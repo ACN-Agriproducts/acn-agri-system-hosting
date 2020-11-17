@@ -1,3 +1,6 @@
+import { PopoverController } from '@ionic/angular';
+import { ShowContactModalComponent } from './../show-contact-modal/show-contact-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OptionsDirectoryComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dialog: MatDialog,
+    private popoverController: PopoverController
+  ) { }
 
   ngOnInit(): void {
+  }
+  
+
+  public openContactModal = () => {
+    this.popoverController.dismiss();
+    const dialogRef = this.dialog.open(ShowContactModalComponent, {
+      autoFocus: false,
+      minWidth: '700px',
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
   }
 
 }
