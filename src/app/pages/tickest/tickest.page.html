@@ -1,0 +1,25 @@
+<app-header-toolbar titulo="Tickets"></app-header-toolbar>
+<ion-content [fullscreen]="true" class="ion-padding-vertical">
+ <div id="container">
+  <div class="content-actions">
+
+    <!-- <ion-title class="capitalize">Progreso</ion-title> -->
+    <ion-buttons class="butons buttons-main">
+      <ion-button slot="start" color="dark">
+        <ion-label class="label-branch_office">
+          Progreso
+        </ion-label>
+        <ion-icon slot="end" name="chevron-down"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-searchbar class="ion-no-padding ion-padding-vertical" animated></ion-searchbar>
+
+    <ion-buttons class="butons">
+      <ion-button (click)="openFilter()" matTooltipPosition="before" matTooltipClass="tooltip-primary" matTooltip="Filter by" color="primary">
+        <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+  <app-table></app-table>
+ </div>
+</ion-content>

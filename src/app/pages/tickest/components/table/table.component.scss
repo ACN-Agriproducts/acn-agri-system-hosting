@@ -1,0 +1,120 @@
+.content-row {
+    cursor: pointer;
+    padding: 10px 13px !important;
+    display: grid;
+    grid-template-columns: 15% 7% 18% 7% 7% 8% 10% 7% 7% 7% 7%;
+    justify-content: space-between;
+    // padding: 10px 0px;
+    &:hover {
+      background: rgb(249, 249, 249);
+      ion-item {
+        --background: rgb(249, 249, 249);
+        // background-color: rgba(var(--ion-color-primary-rgb),.13);
+        // background: rgba(var(--ion-color-primary-rgb),.13);
+      }
+    }
+    ion-text {
+      font-size: 14px;
+    }
+  }
+  .header-table {
+    background-color: #e0ebdf;
+  
+    padding: 10px 13px !important;
+    display: grid;
+    grid-template-columns: 15% 7% 18% 7% 7% 8% 10% 7% 7% 7% 7%;
+    justify-content: space-between;
+    ion-text {
+      font-size: 14px;
+      color: #4f8e4d;
+      font-weight: 500;
+    }
+    ion-item {
+      --background: #e0ebdf;
+    }
+  }
+  .item-action {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  @media screen and (max-width: 1200px) {
+    .header-table,
+    .content-row {
+      grid-template-columns: 10% 7% 18% 8% 8% 8% 10% 8% 8% 8% 7%;
+    }
+  }
+  @media screen and (max-width: 992px) {
+    .header-table,
+    .content-row {
+      grid-template-columns: 25% 20% 9% 10% 10% 10% 10%;
+    }
+  }
+  .content-item-text {
+    display: grid;
+  }
+  .item-label-small {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+  }
+  .item-ticket {
+    font-size: 14px;
+    color: var(--ion-color-dark);
+    span {
+      font-weight: 600;
+    }
+  }
+  .item-costomer {
+    font-size: 16px;
+    font-size: 500;
+    color: var(--ion-color-dark);
+  }
+  @media screen and (max-width: 768px) {
+    .header-table,
+    .content-row {
+      grid-template-columns: 35% 25% 30% 10%;
+    }
+    .content-actions {
+      grid-template-columns: 1fr auto;
+      .buttons-main{
+        grid-column-end: -1;
+        grid-column-start: 1;
+      }
+    }
+    ion-item ion-label {
+      h2{
+        color: var(--ion-color-primary);
+        font-size: 1rem;
+      }
+      h3{
+        font-size: 0.95rem;
+      }
+      p{
+        font-size: 0.75rem;
+      }
+      & h2,
+      & h3,
+      & p {
+        margin: 0;
+        padding: 0;
+        white-space: pre-wrap;
+      }
+      h3 {
+        color: var(--ion-color-medium-shade);
+        line-height: 1.2;
+      }
+    }
+  }
+  .item-card{
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+  ion-fab{
+    right: 35px;
+    bottom: 15px;
+  }
+  .content-more{
+    display: block;
+    padding: 15px;
+  }

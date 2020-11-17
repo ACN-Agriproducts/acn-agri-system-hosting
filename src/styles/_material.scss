@@ -1,0 +1,6 @@
+.mat-calendar-body-selected, .mat-form-field.mat-focused .mat-form-field-ripple{
+    background-color: var(--ion-color-primary);
+}
+.mat-datepicker-toggle-active, .mat-form-field.mat-focused .mat-form-field-label{
+    color: var(--ion-color-primary);
+}

@@ -1,0 +1,41 @@
+.ion-buttons {
+  width: 100%;
+}
+.content-actions {
+  display: grid;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 15px;
+}
+#container {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.label-branch_office {
+  text-transform: none !important;
+  font-size: 1.2rem;
+  & + ion-icon {
+    font-size: 1rem;
+  }
+}
+ion-searchbar {
+  border-radius: 5px;
+}
+.label-business {
+  text-transform: none !important;
+  height: 1em;
+  // margin-right: 5px;
+  margin-left: 10px;
+}
+@media screen and (max-width: 768px) {
+  .content-actions {
+    grid-template-columns: 1fr auto;
+    .buttons-main {
+      grid-column-end: -1;
+      grid-column-start: 1;
+    }
+  }
+}

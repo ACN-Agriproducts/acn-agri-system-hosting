@@ -1,0 +1,36 @@
+<!-- <h2 mat-dialog-title>Install Angular</h2> -->
+<mat-dialog-content class="mat-typography">
+    <div class="content-ticket">
+        <div class="panel-main">
+            <img src="./../../../../../assets/contract.png" alt="">
+        </div>
+        <div class="panel-secound">
+            <div class="item-panel-secound">
+                <h3>Current</h3>
+                <p>60892.86 / 98214.30 Bushels</p>
+                <p>150 total loads</p>
+            </div>
+            <div class="item-panel-secound">
+                <h3>Payment History</h3>
+                <ul>
+                    <li class="item-payment" *ngFor="let item of [1,2,3,4]">
+                        <p class="title-payment-item">
+                            Payment {{item}}:
+                        </p>
+                        <p class="content-payment-item">
+                            <span class="price-payment">
+                                {{1500 | currency:'$'}}
+                            </span>
+                            <span class="date-payment">
+                                10/05/2019
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+                <!-- <p>60892.86 / 98214.30 Bushels</p>
+                <p>150 total loads</p> -->
+            </div>
+        </div>
+    </div>
+
+</mat-dialog-content>

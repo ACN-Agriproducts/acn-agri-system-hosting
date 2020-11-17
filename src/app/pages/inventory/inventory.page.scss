@@ -1,0 +1,98 @@
+.content-card-inventory {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 15px;
+  row-gap: 15px;
+}
+.label-branch_office {
+    text-transform: none !important;
+    font-size: 1.2rem;
+    & + ion-icon {
+      font-size: 1rem;
+    }
+  }
+.item-inventory .item-text-inventory {
+  p {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 5px;
+    justify-content: start;
+    align-items: center;
+  }
+}
+.item-percentage{
+    display: grid;
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+    margin-top: -10px;
+    .item-text-percentage{
+        margin: 0;
+
+    }
+}
+
+#container {
+    padding-right: 10px;
+    padding-left: 10px;
+    display: grid;
+    row-gap: 20px;
+  }
+  ion-card {
+      position: relative;
+      .content-btn-options{
+          position: absolute;
+          top: 5px;
+          right: 5px;
+      }
+      .content-range-inventory{
+          position: relative;
+          &:before{
+              content:"";
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              z-index: 50;
+          }
+      }
+  }
+  .content-subtitle_small-inventory{
+    h4{
+      font-size: 18px;
+      color: var(--ion-color-tertiary);
+      margin: 0;
+      line-height: 1.4;
+      position: relative;
+      span{
+        background-color: #FFF;
+        position: relative;
+        z-index: 80;
+        display: grid;
+        justify-content: start;
+        max-width: 150px;
+      }
+      &:before{
+        content: "";
+        width: 98.5%;
+        height: 1px;
+        z-index: 70;
+        background: var(--ion-color-light-shade);
+        position: absolute;
+        left: 8px;
+        top: 15px;
+      }
+      &:after{
+        content: "";
+        position: absolute;
+        right: 0%;
+        top: 11px;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        background-color: var(--ion-color-light-shade);
+      }
+    }
+  }

@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Add picture</h2>
+
+<mat-dialog-content>
+    <ngx-dropzone  accept="image/*" (change)="onSelect($event)">
+        <ngx-dropzone-label>
+            <ion-icon name="cloud-upload-outline"></ion-icon>
+            <h3>Add files</h3>
+            <p>Simply drag and drop elements</p>
+        </ngx-dropzone-label>
+        <!-- <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>({{ f.type }})  
+        </ngx-dropzone-preview> -->
+        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+            <ngx-dropzone-label class="label-img">{{ f.name | slice:0:15}} </ngx-dropzone-label>
+        </ngx-dropzone-image-preview>
+    </ngx-dropzone>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <ion-button mat-dialog-close fill="clear" color="dark">
+        Cancel
+    </ion-button>
+    <ion-button cdkFocusInitial [mat-dialog-close]="true" fill="solid" color="primary">
+        Save
+    </ion-button>
+  </mat-dialog-actions>

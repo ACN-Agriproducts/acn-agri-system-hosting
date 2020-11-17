@@ -1,0 +1,15 @@
+mat-dialog-content {
+    max-height: 85vh;
+}
+.content-ticket{
+    display: grid;
+    grid-template-columns: 1.5fr .5fr;
+    column-gap: 15px;
+}
+.panel-secound{
+    display: grid;
+    img{
+        height: 270px;
+        width: auto;
+    }
+}
