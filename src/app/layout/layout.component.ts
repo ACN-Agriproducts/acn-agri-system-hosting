@@ -9,45 +9,50 @@ export class LayoutComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
     {
+      title: 'Dashboard',
+      url: '/dashboard/home',
+      icon: 'speedometer'
+    },
+    {
       title: 'Tickets',
-      url: '/tickets',
+      url: '/dashboard/tickets',
       icon: 'receipt'
     },
     {
       title: 'Inventory',
-      url: '/inventory',
+      url: '/dashboard/inventory',
       icon: 'podium'
     },
     {
-      title: 'Invoces',
-      url: '/invoces',
+      title: 'Invoices',
+      url: '/dashboard/invoices',
       icon: 'document-text'
     },
     {
       title: 'Contracts',
-      url: '/contracts',
+      url: '/dashboard/contracts',
       icon: 'newspaper'
     },
     {
       title: 'Treasury',
-      url: '/treasury',
+      url: '/dashboard/treasury',
       icon: 'wallet'
     },
     {
       title: 'Directory',
-      url: '/directory',
+      url: '/dashboard/directory',
       icon: 'library'
     },
     {
       title: 'Employees',
-      url: '/employees',
+      url: '/dashboard/employees',
       icon: 'people'
     }
   ];
   public appOptions = [
     {
       title: 'Setting',
-      url: '/settings',
+      url: '/dashboard/settings',
       icon: 'settings'
     },
     {

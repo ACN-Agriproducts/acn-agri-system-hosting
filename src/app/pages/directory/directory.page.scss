@@ -1,0 +1,36 @@
+.content-label{
+    display: grid;
+    justify-content: start;
+    
+}
+.label-text{
+    font-size: .775rem;
+    color: var(--ion-color-medium);
+}
+ion-item {
+    --min-height: 64px;
+    ion-label{
+        font-size: .875rem;
+    }
+}
+.content-subtitle{
+    letter-spacing: .07272727em;
+    font-family: Roboto,Arial,sans-serif;
+    font-size: .6875rem;
+    font-weight: 500;
+    line-height: 1rem;
+    text-transform: uppercase;
+    color: #5f6368;
+    display: flex;
+    padding: 10px 0 10px 10px;
+}
+ion-icon {
+    font-size: 20px !important;
+}
+ion-item{
+    --color: rgba(0,0,0,0.87);
+    a{
+        color: inherit;
+        text-decoration: none;
+    }
+}

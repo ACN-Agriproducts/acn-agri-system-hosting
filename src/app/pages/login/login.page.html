@@ -7,6 +7,15 @@
 <ion-content>
   <div id="container">
     <div class="content-form">
+      <div class="content-boton-setting">
+        <ion-buttons>
+          <ion-button mode="md" color="tertiary" class="ion-activatable ripple-parent">
+            <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+            <ion-ripple-effect></ion-ripple-effect>
+
+          </ion-button>
+        </ion-buttons>
+      </div>
       <div class="content-welcome">
         <div class="text-welcome">
           <h1>WELCOME TO</h1>
@@ -34,18 +43,18 @@
             </ion-row>
             <ion-row>
               <ion-col size="12">
-                <ion-button expand="block" matRipple cdkFocusInitial [mat-dialog-close]="true" fill="solid" color="primary">
-                  Apply
-              </ion-button>
+                <ion-button routerLink="/dashboard/home" expand="block" matRipple cdkFocusInitial [mat-dialog-close]="true" fill="solid"
+                  color="primary">
+                  LOGIN
+                </ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
         </form>
       </div>
     </div>
-    <div class="contet-img">
+    <div class="contet-img ion-hide-lg-down">
       <div class="background-img"></div>
     </div>
   </div>
-
 </ion-content>

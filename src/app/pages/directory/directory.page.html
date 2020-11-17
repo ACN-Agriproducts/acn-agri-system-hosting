@@ -1,9 +1,40 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>directory</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="Directory"></app-header-toolbar>
 
 <ion-content>
-
+  <div class="content-search">
+    <ion-searchbar></ion-searchbar>
+  </div>
+  <ion-card >
+    <div class="content-subtitle">
+      Contacts 
+      <span> (20)</span>
+    </div>
+    <!-- <ion-card-content> -->
+    <ion-item (click)="openContactModal()" (contextmenu)="openOptions($event)" button lines="none" *ngFor="let item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
+      <ion-avatar slot="start">
+        <img src="../../../assets/avatar.svg">
+      </ion-avatar>
+      <ion-label>
+        <div class="content-label">
+          <span>Cecilia Villaverde Jimenez </span>
+          <span class="label-text">Cliente</span>
+        </div>
+      </ion-label>
+      <ion-label >(477) 518-86-38</ion-label>
+      
+      <ion-label >cecilia-jimenez@gmail.com</ion-label>
+      <ion-buttons>
+        <ion-button color="primary" slot="end">
+          <ion-icon slot="icon-only"  name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button color="danger" slot="end">
+          <ion-icon slot="icon-only"  name="trash-outline"></ion-icon>
+        </ion-button>
+        <!-- <ion-button color="medium" slot="end">
+          <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+        </ion-button> -->
+      </ion-buttons>
+    </ion-item>
+    <!-- </ion-card-content> -->
+  </ion-card>
 </ion-content>

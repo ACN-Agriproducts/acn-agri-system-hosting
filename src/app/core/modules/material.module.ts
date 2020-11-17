@@ -116,7 +116,7 @@ import {LayoutModule} from '@angular/cdk/layout';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatRadioModule,
-    MatRippleModule,
+    // MatRippleModule,
     MatSelectModule,
     MatSidenavModule,
     MatSliderModule,

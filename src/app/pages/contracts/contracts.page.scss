@@ -25,9 +25,9 @@
   }
 }
 .subtitle-contract {
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 12px;
-  color: var(--ion-color-tertiary);
+  color: var(--ion-color-danger);
   font-weight: 500;
   display: grid;
   position: relative;
@@ -84,4 +84,15 @@
         margin: 0;
 
     }
+}
+
+@media screen and(max-width:768px){
+  .content-card-contract  {
+    grid-template-columns: repeat(2, 1fr); 
+  }
+}
+@media screen and(max-width:576px){
+  .content-card-contract  {
+    grid-template-columns: repeat(1, 1fr); 
+  }
 }

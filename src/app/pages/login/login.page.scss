@@ -24,6 +24,9 @@
       // backdrop-filter:blur(3px);
     }
   }
+  .content-form {
+    position: relative;
+  }
   .content-form,
   .content-welcome {
     display: grid;
@@ -46,10 +49,23 @@
       }
     }
   }
-  ion-button{
-      height: 44px;
-      button{
-          border-radius: 3px;
-      }
+  ion-button {
+    height: 44px;
+    button {
+      border-radius: 3px;
+    }
   }
+  .content-boton-setting {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
+
+@media screen and (max-width: 992px){
+    #container {
+        grid-template-columns: 100%;
+        padding-right: 10px !important;
+        padding-left: 10px !important;
+    }
 }

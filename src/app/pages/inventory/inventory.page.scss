@@ -96,3 +96,14 @@
       }
     }
   }
+
+  @media screen and(max-width:768px){
+    .content-card-inventory {
+      grid-template-columns: repeat(2, 1fr); 
+    }
+  }
+  @media screen and(max-width:576px){
+    .content-card-inventory {
+      grid-template-columns: repeat(1, 1fr); 
+    }
+  }

@@ -9,12 +9,16 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/tickets',
+        redirectTo: '/dashboard/home',
         pathMatch: 'full',
       },
       {
-        path: '',
+        path: 'dashboard',
         children: [
+          {
+            path: 'home',
+            loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+          },
           {
             path: 'tickets',
             loadChildren: () => import('./pages/tickest/tickest.module').then(m => m.TickestPageModule)
@@ -53,13 +57,10 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
-  },
-  {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
+
   // {
   //   path: '',
   //   redirectTo: 'home',
