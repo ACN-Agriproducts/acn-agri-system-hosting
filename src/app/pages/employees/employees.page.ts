@@ -22,7 +22,7 @@ export class EmployeesPage implements OnInit {
       minWidth: '700px',
     });
     dialogRef.afterClosed().subscribe(result => {
-      
+
     });
   }
 }

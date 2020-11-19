@@ -21,7 +21,7 @@ export class ShowDetailsComponent implements OnInit {
   public openTicket = async () => {
     const modal = await this.modalController.create({
       component: ModalTicketComponent
-    })
+    });
     return await modal.present();
   }
 }

@@ -24,7 +24,7 @@ export class ContractsPage implements OnInit {
     // });
     const modal = await this.modalController.create({
       component: ContractModalComponent,
-      cssClass: 'modal-contract', 
+      cssClass: 'modal-contract',
     });
     return await modal.present();
   }

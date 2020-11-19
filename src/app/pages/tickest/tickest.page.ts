@@ -1,7 +1,7 @@
 import { FiltersComponent } from './components/filters/filters.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import {  PopoverController, ModalController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tickest',
@@ -31,7 +31,4 @@ export class TickestPage implements OnInit {
     // this.bottomSheet.open(FiltersComponent);
 
   }
-
-
 }
-// ModalTicketComponent
