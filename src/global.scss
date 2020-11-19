@@ -68,4 +68,21 @@ mat-form-field {
       width: 750px;
     } 
   }
+  .modal-dialog-ticket{
+    .modal-wrapper{
+      --border-radius: 8px;
+      width: 800px;
+    }
+  }
+  .moda-general-lg{
+    .modal-wrapper{
+      --border-radius: 8px;
+      min-width: 700px;
+    }
+  }
+  .modal-filter-ticket,.modal-contact{
+    .modal-wrapper{
+      --border-radius: 8px;
+    }
+  }
 }

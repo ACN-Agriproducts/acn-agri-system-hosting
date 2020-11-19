@@ -1,3 +1,4 @@
+import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddPictureComponent implements OnInit {
   public files: File[] = [];
-  constructor() { }
+  constructor(
+    private modalController: ModalController
+  ) { }
 
   ngOnInit(): void {
   }
@@ -21,4 +24,7 @@ export class AddPictureComponent implements OnInit {
     this.files.splice(this.files.indexOf(event), 1);
   }
 
+  public closeModal = (): void => {
+    this.modalController.dismiss();
+  }
 }

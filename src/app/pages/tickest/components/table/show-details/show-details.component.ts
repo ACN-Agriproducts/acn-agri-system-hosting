@@ -1,3 +1,4 @@
+import { ModalTicketComponent } from './../../modal-ticket/modal-ticket.component';
 import { ModalController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 
@@ -16,5 +17,11 @@ export class ShowDetailsComponent implements OnInit {
   }
   public closeModal = () => {
     this.modalController.dismiss();
+  }
+  public openTicket = async () => {
+    const modal = await this.modalController.create({
+      component: ModalTicketComponent
+    })
+    return await modal.present();
   }
 }

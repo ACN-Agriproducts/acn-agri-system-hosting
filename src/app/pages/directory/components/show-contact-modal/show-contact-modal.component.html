@@ -7,84 +7,86 @@
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<div class="content-header">
-    <div class="content-img-avatar">
-        <ion-avatar>
-            <img src="../../../../../assets/avatar.svg">
-        </ion-avatar>
+<ion-content>
+    <div class="content-header">
+        <div class="content-img-avatar">
+            <ion-avatar>
+                <img src="../../../../../assets/avatar.svg">
+            </ion-avatar>
+        </div>
+        <div class="content-info-contact">
+            <h2 class="item-name-title">Cecilia Villaverde Jimenez </h2>
+            <span class="item-subname-title">Cliente</span>
+        </div>
+        <div class="content-actions-contact">
+            <ion-buttons>
+                <ion-button color="danger">
+                    <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+                <ion-button color="primary">
+                    <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                </ion-button>
+                <ion-button class="ion-hide-md-down" color="dark" (click)="closeModal()">
+                    <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+        </div>
     </div>
-    <div class="content-info-contact">
-        <h2 class="item-name-title">Cecilia Villaverde Jimenez </h2>
-        <span class="item-subname-title">Cliente</span>
-    </div>
-    <div class="content-actions-contact">
-        <ion-buttons>
-            <ion-button color="danger">
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-            </ion-button>
-            <ion-button color="primary">
-                <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-            </ion-button>
-            <ion-button class="ion-hide-md-down" color="dark" [mat-dialog-close]="null">
-                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-    </div>
-</div>
-<div class="mat-dialog-content">
-    <div class="content-detail-contact">
-        <h2><span>Contact details</span></h2>
-        <div class="panel-detail-contact">
-            <!-- ############################# -->
-            <!-- ITEM CORREO -->
-            <!-- ############################# -->
-            <div class="item-detail">
-                <div class="icon-detail">
-                    <ion-icon name="mail-outline" color="medium"></ion-icon>
+    <div class="mat-dialog-content">
+        <div class="content-detail-contact">
+            <h2><span>Contact details</span></h2>
+            <div class="panel-detail-contact">
+                <!-- ############################# -->
+                <!-- ITEM CORREO -->
+                <!-- ############################# -->
+                <div class="item-detail">
+                    <div class="icon-detail">
+                        <ion-icon name="mail-outline" color="medium"></ion-icon>
+                    </div>
+                    <div class="text-content-detail">
+                        <ion-text>
+                            <a href="mailto:cecilia-jimenez@gmail.com">cecilia-jimenez@gmail.com</a>
+                            <span class="sublabel-text">
+                                Email
+                            </span>
+                        </ion-text>
+                    </div>
                 </div>
-                <div class="text-content-detail">
-                    <ion-text>
-                        <a href="mailto:cecilia-jimenez@gmail.com">cecilia-jimenez@gmail.com</a>
-                        <span class="sublabel-text">
-                            Email
-                        </span>
-                    </ion-text>
+                <!-- ############################# -->
+                <!-- ITEM TELEFONO -->
+                <!-- ############################# -->
+                <div class="item-detail">
+                    <div class="icon-detail">
+                        <ion-icon name="call-outline" color="medium"></ion-icon>
+                    </div>
+                    <div class="text-content-detail">
+                        <ion-text>
+                            <span>(477) 518-86-38</span>
+                            <span class="sublabel-text">
+                                Phone
+                            </span>
+                        </ion-text>
+                    </div>
                 </div>
-            </div>
-            <!-- ############################# -->
-            <!-- ITEM TELEFONO -->
-            <!-- ############################# -->
-            <div class="item-detail">
-                <div class="icon-detail">
-                    <ion-icon name="call-outline" color="medium"></ion-icon>
-                </div>
-                <div class="text-content-detail">
-                    <ion-text>
-                        <span>(477) 518-86-38</span>
-                        <span class="sublabel-text">
-                            Phone
-                        </span>
-                    </ion-text>
-                </div>
-            </div>
-            <!-- ############################# -->
-            <!-- ITEM CELULAR -->
-            <!-- ############################# -->
-            <div class="item-detail">
-                <div class="icon-detail">
-                    <ion-icon name="phone-portrait-outline" color="medium"></ion-icon>
-                </div>
-                <div class="text-content-detail">
-                    <ion-text>
-                        <span>(477) 520-46-08</span>
-                        <span class="sublabel-text">
-                            Cell Phone
-                        </span>
-                    </ion-text>
+                <!-- ############################# -->
+                <!-- ITEM CELULAR -->
+                <!-- ############################# -->
+                <div class="item-detail">
+                    <div class="icon-detail">
+                        <ion-icon name="phone-portrait-outline" color="medium"></ion-icon>
+                    </div>
+                    <div class="text-content-detail">
+                        <ion-text>
+                            <span>(477) 520-46-08</span>
+                            <span class="sublabel-text">
+                                Cell Phone
+                            </span>
+                        </ion-text>
+                    </div>
                 </div>
             </div>
         </div>
+
+
     </div>
-
-
-</div>
+</ion-content>

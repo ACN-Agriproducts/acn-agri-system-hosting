@@ -1,8 +1,7 @@
 import { FiltersComponent } from './components/filters/filters.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
-import { NavController, PopoverController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import {  PopoverController, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tickest',
@@ -12,19 +11,27 @@ import { ActivatedRoute } from '@angular/router';
 export class TickestPage implements OnInit {
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     public popoverController: PopoverController,
     public dialog: MatDialog,
-    private navController: NavController 
+    private modalController: ModalController,
   ) { }
 
   ngOnInit() {
   }
-  public openFilter = () => {
-    const dialogRef = this.dialog.open(FiltersComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+  public openFilter = async () => {
+    // const dialogRef = this.dialog.open(FiltersComponent);
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
+    const modal = await this.modalController.create({
+      component: FiltersComponent,
+      cssClass: 'modal-filter-ticket'
     });
+    return await modal.present();
+    // this.bottomSheet.open(FiltersComponent);
+
   }
+
+
 }
 // ModalTicketComponent

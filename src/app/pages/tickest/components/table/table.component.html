@@ -79,7 +79,7 @@
         </div>
     </div>
     <!-- ================================= -->
-    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event)" (dblclick)="open()"
+    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event)" (dblclick)="openDialog($event)"
         *ngFor="let item of ELEMENT_DATA">
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
@@ -212,7 +212,7 @@
                 <ion-button color="secondary" (click)="openDetails($event)">
                     <ion-icon slot="icon-only" name="open-outline"></ion-icon>
                 </ion-button>
-                <ion-button color="tertiary" (click)="openDetails($event)">
+                <ion-button color="tertiary" (click)="openAddicture($event)">
                     <ion-icon slot="icon-only" name="images-outline"></ion-icon>
                 </ion-button>
                 <ion-button (click)="openDialog()" color="primary">

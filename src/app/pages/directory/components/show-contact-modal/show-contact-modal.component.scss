@@ -112,22 +112,30 @@
   }
 }
 
+.content-header,.mat-dialog-content{
+  padding: 16px;
+  display: grid;
+  justify-content: stretch;
+  width: 100%;
+  margin: 0;
+
+}
 @media screen and (max-width: 768px) {
-  :host {
-    display: grid;
-    align-items: start;
-    align-content: start;
+  // :host {
+  // //   display: grid;
+  // //   align-items: start;
+  // //   align-content: start;
     
-    width: 100%;
-    justify-content: stretch;
-  }
-  .content-header,.mat-dialog-content{
-      padding: 16px;
-      display: grid;
-      justify-content: stretch;
-      width: 100%;
-      margin: 0;
-  }
+  // //   width: 100%;
+  // //   justify-content: stretch;
+  // }
+  // .content-header,.mat-dialog-content{
+  //     padding: 16px;
+  //     display: grid;
+  //     justify-content: stretch;
+  //     width: 100%;
+  //     margin: 0;
+  // }
   .content-header {
     display: grid;
     grid-template-columns: 1fr;
@@ -154,3 +162,4 @@
     } 
   }
 }
+

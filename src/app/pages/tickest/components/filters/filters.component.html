@@ -1,5 +1,24 @@
-<h2 mat-dialog-title>Filter by:</h2>
-<mat-dialog-content class="mat-typography">
+<ion-header translucent class="ion-hide-md-up ion-no-border">
+    <!-- ion-no-border -->
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <!-- <ion-title></ion-title> -->
+        <!-- <ion-buttons slot="end">
+            <ion-button (click)="closeModal()" color="medium">
+                CANCEL
+            </ion-button>
+            <ion-button color="primary">
+                APPLY
+            </ion-button>
+        </ion-buttons> -->
+    </ion-toolbar>
+</ion-header>
+<ion-content class="mat-typography ion-padding">
+    <h2 mat-dialog-title>Filter by:</h2>
     <ion-grid>
         <ion-row>
             <ion-col size="12">
@@ -37,14 +56,14 @@
             </ion-col>
         </ion-row>
     </ion-grid>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-    <ion-button mat-dialog-close fill="clear" color="dark">
+</ion-content>
+<mat-dialog-actions align="end" class="ion-padding" >
+    <ion-button (click)="closeModal()" fill="clear" color="dark">
         Cancel
     </ion-button>
-    <ion-button cdkFocusInitial [mat-dialog-close]="true" fill="solid" color="primary">
+    <ion-button  fill="solid" color="primary">
         Apply
     </ion-button>
     <!-- <button mat-></button> -->
     <!-- <button mat-button >Install</button> -->
-  </mat-dialog-actions>
+</mat-dialog-actions>

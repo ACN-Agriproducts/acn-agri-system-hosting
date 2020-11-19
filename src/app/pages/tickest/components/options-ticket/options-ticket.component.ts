@@ -23,17 +23,24 @@ export class OptionsTicketComponent implements OnInit {
     this.closePanel();
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
+      cssClass: 'modal-dialog-ticket'
     });
     return await modal.present();
   }
-  openDialogAddPicture() {
+  public openDialogAddPicture = async () => {
     this.closePanel();
-    const dialogRef = this.dialog.open(AddPictureComponent, {
-      autoFocus: false
+    // const dialogRef = this.dialog.open(AddPictureComponent, {
+    //   autoFocus: false
+    // });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
+    const modal = await this.modalController.create({
+      component: AddPictureComponent,
+      cssClass: ' moda-general-lg',
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    return await modal.present();
+    // moda-general-lg
   }
   public closePanel = () => {
     this.popoverController.dismiss();

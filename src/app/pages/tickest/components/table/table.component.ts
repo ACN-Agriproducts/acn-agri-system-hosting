@@ -1,3 +1,4 @@
+import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { ShowDetailsComponent } from './show-details/show-details.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalTicketComponent } from './../modal-ticket/modal-ticket.component';
@@ -128,13 +129,20 @@ export class TableComponent implements OnInit {
     });
     return await modal.present();
   }
-  public openDialog = async () => {
+  public openDialog = async (event) => {
     // const dialogRef = this.dialog.open(ModalTicketComponent);
     // dialogRef.afterClosed().subscribe(result => {
     //   console.log(`Dialog result: ${result}`);
     // });
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
+      cssClass: 'modal-dialog-ticket'
+    });
+    return await modal.present();
+  }
+  public openAddicture = async () => {
+    const modal = await this.modalController.create({
+      component: AddPictureComponent,
     });
     return await modal.present();
   }
