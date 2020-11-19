@@ -1,4 +1,8 @@
+import { ModalController } from '@ionic/angular';
+
 import { Component, OnInit } from '@angular/core';
+import {MatBottomSheet, MatBottomSheetRef} from '@angular/material/bottom-sheet';
+import { ShowDetailsComponent } from '../show-details/show-details.component';
 
 @Component({
   selector: 'app-contract-modal',
@@ -7,9 +11,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContractModalComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private bottomSheet: MatBottomSheet,
+    private modalController: ModalController
+  ) { }
 
   ngOnInit(): void {
   }
-
+  closeModal = (): void => {
+    this.modalController.dismiss();
+  }
+  openDetailsSheet = (): void => {
+    this.bottomSheet.open(ShowDetailsComponent);
+  }
 }

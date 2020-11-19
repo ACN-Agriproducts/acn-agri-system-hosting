@@ -1,12 +1,39 @@
-<!-- <h2 mat-dialog-title>Install Angular</h2> -->
-<mat-dialog-content class="mat-typography">
-    <div class="content-ticket">
-        <div class="panel-main">
-            <img src="./../../../../../assets/ticket.png" alt="">
-        </div>
-        <div class="panel-secound">
-            <img src="./../../../../../assets/ticket.png" alt="">
+<ion-header translucent class="ion-hide-md-up ">
+    <!-- ion-no-border -->
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Ticket 592</ion-title>
+        <!-- <ion-buttons slot="end">
+            <ion-button color="medium">
+                <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons> -->
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="mat-typography mat-dialog-content ion-hide-sm-down">
+        <div class="content-ticket">
+            <div class="panel-main">
+                <img src="./../../../../../assets/ticket.png" alt="">
+            </div>
+            <div class="panel-secound " >
+                <img src="./../../../../../assets/ticket.png" alt="">
+            </div>
         </div>
     </div>
-    
-</mat-dialog-content>
+    <ion-slides pager="true" [options]="slideOpts" class="ion-hide-sm-up">
+        <ion-slide>
+           <img src="./../../../../../assets/ticket.png" alt="">
+        </ion-slide>
+        <ion-slide>
+           <img src="./../../../../../assets/ticket.png" alt="">
+        </ion-slide>
+        <ion-slide>
+           <img src="./../../../../../assets/ticket.png" alt="">
+        </ion-slide>
+      </ion-slides>
+</ion-content>

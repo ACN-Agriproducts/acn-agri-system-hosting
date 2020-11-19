@@ -136,3 +136,9 @@ ion-content {
     --overflow: auto;
   }
 }
+@media scree and (max-width: 768px){
+  ion-content {
+    overflow: auto !important;
+    --overflow: auto !important;
+  } 
+}

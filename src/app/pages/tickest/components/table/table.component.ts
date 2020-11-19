@@ -1,8 +1,9 @@
+import { ShowDetailsComponent } from './show-details/show-details.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalTicketComponent } from './../modal-ticket/modal-ticket.component';
 import { OptionsTicketComponent } from './../options-ticket/options-ticket.component';
 import { Component, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 export interface PeriodicElement {
   ticket: string;
   date: string;
@@ -98,8 +99,9 @@ export class TableComponent implements OnInit {
 
   ];
   constructor(
-    public popoverController: PopoverController,
-    public dialog: MatDialog,
+    private popoverController: PopoverController,
+    private dialog: MatDialog,
+    private modalController: ModalController
   ) { }
 
   ngOnInit(): void {
@@ -119,5 +121,21 @@ export class TableComponent implements OnInit {
     });
     return await popover.present();
   }
- 
+
+  public openDetails = async (ev) => {
+    const modal = await this.modalController.create({
+      component: ShowDetailsComponent,
+    });
+    return await modal.present();
+  }
+  public openDialog = async () => {
+    // const dialogRef = this.dialog.open(ModalTicketComponent);
+    // dialogRef.afterClosed().subscribe(result => {
+    //   console.log(`Dialog result: ${result}`);
+    // });
+    const modal = await this.modalController.create({
+      component: ModalTicketComponent,
+    });
+    return await modal.present();
+  }
 }

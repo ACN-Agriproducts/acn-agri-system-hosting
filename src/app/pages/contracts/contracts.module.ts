@@ -10,6 +10,7 @@ import { ContractsPageRoutingModule } from './contracts-routing.module';
 import { ContractsPage } from './contracts.page';
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
+import { ShowDetailsComponent } from './components/show-details/show-details.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import { OptionsContractComponent } from './components/options-contract/options-
     ContractsPageRoutingModule,
     CoreModule
   ],
-  declarations: [ContractsPage, ContractModalComponent, OptionsContractComponent]
+  declarations: [ContractsPage, ContractModalComponent, OptionsContractComponent, ShowDetailsComponent]
 })
 export class ContractsPageModule {}

@@ -187,24 +187,38 @@
             </ion-item>
         </div>
     </div>
-    <div class="ion-hide-sm-up">
-        <ion-card class="item-card" *ngFor="let item of ELEMENT_DATA">
-            <ion-item lines="none" button>
-
-                <ion-label slot="start">
-                    <h2>Ticket # <span>{{item.ticket}}</span></h2>
-                    <p>{{item.customer}}</p>
-                    <p>{{item.date}}</p>
-                    <p>Product: <b>{{item.product}}</b></p>
-                    <!-- <p>Moisture: <b>{{item.moisture}}</b></p>
-              <p>Test Wt: <b>{{item.testsWt}}</b></p>
-              <p>Gross: <b>{{item.gross}}</b></p>
-              <p>Tare: <b>{{item.tare}}</b></p>
-              <p>Net: <b>{{item.net}}</b></p> -->
-                </ion-label>
-                <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-            </ion-item>
-        </ion-card>
-    </div>
-
 </ion-card>
+<div class="ion-hide-sm-up">
+    <ion-card class="item-card" *ngFor="let item of ELEMENT_DATA">
+        <ion-item lines="none" button (click)="openDetails($event)">
+            <ion-label slot="start">
+                <h2>Ticket # <span>{{item.ticket}}</span></h2>
+                <p class="item-subtitle">{{item.customer}}</p>
+                <p class="item-subtitle">{{item.date}}</p>
+                <ul>
+                    <li>Product: <b>{{item.product}}</b></li>
+                    <li>Moisture: <b>{{item.moisture}}</b></li>
+                    <li>Test Wt: <b>{{item.testsWt}}</b></li>
+                    <li>Gross: <b>{{item.gross}}</b></li>
+                </ul>
+                <!-- <p>Test Wt: <b>{{item.testsWt}}</b></p>
+                    <p>Gross: <b>{{item.gross}}</b></p>
+                    <p>Tare: <b>{{item.tare}}</b></p>
+                    <p>Net: <b>{{item.net}}</b></p>  -->
+            </ion-label>
+        </ion-item>
+        <ion-item lines="none" class="content-botons">
+            <ion-buttons slot="end">
+                <ion-button color="secondary" (click)="openDetails($event)">
+                    <ion-icon slot="icon-only" name="open-outline"></ion-icon>
+                </ion-button>
+                <ion-button color="tertiary" (click)="openDetails($event)">
+                    <ion-icon slot="icon-only" name="images-outline"></ion-icon>
+                </ion-button>
+                <ion-button (click)="openDialog()" color="primary">
+                    <ion-icon slot="icon-only" name="receipt-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+        </ion-item>
+    </ion-card>
+</div>

@@ -1,7 +1,7 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
 
 @Component({
@@ -13,17 +13,18 @@ export class OptionsTicketComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
   }
-  openDialog() {
+  public openDialog = async () => {
     this.closePanel();
-    const dialogRef = this.dialog.open(ModalTicketComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    const modal = await this.modalController.create({
+      component: ModalTicketComponent,
     });
+    return await modal.present();
   }
   openDialogAddPicture() {
     this.closePanel();

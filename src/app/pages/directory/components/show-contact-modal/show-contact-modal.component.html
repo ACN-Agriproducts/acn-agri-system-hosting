@@ -1,7 +1,9 @@
-<ion-header translucent>
+<ion-header translucent class="ion-hide-md-up">
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-button> <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon></ion-button>
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -60,7 +62,7 @@
                     <ion-text>
                         <span>(477) 518-86-38</span>
                         <span class="sublabel-text">
-                            Cell Phone
+                            Phone
                         </span>
                     </ion-text>
                 </div>
@@ -76,7 +78,7 @@
                     <ion-text>
                         <span>(477) 520-46-08</span>
                         <span class="sublabel-text">
-                            Phone
+                            Cell Phone
                         </span>
                     </ion-text>
                 </div>

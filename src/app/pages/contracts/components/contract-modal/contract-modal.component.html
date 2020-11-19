@@ -1,36 +1,53 @@
-<!-- <h2 mat-dialog-title>Install Angular</h2> -->
-<mat-dialog-content class="mat-typography">
-    <div class="content-ticket">
-        <div class="panel-main">
-            <img src="./../../../../../assets/contract.png" alt="">
-        </div>
-        <div class="panel-secound">
-            <div class="item-panel-secound">
-                <h3>Current</h3>
-                <p>60892.86 / 98214.30 Bushels</p>
-                <p>150 total loads</p>
-            </div>
-            <div class="item-panel-secound">
-                <h3>Payment History</h3>
-                <ul>
-                    <li class="item-payment" *ngFor="let item of [1,2,3,4]">
-                        <p class="title-payment-item">
-                            Payment {{item}}:
-                        </p>
-                        <p class="content-payment-item">
-                            <span class="price-payment">
-                                {{1500 | currency:'$'}}
-                            </span>
-                            <span class="date-payment">
-                                10/05/2019
-                            </span>
-                        </p>
-                    </li>
-                </ul>
-                <!-- <p>60892.86 / 98214.30 Bushels</p>
-                <p>150 total loads</p> -->
-            </div>
-        </div>
-    </div>
+<ion-header translucent class="ion-hide-md-up">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Contract 287</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="openDetailsSheet()">
+                <ion-icon slot="icon-only" color="medium" name="reader-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
 
-</mat-dialog-content>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <div class="mat-dialog-content mat-typography">
+        <div class="content-ticket">
+            <div class="panel-main">
+                <img src="./../../../../../assets/contract.png" alt="">
+            </div>
+            <div class="panel-secound ion-hide-sm-down">
+                <div class="item-panel-secound">
+                    <h3>Current</h3>
+                    <p>60892.86 / 98214.30 Bushels</p>
+                    <p>150 total loads</p>
+                </div>
+                <div class="item-panel-secound">
+                    <h3>Payment History</h3>
+                    <ul>
+                        <li class="item-payment" *ngFor="let item of [1,2,3,4]">
+                            <p class="title-payment-item">
+                                Payment {{item}}:
+                            </p>
+                            <p class="content-payment-item">
+                                <span class="price-payment">
+                                    {{1500 | currency:'$'}}
+                                </span>
+                                <span class="date-payment">
+                                    10/05/2019
+                                </span>
+                            </p>
+                        </li>
+                    </ul>
+                    <!-- <p>60892.86 / 98214.30 Bushels</p>
+                    <p>150 total loads</p> -->
+                </div>
+            </div>
+        </div>
+    
+    </div>
+</ion-content>

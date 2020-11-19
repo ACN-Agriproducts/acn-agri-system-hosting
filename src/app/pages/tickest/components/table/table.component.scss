@@ -84,14 +84,27 @@
     }
     ion-item ion-label {
       h2{
-        color: var(--ion-color-primary);
-        font-size: 1rem;
+        font-size: .95rem;
+        margin-bottom: 4px;
       }
       h3{
         font-size: 0.95rem;
       }
+      ul{
+        padding: 0;
+        padding-left: 18px;
+        li{
+          font-size: 0.70rem;
+          color: var(--ion-color-text-dark);
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+      }
+      .item-subtitle{
+        margin-top: -5px;
+      }
       p{
-        font-size: 0.75rem;
+        font-size: 0.70rem;
       }
       & h2,
       & h3,
@@ -117,4 +130,8 @@
   .content-more{
     display: block;
     padding: 15px;
+  }
+  .content-botons{
+    margin-top: -15px;
+    padding-bottom: 6px;
   }

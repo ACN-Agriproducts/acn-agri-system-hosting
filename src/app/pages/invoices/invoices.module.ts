@@ -1,3 +1,4 @@
+import { CoreModule } from './../../core/core.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,8 @@ import { InvoicesPage } from './invoices.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    InvoicesPageRoutingModule
+    InvoicesPageRoutingModule,
+    CoreModule
   ],
   declarations: [InvoicesPage]
 })

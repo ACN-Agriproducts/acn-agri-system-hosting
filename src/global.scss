@@ -46,8 +46,8 @@ ion-menu {
   font-size: 12px;
   font-weight: 500;
 }
-mat-form-field{
-    width: 100%;
+mat-form-field {
+  width: 100%;
 }
 #container {
   padding-right: 10px;
@@ -56,4 +56,16 @@ mat-form-field{
 .ripple-parent {
   position: relative;
   overflow: hidden;
+}
+
+@media screen and (min-width: 768px) {
+  .showModal-employee .modal-wrapper {
+    --border-radius: 8px;
+  }
+  .modal-contract{
+    .modal-wrapper{
+      --border-radius: 8px;
+      width: 750px;
+    } 
+  }
 }

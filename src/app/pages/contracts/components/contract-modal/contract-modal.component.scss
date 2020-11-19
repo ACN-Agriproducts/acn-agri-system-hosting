@@ -1,5 +1,7 @@
-mat-dialog-content {
+.mat-dialog-content {
   max-height: 85vh;
+  padding: 18px;
+  overflow: auto; 
 }
 .content-ticket {
   display: grid;
@@ -57,5 +59,18 @@ li {
       grid-template-columns: auto auto;
       justify-content: space-between;
       align-content: center;
+  }
+}
+@media screen and (max-width: 768px){
+  .content-ticket {
+    grid-template-columns: 1fr;
+  }
+  .mat-dialog-content{
+    padding: 0;
+  }
+  .panel-main{
+    img{
+      width: 100%;
+    }
   }
 }

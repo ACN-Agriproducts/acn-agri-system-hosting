@@ -123,6 +123,10 @@
   }
   .content-header,.mat-dialog-content{
       padding: 16px;
+      display: grid;
+      justify-content: stretch;
+      width: 100%;
+      margin: 0;
   }
   .content-header {
     display: grid;
@@ -140,5 +144,13 @@
         height: 65px;
       }
     }
+  }
+  .content-detail-contact {
+    h2 {
+      &:after, &:before{
+        content: "";
+        display: none;
+      } 
+    } 
   }
 }

@@ -1,0 +1,97 @@
+<ion-header translucent class="ion-hide-md-up ion-no-border">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="closeModal()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button color="medium">
+                <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-item class="content-item-date" lines="none">
+        <ion-text slot="end" color="medium">Wednesday, November 10, 2020</ion-text>
+    </ion-item>
+    <ion-item class="content-item-title" lines="none">
+        <div class="content-title">
+            <ion-text class="item-ticket" slot="start" color="primary">Ticket 592</ion-text>
+            <ion-text class="item-customer" slot="start" color="dark">GRANEROS EL BRASIL DE BRASIL</ion-text>
+            <div class="more-info-customer">
+                <ion-text class="item-more-info item-title" slot="start" color="dark">Customer information</ion-text>
+                <ion-text class="item-more-info item-phone" slot="start" color="medium">(444) 333-33-33</ion-text>
+                <ion-text class="item-more-info item-email" slot="start" color="medium">graneroelbrasil@gmail.com
+                </ion-text>
+            </div>
+        </div>
+    </ion-item>
+    <div class="content-boton-ticket">
+        <ion-button expand="block" color="primary">Open ticket</ion-button>
+    </div>
+    <ion-item lines="none" class="title-descriptions">
+        <ion-text color="dark" slot="start">
+            <b>Description</b>
+        </ion-text>
+    </ion-item>
+    <div lines="none" class="content-items-descriptions">
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Product:</span>
+                </ion-text>
+                <ion-text color="medium">Yellow Corn</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Moisture:</span>
+                </ion-text>
+                <ion-text color="medium">13.14 %</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Test WT:</span>
+                </ion-text>
+                <ion-text color="medium">13.14 %</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Contract:</span>
+                </ion-text>
+                <ion-text color="medium">13.14 %</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Gross:</span>
+                </ion-text>
+                <ion-text color="medium">142400</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Tare:</span>
+                </ion-text>
+                <ion-text color="medium">45220</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="item-description">
+                <ion-text >
+                    <span>Net:</span>
+                </ion-text>
+                <ion-text color="medium">97180</ion-text>
+            </div>
+        </ion-item>
+    </div>
+</ion-content>

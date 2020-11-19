@@ -1,3 +1,4 @@
+import { CoreModule } from './../../core/core.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,8 @@ import { TreasuryPage } from './treasury.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    TreasuryPageRoutingModule
+    TreasuryPageRoutingModule,
+    CoreModule
   ],
   declarations: [TreasuryPage]
 })

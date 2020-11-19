@@ -1,15 +1,26 @@
-mat-dialog-content {
-    max-height: 85vh;
+.mat-dialog-content {
+  padding: 18px;
 }
-.content-ticket{
-    display: grid;
-    grid-template-columns: 1.5fr .5fr;
-    column-gap: 15px;
+.content-ticket {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr;
+  column-gap: 15px;
 }
-.panel-secound{
-    display: grid;
-    img{
-        height: 270px;
-        width: auto;
-    }
+.panel-secound {
+  display: grid;
+  img {
+    height: 270px;
+    width: auto;
+  }
+}
+@media screen and (max-width: 768px) {
+  .content-ticket {
+    grid-template-columns: 1fr;
+  }
+  ion-slides {
+    height: 100%;
+  }
+  .mat-dialog-content {
+    padding: 0;
+  }
 }
