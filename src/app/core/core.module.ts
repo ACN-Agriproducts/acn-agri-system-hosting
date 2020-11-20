@@ -1,3 +1,4 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesCoreModule } from './directive/directives-core.module';
 import { MaterialModule } from './modules/material.module';
 
@@ -15,12 +16,16 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     // IonicModule,
     MaterialModule,
     NgxDropzoneModule,
-    DirectivesCoreModule
+    DirectivesCoreModule,
+    // FormsModule,
+    // ReactiveFormsModule,
   ],
   exports: [
     ComponentsModule,
     MaterialModule,
-    DirectivesCoreModule
+    DirectivesCoreModule,
+    // FormsModule,
+    // ReactiveFormsModule,
   ],
   declarations: []
 })

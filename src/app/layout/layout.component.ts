@@ -1,3 +1,5 @@
+import { NavController } from '@ionic/angular';
+import { AuthenticationService } from '@core/services/Authentication/Authentication.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -49,21 +51,16 @@ export class LayoutComponent implements OnInit {
       icon: 'people'
     }
   ];
-  public appOptions = [
-    {
-      title: 'Setting',
-      url: '/dashboard/settings',
-      icon: 'settings'
-    },
-    {
-      title: 'Sign out',
-      url: '/login',
-      icon: 'log-out'
-    }
-  ];
-  constructor() { }
+
+  constructor(
+    private authentication: AuthenticationService,
+    private navController: NavController
+  ) { }
 
   ngOnInit(): void {
   }
-
+  public logout = () => {
+    this.authentication.logout();
+    this.navController.navigateForward('/login');
+  }
 }

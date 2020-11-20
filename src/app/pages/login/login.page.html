@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header> -->
 
-<ion-content>
+<ion-content >
   <div id="container">
     <div class="content-form">
       <div class="content-boton-setting">
@@ -25,26 +25,25 @@
         </div>
       </div>
       <div class="content-form-login">
-        <form>
+        <form novalidate [formGroup]="formulario" (ngSubmit)="submit($event)">
           <ion-grid>
             <ion-row>
               <ion-col size="12">
                 <mat-form-field appearance="fill">
                   <mat-label>Email</mat-label>
-                  <input matInput type="email">
+                  <input (keydown.enter)="submit($event)" formControlName="email" matInput type="email">
                 </mat-form-field>
               </ion-col>
               <ion-col size="12">
                 <mat-form-field appearance="fill">
                   <mat-label>Password</mat-label>
-                  <input matInput type="password">
+                  <input (keydown.enter)="submit($event)" formControlName="password" matInput type="password">
                 </mat-form-field>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size="12">
-                <ion-button (click)="login()"  expand="block"  fill="solid"
-                  color="primary">
+                <ion-button type="submit" expand="block" fill="solid" color="primary">
                   LOGIN
                 </ion-button>
               </ion-col>

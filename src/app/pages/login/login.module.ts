@@ -1,13 +1,11 @@
+import { LoginService } from './utils/services/login.service';
+import { CoreModule } from '@core/core.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
 import { LoginPageRoutingModule } from './login-routing.module';
-
 import { LoginPage } from './login.page';
-import { MaterialModule } from 'src/app/core/modules/material.module';
 
 @NgModule({
   imports: [
@@ -15,8 +13,12 @@ import { MaterialModule } from 'src/app/core/modules/material.module';
     FormsModule,
     IonicModule,
     LoginPageRoutingModule,
-    MaterialModule
+    CoreModule,
+    ReactiveFormsModule,
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
+  providers: [
+    LoginService
+  ]
 })
 export class LoginPageModule {}

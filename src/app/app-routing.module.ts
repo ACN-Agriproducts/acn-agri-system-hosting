@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
+import { AngularFireAuthGuard, hasCustomClaim, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
 
+const redirectLoggedLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   {
     path: '',
@@ -14,6 +16,7 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
+        canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectLoggedLogin },
         children: [
           {
             path: 'home',
