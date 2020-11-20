@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "business-manager-c488c"
+  },
+  "targets": {
+    "business-manager-c488c": {
+      "hosting": {
+        "app": [
+          "business-manager-c488c"
+        ]
+      }
+    }
   }
 }

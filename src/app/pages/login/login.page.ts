@@ -1,3 +1,4 @@
+import { LoadingController, NavController } from '@ionic/angular';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
@@ -11,6 +12,8 @@ export class LoginPage implements OnInit, OnDestroy {
 
   constructor(
     private cd: ChangeDetectorRef,
+    private navController: NavController,
+    public loadingController: LoadingController
   ) { }
 
   ngOnDestroy(): void {
@@ -21,4 +24,21 @@ export class LoginPage implements OnInit, OnDestroy {
     this.cd.markForCheck();
   }
 
+  public login = async () => {
+
+    const loading = await this.loadingController.create({
+      cssClass: 'panel-load',
+      message: 'Please wait...',
+      duration: 1000,
+      backdropDismiss: true
+    });
+    setTimeout(() => {
+      this.navController.navigateForward('/dashboard/home');
+    }, 1000);
+    return await loading.present();
+    // await loading.onDidDismiss().then(res => {
+    // });
+
+
+  }
 }
