@@ -1,5 +1,5 @@
-<app-header-toolbar titulo="Invoices"></app-header-toolbar>
-<ion-content class="ion-padding">
-  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam magnam vero quod fugit ratione doloribus id,
-  exercitationem perspiciatis quia neque illum ab placeat explicabo modi rem aliquid, consectetur quisquam porro!
-</ion-content>
+  <app-header-toolbar titulo="Invoices"></app-header-toolbar>
+  <ion-content class="ion-padding">
+    <ion-searchbar (contextmenu)="openContextMenu($event)"></ion-searchbar>
+    <app-table></app-table>
+  </ion-content>

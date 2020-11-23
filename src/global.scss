@@ -34,7 +34,11 @@ ion-menu {
   padding-inline-start: 0px !important;
   padding-inline-end: 0px !important;
 }
-
+.tooltip-white{
+  background-color: white;
+  color: var(--ion-color-text-dark) !important;
+  font-size: 11px;
+}
 .tooltip-primary {
   background-color: rgba(var(--ion-color-primary-rgb), 0.075);
   color: var(--ion-color-primary) !important;
@@ -84,5 +88,15 @@ mat-form-field {
     .modal-wrapper{
       --border-radius: 8px;
     }
+  }
+}
+
+
+.item-icon-hide-hover{
+  ion-icon{
+    opacity: 0;
+  }
+  &:hover ion-icon{
+    opacity: 1;
   }
 }

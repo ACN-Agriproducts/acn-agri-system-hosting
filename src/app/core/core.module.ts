@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
   imports: [
@@ -17,6 +18,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     MaterialModule,
     NgxDropzoneModule,
     DirectivesCoreModule,
+    // IonicStorageModule.forRoot()
+
     // FormsModule,
     // ReactiveFormsModule,
   ],
@@ -24,6 +27,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     ComponentsModule,
     MaterialModule,
     DirectivesCoreModule,
+    // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
   ],

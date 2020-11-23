@@ -1,6 +1,6 @@
 <!-- <ion-app>
 </ion-app> -->
-<ion-app>
+<ion-app (contextmenu)="$event.preventDefault()">
     <ion-split-pane contentId="main-content" when="(min-width: 1250px)">
         <ion-menu contentId="main-content" type="overlay">
             <ion-content>
@@ -10,7 +10,12 @@
                             src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789">
                         </ion-img>
                     </ion-list-header>
-                    <ion-note>cristian160595@mail.com</ion-note>
+                    <ion-note *ngIf="dataUser">
+                        <div class="content-note-user">
+                            <span>{{dataUser.email}}</span>
+                            <span class="subitem-note-user">Administrator</span>
+                        </div>
+                    </ion-note>
 
                     <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
                         <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected" [routerLink]="[p.url]" lines="none" 
@@ -23,6 +28,13 @@
 
                 <ion-list id="labels-list">
                     <ion-list-header>Options</ion-list-header>
+                    <ion-menu-toggle auto-hide="false" >
+                        <ion-item button
+                            lines="none" detail="false">
+                            <ion-icon slot="start" ios="person-outline" md="person-outline"></ion-icon>
+                            <ion-label>Users</ion-label>
+                        </ion-item>
+                    </ion-menu-toggle>
                     <ion-menu-toggle auto-hide="false" >
                         <ion-item button
                             lines="none" detail="false">

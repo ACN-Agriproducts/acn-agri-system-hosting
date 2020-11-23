@@ -1,6 +1,7 @@
 import { NavController } from '@ionic/angular';
 import { AuthenticationService } from '@core/services/Authentication/Authentication.service';
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-layout',
@@ -51,13 +52,19 @@ export class LayoutComponent implements OnInit {
       icon: 'people'
     }
   ];
+  public dataUser: any;
 
   constructor(
     private authentication: AuthenticationService,
-    private navController: NavController
+    private navController: NavController,
+    private storage: Storage
   ) { }
 
   ngOnInit(): void {
+    this.storage.get('user').then(data => {
+      console.log(data);
+      this.dataUser = data;
+    });
   }
   public logout = () => {
     this.authentication.logout();

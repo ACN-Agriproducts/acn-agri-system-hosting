@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutComponent } from '@layout/layout.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '@enviroment/environment.prod';
+import { IonicStorageModule } from '@ionic/storage';
 
 
 @NgModule({
@@ -25,6 +26,9 @@ import { environment } from '@enviroment/environment.prod';
     BrowserAnimationsModule,
     SharedModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    IonicStorageModule.forRoot({
+      name: 'dbAgriproductos',
+    })
   ],
   providers: [
     StatusBar,

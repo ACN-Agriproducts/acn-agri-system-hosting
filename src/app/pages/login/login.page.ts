@@ -2,7 +2,7 @@ import { LoginService } from './utils/services/login.service';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { Storage } from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 
 
 @Component({
@@ -21,7 +21,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private loadingController: LoadingController,
     private service: LoginService,
     private formBuilder: FormBuilder,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private storage: Storage
   ) {
     this.buildForm();
   }
@@ -46,8 +47,8 @@ export class LoginPage implements OnInit, OnDestroy {
       const email = this.formulario.value.email;
       const password = this.formulario.value.password;
       this.service.login(email, password).then(response => {
-        console.log(response);
         if (response) {
+          this.storage.set('user', this.dataUser(response.user));
           this.loadingController.dismiss().then(() => {
             this.navController.navigateForward('/dashboard/home');
           });
@@ -79,5 +80,15 @@ export class LoginPage implements OnInit, OnDestroy {
     });
 
     await alert.present();
+  }
+  private dataUser = (data) => {
+    return {
+      displayName: data.displayName,
+      email: data.email,
+      uid: data.uid,
+      photoURL: data.photoURL,
+      phoneNumber: data.phoneNumber,
+      refreshToke: data.refreshToken
+    }
   }
 }

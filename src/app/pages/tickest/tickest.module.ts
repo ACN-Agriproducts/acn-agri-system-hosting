@@ -15,6 +15,7 @@ import { AddPictureComponent } from './components/add-picture/add-picture.compon
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ModalTicketComponent } from './components/modal-ticket/modal-ticket.component';
 import { ShowDetailsComponent } from './components/table/show-details/show-details.component';
+import { TabletAuxComponent } from './components/tablet-aux/tablet-aux.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { ShowDetailsComponent } from './components/table/show-details/show-detai
     DetailsTicketComponent,
     AddPictureComponent,
     ModalTicketComponent,
-    ShowDetailsComponent
+    ShowDetailsComponent,
+    TabletAuxComponent
   ]
 })
 export class TickestPageModule { }
