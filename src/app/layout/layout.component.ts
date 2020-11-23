@@ -65,6 +65,7 @@ export class LayoutComponent implements OnInit {
       console.log(data);
       this.dataUser = data;
     });
+    this.authentication.user().subscribe(data => console.log(data));
   }
   public logout = () => {
     this.authentication.logout();

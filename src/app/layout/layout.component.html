@@ -29,14 +29,7 @@
                 <ion-list id="labels-list">
                     <ion-list-header>Options</ion-list-header>
                     <ion-menu-toggle auto-hide="false" >
-                        <ion-item button
-                            lines="none" detail="false">
-                            <ion-icon slot="start" ios="person-outline" md="person-outline"></ion-icon>
-                            <ion-label>Users</ion-label>
-                        </ion-item>
-                    </ion-menu-toggle>
-                    <ion-menu-toggle auto-hide="false" >
-                        <ion-item button
+                        <ion-item button routerLinkActive="selected" routerLink="/dashboard/settings" routerDirection="forward"
                             lines="none" detail="false">
                             <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
                             <ion-label>Settings</ion-label>

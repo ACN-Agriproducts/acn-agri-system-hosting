@@ -50,6 +50,10 @@ const routes: Routes = [
             path: 'directory',
             loadChildren: () => import('./pages/directory/directory.module').then(m => m.DirectoryPageModule)
           },
+          {
+            path: 'settings',
+            loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+          },
           // {
           //   path: '',
           //   data: { preload: true, title: 'Kabik' },
@@ -63,6 +67,7 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
+ 
 
   // {
   //   path: '',
