@@ -1,0 +1,66 @@
+<ion-content class="mat-typography ion-padding">
+    <h2 mat-dialog-title>New user:</h2>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="12">
+                <mat-form-field appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="6">
+                <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email">
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="6">
+                <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password">
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12">
+                <ion-text color="medium">
+                    Privileges
+                </ion-text>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="6">
+                <mat-form-field appearance="fill">
+                    <mat-label>Ticket</mat-label>
+                    <input matInput>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="6">
+                <mat-form-field appearance="fill">
+                    <mat-label>Client</mat-label>
+                    <input matInput>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="12">
+                <mat-form-field appearance="fill">
+                    <mat-label>Product</mat-label>
+                    <input matInput>
+                </mat-form-field>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
+<mat-dialog-actions align="end" class="ion-padding" >
+    <ion-button  fill="clear" color="dark">
+        Cancel
+    </ion-button>
+    <ion-button  fill="solid" color="primary">
+        Save
+    </ion-button>
+    <!-- <button mat-></button> -->
+    <!-- <button mat-button >Install</button> -->
+</mat-dialog-actions>

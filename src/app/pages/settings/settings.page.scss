@@ -1,0 +1,12 @@
+.grid-content, .grid-content-collapse{
+    width: 60%;
+    margin: auto;
+    display: grid;
+
+    
+    // float: right;
+    // align-items: stretch;
+}
+.grid-content-collapse{
+    width: 80% !important;
+}

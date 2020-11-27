@@ -22,6 +22,7 @@ export class AuthenticationService {
   }
   public user = () => {
     // return this.auth.createUserWithEmailAndPassword(dataUser.email, dataUser.password);
+     
     return this.auth.user;
   }
 }

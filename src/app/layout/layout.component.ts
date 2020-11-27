@@ -1,7 +1,9 @@
+import { SettingsService } from './../pages/settings/utils/service/settings.service';
 import { NavController } from '@ionic/angular';
 import { AuthenticationService } from '@core/services/Authentication/Authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -52,12 +54,15 @@ export class LayoutComponent implements OnInit {
       icon: 'people'
     }
   ];
+  public collapse$: Observable<boolean>;
+  public displayName$: Observable<boolean>;
   public dataUser: any;
 
   constructor(
     private authentication: AuthenticationService,
     private navController: NavController,
-    private storage: Storage
+    private storage: Storage,
+    private serviceSettings: SettingsService
   ) { }
 
   ngOnInit(): void {
@@ -66,6 +71,10 @@ export class LayoutComponent implements OnInit {
       this.dataUser = data;
     });
     this.authentication.user().subscribe(data => console.log(data));
+
+
+    this.collapse$ = this.serviceSettings.collapseMenu$;
+    this.displayName$ = this.serviceSettings.displayName$;
   }
   public logout = () => {
     this.authentication.logout();

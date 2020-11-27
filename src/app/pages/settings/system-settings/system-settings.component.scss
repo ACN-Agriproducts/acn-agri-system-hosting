@@ -1,0 +1,29 @@
+ion-card-title {
+  --color: var(--ion-color-step-800);
+  color: var(--ion-color-step-800);
+  font-size: 18px;
+}
+.label-title{
+    font-weight: 500;
+    font-size: 16px;
+}
+.content-label-item{
+    display: grid;
+    .label-item-title{
+        color: var(--ion-color-step-800);
+        font-weight: 500;
+        font-size: 16px;
+    }
+    .label-item-subtitle{
+        color: var(--ion-color-step-450);
+        font-size: 14px;
+    }
+}
+.item-select{
+    .label-item-title , ion-select {
+        font-size: 14px;
+    }
+}
+.content-grid{
+    display: grid;
+}

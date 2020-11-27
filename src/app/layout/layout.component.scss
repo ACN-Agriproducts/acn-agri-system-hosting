@@ -65,7 +65,7 @@ ion-menu.md ion-item.selected ion-icon {
 }
 
 ion-menu.md ion-item ion-icon {
-  color: #4c8c4aef;
+  color: var(--ion-color-primary);
   // font-size: 16px;
 }
 
@@ -148,4 +148,12 @@ ion-content {
 }
 .subitem-note-user{
   font-size: .95rem;
+}
+
+.position-r{
+  .button-add{
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }

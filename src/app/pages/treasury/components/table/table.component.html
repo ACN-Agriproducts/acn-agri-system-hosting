@@ -1,0 +1,86 @@
+<div class="panel-aux"></div>
+<ion-card class="table-header grid-item ion-hide-md-down">
+    <!-- <ion-item lines="none" class="item-icon-hide-hover" (click)="number = number">
+        <div class="item-text-header">
+            <ion-text>N°</ion-text>
+            <ion-icon [class.active-arrow]="number" name="chevron-down-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item> -->
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="customer = customer">
+        <div class="item-text-header">
+            <ion-text>Customer</ion-text>
+            <ion-icon [class.active-arrow]="customer" name="chevron-down-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="billed = billed">
+        <div class="item-text-header">
+            <ion-text>Ammount</ion-text>
+            <ion-icon [class.active-arrow]="billed" name="chevron-down-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="issue = issue">
+        <div class="item-text-header">
+            <ion-text >Bank account</ion-text>
+            <ion-icon [class.active-arrow]="issue" name="chevron-down-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="paid = paid">
+        <div class="item-text-header">
+            <ion-text>Date</ion-text>
+            <ion-icon [class.active-arrow]="paid" name="chevron-down-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="paid = paid">
+        <div class="item-text-header">
+            <ion-text>Status</ion-text>
+            <ion-icon [class.active-arrow]="paid" name="chevron-down-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+
+    <ion-item lines="none">
+        <div class="item-text-header">
+            <ion-text>Manage</ion-text>
+        </div>
+    </ion-item>
+</ion-card>
+<ion-card  class="table-body">
+    <div (contextmenu)="openOptions($event)" class="grid-item item-table" *ngFor="let item of [1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6,7,8,9,10]">
+        <!-- <ion-item lines="none">
+            <ion-text color="dark" class="item-text-number">D 04{{item}}</ion-text>
+        </ion-item> -->
+        <ion-item lines="none">
+            <ion-text (dblclick)="select($event)" color="primary" class="item-text-customer">César Palacio Vega Bonilla
+
+            </ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text class="item-text-price" color="dark">{{(850.00) * item | currency:'$ '}}</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="content-grid">
+                <ion-text class="item-title" color="dark">ES3221051662758278834301</ion-text>
+                <ion-text class="subitem-title" color="medium">111222333333333334</ion-text>
+            </div>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>30 May 2019</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <div class="content-grid content-item-status">
+                <div class="item-status">
+                    <span>Paid</span>
+                </div>
+            </div>
+        </ion-item>
+
+        <ion-item lines="none"class="ion-hide-md-down">
+            <div class="content-button">
+                <ion-buttons>
+                    <ion-button (click)="openOptions($event)" color="medium" slot="end">
+                        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                    </ion-button>
+                </ion-buttons>
+            </div>
+        </ion-item>
+    </div>
+</ion-card>

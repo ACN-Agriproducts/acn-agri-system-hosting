@@ -1,5 +1,10 @@
 <app-header-toolbar titulo="Settings"></app-header-toolbar>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+  <!-- <div class="content-system-settings"> -->
+  <div class="grid-content"
+    [class.grid-content-collapse]="!(collapse$ | async)">
+    <app-user-data></app-user-data>
+    <app-system-settings></app-system-settings>
+  </div>
 </ion-content>

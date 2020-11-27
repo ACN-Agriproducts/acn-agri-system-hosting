@@ -1,7 +1,8 @@
 <!-- <ion-app>
 </ion-app> -->
 <ion-app (contextmenu)="$event.preventDefault()">
-    <ion-split-pane contentId="main-content" when="(min-width: 1250px)">
+    <ion-split-pane contentId="main-content"
+        [when]="(collapse$ | async)  ? '(min-width: 10250px)' : '(min-width: 1250px)' ">
         <ion-menu contentId="main-content" type="overlay">
             <ion-content>
                 <ion-list id="inbox-list">
@@ -10,16 +11,19 @@
                             src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789">
                         </ion-img>
                     </ion-list-header>
-                    <ion-note *ngIf="dataUser">
-                        <div class="content-note-user">
-                            <span>{{dataUser.email}}</span>
-                            <span class="subitem-note-user">Administrator</span>
-                        </div>
-                    </ion-note>
+                    <ng-container *ngIf="(displayName$ | async)">
+                        <ion-note *ngIf="dataUser">
+                            <div class="content-note-user">
+                                <span>{{dataUser.email}}</span>
+                                <span class="subitem-note-user">Administrator</span>
+                            </div>
+                        </ion-note>
+                    </ng-container>
+
 
                     <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-                        <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected" [routerLink]="[p.url]" lines="none" 
-                            detail="false">
+                        <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected"
+                            [routerLink]="[p.url]" lines="none" detail="false">
                             <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
                             <ion-label>{{ p.title }}</ion-label>
                         </ion-item>
@@ -28,16 +32,22 @@
 
                 <ion-list id="labels-list">
                     <ion-list-header>Options</ion-list-header>
-                    <ion-menu-toggle auto-hide="false" >
-                        <ion-item button routerLinkActive="selected" routerLink="/dashboard/settings" routerDirection="forward"
-                            lines="none" detail="false">
+                    <ion-menu-toggle  auto-hide="false">
+                        <ion-item button routerLinkActive="selected" routerLink="/dashboard/users"
+                            routerDirection="forward" lines="none" detail="false">
+                            <ion-icon slot="start" ios="person-outline" md="person-outline"></ion-icon>
+                            <ion-label>Users</ion-label>
+                        </ion-item>
+                    </ion-menu-toggle>
+                    <ion-menu-toggle auto-hide="false">
+                        <ion-item button routerLinkActive="selected" routerLink="/dashboard/settings"
+                            routerDirection="forward" lines="none" detail="false">
                             <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
                             <ion-label>Settings</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
-                    <ion-menu-toggle auto-hide="false" >
-                        <ion-item button (click)="logout()"
-                            lines="none" detail="false" >
+                    <ion-menu-toggle auto-hide="false">
+                        <ion-item button (click)="logout()" lines="none" detail="false">
                             <ion-icon slot="start" ios="log-out-outline" md="log-out-outline"></ion-icon>
                             <ion-label>Sign out</ion-label>
                         </ion-item>

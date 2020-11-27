@@ -10,6 +10,7 @@ import { OptionBusinessComponent } from '../option-business/option-business.comp
 })
 export class HeaderToolbarComponent implements OnInit {
   @Input() public titulo: string;
+  @Input() public border = true;
   constructor(
     private popoverController: PopoverController,
   ) { }
@@ -25,4 +26,5 @@ export class HeaderToolbarComponent implements OnInit {
     });
     return await popover.present();
   }
+
 }

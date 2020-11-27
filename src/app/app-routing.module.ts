@@ -14,13 +14,24 @@ const routes: Routes = [
         redirectTo: '/login',
         pathMatch: 'full',
       },
+
+      // {
+      //   path: '/dashboard',
+      //   redirectTo: '/login',
+      //   pathMatch: 'full',
+      // },
       {
         path: 'dashboard',
         canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectLoggedLogin },
         children: [
           {
+            path: '',
+            redirectTo: '/dashboard/home',
+            pathMatch: 'full',
+          },
+          {
             path: 'home',
-            loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+            loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
           },
           {
             path: 'tickets',
@@ -52,22 +63,42 @@ const routes: Routes = [
           },
           {
             path: 'settings',
-            loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+            loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
           },
+          {
+            path: 'users',
+            loadChildren: () => import('./pages/users/users.module').then(m => m.UsersPageModule)
+          },
+          // {
+          //   path: '**',
+          //   redirectTo: '/dashboard/home',
+          //   pathMatch: 'full',
+          // }
           // {
           //   path: '',
           //   data: { preload: true, title: 'Kabik' },
           //   loadChildren: () => import('@pages/home/home.module').then(m => m.HomeModule),
           // },
         ]
-      }
+      },
+      // {
+      //   path: '**',
+      //   redirectTo: '/dashboard/home',
+      //   pathMatch: 'full',
+      // },
     ]
   },
+
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
- 
+  {
+    path: '**',
+    redirectTo: '/dashboard/home',
+    pathMatch: 'full',
+  }
+
 
   // {
   //   path: '',
