@@ -25,7 +25,7 @@ export class TickestPage implements OnInit {
     // });
     const modal = await this.modalController.create({
       component: FiltersComponent,
-      cssClass: 'modal-filter-ticket'
+      cssClass: 'modal-filter-ticket',
     });
     return await modal.present();
     // this.bottomSheet.open(FiltersComponent);
