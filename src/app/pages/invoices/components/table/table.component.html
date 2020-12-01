@@ -13,7 +13,7 @@
     </ion-item>
     <ion-item lines="none" class="item-icon-hide-hover" (click)="issue = issue">
         <div class="item-text-header">
-            <ion-text >Issue</ion-text>
+            <ion-text>Issue</ion-text>
             <ion-icon [class.active-arrow]="issue" name="chevron-down-outline" color="primary"></ion-icon>
         </div>
     </ion-item>
@@ -35,7 +35,7 @@
         </div>
     </ion-item>
 </ion-card>
-<ion-card  class="table-body">
+<ion-card class="table-body">
     <div (contextmenu)="openOptions($event)" class="grid-item item-table" *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
         <ion-item lines="none">
             <ion-text color="dark" class="item-text-number">D 04{{item}}</ion-text>
@@ -50,9 +50,15 @@
             <ion-text>30 May 2019</ion-text>
         </ion-item>
         <ion-item lines="none">
-            <ion-text class="item-text-price" color="dark">{{(850.00) * item | currency:'$ '}}</ion-text>
+            <ion-text class="item-text-price" color="dark">
+                <div class="iten-price-customer">
+                    <span class="pesos">$</span>
+                    {{(850.00) * item }}
+                    <span class="decimales">00</span>
+                </div>
+            </ion-text>
         </ion-item>
-        <ion-item lines="none"class="ion-hide-md-down">
+        <ion-item lines="none" class="ion-hide-md-down">
             <div class="content-button">
                 <ion-buttons>
                     <ion-button (click)="openOptions($event)" color="medium" slot="end">

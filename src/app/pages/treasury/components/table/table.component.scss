@@ -16,7 +16,7 @@
 }
 .panel-aux{
     position: sticky;
-    background-color: var(--ion-background-color, #fff);
+    background: var(--ion-color-light);
     top: -20px;
     left: 0;
     height: 20px;
@@ -60,7 +60,7 @@ ion-item {
 .item-text-header {
   display: grid;
   grid-template-columns: auto auto;
-  column-gap: 15px;
+  // column-gap: 15px;
   justify-content: start;
   align-items: center;
   cursor: pointer;

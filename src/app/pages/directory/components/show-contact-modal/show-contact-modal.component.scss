@@ -1,3 +1,6 @@
+ion-content{
+  --background:  var(--ion-background-color, #fff);
+}
 .content-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -12,7 +15,7 @@
     font-weight: 400;
     letter-spacing: 0;
     line-height: 1.75rem;
-    color: var(--ion-color-text-dark);
+    color: var(--ion-color-dark);
   }
   .item-subname-title {
     color: var(--ion-color-medium);
@@ -53,7 +56,7 @@
     .text-content-detail {
       padding: 6px 0;
       ion-text {
-        color: var(--ion-color-text-dark);
+        color: var(--ion-color-dark);
         display: grid;
         .sublabel-text {
           font-size: 0.725rem;
@@ -82,7 +85,7 @@
     //   margin-bottom: 10px;
     position: relative;
     span {
-      background-color: #fff;
+      background:  var(--ion-background-color, #fff);
       position: relative;
       z-index: 80;
       display: grid;

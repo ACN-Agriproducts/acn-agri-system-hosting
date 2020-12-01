@@ -1,3 +1,4 @@
+import { FormatPriceLetterPipe } from './pipes/FormatPriceLetter/FormatPriceLetter.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesCoreModule } from './directive/directives-core.module';
 import { MaterialModule } from './modules/material.module';
@@ -27,10 +28,13 @@ import { IonicStorageModule } from '@ionic/storage';
     ComponentsModule,
     MaterialModule,
     DirectivesCoreModule,
+    FormatPriceLetterPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
   ],
-  declarations: []
+  declarations: [
+    FormatPriceLetterPipe
+  ]
 })
 export class CoreModule { }

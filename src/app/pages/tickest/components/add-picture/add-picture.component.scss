@@ -45,6 +45,10 @@ ngx-dropzone {
   justify-content: center;
   min-height: 250px;
   max-height: 340px;
+  background: var(--ion-color-light);
+}
+ion-content{
+  --background:  var(--ion-background-color, #fff);
 }
 @media screen and (max-width: 720px) {
   mat-dialog-content {

@@ -1,0 +1,35 @@
+.content-header{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 12px;
+}
+.content-button
+{
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-between;
+    align-items: center;
+}
+ion-button{
+    text-transform: none;
+}
+
+.content-filter{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: end;
+    align-items: center;
+    column-gap: 15px;
+}
+.item-form-input{
+    padding-top: 1.34375em;
+}
+.magin-inline{
+    margin-inline: 10px;
+}
+.content-radio-items{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: end;
+    align-items: center;
+}

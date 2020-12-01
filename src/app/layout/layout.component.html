@@ -40,6 +40,13 @@
                         </ion-item>
                     </ion-menu-toggle>
                     <ion-menu-toggle auto-hide="false">
+                        <ion-item button 
+                            (click)="test()" lines="none" detail="false">
+                            <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
+                            <ion-label>Test</ion-label>
+                        </ion-item>
+                    </ion-menu-toggle>
+                    <ion-menu-toggle auto-hide="false">
                         <ion-item button routerLinkActive="selected" routerLink="/dashboard/settings"
                             routerDirection="forward" lines="none" detail="false">
                             <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>

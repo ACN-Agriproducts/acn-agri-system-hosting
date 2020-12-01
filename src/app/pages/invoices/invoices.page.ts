@@ -1,5 +1,5 @@
 import { ContextMenuComponent } from './../../core/components/context-menu/context-menu.component';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ToastController } from '@ionic/angular';
 import { OptionsComponent } from './components/options/options.component';
 import { Component, OnInit } from '@angular/core';
 
@@ -10,8 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvoicesPage implements OnInit {
 
+  public filter: boolean;
   constructor(
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -24,5 +26,26 @@ export class InvoicesPage implements OnInit {
       event: ev
     });
     return await options.present();
+  }
+  async presentToast(event) {
+    const toast = await this.toastController.create({
+      message: 'Your settings have been saved.',
+      duration: 2000,
+      position: 'bottom',
+      mode: 'ios',
+      keyboardClose: true,
+      header: 'Header to be shown in the toast.',
+      color: 'dark',
+      buttons: [
+       {
+          text: 'Close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    toast.present();
   }
 }

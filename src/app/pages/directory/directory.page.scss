@@ -1,6 +1,11 @@
 .content-label{
     display: grid;
     justify-content: start;
+    span:nth-child(1){
+        font-size: 16px;
+        color: var(--ion-color-dark);
+        font-weight: 500;
+    }
     
 }
 .label-text{
@@ -20,7 +25,7 @@ ion-item {
     font-weight: 500;
     line-height: 1rem;
     text-transform: uppercase;
-    color: #5f6368;
+    color: var(--ion-color-medium);
     display: flex;
     padding: 10px 0 10px 10px;
 }

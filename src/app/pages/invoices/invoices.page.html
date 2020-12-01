@@ -1,5 +1,59 @@
-  <app-header-toolbar titulo="Invoices"></app-header-toolbar>
-  <ion-content class="ion-padding">
-    <ion-searchbar (contextmenu)="openContextMenu($event)"></ion-searchbar>
-    <app-table></app-table>
-  </ion-content>
+<app-header-toolbar titulo="Invoices"></app-header-toolbar>
+<ion-content class="ion-padding">
+  <div class="content-header magin-inline">
+    <ion-searchbar (contextmenu)="openContextMenu($event)" class="ion-no-padding"></ion-searchbar>
+    <div class="content-button">
+      <ion-button [color]="filter ? 'danger' : 'dark'" (click)="filter = !filter">
+        <!-- <ion-text slot="end">Export CSV</ion-text> -->
+        <ion-icon [name]="filter ? 'close-outline' : 'options-outline'"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-text slot="end">New Invoice</ion-text>
+      </ion-button>
+    </div>
+  </div>
+  <div class="content-filter magin-inline" *ngIf="filter">
+    <div class="item-form-input">
+      <mat-form-field appearance="fill">
+        <mat-label>Only paid invoices</mat-label>
+        <mat-select>
+          <mat-option value="yes">Yes</mat-option>
+          <mat-option value="no">No</mat-option>
+          <mat-option value="both">Both</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <!-- <ion-radio-group value="biff">
+        <div class="content-radio-items">
+          <ion-item lines="none" color="light">
+            <ion-label>Biff</ion-label>
+            <ion-radio slot="start" value="biff"></ion-radio>
+          </ion-item>
+      
+          <ion-item lines="none" color="light">
+            <ion-label>Griff</ion-label>
+            <ion-radio slot="start" value="griff"></ion-radio>
+          </ion-item>
+        </div>
+      </ion-radio-group> -->
+    </div>
+    <div class="item-form-input">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <div class="item-form-button">
+      <ion-button color="dark" (click)="presentToast($event)">
+        <ion-text>Apply</ion-text>
+      </ion-button>
+    </div>
+  </div>
+  <app-table></app-table>
+  {{'' | FormatPriceLetter}}
+</ion-content>

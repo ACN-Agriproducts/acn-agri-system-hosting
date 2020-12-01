@@ -1,5 +1,5 @@
 import { SettingsService } from './../pages/settings/utils/service/settings.service';
-import { NavController } from '@ionic/angular';
+import {  NavController } from '@ionic/angular';
 import { AuthenticationService } from '@core/services/Authentication/Authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
@@ -57,12 +57,14 @@ export class LayoutComponent implements OnInit {
   public collapse$: Observable<boolean>;
   public displayName$: Observable<boolean>;
   public dataUser: any;
+  // public nextPage = LayoutComponent;
 
   constructor(
     private authentication: AuthenticationService,
     private navController: NavController,
     private storage: Storage,
-    private serviceSettings: SettingsService
+    private serviceSettings: SettingsService,
+    // private nav: IonNav
   ) { }
 
   ngOnInit(): void {
@@ -75,6 +77,9 @@ export class LayoutComponent implements OnInit {
 
     this.collapse$ = this.serviceSettings.collapseMenu$;
     this.displayName$ = this.serviceSettings.displayName$;
+  }
+  public test = () => {
+    // this.nav.push(this.nextPage, { level: 0 + 1 });
   }
   public logout = () => {
     this.authentication.logout();
