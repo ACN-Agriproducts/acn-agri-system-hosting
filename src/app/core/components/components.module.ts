@@ -1,3 +1,4 @@
+import { FileInvoiceComponent } from './../components/file-invoice/file-invoice.component';
 
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -23,13 +24,15 @@ import { MaterialModule } from '@core/modules/material.module';
     OptionBusinessComponent,
     ButtonBusinessComponent,
     HeaderToolbarComponent,
-    ContextMenuComponent
+    ContextMenuComponent,
+    FileInvoiceComponent
   ],
   exports: [
     OptionBusinessComponent,
     ButtonBusinessComponent,
     HeaderToolbarComponent,
-    ContextMenuComponent
+    ContextMenuComponent,
+    FileInvoiceComponent
   ]
 })
 export class ComponentsModule { }

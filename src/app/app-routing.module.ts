@@ -94,10 +94,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
+    path: 'ticket/:id',
+    loadChildren: () => import('./pages/files/ticket/ticket.module').then( m => m.TicketPageModule)
+  },
+  {
     path: '**',
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
-  }
+  },
+
 
 
   // {

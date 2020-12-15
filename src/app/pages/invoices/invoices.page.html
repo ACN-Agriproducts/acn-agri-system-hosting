@@ -7,7 +7,7 @@
         <!-- <ion-text slot="end">Export CSV</ion-text> -->
         <ion-icon [name]="filter ? 'close-outline' : 'options-outline'"></ion-icon>
       </ion-button>
-      <ion-button>
+      <ion-button (click)="openOption($event)">
         <ion-text slot="end">New Invoice</ion-text>
       </ion-button>
     </div>
@@ -22,7 +22,7 @@
           <mat-option value="both">Both</mat-option>
         </mat-select>
       </mat-form-field>
-      
+
       <!-- <ion-radio-group value="biff">
         <div class="content-radio-items">
           <ion-item lines="none" color="light">
@@ -49,11 +49,11 @@
       </mat-form-field>
     </div>
     <div class="item-form-button">
-      <ion-button color="dark" (click)="presentToast($event)">
+      <ion-button color="dark" >
         <ion-text>Apply</ion-text>
       </ion-button>
     </div>
   </div>
   <app-table></app-table>
-  {{'' | FormatPriceLetter}}
+  <!-- <app-file-invoice></app-file-invoice> -->
 </ion-content>

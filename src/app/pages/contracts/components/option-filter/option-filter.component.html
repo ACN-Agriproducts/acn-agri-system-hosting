@@ -1,0 +1,57 @@
+<ion-list>
+    <ion-item (click)="orderAtoZ()" lines="none" button>
+        <ion-icon name="filter-outline" slot="start"></ion-icon>
+        <ion-text>Sort from A to Z</ion-text>
+        <!-- sort from highest to lowest -->
+        <!-- order from smallest to largest -->
+    </ion-item>
+    <ion-item (click)="orderZtoA()" lines="none" button>
+        <ion-icon class="rotate" name="filter-outline" slot="start"></ion-icon>
+        <ion-text>Sort from Z to A</ion-text>
+    </ion-item>
+    <ion-item class="item-two-icon" (click)="cleanFilter()" lines="none" button [disabled]="isFilter">
+        <ion-icon name="funnel-outline" color="primary" slot="start"></ion-icon>
+        <ion-icon class="icon-seccound" color="danger" name="close" slot="start"></ion-icon>
+        <ion-text>Clean filter</ion-text>
+    </ion-item>
+    <ion-item-group *ngIf="objet">
+        <ion-item-divider>
+            <div class="content-row-divider">
+                <ion-label color="medium">
+                    Filter by:
+                </ion-label>
+                <div class="item-form-search">
+                    <ion-icon name="search" class="icon-search"></ion-icon>
+                    <input type="search" [formControl]="input" placeholder="Search">
+                    <ion-icon *ngIf="input.value" (click)="input.setValue('')" name="close" class="icon-clean">
+                    </ion-icon>
+                </div>
+            </div>
+        </ion-item-divider>
+        <ion-list class="list-items">
+            <ion-item (click)="selectAll()" lines="none" button>
+                <ion-icon [color]="selectAllBand ? 'primary' : 'medium'"
+                    [name]="selectAllBand ? 'checkbox' : 'square-outline'" slot="start"></ion-icon>
+                <ion-text>{{'Select all'| titlecase}}</ion-text>
+            </ion-item>
+            <ion-item (click)="reduceArray(item)" lines="none" button *ngFor="let item of listArray">
+                <!-- <ion-icon color="medium" name="square-outline" slot="start"></ion-icon> -->
+                <ion-icon [color]="item.active ? 'primary' : 'medium'"
+                    [name]="item.active ? 'checkbox' : 'square-outline'" slot="start"></ion-icon>
+                <ng-container [ngSwitch]="(item.name | formatString)">
+                    <ion-text *ngSwitchCase="'string'">{{(item.name | titlecase)}}</ion-text>
+                    <ion-text *ngSwitchCase="'number'"> {{
+                        (isCurrency === '$') ? (item.name | currency:'$') : item.name 
+                    }} </ion-text>
+                    <ion-text *ngSwitchCase="'object'"> {{item.name | date}} </ion-text>
+                </ng-container>
+            </ion-item>
+        </ion-list>
+        <ion-item lines="none">
+            <div class="content-buttons">
+                <!-- <button class="btn-seccond" (click)="cancelButtoon()">Cancel</button> -->
+                <button class="btn-primary" (click)="acceptButton()">Accept</button>
+            </div>
+        </ion-item>
+    </ion-item-group>
+</ion-list>

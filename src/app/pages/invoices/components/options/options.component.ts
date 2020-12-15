@@ -1,4 +1,6 @@
-import { PopoverController } from '@ionic/angular';
+// import { FileInvoiceComponent } from '@core/mfile-invoice/file-invoice.component';
+
+import { PopoverController, ModalController } from '@ionic/angular';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
@@ -14,7 +16,8 @@ export class OptionsComponent implements OnInit {
   constructor(
     private clipboard: Clipboard,
     private popoverController: PopoverController,
-    private storage: Storage
+    private storage: Storage,
+    private modalController: ModalController
   ) { }
 
   ngOnInit(): void {
@@ -39,4 +42,29 @@ export class OptionsComponent implements OnInit {
     });
   }
 
+  public openInvoice = async () => {
+    // this.popoverController.dismiss(null);
+    // const modal = await this.modalController.create({
+    //   // component: FileInvoiceComponent,
+    //   cssClass: 'modal-file-invoice',
+    //   mode: 'md'
+    // });
+    // return await modal.present();
+  }
+  public print = () => {
+    this.openInvoice().then(() => {
+      setTimeout(() => {
+
+        const ventana = window.open('', 'PRINT', 'height=500,width=700');
+        const invoice = document.getElementById('file-html-invoice');
+        console.log(invoice);
+        ventana.document.write(invoice.innerHTML);
+        ventana.document.close();
+        ventana.focus();
+        ventana.print();
+        ventana.close();
+        return true;
+      }, 150);
+    });
+  }
 }

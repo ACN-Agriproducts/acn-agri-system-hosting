@@ -1,3 +1,4 @@
+import { CoreModule } from './core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -14,6 +15,7 @@ import { LayoutComponent } from '@layout/layout.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '@enviroment/environment.prod';
 import { IonicStorageModule } from '@ionic/storage';
+import { File } from '@ionic-native/file/ngx';
 
 
 @NgModule({
@@ -21,10 +23,13 @@ import { IonicStorageModule } from '@ionic/storage';
   entryComponents: [],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      mode: 'md'
+    }),
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
+    CoreModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     IonicStorageModule.forRoot({
       name: 'dbAgriproductos',
@@ -32,6 +37,7 @@ import { IonicStorageModule } from '@ionic/storage';
   ],
   providers: [
     StatusBar,
+    
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

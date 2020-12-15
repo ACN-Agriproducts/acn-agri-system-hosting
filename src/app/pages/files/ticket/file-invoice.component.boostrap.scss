@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+.row-2 {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  align-content: center;
+}
+.mb-0 {
+  margin: 0;
+}
+.container-fluid {
+  width: 100%;
+}
+header {
+  h4 {
+    color: #0c2f54;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    line-height: 1.2;
+    text-align: right !important;
+    font-size: 1.5rem;
+  }
+  p{
+    color: #535b61;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+  }
+}
+.row-flex-2{
+    display: flex;
+    justify-content: space-between;
+    
+}
+.order-right{
+    text-align: right;
+    display: grid;
+    justify-content: end;
+}
+address{
+    display: grid;
+    line-height: 1.3;
+}
+.d-grid{
+    display: grid;
+}
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+    .card-header:first-child {
+        border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;
+    }
+    .card-header {
+        padding: .75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: rgba(0,0,0,.03);
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+}
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    color: #535b61;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+.text-center {
+    text-align: center!important;
+}
+.text-right {
+    text-align: right!important;
+}
+.border-top-0 {
+    border-top: 0!important;
+}
+.font-weight-600 {
+    font-weight: 600 !important;
+}
+.text-4 {
+    font-size: 18px !important;
+    font-size: 1.125rem !important;
+}
+ion-title{
+    cursor: pointer;
+}

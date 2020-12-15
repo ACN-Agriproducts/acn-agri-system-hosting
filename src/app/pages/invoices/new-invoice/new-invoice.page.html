@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons class="ion-hide-md-up" slot="start">
+      <ion-back-button>
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title>New invoice</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-content-div">
+    <div class="item-select-product">
+      <ion-item lines="none">
+        <ion-label>Select product</ion-label>
+        <ion-select multiple="true" [value]="product" multiple="false" cancelText="cancel" okText="Save">
+          <ion-select-option value="yellow corn">Yellow corn</ion-select-option>
+          <ion-select-option value="milo">Milo</ion-select-option>
+          <ion-select-option value="caliche">Caliche</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div class="header-title">
+      <ion-title class=" title-content">Select tickets</ion-title>
+      <ion-searchbar placeholder="Search tickets"></ion-searchbar>
+    </div>
+    <div class="content-main">
+      <ion-card (click)="active(item, i)" class="item-card"
+        *ngFor="let item of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; let i = index" [class]="'item-' + item">
+        <!-- [class.active-card]="item <= 3" -->
+        <ion-card-header>
+          <ion-card-title color="dark">Ticket 177{{item}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p class="ion-no-margin">GRANEROS EL BRASIL BRASIL</p>
+          <p>16 de Nov del 2019</p>
+          <p>Yellow Corn</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="content-action" [class.show-buttom]="list.length>0">
+      <ion-card class="panel-action">
+        <ion-card-content>
+          <div class="content-panel-button">
+            <ion-button fill="clear" color="secondary" routerLink="/dashboard/invoices" (click)="list = []">Cancel
+            </ion-button>
+            <div class="panel-list">
+              <ion-item color="dark" lines="none">
+                <ion-label *ngFor="let item of list">{{item}} {{list.length > 1 ?  ',' : ''}}</ion-label>
+              </ion-item>
+              <ion-button routerLink="/dashboard/invoices/confirm-invoice">Next</ion-button>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

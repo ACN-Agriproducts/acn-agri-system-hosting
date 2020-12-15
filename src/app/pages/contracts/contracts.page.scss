@@ -96,3 +96,23 @@
     grid-template-columns: repeat(1, 1fr); 
   }
 }
+table{
+  width: 100%;
+}
+ion-toolbar{
+  min-height: 35px;
+  height: 35px;
+}
+ion-segment-button{
+  text-transform: none;
+  font-size: 14px;
+  min-height: 35px;
+  height: 35px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  overflow: hidden;
+}
+.segment-button-checked{
+  --background: rgba(var(--ion-color-primary-rgb),0.075);
+  background: rgba(var(--ion-color-primary-rgb),0.075);
+}

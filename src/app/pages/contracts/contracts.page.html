@@ -1,11 +1,31 @@
-<app-header-toolbar titulo="Contract"></app-header-toolbar>
+<ion-header>
+  <app-header-toolbar titulo="Contract" ></app-header-toolbar>
+  <ion-toolbar>
+    <ion-segment class="ion-justify-content-start" value="sale" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="sale">
+        <ion-label>Sale</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="purchase">
+        <ion-label>Purchase</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="new">
+        <ion-label>New Contract</ion-label>
+      </ion-segment-button>
+      <!-- <ion-segment-button value="new">
+        <ion-label>New Contract</ion-label>
+      </ion-segment-button> -->
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" class="">
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div id="container">
+  <div class="content">
+    <app-table></app-table>
+  </div>
+  
+  <!-- <div id="container">
     <div class="container-contracts current-contract">
-      <div class="title-contract">
-        <h2>Current Contract</h2>
-      </div>
+
       <div class="content-item-contract">
         <h3 class="subtitle-contract ion-color-tertiary">
           <span>Sale</span>
@@ -156,5 +176,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </ion-content>

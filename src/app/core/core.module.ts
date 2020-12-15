@@ -1,3 +1,5 @@
+import { SearchPipe } from './pipes/Search/search.pipe';
+import { FormatStringPipe } from './pipes/FormatString/formatString.pipe';
 import { FormatPriceLetterPipe } from './pipes/FormatPriceLetter/FormatPriceLetter.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesCoreModule } from './directive/directives-core.module';
@@ -19,22 +21,27 @@ import { IonicStorageModule } from '@ionic/storage';
     MaterialModule,
     NgxDropzoneModule,
     DirectivesCoreModule,
+    
     // IonicStorageModule.forRoot()
-
+    
     // FormsModule,
     // ReactiveFormsModule,
   ],
   exports: [
     ComponentsModule,
+    FormatStringPipe,
     MaterialModule,
     DirectivesCoreModule,
-    FormatPriceLetterPipe
+    FormatPriceLetterPipe,
+    SearchPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
   ],
   declarations: [
-    FormatPriceLetterPipe
+    FormatPriceLetterPipe,
+    FormatStringPipe,
+    SearchPipe
   ]
 })
 export class CoreModule { }

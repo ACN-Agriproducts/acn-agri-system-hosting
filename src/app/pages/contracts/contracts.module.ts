@@ -1,7 +1,7 @@
 import { CoreModule } from './../../core/core.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -11,15 +11,27 @@ import { ContractsPage } from './contracts.page';
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
 import { ShowDetailsComponent } from './components/show-details/show-details.component';
+import { TableComponent } from './components/table/table.component';
+import { OptionFilterComponent } from './components/option-filter/option-filter.component';
+import { FilterComponent } from './components/filter/filter.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     ContractsPageRoutingModule,
     CoreModule
   ],
-  declarations: [ContractsPage, ContractModalComponent, OptionsContractComponent, ShowDetailsComponent]
+  declarations: [
+    ContractsPage,
+    ContractModalComponent,
+    OptionsContractComponent,
+    ShowDetailsComponent,
+    TableComponent,
+    OptionFilterComponent,
+    FilterComponent
+  ]
 })
-export class ContractsPageModule {}
+export class ContractsPageModule { }

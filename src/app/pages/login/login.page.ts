@@ -49,13 +49,14 @@ export class LoginPage implements OnInit, OnDestroy {
       this.service.login(email, password).then(response => {
         if (response) {
           this.storage.set('user', this.dataUser(response.user));
-          this.loadingController.dismiss().then(() => {
+          this.loadingController.dismiss().then((res) => {
+            console.log(res);
+
             this.navController.navigateForward('/dashboard/home');
           });
         }
       }).catch((error) => {
         this.presentAlert(error.message);
-        this.loadingController.dismiss();
       });
     }
   }
@@ -78,8 +79,9 @@ export class LoginPage implements OnInit, OnDestroy {
       message,
       buttons: ['OK']
     });
-
-    await alert.present();
+    await alert.present().then(() => {
+      this.loadingController.dismiss();
+    });
   }
   private dataUser = (data) => {
     return {

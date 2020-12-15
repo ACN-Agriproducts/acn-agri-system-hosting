@@ -1,0 +1,72 @@
+.content-panel {
+  display: grid;
+  width: 80%;
+  margin: auto;
+  grid-template-columns: 55% 45%;
+}
+
+.content-main {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: space-between;
+  height: 100%;
+}
+.content-form{
+  width: 80%;
+  // margin: auto;}
+}
+// ion-card{
+//   margin: 0;
+// }
+.content-items-tickets {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 8px;
+}
+.item-ticket {
+  display: grid;
+  // row-gap: 3px;
+  border-bottom: 1px solid rgba(var(--ion-color-medium-rgb), 0.35);
+  padding-bottom: 12px;
+  padding-top: 12px;
+  h2 {
+    font-size: 16px;
+    margin: 0;
+    margin-bottom: 3px;
+    color: var(--ion-color-dark);
+  }
+  .item-name {
+    font-size: 16px;
+    color: var(--ion-color-step-600);
+  }
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+  }
+}
+.panel-action {
+  background: var(--ion-color-dark);
+}
+.content-panel-button {
+  display: grid;
+  justify-content: space-between;
+  align-content: center;
+  grid-template-columns: auto auto;
+}
+.content-action {
+  width: 100%;
+  margin: auto;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  z-index: 100;
+  position: sticky;
+  display: grid;
+  justify-items: center;
+  ion-card{
+      width: 80%;
+    //   margin-left: 0;
+  }
+}

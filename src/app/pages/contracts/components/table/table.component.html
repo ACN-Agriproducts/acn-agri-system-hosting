@@ -1,0 +1,145 @@
+<div class="header-filter">
+    <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
+    <ion-button  color="dark">
+        <ion-icon name="add" slot="start"></ion-icon>
+        <ion-text>New</ion-text>
+    </ion-button>
+    <ion-button fill="outline" color="primary" (click)="openFilter($event)">
+        <ion-icon name="filter" slot="start"></ion-icon>
+        <ion-text>Filter</ion-text>
+    </ion-button>
+</div>
+<ion-card class="table-header grid-item ion-hide-md-down">
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="number = number">
+        <div class="item-text-header item-text-number-header">
+            <ion-text>N°</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'numberContract')" [class.active-arrow]="customer"
+                name="funnel-outline" color="primary"></ion-icon>
+
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="customer = customer">
+        <div class="item-text-header">
+            <ion-text>Customer</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'name')" [class.active-arrow]="customer" name="funnel-outline"
+                color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="issue = issue">
+        <div class="item-text-header">
+            <ion-text>State</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'state')" [class.active-arrow]="issue" name="funnel-outline"
+                color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="paid = paid">
+        <div class="item-text-header">
+            <ion-text>Freight</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'freight')" [class.active-arrow]="paid" name="funnel-outline"
+                color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" class="item-icon-hide-hover" (click)="billed = billed" matTooltip="Product">
+        <div class="item-text-header">
+            <ion-text>Product</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'product')" [class.active-arrow]="billed" name="funnel-outline"
+                color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" matTooltip="Contract Date">
+        <div class="item-text-header item-icon-hide-hover">
+            <ion-text>Date</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'dateContract')" [class.active-arrow]="customer"
+                name="funnel-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none">
+        <div class="item-text-header item-icon-hide-hover">
+            <ion-text>Bushels</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'volumeBushels')" [class.active-arrow]="customer"
+                name="funnel-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none" matTooltip="Price CWT">
+        <div class="item-text-header item-icon-hide-hover">
+            <ion-text>CWT</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'priceCWT', '$')" [class.active-arrow]="customer"
+                name="funnel-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <ion-item lines="none">
+        <div class="item-text-header item-icon-hide-hover">
+            <ion-text>Total</ion-text>
+            <ion-icon (click)="openOptionsFilter($event,'totalContract', '$')" [class.active-arrow]="customer"
+                name="funnel-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
+    <!-- <ion-item lines="none">
+        <div class="item-text-header">
+            <ion-text>Manage</ion-text>
+        </div>
+    </ion-item> -->
+</ion-card>
+<ion-card class="table-body">
+    <!-- (contextmenu)="openOptions($event)" -->
+    <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
+    <div *ngFor="let item of dataListAux;">
+        <div (contextmenu)="openOptions($event)" class="grid-item item-table" *ngIf="item.isActive">
+            <ion-item lines="none">
+                <ion-text color="dark" class="item-text-number">{{item.numberContract}}</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text color="primary" class="item-text-customer">
+                    {{
+                    item.name | titlecase | slice:0:25
+                    }}
+                    <span *ngIf="item.name.length>25">...</span>
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-status" [class.active]="item.state === 'active'"
+                    [class.close]="item.state === 'close'" [class.cancel]="item.state === 'cancel'">{{item.state}}
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text>{{item.freight}}</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-text-price" color="dark">
+                    {{item.product | titlecase}}
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-text-price" color="dark">
+                    {{item.dateContract | date}}
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-text-price" color="dark">
+                    {{item.volumeBushels}}
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-text-price" color="dark">
+                    {{item.priceCWT | currency:'$'}}
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-text-price" color="dark">
+                    {{item.totalContract | currency:'$'}}
+                </ion-text>
+            </ion-item>
+            <!-- <ion-item lines="none" class="ion-hide-md-down">
+                    <div class="content-button">
+                        <ion-buttons>
+                            <ion-button  color="medium" slot="end">
+                                <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                            </ion-button>
+                        </ion-buttons>
+                    </div>
+                </ion-item> -->
+        </div>
+    </div>
+
+    <!-- </ion-virtual-scroll> -->
+</ion-card>

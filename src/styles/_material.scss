@@ -9,6 +9,17 @@
 .mat-input-element {
   caret-color: var(--ion-color-primary);
 }
-.mat-simple-snackbar-action{
+.mat-simple-snackbar-action {
   color: var(--ion-color-tertiary) !important;
+}
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled),
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+  color: var(--ion-color-primary);
+}
+
+.input-small-mat {
+  .mat-form-field-flex {
+    padding: 0 8px !important;
+    align-items: center !important;
+  }
 }

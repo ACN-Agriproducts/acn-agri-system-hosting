@@ -24,9 +24,14 @@
         <ion-icon color="dark" slot="start" name="document-text-outline"></ion-icon>
         <!-- <ion-icon color="primary" name="open-outline" slot="start"></ion-icon> -->
     </ion-item>
-    <ion-item button lines="none">
+    <ion-item button lines="none" (click)="openInvoice()">
         Open PDF
         <ion-icon color="primary" slot="start" name="newspaper-outline"></ion-icon>
+        <!-- <ion-icon color="primary" name="open-outline" slot="start"></ion-icon> -->
+    </ion-item>
+    <ion-item button lines="none" (click)="print()">
+        Print invoice
+        <ion-icon color="secondary" slot="start" name="print-outline"></ion-icon>
         <!-- <ion-icon color="primary" name="open-outline" slot="start"></ion-icon> -->
     </ion-item>
 
