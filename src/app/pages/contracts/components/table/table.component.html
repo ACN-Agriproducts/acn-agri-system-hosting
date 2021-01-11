@@ -4,10 +4,10 @@
         <ion-icon name="add" slot="start"></ion-icon>
         <ion-text>New</ion-text>
     </ion-button>
-    <ion-button fill="outline" color="primary" (click)="openFilter($event)">
+    <!-- <ion-button fill="outline" color="primary" (click)="openFilter($event)">
         <ion-icon name="filter" slot="start"></ion-icon>
         <ion-text>Filter</ion-text>
-    </ion-button>
+    </ion-button> -->
 </div>
 <ion-card class="table-header grid-item ion-hide-md-down">
     <ion-item lines="none" class="item-icon-hide-hover" (click)="number = number">
@@ -49,7 +49,7 @@
     <ion-item lines="none" matTooltip="Contract Date">
         <div class="item-text-header item-icon-hide-hover">
             <ion-text>Date</ion-text>
-            <ion-icon (click)="openOptionsFilter($event, 'dateContract')" [class.active-arrow]="customer"
+            <ion-icon (click)="openOptionsFilter($event, 'dateContract', 'date')" [class.active-arrow]="customer"
                 name="funnel-outline" color="primary"></ion-icon>
         </div>
     </ion-item>

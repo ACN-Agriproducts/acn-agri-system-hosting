@@ -2,6 +2,14 @@ ion-item {
   font-size: 12px;
   --min-height: 34px;
 }
+ion-list{
+  position: relative;
+}
+.item-content-buttons{
+  position: sticky;
+  bottom: 0;
+  left: 0;
+}
 ion-item-divider {
   ion-label {
     font-size: 12px;
@@ -93,7 +101,20 @@ ion-icon {
     cursor: pointer;
   }
 }
-
+.d-none{
+  display: none;
+}
+.item-datepicker{
+  width: 155px;
+  background-color: var(--ion-color-light);
+  margin: 0;
+  input{
+    font-size: 11px;
+  }
+}
+.divider-only{
+  min-height: 1px;
+}
 .content-buttons {
   display: grid;
   grid-template-columns: auto ;

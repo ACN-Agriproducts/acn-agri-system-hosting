@@ -14,6 +14,32 @@
         <ion-icon class="icon-seccound" color="danger" name="close" slot="start"></ion-icon>
         <ion-text>Clean filter</ion-text>
     </ion-item>
+
+    <!-- <ion-item-group *ngIf="typeObjet === 'date'">
+        <ion-item-divider>
+            <ion-icon name="calendar-outline" color="medium" slot="start"></ion-icon>
+            <ion-label color="medium">
+                Filter date:
+            </ion-label>
+
+        </ion-item-divider>
+        <ion-item mat-raised-button #rangeDate (click)="pickerRange.open()" lines="none" button>
+            <ion-text>Range</ion-text>
+            <div class="item-datepicker" slot="end">
+                <mat-form-field class="example-full-width" appearance="fill"
+                    class="input-small-mat input-small-mat-label input-light">
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="pickerRange">
+                        <input matStartDate formControlName="start">
+                        <input matEndDate formControlName="end">
+                        <mat-date-range-picker disabled="false" #pickerRange></mat-date-range-picker>
+                    </mat-date-range-input>
+                </mat-form-field>
+            </div>
+        </ion-item>
+        <ion-item-divider class="divider-only"></ion-item-divider>
+    </ion-item-group> -->
+
+
     <ion-item-group *ngIf="objet">
         <ion-item-divider>
             <div class="content-row-divider">
@@ -41,13 +67,13 @@
                 <ng-container [ngSwitch]="(item.name | formatString)">
                     <ion-text *ngSwitchCase="'string'">{{(item.name | titlecase)}}</ion-text>
                     <ion-text *ngSwitchCase="'number'"> {{
-                        (isCurrency === '$') ? (item.name | currency:'$') : item.name 
-                    }} </ion-text>
+                        (typeObjet === '$') ? (item.name | currency:'$') : item.name
+                        }} </ion-text>
                     <ion-text *ngSwitchCase="'object'"> {{item.name | date}} </ion-text>
                 </ng-container>
             </ion-item>
         </ion-list>
-        <ion-item lines="none">
+        <ion-item lines="none" class="item-content-buttons">
             <div class="content-buttons">
                 <!-- <button class="btn-seccond" (click)="cancelButtoon()">Cancel</button> -->
                 <button class="btn-primary" (click)="acceptButton()">Accept</button>

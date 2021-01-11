@@ -1,21 +1,26 @@
 <div class="content-items">
     <div class="item">
         <ion-label>Date contract</ion-label>
-        <mat-form-field appearance="fill" class="input-small-mat">
+        <mat-form-field [formGroup]="inputDateContract" appearance="fill" class="input-small-mat">
             <mat-date-range-input placeholder="Date contract" [rangePicker]="picker">
-                <input matStartDate placeholder="Start date">
-                <input matEndDate placeholder="End date">
+                <input formControlName="start" matStartDate placeholder="Start date">
+                <input formControlName="end" matEndDate placeholder="End date">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-date-range-picker #picker></mat-date-range-picker>
+
+            <mat-error *ngIf="inputDateContract.controls.start.hasError('required') 
+                || inputDateContract.controls.end.hasError('required')">
+                Required</mat-error>
+            <!-- <mat-error *ngIf="inputDateContract.controls.end.hasError('required')">Required</mat-error> -->
         </mat-form-field>
     </div>
     <div class="item">
         <ion-label>Period</ion-label>
-        <mat-form-field appearance="fill" class="input-small-mat">
+        <mat-form-field [formGroup]="inputPeriod" appearance="fill" class="input-small-mat">
             <mat-date-range-input placeholder="Date contract" [rangePicker]="period">
-                <input matStartDate placeholder="Start date">
-                <input matEndDate placeholder="End date">
+                <input formControlName="start" matStartDate placeholder="Start date">
+                <input formControlName="end" matEndDate placeholder="End date">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="period"></mat-datepicker-toggle>
             <mat-date-range-picker #period></mat-date-range-picker>
@@ -24,7 +29,7 @@
     <div class="item item-button">
         <div class="content-buttons">
             <!-- <button class="btn-seccond" (click)="cancelButtoon()">Cancel</button> -->
-            <button class="btn-primary">Accept</button>
+            <button (click)="accept()" class="btn-primary">Accept</button>
         </div>
     </div>
 </div>

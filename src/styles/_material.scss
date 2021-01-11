@@ -21,5 +21,24 @@
   .mat-form-field-flex {
     padding: 0 8px !important;
     align-items: center !important;
+    border-radius: 4px !important;
   }
+  .mat-form-field-wrapper {
+    padding: 0;
+    .mat-form-field-underline {
+      display: none;
+    }
+  }
+}
+.input-small-mat-label{
+  .mat-form-field-infix{
+    padding: 0;
+    margin: 0;
+    border: none;
+    padding: 8px 0;
+  }
+}
+.mat-raised-button:not([class*=mat-elevation-z]){
+  box-shadow: none;
+  background-color: #FFF;
 }

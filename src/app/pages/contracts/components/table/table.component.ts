@@ -5,7 +5,7 @@ import { OptionFilterComponent } from './../option-filter/option-filter.componen
 import { OptionsContractComponent } from './../options-contract/options-contract.component';
 import { PopoverController } from '@ionic/angular';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-
+import { isEqual, isWithinInterval } from 'date-fns';
 
 @Component({
   selector: 'app-table',
@@ -252,29 +252,38 @@ export class TableComponent implements OnInit {
     });
     await popover.present();
   }
-  public openOptionsFilter = async (event, objet?: string, isCurrency?: string) => {
+  public openOptionsFilter = async (event, objet?: string, typeObjet?: string) => {
     const popover = await this.popoverController.create({
       component: OptionFilterComponent,
       event,
-      // cssClass: 'option-contract',
+      cssClass: 'option-filter',
       // showBackdrop: false,
       componentProps: {
         listDataAlter: this.dataList,
         listData: this.dataService.dataContract, objet,
         listFilter: this.listFilter,
-        isCurrency
+        typeObjet
       }
     });
     await popover.present();
     await popover.onDidDismiss().then(result => {
       console.log(result);
-      if (result.data) {
+      const data = result.data;
+      if (data) {
+        console.log(data.filterDate);
         this.dataList = result.data.list;
         this.dataListAux = this.dataList;
         this.listFilter = result.data.filter;
         this.activeFilter = true;
         this.searching(this.searchIinput.value);
+        // if (data.filterDate) {
+
+        //   this.dataListAux = this.filterDateRange(result.data.list, data.filterDate);
+        // }
         this.cd.markForCheck();
+        // } else {
+        //   this.dataListAux = this.filterDateRange(data.dataListAux, data.dataDate);
+        // }
       }
     });
   }
@@ -291,6 +300,18 @@ export class TableComponent implements OnInit {
 
       }
     });
+  }
+
+  public filterDateRange = (dataList, dataDate) => {
+    if (typeof dataDate === 'object') {
+      return dataList.filter(item => {
+        return isWithinInterval(item.dateContract, { start: dataDate.start, end: dataDate.end });
+      });
+    } else {
+      return dataList.filter(item => {
+        return isEqual(item.dateContract, dataList);
+      });
+    }
   }
 
 }

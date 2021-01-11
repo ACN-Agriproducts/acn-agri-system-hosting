@@ -1,7 +1,7 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PopoverController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
-
+import { isEqual, isAfter, isBefore, isWithinInterval } from 'date-fns';
 @Component({
   selector: 'app-option-filter',
   templateUrl: './option-filter.component.html',
@@ -11,7 +11,9 @@ export class OptionFilterComponent implements OnInit {
   @Input() objet: string;
   @Input() listData: any;
   @Input() listDataAlter: any;
-  @Input() isCurrency: string;
+  @Input() typeObjet: string;
+  @Input() filterDate: string;
+
   @Input() listArrayActive = [];
   public selectAllBand = true;
   public listArray: any;
@@ -19,12 +21,18 @@ export class OptionFilterComponent implements OnInit {
   public list;
   @Input() public listFilter: any = [];
   public input = new FormControl('');
+  public dateOnly = new FormControl('');
+  public range = new FormGroup({
+    start: new FormControl({ value: '', disabled: true }, Validators.required),
+    end: new FormControl({ value: '', disabled: true }, Validators.required),
+  });
   constructor(
     private popoverController: PopoverController
   ) {
     this.input.valueChanges.pipe().subscribe(value => {
       this.searching(value);
     });
+    this.changeRange();
   }
 
   public searching = (value?: string) => {
@@ -48,7 +56,7 @@ export class OptionFilterComponent implements OnInit {
     }));
   }
   public get isFilter(): boolean {
-    return this.listArray.every(item => item.active);
+    return this.listArray.every(item => item.active) || this.list !== this.listData;
   }
 
   public listDataFilter = (array, order?: boolean) => {
@@ -74,27 +82,27 @@ export class OptionFilterComponent implements OnInit {
     }, {});
     // console.log(arrayAux);
     // if (order) {
-      
+
     // }
     return arrayAux;
   }
 
   public sendAll = () => {
-    this.popoverController.dismiss({ list: this.listData, filter: this.listFilter });
+    this.popoverController.dismiss({ list: this.listData, filter: this.listFilter, filterDate: this.filterDate });
   }
   public orderAtoZ = (): void => {
     this.listData.sort(((a, b) => {
       return a[this.objet].toString().localeCompare(b[this.objet].toString());
     }));
     this.listFilter.push({ [this.objet]: 'AtoZ' });
-    this.popoverController.dismiss({ list: this.listData, filter: this.listFilter });
+    this.popoverController.dismiss({ list: this.listData, filter: this.listFilter, filterDate: this.filterDate });
   }
   public orderZtoA = (): void => {
     this.listData.sort(((a, b) => {
       return b[this.objet].toString().localeCompare(a[this.objet].toString());
     }));
     this.listFilter.push({ [this.objet]: 'ZtoA' });
-    this.popoverController.dismiss({ list: this.listData, filter: this.listFilter });
+    this.popoverController.dismiss({ list: this.listData, filter: this.listFilter, filterDate: this.filterDate });
   }
 
   public reduceArray = (itemObj) => {
@@ -114,7 +122,7 @@ export class OptionFilterComponent implements OnInit {
     // this.popoverController.dismiss({list, filter: this.listFilter });
   }
   public acceptButton = (): void => {
-    this.popoverController.dismiss({ list: this.list, filter: this.listFilter });
+    this.popoverController.dismiss({ list: (this.list) ? this.list : this.listData, filter: this.listFilter, filterDate: this.filterDate });
   }
   public cleanFilter = (): void => {
     const list = [];
@@ -125,7 +133,7 @@ export class OptionFilterComponent implements OnInit {
     this.list = list;
     this.listArray = this.listDataFilter(list, true);
     this.searching(this.input.value);
-    this.popoverController.dismiss({ list, filter: this.listFilter });
+    this.popoverController.dismiss({ list, filter: this.listFilter, filterDate: this.filterDate });
 
   }
   public selectAll = () => {
@@ -139,5 +147,22 @@ export class OptionFilterComponent implements OnInit {
     this.list = list;
     this.listArray = this.listDataFilter(list, true);
     this.searching(this.input.value);
+  }
+
+  public getOnlyDate = (event): void => {
+    const date = event.value;
+    this.filterDate = date;
+
+    // console.log(array);
+  }
+  public changeRange = (): void => {
+    this.range.valueChanges.subscribe(value => {
+      if (value.end && value.start) {
+        this.list = this.listData.filter(item => {
+          return isWithinInterval(item.dateContract, { start: value.start, end: value.end });
+        });
+        // this.filterDate = value;
+      }
+    });
   }
 }
