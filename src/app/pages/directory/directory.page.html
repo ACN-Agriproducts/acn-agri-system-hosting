@@ -1,30 +1,33 @@
 <app-header-toolbar titulo="Directory"></app-header-toolbar>
 
-<ion-content>
-  <div class="content-search">
+<ion-content class="ion-padding">
+  <div class="content-header margin-inline">
     <ion-searchbar></ion-searchbar>
+    <ion-button (click)="openNewContact($event)">
+      <ion-text slot="end">New Contact</ion-text>
+    </ion-button>
   </div>
   <ion-card>
     <div class="content-subtitle">
       Contacts
-      <span> (20)</span>
+      <span> ({{contacts.length}})</span>
     </div>
     <!-- <ion-card-content> -->
     <div class="content-item" (contextmenu)="openOptions($event)"
-      *ngFor="let item of [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]">
-      <ion-item (click)="openContactModal()" button lines="none">
+      *ngFor="let item of contacts; let i = index">
+      <ion-item (click)="openContactModal(i)" button lines="none">
         <ion-avatar slot="start">
           <img src="../../../assets/avatar.svg">
         </ion-avatar>
         <ion-label>
           <div class="content-label">
-            <span>Cecilia Villaverde Jimenez </span>
-            <span class="label-text">Cliente</span>
+            <span>{{item.name}} </span>
+            <span class="label-text">{{item.type}}</span>
           </div>
         </ion-label>
-        <ion-label color="dark" class="ion-hide-lg-down">(477) 518-86-38</ion-label>
+        <ion-label color="dark" class="ion-hide-lg-down">{{item.phoneNumber}}</ion-label>
 
-        <ion-label color="dark" class="ion-hide-md-down">cecilia-jimenez@gmail.com</ion-label>
+        <ion-label color="dark" class="ion-hide-md-down">{{item.email}}</ion-label>
         
         <ion-buttons class="ion-hide-sm-down">
           <ion-button color="primary" slot="end">
@@ -41,4 +44,7 @@
     </div>
     <!-- </ion-card-content> -->
   </ion-card>
+
+  <ion-input [(ngModel)]="stringTest"></ion-input>
+  <ion-button (click)="testBinding()">Test</ion-button>
 </ion-content>

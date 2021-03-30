@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { OptionBusinessComponent } from '../option-business/option-business.component';
+import { Storage } from '@ionic/storage';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -11,12 +12,19 @@ import { OptionBusinessComponent } from '../option-business/option-business.comp
 export class HeaderToolbarComponent implements OnInit {
   @Input() public titulo: string;
   @Input() public border = true;
+  currentCompany: String;
+
   constructor(
     private popoverController: PopoverController,
-  ) { }
+    private storage: Storage
+  ) { 
+    this.storage.get('currentCompany').then(val => this.currentCompany = val);
+  }
 
   ngOnInit(): void {
+    console.log(this.storage.get('user'));
   }
+
   public presentPopover = async (ev: any) => {
     const popover = await this.popoverController.create({
       component: OptionBusinessComponent,

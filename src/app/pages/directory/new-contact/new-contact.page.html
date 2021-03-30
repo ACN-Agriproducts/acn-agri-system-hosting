@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Contact</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <div class="content-form">
+      <h2><span>New Contact</span></h2>
+      <form [formGroup]="contactForm" (ngSubmit)="submitModal()">  
+        <ion-list>
+          <ion-item>
+            <ion-input class="form-input" formControlName="name" placeholder="Name"></ion-input>        </ion-item>
+          <ion-item>
+            <ion-input class="form-input" formControlName="streetAddress" placeholder="Street Address"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input class="form-input" formControlName="city" placeholder="City"></ion-input>
+          </ion-item> 
+          <ion-item>
+            <ion-input class="form-input" formControlName="state" placeholder="State"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input class="form-input" formControlName="zipCode" placeholder="Zip Code"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input class="form-input" formControlName="phoneNumber" placeholder="Phone Number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input class="form-input" formControlName="email" placeholder="E-mail"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input class="form-input" formControlName="caat" placeholder="CAAT"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>Customer Type</ion-label>
+            <ion-select placeholder="Select One" formControlName="type" interface="popover">
+              <ion-select-option value="Client">Client</ion-select-option>
+              <ion-select-option value="Trucker">Trucker</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-button color="success" type="submit" [disabled]="contactForm.invalid">Submit</ion-button>
+        </ion-list>
+      </form>
+    </div>
+  </ion-card>
+</ion-content>

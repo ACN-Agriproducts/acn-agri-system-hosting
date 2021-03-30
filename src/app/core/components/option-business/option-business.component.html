@@ -1,7 +1,3 @@
 <ion-list>
-    <ion-item button>ACN Agriproducts, LLC.</ion-item>
-    <ion-item button> ACN Agriproducts, LLC.</ion-item>
-    <ion-item button> ACN Agriproducts, LLC.</ion-item>
-    <ion-item button> ACN Agriproducts, LLC. Repo</ion-item>
-    <ion-item lines="none" detail="false" button onClick="dismissPopover()">Close</ion-item>
+    <ion-item button *ngFor='let company of companyList' (click)="changeCompany(company)">{{company}}</ion-item>
 </ion-list>

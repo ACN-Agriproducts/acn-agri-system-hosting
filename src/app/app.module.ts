@@ -15,7 +15,6 @@ import { LayoutComponent } from '@layout/layout.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '@enviroment/environment.prod';
 import { IonicStorageModule } from '@ionic/storage';
-import { File } from '@ionic-native/file/ngx';
 
 
 @NgModule({
@@ -34,6 +33,7 @@ import { File } from '@ionic-native/file/ngx';
     IonicStorageModule.forRoot({
       name: 'dbAgriproductos',
     })
+
   ],
   providers: [
     StatusBar,

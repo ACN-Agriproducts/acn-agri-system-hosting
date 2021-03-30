@@ -21,39 +21,6 @@ export class HomePage implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.itemsCollection = this.afs.collection<Item>('companies');
-    this.items = this.itemsCollection.valueChanges();
-    console.log(this.itemsCollection);
-    this.items.subscribe(res => {
-      res.map(data => {
-        console.log(data.employees);
-        data.employees.map((dataRef) => {
-          const userDoc = this.afs.doc<any>(dataRef.path);
-          // userDoc.collection<any>('users').valueChanges();
-          console.log(userDoc);
-          
-          userDoc.valueChanges().subscribe(datos => {
-            console.log(datos);
-          });
-        })
-        // this.items2.subscribe(response => {
-        //   console.log(response);
-        // })
-
-
-        // userDoc.collection<any>('employees').valueChanges();
-
-
-        // user.subscribe(resRef => {
-        // const user = userDoc.valueChanges();
-
-
-        // })
-      });
-    });
-
-
-  }
+  ngOnInit() {}
 
 }

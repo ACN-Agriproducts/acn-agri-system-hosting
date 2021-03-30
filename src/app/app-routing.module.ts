@@ -11,15 +11,9 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/login',
+        redirectTo: '/dashboard/home',
         pathMatch: 'full',
       },
-
-      // {
-      //   path: '/dashboard',
-      //   redirectTo: '/login',
-      //   pathMatch: 'full',
-      // },
       {
         path: 'dashboard',
         canActivate: [AngularFireAuthGuard], data: { authGuardPipe: redirectLoggedLogin },
@@ -59,7 +53,7 @@ const routes: Routes = [
           },
           {
             path: 'directory',
-            loadChildren: () => import('./pages/directory/directory.module').then(m => m.DirectoryPageModule)
+            loadChildren: () => import('./pages/directory/directory.module').then(m => m.DirectoryPageModule),
           },
           {
             path: 'settings',
@@ -69,23 +63,8 @@ const routes: Routes = [
             path: 'users',
             loadChildren: () => import('./pages/users/users.module').then(m => m.UsersPageModule)
           },
-          // {
-          //   path: '**',
-          //   redirectTo: '/dashboard/home',
-          //   pathMatch: 'full',
-          // }
-          // {
-          //   path: '',
-          //   data: { preload: true, title: 'Kabik' },
-          //   loadChildren: () => import('@pages/home/home.module').then(m => m.HomeModule),
-          // },
         ]
       },
-      // {
-      //   path: '**',
-      //   redirectTo: '/dashboard/home',
-      //   pathMatch: 'full',
-      // },
     ]
   },
 
@@ -102,14 +81,6 @@ const routes: Routes = [
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
   },
-
-
-
-  // {
-  //   path: '',
-  //   redirectTo: 'home',
-  //   pathMatch: 'full'
-  // },
 
 ];
 

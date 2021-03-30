@@ -15,8 +15,8 @@
             </ion-avatar>
         </div>
         <div class="content-info-contact">
-            <h2 class="item-name-title">Cecilia Villaverde Jimenez </h2>
-            <span class="item-subname-title">Cliente</span>
+            <h2 class="item-name-title">{{data.name}}</h2>
+            <span class="item-subname-title">{{data.type}}</span>
         </div>
         <div class="content-actions-contact">
             <ion-buttons>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="text-content-detail">
                         <ion-text>
-                            <a href="mailto:cecilia-jimenez@gmail.com">cecilia-jimenez@gmail.com</a>
+                            <a href="mailto:cecilia-jimenez@gmail.com">{{data.email}}</a>
                             <span class="sublabel-text">
                                 Email
                             </span>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="text-content-detail">
                         <ion-text>
-                            <span>(477) 518-86-38</span>
+                            <span>{{data.phoneNumber}}</span>
                             <span class="sublabel-text">
                                 Phone
                             </span>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="text-content-detail">
                         <ion-text>
-                            <span>(477) 520-46-08</span>
+                            <span>{{data.phoneNumber}}</span>
                             <span class="sublabel-text">
                                 Cell Phone
                             </span>

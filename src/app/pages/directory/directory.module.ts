@@ -1,7 +1,7 @@
 import { CoreModule } from './../../core/core.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -17,8 +17,13 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
     FormsModule,
     IonicModule,
     DirectoryPageRoutingModule,
-    CoreModule
+    CoreModule,
+    ReactiveFormsModule
   ],
-  declarations: [DirectoryPage, OptionsDirectoryComponent, ShowContactModalComponent]
+  declarations: [
+    DirectoryPage, 
+    OptionsDirectoryComponent, 
+    ShowContactModalComponent
+  ]
 })
 export class DirectoryPageModule {}

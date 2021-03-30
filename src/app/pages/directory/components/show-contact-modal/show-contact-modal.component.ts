@@ -1,5 +1,5 @@
 import { ModalController } from '@ionic/angular';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-show-contact-modal',
@@ -8,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShowContactModalComponent implements OnInit {
 
+  @Input() data;
+
   constructor(
-    private modalController: ModalController
+    private modalController: ModalController,
   ) { }
 
   ngOnInit(): void {

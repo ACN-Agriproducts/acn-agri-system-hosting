@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-option-business',
@@ -6,10 +8,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./option-business.component.scss']
 })
 export class OptionBusinessComponent implements OnInit {
+  companyList: any;
 
-  constructor() { }
+  constructor(
+    private store: Storage,
+    private navController: NavController
+    ) { }
 
   ngOnInit(): void {
+    this.store.get('user').then(val => {
+      this.companyList = val.worksAt
+    })
+  }
+
+  public changeCompany(company) {
+    this.store.set('currentCompany', company);
+    location.reload();
   }
 
 }

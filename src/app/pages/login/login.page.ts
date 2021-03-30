@@ -3,6 +3,7 @@ import { AlertController, LoadingController, NavController } from '@ionic/angula
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private service: LoginService,
     private formBuilder: FormBuilder,
     public alertController: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    private fb: AngularFirestore
   ) {
     this.buildForm();
   }
@@ -48,12 +50,21 @@ export class LoginPage implements OnInit, OnDestroy {
       const password = this.formulario.value.password;
       this.service.login(email, password).then(response => {
         if (response) {
-          this.storage.set('user', this.dataUser(response.user));
-          this.loadingController.dismiss().then((res) => {
-            console.log(res);
+          this.fb.doc(`/users/${response.user.email}`).valueChanges().subscribe( val => {
+            this.storage.set('user', {
+              email: response.user.email,
+              uid: response.user.uid, 
+              refreshToken: response.user.refreshToken, 
+              name: val['name'],
+              worksAt: val['worksAt']
+            });
 
-            this.navController.navigateForward('/dashboard/home');
-          });
+            this.storage.set('currentCompany', val['worksAt'][0])
+
+            this.loadingController.dismiss().then((res) => {
+              this.navController.navigateForward('/dashboard/home');
+            });
+          })
         }
       }).catch((error) => {
         this.presentAlert(error.message);
