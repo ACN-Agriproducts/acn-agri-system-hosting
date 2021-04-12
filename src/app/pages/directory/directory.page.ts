@@ -64,8 +64,4 @@ export class DirectoryPage implements OnInit {
   public openNewContact(){
     this.navController.navigateForward('dashboard/directory/new')
   }
-
-  public testBinding(){
-    console.log(this.stringTest)
-  }
 }

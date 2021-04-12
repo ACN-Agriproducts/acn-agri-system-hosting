@@ -10,7 +10,7 @@
   <ion-card>
     <div class="content-subtitle">
       Contacts
-      <span> ({{contacts.length}})</span>
+      <span> ({{contacts != null? contacts.length : 0}})</span>
     </div>
     <!-- <ion-card-content> -->
     <div class="content-item" (contextmenu)="openOptions($event)"
@@ -46,5 +46,4 @@
   </ion-card>
 
   <ion-input [(ngModel)]="stringTest"></ion-input>
-  <ion-button (click)="testBinding()">Test</ion-button>
 </ion-content>

@@ -5,11 +5,10 @@
   <div id="container">
     <div class="content-actions">
 
-      <!-- <ion-title class="capitalize">Progreso</ion-title> -->
       <ion-buttons class="butons buttons-main">
         <ion-button slot="start" color="dark">
           <ion-label class="label-branch_office">
-            Progreso
+            {{this.currentPlantName}}
           </ion-label>
           <ion-icon slot="end" name="chevron-down"></ion-icon>
         </ion-button>
@@ -19,7 +18,7 @@
       <h4><span>Products</span></h4>
     </div>
     <div class="content-card-inventory">
-      <ion-card class="ion-no-margin">
+      <ion-card class="ion-no-margin" *ngFor="let item of productList">
         <!-- <ion-buttons class="content-btn-options">
           <ion-button>
             <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
@@ -27,14 +26,14 @@
         </ion-buttons> -->
         <ion-card-header>
           <!-- <ion-card-subtitle>Max Capacity: 25,000M tons.</ion-card-subtitle> -->
-          <ion-card-title>Yellow corn</ion-card-title>
+          <ion-card-title>{{item.name}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="item-inventory">
             <div class="item-text-inventory">
               <p>
                 <span>Total Physical: </span>
-                <b>24,000 Mt</b>
+                <b>{{item.physicalInventory}} Mt</b>
               </p>
             </div>
           </div>
@@ -42,7 +41,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Storage: </span>
-                <b>1,000 Mt</b>
+                <b>{{item.physicalInventory - item.ownedPhysical}} Mt</b>
               </p>
             </div>
           </div>
@@ -50,7 +49,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Owned Physical: </span>
-                <b> 23,000 Mt</b>
+                <b> {{item.ownedPhysical}} Mt</b>
               </p>
             </div>
           </div>
@@ -58,47 +57,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>For Sale: </span>
-                <b>50,000 Mt</b>
-              </p>
-            </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
-      <ion-card class="ion-no-margin">
-        <ion-card-header>
-          <!-- <ion-card-subtitle>Max Capacity: 25,000M tons.</ion-card-subtitle> -->
-          <ion-card-title>Sorghum</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="item-inventory">
-            <div class="item-text-inventory">
-              <p>
-                <span>Total Physical: </span>
-                <b>10,000 Mt</b>
-              </p>
-            </div>
-          </div>
-          <div class="item-inventory">
-            <div class="item-text-inventory">
-              <p>
-                <span>Storage: </span>
-                <b>0 Mt</b>
-              </p>
-            </div>
-          </div>
-          <div class="item-inventory">
-            <div class="item-text-inventory">
-              <p>
-                <span>Owned Physical: </span>
-                <b> 10,000 Mt</b>
-              </p>
-            </div>
-          </div>
-          <div class="item-inventory">
-            <div class="item-text-inventory">
-              <p>
-                <span>For Sale: </span>
-                <b>5,000 Mt</b>
+                <b>{{item.forSale}} Mt</b>
               </p>
             </div>
           </div>
@@ -109,23 +68,23 @@
     <div class="content-subtitle_small-inventory">
       <h4><span>Tanks</span></h4>
     </div>
-    <div class="content-card-inventory">
-      <ion-card class="ion-no-margin " *ngFor="let item of [1,2,3,4,5,6,7,8,9]">
+    <div class="content-card-inventory" *ngIf="plantList != null">
+      <ion-card class="ion-no-margin " *ngFor="let item of plantList[currentPlantId]['inventory']">
         <ion-buttons class="content-btn-options">
           <ion-button>
             <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-card-header>
-          <ion-card-subtitle>Max Capacity: 25,000M tons.</ion-card-subtitle>
-          <ion-card-title>Tank {{item}}</ion-card-title>
+          <ion-card-subtitle>Max Capacity: {{(item.max / 2204.6226).toFixed(3)}} MT.</ion-card-subtitle>
+          <ion-card-title>{{item.name}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <div class="item-inventory">
             <div class="item-text-inventory">
               <p>
                 <span>Product: </span>
-                <b>Yellow Corn</b>
+                <b>{{item.product.id}}</b>
               </p>
             </div>
           </div>
@@ -133,19 +92,15 @@
             <div class="item-text-inventory">
               <p>
                 <span>Current: </span>
-                <b>{{12000}} MT</b>
+                <b>{{(item.current / 2204.6226).toFixed(3)}} MT</b>
               </p>
             </div>
           </div>
           <div class="content-range-inventory">
-            <ion-range class="ion-no-padding" pin min="1000" value="1850" max="2000" step="100" snaps="true"
-              color="primary">
-              <ion-icon title="inventory" size="small" slot="start" name="cube-outline"></ion-icon>
-              <ion-icon title="inventory" slot="end" name="cube-outline"></ion-icon>
-            </ion-range>
+            <ion-progress-bar class="ion-no-padding" value="{{item.current / item.max}}" pin snaps="true" color="primary"></ion-progress-bar>
             <div class="item-percentage">
               <p class="item-text-percentage">
-                <b>80%</b>
+                <b>{{(item.current / item.max * 100).toFixed(2)}}%</b>
               </p>
             </div>
           </div>
