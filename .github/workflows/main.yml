@@ -1,6 +1,6 @@
 name: Build Ionic App and Deploy on Firebase
 on:
-  merge:
+  push:
     branches:
       - main
 
