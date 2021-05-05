@@ -64,4 +64,8 @@ export class DirectoryPage implements OnInit {
   public openNewContact(){
     this.navController.navigateForward('dashboard/directory/new')
   }
+
+  public deleteContact(item){
+    console.log(item);
+  }
 }

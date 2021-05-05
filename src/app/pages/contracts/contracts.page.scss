@@ -288,3 +288,7 @@ ion-item {
   background-color: rgba(var(--ion-color-danger-rgb), 0.15);
   color: var(--ion-color-danger);
 }
+.pending { 
+  background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+  color: var(--ion-color-warning);
+}

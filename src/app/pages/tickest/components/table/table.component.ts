@@ -5,108 +5,53 @@ import { ModalTicketComponent } from './../modal-ticket/modal-ticket.component';
 import { OptionsTicketComponent } from './../options-ticket/options-ticket.component';
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, ModalController } from '@ionic/angular';
-export interface PeriodicElement {
-  ticket: string;
-  date: string;
-  customer: string;
-  moisture: string;
-  testsWt: string;
-  contract: string;
-  product: string;
-  gross: string;
-  tare: string;
-  net: string;
-}
+import { Storage } from '@ionic/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+
+
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-  public ELEMENT_DATA: PeriodicElement[] = [
-    {
-      date: '16 de Nov del 2019',
-      ticket: '5492',
-      customer: 'GRANEROS EL BRASIL',
-      moisture: '13.4',
-      testsWt: '59.5',
-      contract: '322',
-      product: 'Yellow Corn',
-      gross: '142400',
-      tare: '45220',
-      net: '97180',
-    },
-    {
-      date: '16 de Nov del 2019',
-      ticket: '5492',
-      customer: 'GRANEROS EL BRASIL',
-      moisture: '13.4',
-      testsWt: '59.5',
-      contract: '322',
-      product: 'Yellow Corn',
-      gross: '142400',
-      tare: '45220',
-      net: '97180',
-    },
-    {
-      date: '16 de Nov del 2019',
-      ticket: '5492',
-      customer: 'GRANEROS EL BRASIL',
-      moisture: '13.4',
-      testsWt: '59.5',
-      contract: '322',
-      product: 'Yellow Corn',
-      gross: '142400',
-      tare: '45220',
-      net: '97180',
-    },
-    {
-      date: '16 de Nov del 2019',
-      ticket: '5492',
-      customer: 'GRANEROS EL BRASIL',
-      moisture: '13.4',
-      testsWt: '59.5',
-      contract: '322',
-      product: 'Yellow Corn',
-      gross: '142400',
-      tare: '45220',
-      net: '97180',
-    },
-    {
-      date: '16 de Nov del 2019',
-      ticket: '5492',
-      customer: 'GRANEROS EL BRASIL',
-      moisture: '13.4',
-      testsWt: '59.5',
-      contract: '322',
-      product: 'Yellow Corn',
-      gross: '142400',
-      tare: '45220',
-      net: '97180',
-    },
+  public ticketList: any[];
+  public plantList: string[] = [];
+  public currentCompany: string;
+  public currentPlant: string;
 
-    {
-      date: '16 de Nov del 2019',
-      ticket: '5492',
-      customer: 'GRANEROS EL BRASIL GRANEROS EL BRASIL GRANEROS EL BRASIL',
-      moisture: '13.4',
-      testsWt: '59.5',
-      contract: '322',
-      product: 'Yellow Corn',
-      gross: '142400',
-      tare: '45220',
-      net: '97180',
-    },
-
-  ];
   constructor(
     private popoverController: PopoverController,
     private dialog: MatDialog,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private db: AngularFirestore,
+    private localStorage: Storage,
   ) { }
 
   ngOnInit(): void {
+    this.localStorage.get('currentCompany').then(currentComp => {
+      this.currentCompany = currentComp;
+
+      this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "plantName"}).subscribe(val => {
+        this.currentPlant = val[0].plantName
+        val.forEach(element => {
+          this.plantList.push(element.plantName);
+        });
+
+        this.getTickets();
+      })
+    })
   }
+
+  async getTickets(){
+    this.db.collection(`companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`, ref =>
+      ref.orderBy("id", "desc")
+    ).valueChanges().subscribe(val => {
+      this.ticketList = val;
+      console.log(this.ticketList);
+    });
+  }
+
   open() {
     const dialogRef = this.dialog.open(ModalTicketComponent, {
       autoFocus: false

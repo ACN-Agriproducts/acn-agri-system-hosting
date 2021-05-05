@@ -11,8 +11,8 @@
     </ion-segment>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment class="ion-justify-content-start" value="active,closed" (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="active,closed">
+    <ion-segment class="ion-justify-content-start" value="active,closed,pending,canceled" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="active,closed,pending,canceled">
         <ion-label>All</ion-label>
       </ion-segment-button>
       <ion-segment-button value="active">
@@ -31,7 +31,7 @@
   <div class="content">
     <div class="header-filter">
       <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
-      <ion-button  color="dark">
+      <ion-button color="dark" (click)='newContractButton()'>
           <ion-icon name="add" slot="start"></ion-icon>
           <ion-text>New</ion-text>
       </ion-button>
@@ -77,6 +77,13 @@
                   color="primary"></ion-icon>
           </div>
       </ion-item>
+      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
+        <div class="item-text-header item-icon-hide-hover">
+            <ion-text>Delivered</ion-text>
+            <ion-icon (click)="openOptionsFilter($event, 'currentDelivered')" [class.active-arrow]="sortField == 'quantity' && !assending"
+                name="funnel-outline" color="primary"></ion-icon>
+        </div>
+    </ion-item>
       <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
           <div class="item-text-header item-icon-hide-hover">
               <ion-text>Bushels</ion-text>
@@ -124,13 +131,18 @@
                 <ion-text>{{item.date.toDate() | date}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-              <ion-text class="item-status" [class.active]="item.status === 'active'"
+              <ion-text class="item-status" [class.pending]="item.status === 'pending'" [class.active]="item.status === 'active'"
                   [class.close]="item.status === 'closed'" [class.cancel]="item.status === 'canceled'">{{item.status}}
               </ion-text>
             </ion-item>
             <ion-item lines="none">
                 <ion-text class="item-text-price" color="dark">
                     {{item.product.id | titlecase}}
+                </ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-text-price" color="dark">
+                    {{(item.currentDelivered / item.productInfo.weight).toFixed(2)}}
                 </ion-text>
             </ion-item>
             <ion-item lines="none">

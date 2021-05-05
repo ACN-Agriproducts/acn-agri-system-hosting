@@ -1,4 +1,4 @@
-import { ModalController, PopoverController } from '@ionic/angular';
+import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
@@ -32,7 +32,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public activeFilter: boolean;
   public currentCompany: string;
   public contractType: string = "purchaseContracts";
-  public orderStatus: string[] = ["active", "closed"];
+  public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
 
   constructor(
     private modal: MatDialog,
@@ -41,7 +41,8 @@ export class ContractsPage implements OnInit, AfterViewInit {
     private cd: ChangeDetectorRef,
     private dataService: DataContractService,
     private db: AngularFirestore,
-    private localStorage: Storage
+    private localStorage: Storage,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -137,5 +138,9 @@ export class ContractsPage implements OnInit, AfterViewInit {
     }
 
     this.getContracts();
+  }
+
+  public newContractButton() {
+    this.navController.navigateForward('dashboard/contracts/new-contract')
   }
 }

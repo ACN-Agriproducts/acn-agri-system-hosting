@@ -33,7 +33,7 @@
           <ion-button color="primary" slot="end">
             <ion-icon slot="icon-only" name="create-outline"></ion-icon>
           </ion-button>
-          <ion-button color="danger" slot="end">
+          <ion-button color="danger" slot="end" (click)="$event.stopPropagation()">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
           <!-- <ion-button color="medium" slot="end">

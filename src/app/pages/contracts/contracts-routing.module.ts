@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: ContractsPage
+  },  {
+    path: 'new-contract',
+    loadChildren: () => import('./new-contract/new-contract.module').then( m => m.NewContractPageModule)
   }
+
 ];
 
 @NgModule({

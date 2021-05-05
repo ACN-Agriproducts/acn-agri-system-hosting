@@ -80,30 +80,30 @@
     </div>
     <!-- ================================= -->
     <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event)" (dblclick)="openDialog($event)"
-        *ngFor="let item of ELEMENT_DATA">
+        *ngFor="let item of ticketList">
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
                 <div class="content-item-text">
-                    <ion-text class="item-text-md item-ticket">Ticket # <span>{{item.ticket}}</span></ion-text>
-                    <ion-text class="item-text-md item-costomer">{{item.customer}}</ion-text>
-                    <ion-text class="item-text-md item-label-small">{{item.date}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Ticket # <span>{{item.id}}</span></ion-text>
+                    <ion-text class="item-text-md item-costomer">{{item.clientName}}</ion-text>
+                    <ion-text class="item-text-md item-label-small">{{item.dateOut.toDate() | date}}</ion-text>
                 </div>
             </ion-item>
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text class="ion-hide-xl-down">{{item.date}}</ion-text>
+                <ion-text class="ion-hide-xl-down">{{item.dateOut.toDate() | date}}</ion-text>
                 <ion-text class="ion-hide-xl-up">16-10-2019</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.ticket}}</ion-text>
+                <ion-text>{{item.id}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.customer}}</ion-text>
+                <ion-text>{{item.clientName}}</ion-text>
             </ion-item>
         </div>
         <!-- #################################### -->
@@ -111,9 +111,9 @@
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
                 <div class="content-item-text">
-                    <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text>
+                    <ion-text class="item-text-md item-costomer">{{item.productName | uppercase}}</ion-text>
                     <ion-text class="item-text-md item-ticket">Moisture: {{item.moisture}}%</ion-text>
-                    <ion-text class="item-text-md item-ticket">TestsWt: {{item.testsWt}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">TestsWt: {{item.weight}}</ion-text>
                     <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
                 </div>
             </ion-item>
@@ -127,7 +127,7 @@
         </div>
         <div class="item-content  ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.testsWt}}</ion-text>
+                <ion-text>{{item.weight}}</ion-text>
             </ion-item>
         </div>
         <!-- #################################### -->
@@ -136,10 +136,10 @@
             <ion-item lines="none" class="item-cantidas ion-no-padding">
                 <div class="content-item-text">
                     <!-- <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text> -->
-                    <ion-text class="item-text-md item-ticket">Contract: {{item.contract}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">TestsWt: {{item.tare}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Contract: {{item.contractID}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">TestWt: {{item.weight}}</ion-text>
                     <ion-text class="item-text-md item-ticket">Tare: {{item.tare}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Net: {{item.tare}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Net: {{(item.gross - item.tare)}}</ion-text>
                     <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
                 </div>
             </ion-item>
@@ -148,12 +148,12 @@
         <!-- #################################### -->
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.contract}}</ion-text>
+                <ion-text>{{item.contractID}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.product}}</ion-text>
+                <ion-text>{{item.productName}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-md-down" size="1">
@@ -168,7 +168,7 @@
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.net}}</ion-text>
+                <ion-text>{{(item.gross - item.net)}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content item-action" size="1">
@@ -189,16 +189,16 @@
     </div>
 </ion-card>
 <div class="ion-hide-sm-up">
-    <ion-card class="item-card" *ngFor="let item of ELEMENT_DATA">
+    <ion-card class="item-card" *ngFor="let item of ticketList">
         <ion-item lines="none" button (click)="openDetails($event)">
             <ion-label slot="start">
-                <h2>Ticket # <span>{{item.ticket}}</span></h2>
-                <p class="item-subtitle">{{item.customer}}</p>
-                <p class="item-subtitle">{{item.date}}</p>
+                <h2>Ticket # <span>{{item.id}}</span></h2>
+                <p class="item-subtitle">{{item.clientName}}</p>
+                <p class="item-subtitle">{{item.dateOut.toDate() | date}</p>
                 <ul>
-                    <li>Product: <b>{{item.product}}</b></li>
+                    <li>Product: <b>{{item.productName}}</b></li>
                     <li>Moisture: <b>{{item.moisture}}</b></li>
-                    <li>Test Wt: <b>{{item.testsWt}}</b></li>
+                    <li>Test Wt: <b>{{item.weight}}</b></li>
                     <li>Gross: <b>{{item.gross}}</b></li>
                 </ul>
                 <!-- <p>Test Wt: <b>{{item.testsWt}}</b></p>
