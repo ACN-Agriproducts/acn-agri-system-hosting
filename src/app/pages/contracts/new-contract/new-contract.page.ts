@@ -90,45 +90,55 @@ export class NewContractPage implements OnInit {
   public submitForm() {
     const formValue = this.contractForm.getRawValue();
 
-    var submit = {
-      aflatoxin: formValue.aflatoxin,
-      base: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product) - formValue.marketPrice,
-      buyer_terms: "",   //TODO
-      client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
-      clientName: formValue.client.name,
-      currentDelivered: 0,
-      date: new Date(),
-      delivery_dates: {
-        begin: new Date(formValue.deliveryDateStart),
-        end: new Date(formValue.deliveryDateEnd),
-      },
-      grade: formValue.grade,
-      id: this.currentCompanyValue[formValue.contractType == "purchaseContracts"? "nextPurchaseContract" : "nextSalesContract"],
-      loads: 0,
-      market_price: formValue.marketPrice,
-      paymentTerms: {
-        before: formValue.paymentTerms.before,
-        measurement: formValue.paymentTerms.measurement,
-        origin: formValue.paymentTerms.origin,
-        paymentTerms: formValue.paymentTerms.amount
-      },
-      pricePerBushel: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product),
-      product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
-      productInfo: {
-        moisture: formValue.product.moisture,
-        name: formValue.product.name,
-        weight: formValue.product.weight
-      },
-      quantity: this.getPoundWeight(formValue.quantity, formValue.quantityUnits, formValue.product),
-      seller_terms: "",     //TODO
-      status: "pending",
-      tickets: [],
-      transport: 'truck',
-      truckers: []
-    };
+    this.db.firestore.runTransaction(transaction => {
+      return transaction.get(this.db.firestore.doc(`companies/${this.currentCompany}`)).then(val => {
+        var submit = {
+          aflatoxin: formValue.aflatoxin,
+          base: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product) - formValue.marketPrice,
+          buyer_terms: "",   //TODO
+          client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
+          clientName: formValue.client.name,
+          currentDelivered: 0,
+          date: new Date(),
+          delivery_dates: {
+            begin: new Date(formValue.deliveryDateStart),
+            end: new Date(formValue.deliveryDateEnd),
+          },
+          grade: formValue.grade,
+          id: this.currentCompanyValue[formValue.contractType == "purchaseContracts"? "nextPurchaseContract" : "nextSalesContract"],
+          loads: 0,
+          market_price: formValue.marketPrice,
+          paymentTerms: {
+            before: formValue.paymentTerms.before,
+            measurement: formValue.paymentTerms.measurement,
+            origin: formValue.paymentTerms.origin,
+            paymentTerms: formValue.paymentTerms.amount
+          },
+          pricePerBushel: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product),
+          product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
+          productInfo: {
+            moisture: formValue.product.moisture,
+            name: formValue.product.name,
+            weight: formValue.product.weight
+          },
+          quantity: this.getPoundWeight(formValue.quantity, formValue.quantityUnits, formValue.product),
+          seller_terms: "",     //TODO
+          status: "pending",
+          tickets: [],
+          transport: 'truck',
+          truckers: []
+        };
+    
+        var docRef = this.db.firestore.collection(`companies/${this.currentCompany}/${formValue.contractType}`).doc();
+  
+        transaction.set(docRef, submit);
+      })
 
-    this.db.collection(`companies/${this.currentCompany}/${formValue.contractType}`).add(Object.assign({}, submit));
-    this.navController.navigateForward('dashboard/contracts');
+    }).then(() => {
+      this.navController.navigateForward('dashboard/contracts');
+    }).catch(error => {
+      console.log("Error submitting form: ", error);
+    })
   }
 
   private getBushelPrice(quantity: number, type: string, product: any){
