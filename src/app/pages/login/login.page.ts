@@ -50,7 +50,7 @@ export class LoginPage implements OnInit, OnDestroy {
       const password = this.formulario.value.password;
       this.service.login(email, password).then(response => {
         if (response) {
-          this.fb.doc(`/users/${response.user.email}`).valueChanges().subscribe( val => {
+          this.fb.doc(`/users/${response.user.uid}`).valueChanges().subscribe( val => {
             this.storage.set('user', {
               email: response.user.email,
               uid: response.user.uid, 
