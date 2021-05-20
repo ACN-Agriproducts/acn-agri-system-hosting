@@ -38,14 +38,28 @@ export class TableComponent implements OnInit {
           this.plantList.push(element.plantName);
         });
 
-        this.getTickets();
+        this.getTickets(new Date());
       })
     })
   }
 
-  async getTickets(){
+  public dateChangeFn($event) {
+    console.log($event);
+
+    this.getTickets(new Date($event.detail.value))
+  }
+
+  async getTickets(date: Date){
+    let startDate: Date = new Date(date.valueOf());
+    let endDate: Date = new Date(date.valueOf());
+
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(23,59,59,59);
+
     this.db.collection(`companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`, ref =>
-      ref.orderBy("id", "desc")
+      ref.where("dateOut", ">=", startDate)
+      .where("dateOut", "<=", endDate)
+      .orderBy("dateOut", "desc")
     ).valueChanges().subscribe(val => {
       this.ticketList = val;
       console.log(this.ticketList);
