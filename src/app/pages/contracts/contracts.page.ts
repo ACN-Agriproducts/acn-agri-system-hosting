@@ -13,8 +13,6 @@ import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 
 
-
-
 @Component({
   selector: 'app-contracts',
   templateUrl: './contracts.page.html',

@@ -16,6 +16,6 @@ export class ContractModalOptionsComponent implements OnInit {
   ngOnInit() {}
 
   public openContractEdit() {
-    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.contractId}`)
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.isPurchase? 'purchase' : 'sales'}/${this.contractId}`)
   }
 }

@@ -13,7 +13,7 @@ const routes: Routes = [
     loadChildren: () => import('./new-contract/new-contract.module').then( m => m.NewContractPageModule)
   },
   {
-    path: 'contract-info/:id',
+    path: 'contract-info/:type/:id',
     loadChildren: () => import('./contract-info/contract-info.module').then( m => m.ContractInfoPageModule)
   }
 
