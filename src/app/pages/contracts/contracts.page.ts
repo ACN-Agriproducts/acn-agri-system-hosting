@@ -10,6 +10,7 @@ import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
+import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 
 
 
@@ -69,7 +70,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
       ref.where("status", "in", this.orderStatus)
       .orderBy(this.sortField, this.assending? 'asc': 'desc')
     )
-      .valueChanges().subscribe(val => {
+      .valueChanges({idField: 'documentId'}).subscribe(val => {
         this.dataList = val;
         console.log(`companies/${this.currentCompany}/${this.contractType}`);
         console.log(this.dataList);
@@ -142,5 +143,19 @@ export class ContractsPage implements OnInit, AfterViewInit {
 
   public newContractButton() {
     this.navController.navigateForward('dashboard/contracts/new-contract')
+  }
+
+  public openContractOptions= async (event: any, id: string) => {
+    event.preventDefault();
+    console.log("Button pressed");
+    const popover = await this.popoverController.create({
+      component: ContractModalOptionsComponent,
+      event,
+      componentProps: {
+        'contractId': id,
+        'isPurchase': this.contractType == 'purchaseContracts'
+      }
+    })
+    await popover.present();
   }
 }

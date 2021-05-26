@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { IonicModule, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -7,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContractModalOptionsComponent implements OnInit {
 
-  constructor() { }
+  @Input() contractId: string;
+  @Input() isPurchase: boolean;
+
+  constructor(private navController: NavController) { }
 
   ngOnInit() {}
 
+  public openContractEdit() {
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.contractId}`)
+  }
 }
