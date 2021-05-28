@@ -1,9 +1,43 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>contract-info</ion-title>
+    <ion-title *ngIf="ready">{{type | titlecase}} Contract {{currentContract.id}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-grid *ngIf="ready">
+    <ion-row>
+      <ion-col size="8">
+        <ion-card>
+          <ion-card-header>
+            Contract Info
+          </ion-card-header>
+          <ion-list>
+            <ion-item>
+              {{currentContract.currentDelivered / currentContract.quantity | percent}}
+              <ion-progress-bar value="{{currentContract.currentDelivered / currentContract.quantity}}"></ion-progress-bar>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col size="4">
+        <ion-card>
+          Contract Document
+        </ion-card>
+      </ion-col>
 
+      <ion-col size="6">
+        <ion-card>
+          <ion-card-header>
+            Ticket List
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card>
+          Trucker List
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

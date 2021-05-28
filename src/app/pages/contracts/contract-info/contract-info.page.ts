@@ -14,6 +14,7 @@ export class ContractInfoPage implements OnInit {
   public type: string;
   public currentCompany: string;
   public currentContract: any;
+  public ready:boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,10 +24,14 @@ export class ContractInfoPage implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.id = this.route.snapshot.paramMap.get('type')
+    this.type = this.route.snapshot.paramMap.get('type')
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
-      this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`)
+      console.log(`companies/${val}/${this.type}Contracts/${this.id}`);
+      this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`).valueChanges().subscribe(val => {
+        this.currentContract = val;
+        this.ready = true;
+      })
     })
   }
 
