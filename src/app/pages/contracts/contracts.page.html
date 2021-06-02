@@ -1,178 +1,190 @@
 <ion-header>
-  <app-header-toolbar titulo="Contract" ></app-header-toolbar>
-  <ion-toolbar class="ion-align-items-stretch">
-    <ion-segment class="ion-justify-content-start" value="purchaseContracts" (ionChange)="changedContractType($event)">
-      <ion-segment-button value="purchaseContracts">
-        <ion-label>Purchase Contracts</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="salesContracts">
-        <ion-label>Sales Contracts</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
-  <ion-toolbar>
-    <ion-segment class="ion-justify-content-start" value="active,closed,pending,canceled" (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="active,closed,pending,canceled">
-        <ion-label>All</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="active">
-        <ion-label>Active</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="closed">
-        <ion-label>Closed</ion-label>
-      </ion-segment-button>
-      <!-- <ion-segment-button value="new">
+    <app-header-toolbar titulo="Contract"></app-header-toolbar>
+    <ion-toolbar class="ion-align-items-stretch">
+        <ion-segment class="ion-justify-content-start" value="purchaseContracts"
+            (ionChange)="changedContractType($event)">
+            <ion-segment-button value="purchaseContracts">
+                <ion-label>Purchase Contracts</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="salesContracts">
+                <ion-label>Sales Contracts</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+    <ion-toolbar>
+        <ion-segment class="ion-justify-content-start" value="active,closed,pending,canceled"
+            (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="active,closed,pending,canceled">
+                <ion-label>All</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="active">
+                <ion-label>Active</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="closed">
+                <ion-label>Closed</ion-label>
+            </ion-segment-button>
+            <!-- <ion-segment-button value="new">
         <ion-label>New Contract</ion-label>
       </ion-segment-button> -->
-    </ion-segment>
-  </ion-toolbar>
+        </ion-segment>
+    </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="">
-  <div class="content">
-    <div class="header-filter">
-      <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
-      <ion-button color="dark" (click)='newContractButton()'>
-          <ion-icon name="add" slot="start"></ion-icon>
-          <ion-text>New</ion-text>
-      </ion-button>
-      <!-- <ion-button fill="outline" color="primary" (click)="openFilter($event)">
+    <div class="content">
+        <div class="header-filter">
+            <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
+            <ion-button color="dark" (click)='newContractButton()'>
+                <ion-icon name="add" slot="start"></ion-icon>
+                <ion-text>New</ion-text>
+            </ion-button>
+            <!-- <ion-button fill="outline" color="primary" (click)="openFilter($event)">
           <ion-icon name="filter" slot="start"></ion-icon>
           <ion-text>Filter</ion-text>
       </ion-button> -->
-    </div>
-    <ion-card class="table-header grid-item ion-hide-md-down">
-      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('id')">
-          <div class="item-text-header item-text-number-header">
-              <ion-text>N°</ion-text>
-              <ion-icon (click)="openOptionsFilter($event, 'numberContract')" [class.active-arrow]="sortField == 'id' && !assending"
-                  name="funnel-outline" color="primary"></ion-icon>
-  
-          </div>
-      </ion-item>
-      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('client')">
-          <div class="item-text-header">
-              <ion-text>Customer</ion-text>
-              <ion-icon (click)="openOptionsFilter($event, 'name')" [class.active-arrow]="sortField == 'client' && !assending" name="funnel-outline"
-                  color="primary"></ion-icon>
-          </div>
-      </ion-item>
-      <ion-item lines="none" matTooltip="Contract Date">
-        <div class="item-text-header item-icon-hide-hover">
-            <ion-text>Date</ion-text>
-            <ion-icon (click)="openOptionsFilter($event, 'dateContract', 'date')" [class.active-arrow]="sortField == 'id' && !assending"
-                name="funnel-outline" color="primary"></ion-icon>
         </div>
-      </ion-item>
-      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('status')">
-          <div class="item-text-header">
-              <ion-text>State</ion-text>
-              <ion-icon (click)="openOptionsFilter($event, 'state')" [class.active-arrow]="sortField == 'status' && !assending" name="funnel-outline"
-                  color="primary"></ion-icon>
-          </div>
-      </ion-item>
-      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('product')" matTooltip="Product">
-          <div class="item-text-header">
-              <ion-text>Product</ion-text>
-              <ion-icon (click)="openOptionsFilter($event, 'product')" [class.active-arrow]="sortField == 'product' && !assending" name="funnel-outline"
-                  color="primary"></ion-icon>
-          </div>
-      </ion-item>
-      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
-        <div class="item-text-header item-icon-hide-hover">
-            <ion-text>Delivered</ion-text>
-            <ion-icon (click)="openOptionsFilter($event, 'currentDelivered')" [class.active-arrow]="sortField == 'quantity' && !assending"
-                name="funnel-outline" color="primary"></ion-icon>
-        </div>
-    </ion-item>
-      <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
-          <div class="item-text-header item-icon-hide-hover">
-              <ion-text>Bushels</ion-text>
-              <ion-icon (click)="openOptionsFilter($event, 'volumeBushels')" [class.active-arrow]="sortField == 'quantity' && !assending"
-                  name="funnel-outline" color="primary"></ion-icon>
-          </div>
-      </ion-item>
-      <ion-item lines="none" matTooltip="Price per Bushel" (click)="sortList('price')">
-          <div class="item-text-header item-icon-hide-hover">
-              <ion-text>Price</ion-text>
-              <ion-icon (click)="openOptionsFilter($event, 'priceCWT', '$')" [class.active-arrow]="sortField == 'price' && !assending"
-                  name="funnel-outline" color="primary"></ion-icon>
-          </div>
-      </ion-item>
-      <ion-item lines="none">
-          <div class="item-text-header item-icon-hide-hover">
-              <ion-text>Total</ion-text>
-              <ion-icon (click)="openOptionsFilter($event,'totalContract', '$')" [class.active-arrow]="sortField == 'total' && !assending"
-                  name="funnel-outline" color="primary"></ion-icon>
-          </div>
-      </ion-item>
-      <!-- <ion-item lines="none">
+        <ion-card class="table-header grid-item ion-hide-md-down">
+            <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('id')">
+                <div class="item-text-header item-text-number-header">
+                    <ion-text>N°</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'numberContract')"
+                        [class.active-arrow]="sortField == 'id' && !assending" name="funnel-outline" color="primary">
+                    </ion-icon>
+
+                </div>
+            </ion-item>
+            <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('client')">
+                <div class="item-text-header">
+                    <ion-text>Customer</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'name')"
+                        [class.active-arrow]="sortField == 'client' && !assending" name="funnel-outline"
+                        color="primary"></ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none" matTooltip="Contract Date">
+                <div class="item-text-header item-icon-hide-hover">
+                    <ion-text>Date</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'dateContract', 'date')"
+                        [class.active-arrow]="sortField == 'id' && !assending" name="funnel-outline" color="primary">
+                    </ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('status')">
+                <div class="item-text-header">
+                    <ion-text>State</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'state')"
+                        [class.active-arrow]="sortField == 'status' && !assending" name="funnel-outline"
+                        color="primary"></ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('product')" matTooltip="Product">
+                <div class="item-text-header">
+                    <ion-text>Product</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'product')"
+                        [class.active-arrow]="sortField == 'product' && !assending" name="funnel-outline"
+                        color="primary"></ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
+                <div class="item-text-header item-icon-hide-hover">
+                    <ion-text>Delivered</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'currentDelivered')"
+                        [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
+                        color="primary"></ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
+                <div class="item-text-header item-icon-hide-hover">
+                    <ion-text>Bushels</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'volumeBushels')"
+                        [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
+                        color="primary"></ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none" matTooltip="Price per Bushel" (click)="sortList('price')">
+                <div class="item-text-header item-icon-hide-hover">
+                    <ion-text>Price</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event, 'priceCWT', '$')"
+                        [class.active-arrow]="sortField == 'price' && !assending" name="funnel-outline" color="primary">
+                    </ion-icon>
+                </div>
+            </ion-item>
+            <ion-item lines="none">
+                <div class="item-text-header item-icon-hide-hover">
+                    <ion-text>Total</ion-text>
+                    <ion-icon (click)="openOptionsFilter($event,'totalContract', '$')"
+                        [class.active-arrow]="sortField == 'total' && !assending" name="funnel-outline" color="primary">
+                    </ion-icon>
+                </div>
+            </ion-item>
+            <!-- <ion-item lines="none">
           <div class="item-text-header">
               <ion-text>Manage</ion-text>
           </div>
       </ion-item> -->
-  </ion-card>
-  <ion-card class="table-body" *ngIf='ready'>
-      <!-- (contextmenu)="openOptions($event)" -->
-      <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
-      <div *ngFor="let item of dataList;">
-        <div (contextmenu)="openOptions($event)" class="grid-item item-table">
-            <ion-item lines="none">
-                <ion-text color="dark" class="item-text-number">{{item.id}}</ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text color="primary" class="item-text-customer">
-                    {{
-                     item.clientName | titlecase | slice:0:25
-                    }}
-                    <span *ngIf="item.clientName.length>25">...</span>
-                </ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text>{{item.date.toDate() | date}}</ion-text>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-text class="item-status" [class.pending]="item.status === 'pending'" [class.active]="item.status === 'active'"
-                  [class.close]="item.status === 'closed'" [class.cancel]="item.status === 'canceled'">{{item.status}}
-              </ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text class="item-text-price" color="dark">
-                    {{item.product.id | titlecase}}
-                </ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text class="item-text-price" color="dark">
-                    {{(item.currentDelivered / item.productInfo.weight).toFixed(2)}}
-                </ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text class="item-text-price" color="dark">
-                    {{(item.quantity / item.productInfo.weight).toFixed(2)}}
-                </ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text class="item-text-price" color="dark">
-                    {{item.pricePerBushel | currency:'$'}}
-                </ion-text>
-            </ion-item>
-            <ion-item lines="none">
-                <ion-text class="item-text-price" color="dark">
-                    {{item.quantity / item.productInfo.weight * item.pricePerBushel| currency:'$'}}
-                </ion-text>
-            </ion-item>
-            <!-- <ion-item lines="none" class="ion-hide-md-down">
-                    <div class="content-button">
-                        <ion-buttons>
-                            <ion-button  color="medium" slot="end">
-                                <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
-                            </ion-button>
-                        </ion-buttons>
-                    </div>
-                </ion-item> -->
-        </div>
-      </div>
-  
-      <!-- </ion-virtual-scroll> -->
-    </ion-card>
-  </div>
+        </ion-card>
+        <ion-card class="table-body" *ngIf='ready'>
+            <!-- (contextmenu)="openOptions($event)" -->
+            <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
+            <div *ngFor="let item of dataList;">
+                <div (contextmenu)="openOptions($event)" class="grid-item item-table">
+                    <ion-item lines="none">
+                        <ion-text color="dark" class="item-text-number">{{item.id}}</ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text color="primary" class="item-text-customer">
+                            {{
+                            item.clientName | titlecase | slice:0:25
+                            }}
+                            <span *ngIf="item.clientName.length>25">...</span>
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text>{{item.date.toDate() | date}}</ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text class="item-status" [class.pending]="item.status === 'pending'"
+                            [class.active]="item.status === 'active'" [class.close]="item.status === 'closed'"
+                            [class.cancel]="item.status === 'canceled'">{{item.status}}
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text class="item-text-price" color="dark">
+                            {{item.product.id | titlecase}}
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text class="item-text-price" color="dark">
+                            {{(item.currentDelivered / item.productInfo.weight).toFixed(2)}}
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text class="item-text-price" color="dark">
+                            {{(item.quantity / item.productInfo.weight).toFixed(2)}}
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text class="item-text-price" color="dark">
+                            {{item.pricePerBushel | currency:'$'}}
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                        <ion-text class="item-text-price" color="dark">
+                            {{item.quantity / item.productInfo.weight * item.pricePerBushel| currency:'$'}}
+                        </ion-text>
+                    </ion-item>
+                    <ion-item lines="none" class="ion-hide-md-down">
+                        <div class="content-button">
+                            <ion-buttons>
+                                <ion-button color="medium" slot="end" (click)='openContractOptions($event, item.documentId)'>
+                                    <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                                </ion-button>
+                            </ion-buttons>
+                        </div>
+                    </ion-item>
+                </div>
+            </div>
+
+            <!-- </ion-virtual-scroll> -->
+        </ion-card>
+    </div>
 </ion-content>

@@ -7,9 +7,14 @@ const routes: Routes = [
   {
     path: '',
     component: ContractsPage
-  },  {
+  },
+  {
     path: 'new-contract',
     loadChildren: () => import('./new-contract/new-contract.module').then( m => m.NewContractPageModule)
+  },
+  {
+    path: 'contract-info/:type/:id',
+    loadChildren: () => import('./contract-info/contract-info.module').then( m => m.ContractInfoPageModule)
   }
 
 ];

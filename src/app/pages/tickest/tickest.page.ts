@@ -9,6 +9,7 @@ import { PopoverController, ModalController } from '@ionic/angular';
   styleUrls: ['./tickest.page.scss'],
 })
 export class TickestPage implements OnInit {
+  public date: string;
 
   constructor(
     public popoverController: PopoverController,
@@ -17,6 +18,7 @@ export class TickestPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.date = new Date().toISOString();
   }
   public openFilter = async () => {
     // const dialogRef = this.dialog.open(FiltersComponent);
