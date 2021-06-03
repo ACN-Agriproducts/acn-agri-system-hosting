@@ -23,7 +23,14 @@ export class OptionBusinessComponent implements OnInit {
 
   public changeCompany(company) {
     this.store.set('currentCompany', company);
-    location.reload();
+    this.store.get('firestoreVal').then(val => {
+      this.store.get('user').then(user => {
+        user.currentPermissions = val[company]
+
+        this.store.set('user', user);
+        location.reload();
+      })
+    })
   }
 
 }

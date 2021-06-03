@@ -56,8 +56,11 @@ export class LoginPage implements OnInit, OnDestroy {
               uid: response.user.uid, 
               refreshToken: response.user.refreshToken, 
               name: val['name'],
-              worksAt: val['worksAt']
+              worksAt: val['worksAt'],
+              currentPermissions: val[val['worksAt'][0]]
             });
+            
+            this.storage.set('firestoreVal', val);
 
             this.storage.set('currentCompany', val['worksAt'][0])
 
