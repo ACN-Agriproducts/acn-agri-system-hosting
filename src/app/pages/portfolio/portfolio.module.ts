@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CoreModule } from './../../core/core.module';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -13,7 +14,8 @@ import { PortfolioPage } from './portfolio.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    PortfolioPageRoutingModule
+    PortfolioPageRoutingModule,
+    CoreModule
   ],
   declarations: [PortfolioPage]
 })
