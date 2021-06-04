@@ -72,6 +72,7 @@ export class LayoutComponent implements OnInit {
   public displayName$: Observable<boolean>;
   public dataUser: any;
   public permissions: any;
+  public ready: boolean = false;
   // public nextPage = LayoutComponent;
 
   constructor(
@@ -87,6 +88,8 @@ export class LayoutComponent implements OnInit {
       console.log(data);
       this.dataUser = data;
       this.permissions = data.currentPermissions;
+
+      this.ready = true;
     });
     this.authentication.user().subscribe(data => console.log(data));
 

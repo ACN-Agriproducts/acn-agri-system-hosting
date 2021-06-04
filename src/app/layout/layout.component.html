@@ -5,7 +5,7 @@
         [when]="(collapse$ | async)  ? '(min-width: 10250px)' : '(min-width: 1250px)' ">
         <ion-menu contentId="main-content" type="overlay">
             <ion-content>
-                <ion-list id="inbox-list">
+                <ion-list id="inbox-list" *ngIf="ready">
                     <ion-list-header>
                         <ion-img class="logo-main"
                             src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789">
