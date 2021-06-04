@@ -16,47 +16,62 @@ export class LayoutComponent implements OnInit {
     {
       title: 'Dashboard',
       url: '/dashboard/home',
-      icon: 'speedometer'
+      icon: 'speedometer',
+      permissionName: ''
     },
     {
       title: 'Tickets',
       url: '/dashboard/tickets',
-      icon: 'receipt'
+      icon: 'receipt',
+      permissionName: 'tickets'
     },
     {
       title: 'Inventory',
       url: '/dashboard/inventory',
-      icon: 'podium'
+      icon: 'podium',
+      permissionName: 'inventory'
     },
     {
       title: 'Invoices',
       url: '/dashboard/invoices',
-      icon: 'document-text'
+      icon: 'document-text',
+      permissionName: 'invoices'
     },
     {
       title: 'Contracts',
       url: '/dashboard/contracts',
-      icon: 'newspaper'
+      icon: 'newspaper',
+      permissionName: 'contracts'
     },
     {
       title: 'Treasury',
       url: '/dashboard/treasury',
-      icon: 'wallet'
+      icon: 'wallet',
+      permissionName: 'treasury'
     },
     {
       title: 'Directory',
       url: '/dashboard/directory',
-      icon: 'library'
+      icon: 'library',
+      permissionName: 'contacts'
     },
     {
       title: 'Employees',
       url: '/dashboard/employees',
-      icon: 'people'
+      icon: 'people',
+      permissionName: 'employees'
+    },
+    {
+      title: "Portfolio",
+      url: '/dashboard/portfolio',
+      icon: 'bag',
+      permissionName: 'portfolio'
     }
   ];
   public collapse$: Observable<boolean>;
   public displayName$: Observable<boolean>;
   public dataUser: any;
+  public permissions: any;
   // public nextPage = LayoutComponent;
 
   constructor(
@@ -71,6 +86,7 @@ export class LayoutComponent implements OnInit {
     this.storage.get('user').then(data => {
       console.log(data);
       this.dataUser = data;
+      this.permissions = data.currentPermissions;
     });
     this.authentication.user().subscribe(data => console.log(data));
 
