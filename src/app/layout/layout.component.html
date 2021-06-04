@@ -23,7 +23,7 @@
 
                     <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
                         <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected"
-                            [routerLink]="[p.url]" lines="none" detail="false" *ngIf="permissions.admin || permissions[p.permissionName].read">
+                            [routerLink]="[p.url]" lines="none" detail="false" *ngIf="p.permissionName == '' || permissions.admin || permissions[p.permissionName].read">
                             <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
                             <ion-label>{{ p.title }}</ion-label>
                         </ion-item>
