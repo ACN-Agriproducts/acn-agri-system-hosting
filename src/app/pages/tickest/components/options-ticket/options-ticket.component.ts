@@ -1,8 +1,10 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PopoverController, ModalController } from '@ionic/angular';
+import { PopoverController, ModalController, NavController } from '@ionic/angular';
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-options-ticket',
@@ -10,14 +12,22 @@ import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
   styleUrls: ['./options-ticket.component.scss']
 })
 export class OptionsTicketComponent implements OnInit {
+  @Input() ticket: any;
+  public downloadURL: Observable<string | null>;
+  public downloadString: string;
 
   constructor(
     public dialog: MatDialog,
     public popoverController: PopoverController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private storage: AngularFireStorage,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
+    this.storage.ref(this.ticket.pdfLink).getDownloadURL().subscribe(val => {
+      this.downloadString = val;
+    });
   }
   public openDialog = async () => {
     this.closePanel();
@@ -42,6 +52,13 @@ export class OptionsTicketComponent implements OnInit {
     return await modal.present();
     // moda-general-lg
   }
+
+  public downloadTicket = () => {
+    this.downloadURL.subscribe( val => {
+      this.navController.navigateForward(val);
+    })
+  }
+
   public closePanel = () => {
     this.popoverController.dismiss();
   }

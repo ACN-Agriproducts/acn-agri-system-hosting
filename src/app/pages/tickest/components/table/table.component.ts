@@ -71,10 +71,13 @@ export class TableComponent implements OnInit {
       autoFocus: false
     });
   }
-  async presentPopoverTicket(ev: any) {
+  async presentPopoverTicket(ev: any, ticket: any) {
     ev.preventDefault();
     const popover = await this.popoverController.create({
       component: OptionsTicketComponent,
+      componentProps: {
+        ticket: ticket
+      },
       cssClass: 'my-custom-class',
       event: ev,
       translucent: true

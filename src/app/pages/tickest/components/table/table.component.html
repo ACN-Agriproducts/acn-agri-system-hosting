@@ -79,7 +79,7 @@
         </div>
     </div>
     <!-- ================================= -->
-    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event)" (dblclick)="openDialog($event)"
+    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.docId)"
         *ngFor="let item of ticketList">
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
@@ -175,7 +175,7 @@
             <ion-item button="false" lines="none" class="item-cantidas ion-no-padding">
                 <ion-buttons>
                     <ion-button matTooltipPosition="before" matTooltipClass="tooltip-primary-solid" matTooltip="Options"
-                        (click)="presentPopoverTicket($event)" color="primary" style="text-transform: none">
+                        (click)="presentPopoverTicket($event, item)" color="primary" style="text-transform: none">
 
                         <!-- <span class="ion-hide-md-down">
                 Open
@@ -215,7 +215,7 @@
                 <ion-button color="tertiary" (click)="openAddicture()">
                     <ion-icon slot="icon-only" name="images-outline"></ion-icon>
                 </ion-button>
-                <ion-button (click)="openDialog($event)" color="primary">
+                <ion-button (click)="openDialog($event, item.docId)" color="primary">
                     <ion-icon slot="icon-only" name="receipt-outline"></ion-icon>
                 </ion-button>
             </ion-buttons>
