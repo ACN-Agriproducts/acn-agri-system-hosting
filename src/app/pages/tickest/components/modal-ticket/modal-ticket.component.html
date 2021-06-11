@@ -6,12 +6,7 @@
                 <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>Ticket 592</ion-title>
-        <!-- <ion-buttons slot="end">
-            <ion-button color="medium">
-                <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons> -->
+        <ion-title>Ticket {{ticket.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -20,8 +15,11 @@
             <div class="panel-main">
                 <img src="./../../../../../assets/ticket.png" alt="">
             </div>
-            <div class="panel-secound " >
-                <img src="./../../../../../assets/ticket.png" alt="">
+            <div class="panel-second" >
+                <embed src="{{pdfLink}}" *ngIf="pdfLink != null"/>
+                <img src="./../../../../../assets/ticket.png" alt="" />
+                <img src="./../../../../../assets/ticket.png" alt="" />
+                <img src="./../../../../../assets/ticket.png" alt="" />
             </div>
         </div>
     </div>

@@ -6,11 +6,15 @@
   grid-template-columns: 1.5fr 0.5fr;
   column-gap: 15px;
 }
-.panel-secound {
+.panel-second {
   display: grid;
   img {
     height: 270px;
     width: auto;
+  }
+  embed {
+    height: 270px;
+    width:auto;
   }
 }
 @media screen and (max-width: 768px) {
