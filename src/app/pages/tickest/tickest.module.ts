@@ -15,6 +15,7 @@ import { AddPictureComponent } from './components/add-picture/add-picture.compon
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ModalTicketComponent } from './components/modal-ticket/modal-ticket.component';
 import { ShowDetailsComponent } from './components/table/show-details/show-details.component';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ShowDetailsComponent } from './components/table/show-details/show-detai
     IonicModule,
     TickestPageRoutingModule,
     CoreModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    AngularFireStorageModule
   ],
   declarations: [
     TickestPage,

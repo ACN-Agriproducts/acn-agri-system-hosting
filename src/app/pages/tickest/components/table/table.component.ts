@@ -60,7 +60,7 @@ export class TableComponent implements OnInit {
       ref.where("dateOut", ">=", startDate)
       .where("dateOut", "<=", endDate)
       .orderBy("dateOut", "desc")
-    ).valueChanges().subscribe(val => {
+    ).valueChanges({idField: "docId"}).subscribe(val => {
       this.ticketList = val;
       console.log(this.ticketList);
     });
@@ -71,10 +71,13 @@ export class TableComponent implements OnInit {
       autoFocus: false
     });
   }
-  async presentPopoverTicket(ev: any) {
+  async presentPopoverTicket(ev: any, ticket: any) {
     ev.preventDefault();
     const popover = await this.popoverController.create({
       component: OptionsTicketComponent,
+      componentProps: {
+        ticket: ticket
+      },
       cssClass: 'my-custom-class',
       event: ev,
       translucent: true
@@ -88,13 +91,15 @@ export class TableComponent implements OnInit {
     });
     return await modal.present();
   }
-  public openDialog = async (event) => {
-    // const dialogRef = this.dialog.open(ModalTicketComponent);
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log(`Dialog result: ${result}`);
-    // });
+  public openDialog = async (event, ticketId: string) => {
+    var ticket =  this.ticketList.find(t => t.docId = ticketId);
+
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
+      componentProps: {
+        ticketId: ticketId,
+        ticket: ticket
+      },
       cssClass: 'modal-dialog-ticket'
     });
     return await modal.present();
