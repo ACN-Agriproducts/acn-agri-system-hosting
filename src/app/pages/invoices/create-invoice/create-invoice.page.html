@@ -1,5 +1,65 @@
 <app-header-toolbar titulo="New Invoice"></app-header-toolbar>
 
 <ion-content>
-  <app-printable-invoice></app-printable-invoice>
+  <ion-row>
+    <ion-col size-lg='5' size-xs='12'>
+      <form [formGroup]="invoiceForm" *ngIf="ready">
+        <ion-card formGroupName="seller">
+          <ion-card-header>Seller Info</ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size='9'>
+                  <mat-form-field>
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size='3'>
+                  <mat-form-field>
+                    <mat-label>Phone #</mat-label>
+                    <input matInput formControlName="phone">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <mat-label>Street</mat-label>
+                  <input matInput formControlName="street">
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size='5'>
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city">
+                </ion-col>
+                <ion-col size='2'>
+                  <mat-label>ZIP</mat-label>
+                  <input matInput formControlName="zip">
+                </ion-col>
+                <ion-col size='2'>
+                  <mat-label>State</mat-label>
+                  <input matInput formControlName="state">
+                </ion-col>
+                <ion-col size='3'>
+                  <mat-label>Country</mat-label>
+                  <input matInput formControlName="country">
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </form>
+    </ion-col>
+    <ion-col size-lg='7' size-xs='12'>
+      <app-printable-invoice 
+        [seller]="invoiceForm.value.seller"
+        [buyer]="buyer"
+        [id]="id"
+        [date]="date"
+        [items]="items"
+        [total]="total"
+      ></app-printable-invoice>
+    </ion-col>
+  </ion-row>
 </ion-content>

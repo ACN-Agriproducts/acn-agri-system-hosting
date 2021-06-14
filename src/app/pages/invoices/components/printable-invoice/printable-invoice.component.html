@@ -20,11 +20,11 @@
       <div class="row-flex-2 ">
         <div class="col-sm-6 text-sm-right order-sm-1"> <strong>Pay To:</strong>
           <address>
-            <span>Agropecuaria La Capilla Del Noreste, S.A de C.V</span>
-            <span>Zaragosa S/N Col.</span>
-            <span>C.P 87500 </span>
-            <span>Valle Hermoso, Tamp., Mex </span>
-            <span>(894) 818 4571</span>
+            <span>{{seller.name}}</span>
+            <span>{{seller.street}}</span>
+            <span>ZIP {{seller.zip}} </span>
+            <span>{{seller.city}}, {{seller.state}}, {{seller.country}} </span>
+            <span>{{seller.phone}}</span>
           </address>
         </div>
         <div class="col-sm-6 order-right"> <strong>Invoiced To:</strong>
@@ -54,7 +54,7 @@
               <thead>
                 <tr class="">
                   <td class="border-top-0"><strong>Description</strong></td>
-                  <td class="text-center border-top-0"><strong>U/M Tons</strong></td>
+                  <td class="text-center border-top-0"><strong>Quantity</strong></td>
                   <td class="text-center border-top-0"><strong>Price</strong></td>
                   <td class="text-right border-top-0"><strong>Amount</strong></td>
                 </tr>
