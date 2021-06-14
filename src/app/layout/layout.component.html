@@ -1,6 +1,6 @@
 <!-- <ion-app>
 </ion-app> -->
-<ion-app (contextmenu)="$event.preventDefault()">
+<ion-app (contextmenu)="$event.preventDefault()" *ngIf="ready">
     <ion-split-pane contentId="main-content"
         [when]="(collapse$ | async)  ? '(min-width: 10250px)' : '(min-width: 1250px)' ">
         <ion-menu contentId="main-content" type="overlay">
