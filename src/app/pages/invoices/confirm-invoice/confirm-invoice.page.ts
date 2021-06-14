@@ -13,7 +13,7 @@ export class ConfirmInvoicePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.navController.navigateForward('')
+    //this.navController.navigateForward('')
   }
 
 }
