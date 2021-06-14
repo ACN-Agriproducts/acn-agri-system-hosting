@@ -7,14 +7,20 @@ import { IonicModule } from '@ionic/angular';
 import { CreateInvoicePageRoutingModule } from './create-invoice-routing.module';
 
 import { CreateInvoicePage } from './create-invoice.page';
+import { ComponentsModule } from '@core/components/components.module';
+import { PrintableInvoiceComponent } from '../components/printable-invoice/printable-invoice.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CreateInvoicePageRoutingModule
+    CreateInvoicePageRoutingModule,
+    ComponentsModule,
   ],
-  declarations: [CreateInvoicePage]
+  declarations: [
+    CreateInvoicePage,
+    PrintableInvoiceComponent
+  ]
 })
 export class CreateInvoicePageModule {}
