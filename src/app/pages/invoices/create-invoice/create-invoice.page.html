@@ -127,7 +127,7 @@
                       <mat-label>Item List</mat-label>
                       <mat-select #itemSelect [disabled]='itemsList == null' (selectionChange)='itemSelectChange($event.value, i)'>
                         <mat-option *ngFor="let item of itemsList" value="{{item.name}}" >{{item.name}}</mat-option>
-                        <mat-option value="none" *ngIf="userPermissions != null && userPermissions['invoice'] != null && userPermissions['invoice'].write">New Item...</mat-option>
+                        <mat-option value="none" *ngIf="userPermissions != null && userPermissions['invoices'] != null && userPermissions['invoices'].write">New Item...</mat-option>
                       </mat-select>
                     </mat-form-field>
                   </ion-col>
