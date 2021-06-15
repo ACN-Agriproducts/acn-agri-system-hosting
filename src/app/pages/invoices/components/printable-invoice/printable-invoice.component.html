@@ -31,7 +31,7 @@
           <address>
             <span>{{buyer.name}}</span>
             <span>{{buyer.street}}</span>
-            <span>ZIP {{buyer.zip}} </span>
+            <span *ngIf="buyer.zip != null">ZIP {{buyer.zip}} </span>
             <span>{{buyer.city}}, {{buyer.state}}, {{buyer.country}} </span>
             <span>{{buyer.phone}}</span>
           </address>

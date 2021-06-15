@@ -3,10 +3,20 @@
   <div class="content-header magin-inline">
     <ion-searchbar (contextmenu)="openContextMenu($event)" class="ion-no-padding"></ion-searchbar>
     <div class="content-button">
-      <ion-button [color]="filter ? 'danger' : 'dark'" (click)="filter = !filter">
-        <!-- <ion-text slot="end">Export CSV</ion-text> -->
+      <!-- <mat-form-field>
+        <input matInput [matDatepicker]="dp" [(ngModel)]="date">
+        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+        <mat-datepicker #dp
+                        startView="multi-year"
+                        (yearSelected)="chosenYearHandler($event)"
+                        (monthSelected)="chosenMonthHandler($event, dp)"
+                        panelClass="example-month-picker">
+        </mat-datepicker>
+      </mat-form-field> -->
+      <!-- <ion-button [color]="filter ? 'danger' : 'dark'" (click)="filter = !filter">
+        <ion-text slot="end">Export CSV</ion-text>
         <ion-icon [name]="filter ? 'close-outline' : 'options-outline'"></ion-icon>
-      </ion-button>
+      </ion-button> -->
       <ion-button (click)="openOption($event)">
         <ion-text slot="end">New Invoice</ion-text>
       </ion-button>

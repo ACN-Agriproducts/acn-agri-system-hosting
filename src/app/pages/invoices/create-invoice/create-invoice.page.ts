@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { PrintableInvoiceComponent } from '../components/printable-invoice/printable-invoice.component';
 
 @Component({
   selector: 'app-create-invoice',
@@ -20,7 +21,7 @@ export class CreateInvoicePage implements OnInit {
 
   public id: number;
   public allItems: any[];
-  public total: number;
+  public total: number = 0;
   public ready: boolean = false;
   
   invoiceForm: FormGroup;
@@ -29,7 +30,9 @@ export class CreateInvoicePage implements OnInit {
     private fb: FormBuilder,
     private db: AngularFirestore,
     private localStorage: Storage,
-    private navController: NavController
+    private navController: NavController,
+    private modalController: ModalController,
+    private alertController: AlertController
     ) {}
 
   ngOnInit() {
@@ -46,11 +49,11 @@ export class CreateInvoicePage implements OnInit {
       buyer: this.fb.group({
         name: [, Validators.required],
         street: [, Validators.required],
-        zip:  [, Validators.required],
+        zip:  [],
         city:  [, Validators.required],
         state:  [, Validators.required],
         country:  [, Validators.required],
-        phone:  [, Validators.required]
+        phone:  []
       }),
       date: [new Date()],
       items: this.fb.array([this.createItem()])
@@ -178,5 +181,65 @@ export class CreateInvoicePage implements OnInit {
   plantSelectChange(value: string, index: number) {
     let plant = this.plantsList.find(p => p.name == value);
     this.storageList = plant.inventory;
+  }
+
+  async submitButton() {
+    let doc = this.invoiceForm.getRawValue();
+    this.total = 0;
+    
+    doc.items.forEach(item => {
+      this.total += (item.quantity * item.price);
+    });
+
+    console.log(this.total)
+
+    let alert = await this.alertController.create({
+      header: "Alert",
+      message: "Are you sure?",
+      buttons: [
+        {
+          text: "cancel",
+          role: 'cancel',
+        },
+        {
+          text:"Submit",
+          handler: async () => {
+            await alert.dismiss();
+            this.acceptedInvoice();
+          }
+        }]
+    })
+
+    await alert.present();
+  }
+
+  async acceptedInvoice() {
+    let invoice = this.invoiceForm.getRawValue();
+    invoice.total = this.total;
+    invoice.status = "pending";
+    invoice.id = this.id;
+
+    this.db.collection(`companies/${this.currentCompany}/invoices`).add(invoice);
+
+    let modal = await this.modalController.create({
+      component: PrintableInvoiceComponent,
+      componentProps: {
+        seller: invoice.seller,
+        buyer: invoice.buyer,
+        id: this.id,
+        date: invoice.date,
+        items: invoice.items,
+        total: this.total
+      },
+      mode: 'md'
+    });
+
+    await modal.present();
+
+    window.onafterprint = () => {
+      this.navController.navigateForward('dashboard/invoices');
+      modal.dismiss();
+    }
+    window.print();
   }
 }
