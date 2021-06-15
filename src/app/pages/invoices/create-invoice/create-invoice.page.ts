@@ -48,7 +48,7 @@ export class CreateInvoicePage implements OnInit {
       }),
       buyer: this.fb.group({
         name: [, Validators.required],
-        street: [, Validators.required],
+        street: [],
         zip:  [],
         city:  [, Validators.required],
         state:  [, Validators.required],
