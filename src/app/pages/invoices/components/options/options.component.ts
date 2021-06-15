@@ -54,18 +54,7 @@ export class OptionsComponent implements OnInit {
   }
   public print = () => {
     this.openInvoice().then(() => {
-      setTimeout(() => {
-
-        const ventana = window.open('', 'PRINT', 'height=500,width=700');
-        const invoice = document.getElementById('file-html-invoice');
-        console.log(invoice);
-        ventana.document.write(invoice.innerHTML);
-        ventana.document.close();
-        ventana.focus();
-        ventana.print();
-        ventana.close();
-        return true;
-      }, 150);
+      window.print();
     });
   }
 }
