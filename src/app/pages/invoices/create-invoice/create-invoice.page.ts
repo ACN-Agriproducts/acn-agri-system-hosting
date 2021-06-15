@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
@@ -10,6 +10,14 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./create-invoice.page.scss'],
 })
 export class CreateInvoicePage implements OnInit {
+
+  public currentCompany: string;
+  public plantsList: any[];
+  public itemsList: any[];
+  public productsList: any[];
+  public userPermissions: any[];
+  public storageList: any[];
+
   public id: number;
   public allItems: any[];
   public total: number;
@@ -48,8 +56,31 @@ export class CreateInvoicePage implements OnInit {
       items: this.fb.array([this.createItem()])
     })
 
-    console.log(this.invoiceForm.getRawValue())
     this.ready = true;
+
+    this.localStorage.get('user').then(val => {
+      this.userPermissions = val.currentPermissions;
+    })
+
+    this.localStorage.get('currentCompany').then(company => {
+      this.currentCompany = company;
+
+      this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe( val => {
+        this.id = val['nextInvoice'];
+      })
+
+      this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "name"}).subscribe(list => {
+        this.plantsList = list;
+      })
+
+      this.db.collection(`companies/${this.currentCompany}/invoiceItems`).valueChanges({idField: "docId"}).subscribe(list => {
+        this.itemsList = list;
+      })
+
+      this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: "name"}).subscribe(list => {
+        this.productsList = list;
+      })
+    })
   }
 
   createItem(): FormGroup{
@@ -68,6 +99,21 @@ export class CreateInvoicePage implements OnInit {
         validators: [this.ifAffectsInventory]
       })
     })
+  }
+
+  addItem(){
+    const items = this.invoiceForm.get("items") as FormArray;
+    items.push(this.createItem());
+  }
+
+  deleteItem(i: number) {
+    const items = this.invoiceForm.get("items") as FormArray;
+    
+    if(items.length <= 1 || items.length !< items.length) {
+      return;
+    }
+
+    items.removeAt(i);
   }
 
  ifAffectsInventory(formGroup: FormGroup) {
@@ -98,5 +144,39 @@ export class CreateInvoicePage implements OnInit {
 
       return conError? errors:null
     }
+  }
+
+  itemSelectChange(value: string, index: number) {
+    if(value == "none"){
+      return;
+    }
+
+    let item = this.itemsList.find(i => i.name == value);
+
+    if(item == null){
+      console.log(this.itemsList);
+      console.log(value);
+      console.log("Item not found");
+      return;
+    }
+
+    let itemArray = this.invoiceForm.get('items') as FormArray;
+    let formItem = itemArray.get(index.toString());
+    formItem.get("name").setValue(item.name);
+    formItem.get("price").setValue(item.price);
+    formItem.get("affectsInventory").setValue(item.affectsInventory);
+    formItem.get("inventoryInfo").get("product").setValue(item.inventoryInfo.product);
+    formItem.get("inventoryInfo").get("quantity").setValue(item.inventoryInfo.quantity);
+    formItem.get("inventoryInfo").get("plant").setValue(item.inventoryInfo.plant);
+    formItem.get("inventoryInfo").get("tank").setValue(item.inventoryInfo.tank);
+
+    this.plantSelectChange(item.inventoryInfo.plant, index);
+
+    console.log(this.invoiceForm.getRawValue())
+  }
+
+  plantSelectChange(value: string, index: number) {
+    let plant = this.plantsList.find(p => p.name == value);
+    this.storageList = plant.inventory;
   }
 }

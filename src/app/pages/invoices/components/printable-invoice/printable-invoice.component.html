@@ -61,23 +61,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><span class="text-3"><span class="font-weight-500">YELLOW CORN</span> </span>
+                <tr *ngFor="let item of items">
+                  <td><span class="text-3"><span class="font-weight-500">{{item.name}}</span> </span>
                   </td>
-                  <td class="text-center">166.832</td>
-                  <td class="text-center">$189.00</td>
-                  <td class="text-right">$31,531.25</td>
+                  <td class="text-center">{{item.quantity}}</td>
+                  <td class="text-center">${{item.price | number:".2"}}</td>
+                  <td class="text-right">${{(item.quantity * item.price) | number:".2"}}</td>
                 </tr>
-  
-                <tr>
-                  <td><span class="text-3"><span class="font-weight-500">YELLOW CORN</span> </span>
-
-                  </td>
-                  <td class="text-center">77.973</td>
-                  <td class="text-center">$191.00</td>
-                  <td class="text-right">$14,892.84</td>
-                </tr>
-  
                 <tr>
                   <td colspan="2" class="bg-light-2 text-right"><strong>Sub Total</strong></td>
                   <td colspan="2" class="bg-light-2 text-right">$46,424.09</td>
