@@ -15,7 +15,11 @@ const routes: Routes = [
   {
     path: 'confirm-invoice',
     loadChildren: () => import('./confirm-invoice/confirm-invoice.module').then( m => m.ConfirmInvoicePageModule)
+  },  {
+    path: 'create-invoice',
+    loadChildren: () => import('./create-invoice/create-invoice.module').then( m => m.CreateInvoicePageModule)
   }
+
 ];
 
 @NgModule({

@@ -53,6 +53,9 @@ export class TableComponent implements OnInit {
     let startDate: Date = new Date(date.valueOf());
     let endDate: Date = new Date(date.valueOf());
 
+    startDate.setDate(1);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0);
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 

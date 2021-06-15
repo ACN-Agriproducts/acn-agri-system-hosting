@@ -5,6 +5,7 @@ import { OptionsComponent } from './components/options/options.component';
 import { Component, OnInit } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import { MatDatepicker } from '@angular/material/datepicker';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
@@ -13,6 +14,8 @@ import html2canvas from 'html2canvas';
 export class InvoicesPage implements OnInit {
   public template: any;
   public filter: boolean;
+  public date: Date;
+
   constructor(
     private popoverController: PopoverController,
     private toastController: ToastController
@@ -93,6 +96,14 @@ export class InvoicesPage implements OnInit {
       showBackdrop: false
     });
     return await popover.present();
+  }
+
+  chosenYearHandler(event: any) {
+    console.log(typeof event)
+  }
+
+  chosenMonthHandler(event: any, datepicker: MatDatepicker<any>) {
+
   }
 
 }
