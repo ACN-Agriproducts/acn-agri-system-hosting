@@ -13,7 +13,8 @@ import { PrintableInvoiceComponent } from '../printable-invoice/printable-invoic
   styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent implements OnInit {
-  @Input() public selectText: string;
+  @Input() public invoice: any;
+
   constructor(
     private clipboard: Clipboard,
     private popoverController: PopoverController,
@@ -21,15 +22,7 @@ export class OptionsComponent implements OnInit {
     private modalController: ModalController
   ) { }
 
-  ngOnInit(): void {
-    console.log(this.selectText);
-  }
-  public copy = () => {
-    this.clipboard.copy(this.selectText);
-    this.addClipboard(this.selectText);
-    this.popoverController.dismiss(true);
-  }
-
+  ngOnInit(): void {}
   public addClipboard = (itemCilpboard: string) => {
     let clipboard = [];
     this.storage.get('clipboard').then(data => {
@@ -47,6 +40,14 @@ export class OptionsComponent implements OnInit {
       this.popoverController.dismiss(null);
       const modal = await this.modalController.create({
         component: PrintableInvoiceComponent,
+        componentProps:{
+          seller: this.invoice.seller,
+          buyer: this.invoice.buyer,
+          id: this.invoice.id,
+          date: this.invoice.date.toDate(),
+          items: this.invoice.items,
+          total: this.invoice.total
+        },
         cssClass: 'modal-file-invoice',
         mode: 'md'
      });

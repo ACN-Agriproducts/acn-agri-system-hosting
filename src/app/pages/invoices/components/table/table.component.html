@@ -36,7 +36,7 @@
     </ion-item>
 </ion-card>
 <ion-card class="table-body">
-    <div (contextmenu)="openOptions($event)" class="grid-item item-table" *ngFor="let invoice of invoiceList">
+    <div (contextmenu)="openOptions($event, invoice)" class="grid-item item-table" *ngFor="let invoice of invoiceList">
         <ion-item lines="none">
             <ion-text color="dark" class="item-text-number">{{invoice.id}}</ion-text>
         </ion-item>
@@ -60,7 +60,7 @@
         <ion-item lines="none" class="ion-hide-md-down">
             <div class="content-button">
                 <ion-buttons>
-                    <ion-button (click)="openOptions($event)" color="medium" slot="end">
+                    <ion-button (click)="openOptions($event, invoice)" color="medium" slot="end">
                         <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
                     </ion-button>
                 </ion-buttons>
