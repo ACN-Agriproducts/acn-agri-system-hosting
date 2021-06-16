@@ -40,12 +40,12 @@ export class TableComponent implements OnInit {
     })
   }
 
-  public openOptions = async (ev) => {
+  public openOptions = async (ev, invoice) => {
     ev.preventDefault();
     const options = await this.popoverController.create({
       component: OptionsComponent,
       event: ev,
-      componentProps: {selectText: ev.target.innerText}
+      componentProps: {invoice: invoice}
     });
     await options.present();
     options.onDidDismiss().then(result => {

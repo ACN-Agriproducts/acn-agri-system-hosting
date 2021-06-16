@@ -30,10 +30,10 @@
         <div class="col-sm-6 order-right"> <strong>Invoiced To:</strong>
           <address>
             <span>{{buyer.name}}</span>
-            <span>{{buyer.street}}</span>
+            <span *ngIf="buyer.street != null">{{buyer.street}}</span>
             <span *ngIf="buyer.zip != null">ZIP {{buyer.zip}} </span>
             <span>{{buyer.city}}, {{buyer.state}}, {{buyer.country}} </span>
-            <span>{{buyer.phone}}</span>
+            <span *ngIf="buyer.phone != null">{{buyer.phone}}</span>
           </address>
         </div>
       </div>

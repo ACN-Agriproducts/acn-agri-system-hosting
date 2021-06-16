@@ -1,10 +1,10 @@
-<app-header-toolbar titulo="New Contact"></app-header-toolbar>
+<app-header-toolbar titulo="Edit Contact"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <ion-card>
-    <div class="content-form">
+    <ion-card-content class="content-form">
       <h2><span>New Contact</span></h2>
-      <form [formGroup]="contactForm" (ngSubmit)="submitModal()">  
+      <form [formGroup]="contactForm" (ngSubmit)="submitButton()">  
         <ion-list>
           <ion-item>
             <ion-input class="form-input" formControlName="name" placeholder="Name"></ion-input>        </ion-item>
@@ -40,6 +40,6 @@
           <ion-button color="success" type="submit" [disabled]="contactForm.invalid">Submit</ion-button>
         </ion-list>
       </form>
-    </div>
+    </ion-card-content>
   </ion-card>
 </ion-content>

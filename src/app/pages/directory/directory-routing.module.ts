@@ -20,7 +20,12 @@ const routes: Routes = [
   {
     path: 'new-contact',
     loadChildren: () => import('./new-contact/new-contact.module').then( m => m.NewContactPageModule)
+  },
+  {
+    path: 'edit-contact/:id',
+    loadChildren: () => import('./edit-contact/edit-contact.module').then( m => m.EditContactPageModule)
   }
+
 
 ];
 
