@@ -1,8 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title *ngIf="ready">{{type | titlecase}} Contract {{currentContract.id}}</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="{{type | titlecase}} Contract {{currentContract.id}}" *ngIf="ready"></app-header-toolbar>
 
 <ion-content>
   <ion-grid *ngIf="ready">
