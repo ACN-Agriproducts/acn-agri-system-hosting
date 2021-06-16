@@ -13,6 +13,7 @@ import { OptionsContractComponent } from './components/options-contract/options-
 import { ShowDetailsComponent } from './components/show-details/show-details.component';
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
 import { FilterComponent } from './components/filter/filter.component';
+import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { FilterComponent } from './components/filter/filter.component';
     OptionsContractComponent,
     ShowDetailsComponent,
     OptionFilterComponent,
-    FilterComponent
+    FilterComponent,
+    ContractModalOptionsComponent
   ]
 })
 export class ContractsPageModule { }

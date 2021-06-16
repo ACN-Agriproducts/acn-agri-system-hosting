@@ -19,6 +19,8 @@ export class TableComponent implements OnInit {
   public plantList: string[] = [];
   public currentCompany: string;
   public currentPlant: string;
+  public inTicket: boolean = true;
+  private date: Date;
 
   constructor(
     private popoverController: PopoverController,
@@ -50,6 +52,8 @@ export class TableComponent implements OnInit {
   }
 
   async getTickets(date: Date){
+    this.date = date;
+
     let startDate: Date = new Date(date.valueOf());
     let endDate: Date = new Date(date.valueOf());
 
@@ -60,7 +64,8 @@ export class TableComponent implements OnInit {
     endDate.setHours(23,59,59,59);
 
     this.db.collection(`companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`, ref =>
-      ref.where("dateOut", ">=", startDate)
+      ref.where("in", "==", this.inTicket)
+      .where("dateOut", ">=", startDate)
       .where("dateOut", "<=", endDate)
       .orderBy("dateOut", "desc")
     ).valueChanges({idField: "docId"}).subscribe(val => {
@@ -112,5 +117,23 @@ export class TableComponent implements OnInit {
       component: AddPictureComponent,
     });
     return await modal.present();
+  }
+
+  public loadInTickets() {
+    if(this.inTicket) {
+      return;
+    }
+
+    this.inTicket = true;
+    this.getTickets(this.date)
+  }
+
+  public loadOutTickets() {
+    if(!this.inTicket) {
+      return;
+    }
+
+    this.inTicket = false;
+    this.getTickets(this.date)
   }
 }
