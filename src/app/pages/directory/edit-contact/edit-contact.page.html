@@ -1,9 +1,8 @@
-<app-header-toolbar titulo="Edit Contact {{this.contactForm.value.name}}"></app-header-toolbar>
-
+<app-header-toolbar titulo="Edit Contact"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <ion-card>
-    <div class="content-form">
+    <ion-card-content class="content-form">
       <h2><span>New Contact</span></h2>
       <form [formGroup]="contactForm" (ngSubmit)="submitButton()">  
         <ion-list>
@@ -41,6 +40,6 @@
           <ion-button color="success" type="submit" [disabled]="contactForm.invalid">Submit</ion-button>
         </ion-list>
       </form>
-    </div>
+    </ion-card-content>
   </ion-card>
 </ion-content>

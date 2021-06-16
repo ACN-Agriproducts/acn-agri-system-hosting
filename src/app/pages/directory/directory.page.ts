@@ -36,7 +36,7 @@ export class DirectoryPage implements OnInit {
   private updateList = async () => {
     this.store.collection(`companies/${this.currentCompany}/directory`, col => 
       col.orderBy('name')
-    ).valueChanges()
+    ).valueChanges({idField: 'docId'})
       .subscribe(val => this.contacts = val);
   }
 
@@ -67,7 +67,7 @@ export class DirectoryPage implements OnInit {
     this.navController.navigateForward('dashboard/directory/new')
   }
 
-  public deleteContact(item){
-    console.log(item);
+  public editButton(id: string) {
+    this.navController.navigateForward(`dashboard/directory/edit-contact/${id}`)
   }
 }
