@@ -143,15 +143,20 @@ export class ContractsPage implements OnInit, AfterViewInit {
     this.navController.navigateForward('dashboard/contracts/new-contract')
   }
 
-  public openContractOptions= async (event: any, id: string) => {
+  public openContractOptions= async (event: any, id: string, contract: any) => {
     event.preventDefault();
+    let user = await this.localStorage.get('user')
     console.log("Button pressed");
     const popover = await this.popoverController.create({
       component: ContractModalOptionsComponent,
       event,
       componentProps: {
-        'contractId': id,
-        'isPurchase': this.contractType == 'purchaseContracts'
+        contractId: id,
+        isPurchase: this.contractType == 'purchaseContracts',
+        status: contract.status,
+        currentCompany: this.currentCompany,
+        userPermissions: user.permissions,
+        contract: contract
       }
     })
     await popover.present();
