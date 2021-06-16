@@ -24,7 +24,7 @@ export class DirectoryPage implements OnInit {
     private navController: NavController,
     private localStore: Storage
   ) { 
-    localStore.get('currentCompany').then(val => {
+    this.localStore.get('currentCompany').then(val => {
       this.currentCompany = val;
       this.updateList();
     })
@@ -34,7 +34,9 @@ export class DirectoryPage implements OnInit {
   }
 
   private updateList = async () => {
-    this.store.collection(`companies/${this.currentCompany}/directory`).valueChanges()
+    this.store.collection(`companies/${this.currentCompany}/directory`, col => 
+      col.orderBy('name')
+    ).valueChanges()
       .subscribe(val => this.contacts = val);
   }
 
