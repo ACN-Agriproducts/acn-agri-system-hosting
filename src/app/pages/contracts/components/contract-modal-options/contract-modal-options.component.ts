@@ -37,4 +37,15 @@ export class ContractModalOptionsComponent implements OnInit {
       status: "active"
     })
   }
+
+  public closeContract() {
+    if(this.contract.status != "active") {
+      return;
+    }
+
+    let type = this.isPurchase? 'purchaseContracts' : 'salesContracts'
+    this.fb.doc(`companies/${this.currentCompany}/${type}/${this.contractId}`).update({
+      status: "closed"
+    })
+  }
 }
