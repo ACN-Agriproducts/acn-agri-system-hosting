@@ -34,7 +34,9 @@ export class TableComponent implements OnInit {
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
 
-      this.fb.collection(`companies/${this.currentCompany}/invoices`).valueChanges({idField: "docId"}).subscribe(list => {
+      this.fb.collection(`companies/${this.currentCompany}/invoices`,
+        ref => ref.orderBy("id", "desc")
+        ).valueChanges({idField: "docId"}).subscribe(list => {
         this.invoiceList = list;
       })
     })
