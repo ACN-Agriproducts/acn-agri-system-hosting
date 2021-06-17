@@ -88,6 +88,7 @@ export class CreateInvoicePage implements OnInit {
 
   createItem(): FormGroup{
     return this.fb.group({
+      details: this.fb.array([]),
       name: [, Validators.required],
       quantity: [0, Validators.required],
       price: [, Validators.required],
