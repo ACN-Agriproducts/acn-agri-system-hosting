@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { NewContractPageRoutingModule } from './new-contract-routing.module';
 
 import { NewContractPage } from './new-contract.page';
+import { CoreModule } from '@core/core.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { NewContractPage } from './new-contract.page';
     NewContractPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    CoreModule
   ],
   declarations: [NewContractPage]
 })

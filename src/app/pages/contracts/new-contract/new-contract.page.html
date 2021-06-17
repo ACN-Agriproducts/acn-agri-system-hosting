@@ -1,8 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>new-contract</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="New Contract"></app-header-toolbar>
 
 <ion-content>
   <ion-card>
@@ -102,4 +98,68 @@
       </form>
     </ion-card-content>
   </ion-card>
+
+  <!-- <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <mat-radio-group class="contract-type-radio-group">
+              <mat-radio-button>Sale Contract</mat-radio-button>
+              <mat-radio-button>Purchase Contract</mat-radio-button>
+            </mat-radio-group>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="2">
+            <span matLine class="mat-text">Client: </span>
+          </ion-col>
+          <ion-col size="4">
+            <mat-form-field>
+              <mat-label>Client</mat-label>
+              <mat-select>
+                <mat-option></mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="4">
+            <mat-form-field>
+              <mat-label>Product Quantity</mat-label>
+              <input matInput>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="4">
+            <mat-form-field>
+              <mat-label>Units</mat-label>
+              <mat-select placeholder='bushels'></mat-select>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="2">
+            <span matLine class="mat-text">of</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="3">
+            <mat-form-field>
+              <mat-label>Product</mat-label>
+              <mat-select></mat-select>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="1">
+            <span class="mat-text">at</span>
+          </ion-col>
+          <ion-col size="3">
+            <mat-form-field>
+              <mat-label>Price</mat-label>
+              <span matPrefix>$</span>
+              <input matInput>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card> -->
 </ion-content>
