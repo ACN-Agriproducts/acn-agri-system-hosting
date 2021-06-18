@@ -23,7 +23,7 @@
 
                     <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
                         <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected"
-                            [routerLink]="[p.url]" lines="none" detail="false" *ngIf="p.permissionName == '' || permissions.admin != null && permissions.admin || permissions[p.permissionName]!= null && permissions[p.permissionName].read">
+                            [routerLink]="[p.url]" lines="none" detail="false" *ngIf="p.permission(permissions)">
                             <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
                             <ion-label>{{ p.title }}</ion-label>
                         </ion-item>
@@ -32,14 +32,14 @@
 
                 <ion-list id="labels-list">
                     <ion-list-header>Options</ion-list-header>
-                    <ion-menu-toggle  auto-hide="false" *ngIf="permissions.admin != null && permissions.admin">
+                    <ion-menu-toggle  auto-hide="false" *ngIf="permissions.developer && permissions.admin != null && permissions.admin">
                         <ion-item button routerLinkActive="selected" routerLink="/dashboard/users"
                             routerDirection="forward" lines="none" detail="false">
                             <ion-icon slot="start" ios="person-outline" md="person-outline"></ion-icon>
                             <ion-label>Users</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
-                    <ion-menu-toggle auto-hide="false" *ngIf="permissions.admin != null && permissions.admin">
+                    <ion-menu-toggle auto-hide="false" *ngIf="permissions.developer && permissions.admin != null && permissions.admin">
                         <ion-item button 
                             (click)="test()" lines="none" detail="false">
                             <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
