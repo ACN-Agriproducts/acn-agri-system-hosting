@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -278,7 +279,8 @@ export class NewUserPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private localStorage: Storage,
-    private fns: AngularFireFunctions
+    private fns: AngularFireFunctions,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -288,10 +290,19 @@ export class NewUserPage implements OnInit {
   }
 
   public submitForm() {
-    let form = this.userForm.getRawValue()
-    form.company = this.currentCompany
+    console.log("Subimtting form...");
 
-    this.fns.httpsCallable('createUser')(form);
+    let form = this.userForm.getRawValue();
+    form.company = this.currentCompany;
+
+    this.fns.httpsCallable('createUser')(form).subscribe(
+      val => {
+        this.navController.navigateForward('dashboard/users');
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   public logScrolling = (event) => {
