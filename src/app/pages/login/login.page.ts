@@ -51,22 +51,22 @@ export class LoginPage implements OnInit, OnDestroy {
       this.service.login(email, password).then(response => {
         if (response) {
           this.fb.doc(`/users/${response.user.uid}`).valueChanges().subscribe( val => {
-            this.storage.set('user', {
-              email: response.user.email,
-              uid: response.user.uid, 
-              refreshToken: response.user.refreshToken, 
-              name: val['name'],
-              worksAt: val['worksAt'],
-              currentPermissions: val[val['worksAt'][0]]
-            });
-            
-            this.storage.set('firestoreVal', val);
-
-            this.storage.set('currentCompany', val['worksAt'][0])
-
-            this.loadingController.dismiss().then((res) => {
-              this.navController.navigateForward('/dashboard/home');
-            });
+            this.fb.doc(`/users/${response.user.uid}/companies/${val['worksAt'][0]}`).valueChanges().subscribe(compDoc => {
+              this.storage.set('user', {
+                email: response.user.email,
+                uid: response.user.uid, 
+                refreshToken: response.user.refreshToken, 
+                name: response.user.displayName,
+                worksAt: val['worksAt'],
+                currentPermissions: compDoc["permissions"]
+              });
+              
+              this.storage.set('currentCompany', val['worksAt'][0])
+  
+              this.loadingController.dismiss().then((res) => {
+                this.navController.navigateForward('/dashboard/home');
+              });
+            })
           })
         }
       }).catch((error) => {
