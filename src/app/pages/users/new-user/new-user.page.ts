@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireFunctions } from '@angular/fire/functions';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-new-user',
@@ -7,8 +9,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./new-user.page.scss'],
 })
 export class NewUserPage implements OnInit {
-  public worksAtList: string[] = ['ACN', 'TestCo', 'ACN Ejem'];
-  public worksAt = new FormControl();
   public privilege = [
     {
       section: 'tickets',
@@ -271,17 +271,27 @@ export class NewUserPage implements OnInit {
 
     })
   })
-
   public sticker: boolean;
+  private currentCompany: string;
+
+
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private localStorage: Storage,
+    private fns: AngularFireFunctions
   ) { }
 
   ngOnInit() {
+    this.localStorage.get('currentCompany').then(val => {
+      this.currentCompany = val;
+    })
   }
 
   public submitForm() {
-    console.log(this.userForm.getRawValue());
+    let form = this.userForm.getRawValue()
+    form.company = this.currentCompany
+
+    this.fns.httpsCallable('createUser')(form);
   }
 
   public logScrolling = (event) => {
