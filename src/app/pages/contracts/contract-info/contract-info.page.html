@@ -30,7 +30,7 @@
             Ticket List
           </ion-card-header>
           <ion-card-content>
-            <app-tickets-table></app-tickets-table>
+            <app-tickets-table #ticketTable [ticketRefList]='currentContract["tickets"]' *ngIf="currentContract != null"></app-tickets-table>
           </ion-card-content>
         </ion-card>
       </ion-col>
