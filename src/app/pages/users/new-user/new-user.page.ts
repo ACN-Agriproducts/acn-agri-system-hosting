@@ -295,7 +295,7 @@ export class NewUserPage implements OnInit {
     let form = this.userForm.getRawValue();
     form.company = this.currentCompany;
 
-    this.fns.httpsCallable('createUser')(form).subscribe(
+    this.fns.httpsCallable('users-createUser')(form).subscribe(
       val => {
         this.navController.navigateForward('dashboard/users');
       },
