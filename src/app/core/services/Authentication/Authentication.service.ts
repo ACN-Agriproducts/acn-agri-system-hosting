@@ -8,7 +8,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class AuthenticationService {
 
-  constructor(public auth: AngularFireAuth) { }
+  constructor(public auth: AngularFireAuth) { 
+    if(location.hostname === 'localhost') {
+      auth.useEmulator('http://localhost:9099')
+    }
+  }
 
   public login = (email: string, password: string) => {
     return this.auth.signInWithEmailAndPassword(email, password);
