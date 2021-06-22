@@ -18,14 +18,7 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private db: AngularFirestore,
-    private storage: AngularFireStorage
   ) {
-    if(location.hostname === 'localhost') {
-      db.firestore.useEmulator('localhost', 8080);
-      storage.storage.useEmulator('localhost', 9199);
-    }
-
     this.initializeApp();
   }
 

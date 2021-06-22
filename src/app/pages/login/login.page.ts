@@ -4,6 +4,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 
 @Component({
@@ -24,7 +26,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     public alertController: AlertController,
     private storage: Storage,
-    private fb: AngularFirestore
+    private fb: AngularFirestore,
+    private auth: AngularFireAuth
   ) {
     this.buildForm();
   }
