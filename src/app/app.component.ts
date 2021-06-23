@@ -18,7 +18,12 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
+    private storage: AngularFireStorage
   ) {
+    if(location.hostname === 'localhost') {
+      storage.storage.useEmulator('localhost', 9199);
+    }
+
     this.initializeApp();
   }
 
