@@ -216,6 +216,7 @@ export class NewUserPage implements OnInit {
   public userForm: FormGroup = this.fb.group({
     name: [, Validators.required],
     email: [, [Validators.required, Validators.email]],
+    password: [,Validators.required],
     position: [],
     permissions: this.fb.group({
       admin: [false],
