@@ -1,0 +1,14 @@
+<form [formGroup]="table">
+  <ng-container formArrayName="data">
+    <mat-table [dataSource]="data.controls">
+
+      <ng-container matColumnDef="low">
+        <mat-header-cell *matHeaderCellDef>Low %</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <input matInput type="number" formControlName='low'>
+        </mat-cell>
+      </ng-container>
+
+    </mat-table>
+  </ng-container>
+</form>
