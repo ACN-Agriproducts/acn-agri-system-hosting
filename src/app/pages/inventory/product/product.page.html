@@ -13,13 +13,13 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size-sm='12' size-md='6'>
+      <ion-col size-sm='12' size-md='6' *ngIf="ready">
         <ion-card>
           <ion-card-content>
             <ion-card-title>
               Moisture Discount Table
             </ion-card-title>
-            <app-discount-table></app-discount-table>
+            <app-discount-table [doc]="doc"></app-discount-table>
           </ion-card-content>
         </ion-card>
       </ion-col>
