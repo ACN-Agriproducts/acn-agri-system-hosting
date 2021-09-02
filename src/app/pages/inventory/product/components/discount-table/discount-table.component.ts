@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentSnapshot } from '@angular/fire/firestore';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
+import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -16,12 +17,12 @@ export class DiscountTableComponent implements OnInit {
   public ready = false;
   public table: FormGroup;
   public currentCompany: string;
-  public displayedColumns: string[] = ['low', 'high', 'weightDiscount', 'charge', 'bonus'];
+  public displayedColumns: string[] = ['low', 'high', 'weightDiscount', 'charge', 'bonus', 'delete'];
 
   constructor(
     private db: AngularFirestore,
     private fb: FormBuilder,
-    private storage: Storage
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -30,18 +31,19 @@ export class DiscountTableComponent implements OnInit {
     });
     
     new AngularFirestoreDocument(this.doc.ref, this.db).collection("discounts").doc("moisture").get().subscribe(val => {
-      if(val.data['data']){
-        val.data['data'].forEach(row => {
-          this.data.push(this.createItem(row));
+      const data = this.table.get("data") as FormArray;
+
+      if(val.data()['data']){
+        val.data()['data'].forEach(row => {
+          data.push(this.createItem(row));
         });  
       }
-      
-      if (this.data.length == 0) {
-        this.createItem();
-      }
-
+    
       this.ready = true;
-      this.tableView.renderRows();
+
+      if (this.data.length == 0) {
+        this.addItem();
+      }
     })
   }
 
@@ -68,12 +70,50 @@ export class DiscountTableComponent implements OnInit {
   public addItem(): void{
     const data = this.table.get("data") as FormArray;
     data.push(this.createItem());
+    this.tableView.renderRows();
+  }
+
+  public deleteItem(index: number): void{
+    const data = this.table.get("data") as FormArray;
+    if(index >= data.length){
+      return;
+    }
+
+    data.removeAt(index);
+    this.tableView.renderRows();
   }
 
   public submit(): void {
-    this.db.doc(this.doc.ref).update({
-      data: this.table.getRawValue().data
+    var rawTable: any[] = this.table.getRawValue().data as any[];
+    rawTable.sort((a,b) => a.low - b.low);
+    
+    if(!this.checkOverlap(rawTable)){
+      return;
+    }
+
+    this.db.doc(this.doc.ref).collection('discounts').doc('moisture').update({
+      data: rawTable
     });
+
+    this.navController.navigateForward('dashboard/inventory');
+  }
+
+  public checkOverlap(rawTable: any[]): boolean {
+    var tableRanges: number[] = [];
+
+    rawTable.forEach(row => {
+      if(row.low >= row.high){
+        return false;
+      }
+
+      tableRanges.forEach(high => {
+        if(row.low < high){
+          return false;
+        }
+      });
+    });
+
+    return true;
   }
 
   get data(): FormArray {
