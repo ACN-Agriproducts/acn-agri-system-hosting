@@ -23,8 +23,8 @@ export class ContractsPage implements OnInit, AfterViewInit {
 
   public searchIinput = new FormControl('');
   public ready: boolean = false;
-  public sortField: string = "id";
-  public assending: boolean;
+  public sortField: string = "date";
+  public assending: boolean = true;
   public dataList: any = [];
   public dataListAux: any;
   public listFilter: any = [];
