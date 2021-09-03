@@ -38,7 +38,7 @@ export class ListComponent implements OnInit {
           ref.get().then(user => {
             ref.collection('companies').doc(currentCompany).get().then(userComp => {
               let status = 'User';
-              let pictureURL: string = 'users/empty_profile_pic.png';
+              let pictureURL: string = 'users/avatar.svg';
 
               if(userComp.data().permissions.developer) {
                 status = 'Developer'
