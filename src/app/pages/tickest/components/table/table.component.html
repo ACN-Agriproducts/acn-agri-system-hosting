@@ -90,7 +90,9 @@
             <ion-item lines="none" class="item-cantidas ion-no-padding">
                 <div class="content-item-text">
                     <ion-text class="item-text-md item-ticket">Ticket # <span>{{item.id}}</span></ion-text>
-                    <ion-text class="item-text-md item-costomer">{{item.clientName}}</ion-text>
+                    <ion-text class="item-text-md item-costomer" 
+                        [class.request]="item.voidRequest" 
+                        [class.void]="item.void">{{item.clientName}}</ion-text>
                     <ion-text class="item-text-md item-label-small">{{item.dateOut.toDate() | date}}</ion-text>
                 </div>
             </ion-item>
@@ -108,7 +110,8 @@
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.clientName}}</ion-text>
+                <ion-text [class.request]="item.voidRequest" 
+                [class.void]="item.void">{{item.clientName}}</ion-text>
             </ion-item>
         </div>
         <!-- #################################### -->
@@ -198,7 +201,8 @@
         <ion-item lines="none" button (click)="openDetails($event)">
             <ion-label slot="start">
                 <h2>Ticket # <span>{{item.id}}</span></h2>
-                <p class="item-subtitle">{{item.clientName}}</p>
+                <p class="item-subtitle" [class.request]="item.voidRequest" 
+                [class.void]="item.void">{{item.clientName}}</p>
                 <p class="item-subtitle">{{item.dateOut.toDate() | date}</p>
                 <ul>
                     <li>Product: <b>{{item.productName}}</b></li>

@@ -141,3 +141,13 @@ ion-fab {
   margin-top: -15px;
   padding-bottom: 6px;
 }
+
+.void {
+  background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+  color: var(--ion-color-danger);
+}
+
+.request { 
+  background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+  color: var(--ion-color-warning);
+}
