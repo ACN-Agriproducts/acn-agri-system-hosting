@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-inventory',
@@ -17,7 +18,8 @@ export class InventoryPage implements OnInit {
 
   constructor(
     private fb: AngularFirestore,
-    private store: Storage
+    private store: Storage,
+    private navController: NavController
   ) { 
     this.store.get('currentCompany').then(val => {
       this.currentCompany = val;
@@ -33,6 +35,10 @@ export class InventoryPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  public nav(path:string): void {
+    this.navController.navigateForward(path);
   }
 
 }

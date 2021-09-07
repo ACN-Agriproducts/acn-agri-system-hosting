@@ -8,6 +8,8 @@ import { ContractInfoPageRoutingModule } from './contract-info-routing.module';
 
 import { ContractInfoPage } from './contract-info.page';
 import { CoreModule } from '@core/core.module';
+import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
+import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,10 @@ import { CoreModule } from '@core/core.module';
     ContractInfoPageRoutingModule,
     CoreModule
   ],
-  declarations: [ContractInfoPage]
+  declarations: [
+    ContractInfoPage,
+    TicketsTableComponent,
+    TruckerTableComponent
+  ]
 })
 export class ContractInfoPageModule {}

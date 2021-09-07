@@ -17,54 +17,63 @@ export class LayoutComponent implements OnInit {
       title: 'Dashboard',
       url: '/dashboard/home',
       icon: 'speedometer',
+      permission: p => true,
       permissionName: ''
     },
     {
       title: 'Tickets',
       url: '/dashboard/tickets',
       icon: 'receipt',
+      permission: p => this.hasPermission('tickets', p),
       permissionName: 'tickets'
     },
     {
       title: 'Inventory',
       url: '/dashboard/inventory',
       icon: 'podium',
+      permission: p => this.hasPermission('inventory', p),
       permissionName: 'inventory'
     },
     {
       title: 'Invoices',
       url: '/dashboard/invoices',
       icon: 'document-text',
+      permission: p => this.hasPermission('invoices', p),
       permissionName: 'invoices'
     },
     {
       title: 'Contracts',
       url: '/dashboard/contracts',
       icon: 'newspaper',
+      permission: p => this.hasPermission('contracts', p),
       permissionName: 'contracts'
     },
     {
       title: 'Treasury',
       url: '/dashboard/treasury',
       icon: 'wallet',
+      permission: p => this.hasPermission('treasury', p) && p.developer,
       permissionName: 'treasury'
     },
     {
       title: 'Directory',
       url: '/dashboard/directory',
       icon: 'library',
+      permission: p => this.hasPermission('directory', p),
       permissionName: 'contacts'
     },
     {
       title: 'Employees',
       url: '/dashboard/employees',
       icon: 'people',
+      permission: p => this.hasPermission('tickets', p) && p.developer,
       permissionName: 'employees'
     },
     {
       title: "Portfolio",
       url: '/dashboard/portfolio',
       icon: 'bag',
+      permission: p => this.hasPermission('tickets', p) && p.developer,
       permissionName: 'portfolio'
     }
   ];
@@ -103,5 +112,9 @@ export class LayoutComponent implements OnInit {
   public logout = () => {
     this.authentication.logout();
     this.navController.navigateForward('/login');
+  }
+
+  public hasPermission(name: string, p: any):boolean {
+    return p.admin != null && p.admin || p[name]!= null && p[name].read
   }
 }

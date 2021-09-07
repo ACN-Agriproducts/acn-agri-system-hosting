@@ -1,10 +1,12 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PopoverController, ModalController, NavController } from '@ionic/angular';
+import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
+import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-options-ticket',
@@ -13,20 +15,29 @@ import { Observable } from 'rxjs';
 })
 export class OptionsTicketComponent implements OnInit {
   @Input() ticket: any;
+  @Input() collectionPath: string;
   public downloadURL: Observable<string | null>;
   public downloadString: string;
+  public userPermissions: any;
 
   constructor(
     public dialog: MatDialog,
     public popoverController: PopoverController,
     private modalController: ModalController,
     private storage: AngularFireStorage,
-    private navController: NavController
+    private navController: NavController,
+    private db: AngularFirestore,
+    private localStorage: Storage,
+    private alertController: AlertController
   ) { }
 
   ngOnInit() {
     this.storage.ref(this.ticket.pdfLink).getDownloadURL().subscribe(val => {
       this.downloadString = val;
+    });
+
+    this.localStorage.get('user').then(data => {
+      this.userPermissions = data.currentPermissions;
     });
   }
   public openDialog = async () => {
@@ -61,5 +72,34 @@ export class OptionsTicketComponent implements OnInit {
 
   public closePanel = () => {
     this.popoverController.dismiss();
+  }
+
+  public async voidTicket(): Promise<void> {
+    let alert = await this.alertController.create({
+      header: "Alert",
+      message: "Are you sure you want to void this ticket?",
+      buttons: [
+        {
+          text: "Cancel",
+          role: 'cancel',
+        },
+        {
+          text:"Accept",
+          handler: async () => {
+            alert.dismiss();
+            await this.db.doc(this.collectionPath  + '/' + this.ticket.docId).update(
+              this.userPermissions.admin || this.userPermissions.tickets.voidTicketAccept ? 
+              {
+                void: true,
+                voidRequest: false
+              } :
+              {
+                voidRequest: true
+              });
+          }
+        }]
+    })
+
+    await alert.present();
   }
 }

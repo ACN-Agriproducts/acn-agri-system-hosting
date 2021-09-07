@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 
 import { NewUserPageRoutingModule } from './new-user-routing.module';
 
@@ -16,7 +17,8 @@ import { NewUserPage } from './new-user.page';
     IonicModule,
     NewUserPageRoutingModule,
     CoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AngularFireFunctionsModule
   ],
   declarations: [NewUserPage]
 })

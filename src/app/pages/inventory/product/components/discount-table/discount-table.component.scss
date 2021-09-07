@@ -1,0 +1,21 @@
+input {
+    background-color: white;
+    outline-color: gray;
+    width: calc(100% - 12px);
+}
+
+.mat-column-delete {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    width: 48px !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    padding: 0px;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}

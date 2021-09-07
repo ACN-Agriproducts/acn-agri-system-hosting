@@ -1,124 +1,103 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons class="ion-hide-md-up" slot="start">
-      <ion-back-button >
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-back-button>
-    </ion-buttons>
-    <ion-title>New user</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="New User"></app-header-toolbar>
+
 
 <ion-content class="ion-padding"  (ionScroll)="logScrolling($event)" [scrollEvents]="true">
   <main>
-    <ion-card>
-      <ion-card-header>
-        Data user
-      </ion-card-header>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="12" size-sm="12">
-              <mat-form-field appearance="fill">
-                <mat-label>Name</mat-label>
-                <input matInput>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="6" >
-              <mat-form-field appearance="fill">
-                <mat-label>Email</mat-label>
-                <input matInput>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6">
-              <mat-form-field appearance="fill">
-                <mat-label>Password</mat-label>
-                <input matInput>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="12">
-              <mat-form-field appearance="fill">
-                <mat-label>Works At</mat-label>
-                <mat-select [formControl]="worksAt" multiple>
-                  <mat-select-trigger>
-                    {{worksAt.value ? worksAt.value[0] : ''}}
-                    <span *ngIf="worksAt.value?.length > 1" class="example-additional-selection">
-                      (+{{worksAt.value.length - 1}} {{worksAt.value?.length === 2 ? 'other' : 'others'}})
-                    </span>
-                  </mat-select-trigger>
-                  <mat-option *ngFor="let topping of worksAtList" [value]="topping">{{topping}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-    <ion-card>
-      <ion-card-header>
-        Privilege
-      </ion-card-header>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
-              <ion-item lines="none" class="ion-no-padding">
-                <ion-label class="label-title">User</ion-label>
-              </ion-item>
-            </ion-col>
-            <ion-col size-lg="8" size-sm="12" size-xs="12">
-              <ion-item lines="none" class="item-select">
-                <ion-label>
-                  <div class="content-label-item">
-                    <ion-text class="label-item-title">Type user</ion-text>
+    <form [formGroup]='userForm' (ngSubmit)="submitForm()">
+      <ion-card>
+        <ion-card-header>
+          User Data
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-sm="12">
+                <mat-form-field appearance="fill">
+                  <mat-label>Name</mat-label>
+                  <input matInput formControlName='name'>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" >
+                <mat-form-field appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName='email'>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" >
+                <mat-form-field appearance="fill">
+                  <mat-label>Password</mat-label>
+                  <input matInput formControlName='password'>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" >
+                <mat-form-field appearance="fill">
+                  <mat-label>Position</mat-label>
+                  <input matInput formControlName="position">
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+      <ion-card formGroupName='permissions'>
+        <ion-card-header>
+          Privileges
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
+                <ion-item lines="none" class="ion-no-padding">
+                  <ion-label class="label-title">User</ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col size-lg="8" size-sm="12" size-xs="12">
+                <ion-item lines="none" class="item-select">
+                  <ion-label class="label-title">Administrator</ion-label>
+                  <ion-checkbox slot="start" formControlName='admin'></ion-checkbox>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-grid>
+            <ion-row *ngFor="let item of privilege" formGroupName='{{item.section}}'>
+              <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
+                <ion-item lines="none" class="ion-no-padding">
+                  <ion-label class="label-title">{{item.section | titlecase}}</ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col size-lg="8" size-sm="12" size-xs="12">
+                <div class="div-content-privilege">
+                  <div class="item-privilege">
+                    <ion-item matTooltipClass="tooltip-white" [matTooltip]="module.label" lines="none"
+                      *ngFor="let module of item.module;" [class.main]="module.main">
+                      <ion-label>{{module.label}}</ion-label>
+                      <ion-checkbox slot="start" formControlName='{{module.controlName}}'></ion-checkbox>
+                      <!-- <ion-icon slot="end" color="dark" [name]="entry.icon"></ion-icon> -->
+                    </ion-item>
                   </div>
-                </ion-label>
-                <ion-select value="english">
-                  <ion-select-option value="english">Administrator</ion-select-option>
-                  <ion-select-option value="spanish">User basic</ion-select-option>
-                  <ion-select-option value="spanish">User</ion-select-option>
-                  <ion-select-option value="spanish">Invited</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-
-        <ion-grid>
-          <ion-row *ngFor="let privileg of privilege">
-            <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
-              <ion-item lines="none" class="ion-no-padding">
-                <ion-label class="label-title">{{privileg.section | titlecase}}</ion-label>
-              </ion-item>
-            </ion-col>
-            <ion-col size-lg="8" size-sm="12" size-xs="12">
-              <div class="div-content-privilege">
-                <div class="item-privilege">
-                  <ion-item matTooltipClass="tooltip-white" [matTooltip]="module.label" lines="none"
-                    *ngFor="let module of privileg.module;" [class.main]="module.main">
-                    <ion-label>{{module.label}}</ion-label>
-                    <ion-checkbox slot="start" [checked]="module.isChecked"></ion-checkbox>
-                    <!-- <ion-icon slot="end" color="dark" [name]="entry.icon"></ion-icon> -->
-                  </ion-item>
                 </div>
-              </div>
-            </ion-col>
-            <ion-col size="12">
-              <mat-divider></mat-divider>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+              </ion-col>
+              <ion-col size="12">
+                <mat-divider></mat-divider>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 
-      </ion-card-content>
-    </ion-card>
-    <div class="content-footer-button">
-      <div class="item-button">
-        <ion-button>Save user</ion-button>
+        </ion-card-content>
+      </ion-card>
+      <div class="content-footer-button">
+        <div class="item-button">
+          <ion-button type='submit' [disabled]='userForm.invalid'>Save user</ion-button>
+        </div>
       </div>
-    </div>
+    </form>
   </main>
 </ion-content>

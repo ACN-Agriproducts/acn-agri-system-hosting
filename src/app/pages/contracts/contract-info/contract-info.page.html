@@ -18,7 +18,9 @@
       </ion-col>
       <ion-col size="4">
         <ion-card>
-          Contract Document
+          <ion-card-header>
+            Contract Document
+          </ion-card-header>
         </ion-card>
       </ion-col>
 
@@ -27,11 +29,19 @@
           <ion-card-header>
             Ticket List
           </ion-card-header>
+          <ion-card-content>
+            <app-tickets-table #ticketTable [ticketRefList]='currentContract["tickets"]' *ngIf="currentContract != null"></app-tickets-table>
+          </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col size="6">
         <ion-card>
-          Trucker List
+          <ion-card-header>
+            Trucker List
+          </ion-card-header>
+          <ion-card-content>
+            <app-trucker-table></app-trucker-table>
+          </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>

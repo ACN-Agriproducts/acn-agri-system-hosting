@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 
 @Component({
   selector: 'app-contract-info',
@@ -15,7 +16,7 @@ export class ContractInfoPage implements OnInit {
   public currentCompany: string;
   public currentContract: any;
   public ready:boolean = false;
-
+  
   constructor(
     private route: ActivatedRoute,
     private localStorage: Storage,
@@ -31,6 +32,8 @@ export class ContractInfoPage implements OnInit {
       this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`).valueChanges().subscribe(val => {
         this.currentContract = val;
         this.ready = true;
+
+        
       })
     })
   }

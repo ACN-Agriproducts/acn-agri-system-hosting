@@ -2,6 +2,26 @@ ion-label{
     max-width: 20% !important;
 }
 
-ion-select{
+ion-col{
+    justify-content: center;
+}
 
+mat-grid-tile mat-figure{ 
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+}
+
+.mat-text {
+    font-size: x-large;
+    vertical-align: middle;
+}
+
+.contract-type-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+
+    mat-radio-button {
+        margin: 5px
+    }
 }

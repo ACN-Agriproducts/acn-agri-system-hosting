@@ -21,6 +21,7 @@ export class TableComponent implements OnInit {
   public currentPlant: string;
   public inTicket: boolean = true;
   private date: Date;
+  private path: string;
 
   constructor(
     private popoverController: PopoverController,
@@ -40,6 +41,7 @@ export class TableComponent implements OnInit {
           this.plantList.push(element.plantName);
         });
 
+        this.path = `companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`;
         this.getTickets(new Date());
       })
     })
@@ -63,7 +65,7 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    this.db.collection(`companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`, ref =>
+    this.db.collection(this.path, ref =>
       ref.where("in", "==", this.inTicket)
       .where("dateOut", ">=", startDate)
       .where("dateOut", "<=", endDate)
@@ -84,7 +86,8 @@ export class TableComponent implements OnInit {
     const popover = await this.popoverController.create({
       component: OptionsTicketComponent,
       componentProps: {
-        ticket: ticket
+        ticket: ticket,
+        collectionPath: this.path
       },
       cssClass: 'my-custom-class',
       event: ev,

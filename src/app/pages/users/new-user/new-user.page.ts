@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-new-user',
@@ -7,272 +10,303 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./new-user.page.scss'],
 })
 export class NewUserPage implements OnInit {
-  public worksAtList: string[] = ['ACN', 'TestCo', 'ACN Ejem'];
-  public worksAt = new FormControl();
   public privilege = [
     {
       section: 'tickets',
       module: [
         {
           label: 'Open tickets section',
-          isChecked: true,
-          icon: 'newspaper-outline',
+          controlName: 'read',
           main: true,
         },
         {
-          label: 'Create tickets',
-          isChecked: false,
-          icon: 'newspaper-outline'
-        },
-        {
-          label: 'Cancel tickets',
-          isChecked: false,
+          label: 'Request to void ticket',
+          controlName: 'voidTicketRequest',
           icon: 'close'
         },
         {
-          label: 'Edit tickets',
-          isChecked: false,
-          icon: 'create-outline'
-        },
-        {
-          label: 'Authorize ticket',
-          isChecked: false,
+          label: 'Authorize void ticket',
+          controlName: 'voidTicketAccept',
           icon: 'checkmark-done-outline'
         },
         {
-          label: 'Add pictures',
-          isChecked: false,
+          label: 'Add documents',
+          controlName: 'addDocument',
           icon: 'checkmark-done-outline'
         },
       ]
     },
     {
       section: 'inventory',
-      module: [{
-        label: 'Open inventory section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
-
-      },
-      // {
-      //   label: 'Cancel tickets',
-      //   isChecked: false,
-      //   icon: 'close'
-      // },
-      // {
-      //   label: 'Edit tickets',
-      //   isChecked: false,
-      //   icon: 'create-outline'
-      // },
-      // {
-      //   label: 'Authorize ticket',
-      //   isChecked: false,
-      //   icon: 'checkmark-done-outline'
-      // }
-    ]
+      module: [
+        {
+          label: 'Open inventory section',
+          controlName: 'read',
+          main: true,
+        },
+        {
+          label: 'Move inventory',
+          controlName: 'moveInventory'
+        },
+        {
+          label: 'Zero out tank',
+          controlName: 'zeroOutInventory'
+        },
+        {
+          label: 'Add new inventory space',
+          controlName: 'addSpace'
+        },
+        {
+          label: 'Edit inventory space',
+          controlName: 'editSpace'
+        }
+      ]
     },
     {
       section: 'invoices',
-      module: [{
-        label: 'Open invoices section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
-      },
-      {
-        label: 'Create new invoice',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Cancel invoice',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Show details',
-        isChecked: false,
-        icon: 'create-outline'
-      },
-      {
-        label: 'Dowonload PDF & XML',
-        isChecked: false,
-        icon: 'checkmark-done-outline'
-      }]
+      module: [
+        {
+          label: 'Open invoices section',
+          controlName: 'read',
+          main: true,
+        },
+        {
+          label: 'Create new invoice',
+          controlName: 'createInvoice',
+          icon: 'close'
+        },
+        {
+          label: 'Cancel invoice',
+          controlName: 'cancelInvoice',
+          icon: 'close'
+        },
+        {
+          label: 'Add proof of payment',
+          controlName: 'addProofOfPayment'
+        },
+        {
+          label: 'Edit invoice',
+          controlName: 'editInvoice'
+        },
+        {
+          label: 'Create Export Invoice',
+          controlName: 'createExportInvoice'
+        }
+      ]
     },
     {
-      section: 'Contract',
-      module: [{
-        label: 'Open contract section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
-      },
-      {
-        label: 'Create contract',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Accept contract',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Close contract',
-        isChecked: false,
-        icon: 'create-outline'
-      },
-      {
-        label: 'Cancel contract',
-        isChecked: false,
-        icon: 'checkmark-done-outline'
-      },
-      {
-        label: 'Authorize contract',
-        isChecked: false,
-        icon: 'checkmark-done-outline'
-      },
-    ]
+      section: 'contracts',
+      module: [
+        {
+          label: 'Open contract section',
+          controlName: 'read',
+          icon: 'newspaper-outline',
+          main: true,
+        },
+        {
+          label: 'Create contract',
+          controlName: 'createContract',
+          icon: 'close'
+        },
+        {
+          label: 'Accept contract',
+          controlName: 'acceptContract',
+          icon: 'close'
+        },
+        {
+          label: 'Close contract',
+          controlName: 'closeContract',
+          icon: 'create-outline'
+        },
+        {
+          label: 'Cancel contract',
+          controlName: 'cancelContract',
+          icon: 'checkmark-done-outline'
+        }
+      ]
     },
     {
-      section: 'Treasury',
-      module: [{
-        label: 'Open treasury section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
-      },
-      {
-        label: 'Cancel orders',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Authorize orders',
-        isChecked: false,
-        icon: 'create-outline'
-      }
-    ]
+      section: 'treasury',
+      module: [
+        {
+          label: 'Open treasury section',
+          controlName: 'read',
+          icon: 'newspaper-outline',
+          main: true,
+        },
+        {
+          label: 'Create payment request',
+          controlName: 'createRequest',
+          icon: 'close'
+        },
+        {
+          label: 'Complete payment orders',
+          controlName: 'closeOrders',
+          icon: 'create-outline'
+        }
+      ]
     },
     {
       section: 'directory',
-      module: [{
-        label: 'Open directory section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
+      module: [
+        {
+          label: 'Open directory section',
+          controlName: 'read',
+          icon: 'newspaper-outline',
+          main: true,
 
-      },
-      {
-        label: 'Delete client',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Edit client',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Add new client',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Hide email',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Hide phone',
-        isChecked: false,
-        icon: 'close'
-      },
-    ]
+        },
+        {
+          label: 'Delete client',
+          controlName: 'deleteContact',
+          icon: 'close'
+        },
+        {
+          label: 'Edit client',
+          controlName: 'editContact',
+          icon: 'close'
+        },
+        {
+          label: 'Add new client',
+          controlName: 'addContact',
+          icon: 'close'
+        },
+        {
+          label: 'Archive Contact',
+          controlName: 'archiveContact'
+        }
+      ]
     },
     {
-      section: 'empoyees',
-      module: [{
-        label: 'Open empoyees section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
+      section: 'employees',
+      module: [
+        {
+          label: 'Open employees section',
+          controlName: 'read',
+          icon: 'newspaper-outline',
+          main: true,
 
-      },
-      {
-        label: 'Hide salary',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Hide email',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Hide email',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Hide employment',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Hide work time',
-        isChecked: false,
-        icon: 'close'
-      },
-    ]
+        },
+        {
+          label: 'Edit employees',
+          controlName: 'editEmployeeInfo'
+        },
+      ]
     },
     {
-      section: 'users',
-      module: [{
-        label: 'Open users section',
-        isChecked: true,
-        icon: 'newspaper-outline',
-        main: true,
-
-      },
-      {
-        label: 'Add new user',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Add privilege',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Edit privilege',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Delete user',
-        isChecked: false,
-        icon: 'close'
-      },
-      {
-        label: 'Edit user',
-        isChecked: false,
-        icon: 'close'
-      },
-    ]
+      section: 'portfolio',
+      module: [
+        {
+          label: 'Open portfolio section',
+          controlName: 'read',
+          main: true
+        },
+        {
+          label: 'Edit pyramid', 
+          controlName: 'editPyramid',
+        },
+        {
+          label: 'Add record',
+          controlName: 'addRecord'
+        }
+      ]
     },
   ];
+
+  public userForm: FormGroup = this.fb.group({
+    name: [, Validators.required],
+    email: [, [Validators.required, Validators.email]],
+    password: [,Validators.required],
+    position: [],
+    permissions: this.fb.group({
+      admin: [false],
+      tickets: this.fb.group({
+        read: [false],
+        voidTicketRequest: [false],
+        voidTicketAccept: [false],
+        addDocument: [false]
+      }),
+      inventory: this.fb.group({
+        read: [false],
+        zeroOutInventory:  [false],
+        moveInventory: [false],
+        addSpace: [false],
+        editSpace: [false]
+      }),
+      invoices: this.fb.group({
+        read: [false],
+        createInvoice: [false],
+        addProofOfPayment: [false],
+        cancelInvoice: [false],
+        editInvoice: [false],
+        createExportInvoice: [false]
+      }),
+      contracts: this.fb.group({
+        read: [false],
+        createContract: [false],
+        acceptContract: [false],
+        closeContract: [false],
+        cancelContract: [false],
+      }),
+      directory: this.fb.group({
+        read: [false],
+        archiveContact: [false],
+        deleteContact: [false],
+        addContact: [false],
+        editContact: [false]
+      }),
+      treasury: this.fb.group({
+        read: [false],
+        createRequest: [false],
+        closeOrders: [false]
+      }),
+      employees: this.fb.group({
+        read: [false],
+        editEmployeeInfo: [false]
+      }),
+      portfolio: this.fb.group({
+        read: [false],
+        editPyramid: [false],
+        addRecord: [false]
+      })
+
+
+    })
+  })
   public sticker: boolean;
-  constructor() { }
+  private currentCompany: string;
+
+
+  constructor(
+    private fb: FormBuilder,
+    private localStorage: Storage,
+    private fns: AngularFireFunctions,
+    private navController: NavController
+  ) { }
 
   ngOnInit() {
+    this.localStorage.get('currentCompany').then(val => {
+      this.currentCompany = val;
+    })
   }
+
+  public submitForm() {
+    console.log("Subimtting form...");
+
+    let form = this.userForm.getRawValue();
+    form.company = this.currentCompany;
+
+    this.fns.httpsCallable('users-createUser')(form).subscribe(
+      val => {
+        this.navController.navigateForward('dashboard/users');
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
   public logScrolling = (event) => {
-    console.log(event);
-    
     const scrolling = event.detail.scrollTop;
     if (scrolling > 0) {
       this.sticker = true;

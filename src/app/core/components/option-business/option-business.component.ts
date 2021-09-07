@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
@@ -12,7 +13,8 @@ export class OptionBusinessComponent implements OnInit {
 
   constructor(
     private store: Storage,
-    private navController: NavController
+    private navController: NavController,
+    private db: AngularFirestore
     ) { }
 
   ngOnInit(): void {
@@ -23,9 +25,9 @@ export class OptionBusinessComponent implements OnInit {
 
   public changeCompany(company) {
     this.store.set('currentCompany', company);
-    this.store.get('firestoreVal').then(val => {
-      this.store.get('user').then(user => {
-        user.currentPermissions = val[company]
+    this.store.get('user').then(user => {
+      this.db.doc(`users/${user.uid}/companies/${company}`).valueChanges().subscribe(compDoc => {
+        user.currentPermissions = compDoc['permissions']
 
         this.store.set('user', user);
         location.reload();
