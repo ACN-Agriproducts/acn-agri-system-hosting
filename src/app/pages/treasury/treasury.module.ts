@@ -1,4 +1,4 @@
-import { OptionsComponent } from './../invoices/components/options/options.component';
+import { OptionsComponent } from './components/options/options.component';
 import { CoreModule } from '@core/core.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

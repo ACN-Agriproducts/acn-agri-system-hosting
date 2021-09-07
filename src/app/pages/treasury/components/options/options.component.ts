@@ -12,4 +12,7 @@ export class OptionsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  public openModal():void {
+
+  }
 }
