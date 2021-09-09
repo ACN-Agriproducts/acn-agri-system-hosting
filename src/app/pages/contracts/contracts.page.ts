@@ -25,7 +25,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public searchIinput = new FormControl('');
   public ready: boolean = false;
   public sortField: string = "date";
-  public assending: boolean = true;
+  public assending: boolean = false;
   public dataList: any = [];
   public dataListAux: any;
   public listFilter: any = [];
