@@ -100,9 +100,7 @@ export class LayoutComponent implements OnInit {
 
       this.ready = true;
     });
-    this.authentication.user().subscribe(data => console.log(data));
-
-
+    
     this.collapse$ = this.serviceSettings.collapseMenu$;
     this.displayName$ = this.serviceSettings.displayName$;
   }

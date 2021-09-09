@@ -11,6 +11,7 @@ import { OptionsContractComponent } from './components/options-contract/options-
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
+import { Observable, Subscription } from 'rxjs';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public currentCompany: string;
   public contractType: string = "purchaseContracts";
   public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
+  public currentSub: Subscription[] = [];
 
   constructor(
     private modal: MatDialog,
@@ -64,16 +66,23 @@ export class ContractsPage implements OnInit, AfterViewInit {
   };
 
   public async getContracts() {
-    this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
+    if(this.currentSub.length > 0) {
+      for(const sub of this.currentSub){
+        sub.unsubscribe();
+      };
+
+      this.currentSub = [];
+    }
+
+    this.currentSub.push(this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
       ref.where("status", "in", this.orderStatus)
       .orderBy(this.sortField, this.assending? 'asc': 'desc')
-    )
-      .valueChanges({idField: 'documentId'}).subscribe(val => {
+    ).valueChanges({idField: 'documentId'}).subscribe(val => {
         this.dataList = val;
         console.log(`companies/${this.currentCompany}/${this.contractType}`);
         console.log(this.dataList);
         this.ready = true;
-      })
+      }));
   };
 
   public openModal = async () => {
