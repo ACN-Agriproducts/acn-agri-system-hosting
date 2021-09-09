@@ -70,4 +70,8 @@ export class DirectoryPage implements OnInit {
   public editButton(id: string) {
     this.navController.navigateForward(`dashboard/directory/edit-contact/${id}`)
   }
+
+  public deleteButton(id: string): void {
+    
+  }
 }

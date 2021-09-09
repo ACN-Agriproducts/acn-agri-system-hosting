@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { CoreModule } from '@core/core.module';
 import { IonicModule } from '@ionic/angular';
 
 import { NewContactPageRoutingModule } from './new-contact-routing.module';
@@ -15,7 +15,8 @@ import { NewContactPage } from './new-contact.page';
     IonicModule,
     NewContactPageRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CoreModule
   ],
   declarations: [NewContactPage]
 })
