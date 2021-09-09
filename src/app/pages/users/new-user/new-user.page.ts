@@ -296,12 +296,14 @@ export class NewUserPage implements OnInit {
     let form = this.userForm.getRawValue();
     form.company = this.currentCompany;
 
-    this.fns.httpsCallable('users-createUser')(form).subscribe(
+    const sub = this.fns.httpsCallable('users-createUser')(form).subscribe(
       val => {
         this.navController.navigateForward('dashboard/users');
+        sub.unsubscribe();
       },
       error => {
         console.log(error);
+        sub.unsubscribe();
       }
     );
   }

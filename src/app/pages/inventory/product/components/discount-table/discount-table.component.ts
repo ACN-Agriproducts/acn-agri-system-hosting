@@ -30,7 +30,7 @@ export class DiscountTableComponent implements OnInit {
       data: this.fb.array([])
     });
     
-    new AngularFirestoreDocument(this.doc.ref, this.db).collection("discounts").doc("moisture").get().subscribe(val => {
+    const sub = new AngularFirestoreDocument(this.doc.ref, this.db).collection("discounts").doc("moisture").get().subscribe(val => {
       const data = this.table.get("data") as FormArray;
 
       if(val.data()['data']){
@@ -44,6 +44,7 @@ export class DiscountTableComponent implements OnInit {
       if (this.data.length == 0) {
         this.addItem();
       }
+      sub.unsubscribe();
     })
   }
 

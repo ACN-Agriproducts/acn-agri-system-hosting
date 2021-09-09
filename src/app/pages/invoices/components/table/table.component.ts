@@ -1,16 +1,17 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { OptionsComponent } from '../options/options.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnDestroy {
 
   public number: boolean;
   public customer: boolean;
@@ -20,6 +21,8 @@ export class TableComponent implements OnInit {
 
   private currentCompany:string;
   public invoiceList: any[];
+
+  private currentSub: Subscription;
 
   constructor(
     private popoverController: PopoverController,
@@ -40,6 +43,12 @@ export class TableComponent implements OnInit {
         this.invoiceList = list;
       })
     })
+  }
+
+  ngOnDestroy() {
+    if(this.currentSub != null) {
+      this.currentSub.unsubscribe();
+    }
   }
 
   public openOptions = async (ev, invoice) => {

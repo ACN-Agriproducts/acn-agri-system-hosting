@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 import { PrintableInvoiceComponent } from '../components/printable-invoice/printable-invoice.component';
 
 @Component({
@@ -25,6 +26,8 @@ export class CreateInvoicePage implements OnInit {
   public ready: boolean = false;
   
   invoiceForm: FormGroup;
+
+  private currentSubs: Subscription[];
 
   constructor(
     private fb: FormBuilder,
@@ -67,21 +70,27 @@ export class CreateInvoicePage implements OnInit {
 
     this.localStorage.get('currentCompany').then(company => {
       this.currentCompany = company;
+      var tempSub;
 
-      this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe( val => {
+      tempSub = this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe( val => {
         this.id = val['nextInvoice'];
       })
+      this.currentSubs.push(tempSub);
 
-      this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "name"}).subscribe(list => {
+      const sub = this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "name"}).subscribe(list => {
         this.plantsList = list;
+        sub.unsubscribe();
       })
+      
 
-      this.db.collection(`companies/${this.currentCompany}/invoiceItems`).valueChanges({idField: "docId"}).subscribe(list => {
+      tempSub = this.db.collection(`companies/${this.currentCompany}/invoiceItems`).valueChanges({idField: "docId"}).subscribe(list => {
         this.itemsList = list;
       })
+      this.currentSubs.push(tempSub)
 
-      this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: "name"}).subscribe(list => {
+      const sub2 = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: "name"}).subscribe(list => {
         this.productsList = list;
+        sub2.unsubscribe();
       })
     })
   }

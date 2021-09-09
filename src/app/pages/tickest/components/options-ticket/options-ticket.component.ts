@@ -32,8 +32,9 @@ export class OptionsTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.storage.ref(this.ticket.pdfLink).getDownloadURL().subscribe(val => {
+    var sub = this.storage.ref(this.ticket.pdfLink).getDownloadURL().subscribe(val => {
       this.downloadString = val;
+      sub.unsubscribe();
     });
 
     this.localStorage.get('user').then(data => {
@@ -65,8 +66,9 @@ export class OptionsTicketComponent implements OnInit {
   }
 
   public downloadTicket = () => {
-    this.downloadURL.subscribe( val => {
+    var sub = this.downloadURL.subscribe( val => {
       this.navController.navigateForward(val);
+      sub.unsubscribe();
     })
   }
 

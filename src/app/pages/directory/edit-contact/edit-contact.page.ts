@@ -27,9 +27,10 @@ export class EditContactPage implements OnInit {
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
 
-      this.db.doc(`companies/${this.currentCompany}/directory/${this.id}`).get().subscribe(doc => {
+      const tempSub = this.db.doc(`companies/${this.currentCompany}/directory/${this.id}`).get().subscribe(doc => {
         this.doc = doc.data();
         this.setForm();
+        tempSub.unsubscribe();
       });
     });
     this.id = this.route.snapshot.paramMap.get('id');

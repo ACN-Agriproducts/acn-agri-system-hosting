@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -18,6 +19,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class LoginPage implements OnInit, OnDestroy {
   public destroy: boolean;
   public formulario: FormGroup;
+
+  private currentSubs: Subscription[];
   constructor(
     private cd: ChangeDetectorRef,
     private navController: NavController,
@@ -40,6 +43,10 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.cd.markForCheck();
+
+    for(const sub of this.currentSubs) {
+      sub.unsubscribe();
+    }
   }
   ionViewDidLeave() {
   }
@@ -53,8 +60,8 @@ export class LoginPage implements OnInit, OnDestroy {
       const password = this.formulario.value.password;
       this.service.login(email, password).then(response => {
         if (response) {
-          this.fb.doc(`/users/${response.user.uid}`).valueChanges().subscribe( val => {
-            this.fb.doc(`/users/${response.user.uid}/companies/${val['worksAt'][0]}`).valueChanges().subscribe(compDoc => {
+          const sub = this.fb.doc(`/users/${response.user.uid}`).valueChanges().subscribe( val => {
+            const sub2 = this.fb.doc(`/users/${response.user.uid}/companies/${val['worksAt'][0]}`).valueChanges().subscribe(compDoc => {
               this.storage.set('user', {
                 email: response.user.email,
                 uid: response.user.uid, 
@@ -69,8 +76,10 @@ export class LoginPage implements OnInit, OnDestroy {
               this.loadingController.dismiss().then((res) => {
                 this.navController.navigateForward('/dashboard/home');
               });
+              this.currentSubs.push(sub);
             })
           })
+          this.currentSubs.push(sub);
         }
       }).catch((error) => {
         this.presentAlert(error.message);
