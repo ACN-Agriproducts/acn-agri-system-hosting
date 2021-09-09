@@ -20,7 +20,7 @@ export class LoginPage implements OnInit, OnDestroy {
   public destroy: boolean;
   public formulario: FormGroup;
 
-  private currentSubs: Subscription[];
+  private currentSubs: Subscription[] = [];
   constructor(
     private cd: ChangeDetectorRef,
     private navController: NavController,

@@ -19,7 +19,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   clientsReady: boolean = false;
   productsReady: boolean = false;
   contractForm: FormGroup;
-  currentSubs: Subscription[];
+  currentSubs: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,

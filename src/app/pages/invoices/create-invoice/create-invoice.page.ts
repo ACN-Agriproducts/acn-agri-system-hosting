@@ -27,7 +27,7 @@ export class CreateInvoicePage implements OnInit {
   
   invoiceForm: FormGroup;
 
-  private currentSubs: Subscription[];
+  private currentSubs: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,

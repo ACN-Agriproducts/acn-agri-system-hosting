@@ -16,7 +16,7 @@ export class InventoryPage implements OnInit, OnDestroy{
   currentPlantId: number = 0;
   plantList: any[];
   productList: any[];
-  currentSubs: Subscription[];
+  currentSubs: Subscription[] = [];
 
   constructor(
     private fb: AngularFirestore,

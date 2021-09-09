@@ -18,7 +18,7 @@ export class ListComponent implements OnInit {
   public filterEmployee: boolean;
   public filterStatus: boolean;
   public filterSalary: boolean;
-  private currentSubs: Subscription[];
+  private currentSubs: Subscription[] = [];
   constructor(
     private popoverController: PopoverController,
     private modalController: ModalController,
