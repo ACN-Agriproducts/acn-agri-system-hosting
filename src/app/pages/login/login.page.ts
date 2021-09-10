@@ -60,6 +60,7 @@ export class LoginPage implements OnInit, OnDestroy {
       const password = this.formulario.value.password;
       this.service.login(email, password).then(response => {
         if (response) {
+          console.log(`/users/${response.user.uid}`);
           const sub = this.fb.doc(`/users/${response.user.uid}`).valueChanges().subscribe( val => {
             const sub2 = this.fb.doc(`/users/${response.user.uid}/companies/${val['worksAt'][0]}`).valueChanges().subscribe(compDoc => {
               this.storage.set('user', {
@@ -76,7 +77,7 @@ export class LoginPage implements OnInit, OnDestroy {
               this.loadingController.dismiss().then((res) => {
                 this.navController.navigateForward('/dashboard/home');
               });
-              this.currentSubs.push(sub);
+              this.currentSubs.push(sub2);
             })
           })
           this.currentSubs.push(sub);
