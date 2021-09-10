@@ -90,6 +90,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
             .where("year", "==", this.year)
             .where("product", "==", this.productDoc.ref.id)
         ).valueChanges().subscribe(dpr => {
+          this.tableData = [];
           this.dprDoc = dpr[0];
 
           const data = this.dprDoc.tickets as any;
