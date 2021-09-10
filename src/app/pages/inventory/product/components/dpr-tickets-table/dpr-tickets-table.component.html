@@ -1,3 +1,29 @@
-<p>
-  dpr-tickets-table works!
-</p>
+<mat-spinner [diameter]="20" *ngIf="!ready"></mat-spinner>
+<span *ngIf="ready">{{this.ticketType}}</span>
+
+<table mat-table [dataSource]="ticketData" class="mat-elevation-z8" *ngIf="ready">
+  <!-- ID Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.id}} </td>
+    <td mat-footer-cell *matFooterCellDef> Total </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="client">
+    <th mat-header-cell *matHeaderCellDef> Client </th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.clientName | slice:0:10}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <!-- Volume Column -->
+  <ng-container matColumnDef="net">
+    <th mat-header-cell *matHeaderCellDef> Net </th>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.dryWeight / this.bushelWeight | number: '1.3-3'}} </td>
+    <td mat-footer-cell *matFooterCellDef> {{getTotalWeight() / this.bushelWeight | number: '1.3-3'}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+</table>
