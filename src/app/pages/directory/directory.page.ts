@@ -1,9 +1,9 @@
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { AngularFirestore } from '@angular/fire/firestore'
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
 
 @Component({
@@ -11,11 +11,12 @@ import { Storage } from '@ionic/storage';
   templateUrl: './directory.page.html',
   styleUrls: ['./directory.page.scss'],
 })
-export class DirectoryPage implements OnInit {
+export class DirectoryPage implements OnInit, OnDestroy {
 
   contacts: any[]
   stringTest: string
   currentCompany: string
+  private currentSub: Subscription;
 
   constructor(
     private popoverController: PopoverController,
@@ -33,8 +34,14 @@ export class DirectoryPage implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    if(this.currentSub != null) {
+      this.currentSub.unsubscribe();
+    }
+  }
+
   private updateList = async () => {
-    this.store.collection(`companies/${this.currentCompany}/directory`, col => 
+    this.currentSub = this.store.collection(`companies/${this.currentCompany}/directory`, col => 
       col.orderBy('name')
     ).valueChanges({idField: 'docId'})
       .subscribe(val => this.contacts = val);

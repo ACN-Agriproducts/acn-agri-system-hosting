@@ -1,4 +1,4 @@
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
+import { IonInfiniteScroll, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
@@ -11,6 +11,7 @@ import { OptionsContractComponent } from './components/options-contract/options-
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
+import { Observable, Subscription } from 'rxjs';
 
 
 @Component({
@@ -20,11 +21,12 @@ import { ContractModalOptionsComponent } from './components/contract-modal-optio
 })
 export class ContractsPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public searchIinput = new FormControl('');
   public ready: boolean = false;
   public sortField: string = "date";
-  public assending: boolean = true;
+  public assending: boolean = false;
   public dataList: any = [];
   public dataListAux: any;
   public listFilter: any = [];
@@ -32,6 +34,10 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public currentCompany: string;
   public contractType: string = "purchaseContracts";
   public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
+  public currentSub: Subscription[] = [];
+
+  private contractLimit = 20;
+  private contractStep = 20;
 
   constructor(
     private modal: MatDialog,
@@ -64,17 +70,48 @@ export class ContractsPage implements OnInit, AfterViewInit {
   };
 
   public async getContracts() {
-    this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
+    for(const sub of this.currentSub){
+      sub.unsubscribe();
+    };
+
+    this.currentSub = [];
+    this.contractLimit = this.contractStep;
+    this.infiniteScroll.disabled = false;
+
+    this.currentSub.push(this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
       ref.where("status", "in", this.orderStatus)
       .orderBy(this.sortField, this.assending? 'asc': 'desc')
-    )
-      .valueChanges({idField: 'documentId'}).subscribe(val => {
+      .limit(this.contractLimit)
+    ).valueChanges({idField: 'documentId'}).subscribe(val => {
         this.dataList = val;
-        console.log(`companies/${this.currentCompany}/${this.contractType}`);
-        console.log(this.dataList);
         this.ready = true;
-      })
+      }));
   };
+
+  public async infiniteContracts(event) {
+    for(const sub of this.currentSub){
+      sub.unsubscribe();
+    };
+
+    this.currentSub = [];
+    this.contractLimit += this.contractStep;
+
+    const tempSub = this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
+    ref.where("status", "in", this.orderStatus)
+      .orderBy(this.sortField, this.assending? 'asc': 'desc')
+      .limit(this.contractLimit)
+    ).valueChanges({idField: 'documentId'}).subscribe(val => {
+        console.log(val, this.contractLimit);
+        this.dataList = val;
+        event.target.complete();
+
+        if(val.length < this.contractLimit) {
+          this.infiniteScroll.disabled = true;
+        }
+    })
+
+    this.currentSub.push(tempSub);
+  }
 
   public openModal = async () => {
     const modal = await this.modalController.create({

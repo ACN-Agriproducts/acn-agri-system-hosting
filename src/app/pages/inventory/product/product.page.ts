@@ -26,9 +26,10 @@ export class ProductPage implements OnInit {
     this.storage.get("currentCompany").then(company => {
       this.currentCompany = company;
 
-      this.db.doc<any>(`companies/${company}/products/${this.product}`).get().subscribe(val => {
+      const tempSub = this.db.doc<any>(`companies/${company}/products/${this.product}`).get().subscribe(val => {
         this.doc = val;
         this.ready = true;
+        tempSub.unsubscribe();
       })
     })
   }

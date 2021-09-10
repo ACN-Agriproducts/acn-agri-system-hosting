@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.page.html',
   styleUrls: ['./inventory.page.scss'],
 })
-export class InventoryPage implements OnInit {
+export class InventoryPage implements OnInit, OnDestroy{
 
   currentCompany: string;
   currentPlantName: string;
   currentPlantId: number = 0;
   plantList: any[];
   productList: any[];
+  currentSubs: Subscription[] = [];
 
   constructor(
     private fb: AngularFirestore,
@@ -23,18 +25,28 @@ export class InventoryPage implements OnInit {
   ) { 
     this.store.get('currentCompany').then(val => {
       this.currentCompany = val;
-      this.fb.collection(`companies/${this.currentCompany}/plants`).valueChanges({ idField: 'name' }).subscribe(val => {
+      var tempSub;
+      tempSub = this.fb.collection(`companies/${this.currentCompany}/plants`).valueChanges({ idField: 'name' }).subscribe(val => {
         this.plantList = val;
         this.currentPlantName = val[0].name;
         console.log(this.plantList);
       })
-      this.fb.collection(`companies/${this.currentCompany}/products`).valueChanges({ idField: 'name' }).subscribe(val => {
+      this.currentSubs.push(tempSub);
+
+      tempSub = this.fb.collection(`companies/${this.currentCompany}/products`).valueChanges({ idField: 'name' }).subscribe(val => {
         this.productList = val;
       })
+      this.currentSubs.push(tempSub);
     })
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    for(const sub of this.currentSubs) {
+      sub.unsubscribe();
+    }
   }
 
   public nav(path:string): void {

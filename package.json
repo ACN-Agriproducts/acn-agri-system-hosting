@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "ionic build & firebase deploy",
-    "build:ci": "ng build --configuration=production --sourceMap=false --base-href acn-agri-system-hosting"
+    "build:ci": "ng build --configuration=production --sourceMap=false"
   },
   "private": true,
   "dependencies": {

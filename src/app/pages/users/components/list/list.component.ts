@@ -4,6 +4,7 @@ import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@
 import { AngularFireStorage } from '@angular/fire/storage';
 import { PopoverController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 // import { OptionsComponent } from '../options/options.component';
 
 @Component({
@@ -17,6 +18,7 @@ export class ListComponent implements OnInit {
   public filterEmployee: boolean;
   public filterStatus: boolean;
   public filterSalary: boolean;
+  private currentSubs: Subscription[] = [];
   constructor(
     private popoverController: PopoverController,
     private modalController: ModalController,
@@ -27,7 +29,7 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.localStorage.get('currentCompany').then(currentCompany => {
-      this.db.doc(`companies/${currentCompany}`).valueChanges().subscribe(companyDoc => {
+      var sub = this.db.doc(`companies/${currentCompany}`).valueChanges().subscribe(companyDoc => {
         console.log(currentCompany)
         this.listEmployees = [];
 
@@ -54,7 +56,8 @@ export class ListComponent implements OnInit {
                 pictureURL = user.data().profilePicPath
               }
 
-              this.storage.ref(pictureURL).getDownloadURL().subscribe(url => {
+              var tempSub = this.storage.ref(pictureURL).getDownloadURL().subscribe(url => {
+                this.listEmployees = [];
                 this.listEmployees.push({
                   name: user.data().name,
                   createdAt: user.data().createdAt,
@@ -65,6 +68,8 @@ export class ListComponent implements OnInit {
                   pictureURL: url
                 })
               })
+              this.currentSubs.push(tempSub);
+              sub.unsubscribe();
             })
           })
         });

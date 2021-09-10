@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-new-contract',
   templateUrl: './new-contract.page.html',
   styleUrls: ['./new-contract.page.scss'],
 })
-export class NewContractPage implements OnInit {
+export class NewContractPage implements OnInit, OnDestroy {
 
   currentCompany: string;
   currentCompanyValue: any;
@@ -18,6 +19,7 @@ export class NewContractPage implements OnInit {
   clientsReady: boolean = false;
   productsReady: boolean = false;
   contractForm: FormGroup;
+  currentSubs: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -31,7 +33,7 @@ export class NewContractPage implements OnInit {
       this.currentCompany = val;
       console.log(`companies/${this.currentCompany}`)
 
-      this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe(val => {
+      var tempSub = this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe(val => {
         this.currentCompanyValue = val;
         this.contactList = val['contactList'].sort((a, b) =>{
             var nameA = a.name.toUpperCase()
@@ -48,11 +50,13 @@ export class NewContractPage implements OnInit {
           });
         this.clientsReady = true;
       })
+      this.currentSubs.push(tempSub);
 
-      this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: 'name'}).subscribe(val => {
+      tempSub = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: 'name'}).subscribe(val => {
         this.productsList = val;
         this.productsReady = true;
       })
+      this.currentSubs.push(tempSub);
     })
 
     var today = new Date();
@@ -77,6 +81,12 @@ export class NewContractPage implements OnInit {
         measurement: ['', Validators.required]
       })
     })
+  }
+
+  ngOnDestroy() {
+    for(var x of this.currentSubs) {
+      x.unsubscribe();
+    }
   }
 
   compareWithProduct(p1, p2){

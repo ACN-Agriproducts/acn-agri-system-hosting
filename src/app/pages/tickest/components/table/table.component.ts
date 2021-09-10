@@ -3,10 +3,11 @@ import { ShowDetailsComponent } from './show-details/show-details.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalTicketComponent } from './../modal-ticket/modal-ticket.component';
 import { OptionsTicketComponent } from './../options-ticket/options-ticket.component';
-import { Component, OnInit } from '@angular/core';
-import { PopoverController, ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   public ticketList: any[];
   public plantList: string[] = [];
   public currentCompany: string;
@@ -22,6 +25,10 @@ export class TableComponent implements OnInit {
   public inTicket: boolean = true;
   private date: Date;
   private path: string;
+  private currentSub: Subscription[] = [];
+
+  private ticketStep: number = 20;
+  private ticketLimit: number = 20;
 
   constructor(
     private popoverController: PopoverController,
@@ -35,15 +42,16 @@ export class TableComponent implements OnInit {
     this.localStorage.get('currentCompany').then(currentComp => {
       this.currentCompany = currentComp;
 
-      this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "plantName"}).subscribe(val => {
-        this.currentPlant = val[0].plantName
+      const tempsub = this.db.collection(`companies/${this.currentCompany}/plants`).get().subscribe(val => {
+        this.currentPlant = val.docs[0].id;
         val.forEach(element => {
-          this.plantList.push(element.plantName);
+          this.plantList.push(element.id);
         });
 
         this.path = `companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`;
         this.getTickets(new Date());
-      })
+        tempsub.unsubscribe();
+      });
     })
   }
 
@@ -54,6 +62,16 @@ export class TableComponent implements OnInit {
   }
 
   async getTickets(date: Date){
+    if(this.currentSub.length > 0) {
+      for(const sub of this.currentSub){
+        sub.unsubscribe();
+      };
+
+      this.currentSub = [];
+    }
+
+    this.infiniteScroll.disabled = false;
+    this.ticketLimit = this.ticketStep;
     this.date = date;
 
     let startDate: Date = new Date(date.valueOf());
@@ -65,15 +83,47 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    this.db.collection(this.path, ref =>
+    this.currentSub.push(this.db.collection(this.path, ref =>
       ref.where("in", "==", this.inTicket)
       .where("dateOut", ">=", startDate)
       .where("dateOut", "<=", endDate)
       .orderBy("dateOut", "desc")
+      .limit(this.ticketLimit)
     ).valueChanges({idField: "docId"}).subscribe(val => {
       this.ticketList = val;
-      console.log(this.ticketList);
-    });
+    }));
+  }
+
+  async infiniteTickets(event):Promise<void> {
+    for(const sub of this.currentSub){
+      sub.unsubscribe();
+    };
+    this.currentSub = [];
+    this.ticketLimit += this.ticketStep;
+
+    let startDate: Date = new Date(this.date.valueOf());
+    let endDate: Date = new Date(this.date.valueOf());
+
+    startDate.setDate(1);
+    endDate.setMonth(endDate.getMonth() + 1);
+    endDate.setDate(0);
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(23,59,59,59);
+
+    this.currentSub.push(this.db.collection(this.path, ref =>
+      ref.where("in", "==", this.inTicket)
+      .where("dateOut", ">=", startDate)
+      .where("dateOut", "<=", endDate)
+      .orderBy("dateOut", "desc")
+      .limit(this.ticketLimit)
+    ).valueChanges({idField: "docId"}).subscribe(val => {
+      this.ticketList = val;
+      event.target.complete();
+
+      if(val.length < this.ticketLimit) {
+        this.infiniteScroll.disabled = true;
+      }
+    }))
   }
 
   open() {
