@@ -71,7 +71,10 @@ export class DiscountTableComponent implements OnInit {
   public addItem(): void{
     const data = this.table.get("data") as FormArray;
     data.push(this.createItem());
-    this.tableView.renderRows();
+
+    if(this.tableView){
+      this.tableView.renderRows();
+    }
   }
 
   public deleteItem(index: number): void{

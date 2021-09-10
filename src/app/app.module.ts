@@ -19,6 +19,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/firestore';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions';
+import { MomentDateModule } from '@angular/material-moment-adapter';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/functions'
     AngularFireModule.initializeApp(environment.firebaseConfig),
     IonicStorageModule.forRoot({
       name: 'dbAgriproductos',
-    })
+    }),
+    MomentDateModule
 
   ],
   providers: [

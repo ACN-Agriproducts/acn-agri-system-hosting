@@ -9,6 +9,7 @@ import { ProductPageRoutingModule } from './product-routing.module';
 import { ProductPage } from './product.page';
 import { CoreModule } from '@core/core.module';
 import { DiscountTableComponent } from './components/discount-table/discount-table.component';
+import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { DiscountTableComponent } from './components/discount-table/discount-tab
   ],
   declarations: [
     ProductPage,
-    DiscountTableComponent
+    DiscountTableComponent,
+    ProductDprTableComponent
   ]
 })
 export class ProductPageModule {}
