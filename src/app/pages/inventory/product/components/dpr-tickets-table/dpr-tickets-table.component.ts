@@ -11,6 +11,7 @@ export class DprTicketsTableComponent implements OnInit {
   @Input() ticketList: any[] = [];
   @Input() ticketType: string = "";
   @Input() bushelWeight: number = 1;
+  @Input() title: string;
   public ticketData: any[];
 
   public displayedColumns: string[] = ['id', 'client', 'net']
@@ -23,6 +24,10 @@ export class DprTicketsTableComponent implements OnInit {
   ngOnInit() {
     this.ticketData = new Array<any>(this.ticketList.length);
     let counter = 0;
+
+    if(this.ticketData.length == 0) {
+      this.ready = true;
+    }
 
     this.ticketList.forEach((ticket, index) => {
       let ticketRef = ticket as DocumentReference<any>;

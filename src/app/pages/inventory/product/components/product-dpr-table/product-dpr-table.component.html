@@ -53,8 +53,8 @@
           {{element.description}}
           <span class="example-element-description-attribution"> -- Wikipedia </span>
         </div> -->
-        <app-dpr-tickets-table [ticketList]="day.inTickets" [bushelWeight]="this.productDoc.data().weight"></app-dpr-tickets-table>
-        <app-dpr-tickets-table [ticketList]="day.outTickets" [bushelWeight]="this.productDoc.data().weight"></app-dpr-tickets-table>
+        <app-dpr-tickets-table [title]="'In Tickets'" [ticketList]="day.inTickets" [bushelWeight]="this.productDoc.data().weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
+        <app-dpr-tickets-table [title]="'Out Tickets'" [ticketList]="day.outTickets" [bushelWeight]="this.productDoc.data().weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
       </div>
     </td>
   </ng-container>

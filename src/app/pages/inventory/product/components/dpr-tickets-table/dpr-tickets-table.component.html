@@ -1,6 +1,6 @@
 <mat-spinner [diameter]="20" *ngIf="!ready"></mat-spinner>
-<span *ngIf="ready">{{this.ticketType}}</span>
 
+<span *ngIf="ready">{{this.title}}</span>
 <table mat-table [dataSource]="ticketData" class="mat-elevation-z8" *ngIf="ready">
   <!-- ID Column -->
   <ng-container matColumnDef="id">
