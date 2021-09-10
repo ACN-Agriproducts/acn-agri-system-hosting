@@ -74,10 +74,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.year = moment().year();
     this.month = moment().month() + 1;
 
-    this.date.month(this.month);
+    this.date.month(this.month - 1);
     this.date.year(this.year);
-
-    console.log(this.month, this.year)
 
     this.localStorage.get("currentCompany").then(company => {
       this.currentCompany = company;
@@ -168,7 +166,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   public chosenMonthHandler(normalizedMonth: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
     console.log(normalizedMonth);
     this.month = normalizedMonth.month() + 1;
-    this.date.month(this.month);
+    this.date.month(normalizedMonth.month());
     datepicker.close();
   }
 

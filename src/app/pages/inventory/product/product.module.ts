@@ -10,6 +10,7 @@ import { ProductPage } from './product.page';
 import { CoreModule } from '@core/core.module';
 import { DiscountTableComponent } from './components/discount-table/discount-table.component';
 import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
+import { DprTicketsTableComponent } from './components/dpr-tickets-table/dpr-tickets-table.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ProductDprTableComponent } from './components/product-dpr-table/product
   declarations: [
     ProductPage,
     DiscountTableComponent,
-    ProductDprTableComponent
+    ProductDprTableComponent,
+    DprTicketsTableComponent
   ]
 })
 export class ProductPageModule {}
