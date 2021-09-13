@@ -8,6 +8,7 @@ import { ItemFixesPageRoutingModule } from './item-fixes-routing.module';
 
 import { ItemFixesPage } from './item-fixes.page';
 import { CoreModule } from '@core/core.module';
+import { ItemFormComponent } from './components/item-form/item-form.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     IonicModule,
     ItemFixesPageRoutingModule,
-    CoreModule
+    CoreModule,
+    ItemFormComponent
   ],
   declarations: [ItemFixesPage]
 })

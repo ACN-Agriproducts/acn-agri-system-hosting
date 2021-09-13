@@ -13,7 +13,6 @@ import { ModalComponent } from './components/modal/modal.component';
 import { OptionsComponent } from './components/options/options.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { OptionNewInvoiceComponent } from './components/option-new-invoice/option-new-invoice.component';
-import { ItemFormComponent } from './item-fixes/components/item-form/item-form.component';
 
 @NgModule({
   imports: [
@@ -30,7 +29,7 @@ import { ItemFormComponent } from './item-fixes/components/item-form/item-form.c
     ModalComponent,
     OptionsComponent,
     OptionNewInvoiceComponent,
-    ItemFormComponent
+    
   ]
 })
 export class InvoicesPageModule {}
