@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 })
 export class DprTicketsTableComponent implements OnInit {
   @Input() ticketList: any[] = [];
-  @Input() ticketType: string = "";
   @Input() bushelWeight: number = 1;
   @Input() title: string;
   public ticketData: any[];
