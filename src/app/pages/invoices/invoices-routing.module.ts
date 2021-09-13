@@ -15,12 +15,13 @@ const routes: Routes = [
   {
     path: 'confirm-invoice',
     loadChildren: () => import('./confirm-invoice/confirm-invoice.module').then( m => m.ConfirmInvoicePageModule)
-  },  {
+  },
+  {
     path: 'create-invoice',
     loadChildren: () => import('./create-invoice/create-invoice.module').then( m => m.CreateInvoicePageModule)
   },
   {
-    path: 'item-fixes',
+    path: 'item-fixes/:id',
     loadChildren: () => import('./item-fixes/item-fixes.module').then( m => m.ItemFixesPageModule)
   }
 

@@ -1,9 +1,96 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>item-fixes</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="{{'Invoice ' + invoiceId}}"></app-header-toolbar>
+<ion-content *ngIf="invoiceData">
+  <ion-row>
+    <ion-col size='6'>
+      <ion-card>
+        <ion-card-header>Seller Info</ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size='7'>
+                <span class="info-label">Name:</span>
+                <span class="info-content">{{invoiceData.seller.name}}</span>
+              </ion-col>
+              <ion-col size='5'>
+                <span class="info-label">Phone #</span>
+                <span class="info-content">{{invoiceData.seller.phone}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <span class="info-label">Street</span>
+                <span class="info-content">{{invoiceData.seller.street}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size='5'>
+                <span class="info-label">City</span>
+                <span class="info-content">{{invoiceData.seller.city}}</span>                
+              </ion-col>
+              <ion-col size='2'>              
+                <span class="info-label">ZIP</span>
+                <span class="info-content">{{invoiceData.seller.zip}}</span>                
+              </ion-col>
+              <ion-col size='2'>              
+                <span class="info-label" >State</span>
+                <span class="info-content">{{invoiceData.seller.state}}</span>                
+              </ion-col>
+              <ion-col size='3'>              
+                <span class="info-label">Country</span>
+                <span class="info-content">{{invoiceData.seller.country}}</span>                
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
 
-<ion-content>
+    <ion-col size="6">
+      <ion-card>
+        <ion-card-header>Buyer Info</ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col size='7'>
+                <span class="info-label">Name:</span>
+                <span class="info-content">{{invoiceData.buyer.name}}</span>
+              </ion-col>
+              <ion-col size='5'>
+                <span class="info-label">Phone #</span>
+                <span class="info-content">{{invoiceData.buyer.phone}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <span class="info-label">Street</span>
+                <span class="info-content">{{invoiceData.buyer.street}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size='5'>
+                <span class="info-label">City</span>
+                <span class="info-content">{{invoiceData.buyer.city}}</span>                
+              </ion-col>
+              <ion-col size='2'>              
+                <span class="info-label">ZIP</span>
+                <span class="info-content">{{invoiceData.buyer.zip}}</span>                
+              </ion-col>
+              <ion-col size='2'>              
+                <span class="info-label" >State</span>
+                <span class="info-content">{{invoiceData.buyer.state}}</span>                
+              </ion-col>
+              <ion-col size='3'>              
+                <span class="info-label">Country</span>
+                <span class="info-content">{{invoiceData.buyer.country}}</span>                
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
 
+    <ion-col *ngFor="let item of invoiceData.items">
+
+    </ion-col>
+  </ion-row>
 </ion-content>
