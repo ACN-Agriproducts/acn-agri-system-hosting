@@ -16,9 +16,11 @@ import { ItemFormComponent } from './components/item-form/item-form.component';
     FormsModule,
     IonicModule,
     ItemFixesPageRoutingModule,
-    CoreModule,
-    ItemFormComponent
+    CoreModule
   ],
-  declarations: [ItemFixesPage]
+  declarations: [
+    ItemFixesPage,
+    ItemFormComponent
+  ]
 })
 export class ItemFixesPageModule {}
