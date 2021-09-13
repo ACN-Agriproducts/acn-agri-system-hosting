@@ -46,6 +46,10 @@ export class DprTicketsTableComponent implements OnInit {
     let counter = 0;
 
     for(const x of this.ticketData) {
+      if(x.clientName == 'VOID'){
+        continue;
+      }
+      
       counter += x.dryWeight;
     }
     return counter;
