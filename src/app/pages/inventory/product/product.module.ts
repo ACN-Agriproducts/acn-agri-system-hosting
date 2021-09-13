@@ -11,6 +11,7 @@ import { CoreModule } from '@core/core.module';
 import { DiscountTableComponent } from './components/discount-table/discount-table.component';
 import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
 import { DprTicketsTableComponent } from './components/dpr-tickets-table/dpr-tickets-table.component';
+import { DprInvoiceTableComponent } from './components/dpr-invoice-table/dpr-invoice-table.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { DprTicketsTableComponent } from './components/dpr-tickets-table/dpr-tic
     ProductPage,
     DiscountTableComponent,
     ProductDprTableComponent,
-    DprTicketsTableComponent
+    DprTicketsTableComponent,
+    DprInvoiceTableComponent
   ]
 })
 export class ProductPageModule {}
