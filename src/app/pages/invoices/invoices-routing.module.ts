@@ -18,6 +18,10 @@ const routes: Routes = [
   },  {
     path: 'create-invoice',
     loadChildren: () => import('./create-invoice/create-invoice.module').then( m => m.CreateInvoicePageModule)
+  },
+  {
+    path: 'item-fixes',
+    loadChildren: () => import('./item-fixes/item-fixes.module').then( m => m.ItemFixesPageModule)
   }
 
 ];
