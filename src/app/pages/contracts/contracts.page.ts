@@ -8,7 +8,7 @@ import { FormControl } from '@angular/forms';
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
 import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { Observable, Subscription } from 'rxjs';

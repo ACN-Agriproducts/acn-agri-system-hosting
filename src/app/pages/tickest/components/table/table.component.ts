@@ -6,7 +6,7 @@ import { OptionsTicketComponent } from './../options-ticket/options-ticket.compo
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Subscription } from 'rxjs';
 
 
