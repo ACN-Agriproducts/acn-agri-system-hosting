@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { environment } from '@enviroment/environment';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 // import { jsPDF } from "jspdf";
 
 // import html2canvas from 'html2canvas';
@@ -19,7 +20,8 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth
   ) {
     if(!environment.production) {
       storage.storage.useEmulator('localhost', 9199);

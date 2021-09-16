@@ -52,6 +52,7 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.auth.onAuthStateChanged(async user => {
+      console.log(this.fb)
       console.log(user)
       if(user) {
         try{
@@ -74,9 +75,9 @@ export class LoginPage implements OnInit, OnDestroy {
           
         }
         catch(error) {
-          console.log('Error',error);
+          console.error('Error',error);
           if(user) {
-            this.auth.signOut();
+            //this.auth.signOut();
           }
         }
       }

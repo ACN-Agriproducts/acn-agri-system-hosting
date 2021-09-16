@@ -19,6 +19,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { USE_EMULATOR as USE_AUTH_EMULATOR } from '@angular/fire/compat/auth';
 import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/firestore';
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/compat/functions';
+import { USE_EMULATOR as USE_STORAGE_EMULATOR } from '@angular/fire/compat/storage' 
 import { MomentDateModule } from '@angular/material-moment-adapter';
 
 
@@ -45,10 +46,10 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: USE_AUTH_EMULATOR, useValue: environment.production ? undefined : ['localhost', 9099] },
-    // { provide: USE_STORAGE_EMULATOR, useValue: !environment.production ? ['localhost', 9000] : undefined },
-    { provide: USE_FIRESTORE_EMULATOR, useValue: environment.production ? undefined : ['localhost', 8080]  },
-    { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.production ? undefined : ['localhost', 5001] },
+    { provide: USE_AUTH_EMULATOR, useValue: environment.production ? undefined : ['http://localhost:9099'] },
+    { provide: USE_STORAGE_EMULATOR, useValue: environment.production ? undefined :['localhost', 9199] },
+    { provide: USE_FIRESTORE_EMULATOR, useValue: environment.production ? undefined : ['http://localhost', 8080]  },
+    { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.production ? undefined : ['http://localhost', 5001] },
   ],
   bootstrap: [AppComponent]
 })
