@@ -52,8 +52,6 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.auth.onAuthStateChanged(async user => {
-      console.log(this.fb)
-      console.log(user)
       if(user) {
         try{
           const val = (await this.fb.doc(`/users/${user.uid}`).get().toPromise()).data();
@@ -95,8 +93,6 @@ export class LoginPage implements OnInit, OnDestroy {
     }
   }
   private load = async () => {
-    console.log('ss');
-
     const loading = await this.loadingController.create({
       cssClass: 'panel-load',
       message: 'Please wait...',

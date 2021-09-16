@@ -48,8 +48,8 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: USE_AUTH_EMULATOR, useValue: environment.production ? undefined : ['http://localhost:9099'] },
     { provide: USE_STORAGE_EMULATOR, useValue: environment.production ? undefined :['localhost', 9199] },
-    { provide: USE_FIRESTORE_EMULATOR, useValue: environment.production ? undefined : ['http://localhost', 8080]  },
-    { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.production ? undefined : ['http://localhost', 5001] },
+    { provide: USE_FIRESTORE_EMULATOR, useValue: environment.production ? undefined : ['localhost', 8080]  },
+    { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.production ? undefined : ['localhost', 5001] },
   ],
   bootstrap: [AppComponent]
 })
