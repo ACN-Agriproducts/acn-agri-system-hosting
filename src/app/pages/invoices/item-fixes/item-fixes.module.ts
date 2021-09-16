@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -16,7 +16,8 @@ import { ItemFormComponent } from './components/item-form/item-form.component';
     FormsModule,
     IonicModule,
     ItemFixesPageRoutingModule,
-    CoreModule
+    CoreModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ItemFixesPage,

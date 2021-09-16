@@ -1,6 +1,6 @@
 import { DataUser } from './../../models/DataUser';
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 
 @Injectable({

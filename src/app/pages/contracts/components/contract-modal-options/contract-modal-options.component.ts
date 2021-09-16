@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { IonicModule, NavController } from '@ionic/angular';
 
 @Component({

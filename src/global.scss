@@ -140,7 +140,7 @@ ion-content {
     &::-webkit-scrollbar {
       width: 6px; /* Tamaño del scroll en vertical */
       height: 6px; /* Tamaño del scroll en horizontal */
-      // display: none; /* Ocultar scroll */
+      // display: none; __<<ngThemingMigrationEscapedComment6>>__
     }
     &::-webkit-scrollbar-thumb {
       background: rgb(185, 185, 185);

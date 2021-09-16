@@ -28,7 +28,7 @@ ion-icon {
   &::-webkit-scrollbar {
     width: 6px; /* Tamaño del scroll en vertical */
     height: 6px; /* Tamaño del scroll en horizontal */
-    // display: none; /* Ocultar scroll */
+    // display: none; __<<ngThemingMigrationEscapedComment2>>__
   }
   &::-webkit-scrollbar-thumb {
     background: #ccc;

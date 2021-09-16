@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';

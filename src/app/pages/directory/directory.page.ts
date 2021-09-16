@@ -2,7 +2,7 @@ import { ModalController, NavController, PopoverController } from '@ionic/angula
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { AngularFirestore } from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/compat/firestore'
 import { Observable, Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
 

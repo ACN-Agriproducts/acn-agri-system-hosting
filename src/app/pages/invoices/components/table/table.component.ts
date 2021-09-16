@@ -2,7 +2,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { OptionsComponent } from '../options/options.component';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 

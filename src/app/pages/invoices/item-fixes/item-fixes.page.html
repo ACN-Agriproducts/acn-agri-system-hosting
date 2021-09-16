@@ -89,8 +89,8 @@
       </ion-card>
     </ion-col>
 
-    <ion-col *ngFor="let item of invoiceData.items">
-
+    <ion-col *ngFor="let item of invoiceData.items; let i = index" size="6">
+      <app-item-form [item]="item" [invoiceRef]="invoiceDoc.ref" [index]="i"></app-item-form>
     </ion-col>
   </ion-row>
 </ion-content>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData, DocumentSnapshot } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { MatDatepicker } from '@angular/material/datepicker';
