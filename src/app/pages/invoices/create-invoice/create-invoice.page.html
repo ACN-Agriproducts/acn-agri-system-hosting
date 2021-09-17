@@ -161,36 +161,56 @@
                     <mat-checkbox formControlName="affectsInventory">Inv.</mat-checkbox>
                   </ion-col>
                 </ion-row>
-                <ion-row [hidden]="!invoiceForm.value.items[i].affectsInventory" formGroupName="inventoryInfo">
-                  <ion-col size="3" offset="1">
-                    <mat-form-field>
-                      <mat-label>Product</mat-label>
-                      <mat-select [disabled]='productsList == null' formControlName="product">
-                        <mat-option *ngFor="let product of productsList" value={{product.name}}>{{product.name}}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                <div formArrayName="inventoryInfo">
+                  <ion-row [formGroupName]="i" [hidden]="!invoiceForm.value.items[i].affectsInventory" *ngFor="let info of invoiceForm.get(['items', i, 'inventoryInfo'])['controls']; let infoIndex = index">
+                    <ion-col size="1">
+                      <button mat-icon-button color='warn' (click)="deleteInventoryInfo(i, infoIndex)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </ion-col>
+                    <ion-col size="3">
+                      <mat-form-field>
+                        <mat-label>Product</mat-label>
+                        <mat-select [disabled]='productsList == null' formControlName="product">
+                          <mat-option *ngFor="let product of productsList" value={{product.name}}>{{product.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="2">
+                      <mat-form-field>
+                        <mat-label>Quantity</mat-label>
+                        <input matInput type="number" formControlName="quantity">
+                        <div matSuffix>lbs</div>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="3">
+                      <mat-form-field>
+                        <mat-label>Plant</mat-label>
+                        <mat-select [disabled]='plantsList == null' formControlName="plant">
+                          <mat-option *ngFor="let plant of plantsList" value="{{plant.name}}" >{{plant.name | titlecase}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="3">
+                      <mat-form-field>
+                        <mat-label>Storage</mat-label>
+                        <mat-select [disabled]='plantsList == null || storageList == null' formControlName="tank">
+                          <mat-option *ngFor="let tank of storageList[invoiceForm.get(['items', i,'inventoryInfo', infoIndex]).value.plant]" value="{{tank.name}}">{{tank.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                  </ion-row>
+                </div>
+                <ion-row [hidden]="!invoiceForm.get(['items', i, 'affectsInventory']).value" >
+                  <ion-col size="4" offset="8">
+                    <button mat-button color="primary" (click)="addInventoryInfo(i)">+ Add Info...</button>
                   </ion-col>
-                  <ion-col size="2">
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12" *ngFor="let detail of invoiceForm.get(['items', i,'details'])['controls']; let detailIndex = index" formArrayName="details">
                     <mat-form-field>
-                      <mat-label>Quantity</mat-label>
-                      <input matInput type="number" formControlName="quantity">
-                      <div matSuffix>lbs</div>
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="3">
-                    <mat-form-field>
-                      <mat-label>Plant</mat-label>
-                      <mat-select [disabled]='plantsList == null' (selectionChange)="plantSelectChange($event.value, i)" formControlName="plant">
-                        <mat-option *ngFor="let plant of plantsList" value="{{plant.name}}" >{{plant.name | titlecase}}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </ion-col>
-                  <ion-col size="3">
-                    <mat-form-field>
-                      <mat-label>Storage</mat-label>
-                      <mat-select [disabled]='plantsList == null || storageList == null' formControlName="tank">
-                        <mat-option *ngFor="let tank of storageList" value="{{tank.name}}">{{tank.name}}</mat-option>
-                      </mat-select>
+                      <mat-label>Item Description</mat-label>
+                      <input matInput [formControlName]="detailIndex">
                     </mat-form-field>
                   </ion-col>
                 </ion-row>
