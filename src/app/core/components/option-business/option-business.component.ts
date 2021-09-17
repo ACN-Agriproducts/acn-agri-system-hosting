@@ -11,12 +11,12 @@ import { Subscription } from 'rxjs';
 })
 export class OptionBusinessComponent implements OnInit, OnDestroy {
   companyList: any;
+  private currentSub: Subscription
 
   constructor(
     private store: Storage,
     private navController: NavController,
     private db: AngularFirestore,
-    private currentSub: Subscription
     ) { }
 
   ngOnInit(): void {
