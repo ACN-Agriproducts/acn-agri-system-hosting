@@ -63,7 +63,7 @@
               <tbody>
                 <tr *ngFor="let item of items">
                   <td><span class="text-3"><span class="font-weight-500">{{item.name}}</span> </span> <br>
-                  <span *ngFor="let d of item.details">{{d}}<br></span>
+                  <span *ngFor="let d of item.details"><span *ngIf="d != ''">{{d}}<br></span></span>
                   </td>
                   <td class="text-center">{{item.quantity}}</td>
                   <td class="text-center">${{item.price | number:".2"}}</td>
