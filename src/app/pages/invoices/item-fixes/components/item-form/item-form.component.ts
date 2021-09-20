@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-item-form',
@@ -19,7 +20,8 @@ export class ItemFormComponent implements OnInit {
   
   constructor(
     private fb: FormBuilder,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private navController: NavController
   ) {}
 
   ngOnInit() {
@@ -104,17 +106,18 @@ export class ItemFormComponent implements OnInit {
       item.inventoryInfo = [];
     }
 
-    this.invoiceRef.get().then((invoiceDoc) => {
+    this.invoiceRef.get().then(async (invoiceDoc) => {
       if(!invoiceDoc.exists) {
         throw "Document does not exist";
       }
 
-      const itemsArray = invoiceDoc.data().items;
-      itemsArray[this.index] = item;
+      let invoiceData = invoiceDoc.data();
+      invoiceData.items[this.index] = item;
 
-      this.invoiceRef.update({
-        items: itemsArray
-      })
+      await this.invoiceRef.set(invoiceData);
+
+      this.navController.navigateForward('dashboard/invoices');
+
     })
   }
 }
