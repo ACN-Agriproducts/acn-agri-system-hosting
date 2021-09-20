@@ -1,7 +1,7 @@
 // import { ShowModalComponent } from './../show-modal/show-modal.component';
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { PopoverController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';

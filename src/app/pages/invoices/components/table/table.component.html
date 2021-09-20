@@ -38,7 +38,7 @@
 <ion-card class="table-body">
     <div (contextmenu)="openOptions($event, invoice)" class="grid-item item-table" *ngFor="let invoice of invoiceList">
         <ion-item lines="none">
-            <ion-text color="dark" class="item-text-number">{{invoice.id}}</ion-text>
+            <ion-text color="dark" class="item-text-number" [class.attention]="invoice.needsAttention">{{invoice.id}}</ion-text>
         </ion-item>
         <ion-item lines="none">
             <ion-text color="primary" class="item-text-customer">{{invoice.buyer.name}}</ion-text>

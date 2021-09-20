@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
@@ -11,12 +11,12 @@ import { Subscription } from 'rxjs';
 })
 export class OptionBusinessComponent implements OnInit, OnDestroy {
   companyList: any;
+  private currentSub: Subscription
 
   constructor(
     private store: Storage,
     private navController: NavController,
     private db: AngularFirestore,
-    private currentSub: Subscription
     ) { }
 
   ngOnInit(): void {

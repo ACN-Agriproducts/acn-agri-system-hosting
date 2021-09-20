@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DocumentReference } from '@angular/fire/firestore';
+import { DocumentReference } from '@angular/fire/compat/firestore';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 })
 export class DprTicketsTableComponent implements OnInit {
   @Input() ticketList: any[] = [];
-  @Input() ticketType: string = "";
   @Input() bushelWeight: number = 1;
   @Input() title: string;
   public ticketData: any[];
@@ -46,6 +45,10 @@ export class DprTicketsTableComponent implements OnInit {
     let counter = 0;
 
     for(const x of this.ticketData) {
+      if(x.clientName == 'VOID'){
+        continue;
+      }
+      
       counter += x.dryWeight;
     }
     return counter;

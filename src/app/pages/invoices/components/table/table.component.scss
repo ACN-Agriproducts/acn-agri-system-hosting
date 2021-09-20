@@ -86,3 +86,10 @@ ion-item {
     }
   }
 }
+
+.attention {
+  border-radius: 22px;
+  padding: 2px 8px;
+  background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+  color: var(--ion-color-warning);
+}

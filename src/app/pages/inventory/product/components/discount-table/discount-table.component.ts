@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, DocumentSnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, DocumentSnapshot } from '@angular/fire/compat/firestore';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
 import { NavController } from '@ionic/angular';

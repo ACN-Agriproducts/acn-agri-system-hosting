@@ -3,9 +3,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
-import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 
 @Component({

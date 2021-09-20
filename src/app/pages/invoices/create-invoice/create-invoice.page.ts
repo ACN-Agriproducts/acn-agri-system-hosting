@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControlOptions, FormControl } from '@angular/forms';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ export class CreateInvoicePage implements OnInit {
   public itemsList: any[];
   public productsList: any[];
   public userPermissions: any[];
-  public storageList: any[];
+  public storageList: any;
 
   public id: number;
   public allItems: any[];
@@ -59,7 +59,7 @@ export class CreateInvoicePage implements OnInit {
         phone:  []
       }),
       date: [new Date()],
-      items: this.fb.array([this.createItem()])
+      items: this.fb.array([this.createItem()]),
     })
 
     this.ready = true;
@@ -79,6 +79,12 @@ export class CreateInvoicePage implements OnInit {
 
       const sub = this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "name"}).subscribe(list => {
         this.plantsList = list;
+        this.storageList = {};
+
+        for(const plant of list) {
+          this.storageList[plant.name] = plant['inventory'];
+        }
+
         sub.unsubscribe();
       })
       
@@ -97,20 +103,12 @@ export class CreateInvoicePage implements OnInit {
 
   createItem(): FormGroup{
     return this.fb.group({
-      details: this.fb.array([]),
+      details: this.fb.array([this.fb.control('')]),
       name: [, Validators.required],
       quantity: [0, Validators.required],
       price: [, Validators.required],
       affectsInventory: [false, Validators.required],
-      inventoryInfo: this.fb.group({
-        product: [],
-        quantity: [],
-        plant: [],
-        tank: []
-      }, 
-      {
-        validators: [this.ifAffectsInventory]
-      })
+      inventoryInfo: this.fb.array([]),
     })
   }
 
@@ -129,6 +127,34 @@ export class CreateInvoicePage implements OnInit {
     items.removeAt(i);
   }
 
+  createInventoryInfo(): FormGroup {
+    const options: AbstractControlOptions = {
+      validators: this.ifAffectsInventory
+    }
+
+    return this.fb.group({
+      product: [],
+      quantity: [],
+      plant: [],
+      tank: []
+    },
+      options
+    );
+  }
+
+  addInventoryInfo(index: number): void {
+    console.log(index);
+    const infos = this.invoiceForm.get(['items', index, 'inventoryInfo']) as FormArray;
+    console.log(infos)
+    infos.push(this.createInventoryInfo());
+    console.log(infos)
+  }
+
+  deleteInventoryInfo(invIndex: number, infoIndex: number): void {
+    const infos = this.invoiceForm.get(['items', invIndex, 'inventoryInfo']) as FormArray;
+    infos.removeAt(infoIndex);
+  }
+
  ifAffectsInventory(formGroup: FormGroup) {
     if(!formGroup.parent) {
       return null;
@@ -137,7 +163,7 @@ export class CreateInvoicePage implements OnInit {
     let errors: any = {};
     let conError: boolean = false;
 
-    if(formGroup.parent.value.affectsInventory) {
+    if(formGroup.parent.parent.value.affectsInventory) {
       if(!formGroup.value.product) {
         errors.requiredProduct = true;
         conError = true;
@@ -173,24 +199,26 @@ export class CreateInvoicePage implements OnInit {
       return;
     }
 
-    let itemArray = this.invoiceForm.get('items') as FormArray;
-    let formItem = itemArray.get(index.toString());
+    const formItem = this.invoiceForm.get(['items', index]) as FormControl;
+    formItem.get('inventoryInfo').setValue([]);
+
     formItem.get("name").setValue(item.name);
     formItem.get("price").setValue(item.price);
     formItem.get("affectsInventory").setValue(item.affectsInventory);
-    formItem.get("inventoryInfo").get("product").setValue(item.inventoryInfo.product);
-    formItem.get("inventoryInfo").get("quantity").setValue(item.inventoryInfo.quantity);
-    formItem.get("inventoryInfo").get("plant").setValue(item.inventoryInfo.plant);
-    formItem.get("inventoryInfo").get("tank").setValue(item.inventoryInfo.tank);
-
-    this.plantSelectChange(item.inventoryInfo.plant, index);
-
-    console.log(this.invoiceForm.getRawValue())
-  }
-
-  plantSelectChange(value: string, index: number) {
-    let plant = this.plantsList.find(p => p.name == value);
-    this.storageList = plant.inventory;
+    
+    const inventoryInfo = formItem.get("inventoryInfo") as FormArray;
+    while(inventoryInfo.length > 0) {
+      inventoryInfo.removeAt(0);
+    }
+    
+    for(const info of item.inventoryInfo){
+      inventoryInfo.push(this.fb.group({
+        product: info.product,
+        quantity: info.quantity,
+        plant: info.plant,
+        tank: info.tank
+      }))
+    }
   }
 
   async submitButton() {
@@ -199,9 +227,10 @@ export class CreateInvoicePage implements OnInit {
     
     doc.items.forEach(item => {
       this.total += (item.quantity * item.price);
+      if(!item.affectsInventory) {
+        item.inventoryInfo = [];
+      }
     });
-
-    console.log(this.total)
 
     let alert = await this.alertController.create({
       header: "Alert",

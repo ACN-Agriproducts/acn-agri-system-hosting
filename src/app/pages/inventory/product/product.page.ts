@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, DocumentSnapshot } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentSnapshot } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 

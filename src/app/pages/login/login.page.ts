@@ -3,9 +3,9 @@ import { AlertController, LoadingController, NavController } from '@ionic/angula
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Subscription } from 'rxjs';
 
 
@@ -51,6 +51,35 @@ export class LoginPage implements OnInit, OnDestroy {
   ionViewDidLeave() {
   }
   ngOnInit() {
+    this.auth.onAuthStateChanged(async user => {
+      if(user) {
+        try{
+          const val = (await this.fb.doc(`/users/${user.uid}`).get().toPromise()).data();
+          const compDoc = (await this.fb.doc(`/users/${user.uid}/companies/${val['worksAt'][0]}`).get().toPromise()).data();
+          this.storage.set('user', {
+            email: user.email,
+            uid: user.uid, 
+            refreshToken: user.refreshToken, 
+            name: user.displayName,
+            worksAt: val['worksAt'],
+            currentPermissions: compDoc["permissions"]
+          });
+          
+          this.storage.set('currentCompany', val['worksAt'][0])
+
+          this.loadingController.dismiss().then((res) => {
+            this.navController.navigateForward('/dashboard/home');
+          });
+          
+        }
+        catch(error) {
+          console.error('Error',error);
+          if(user) {
+            //this.auth.signOut();
+          }
+        }
+      }
+    })
   }
   public submit = (event: any): void => {
     event.preventDefault();
@@ -58,38 +87,12 @@ export class LoginPage implements OnInit, OnDestroy {
       this.load();
       const email = this.formulario.value.email;
       const password = this.formulario.value.password;
-      this.service.login(email, password).then(response => {
-        if (response) {
-          console.log(`/users/${response.user.uid}`);
-          const sub = this.fb.doc(`/users/${response.user.uid}`).valueChanges().subscribe( val => {
-            const sub2 = this.fb.doc(`/users/${response.user.uid}/companies/${val['worksAt'][0]}`).valueChanges().subscribe(compDoc => {
-              this.storage.set('user', {
-                email: response.user.email,
-                uid: response.user.uid, 
-                refreshToken: response.user.refreshToken, 
-                name: response.user.displayName,
-                worksAt: val['worksAt'],
-                currentPermissions: compDoc["permissions"]
-              });
-              
-              this.storage.set('currentCompany', val['worksAt'][0])
-  
-              this.loadingController.dismiss().then((res) => {
-                this.navController.navigateForward('/dashboard/home');
-              });
-              this.currentSubs.push(sub2);
-            })
-          })
-          this.currentSubs.push(sub);
-        }
-      }).catch((error) => {
+      this.service.login(email, password).catch((error) => {
         this.presentAlert(error.message);
       });
     }
   }
   private load = async () => {
-    console.log('ss');
-
     const loading = await this.loadingController.create({
       cssClass: 'panel-load',
       message: 'Please wait...',
