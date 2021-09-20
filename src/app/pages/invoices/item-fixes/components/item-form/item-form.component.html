@@ -65,6 +65,7 @@
                   <mat-label>Storage</mat-label>
                   <mat-select formControlName="tank" *ngIf="storageList">
                     <mat-option *ngFor="let tank of storageList[getInfo(i).plant]" value="{{tank.name}}">{{tank.name}}</mat-option>
+                    <mat-option value="none">None</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>
