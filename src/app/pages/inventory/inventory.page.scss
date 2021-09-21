@@ -101,6 +101,14 @@
     }
   }
 
+  .card-button {
+    text-align: center;
+    font-size: 24px;
+    font-weight:500;
+    color: var(--ion-color-primary);
+    padding-top: 67px;
+  }
+
   @media screen and(max-width:768px){
     .content-card-inventory {
       grid-template-columns: repeat(2, 1fr); 

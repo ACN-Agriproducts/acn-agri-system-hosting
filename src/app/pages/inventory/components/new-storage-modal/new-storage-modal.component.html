@@ -1,0 +1,46 @@
+<form [formGroup]="storageForm">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+      </ion-col>
+      <ion-col size="6">
+        <mat-form-field>
+          <mat-label>Product</mat-label>
+          <mat-select #productSelect formControlName="product">
+            <mat-option *ngFor="let product of productList" [value]="product.name">{{product.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ion-col>
+      <ion-col size="6">
+        <mat-form-field>
+          <mat-label>Storage Type</mat-label>
+          <mat-select #typeSelect formControlName="type">
+            <mat-option [value]="'local'">Local</mat-option>
+            <mat-option [value]="'storage'">Storage</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ion-col>
+      <ion-col size="6">
+        <mat-form-field>
+          <mat-label>Max Quantity(lbs):</mat-label>
+          <input matInput formControlName="max" type="number">
+        </mat-form-field>
+      </ion-col>
+      <ion-col size="6">
+        <mat-form-field>
+          <mat-label>Current Quantity(lbs):</mat-label>
+          <input matInput formControlName="current" type="number">
+        </mat-form-field>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2" offset="10">
+        <ion-button (click)="submitForm()" [disabled]="!storageForm.valid">Submit</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>

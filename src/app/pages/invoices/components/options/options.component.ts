@@ -1,6 +1,6 @@
 // import { FileInvoiceComponent } from '@core/mfile-invoice/file-invoice.component';
 
-import { PopoverController, ModalController } from '@ionic/angular';
+import { PopoverController, ModalController, NavController } from '@ionic/angular';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
@@ -19,7 +19,8 @@ export class OptionsComponent implements OnInit {
     private clipboard: Clipboard,
     private popoverController: PopoverController,
     private storage: Storage,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private navController: NavController
   ) { }
 
   ngOnInit(): void {}
@@ -57,5 +58,9 @@ export class OptionsComponent implements OnInit {
     this.openInvoice().then(() => {
       window.print();
     });
+  }
+
+  public openFixInvPage(): void {
+    this.navController.navigateForward(`dashboard/invoices/item-fixes/${this.invoice.docId}`);
   }
 }

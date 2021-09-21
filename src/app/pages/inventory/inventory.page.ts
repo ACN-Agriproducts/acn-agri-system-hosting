@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
 
 @Component({
   selector: 'app-inventory',
@@ -21,7 +22,8 @@ export class InventoryPage implements OnInit, OnDestroy{
   constructor(
     private fb: AngularFirestore,
     private store: Storage,
-    private navController: NavController
+    private navController: NavController,
+    private modalController: ModalController
   ) { 
     this.store.get('currentCompany').then(val => {
       this.currentCompany = val;
@@ -51,6 +53,22 @@ export class InventoryPage implements OnInit, OnDestroy{
 
   public nav(path:string): void {
     this.navController.navigateForward(path);
+  }
+
+  public inventoryModal(): void {
+
+  }
+
+  public async newStorageModal(): Promise<any> {
+    const modal = await this.modalController.create({
+      component: NewStorageModalComponent,
+      componentProps:{
+        plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        productList: this.productList
+      }
+    });
+
+    return await modal.present();
   }
 
 }

@@ -90,7 +90,8 @@
     </ion-col>
 
     <ion-col *ngFor="let item of invoiceData.items; let i = index" size="6">
-      <app-item-form *ngIf="productList && plantsList" [item]="item" [invoiceRef]="invoiceDoc.ref" [index]="i" [productList]="productList" [plantsList]="plantsList"></app-item-form>
+      <app-item-form *ngIf="productList && plantsList" [item]="item" [invoiceRef]="invoiceDoc.ref" [index]="i" 
+        [productList]="productList" [plantsList]="plantsList"></app-item-form>
     </ion-col>
   </ion-row>
 </ion-content>
