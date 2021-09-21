@@ -26,11 +26,13 @@ export class ItemFormComponent implements OnInit {
 
   ngOnInit() {
     this.itemForm = this.fb.group({
-      details: this.fb.array([]),
+      details: [],
       name: [{value: this.item.name, disabled: true}, Validators.required],
       quantity: [{value: this.item.quantity, disabled: true}, Validators.required],
       price: [{value: this.item.price, disabled: true}, Validators.required],
-      inventoryInfo: this.fb.array([]),
+      inventoryInfo: this.fb.group({
+        info: this.fb.array([])
+      }),
       affectsInventory: [this.item.affectsInventory, Validators.required],
       needsAttention: [false, Validators.required]
     })
@@ -40,9 +42,9 @@ export class ItemFormComponent implements OnInit {
       details.push(this.createDetail(this.item.details));
     }
 
-    const inventoryInfo = this.itemForm.get('inventoryInfo') as FormArray;
-    if (Array.isArray(this.item.inventoryInfo)) {
-      for(const info of this.item.inventoryInfo) {
+    const inventoryInfo = this.itemForm.get(['inventoryInfo', 'info']) as FormArray;
+    if (Array.isArray(this.item.inventoryInfo.info)) {
+      for(const info of this.item.inventoryInfo.info) {
         inventoryInfo.push(this.createInventoryInfo(info));
       }
     }
@@ -62,7 +64,7 @@ export class ItemFormComponent implements OnInit {
   }
 
   addInventoryInfo(): void{
-    const inventory = this.itemForm.get("inventoryInfo") as FormArray;
+    const inventory = this.itemForm.get(["inventoryInfo", "info"]) as FormArray;
     inventory.push(this.createInventoryInfo());
   }
 
@@ -85,25 +87,25 @@ export class ItemFormComponent implements OnInit {
   }
 
   getInfo(index: number): any {
-    return this.itemForm.getRawValue().inventoryInfo[index];
+    return this.itemForm.getRawValue().inventoryInfo.info[index];
   }
 
   addInvButton(): void {
     if(this.itemForm.value.affectsInventory) {
-      const inventoryInfo = this.itemForm.get('inventoryInfo') as FormArray;
+      const inventoryInfo = this.itemForm.get(['inventoryInfo', "info"]) as FormArray;
       inventoryInfo.push(this.createInventoryInfo());
     }
   }
 
   deleteInfo(index: number) {
-    const inventoryInfo = this.itemForm.get('inventoryInfo') as FormArray;
+    const inventoryInfo = this.itemForm.get(['inventoryInfo', 'info']) as FormArray;
     inventoryInfo.removeAt(index);
   }
 
   submitButton(): void {
     let item = this.itemForm.getRawValue();
     if(!item.affectsInventory) {
-      item.inventoryInfo = [];
+      item.inventoryInfo.info = [];
     }
 
     this.invoiceRef.get().then(async (invoiceDoc) => {
