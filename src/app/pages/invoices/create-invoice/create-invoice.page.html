@@ -163,7 +163,7 @@
                 </ion-row>
                 <div formGroupName="inventoryInfo">
                   <div formArrayName="info">
-                    <ion-row [formGroupName]="i" [hidden]="!invoiceForm.value.items[i].affectsInventory" *ngFor="let info of invoiceForm.get(['items', i, 'inventoryInfo', 'info'])['controls']; let infoIndex = index">
+                    <ion-row [formGroupName]="infoIndex" [hidden]="!invoiceForm.value.items[i].affectsInventory" *ngFor="let info of invoiceForm.get(['items', i, 'inventoryInfo', 'info'])['controls']; let infoIndex = index">
                       <ion-col size="1">
                         <button mat-icon-button color='warn' (click)="deleteInventoryInfo(i, infoIndex)">
                           <mat-icon>delete</mat-icon>
@@ -196,7 +196,7 @@
                         <mat-form-field>
                           <mat-label>Storage</mat-label>
                           <mat-select [disabled]='plantsList == null || storageList == null' formControlName="tank">
-                            <mat-option *ngFor="let tank of storageList[info.value.plant]" value="{{tank.name}}">{{tank.name}}</mat-option>
+                            <mat-option *ngFor="let tank of storageList[getInfo(i, infoIndex).plant]" value="{{tank.name}}">{{tank.name}}</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </ion-col>

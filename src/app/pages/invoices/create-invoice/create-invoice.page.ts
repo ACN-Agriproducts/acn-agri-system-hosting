@@ -223,8 +223,17 @@ export class CreateInvoicePage implements OnInit {
     }
   }
 
-  async submitButton() {
+  public getInfo(itemIndex:number, infoIndex:number) {
+    const form = this.invoiceForm.getRawValue();
+
+    return form.items[itemIndex].inventoryInfo.info[infoIndex];
+  }
+
+  async submitButton() {    
     let doc = this.invoiceForm.getRawValue();
+    console.log(doc);
+    return;
+
     this.total = 0;
     
     doc.items.forEach(item => {
