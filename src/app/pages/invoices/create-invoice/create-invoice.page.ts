@@ -231,8 +231,6 @@ export class CreateInvoicePage implements OnInit {
 
   async submitButton() {    
     let doc = this.invoiceForm.getRawValue();
-    console.log(doc);
-    return;
 
     this.total = 0;
     
