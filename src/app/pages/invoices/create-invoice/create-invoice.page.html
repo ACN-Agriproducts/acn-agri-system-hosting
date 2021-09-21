@@ -196,7 +196,7 @@
                         <mat-form-field>
                           <mat-label>Storage</mat-label>
                           <mat-select [disabled]='plantsList == null || storageList == null' formControlName="tank">
-                            <mat-option *ngFor="let tank of storageList[invoiceForm.get(['items', i,'inventoryInfo','info', infoIndex]).value.plant]" value="{{tank.name}}">{{tank.name}}</mat-option>
+                            <mat-option *ngFor="let tank of storageList[info.value.plant]" value="{{tank.name}}">{{tank.name}}</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </ion-col>
@@ -209,10 +209,10 @@
                   </ion-col>
                 </ion-row>
                 <ion-row>
-                  <ion-col size="12" *ngFor="let detail of invoiceForm.get(['items', i,'details'])['controls']; let detailIndex = index" formArrayName="details">
+                  <ion-col size="12">
                     <mat-form-field>
                       <mat-label>Item Description</mat-label>
-                      <input matInput [formControlName]="detailIndex">
+                      <input matInput formControlName="details">
                     </mat-form-field>
                   </ion-col>
                 </ion-row>

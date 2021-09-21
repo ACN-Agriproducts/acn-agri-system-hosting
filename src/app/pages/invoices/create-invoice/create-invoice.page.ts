@@ -157,7 +157,7 @@ export class CreateInvoicePage implements OnInit {
     infos.removeAt(infoIndex);
   }
 
- ifAffectsInventory(formGroup: FormGroup) {
+  ifAffectsInventory(formGroup: FormGroup) {
     if(!formGroup.parent) {
       return null;
     }
