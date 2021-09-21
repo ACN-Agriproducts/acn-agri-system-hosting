@@ -103,12 +103,14 @@ export class CreateInvoicePage implements OnInit {
 
   createItem(): FormGroup{
     return this.fb.group({
-      details: this.fb.array([this.fb.control('')]),
+      details: [],
       name: [, Validators.required],
       quantity: [0, Validators.required],
       price: [, Validators.required],
       affectsInventory: [false, Validators.required],
-      inventoryInfo: this.fb.array([]),
+      inventoryInfo: this.fb.group({
+        info: this.fb.array([])
+      }),
     })
   }
 
@@ -144,14 +146,14 @@ export class CreateInvoicePage implements OnInit {
 
   addInventoryInfo(index: number): void {
     console.log(index);
-    const infos = this.invoiceForm.get(['items', index, 'inventoryInfo']) as FormArray;
+    const infos = this.invoiceForm.get(['items', index, 'inventoryInfo', 'info']) as FormArray;
     console.log(infos)
     infos.push(this.createInventoryInfo());
     console.log(infos)
   }
 
   deleteInventoryInfo(invIndex: number, infoIndex: number): void {
-    const infos = this.invoiceForm.get(['items', invIndex, 'inventoryInfo']) as FormArray;
+    const infos = this.invoiceForm.get(['items', invIndex, 'inventoryInfo', 'info']) as FormArray;
     infos.removeAt(infoIndex);
   }
 
@@ -199,14 +201,14 @@ export class CreateInvoicePage implements OnInit {
       return;
     }
 
-    const formItem = this.invoiceForm.get(['items', index]) as FormControl;
-    formItem.get('inventoryInfo').setValue([]);
+    const formItem = this.invoiceForm.get(["items", index]) as FormControl;
+    formItem.get(["inventoryInfo", "info"]).setValue([]);
 
     formItem.get("name").setValue(item.name);
     formItem.get("price").setValue(item.price);
     formItem.get("affectsInventory").setValue(item.affectsInventory);
     
-    const inventoryInfo = formItem.get("inventoryInfo") as FormArray;
+    const inventoryInfo = formItem.get(["inventoryInfo", "info"]) as FormArray;
     while(inventoryInfo.length > 0) {
       inventoryInfo.removeAt(0);
     }
