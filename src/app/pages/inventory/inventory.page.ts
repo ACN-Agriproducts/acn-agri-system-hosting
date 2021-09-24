@@ -63,7 +63,8 @@ export class InventoryPage implements OnInit, OnDestroy{
       componentProps: {
         plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
         storageId: storageId,
-        tankList: this.plantList.find(p => p.name == this.currentPlantName).inventory
+        tankList: this.plantList.find(p => p.name == this.currentPlantName).inventory,
+        productList: this.productList
       }
     });
 

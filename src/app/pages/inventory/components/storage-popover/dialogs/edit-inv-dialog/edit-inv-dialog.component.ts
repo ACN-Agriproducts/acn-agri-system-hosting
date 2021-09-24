@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-inv-dialog',
@@ -6,8 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-inv-dialog.component.scss'],
 })
 export class EditInvDialogComponent implements OnInit {
+  public response = {
+    quantity: 0,
+    newProduct: null
+  }
 
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {
+    productList: any[],
+    currentProduct: string
+  }) { }
 
   ngOnInit() {}
 

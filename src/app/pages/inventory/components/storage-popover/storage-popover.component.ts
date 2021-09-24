@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { PopoverController } from '@ionic/angular';
+import { EditInvDialogComponent } from './dialogs/edit-inv-dialog/edit-inv-dialog.component';
 import { MoveInvDialogComponent } from './dialogs/move-inv-dialog/move-inv-dialog.component';
 
 @Component({
@@ -13,6 +14,7 @@ export class StoragePopoverComponent implements OnInit {
   @Input() plantRef: DocumentReference;
   @Input() storageId: number;
   @Input() tankList: any[];
+  @Input() productList: any[];
 
   constructor(
     private dialog: MatDialog,
@@ -62,7 +64,39 @@ export class StoragePopoverComponent implements OnInit {
   }
 
   public editInvButton(event: any) {
+    const dialogRef = this.dialog.open(EditInvDialogComponent, {
+      width: '250px',
+      data:{
+        currentProduct: this.tankList[this.storageId].product.id,
+        productList: this.productList
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.plantRef.firestore.runTransaction(transaction => {
+          return transaction.get(this.plantRef).then(async plant => {
+            let inventory = plant.data().inventory;
+            
+            if(result.newProduct){
+              inventory[this.storageId].product = inventory[this.storageId].product.parent.doc(result.newProduct);
+            }
+
+            if(inventory[this.storageId].current + result.quantity <= 0) {
+              inventory[this.storageId].current = 0;
+              inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none')
+            }
+            else {
+              inventory[this.storageId].current += result.quantity;
+            }
+
+            transaction.update(this.plantRef, { inventory });
+          });
+        });
+      }
+    });
+
+    this.popoverController.dismiss();
   }
 
   public zeroOutButton(event: any) {
