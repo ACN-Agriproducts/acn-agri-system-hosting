@@ -4,7 +4,7 @@
     <mat-label>Move to</mat-label>
     <mat-select [(ngModel)]="response.targetTank">
       <ng-container *ngFor="let storage of data.tankList; let index = index">
-        <mat-option [value]="index" *ngIf="storage.product.id == data.tankList[data.currentTank].product.id
+        <mat-option [value]="index" *ngIf="(storage.product.id == data.tankList[data.currentTank].product.id || storage.product.id == 'none')
                             && index != data.currentTank">
           {{storage.name}}
         </mat-option>

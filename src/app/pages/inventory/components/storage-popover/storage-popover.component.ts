@@ -36,6 +36,14 @@ export class StoragePopoverComponent implements OnInit {
           return transaction.get(this.plantRef).then(async plant => {
             let inventory = plant.data().inventory;
 
+            if(inventory[result.targetTank].product.id != 'none' && inventory[result.targetTank].product.id != inventory[this.storageId].product.id ) {
+              return;
+            }
+
+            if(inventory[result.targetTank].product.id == 'none') {
+              inventory[result.targetTank].product = inventory[this.storageId].product;
+            }
+
             if(result.wholeInventory || result.quantityToMove > inventory[this.storageId].current) {
               result.quantityToMove = inventory[this.storageId].current;
               inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
