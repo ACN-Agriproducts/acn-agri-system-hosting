@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
+import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 
 @Component({
   selector: 'app-inventory',
@@ -23,7 +24,8 @@ export class InventoryPage implements OnInit, OnDestroy{
     private fb: AngularFirestore,
     private store: Storage,
     private navController: NavController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private popoverController: PopoverController
   ) { 
     this.store.get('currentCompany').then(val => {
       this.currentCompany = val;
@@ -55,8 +57,18 @@ export class InventoryPage implements OnInit, OnDestroy{
     this.navController.navigateForward(path);
   }
 
-  public inventoryModal(): void {
+  public async inventoryMenu(ev: any, storageId: number): Promise<void> {
+    const popover = await this.popoverController.create({
+      component: StoragePopoverComponent,
+      event: ev,
+      componentProps: {
+        currentCompany: this.currentCompany,
+        currentplant: this.currentPlantName,
+        storageId: storageId
+      }
+    });
 
+    return popover.present();
   }
 
   public async newStorageModal(): Promise<any> {
