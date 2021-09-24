@@ -26,12 +26,10 @@ import { ZeroOutTankDialogComponent } from './components/storage-popover/dialogs
   declarations: [
     InventoryPage,
     NewStorageModalComponent,
-    StoragePopoverComponent
-  ],
-  bootstrap: [
+    StoragePopoverComponent,
     MoveInvDialogComponent,
     EditInvDialogComponent,
     ZeroOutTankDialogComponent
-  ]
+  ],
 })
 export class InventoryPageModule {}

@@ -33,7 +33,6 @@ export class InventoryPage implements OnInit, OnDestroy{
       tempSub = this.fb.collection(`companies/${this.currentCompany}/plants`).valueChanges({ idField: 'name' }).subscribe(val => {
         this.plantList = val;
         this.currentPlantName = val[0].name;
-        console.log(this.plantList);
       })
       this.currentSubs.push(tempSub);
 
@@ -62,9 +61,9 @@ export class InventoryPage implements OnInit, OnDestroy{
       component: StoragePopoverComponent,
       event: ev,
       componentProps: {
-        currentCompany: this.currentCompany,
-        currentplant: this.currentPlantName,
-        storageId: storageId
+        plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        storageId: storageId,
+        tankList: this.plantList.find(p => p.name == this.currentPlantName).inventory
       }
     });
 
@@ -76,7 +75,7 @@ export class InventoryPage implements OnInit, OnDestroy{
       component: NewStorageModalComponent,
       componentProps:{
         plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
-        productList: this.productList
+        productList: this.productList,
       }
     });
 

@@ -1,3 +1,24 @@
-<p>
-  move-inv-dialog works!
-</p>
+<h1 mat-dialog-title>Move Inventory</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Move to</mat-label>
+    <mat-select [(ngModel)]="response.targetTank">
+      <ng-container *ngFor="let storage of data.tankList; let index = index">
+        <mat-option [value]="index" *ngIf="storage.product.id == data.tankList[data.currentTank].product.id
+                            && index != data.currentTank">
+          {{storage.name}}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Quantity (lbs) (check for all)</mat-label>
+    <input matInput [(ngModel)]="response.quantityToMove" type="number" max="{{data.tankList[data.currentTank].current}}"
+      [disabled]="response.wholeInventory" autocomplete="off">
+    <mat-checkbox [(ngModel)]="response.wholeInventory" matSuffix></mat-checkbox>
+  </mat-form-field>
+</div>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="response">Submit</button>
+</mat-dialog-actions>
