@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PopoverController } from '@ionic/angular';
 import { EditInvDialogComponent } from './dialogs/edit-inv-dialog/edit-inv-dialog.component';
 import { MoveInvDialogComponent } from './dialogs/move-inv-dialog/move-inv-dialog.component';
+import { ZeroOutTankDialogComponent } from './dialogs/zero-out-tank-dialog/zero-out-tank-dialog.component';
 
 @Component({
   selector: 'app-storage-popover',
@@ -100,6 +101,28 @@ export class StoragePopoverComponent implements OnInit {
   }
 
   public zeroOutButton(event: any) {
+    const dialogRef = this.dialog.open(ZeroOutTankDialogComponent, {
+      width: '250px',
+      data: {
+        tankName: this.tankList[this.storageId].name
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(async result => {
+      if(result) {
+        this.plantRef.firestore.runTransaction(transaction => {
+          return transaction.get(this.plantRef).then(async plant => {
+            let inventory = plant.data().inventory;
+
+            inventory[this.storageId].current = 0;
+            inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
+    
+            transaction.update(this.plantRef, {inventory});
+          });
+        });
+      }
+    });
+
+    this.popoverController.dismiss();
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-zero-out-tank-dialog',
@@ -6,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./zero-out-tank-dialog.component.scss'],
 })
 export class ZeroOutTankDialogComponent implements OnInit {
-
-  constructor() { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {
+    tankName: string
+  }) { }
 
   ngOnInit() {}
 
