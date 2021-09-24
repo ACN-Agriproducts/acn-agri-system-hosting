@@ -9,6 +9,7 @@ import { InventoryPageRoutingModule } from './inventory-routing.module';
 
 import { InventoryPage } from './inventory.page';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
+import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { NewStorageModalComponent } from './components/new-storage-modal/new-sto
   ],
   declarations: [
     InventoryPage,
-    NewStorageModalComponent
+    NewStorageModalComponent,
+    StoragePopoverComponent
   ]
 })
 export class InventoryPageModule {}
