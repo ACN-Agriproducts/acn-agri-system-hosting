@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { PopoverController } from '@ionic/angular';
 import { MoveInvDialogComponent } from './dialogs/move-inv-dialog/move-inv-dialog.component';
 
 @Component({
@@ -15,7 +16,7 @@ export class StoragePopoverComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-
+    private popoverController: PopoverController
     ) { }
 
   ngOnInit() {}
@@ -35,7 +36,7 @@ export class StoragePopoverComponent implements OnInit {
           return transaction.get(this.plantRef).then(async plant => {
             let inventory = plant.data().inventory;
 
-            if(result.wholeInventory) {
+            if(result.wholeInventory || result.quantityToMove > inventory[this.storageId].current) {
               result.quantityToMove = inventory[this.storageId].current;
               inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
             }
@@ -48,6 +49,8 @@ export class StoragePopoverComponent implements OnInit {
         })
       }
     });
+
+    this.popoverController.dismiss();
   }
 
   public editInvButton(event: any) {
