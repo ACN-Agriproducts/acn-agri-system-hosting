@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ContractLiquidationLongComponent } from './contract-liquidation-long/contract-liquidation-long.component';
 
 
 
@@ -14,8 +15,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
     IonicModule,
   ],
   exports: [
-    ToolbarComponent
+    ToolbarComponent,
+    ContractLiquidationLongComponent
   ],
-  declarations: [ToolbarComponent]
+  declarations: [ToolbarComponent, ContractLiquidationLongComponent]
 })
 export class SharedModule {}
