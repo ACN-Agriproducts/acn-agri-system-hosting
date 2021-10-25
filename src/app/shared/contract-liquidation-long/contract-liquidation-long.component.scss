@@ -1,10 +1,87 @@
 :host {
     display: block;
-    height: 203.2mm;
+    height: auto; //203.2mm;
     width: 266.7mm;
     background-color: white;
     outline: black solid 1px;
     padding: 12.7mm;
     margin: 1em;
     box-shadow: -0.5em 0.5em 0.25em gray;
+}
+
+#main-table {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr 1fr 1.5fr 1.5fr 1.5fr 1fr 1fr 1.5fr 1fr 1fr 1.5fr 1fr 1fr 2fr 1fr 1fr 2fr;
+    grid-auto-rows: 1.5em;
+    font-size: xx-small;
+
+    * {
+        outline: black solid 1px;
+        line-height: 1em;
+        display: flex;
+        align-items: center;
+        padding: 0px 2px;
+    }
+}
+
+.header {
+    font-weight: bold;
+    text-align: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.total-row {
+    font-weight: bold;
+    outline: none !important;
+}
+
+.row-2 {
+    grid-row-end: span 2;
+}
+
+.col-2 {
+    grid-column-end: span 2;
+}
+
+.col-3 {
+    grid-column-end: span 3;
+}
+
+.center {
+    justify-content: center;
+}
+
+.left {
+    justify-content: left;
+}
+
+.right {
+    justify-content: right;
+}
+
+#title {
+    text-align: center;
+    h1 {
+        line-height: 0.8em;
+    }
+}
+
+#company-logo {
+    height: 20mm;
+    width: 25mm;
+    display: inline-block;
+}
+
+#contract-details {
+    display: inline-block;
+}
+
+.even {
+    background-color: lightgray;
+}
+
+.odd {
+    background-color: white;
 }
