@@ -6,8 +6,8 @@
 <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Fcompanylogoonly.png?alt=media&token=cd8bbf25-c1ae-4880-b883-6cfb8f12f9bb'>
 
 <div *ngIf="contract" id="contract-details">
-    <div>FARMER NAME: {{contract.data().clientName}}</div>
-    <div>Contract {{contract.data().id}}</div>
+    <div>FARMER NAME: {{contract.clientName}}</div>
+    <div>Contract {{contract.id}}</div>
     <div id='date'>DATE: {{getDate() | date:'fullDate'}}</div>
 </div>
 
@@ -35,24 +35,24 @@
     <div class='header'>CWT</div>
 
     <ng-container *ngFor="let ticket of ticketList; even as even">
-        <div [class.odd]='!even' [class.even]='even' class='center'>{{ticket.dateIn.toDate() | date:'shortDate'}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='center'>{{ticket.id}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='center'>{{ticket.contractID}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.gross}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.tare}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.gross - ticket.tare}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.moisture | number:'1.1-1'}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.dryWeight - (ticket.gross - ticket.tare)}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.dryWeight}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.damage || 0 | number:'1.1-1'}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='center'>{{ticket.data().dateIn.toDate() | date:'shortDate'}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='center'>{{ticket.data().id}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='center'>{{ticket.data().contractID}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().gross}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().tare}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().gross - ticket.data().tare}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().moisture | number:'1.1-1'}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().dryWeight - (ticket.data().gross - ticket.data().tare)}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().dryWeight}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().damage || 0 | number:'1.1-1'}}</div>
         <div [class.odd]='!even' [class.even]='even' class='right'>{{0 | number:'1.1-1'}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.dryWeight}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.data().pricePerBushel / 0.56 | currency}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.data().pricePerBushel / 0.56 | currency}}</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.data().pricePerBushel / 56 * ticket.dryWeight | currency}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data().dryWeight}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 0.56 | currency}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 0.56 | currency}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 56 * ticket.data().dryWeight | currency}}</div>
         <div [class.odd]='!even' [class.even]='even' class='right'>$-</div>
         <div [class.odd]='!even' [class.even]='even' class='right'>$-</div>
-        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.data().pricePerBushel / 56 * ticket.dryWeight | currency}}</div>
+        <div [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 56 * ticket.data().dryWeight | currency}}</div>
     </ng-container>
 
     <div class='total-row center'>TOTALS:</div>
@@ -67,10 +67,10 @@
     <div class='total-row'></div>
     <div class='total-row'>-</div>
     <div class='total-row right'>{{moistureAdjustedWeight | number}}</div>
-    <div class='total-row right'>{{contract.data().pricePerBushel / 0.56 | currency}}</div>
-    <div class='total-row right'>{{contract.data().pricePerBushel / 0.56 | currency}}</div>
-    <div class='total-row right'>{{moistureAdjustedWeight / 100 * contract.data().pricePerBushel / 0.56 | currency}}</div>
+    <div class='total-row right'>{{contract.pricePerBushel / 0.56 | currency}}</div>
+    <div class='total-row right'>{{contract.pricePerBushel / 0.56 | currency}}</div>
+    <div class='total-row right'>{{moistureAdjustedWeight / 100 * contract.pricePerBushel / 0.56 | currency}}</div>
     <div class='total-row right'>$-</div>
     <div class='total-row right'>$-</div>
-    <div class='total-row right'>{{moistureAdjustedWeight / 100 * contract.data().pricePerBushel / 0.56 | currency}}</div>
+    <div class='total-row right'>{{moistureAdjustedWeight / 100 * contract.pricePerBushel / 0.56 | currency}}</div>
 </div>

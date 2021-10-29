@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./contract-liquidation-long.component.scss'],
 })
 export class ContractLiquidationLongComponent implements OnInit {
-  public ticketList: any[];
+  @Input() ticketList: any[];
   @Input() contract: any;
 
   public gross: number = 0;
@@ -19,16 +19,12 @@ export class ContractLiquidationLongComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
-
-  public setTickets(tempList: any[]): void {
-    this.ticketList = tempList;
-
+  ngOnInit() {
     this.ticketList.forEach(ticket => {
-      this.gross += ticket.gross;
-      this.tare += ticket.tare;
-      this.moistureDiscount += ticket.dryWeight - (ticket.gross - ticket.tare);
-      this.moistureAdjustedWeight += ticket.dryWeight;
+      this.gross += ticket.data().gross;
+      this.tare += ticket.data().tare;
+      this.moistureDiscount += ticket.data().dryWeight - (ticket.data().gross - ticket.data().tare);
+      this.moistureAdjustedWeight += ticket.data().dryWeight;
     });
   }
 

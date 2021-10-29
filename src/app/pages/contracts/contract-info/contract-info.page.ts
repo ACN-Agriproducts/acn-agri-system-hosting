@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
+import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 
 @Component({
@@ -17,12 +19,17 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentCompany: string;
   public currentContract: any;
   public ready:boolean = false;
+  public ticketList: any[];
   private currentSub: Subscription;
+
+  @ViewChild(TicketsTableComponent) ticketTable: TicketsTableComponent;
+  @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
   
   constructor(
     private route: ActivatedRoute,
     private localStorage: Storage,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private modalController: ModalController
     ) { }
 
   ngOnInit() {
@@ -33,8 +40,27 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       this.currentSub = this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`).valueChanges().subscribe(val => {
         this.currentContract = val;
         this.ready = true;
-      })
-    })
+        this.ticketList = [];
+
+        let ticketCounter = 0;
+        this.currentContract.tickets.forEach(ticketRef => {
+          const temp = ticketRef as DocumentReference
+          temp.get().then(ticket => {
+            ticketCounter++;
+
+            if(!ticket.data().void){
+              this.ticketList.push(ticket);
+              this.ticketList.push(ticket);
+            }
+
+            if(ticketCounter == this.currentContract.tickets.length) {
+              this.ticketTable.renderComponent(this.ticketList);
+              
+            }
+          });
+        });
+      });
+    });
   }
 
   ngOnDestroy() {
@@ -43,4 +69,15 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     }
   }
 
+  async presentLiquidation(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: ContractLiquidationLongComponent,
+      componentProps: {
+        ticketList: this.ticketList,
+        contract: this.currentContract
+      }
+    });
+
+    return await modal.present();
+  }
 }

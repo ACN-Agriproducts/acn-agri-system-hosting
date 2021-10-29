@@ -10,6 +10,7 @@ import { ContractInfoPage } from './contract-info.page';
 import { CoreModule } from '@core/core.module';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
+import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { TruckerTableComponent } from './components/trucker-table/trucker-table.
   declarations: [
     ContractInfoPage,
     TicketsTableComponent,
-    TruckerTableComponent
+    TruckerTableComponent,
+    ContractLiquidationLongComponent
   ]
 })
 export class ContractInfoPageModule {}

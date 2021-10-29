@@ -3,27 +3,27 @@
   <!-- Id Column -->
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.id}} </td>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.data().id}} </td>
   </ng-container>
 
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef>Date</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.dateOut.toDate() | date}} </td>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.data().dateOut.toDate() | date}} </td>
   </ng-container>
 
   <ng-container matColumnDef="tare">
     <th mat-header-cell *matHeaderCellDef>Tare</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.tare}} </td>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.data().tare}} </td>
   </ng-container>
 
   <ng-container matColumnDef="gross">
     <th mat-header-cell *matHeaderCellDef>Gross</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.gross}} </td>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.data().gross}} </td>
   </ng-container>
 
   <ng-container matColumnDef="net">
     <th mat-header-cell *matHeaderCellDef>Net</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.gross - ticket.tare | number}} </td>
+    <td mat-cell *matCellDef="let ticket"> {{ticket.data().gross - ticket.data().tare | number}} </td>
   </ng-container>
 
   <ng-container matColumnDef="opt">

@@ -1,4 +1,7 @@
 <app-header-toolbar titulo="{{type | titlecase}} Contract {{currentContract.id}}" *ngIf="ready"></app-header-toolbar>
+<mat-toolbar>
+  <button mat-button (click)='presentLiquidation()'>Liquidation</button>
+</mat-toolbar>
 
 <ion-content>
   <ion-grid *ngIf="ready">
@@ -30,7 +33,7 @@
             Ticket List
           </ion-card-header>
           <ion-card-content>
-            <app-tickets-table #ticketTable [ticketRefList]='currentContract["tickets"]' *ngIf="currentContract != null"></app-tickets-table>
+            <app-tickets-table #ticketTable *ngIf="currentContract != null"></app-tickets-table>
           </ion-card-content>
         </ion-card>
       </ion-col>
