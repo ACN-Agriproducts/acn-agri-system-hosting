@@ -21,6 +21,5 @@ export class TicketsTableComponent implements OnInit {
 
   public renderComponent (ticketList: any[]): void {
     this.ticketList = ticketList;
-    this.table.renderRows();
   }
 }
