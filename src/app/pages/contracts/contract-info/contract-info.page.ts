@@ -20,6 +20,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentContract: any;
   public ready:boolean = false;
   public ticketList: any[];
+  public ticketsReady: boolean = false;
   private currentSub: Subscription;
 
   @ViewChild(TicketsTableComponent) ticketTable: TicketsTableComponent;
@@ -50,12 +51,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
             if(!ticket.data().void){
               this.ticketList.push(ticket);
-              this.ticketList.push(ticket);
             }
 
             if(ticketCounter == this.currentContract.tickets.length) {
               this.ticketTable.renderComponent(this.ticketList);
-              
+              this.ticketsReady = true;
             }
           });
         });

@@ -1,6 +1,12 @@
 <app-header-toolbar titulo="{{type | titlecase}} Contract {{currentContract.id}}" *ngIf="ready"></app-header-toolbar>
 <mat-toolbar>
-  <button mat-button (click)='presentLiquidation()'>Liquidation</button>
+  <button mat-button 
+    printSectionId='ContractLiquidationLong'
+    printTitle='Liquidation'
+    ngxPrint
+    [useExistingCss]='true'
+    [disabled]="!ticketsReady"
+  >Liquidation</button>
 </mat-toolbar>
 
 <ion-content>
@@ -50,3 +56,8 @@
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<app-contract-liquidation-long hidden id='ContractLiquidationLong' class="printable" *ngIf="ticketList && currentContract"
+  [ticketList] = "ticketList"
+  [contract] = "currentContract"
+></app-contract-liquidation-long>

@@ -11,6 +11,7 @@ import { CoreModule } from '@core/core.module';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
     FormsModule,
     IonicModule,
     ContractInfoPageRoutingModule,
-    CoreModule
+    CoreModule,
+    NgxPrintModule
   ],
   declarations: [
     ContractInfoPage,
