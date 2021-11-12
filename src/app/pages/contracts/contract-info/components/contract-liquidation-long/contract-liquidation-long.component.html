@@ -3,12 +3,14 @@
     <span id='address'>1512 Rancho Toluca Rd Progreso TX 78597</span>    
 </div>
 
-<img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Fcompanylogoonly.png?alt=media&token=cd8bbf25-c1ae-4880-b883-6cfb8f12f9bb'>
 
-<div *ngIf="contract" id="contract-details">
-    <div>FARMER NAME: {{contract.clientName}}</div>
-    <div>Contract {{contract.id}}</div>
-    <div id='date'>DATE: {{getDate() | date:'fullDate'}}</div>
+<div class="client-info">
+    <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Fcompanylogoonly.png?alt=media&token=cd8bbf25-c1ae-4880-b883-6cfb8f12f9bb'>
+    <div *ngIf="contract" id="contract-details">
+        <div id='farmer-name'>FARMER NAME: {{contract.clientName}}</div>
+        <div id='contract-id'>Contract {{contract.id}}</div>
+        <div id='date'>DATE: {{getDate() | date:'fullDate'}}</div>
+    </div>
 </div>
 
 <div id='main-table' *ngIf="contract">
