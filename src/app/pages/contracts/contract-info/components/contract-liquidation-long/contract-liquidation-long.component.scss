@@ -26,6 +26,28 @@
     }
 }
 
+.client-info {
+    margin-top: 2em;
+    display: flex;
+    justify-content: space-evenly;
+    
+    #contract-details {
+        display: inline-block;
+
+        // #farmer-name {
+        //     background-color: lightgreen;
+        // }
+
+        // #contract-name {
+        //     background-color: lightgreen;
+        // }
+
+        // #date {
+        //     background-color: yellow;
+        // }
+    }
+}
+
 .header {
     font-weight: bold;
     text-align: center;
@@ -72,10 +94,6 @@
 #company-logo {
     height: 20mm;
     width: 25mm;
-    display: inline-block;
-}
-
-#contract-details {
     display: inline-block;
 }
 
