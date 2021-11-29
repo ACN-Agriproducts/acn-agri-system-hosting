@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { ContractPrintableComponent } from './printable/contract-printable/contract-printable.component';
 
 
 
@@ -15,7 +16,11 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   ],
   exports: [
     ToolbarComponent,
+    ContractPrintableComponent
   ],
-  declarations: [ToolbarComponent]
+  declarations: [
+    ToolbarComponent,
+    ContractPrintableComponent
+  ]
 })
 export class SharedModule {}
