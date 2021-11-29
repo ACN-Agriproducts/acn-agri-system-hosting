@@ -4,9 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NewContractPageRoutingModule } from './new-contract-routing.module';
+import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 
 import { NewContractPage } from './new-contract.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -16,8 +18,9 @@ import { CoreModule } from '@core/core.module';
     NewContractPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
-  declarations: [NewContractPage]
+  declarations: [NewContractPage, DisplayContractComponent]
 })
 export class NewContractPageModule {}
