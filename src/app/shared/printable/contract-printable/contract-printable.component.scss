@@ -1,8 +1,70 @@
 :host {
     display: block;
     height: auto;
-    width: 266.7mm;
+    width: 188.2mm;
     background-color: white;
     margin: 1em;
-    
+    font-size: small;
+    outline: 1px solid orange;
+}
+
+.header-section {
+    outline: black solid 1px;
+}
+
+#company-logo {
+    width: 40%;
+    display: inline-block;
+}
+
+h1{
+    display: inline-block;
+    vertical-align: top;
+    margin: 5%;
+}
+
+.party-header {
+    border-top: 1px solid black;
+    border-bottom: 2px solid black;
+}
+
+.right-justify {
+    display: block;
+    text-align: right;
+}
+
+#extra-info-header {
+    border: 2px solid black;
+}
+
+.underline {
+    border-bottom: 2px solid black;
+}
+
+#total {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box {
+    border: 2px solid black;
+}
+
+.signature-area {
+    display: flex;
+    gap: 15%;
+
+    div{
+        flex-grow: 1;
+    }
+}
+
+.page-footer {
+    text-align: center;
+    font-weight: bold;
+    page-break-after: always;
+}
+
+.terms-and-conditions {
+    font-size: xx-small;
 }
