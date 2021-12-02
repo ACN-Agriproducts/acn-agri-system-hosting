@@ -9,6 +9,7 @@ import { DisplayContractComponent } from './components/display-contract/display-
 import { NewContractPage } from './new-contract.page';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { SharedModule } from '@shared/shared.module';
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    NgxPrintModule
   ],
   declarations: [NewContractPage, DisplayContractComponent]
 })

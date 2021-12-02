@@ -2,7 +2,7 @@
 
 <ion-content>
   <ion-row>
-    <ion-col size-lg='5' size-xs='12'>
+    <ion-col size-xl='5' size-xs='12'>
       <ion-card>
         <ion-card-header>
           <ion-card-subtitle>
@@ -96,76 +96,20 @@
                 </ion-item>
               </div>
               <ion-button type="submit" [disabled]="contractForm.invalid">Submit</ion-button>
+              <button 
+                mat-button
+                printSectionId="printable-doc"
+                [useExistingCss]='true'
+                ngxPrint>
+                PRINT
+              </button>
             </ion-list>
           </form>
         </ion-card-content>
       </ion-card>
     </ion-col>
-    <ion-col size-lg='7' size-xs='12'>
-      <app-display-contract></app-display-contract>
+    <ion-col size-xl='7' size-xs='12'>
+      <app-display-contract id='printable-doc'></app-display-contract>
     </ion-col>
   </ion-row>
-  <!-- <ion-card>
-    <ion-card-content>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12">
-            <mat-radio-group class="contract-type-radio-group">
-              <mat-radio-button>Sale Contract</mat-radio-button>
-              <mat-radio-button>Purchase Contract</mat-radio-button>
-            </mat-radio-group>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col size="2">
-            <span matLine class="mat-text">Client: </span>
-          </ion-col>
-          <ion-col size="4">
-            <mat-form-field>
-              <mat-label>Client</mat-label>
-              <mat-select>
-                <mat-option></mat-option>
-              </mat-select>
-            </mat-form-field>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="4">
-            <mat-form-field>
-              <mat-label>Product Quantity</mat-label>
-              <input matInput>
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="4">
-            <mat-form-field>
-              <mat-label>Units</mat-label>
-              <mat-select placeholder='bushels'></mat-select>
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="2">
-            <span matLine class="mat-text">of</span>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="3">
-            <mat-form-field>
-              <mat-label>Product</mat-label>
-              <mat-select></mat-select>
-            </mat-form-field>
-          </ion-col>
-          <ion-col size="1">
-            <span class="mat-text">at</span>
-          </ion-col>
-          <ion-col size="3">
-            <mat-form-field>
-              <mat-label>Price</mat-label>
-              <span matPrefix>$</span>
-              <input matInput>
-            </mat-form-field>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card> -->
 </ion-content>

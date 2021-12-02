@@ -5,7 +5,7 @@
     background-color: white;
     margin: 1em;
     font-size: small;
-    outline: 1px solid orange;
+    line-height: 150%;
 }
 
 .header-section {
@@ -66,5 +66,33 @@ h1{
 }
 
 .terms-and-conditions {
-    font-size: xx-small;
+    font-size: x-small;
+    line-height: 125%;
+}
+
+.grid-12 {
+    display: grid;
+
+    grid-template-columns: repeat(12, 1fr);
+    gap: 5px;
+}
+
+.column-size-1 {
+    grid-column-end: span 1;
+}
+
+.column-size-2 {
+    grid-column-end: span 2;
+}
+
+.column-size-3 {
+    grid-column-end: span 3;
+}
+
+.column-size-4 {
+    grid-column-end: span 4;
+}
+
+.column-size-5 {
+    grid-column-end: span 5;
 }
