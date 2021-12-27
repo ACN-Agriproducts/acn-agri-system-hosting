@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-contract-printable',
@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./contract-printable.component.scss'],
 })
 export class ContractPrintableComponent implements OnInit {
+
+  @Input() contractForm: any;
+  @Input() productsList: any[];
+  public today: Date = new Date();
 
   constructor() { }
 

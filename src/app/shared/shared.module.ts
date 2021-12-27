@@ -7,12 +7,11 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ContractPrintableComponent } from './printable/contract-printable/contract-printable.component';
 
 
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonicModule
   ],
   exports: [
     ToolbarComponent,

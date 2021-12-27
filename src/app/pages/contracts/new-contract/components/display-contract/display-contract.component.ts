@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-display-contract',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./display-contract.component.scss'],
 })
 export class DisplayContractComponent implements OnInit {
+
+  @Input() contractForm: any;
+  @Input() productsList: any[];
 
   constructor() { }
 

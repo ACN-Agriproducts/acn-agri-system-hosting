@@ -3,14 +3,14 @@
   <h1><b>CONTRACT</b></h1>
   <div class='grid-12'>
     <div class='column-size-4'>
-      <div class='party-header'><b>BUYER</b></div>
+      <div class='party-header'><b>{{contractForm.contractType == "purchaseContracts"? "BUYER" : "SELLER"}}</b></div>
       <span><b>ACN AGRIPRODUTS LLC</b></span><br>
       <span>1512 RANCHO TOLUCA RD</span><br>
       <span>WESLACO TX. 78596</span><br>
       <span></span><br>
 
-      <div class='party-header'><b>SELLER</b></div>
-      <span><b>Driscoll Grain Cooperative Inc.</b></span><br>
+      <div class='party-header'><b>{{contractForm.contractType == "purchaseContracts"? "SELLER" : "BUYER"}}</b></div>
+      <span><b>{{contractForm.client || ""}}</b></span><br>
       <span>P.O. Box 208</span><br>
       <span>Driscoll TX, 78351-0208</span><br>
       <span>361-387-6242</span><br>
@@ -18,17 +18,22 @@
     <div class='column-size-2'></div>
     <div class='column-size-3'>
       <b>CONTRACT NUMBER</b><br>
+      <b>BASE</b><br>
+      <b>FUTURE PRICE</b><br>
       <b>PRICED</b><br>
-      <b>CONTRACT DATE</b><br><br>
-      <b>CUSTOMER NO.</b><br>
+      <b>CONTRACT DATE</b><br>
       <b>PAYMENT TERMS</b><br>
-      <b>CHECK</b><br>
-      <b>BROKER</b><br>
-      <b>BROKER No.</b><br>
-      <b>DELIVERY TERMS</b><br>
+      <b>FREIGHT PRICE</b><br>
     </div>
     <div class='column-size-3'>
-      <b>287-19</b>
+      <b>{{contractForm.id || 0}}-{{today.getFullYear() % 100}}</b><br>
+      {{contractForm.price - contractForm.marketPrice | number:"0.5-5"}}<br>
+      {{contractForm.marketPrice | number:"0.5-5"}}<br>
+      {{contractForm.price | number:"0.5-5"}}<br>
+      {{today | date:'MM/dd/YYYY'}}<br>
+      <br>
+      <br>
+      <br>
     </div>
   </div>
 </div>
@@ -44,18 +49,20 @@
       <span><b>COMMODITY:</b></span><br>
       <span><b>QUANTITY:</b></span>
     </div>
-    <div class='column-size-1'>
-      <span>Sorghum</span>
-    </div>
-    <div class='column-size-1'>
-      <br>
-      <span class='right-justify'>98214.3</span>
-      <span class='right-justify'>55000</span>
-    </div>
-    <div class='column-size-1'>
-      <br>
-      <span>Bushels</span><br>
-      <span>CWT</span>
+    <div class='column-size-3'>
+      <span>{{contractForm.product}}</span><br>
+      <div class='grid-3'>
+        <div class='column-size-2'>
+          <span class='right-justify'>98214.3</span>
+          <span class='right-justify'>55000</span>
+          <span class='right-justify'>55000</span>
+        </div>
+        <div class='column-size-1'>
+          <span>BUSHELS</span><br>
+          <span>LBS</span><br>
+          <span>M. TONS</span>
+        </div>
+      </div>
     </div>
     <div class='column-size-1'>
       <span class='right-justify'><b>MST:</b></span>

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
+import { WeightUnits } from '@shared/WeightUnits/weight-units';
+import { Weight } from '@shared/Weight/weight';
 
 @Component({
   selector: 'app-new-contract',
@@ -55,6 +57,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       tempSub = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: 'name'}).subscribe(val => {
         this.productsList = val;
         this.productsReady = true;
+        console.log(this.productsList)
       })
       this.currentSubs.push(tempSub);
     })
@@ -63,6 +66,7 @@ export class NewContractPage implements OnInit, OnDestroy {
 
     this.contractForm = this.fb.group({
       contractType: ['', Validators.required],
+      id: [0, Validators.required],
       client: ['', Validators.required],
       quantity: [0, Validators.required],
       quantityUnits: ['', Validators.required],
@@ -95,6 +99,10 @@ export class NewContractPage implements OnInit, OnDestroy {
 
   compareWithClient(c1, c2) {
     return c1 && c2? c1.id === c2.id: c1 === c2;
+  }
+
+  public getForm() {
+    return this.contractForm.getRawValue();
   }
 
   public submitForm() {

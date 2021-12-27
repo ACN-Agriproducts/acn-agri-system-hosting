@@ -77,6 +77,13 @@ h1{
     gap: 5px;
 }
 
+.grid-3 {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
 .column-size-1 {
     grid-column-end: span 1;
 }
