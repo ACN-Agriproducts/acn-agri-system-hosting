@@ -27,9 +27,9 @@
     </div>
     <div class='column-size-3'>
       <b>{{contractForm.id || 0}}-{{today.getFullYear() % 100}}</b><br>
-      {{contractForm.price - contractForm.marketPrice | number:"0.5-5"}}<br>
+      {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
       {{contractForm.marketPrice | number:"0.5-5"}}<br>
-      {{contractForm.price | number:"0.5-5"}}<br>
+      {{getPriceInBushels() | number:"0.5-5"}}<br>
       {{today | date:'MM/dd/YYYY'}}<br>
       <br>
       <br>
@@ -53,9 +53,9 @@
       <span>{{contractForm.product}}</span><br>
       <div class='grid-3'>
         <div class='column-size-2'>
-          <span class='right-justify'>98214.3</span>
-          <span class='right-justify'>55000</span>
-          <span class='right-justify'>55000</span>
+          <span class='right-justify'>{{getUnits('bushels') | number:'0.5-5'}}</span>
+          <span class='right-justify'>{{getUnits('lbs') | number:'0.5-5'}}</span>
+          <span class='right-justify'>{{getUnits('mtons') | number:'0.5-5'}}</span>
         </div>
         <div class='column-size-1'>
           <span>BUSHELS</span><br>
@@ -78,8 +78,8 @@
       <span><b>REFERENCE:</b></span>
     </div>
     <div class='column-size-2'>
-      <span>ORIGIN</span><br>
-      <span>U.S. 2 OR BETTER</span><br>
+      <span>{{contractForm.paymentTerms.origin? "ORIGIN" : "DESTINATION"}}</span><br>
+      <span>U.S. {{contractForm.grade}} OR BETTER</span><br>
       <span>TRUCK</span><br>
       <span>20 OR LESS</span>
     </div>
@@ -88,24 +88,30 @@
     <div class='grid-12'>
       <div class='column-size-2'><b>STATUS</b></div>
       <div class='column-size-3'><b>DELIVERY DATES</b></div>
-      <div class='column-size-4'><b>SCHEDULE PRICE</b></div>
+      <div class='column-size-4'><b>PAYMENT TERMS</b></div>
       <div class='column-size-3'><b>CWT PRICE</b></div>
     </div>
   </div>
   <div>
     <div class='underline grid-12'>
       <div class='column-size-2'>Priced</div>
-      <div class='column-size-2'>
-        <br>
+      <div class='column-size-3'>
+        {{contractForm.deliveryDateStart | date:'shortDate'}} to {{contractForm.deliveryDateEnd | date:'shortDate'}}<br><br>
         <div class='underline'>
           Please sign and return this confirmation IMMEDIATELY
         </div>
       </div>
-      <div class='column-size-1'></div>
-      <div class='column-size-1 right-justify'>7.70</div>
-      <div class='column-size-3'>CWT</div>
-      <div class='column-size-1 right-justify'>7.70</div>
-      <div class='column-size-2'>CWT</div>
+      <div class='column-size-4'>
+        EVERY {{contractForm.paymentTerms.amount}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
+      </div>
+      <div class='column-size-1 right-justify'>
+        {{getPriceInCWT() | number:'0.5-5'}}<br>
+        {{getPriceInMTon() | number:'0.5-5'}}
+      </div>
+      <div class='column-size-2'>
+        CWT<br>
+        M. TON
+      </div>
     </div>
   </div>
   <div class='grid-12'>
@@ -121,7 +127,7 @@
     <div class='column-size-2'>
       <div id='total'>
         <span><b>$</b></span>
-        <span><b>423,303.63</b></span>
+        <span><b>{{weight.getPounds() * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
       </div>
     </div>
   </div>
@@ -138,7 +144,7 @@
 <br>
 <div class='signature-area'>
   <div>
-    <span>Driscoll Grain Cooperative Inc.</span>
+    <span>{{contractForm.client || ""}}</span>
     <div class='underline'>BY:</div>
     <span>Name/Title:</span><br>
     <span>Date:</span><br>

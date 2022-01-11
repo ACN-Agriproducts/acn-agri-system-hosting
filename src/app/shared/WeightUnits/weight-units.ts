@@ -12,4 +12,13 @@ export class WeightUnits {
         this.shortName = shortName;
         this.toPounds = toPounds;
     }
+
+    public static getUnits(name: string, bushelWeight: number = 56) {
+        switch (name.toLowerCase()) {
+            case 'lbs': return this.Pounds;
+            case 'cwt': return this.Hundredweight;
+            case 'mtons': return this.MetricTons;
+            case 'bushels': return new WeightUnits('bushels', 'Bushels', bushelWeight);
+        }
+    }
 }

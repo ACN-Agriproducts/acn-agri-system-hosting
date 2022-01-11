@@ -22,6 +22,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   productsReady: boolean = false;
   contractForm: FormGroup;
   currentSubs: Subscription[] = [];
+  contractWeight: Weight;
 
   constructor(
     private fb: FormBuilder,
@@ -64,16 +65,18 @@ export class NewContractPage implements OnInit, OnDestroy {
 
     var today = new Date();
 
+    this.contractWeight = new Weight(0, WeightUnits.Pounds);
+
     this.contractForm = this.fb.group({
       contractType: ['', Validators.required],
       id: [0, Validators.required],
       client: ['', Validators.required],
-      quantity: [0, Validators.required],
+      quantity: [, Validators.required],
       quantityUnits: ['', Validators.required],
       product: ['', Validators.required],
-      price: [0, Validators.required],
+      price: [, Validators.required],
       priceUnit: ['', Validators.required],
-      marketPrice: [0, Validators.required],
+      marketPrice: [, Validators.required],
       grade: [2, Validators.required],
       aflatoxin: [20, Validators.required],
       deliveryDateStart: [],
@@ -84,7 +87,28 @@ export class NewContractPage implements OnInit, OnDestroy {
         amount: [, Validators.required],
         measurement: ['', Validators.required]
       })
-    })
+    });
+
+    this.contractForm.get('product').valueChanges.subscribe(val => {
+      if(this.contractWeight.unit.name.toLocaleLowerCase() == 'bushels') {
+        this.contractWeight.unit.toPounds = this.productsList.find(p => p.name == this.contractForm.getRawValue().product).weight;
+      }
+    });
+
+    this.contractForm.get('quantity').valueChanges.subscribe(val => {
+      this.contractWeight.amount = val;
+    });
+
+    this.contractForm.get('quantityUnits').valueChanges.subscribe(val => {
+      const tempContractProduct: string = this.contractForm.getRawValue().product;
+      if(tempContractProduct) {
+        const tempProduct = this.productsList.find(p => p.name == tempContractProduct);
+        this.contractWeight.unit = WeightUnits.getUnits(val, tempProduct.weight);
+      }
+      else {
+        this.contractWeight.unit = WeightUnits.getUnits(val);
+      }
+    });
   }
 
   ngOnDestroy() {

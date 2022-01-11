@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Weight } from '@shared/Weight/weight';
 
 @Component({
   selector: 'app-display-contract',
@@ -9,6 +10,7 @@ export class DisplayContractComponent implements OnInit {
 
   @Input() contractForm: any;
   @Input() productsList: any[];
+  @Input() weight: Weight;
 
   constructor() { }
 
