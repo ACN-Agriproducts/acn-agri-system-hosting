@@ -163,6 +163,7 @@
             </ion-row>
             <button 
             mat-button
+            [disabled]="contractForm.invalid"
             printSectionId="printable-doc"
             [useExistingCss]='true'
             ngxPrint>

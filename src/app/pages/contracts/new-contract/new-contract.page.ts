@@ -83,18 +83,18 @@ export class NewContractPage implements OnInit, OnDestroy {
       product: ['', Validators.required],
       price: [, Validators.required],
       priceUnit: ['', Validators.required],
-      marketPrice: [, Validators.required],
+      marketPrice: [],
       grade: [2, Validators.required],
       aflatoxin: [20, Validators.required],
       deliveryDateStart: [],
       deliveryDateEnd: [],
       paymentTerms: this.fb.group({
-        before: [false, Validators.required],
-        origin: [false, Validators.required],
-        amount: [, Validators.required],
-        measurement: ['', Validators.required]
+        before: [false],
+        origin: [false],
+        amount: [],
+        measurement: []
       })
-    });
+    }, { validators: form => Validators.required(form.get('client')) });
 
     this.contractForm.get('product').valueChanges.subscribe(val => {
       if(this.contractWeight.unit.name.toLocaleLowerCase() == 'bushels') {
