@@ -10,6 +10,7 @@ import { NewContractPage } from './new-contract.page';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
+import { SelectClientComponent } from './components/select-client/select-client.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,6 @@ import { NgxPrintModule } from 'ngx-print';
     SharedModule,
     NgxPrintModule
   ],
-  declarations: [NewContractPage, DisplayContractComponent]
+  declarations: [NewContractPage, DisplayContractComponent, SelectClientComponent]
 })
 export class NewContractPageModule {}

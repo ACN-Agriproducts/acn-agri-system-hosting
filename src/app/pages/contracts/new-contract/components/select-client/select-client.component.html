@@ -1,0 +1,14 @@
+<h2>Client Selector</h2>
+<mat-dialog-content>
+  <mat-selection-list #client [(ngModel)]="clientSelected" [multiple]="false">
+    <mat-list-option *ngFor="let client of clientsList" [value]="client">
+      {{client.name}}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content><br>
+<div id="bottom-flex">
+  <mat-form-field>
+    <input matInput placeholder="Search name..." [(ngModel)]="searchString" (ngModelChange)="onSearchFieldChange($event)">
+  </mat-form-field>
+  <button mat-stroked-button [mat-dialog-close]="clientSelected" [disabled]="!clientSelected">Select</button>
+</div>

@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
+import {MatDialog} from '@angular/material/dialog';
+import { SelectClientComponent } from './components/select-client/select-client.component';
+import { UniqueContractId } from './components/unique-contract-id';
 
 @Component({
   selector: 'app-new-contract',
@@ -13,7 +16,6 @@ import { Weight } from '@shared/Weight/weight';
   styleUrls: ['./new-contract.page.scss'],
 })
 export class NewContractPage implements OnInit, OnDestroy {
-
   currentCompany: string;
   currentCompanyValue: any;
   contactList: any[];
@@ -23,12 +25,15 @@ export class NewContractPage implements OnInit, OnDestroy {
   contractForm: FormGroup;
   currentSubs: Subscription[] = [];
   contractWeight: Weight;
+  selectedClient: any;
 
   constructor(
     private fb: FormBuilder,
     private db: AngularFirestore,
     private localStorage: Storage,
-    private navController: NavController
+    private navController: NavController,
+    private dialog: MatDialog,
+    private uniqueId: UniqueContractId
   ) { }
 
   ngOnInit() {
@@ -67,10 +72,12 @@ export class NewContractPage implements OnInit, OnDestroy {
 
     this.contractWeight = new Weight(0, WeightUnits.Pounds);
 
+    this.uniqueId.setGetterFunction(this.getContractCollection.bind(this));
+
     this.contractForm = this.fb.group({
       contractType: ['', Validators.required],
-      id: [0, Validators.required],
-      client: ['', Validators.required],
+      id: [{value: null, disabled: true}, [Validators.required], this.uniqueId.validate.bind(this.uniqueId)],
+      client: [{value:'', disabled: true}, Validators.required],
       quantity: [, Validators.required],
       quantityUnits: ['', Validators.required],
       product: ['', Validators.required],
@@ -126,7 +133,9 @@ export class NewContractPage implements OnInit, OnDestroy {
   }
 
   public getForm() {
-    return this.contractForm.getRawValue();
+    let form = this.contractForm.getRawValue();
+    form.client = this.selectedClient;
+    return form;
   }
 
   public submitForm() {
@@ -208,4 +217,26 @@ export class NewContractPage implements OnInit, OnDestroy {
     return 0;
   }
 
+  openClientSelect() {
+    const dialogRef = this.dialog.open(SelectClientComponent, {
+      width: '600px',
+      data: this.contactList
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.db.doc(`companies/${this.currentCompany}/directory/${result[0].id}`).get().subscribe(clientDoc => {
+        this.selectedClient = clientDoc.data();
+        this.contractForm.controls['client'].setValue(this.selectedClient.name);
+      });
+    });
+  }
+
+  contractTypeChange() {
+    this.contractForm.get('id').enable();
+  }
+
+  getContractCollection(): AngularFirestoreCollection {
+    const contractTypeControl = this.contractForm.get('contractType') as FormControl;
+    return this.db.collection(`companies/${this.currentCompany}/${contractTypeControl.value}`);
+  }
 }

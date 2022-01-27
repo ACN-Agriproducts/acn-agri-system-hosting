@@ -8,12 +8,12 @@
           <ion-card-content>
             <ion-row>
               <ion-col size-xs='4' size-sm='3' size-md='2'>
-                <button mat-stroked-button color="primary">Client:</button>
+                <button mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
               </ion-col>
               <ion-col size-xs='8' size-sm='9' size-md='10'>
                 <mat-form-field>
                   <mat-label>Client Name</mat-label>
-                  <input matInput disabled formControlName='client'>
+                  <input matInput formControlName='client'>
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -21,7 +21,7 @@
               <ion-col size-xs='8' size-sm='9'>
                 <mat-form-field>
                   <mat-label>Contract Type</mat-label>
-                  <mat-select formControlName='contractType'>
+                  <mat-select formControlName='contractType' (selectionChange)="contractTypeChange()">
                     <mat-option [value]="'purchaseContracts'">Purchase Contract</mat-option>
                     <mat-option [value]="'salesContracts'">Sales Contract</mat-option>
                   </mat-select>
@@ -30,7 +30,8 @@
               <ion-col size-xs='4' size-sm='3'>
                 <mat-form-field>
                   <mat-label>ID</mat-label>
-                  <input matInput formControlName="id">
+                  <input matInput formControlName="id" type="number">
+                  <mat-spinner matSuffix [diameter]="20" *ngIf="contractForm.get('id').pending"></mat-spinner>
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -38,7 +39,7 @@
               <ion-col size-xs='8' size-sm='9'>
                 <mat-form-field>
                   <mat-label>Quantity</mat-label>
-                  <input matInput type='number' formControlName="quantity">
+                  <input matInput type='number' formControlName="quantity" type="number">
                 </mat-form-field>
               </ion-col>
               <ion-col size-xs='4' size-sm='3'>
@@ -88,7 +89,7 @@
               <ion-col size='12'>
                 <mat-form-field>
                   <mat-label>Market Price Per Bushel</mat-label>
-                  <input matInput formControlName='marketPrice'>
+                  <input matInput formControlName='marketPrice' type="number">
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -96,13 +97,13 @@
               <ion-col size='6'>
                 <mat-form-field>
                   <mat-label>U.S. Grade</mat-label>
-                  <input matInput formControlName='grade'>
+                  <input matInput formControlName='grade' type="number">
                 </mat-form-field>
               </ion-col>
               <ion-col size='6'>
                 <mat-form-field>
                   <mat-label>Aflatoxin</mat-label>
-                  <input matInput formControlName='aflatoxin'>
+                  <input matInput formControlName='aflatoxin' type="number">
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -146,7 +147,7 @@
               <ion-col size='6'>
                 <mat-form-field>
                   <mat-label>Payment Terms</mat-label>
-                  <input matInput formControlName='amount'>
+                  <input matInput formControlName='amount' type="number">
                 </mat-form-field>
               </ion-col>
               <ion-col size='6'>
@@ -158,9 +159,6 @@
                     <mat-option value='bushels'>bushels</mat-option>
                   </mat-select>
                 </mat-form-field>
-              </ion-col>
-              <ion-col size='12'>
-                <mat-checkbox formControlName='before'>Prepaid</mat-checkbox>
               </ion-col>
             </ion-row>
             <button 
