@@ -28,11 +28,11 @@
       <b>FREIGHT PRICE</b><br>
     </div>
     <div class='column-size-3'>
-      <b>{{contractForm.id || 0}}-{{today.getFullYear() % 100}}</b><br>
+      <b>{{contractForm.id || 0}}-{{date.getFullYear() % 100}}</b><br>
       {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
       {{contractForm.marketPrice | number:"0.5-5"}}<br>
       {{getPriceInBushels() | number:"0.5-5"}}<br>
-      {{today | date:'MM/dd/YYYY'}}<br>
+      {{date | date:'MM/dd/YYYY'}}<br>
       <br>
       <br>
       <br>

@@ -161,6 +161,7 @@
                 </mat-form-field>
               </ion-col>
             </ion-row>
+            <button mat-raised-button (click)="submitForm()" [disabled]="contractForm.invalid">Submit</button>
             <button 
             mat-button
             [disabled]="contractForm.invalid"

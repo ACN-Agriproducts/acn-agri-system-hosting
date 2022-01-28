@@ -12,7 +12,7 @@ export class ContractPrintableComponent implements OnInit {
   @Input() contractForm: any;
   @Input() productsList: any[];
   @Input() weight: Weight;
-  public today: Date = new Date();
+  @Input() date: Date;
 
   constructor() { }
 

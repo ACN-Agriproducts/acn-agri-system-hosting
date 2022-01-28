@@ -145,7 +145,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       return transaction.get(this.db.firestore.doc(`companies/${this.currentCompany}`)).then(val => {
         var submit = {
           aflatoxin: formValue.aflatoxin,
-          base: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product) - formValue.marketPrice,
+          base: this.getBushelPrice() - formValue.marketPrice,
           buyer_terms: "",   //TODO
           client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
           clientInfo: this.selectedClient,
@@ -166,14 +166,14 @@ export class NewContractPage implements OnInit, OnDestroy {
             origin: formValue.paymentTerms.origin,
             paymentTerms: formValue.paymentTerms.amount
           },
-          pricePerBushel: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product),
+          pricePerBushel: this.getBushelPrice(),
           product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
           productInfo: {
             moisture: formValue.product.moisture,
             name: formValue.product.name,
             weight: formValue.product.weight
           },
-          quantity: this.getPoundWeight(formValue.quantity, formValue.quantityUnits, formValue.product),
+          quantity: this.contractWeight.getPounds(),
           seller_terms: "",     //TODO
           status: "pending",
           tickets: [],
@@ -193,26 +193,22 @@ export class NewContractPage implements OnInit, OnDestroy {
     })
   }
 
-  private getBushelPrice(quantity: number, type: string, product: any){
-    if(type == "bushel") {
-      return quantity;
+  private getBushelPrice(): number{
+    const form = this.contractForm.getRawValue();
+    const price = form.price;
+    const product = this.productsList.find(p => p.name == form.product);
+    
+    if(form.priceUnit == 'bushels'){
+      return price;
     }
-    if(type == "cwt") {
-      return quantity * product.weight / 100;
+    if(form.priceUnit == 'lbs'){
+      return price * product.weight;
     }
-
-    return 0;
-  }
-
-  private getPoundWeight(quantity: number, type: string, product: any) {
-    if(type == "lbs") {
-      return quantity;
-    } else if(type == "bushels") {
-      return quantity * product.weight;
-    } else if(type == "cwt") {
-      return quantity * 100;
-    } else if(type == "trucks") {
-      return quantity * 50000
+    if(form.priceUnit == 'CWT'){
+      return price / 100 * product.weight;
+    }
+    if(form.priceUnit == 'mtons'){
+      return price / 2204.6 * product.weight;
     }
 
     return 0;
