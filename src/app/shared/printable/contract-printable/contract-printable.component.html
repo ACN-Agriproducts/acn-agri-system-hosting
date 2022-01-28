@@ -3,13 +3,13 @@
   <h1><b>CONTRACT</b></h1>
   <div class='grid-12'>
     <div class='column-size-4'>
-      <div class='party-header'><b>{{contractForm.contractType == "purchaseContracts"? "BUYER" : "SELLER"}}</b></div>
+      <div class='party-header'><b>{{isPurchase()? "BUYER" : "SELLER"}}</b></div>
       <span><b>ACN AGRIPRODUTS LLC</b></span><br>
       <span>1512 RANCHO TOLUCA RD</span><br>
       <span>WESLACO TX. 78596</span><br>
       <span></span><br>
 
-      <div class='party-header'><b>{{contractForm.contractType == "purchaseContracts"? "SELLER" : "BUYER"}}</b></div>
+      <div class='party-header'><b>{{isPurchase? "SELLER" : "BUYER"}}</b></div>
       <ng-container *ngIf="contractForm.client">
         <span><b>{{contractForm.client? contractForm.client.name : ""}}</b></span><br>
         <span>{{contractForm.client.streetAddress}}</span><br>
@@ -40,7 +40,7 @@
   </div>
 </div>
 
-<p>SELLER AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED COMMODITIES TO ACN AGRIPRODUCTS LLC (BUYER)
+<p>{{isPurchase()? "SELLER": "BUYER" }} AGREES TO AND CONFIRMS THE {{isPurchase()? "SALE": "PURCHASE"}} OF THE FOLLOWING DESCRIBED COMMODITIES {{isPurchase()? "TO": "FROM"}} ACN AGRIPRODUCTS LLC ({{isPurchase()? "BUYER": "SELLER" }})
   SUBJET TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK THEREOF FAILURE TO ADVISE ACN AGRIPRODUCTS LLC
   IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJETION TO OR DISAGREEMENT EITH SUCH TERMS AND CONDITIONS SHALL BE AN
   ACCEPTANCE THEREOF.</p>

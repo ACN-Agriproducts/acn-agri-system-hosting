@@ -148,7 +148,8 @@ export class NewContractPage implements OnInit, OnDestroy {
           base: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product) - formValue.marketPrice,
           buyer_terms: "",   //TODO
           client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
-          clientName: formValue.client.name,
+          clientInfo: this.selectedClient,
+          clientName: formValue.client,
           currentDelivered: 0,
           date: new Date(),
           delivery_dates: {

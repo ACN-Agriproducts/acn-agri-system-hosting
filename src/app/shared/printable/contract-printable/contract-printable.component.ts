@@ -26,6 +26,8 @@ export class ContractPrintableComponent implements OnInit {
     return this.weight.convertUnit(WeightUnits.getUnits(name)).amount;
   }
 
+  isPurchase = () => this.contractForm.contractType == "purchaseContracts";
+
   getPriceInBushels(): number {
     const price = this.contractForm.price;
     let bushelWeight = 56;
