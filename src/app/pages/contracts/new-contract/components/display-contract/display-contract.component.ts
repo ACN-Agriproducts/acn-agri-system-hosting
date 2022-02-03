@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Weight } from '@shared/Weight/weight';
 
 @Component({
@@ -6,7 +6,7 @@ import { Weight } from '@shared/Weight/weight';
   templateUrl: './display-contract.component.html',
   styleUrls: ['./display-contract.component.scss'],
 })
-export class DisplayContractComponent implements OnInit {
+export class DisplayContractComponent implements OnInit, OnChanges {
 
   @Input() contractForm: any;
   @Input() productsList: any[];
@@ -16,6 +16,10 @@ export class DisplayContractComponent implements OnInit {
 
   ngOnInit() {
     this.contractForm.date = new Date();
+    this.contractForm.quantity = this.weight.getPounds();
+  }
+
+  ngOnChanges() {
     this.contractForm.quantity = this.weight.getPounds();
   }
 

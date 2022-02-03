@@ -1,4 +1,4 @@
-<div class='header-section'>
+<div class='header-section' *ngIf="contractForm">
   <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
   <h1><b>CONTRACT</b></h1>
   <div class='grid-12'>
@@ -27,12 +27,12 @@
       <b>CONTRACT DATE</b><br>
       <b>FREIGHT PRICE</b><br>
     </div>
-    <div class='column-size-3'>
-      <b>{{contractForm.id || 0}}-{{contractForm.date.getFullYear() % 100}}</b><br>
+    <div class='column-size-3' *ngIf="date">
+      <b>{{contractForm.id || 0}}-{{date.getFullYear() % 100}}</b><br>
       {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
       {{contractForm.marketPrice | number:"0.5-5"}}<br>
       {{getPriceInBushels() | number:"0.5-5"}}<br>
-      {{contractForm.date | date:'MM/dd/YYYY'}}<br>
+      {{date | date:'MM/dd/YYYY'}}<br>
       <br>
       <br>
       <br>
@@ -91,7 +91,7 @@
       <div class='column-size-2'><b>STATUS</b></div>
       <div class='column-size-3'><b>DELIVERY DATES</b></div>
       <div class='column-size-4'><b>PAYMENT TERMS</b></div>
-      <div class='column-size-3'><b>CWT PRICE</b></div>
+      <div class='column-size-3'><b>PRICE</b></div>
     </div>
   </div>
   <div>
@@ -99,7 +99,7 @@
       <div class='column-size-2'>Priced</div>
       <div class='column-size-3'>
         <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd">
-          {{contractForm.deliveryDateStart | date:'shortDate'}} to {{contractForm.deliveryDateEnd | date:'shortDate'}}
+          {{contractForm.deliveryDateStart | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd | date:'MM/dd/yy'}}
         </ng-container>
         <br><br>
         <div class='underline'>
