@@ -11,19 +11,23 @@ export class ContractPrintableComponent implements OnInit {
 
   @Input() contractForm: any;
   @Input() productsList: any[];
-  @Input() weight: Weight;
-  @Input() date: Date;
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (!(this.contractForm.date instanceof Date)) {
+      this.contractForm.date = this.contractForm.date.toDate();
+    }
+  }
 
   getUnits(name: string): number {
+    const weight = new Weight(this.contractForm.amount, WeightUnits.Pounds);
+
     if(this.contractForm.product) {
       const tempProduct = this.productsList.find(p => p.name == this.contractForm.product)
-      return this.weight.convertUnit(WeightUnits.getUnits(name, tempProduct.weight)).amount;  
+      return weight.convertUnit(WeightUnits.getUnits(name, tempProduct.weight)).amount;  
     }
-    return this.weight.convertUnit(WeightUnits.getUnits(name)).amount;
+    return weight.convertUnit(WeightUnits.getUnits(name)).amount;
   }
 
   isPurchase = () => this.contractForm.contractType == "purchaseContracts";

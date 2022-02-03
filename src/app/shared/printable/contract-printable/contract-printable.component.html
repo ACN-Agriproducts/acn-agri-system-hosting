@@ -28,11 +28,11 @@
       <b>FREIGHT PRICE</b><br>
     </div>
     <div class='column-size-3'>
-      <b>{{contractForm.id || 0}}-{{date.getFullYear() % 100}}</b><br>
+      <b>{{contractForm.id || 0}}-{{contractForm.date.getFullYear() % 100}}</b><br>
       {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
       {{contractForm.marketPrice | number:"0.5-5"}}<br>
       {{getPriceInBushels() | number:"0.5-5"}}<br>
-      {{date | date:'MM/dd/YYYY'}}<br>
+      {{contractForm.date | date:'MM/dd/YYYY'}}<br>
       <br>
       <br>
       <br>
@@ -134,7 +134,7 @@
     <div class='column-size-2'>
       <div id='total'>
         <span><b>$</b></span>
-        <span><b>{{weight.getPounds() * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
+        <span><b>{{contractForm.quantity * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
       </div>
     </div>
   </div>

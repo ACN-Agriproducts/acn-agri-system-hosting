@@ -22,7 +22,7 @@ import { SelectClientComponent } from './components/select-client/select-client.
     ReactiveFormsModule,
     CoreModule,
     SharedModule,
-    NgxPrintModule
+    NgxPrintModule,
   ],
   declarations: [NewContractPage, DisplayContractComponent, SelectClientComponent]
 })
