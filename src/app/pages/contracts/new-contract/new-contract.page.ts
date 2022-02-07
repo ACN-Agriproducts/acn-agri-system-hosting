@@ -98,7 +98,7 @@ export class NewContractPage implements OnInit, OnDestroy {
 
     this.contractForm.get('product').valueChanges.subscribe(val => {
       if(this.contractWeight.unit.name.toLocaleLowerCase() == 'bushels') {
-        this.contractWeight.unit.toPounds = this.productsList.find(p => p.name == this.contractForm.getRawValue().product).weight;
+        this.contractWeight.unit.toPounds = val.weight;
       }
     });
 
@@ -182,6 +182,7 @@ export class NewContractPage implements OnInit, OnDestroy {
         };
     
         var docRef = this.db.firestore.collection(`companies/${this.currentCompany}/${formValue.contractType}`).doc();
+        console.log(submit);
   
         transaction.set(docRef, submit);
       })
@@ -196,19 +197,18 @@ export class NewContractPage implements OnInit, OnDestroy {
   private getBushelPrice(): number{
     const form = this.contractForm.getRawValue();
     const price = form.price;
-    const product = this.productsList.find(p => p.name == form.product);
     
     if(form.priceUnit == 'bushels'){
       return price;
     }
     if(form.priceUnit == 'lbs'){
-      return price * product.weight;
+      return price * form.product.weight;
     }
     if(form.priceUnit == 'CWT'){
-      return price / 100 * product.weight;
+      return price / 100 * form.product.weight;
     }
     if(form.priceUnit == 'mtons'){
-      return price / 2204.6 * product.weight;
+      return price / 2204.6 * form.product.weight;
     }
 
     return 0;

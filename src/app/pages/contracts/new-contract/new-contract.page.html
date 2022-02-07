@@ -60,7 +60,7 @@
                   <mat-label>Product</mat-label>
                   <mat-select formControlName='product'>
                     <ng-container *ngIf="productsReady">
-                      <mat-option *ngFor="let product of productsList" [value]="product.name">{{product.name}}</mat-option>
+                      <mat-option *ngFor="let product of productsList" [value]="product">{{product.name}}</mat-option>
                     </ng-container>
                   </mat-select>
                 </mat-form-field>

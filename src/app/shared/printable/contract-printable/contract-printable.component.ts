@@ -26,11 +26,21 @@ export class ContractPrintableComponent implements OnInit {
     }
   }
 
+  getProduct(): string {
+    if(typeof(this.contractForm.product.name) == "string"){
+      console.log('string', this.contractForm.product.name);
+      return this.contractForm.product.name;
+    }
+
+    console.log('id', this.contractForm.product.id);
+    return this.contractForm.product.id;
+  }
+
   getUnits(name: string): number {
     const weight = new Weight(this.contractForm.quantity, WeightUnits.Pounds);
 
     if(this.contractForm.product) {
-      const tempProduct = this.productsList.find(p => p.name == this.contractForm.product)
+      const tempProduct = this.productsList.find(p => p.name == this.getProduct())
       return weight.convertUnit(WeightUnits.getUnits(name, tempProduct.weight)).amount;  
     }
     return weight.convertUnit(WeightUnits.getUnits(name)).amount;
@@ -43,7 +53,7 @@ export class ContractPrintableComponent implements OnInit {
     let bushelWeight = 56;
 
     if(this.productsList) {
-      const product = this.productsList.find(p => p.name == this.contractForm.product);
+      const product = this.productsList.find(p => p.name == this.getProduct());
 
       if(product) {
         bushelWeight = product.weight;
@@ -69,7 +79,7 @@ export class ContractPrintableComponent implements OnInit {
     let bushelWeight = 56;
 
     if(this.productsList) {
-      const product = this.productsList.find(p => p.name == this.contractForm.product);
+      const product = this.productsList.find(p => p.name == this.getProduct());
 
       if(product) {
         bushelWeight = product.weight;
