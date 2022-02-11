@@ -9,13 +9,13 @@
       <span>WESLACO TX. 78596</span><br>
       <span></span><br>
 
-      <div class='party-header'><b>{{isPurchase? "SELLER" : "BUYER"}}</b></div>
-      <ng-container *ngIf="contractForm.client">
-        <span><b>{{contractForm.client? contractForm.client.name : ""}}</b></span><br>
-        <span>{{contractForm.client.streetAddress}}</span><br>
-        <span>{{contractForm.client.city}}{{contractForm.client.state && contractForm.client.city? ",": ""}}
-          {{contractForm.client.state}}{{contractForm.client.state && contractForm.client.zipCode? ",": ""}} {{contractForm.client.zipCode}}</span><br>
-        <span>{{contractForm.client.phoneNumber}}</span><br>
+      <div class='party-header'><b>{{isPurchase() ? "SELLER" : "BUYER"}}</b></div>
+      <ng-container *ngIf="this.contractForm.client">
+        <span><b>{{getClient()? getClient().name : ""}}</b></span><br>
+        <span>{{getClient().streetAddress}}</span><br>
+        <span>{{getClient().city}}{{getClient().state && getClient().city? ",": ""}}
+          {{getClient().state}}{{getClient().state && getClient().zipCode? ",": ""}} {{getClient().zipCode}}</span><br>
+        <span>{{getClient().phoneNumber}}</span><br>
       </ng-container>
     </div>
     <div class='column-size-2'></div>

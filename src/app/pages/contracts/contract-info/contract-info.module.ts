@@ -12,6 +12,8 @@ import { TicketsTableComponent } from './components/tickets-table/tickets-table.
 import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { NgxPrintModule } from 'ngx-print';
+import { DisplayContractComponent } from './components/display-contract/display-contract.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -20,13 +22,15 @@ import { NgxPrintModule } from 'ngx-print';
     IonicModule,
     ContractInfoPageRoutingModule,
     CoreModule,
-    NgxPrintModule
+    NgxPrintModule,
+    SharedModule
   ],
   declarations: [
     ContractInfoPage,
     TicketsTableComponent,
     TruckerTableComponent,
-    ContractLiquidationLongComponent
+    ContractLiquidationLongComponent,
+    DisplayContractComponent
   ]
 })
 export class ContractInfoPageModule {}

@@ -28,11 +28,9 @@ export class ContractPrintableComponent implements OnInit {
 
   getProduct(): string {
     if(typeof(this.contractForm.product.name) == "string"){
-      console.log('string', this.contractForm.product.name);
       return this.contractForm.product.name;
     }
 
-    console.log('id', this.contractForm.product.id);
     return this.contractForm.product.id;
   }
 
@@ -124,5 +122,9 @@ export class ContractPrintableComponent implements OnInit {
     if(this.contractForm.priceUnit == 'mtons'){
       return price;
     }
+  }
+
+  getClient(): any {
+    return this.contractForm.clientInfo || this.contractForm.client;
   }
 }

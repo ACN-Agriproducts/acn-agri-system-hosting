@@ -1,3 +1,20 @@
-<p>
-  display-contract works!
-</p>
+<button 
+  mat-button 
+  *ngIf="ready"
+  ngxPrint
+  printSectionId="printable"
+  [useExistingCss]="true">
+  PRINT
+</button>
+
+<div class="wrapper">
+  <app-contract-printable
+    *ngIf="ready"
+    appScaleToFit
+    id="printable"
+    [contractForm]="contract"
+    [productsList]="[product]"
+  ></app-contract-printable>
+</div>
+
+<mat-spinner *ngIf="!ready"></mat-spinner>
