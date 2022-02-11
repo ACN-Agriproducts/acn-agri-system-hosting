@@ -1,171 +1,173 @@
-<div class='header-section' *ngIf="contractForm">
-  <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
-  <h1><b>CONTRACT</b></h1>
-  <div class='grid-12'>
-    <div class='column-size-4'>
-      <div class='party-header'><b>{{isPurchase()? "BUYER" : "SELLER"}}</b></div>
-      <span><b>ACN AGRIPRODUTS LLC</b></span><br>
-      <span>1512 RANCHO TOLUCA RD</span><br>
-      <span>WESLACO TX. 78596</span><br>
-      <span></span><br>
-
-      <div class='party-header'><b>{{isPurchase() ? "SELLER" : "BUYER"}}</b></div>
-      <ng-container *ngIf="this.contractForm.client">
-        <span><b>{{getClient()? getClient().name : ""}}</b></span><br>
-        <span>{{getClient().streetAddress}}</span><br>
-        <span>{{getClient().city}}{{getClient().state && getClient().city? ",": ""}}
-          {{getClient().state}}{{getClient().state && getClient().zipCode? ",": ""}} {{getClient().zipCode}}</span><br>
-        <span>{{getClient().phoneNumber}}</span><br>
-      </ng-container>
-    </div>
-    <div class='column-size-2'></div>
-    <div class='column-size-3'>
-      <b>CONTRACT NUMBER</b><br>
-      <b>BASE</b><br>
-      <b>FUTURE PRICE</b><br>
-      <b>PRICED</b><br>
-      <b>CONTRACT DATE</b><br>
-      <b>FREIGHT PRICE</b><br>
-    </div>
-    <div class='column-size-3' *ngIf="date">
-      <b>{{contractForm.id || 0}}-{{date.getFullYear() % 100}}</b><br>
-      {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
-      {{contractForm.marketPrice | number:"0.5-5"}}<br>
-      {{getPriceInBushels() | number:"0.5-5"}}<br>
-      {{date | date:'MM/dd/YYYY'}}<br>
-      <br>
-      <br>
-      <br>
-    </div>
-  </div>
-</div>
-
-<p>{{isPurchase()? "SELLER": "BUYER" }} AGREES TO AND CONFIRMS THE {{isPurchase()? "SALE": "PURCHASE"}} OF THE FOLLOWING DESCRIBED COMMODITIES {{isPurchase()? "TO": "FROM"}} ACN AGRIPRODUCTS LLC ({{isPurchase()? "BUYER": "SELLER" }})
-  SUBJET TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK THEREOF FAILURE TO ADVISE ACN AGRIPRODUCTS LLC
-  IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJETION TO OR DISAGREEMENT EITH SUCH TERMS AND CONDITIONS SHALL BE AN
-  ACCEPTANCE THEREOF.</p>
-
-<div class='info-chart'>
-  <div class='grid-12'>
-    <div class='column-size-2'>
-      <span><b>COMMODITY:</b></span><br>
-      <span><b>QUANTITY:</b></span>
-    </div>
-    <div class='column-size-3'>
-      <span>{{getProduct()}}</span><br>
-      <div class='grid-3'>
-        <div class='column-size-2'>
-          <span class='right-justify'>{{getUnits('bushels') | number:'0.5-5'}}</span>
-          <span class='right-justify'>{{getUnits('lbs') | number:'0.5-5'}}</span>
-          <span class='right-justify'>{{getUnits('mtons') | number:'0.5-5'}}</span>
-        </div>
-        <div class='column-size-1'>
-          <span>BUSHELS</span><br>
-          <span>LBS</span><br>
-          <span>M. TONS</span>
-        </div>
-      </div>
-    </div>
-    <div class='column-size-1'>
-      <span class='right-justify'><b>MST:</b></span>
-    </div>
-    <div class='column-size-1'>
-      <span>15%</span>
-    </div>
-    <div class='column-size-1'></div>
-    <div class='column-size-2'>
-      <span><b>WEIGHT:</b></span><br>
-      <span><b>GRADES:</b></span><br>
-      <span><b>TRANSPORTATION:</b></span><br>
-      <span><b>REFERENCE:</b></span>
-    </div>
-    <div class='column-size-2'>
-      <span>{{contractForm.paymentTerms.origin? "ORIGIN" : "DESTINATION"}}</span><br>
-      <span>U.S. {{contractForm.grade}} OR BETTER</span><br>
-      <span>TRUCK</span><br>
-      <span>{{contractForm.aflatoxin}} OR LESS</span>
-    </div>
-  </div>
-  <div id='extra-info-header'>
+<div id="first-page">
+  <div class='header-section' *ngIf="contractForm">
+    <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
+    <h1><b>CONTRACT</b></h1>
     <div class='grid-12'>
-      <div class='column-size-2'><b>STATUS</b></div>
-      <div class='column-size-3'><b>DELIVERY DATES</b></div>
-      <div class='column-size-4'><b>PAYMENT TERMS</b></div>
-      <div class='column-size-3'><b>PRICE</b></div>
+      <div class='column-size-4'>
+        <div class='party-header'><b>{{isPurchase()? "BUYER" : "SELLER"}}</b></div>
+        <span><b>ACN AGRIPRODUTS LLC</b></span><br>
+        <span>1512 RANCHO TOLUCA RD</span><br>
+        <span>WESLACO TX. 78596</span><br>
+        <span></span><br>
+
+        <div class='party-header'><b>{{isPurchase() ? "SELLER" : "BUYER"}}</b></div>
+        <ng-container *ngIf="this.contractForm.client">
+          <span><b>{{getClient()? getClient().name : ""}}</b></span><br>
+          <span>{{getClient().streetAddress}}</span><br>
+          <span>{{getClient().city}}{{getClient().state && getClient().city? ",": ""}}
+            {{getClient().state}}{{getClient().state && getClient().zipCode? ",": ""}} {{getClient().zipCode}}</span><br>
+          <span>{{getClient().phoneNumber}}</span><br>
+        </ng-container>
+      </div>
+      <div class='column-size-2'></div>
+      <div class='column-size-3'>
+        <b>CONTRACT NUMBER</b><br>
+        <b>BASE</b><br>
+        <b>FUTURE PRICE</b><br>
+        <b>PRICED</b><br>
+        <b>CONTRACT DATE</b><br>
+        <b>FREIGHT PRICE</b><br>
+      </div>
+      <div class='column-size-3' *ngIf="date">
+        <b>{{contractForm.id || 0}}-{{date.getFullYear() % 100}}</b><br>
+        {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
+        {{contractForm.marketPrice | number:"0.5-5"}}<br>
+        {{getPriceInBushels() | number:"0.5-5"}}<br>
+        {{date | date:'MM/dd/YYYY'}}<br>
+        <br>
+        <br>
+        <br>
+      </div>
     </div>
   </div>
-  <div>
-    <div class='underline grid-12'>
-      <div class='column-size-2'>Priced</div>
+
+  <p>{{isPurchase()? "SELLER": "BUYER" }} AGREES TO AND CONFIRMS THE {{isPurchase()? "SALE": "PURCHASE"}} OF THE FOLLOWING DESCRIBED COMMODITIES {{isPurchase()? "TO": "FROM"}} ACN AGRIPRODUCTS LLC ({{isPurchase()? "BUYER": "SELLER" }})
+    SUBJET TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK THEREOF FAILURE TO ADVISE ACN AGRIPRODUCTS LLC
+    IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJETION TO OR DISAGREEMENT EITH SUCH TERMS AND CONDITIONS SHALL BE AN
+    ACCEPTANCE THEREOF.</p>
+
+  <div class='info-chart'>
+    <div class='grid-12'>
+      <div class='column-size-2'>
+        <span><b>COMMODITY:</b></span><br>
+        <span><b>QUANTITY:</b></span>
+      </div>
       <div class='column-size-3'>
-        <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd">
-          {{contractForm.deliveryDateStart | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd | date:'MM/dd/yy'}}
-        </ng-container>
-        <br><br>
-        <div class='underline'>
-          Please sign and return this confirmation IMMEDIATELY
+        <span>{{getProduct()}}</span><br>
+        <div class='grid-3'>
+          <div class='column-size-2'>
+            <span class='right-justify'>{{getUnits('bushels') | number:'0.5-5'}}</span>
+            <span class='right-justify'>{{getUnits('lbs') | number:'0.5-5'}}</span>
+            <span class='right-justify'>{{getUnits('mtons') | number:'0.5-5'}}</span>
+          </div>
+          <div class='column-size-1'>
+            <span>BUSHELS</span><br>
+            <span>LBS</span><br>
+            <span>M. TONS</span>
+          </div>
         </div>
       </div>
-      <div class='column-size-4'>
-        <ng-container *ngIf="contractForm.paymentTerms.amount && contractForm.paymentTerms.measurement">
-          EVERY {{contractForm.paymentTerms.amount}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
-        </ng-container>
+      <div class='column-size-1'>
+        <span class='right-justify'><b>MST:</b></span>
       </div>
-      <div class='column-size-1 right-justify'>
-        {{getPriceInCWT() | number:'0.5-5'}}<br>
-        {{getPriceInMTon() | number:'0.5-5'}}
+      <div class='column-size-1'>
+        <span>15%</span>
+      </div>
+      <div class='column-size-1'></div>
+      <div class='column-size-2'>
+        <span><b>WEIGHT:</b></span><br>
+        <span><b>GRADES:</b></span><br>
+        <span><b>TRANSPORTATION:</b></span><br>
+        <span><b>REFERENCE:</b></span>
       </div>
       <div class='column-size-2'>
-        CWT<br>
-        M. TON
+        <span>{{contractForm.paymentTerms.origin? "ORIGIN" : "DESTINATION"}}</span><br>
+        <span>U.S. {{contractForm.grade}} OR BETTER</span><br>
+        <span>TRUCK</span><br>
+        <span>{{contractForm.aflatoxin}} OR LESS</span>
+      </div>
+    </div>
+    <div id='extra-info-header'>
+      <div class='grid-12'>
+        <div class='column-size-2'><b>STATUS</b></div>
+        <div class='column-size-3'><b>DELIVERY DATES</b></div>
+        <div class='column-size-4'><b>PAYMENT TERMS</b></div>
+        <div class='column-size-3'><b>PRICE</b></div>
+      </div>
+    </div>
+    <div>
+      <div class='underline grid-12'>
+        <div class='column-size-2'>Priced</div>
+        <div class='column-size-3'>
+          <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd">
+            {{contractForm.deliveryDateStart | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd | date:'MM/dd/yy'}}
+          </ng-container>
+          <br><br>
+          <div class='underline'>
+            Please sign and return this confirmation IMMEDIATELY
+          </div>
+        </div>
+        <div class='column-size-4'>
+          <ng-container *ngIf="contractForm.paymentTerms.amount && contractForm.paymentTerms.measurement">
+            EVERY {{contractForm.paymentTerms.amount}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
+          </ng-container>
+        </div>
+        <div class='column-size-1 right-justify'>
+          {{getPriceInCWT() | number:'0.5-5'}}<br>
+          {{getPriceInMTon() | number:'0.5-5'}}
+        </div>
+        <div class='column-size-2'>
+          CWT<br>
+          M. TON
+        </div>
+      </div>
+    </div>
+    <div class='grid-12'>
+      <div class='column-size-5'>
+        <br>
+        <div class='box'>
+          Buyer's scale of discounts at time of delivery to apply rules to apply: TGFA
+        </div>
+      </div>
+      <div class='column-size-1'></div>
+      <div class='column-size-3'><b>TOTAL CONTRACTED</b></div>
+      <div class='column-size-1'></div>
+      <div class='column-size-2'>
+        <div id='total'>
+          <span><b>$</b></span>
+          <span><b>{{contractForm.quantity * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
+        </div>
       </div>
     </div>
   </div>
-  <div class='grid-12'>
-    <div class='column-size-5'>
-      <br>
-      <div class='box'>
-        Buyer's scale of discounts at time of delivery to apply rules to apply: TGFA
-      </div>
-    </div>
-    <div class='column-size-1'></div>
-    <div class='column-size-3'><b>TOTAL CONTRACTED</b></div>
-    <div class='column-size-1'></div>
-    <div class='column-size-2'>
-      <div id='total'>
-        <span><b>$</b></span>
-        <span><b>{{contractForm.quantity * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div>
-  BUYER OBJETS TO THE INCLUSION OF ANY DIFFERENT OR ADDITIONAL TERMS PROPOSED BY SELLER. BUYER´S SCHEDULE OF DISCOUNTS TO APPLY.
-  SELLER GUARANTEES GRAIN U.S. GROWN. IF PRICE OF GRAIN IS ON A PREMIUM BASIS, CONTRACT TO BE PRICED OR SPREAD PRIOR TO THE LAST TRADING
-  DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.
-</div>
+  <div>
+    BUYER OBJETS TO THE INCLUSION OF ANY DIFFERENT OR ADDITIONAL TERMS PROPOSED BY SELLER. BUYER´S SCHEDULE OF DISCOUNTS TO APPLY.
+    SELLER GUARANTEES GRAIN U.S. GROWN. IF PRICE OF GRAIN IS ON A PREMIUM BASIS, CONTRACT TO BE PRICED OR SPREAD PRIOR TO THE LAST TRADING
+    DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.
+  </div>
 
-<br>
-<b>CONFIRMATION</b>
-<br>
-<div class='signature-area'>
-  <div>
-    <span>{{contractForm.client? contractForm.client.name : ""}}</span>
-    <div class='underline'>BY:</div>
-    <span>Name/Title:</span><br>
-    <span>Date:</span><br>
+  <br>
+  <b>CONFIRMATION</b>
+  <br>
+  <div class='signature-area'>
+    <div>
+      <span>{{contractForm.client? contractForm.client.name : ""}}</span>
+      <div class='underline'>BY:</div>
+      <span>Name/Title:</span><br>
+      <span>Date:</span><br>
+    </div>
+    <div>
+      <span>ACN AGRIPRODUCTS LLC</span>
+      <div class='underline'>BY:</div>
+      <span>Ruben D. Puga/General Manager</span><br>
+      <span>Date:</span><br>
+    </div>
   </div>
-  <div>
-    <span>ACN AGRIPRODUCTS LLC</span>
-    <div class='underline'>BY:</div>
-    <span>Ruben D. Puga/General Manager</span><br>
-    <span>Date:</span><br>
+  <br>
+  <div class='page-footer'>
+    PLEASE SIGN ONE COPY AND RETURN TO ABOVE ADDRESS
   </div>
-</div>
-<br>
-<div class='page-footer'>
-  PLEASE SIGN ONE COPY AND RETURN TO ABOVE ADDRESS
 </div>
 
 <div class='terms-and-conditions'>TERMS AND CONDITIONS</div>
