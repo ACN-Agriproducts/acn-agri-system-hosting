@@ -91,7 +91,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       paymentTerms: this.fb.group({
         before: [false],
         origin: [false],
-        amount: [],
+        paymentTerms: [],
         measurement: []
       })
     }, { validators: form => Validators.required(form.get('client')) });
@@ -164,7 +164,7 @@ export class NewContractPage implements OnInit, OnDestroy {
             before: formValue.paymentTerms.before,
             measurement: formValue.paymentTerms.measurement,
             origin: formValue.paymentTerms.origin,
-            paymentTerms: formValue.paymentTerms.amount
+            paymentTerms: formValue.paymentTerms.paymentTerms
           },
           pricePerBushel: this.getBushelPrice(),
           product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
