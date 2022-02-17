@@ -40,6 +40,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       this.currentCompany = val;
       this.currentSub = this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`).valueChanges().subscribe(val => {
         this.currentContract = val;
+        this.currentContract.contractType = this.type + "Contracts";
         this.ready = true;
         this.ticketList = [];
 

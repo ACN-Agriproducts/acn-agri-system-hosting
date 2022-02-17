@@ -83,7 +83,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       product: ['', Validators.required],
       price: [, Validators.required],
       priceUnit: ['', Validators.required],
-      marketPrice: [],
+      market_price: [],
       grade: [2, Validators.required],
       aflatoxin: [20, Validators.required],
       deliveryDateStart: [],
@@ -145,7 +145,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       return transaction.get(this.db.firestore.doc(`companies/${this.currentCompany}`)).then(val => {
         var submit = {
           aflatoxin: formValue.aflatoxin,
-          base: this.getBushelPrice() - formValue.marketPrice,
+          base: this.getBushelPrice() - formValue.market_price,
           buyer_terms: "",   //TODO
           client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
           clientInfo: this.selectedClient,
@@ -157,9 +157,9 @@ export class NewContractPage implements OnInit, OnDestroy {
             end: new Date(formValue.deliveryDateEnd),
           },
           grade: formValue.grade,
-          id: this.currentCompanyValue[formValue.contractType == "purchaseContracts"? "nextPurchaseContract" : "nextSalesContract"],
+          id: formValue.id,
           loads: 0,
-          market_price: formValue.marketPrice,
+          market_price: formValue.market_price,
           paymentTerms: {
             before: formValue.paymentTerms.before,
             measurement: formValue.paymentTerms.measurement,
@@ -182,13 +182,12 @@ export class NewContractPage implements OnInit, OnDestroy {
         };
     
         var docRef = this.db.firestore.collection(`companies/${this.currentCompany}/${formValue.contractType}`).doc();
-        console.log(submit);
   
         transaction.set(docRef, submit);
       })
 
     }).then(() => {
-      this.navController.navigateForward('dashboard/contracts');
+      //this.navController.navigateForward('dashboard/contracts');
     }).catch(error => {
       console.log("Error submitting form: ", error);
     })

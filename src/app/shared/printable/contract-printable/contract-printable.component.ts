@@ -13,9 +13,7 @@ export class ContractPrintableComponent implements OnInit {
   @Input() productsList: any[];
   public date: Date;
 
-  constructor() { 
-    
-  }
+  constructor() {}
 
   ngOnInit() {
     if (!(this.contractForm.date instanceof Date)) {
@@ -58,6 +56,10 @@ export class ContractPrintableComponent implements OnInit {
       }
     }
 
+    if(this.contractForm.pricePerBushel) {
+      return this.contractForm.pricePerBushel;
+    }
+
     if(this.contractForm.priceUnit == 'bushels'){
       return price;
     }
@@ -84,6 +86,10 @@ export class ContractPrintableComponent implements OnInit {
       }
     }
 
+    if(this.contractForm.pricePerBushel) {
+      return this.contractForm.pricePerBushel / bushelWeight * 100;
+    }
+
     if(this.contractForm.priceUnit == 'bushels'){
       return price / bushelWeight * 100;
     }
@@ -108,6 +114,10 @@ export class ContractPrintableComponent implements OnInit {
       if(product) {
         bushelWeight = product.weight;
       }
+    }
+
+    if(this.contractForm.pricePerBushel) {
+      return this.contractForm.pricePerBushel / bushelWeight * 2204.6;
     }
 
     if(this.contractForm.priceUnit == 'bushels'){
