@@ -14,6 +14,7 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
+import { ContractFormComponent } from './components/contract-form/contract-form.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { SharedModule } from '@shared/shared.module';
     TicketsTableComponent,
     TruckerTableComponent,
     ContractLiquidationLongComponent,
-    DisplayContractComponent
+    DisplayContractComponent,
+    ContractFormComponent
   ]
 })
 export class ContractInfoPageModule {}
