@@ -187,7 +187,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       })
 
     }).then(() => {
-      //this.navController.navigateForward('dashboard/contracts');
+      this.navController.navigateForward('dashboard/contracts');
     }).catch(error => {
       console.log("Error submitting form: ", error);
     })
