@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
-import { ModalController, NavController } from '@ionic/angular';
+import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
+import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 
 @Component({
   selector: 'app-inventory',
@@ -23,7 +24,8 @@ export class InventoryPage implements OnInit, OnDestroy{
     private fb: AngularFirestore,
     private store: Storage,
     private navController: NavController,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private popoverController: PopoverController
   ) { 
     this.store.get('currentCompany').then(val => {
       this.currentCompany = val;
@@ -31,7 +33,6 @@ export class InventoryPage implements OnInit, OnDestroy{
       tempSub = this.fb.collection(`companies/${this.currentCompany}/plants`).valueChanges({ idField: 'name' }).subscribe(val => {
         this.plantList = val;
         this.currentPlantName = val[0].name;
-        console.log(this.plantList);
       })
       this.currentSubs.push(tempSub);
 
@@ -55,8 +56,19 @@ export class InventoryPage implements OnInit, OnDestroy{
     this.navController.navigateForward(path);
   }
 
-  public inventoryModal(): void {
+  public async inventoryMenu(ev: any, storageId: number): Promise<void> {
+    const popover = await this.popoverController.create({
+      component: StoragePopoverComponent,
+      event: ev,
+      componentProps: {
+        plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        storageId: storageId,
+        tankList: this.plantList.find(p => p.name == this.currentPlantName).inventory,
+        productList: this.productList
+      }
+    });
 
+    return popover.present();
   }
 
   public async newStorageModal(): Promise<any> {
@@ -64,7 +76,7 @@ export class InventoryPage implements OnInit, OnDestroy{
       component: NewStorageModalComponent,
       componentProps:{
         plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
-        productList: this.productList
+        productList: this.productList,
       }
     });
 

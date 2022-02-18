@@ -3,16 +3,17 @@
     View
     <ion-icon slot='end' name="document-text-outline"></ion-icon>
   </ion-item>
-  <div *ngIf="contract.status == 'pending'">
+  <ng-container *ngIf="contract.status == 'pending'">
     <ion-item lines="none" button (click)='acceptContract()'>
       Accept
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
-  </div>
-  <div  *ngIf="contract.status == 'active'">
+  </ng-container>
+  <ng-container  *ngIf="contract.status == 'active'">
     <ion-item lines="none" button (click)='closeContract()'>
       Close
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
-  </div>
+  </ng-container>
+  
 </ion-list>

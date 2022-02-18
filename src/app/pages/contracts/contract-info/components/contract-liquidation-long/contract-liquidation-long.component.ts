@@ -1,0 +1,34 @@
+import { Component, Input, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-contract-liquidation-long',
+  templateUrl: './contract-liquidation-long.component.html',
+  styleUrls: ['./contract-liquidation-long.component.scss'],
+})
+export class ContractLiquidationLongComponent implements OnInit {
+  @Input() ticketList: any[];
+  @Input() contract: any;
+
+  public gross: number = 0;
+  public tare: number = 0;
+  public moistureDiscount: number = 0;
+  public moistureAdjustedWeight: number = 0;
+  public infestedTotal: number = 0;
+  public inspectionTotal: number = 0;
+  public netToPayTotal: number = 0;
+
+  constructor() { }
+
+  ngOnInit() {
+    this.ticketList.forEach(ticket => {
+      this.gross += ticket.data().gross;
+      this.tare += ticket.data().tare;
+      this.moistureDiscount += ticket.data().dryWeight - (ticket.data().gross - ticket.data().tare);
+      this.moistureAdjustedWeight += ticket.data().dryWeight;
+    });
+  }
+
+  public getDate(): Date {
+    return new Date();
+  }
+}

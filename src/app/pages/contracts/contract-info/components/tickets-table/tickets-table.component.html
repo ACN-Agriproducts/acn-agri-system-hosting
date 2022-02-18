@@ -1,40 +1,12 @@
-<table mat-table [dataSource]="ticketList">
-
-  <!-- Id Column -->
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.id}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef>Date</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.dateOut.toDate() | date}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="tare">
-    <th mat-header-cell *matHeaderCellDef>Tare</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.tare}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="gross">
-    <th mat-header-cell *matHeaderCellDef>Gross</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.gross}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="net">
-    <th mat-header-cell *matHeaderCellDef>Net</th>
-    <td mat-cell *matCellDef="let ticket"> {{ticket.gross - ticket.tare | number}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="opt">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let ticket">
-      <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
-</table>
+ <div *ngFor="let ticket of ticketList" class='table-row'>
+  <ion-item lines='none'><b>{{ticket.data().id}}</b></ion-item>
+  <ion-item lines='none'>{{ticket.data().dateOut.toDate() | date}}</ion-item>
+  <ion-item lines='none'>{{ticket.data().gross | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.data().tare | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.data().gross - ticket.data().tare | number}}</ion-item>
+  <ion-item lines='none'>
+    <button mat-icon-button aria-label="Ticket options button">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </ion-item>
+</div>

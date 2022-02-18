@@ -10,7 +10,6 @@ import { Storage } from '@ionic/storage';
 })
 export class TicketsTableComponent implements OnInit {
 
-  @Input() ticketRefList: DocumentReference[];
   public ticketList: any[] = [];
   public displayColumns: string[] = 
     ['id', 'date', 'gross', 'tare', 'net', 'opt'];
@@ -18,19 +17,9 @@ export class TicketsTableComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.ticketRefList.forEach(ticketRef => {
-      let counter = 0;
+  ngOnInit() {}
 
-      ticketRef.get().then(val => {
-        this.ticketList.push(val.data());
-
-        if(this.ticketList.length == this.ticketRefList.length) {
-          this.table.renderRows();
-          console.log(this.table);
-          console.log("Ticket table done");
-        }
-      })
-    })
+  public renderComponent (ticketList: any[]): void {
+    this.ticketList = ticketList;
   }
 }

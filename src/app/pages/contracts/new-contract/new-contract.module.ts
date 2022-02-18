@@ -4,9 +4,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NewContractPageRoutingModule } from './new-contract-routing.module';
+import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 
 import { NewContractPage } from './new-contract.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
+import { SelectClientComponent } from './components/select-client/select-client.component';
 
 @NgModule({
   imports: [
@@ -16,8 +20,10 @@ import { CoreModule } from '@core/core.module';
     NewContractPageRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    SharedModule,
+    NgxPrintModule,
   ],
-  declarations: [NewContractPage]
+  declarations: [NewContractPage, DisplayContractComponent, SelectClientComponent]
 })
 export class NewContractPageModule {}

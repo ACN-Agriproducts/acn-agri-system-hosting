@@ -1,0 +1,21 @@
+<button 
+  mat-button 
+  *ngIf="ready"
+  ngxPrint
+  printSectionId="printable"
+  [printStyle]="{'#first-page' : {'font-size': '13px', 'line-height': '150%'}, '.terms-and-conditions' : {'font-size': 'x-small'} }"
+  [useExistingCss]="true">
+  PRINT
+</button>
+
+<div class="wrapper">
+  <app-contract-printable
+    *ngIf="ready"
+    appScaleToFit
+    id="printable"
+    [contractForm]="contract"
+    [productsList]="[product]"
+  ></app-contract-printable>
+</div>
+
+<mat-spinner *ngIf="!ready"></mat-spinner>

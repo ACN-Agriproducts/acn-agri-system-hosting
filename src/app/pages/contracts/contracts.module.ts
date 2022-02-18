@@ -14,6 +14,7 @@ import { ShowDetailsComponent } from './components/show-details/show-details.com
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
 import { FilterComponent } from './components/filter/filter.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { ContractModalOptionsComponent } from './components/contract-modal-optio
     ReactiveFormsModule,
     IonicModule,
     ContractsPageRoutingModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
   declarations: [
     ContractsPage,

@@ -1,9 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
+import { WeightUnits } from '@shared/WeightUnits/weight-units';
+import { Weight } from '@shared/Weight/weight';
+import {MatDialog} from '@angular/material/dialog';
+import { SelectClientComponent } from './components/select-client/select-client.component';
+import { UniqueContractId } from './components/unique-contract-id';
 
 @Component({
   selector: 'app-new-contract',
@@ -11,7 +16,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./new-contract.page.scss'],
 })
 export class NewContractPage implements OnInit, OnDestroy {
-
   currentCompany: string;
   currentCompanyValue: any;
   contactList: any[];
@@ -20,12 +24,16 @@ export class NewContractPage implements OnInit, OnDestroy {
   productsReady: boolean = false;
   contractForm: FormGroup;
   currentSubs: Subscription[] = [];
+  contractWeight: Weight;
+  selectedClient: any;
 
   constructor(
     private fb: FormBuilder,
     private db: AngularFirestore,
     private localStorage: Storage,
-    private navController: NavController
+    private navController: NavController,
+    private dialog: MatDialog,
+    private uniqueId: UniqueContractId
   ) { }
 
   ngOnInit() {
@@ -55,32 +63,59 @@ export class NewContractPage implements OnInit, OnDestroy {
       tempSub = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: 'name'}).subscribe(val => {
         this.productsList = val;
         this.productsReady = true;
+        console.log(this.productsList)
       })
       this.currentSubs.push(tempSub);
     })
 
     var today = new Date();
 
+    this.contractWeight = new Weight(0, WeightUnits.Pounds);
+
+    this.uniqueId.setGetterFunction(this.getContractCollection.bind(this));
+
     this.contractForm = this.fb.group({
       contractType: ['', Validators.required],
-      client: ['', Validators.required],
-      quantity: [0, Validators.required],
+      id: [{value: null, disabled: true}, [Validators.required], this.uniqueId.validate.bind(this.uniqueId)],
+      client: [{value:'', disabled: true}, Validators.required],
+      quantity: [, Validators.required],
       quantityUnits: ['', Validators.required],
       product: ['', Validators.required],
-      price: [0, Validators.required],
+      price: [, Validators.required],
       priceUnit: ['', Validators.required],
-      marketPrice: [0, Validators.required],
+      market_price: [],
       grade: [2, Validators.required],
       aflatoxin: [20, Validators.required],
       deliveryDateStart: [],
       deliveryDateEnd: [],
       paymentTerms: this.fb.group({
-        before: [false, Validators.required],
-        origin: [false, Validators.required],
-        amount: [, Validators.required],
-        measurement: ['', Validators.required]
+        before: [false],
+        origin: [false],
+        paymentTerms: [],
+        measurement: []
       })
-    })
+    }, { validators: form => Validators.required(form.get('client')) });
+
+    this.contractForm.get('product').valueChanges.subscribe(val => {
+      if(this.contractWeight.unit.name.toLocaleLowerCase() == 'bushels') {
+        this.contractWeight.unit.toPounds = val.weight;
+      }
+    });
+
+    this.contractForm.get('quantity').valueChanges.subscribe(val => {
+      this.contractWeight.amount = val;
+    });
+
+    this.contractForm.get('quantityUnits').valueChanges.subscribe(val => {
+      const tempContractProduct: string = this.contractForm.getRawValue().product;
+      if(tempContractProduct) {
+        const tempProduct = this.productsList.find(p => p.name == tempContractProduct);
+        this.contractWeight.unit = WeightUnits.getUnits(val, tempProduct.weight);
+      }
+      else {
+        this.contractWeight.unit = WeightUnits.getUnits(val);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -97,6 +132,12 @@ export class NewContractPage implements OnInit, OnDestroy {
     return c1 && c2? c1.id === c2.id: c1 === c2;
   }
 
+  public getForm() {
+    let form = this.contractForm.getRawValue();
+    form.client = this.selectedClient;
+    return form;
+  }
+
   public submitForm() {
     const formValue = this.contractForm.getRawValue();
 
@@ -104,10 +145,11 @@ export class NewContractPage implements OnInit, OnDestroy {
       return transaction.get(this.db.firestore.doc(`companies/${this.currentCompany}`)).then(val => {
         var submit = {
           aflatoxin: formValue.aflatoxin,
-          base: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product) - formValue.marketPrice,
+          base: this.getBushelPrice() - formValue.market_price,
           buyer_terms: "",   //TODO
           client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
-          clientName: formValue.client.name,
+          clientInfo: this.selectedClient,
+          clientName: formValue.client,
           currentDelivered: 0,
           date: new Date(),
           delivery_dates: {
@@ -115,23 +157,23 @@ export class NewContractPage implements OnInit, OnDestroy {
             end: new Date(formValue.deliveryDateEnd),
           },
           grade: formValue.grade,
-          id: this.currentCompanyValue[formValue.contractType == "purchaseContracts"? "nextPurchaseContract" : "nextSalesContract"],
+          id: formValue.id,
           loads: 0,
-          market_price: formValue.marketPrice,
+          market_price: formValue.market_price,
           paymentTerms: {
             before: formValue.paymentTerms.before,
             measurement: formValue.paymentTerms.measurement,
             origin: formValue.paymentTerms.origin,
-            paymentTerms: formValue.paymentTerms.amount
+            paymentTerms: formValue.paymentTerms.paymentTerms
           },
-          pricePerBushel: this.getBushelPrice(formValue.price, formValue.priceUnit, formValue.product),
+          pricePerBushel: this.getBushelPrice(),
           product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
           productInfo: {
             moisture: formValue.product.moisture,
             name: formValue.product.name,
             weight: formValue.product.weight
           },
-          quantity: this.getPoundWeight(formValue.quantity, formValue.quantityUnits, formValue.product),
+          quantity: this.contractWeight.getPounds(),
           seller_terms: "",     //TODO
           status: "pending",
           tickets: [],
@@ -151,29 +193,46 @@ export class NewContractPage implements OnInit, OnDestroy {
     })
   }
 
-  private getBushelPrice(quantity: number, type: string, product: any){
-    if(type == "bushel") {
-      return quantity;
+  private getBushelPrice(): number{
+    const form = this.contractForm.getRawValue();
+    const price = form.price;
+    
+    if(form.priceUnit == 'bushels'){
+      return price;
     }
-    if(type == "cwt") {
-      return quantity * product.weight / 100;
+    if(form.priceUnit == 'lbs'){
+      return price * form.product.weight;
     }
-
-    return 0;
-  }
-
-  private getPoundWeight(quantity: number, type: string, product: any) {
-    if(type == "lbs") {
-      return quantity;
-    } else if(type == "bushels") {
-      return quantity * product.weight;
-    } else if(type == "cwt") {
-      return quantity * 100;
-    } else if(type == "trucks") {
-      return quantity * 50000
+    if(form.priceUnit == 'CWT'){
+      return price / 100 * form.product.weight;
+    }
+    if(form.priceUnit == 'mtons'){
+      return price / 2204.6 * form.product.weight;
     }
 
     return 0;
   }
 
+  openClientSelect() {
+    const dialogRef = this.dialog.open(SelectClientComponent, {
+      width: '600px',
+      data: this.contactList
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.db.doc(`companies/${this.currentCompany}/directory/${result[0].id}`).get().subscribe(clientDoc => {
+        this.selectedClient = clientDoc.data();
+        this.contractForm.controls['client'].setValue(this.selectedClient.name);
+      });
+    });
+  }
+
+  contractTypeChange() {
+    this.contractForm.get('id').enable();
+  }
+
+  getContractCollection(): AngularFirestoreCollection {
+    const contractTypeControl = this.contractForm.get('contractType') as FormControl;
+    return this.db.collection(`companies/${this.currentCompany}/${contractTypeControl.value}`);
+  }
 }
