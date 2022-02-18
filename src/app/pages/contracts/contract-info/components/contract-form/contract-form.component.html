@@ -1,3 +1,158 @@
-<p>
-  contract-form works!
-</p>
+<ion-card-content [formGroup]="contractForm" *ngIf="contractForm">
+  <ion-row>
+    <ion-col size="12">
+      <mat-form-field>
+        <mat-label>Client Name</mat-label>
+        <input matInput formControlName='client'>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-xs='8' size-sm='9'>
+      <mat-form-field>
+        <mat-label>Contract Type</mat-label>
+        <mat-select formControlName='contractType'>
+          <mat-option [value]="'purchaseContracts'">Purchase Contract</mat-option>
+          <mat-option [value]="'salesContracts'">Sales Contract</mat-option>
+        </mat-select>
+      </mat-form-field> 
+    </ion-col>
+    <ion-col size-xs='4' size-sm='3'>
+      <mat-form-field>
+        <mat-label>ID</mat-label>
+        <input matInput formControlName="id" type="number">
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-xs='8' size-sm='9'>
+      <mat-form-field>
+        <mat-label>Quantity</mat-label>
+        <input matInput type='number' formControlName="quantity" type="number">
+      </mat-form-field>
+    </ion-col>
+    <ion-col size-xs='4' size-sm='3'>
+      <mat-form-field>
+        <mat-label>Units</mat-label>
+        <mat-select formControlName='quantityUnits'>
+          <mat-option value='bushels'>bushels</mat-option>
+          <mat-option value='lbs'>lbs</mat-option>
+          <mat-option value='CWT'>CWT</mat-option>
+          <mat-option value='mtons'>MTons</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size='12'>
+      <mat-form-field>
+        <mat-label>Product</mat-label>
+        <mat-select formControlName='product'>
+          <mat-option *ngFor="let product of productsList" [value]="product.name">{{product.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size-xs='8' size-sm='9'>
+      <mat-form-field>
+        <mat-label>Price</mat-label>
+        <input matInput type='number' formControlName='price'>
+      </mat-form-field>
+    </ion-col>
+    <ion-col size-xs='4' size-sm='3'>
+      <mat-form-field>
+        <mat-label>Price Unit</mat-label>
+        <mat-select formControlName='priceUnit'>
+          <mat-option value='bushels'>bushels</mat-option>
+          <mat-option value='lbs'>lbs</mat-option>
+          <mat-option value='CWT'>CWT</mat-option>
+          <mat-option value='mtons'>MTons</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size='12'>
+      <mat-form-field>
+        <mat-label>Market Price Per Bushel</mat-label>
+        <input matInput formControlName='market_price' type="number">
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>U.S. Grade</mat-label>
+        <input matInput formControlName='grade' type="number">
+      </mat-form-field>
+    </ion-col>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Aflatoxin</mat-label>
+        <input matInput formControlName='aflatoxin' type="number">
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Delivery Dates Start</mat-label>
+        <input matInput [matDatepicker]="pickerStart" formControlName='deliveryDateStart'>
+        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+        <mat-datepicker #pickerStart></mat-datepicker>
+      </mat-form-field>
+    </ion-col>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Delivery Dates End</mat-label>
+        <input matInput [matDatepicker]="pickerEnd" formControlName='deliveryDateEnd'>
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row formGroupName='paymentTerms'>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Payment</mat-label>
+        <mat-select formControlName='before'>
+          <mat-option [value]='true'>Before</mat-option>
+          <mat-option [value]='false'>After</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Scale</mat-label>
+        <mat-select formControlName='origin'>
+          <mat-option [value]='false'>Destination</mat-option>
+          <mat-option [value]='true'>Origin</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Payment Terms</mat-label>
+        <input matInput formControlName='paymentTerms' type="number">
+      </mat-form-field>
+    </ion-col>
+    <ion-col size='6'>
+      <mat-form-field>
+        <mat-label>Payment Terms Units</mat-label>
+        <mat-select formControlName='measurement'>
+          <mat-option value='lbs'>lbs</mat-option>
+          <mat-option value='trucks'>trucks</mat-option>
+          <mat-option value='bushels'>bushels</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <div class="flexbox">
+    <button mat-raised-button [disabled]="!contractForm.dirty && contractForm.valid" (click)="submitChanges()" *ngIf="currentContract.status == 'pending'">Update</button>
+    <mat-spinner *ngIf="updateStatus == 'pending'" [diameter]="20"></mat-spinner>
+    <mat-icon *ngIf="updateStatus == 'success'">check</mat-icon>
+    <mat-icon *ngIf="updateStatus == 'failure'">close</mat-icon>
+  </div>
+  
+</ion-card-content>
