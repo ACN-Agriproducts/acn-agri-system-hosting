@@ -167,6 +167,7 @@
             [disabled]="contractForm.invalid"
             printSectionId="printable-doc"
             [useExistingCss]='true'
+            [printStyle]="{'#first-page' : {'font-size': '13px', 'line-height': '150%'}, '.terms-and-conditions' : {'font-size': 'x-small'}, '.terms-and-conditions': { 'font-size': 'x-small', 'line-height': '125%'} }"
             ngxPrint>
             PRINT
           </button>
