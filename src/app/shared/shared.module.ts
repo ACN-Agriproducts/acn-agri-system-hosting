@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ContractPrintableComponent } from './printable/contract-printable/contract-printable.component';
 import { ScaleToFitDirective } from './scale-to-fit.directive';
-import { PrintableTicketComponent } from './printable-ticket/printable-ticket.component';
+import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
 
 
 @NgModule({
