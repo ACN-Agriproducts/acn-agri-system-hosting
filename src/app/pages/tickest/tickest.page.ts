@@ -2,6 +2,7 @@ import { FiltersComponent } from './components/filters/filters.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, ModalController } from '@ionic/angular';
+import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 
 @Component({
   selector: 'app-tickest',
@@ -32,5 +33,11 @@ export class TickestPage implements OnInit {
     return await modal.present();
     // this.bottomSheet.open(FiltersComponent);
 
+  }
+
+  async openTicketReportDialog(): Promise<void> {
+    const dialog = await this.dialog.open(TicketReportDialogComponent, {
+      width: '350px'
+    });
   }
 }

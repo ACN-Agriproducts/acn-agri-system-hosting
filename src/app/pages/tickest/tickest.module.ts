@@ -17,6 +17,7 @@ import { ModalTicketComponent } from './components/modal-ticket/modal-ticket.com
 import { ShowDetailsComponent } from './components/table/show-details/show-details.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { OptionsTicketComponent } from './components/options-ticket/options-ticket.component';
+import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 
 @NgModule({
   imports: [
@@ -36,7 +37,8 @@ import { OptionsTicketComponent } from './components/options-ticket/options-tick
     AddPictureComponent,
     ModalTicketComponent,
     ShowDetailsComponent,
-    OptionsTicketComponent
+    OptionsTicketComponent,
+    TicketReportDialogComponent
   ]
 })
 export class TickestPageModule { }
