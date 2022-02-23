@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AngularFirestore, CollectionReference, QueryFn } from '@angular/fire/compat/firestore';
+import { AngularFirestore, CollectionReference, QueryDocumentSnapshot, QueryFn } from '@angular/fire/compat/firestore';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
 import { Ticket } from '@shared/classes/ticket';
@@ -23,7 +23,11 @@ export class TicketReportDialogComponent implements OnInit {
   public startId: number;
   public endId: number;
 
-  public ticketList: any[];
+  public ticketList: Ticket[] = [];
+  public totals: any = {
+    products: {},
+    inventory: {}
+  };
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -35,15 +39,32 @@ export class TicketReportDialogComponent implements OnInit {
     this.localStorage.get('currentCompany').then(_currentCompany => {
       this.currentCompany = _currentCompany;
     });
-
   }
 
-  generateReport() {
-    this.db.collection(Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant), this.getFirebaseQueryFn()).get().toPromise().then(result => {
-      result.docs.forEach(doc => {
-        console.log(doc.data());
-      })
-    });
+  async generateReport(): Promise<void> {
+    await this.getReportTickets();
+  }
+
+  getReportTickets(): Promise<void> {
+    return this.db.collection<Ticket>(
+      Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant),
+      this.getFirebaseQueryFn()).get().toPromise().then(result => {
+        result.forEach(ticketSnap => {
+          const ticket = ticketSnap.data();
+
+          this.ticketList.push(ticket);
+
+          if(!this.totals.products[ticket.productName]){
+            this.totals.products[ticket.productName] = 0;
+          }
+          if(!this.totals.inventory[ticket.tank]) {
+            this.totals.inventory[ticket.tank] = 0;
+          }
+
+          this.totals.products[ticket.productName] += ticket.getNet();
+          this.totals.inventory[ticket.tank] += ticket.getNet();
+        })
+      });
   }
 
   getFirebaseQueryFn(): QueryFn {
