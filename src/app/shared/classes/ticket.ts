@@ -31,7 +31,7 @@ export class Ticket {
     public vehicleID: string;
     public weight: number;
 
-    public dataPath: DocumentReference;
+    public ref: DocumentReference;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         const data = snapshot.data();
@@ -65,6 +65,8 @@ export class Ticket {
         this.truckerId = data.truckerId;
         this.vehicleID = data.vehicleID;
         this.weight = data.weight;
+
+        this.ref = snapshot.ref;
     }
 
     public static ticketConverter = {
@@ -108,5 +110,49 @@ export class Ticket {
 
     public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference {
         return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.ticketConverter);
+    }
+
+    public set(db: AngularFirestore): Promise<void> {
+        const data = {
+            clientName: this.clientName,
+            comment: this.comment,
+            contractID: this.contractID,
+            dateIn: this.dateIn,
+            dateOut: this.dateOut,
+            discount: this.discount,
+            driver: this.driver,
+            dryWeight: this.dryWeight,
+            deryWeightPercent: this.deryWeightPercent,
+            grade: this.grade,
+            gross: this.gross,
+            id: this.id,
+            imageLinks: this.imageLinks,
+            in: this.in,
+            moisture: this.moisture,
+            origin: this.origin,
+            original_ticket: this.original_ticket,
+            original_weight: this.original_weight,
+            pdfLink: this.pdfLink,
+            plague: this.plague,
+            plates: this.plates,
+            PPB: this.PPB,
+            productName: this.productName,
+            tank: this.tank,
+            tankId: this.tankId,
+            tare: this.tare,
+            truckerId: this.truckerId,
+            vehicleID: this.vehicleID,
+            weight: this.weight,
+        }
+
+        return db.doc(this.ref).set(data);
+    }
+
+    public update(db: AngularFirestore, data: any): Promise<void> {
+        return db.doc(this.ref).update(data);
+    }
+
+    public delete(): Promise<void> {
+        return this.ref.delete();
     }
 }
