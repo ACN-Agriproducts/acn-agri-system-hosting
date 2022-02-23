@@ -45,14 +45,16 @@ export class TicketReportDialogComponent implements OnInit {
     await this.getReportTickets();
   }
 
-  getReportTickets(): Promise<void> {
+  private getReportTickets(): Promise<void> {
     return this.db.collection<Ticket>(
       Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant),
       this.getFirebaseQueryFn()).get().toPromise().then(result => {
+        const tempTicketList = [];
+
         result.forEach(ticketSnap => {
           const ticket = ticketSnap.data();
 
-          this.ticketList.push(ticket);
+          tempTicketList.push(ticket);
 
           if(!this.totals.products[ticket.productName]){
             this.totals.products[ticket.productName] = 0;
@@ -64,10 +66,12 @@ export class TicketReportDialogComponent implements OnInit {
           this.totals.products[ticket.productName] += ticket.getNet();
           this.totals.inventory[ticket.tank] += ticket.getNet();
         })
+
+        this.ticketList = tempTicketList;
       });
   }
 
-  getFirebaseQueryFn(): QueryFn {
+  private getFirebaseQueryFn(): QueryFn {
     if(this.reportType == ReportType.DateRange) {
       this.endDate.setHours(23, 59, 59, 999);
       return (q: CollectionReference) => q.where('dateOut', '>=', this.beginDate).where('dateOut', '<=', this.endDate).where('in', '==', this.inTicket);
@@ -82,7 +86,7 @@ export class TicketReportDialogComponent implements OnInit {
     }
   }
 
-  validateInputs(): boolean {
+  public validateInputs(): boolean {
     if(!(this.reportType != null && this.inTicket != null && this.reportOutputType != null)) {
       return false;
     }
@@ -98,6 +102,14 @@ export class TicketReportDialogComponent implements OnInit {
     if(this.reportType == ReportType.IdRange) {
       return this.startId != null && this.endId != null && this.startId < this.endId;
     }
+  }
+
+  public getReportType(): typeof ReportType {
+    return ReportType;
+  }
+
+  public getOutputType(): typeof OutputType{
+    return OutputType;
   }
 }
 
