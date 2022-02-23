@@ -1,6 +1,8 @@
 import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Plant } from "./plant";
 
-export class Ticket {
+export class Ticket extends FirebaseDocInterface{
     public clientName: string;
     public comment: string;
     public contractID: number;
@@ -31,9 +33,9 @@ export class Ticket {
     public vehicleID: string;
     public weight: number;
 
-    public ref: DocumentReference;
-
     constructor(snapshot: QueryDocumentSnapshot<any>) {
+        super(snapshot, Ticket.converter);
+
         const data = snapshot.data();
 
         this.clientName = data.clientName;
@@ -65,11 +67,9 @@ export class Ticket {
         this.truckerId = data.truckerId;
         this.vehicleID = data.vehicleID;
         this.weight = data.weight;
-
-        this.ref = snapshot.ref;
     }
 
-    public static ticketConverter = {
+    public static converter = {
         toFirestore(data: Ticket): DocumentData {
             return {
                 clientName: data.clientName,
@@ -108,51 +108,19 @@ export class Ticket {
         }
     }
 
+    public getPlantReference() {
+        return this.ref.parent.parent.withConverter(Plant.converter);
+    }
+
+    public getCollectionReference() {
+        return this.ref.parent.withConverter(Ticket.converter);
+    }
+
     public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference {
-        return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.ticketConverter);
+        return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.converter);
     }
 
-    public set(db: AngularFirestore): Promise<void> {
-        const data = {
-            clientName: this.clientName,
-            comment: this.comment,
-            contractID: this.contractID,
-            dateIn: this.dateIn,
-            dateOut: this.dateOut,
-            discount: this.discount,
-            driver: this.driver,
-            dryWeight: this.dryWeight,
-            deryWeightPercent: this.deryWeightPercent,
-            grade: this.grade,
-            gross: this.gross,
-            id: this.id,
-            imageLinks: this.imageLinks,
-            in: this.in,
-            moisture: this.moisture,
-            origin: this.origin,
-            original_ticket: this.original_ticket,
-            original_weight: this.original_weight,
-            pdfLink: this.pdfLink,
-            plague: this.plague,
-            plates: this.plates,
-            PPB: this.PPB,
-            productName: this.productName,
-            tank: this.tank,
-            tankId: this.tankId,
-            tare: this.tare,
-            truckerId: this.truckerId,
-            vehicleID: this.vehicleID,
-            weight: this.weight,
-        }
-
-        return db.doc(this.ref).set(data);
-    }
-
-    public update(db: AngularFirestore, data: any): Promise<void> {
-        return db.doc(this.ref).update(data);
-    }
-
-    public delete(): Promise<void> {
-        return this.ref.delete();
+    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference {
+        return db.firestore.doc(`companies/${company}/plants/${plant}/tickets/${ticket}`).withConverter(Ticket.converter);
     }
 }
