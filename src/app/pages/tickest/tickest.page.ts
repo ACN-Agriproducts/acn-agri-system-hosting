@@ -11,6 +11,7 @@ import { TicketReportDialogComponent } from './components/ticket-report-dialog/t
 })
 export class TickestPage implements OnInit {
   public date: string;
+  public currentPlant: string = 'progreso';
 
   constructor(
     public popoverController: PopoverController,
@@ -37,7 +38,8 @@ export class TickestPage implements OnInit {
 
   async openTicketReportDialog(): Promise<void> {
     const dialog = await this.dialog.open(TicketReportDialogComponent, {
-      width: '350px'
+      width: '350px',
+      data: {currentPlant: this.currentPlant}
     });
   }
 }
