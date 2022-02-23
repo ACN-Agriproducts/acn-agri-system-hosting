@@ -108,6 +108,10 @@ export class Ticket extends FirebaseDocInterface{
         }
     }
 
+    getNet(): number{
+        return this.gross - this.tare;
+    }
+
     public getPlantReference() {
         return this.ref.parent.parent.withConverter(Plant.converter);
     }
