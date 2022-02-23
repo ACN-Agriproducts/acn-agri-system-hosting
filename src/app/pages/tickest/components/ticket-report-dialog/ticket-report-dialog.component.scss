@@ -7,3 +7,9 @@ mat-radio-group {
 h3 {
     margin: 5px 0px;
 }
+
+@media screen {
+   .printable {
+    display: none;
+   } 
+}

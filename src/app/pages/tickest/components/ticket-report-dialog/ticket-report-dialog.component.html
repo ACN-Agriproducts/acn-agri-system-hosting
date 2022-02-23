@@ -2,16 +2,16 @@
 <div class="dialog-content">
   <h3>Generate report by...</h3>
   <mat-radio-group [(ngModel)]="reportType" [disabled]="reportGenerated">
-    <mat-radio-button [value]="0">Date Range</mat-radio-button>
-    <mat-radio-button [value]="1">Contract</mat-radio-button>
-    <mat-radio-button [value]="2">Id Range</mat-radio-button>
+    <mat-radio-button [value]="getReportType().DateRange">Date Range</mat-radio-button>
+    <mat-radio-button [value]="getReportType().Contract">Contract</mat-radio-button>
+    <mat-radio-button [value]="getReportType().IdRange">Id Range</mat-radio-button>
   </mat-radio-group>
   
   <div>
     <label>Report Type</label>
     <mat-radio-group [(ngModel)]="reportOutputType" [disabled]="reportGenerated">
-      <mat-radio-button [value]="0">PDF</mat-radio-button>
-      <mat-radio-button [value]="1">Excel</mat-radio-button>
+      <mat-radio-button [value]="getOutputType().pdf">PDF</mat-radio-button>
+      <mat-radio-button [value]="getOutputType().excel">Excel</mat-radio-button>
     </mat-radio-group>
   </div>
 
