@@ -1,4 +1,4 @@
-import { DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
 
 export class Ticket {
     public clientName: string;
@@ -39,8 +39,8 @@ export class Ticket {
         this.clientName = data.clientName;
         this.comment = data.comment;
         this.contractID = data.contractID;
-        this.dateIn = data.dateIn;
-        this.dateOut = data.dateOut;
+        this.dateIn = data.dateIn.toDate();
+        this.dateOut = data.dateOut.toDate();
         this.discount = data.discount;
         this.driver = data.driver;
         this.dryWeight = data.dryWeight;
@@ -66,7 +66,7 @@ export class Ticket {
         this.vehicleID = data.vehicleID;
         this.weight = data.weight;
     }
-    // Converters
+
     public static ticketConverter = {
         toFirestore(data: Ticket): DocumentData {
             return {
@@ -104,5 +104,9 @@ export class Ticket {
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Ticket {
             return new Ticket(snapshot);
         }
+    }
+
+    public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference {
+        return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.ticketConverter);
     }
 }
