@@ -54,7 +54,7 @@ export class Plant extends FirebaseDocInterface {
         return db.firestore.collection(`companies/${company}/plants`).withConverter(Plant.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference<Plant> {
+    public static getDocReference(db: AngularFirestore, company: string, plant: string): DocumentReference<Plant> {
         return db.firestore.doc(`companies/${company}/plants/${plant}`).withConverter(Plant.converter);
     }
 }
