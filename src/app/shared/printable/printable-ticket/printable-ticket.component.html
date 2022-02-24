@@ -6,8 +6,8 @@
 
   <!-- Date Block -->
   <div class='header' id='ticket-date-block'>
-    <p>In: {{ticket.dateIn.toDate() | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
-    <p *ngIf="ticket.dateOut">Out: {{ticket.dateOut.toDate() | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
+    <p>In: {{ticket.dateIn | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
+    <p *ngIf="ticket.dateOut">Out: {{ticket.dateOut | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
   </div>
 
   <!-- Ticket Type Block -->
@@ -28,7 +28,7 @@
       <span class='label'>Hauler ID</span>
       <span class='label'>Vehicle ID</span>
       <span class='label'>Plates</span>
-      <div class='info'>{{ticket.truckerID}}</div>
+      <div class='info'></div>
       <div class='info'>{{ticket.vehicleID}}</div>
       <div class='info'>{{ticket.plates}}</div>
       <div class='transport-info info'>
