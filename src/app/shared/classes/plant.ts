@@ -38,23 +38,23 @@ export class Plant extends FirebaseDocInterface {
         }
     }
 
-    public getCollectionReference() {
+    public getCollectionReference(): CollectionReference<Plant> {
         return this.ref.parent.withConverter(Plant.converter);
     }
 
-    public getTicketCollectionReference() {
+    public getTicketCollectionReference(): CollectionReference<Ticket> {
         return this.ref.collection('tickets').withConverter(Ticket.converter);
     }
 
-    public getTicketReference(ticket: string) {
+    public getTicketReference(ticket: string): DocumentReference<Ticket> {
         return this.ref.collection('tickets').doc(ticket).withConverter(Ticket.converter);
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference {
+    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Plant> {
         return db.firestore.collection(`companies/${company}/plants`).withConverter(Plant.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference {
+    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference<Plant> {
         return db.firestore.doc(`companies/${company}/plants/${plant}`).withConverter(Plant.converter);
     }
 }

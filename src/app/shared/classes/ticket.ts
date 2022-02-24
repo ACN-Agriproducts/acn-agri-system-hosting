@@ -112,19 +112,19 @@ export class Ticket extends FirebaseDocInterface{
         return this.gross - this.tare;
     }
 
-    public getPlantReference() {
+    public getPlantReference(): DocumentReference<Plant> {
         return this.ref.parent.parent.withConverter(Plant.converter);
     }
 
-    public getCollectionReference() {
+    public getCollectionReference(): CollectionReference<Ticket> {
         return this.ref.parent.withConverter(Ticket.converter);
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference {
+    public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference<Ticket> {
         return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference {
+    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference<Ticket> {
         return db.firestore.doc(`companies/${company}/plants/${plant}/tickets/${ticket}`).withConverter(Ticket.converter);
     }
 }
