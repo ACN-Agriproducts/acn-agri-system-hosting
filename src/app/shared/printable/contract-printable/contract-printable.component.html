@@ -9,7 +9,6 @@
         <span>1512 RANCHO TOLUCA RD</span><br>
         <span>WESLACO TX. 78596</span><br>
         <span></span><br>
-
         <div class='party-header'><b>{{isPurchase() ? "SELLER" : "BUYER"}}</b></div>
         <ng-container *ngIf="this.contractForm.client">
           <span><b>{{getClient()? getClient().name : ""}}</b></span><br>
@@ -30,8 +29,8 @@
       </div>
       <div class='column-size-3' *ngIf="date">
         <b>{{contractForm.id || 0}}-{{date.getFullYear() % 100}}</b><br>
-        {{getPriceInBushels() - contractForm.marketPrice | number:"0.5-5"}}<br>
-        {{contractForm.marketPrice | number:"0.5-5"}}<br>
+        {{getPriceInBushels() - contractForm.market_price | number:"0.5-5"}}<br>
+        {{contractForm.market_price | number:"0.5-5"}}<br>
         {{getPriceInBushels() | number:"0.5-5"}}<br>
         {{date | date:'MM/dd/YYYY'}}<br>
         <br>
@@ -99,8 +98,8 @@
       <div class='underline grid-12'>
         <div class='column-size-2'>Priced</div>
         <div class='column-size-3'>
-          <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd">
-            {{contractForm.deliveryDateStart | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd | date:'MM/dd/yy'}}
+          <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd || contractForm.delivery_dates">
+            {{contractForm.deliveryDateStart || contractForm.delivery_dates.begin.toDate() | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd || contractForm.delivery_dates.end.toDate() | date:'MM/dd/yy'}}
           </ng-container>
           <br><br>
           <div class='underline'>
@@ -108,8 +107,8 @@
           </div>
         </div>
         <div class='column-size-4'>
-          <ng-container *ngIf="contractForm.paymentTerms.amount && contractForm.paymentTerms.measurement">
-            EVERY {{contractForm.paymentTerms.amount}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
+          <ng-container *ngIf="contractForm.paymentTerms.paymentTerms && contractForm.paymentTerms.measurement">
+            EVERY {{contractForm.paymentTerms.paymentTerms}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
           </ng-container>
         </div>
         <div class='column-size-1 right-justify'>

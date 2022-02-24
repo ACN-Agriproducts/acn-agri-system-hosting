@@ -2,6 +2,7 @@ import { FiltersComponent } from './components/filters/filters.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, ModalController } from '@ionic/angular';
+import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 
 @Component({
   selector: 'app-tickest',
@@ -10,6 +11,7 @@ import { PopoverController, ModalController } from '@ionic/angular';
 })
 export class TickestPage implements OnInit {
   public date: string;
+  public currentPlant: string = 'progreso';
 
   constructor(
     public popoverController: PopoverController,
@@ -32,5 +34,12 @@ export class TickestPage implements OnInit {
     return await modal.present();
     // this.bottomSheet.open(FiltersComponent);
 
+  }
+
+  async openTicketReportDialog(): Promise<void> {
+    const dialog = await this.dialog.open(TicketReportDialogComponent, {
+      width: '350px',
+      data: {currentPlant: this.currentPlant}
+    });
   }
 }

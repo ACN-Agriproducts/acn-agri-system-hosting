@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -21,6 +21,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ready:boolean = false;
   public ticketList: any[];
   public ticketsReady: boolean = false;
+  public contractRef: AngularFirestoreDocument;
   private currentSub: Subscription;
 
   @ViewChild(TicketsTableComponent) ticketTable: TicketsTableComponent;
@@ -38,8 +39,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.type = this.route.snapshot.paramMap.get('type')
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
-      this.currentSub = this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`).valueChanges().subscribe(val => {
+      this.contractRef = this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`);
+      this.currentSub = this.contractRef.valueChanges().subscribe(val => {
         this.currentContract = val;
+        this.currentContract.contractType = this.type + "Contracts";
         this.ready = true;
         this.ticketList = [];
 

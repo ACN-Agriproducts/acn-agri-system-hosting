@@ -1,0 +1,94 @@
+<h1>Ticket Report</h1>
+<div class="dialog-content">
+  <h3>Generate report by...</h3>
+  <mat-radio-group [(ngModel)]="reportType" [disabled]="reportGenerated">
+    <mat-radio-button [value]="getReportType().DateRange">Date Range</mat-radio-button>
+    <mat-radio-button [value]="getReportType().Contract">Contract</mat-radio-button>
+    <mat-radio-button [value]="getReportType().IdRange">Id Range</mat-radio-button>
+  </mat-radio-group>
+  
+  <div>
+    <label>Report Type</label>
+    <mat-radio-group [(ngModel)]="reportOutputType" [disabled]="reportGenerated">
+      <mat-radio-button [value]="getOutputType().pdf">PDF</mat-radio-button>
+      <mat-radio-button [value]="getOutputType().excel">Excel</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="date-range-form" *ngIf="reportType == 0">
+    <div>
+      <label>Ticket Types</label>
+      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
+        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date" [(ngModel)]="beginDate" [disabled]="reportGenerated">
+          <input matEndDate placeholder="End date" [(ngModel)]="endDate" [disabled]="reportGenerated">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="contract-id-form" *ngIf="reportType == 1">
+    <div>
+      <label>Contract Types</label>
+      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+        <mat-radio-button [value]="true">Purchase Contract</mat-radio-button>
+        <mat-radio-button [value]="false">Sales Contract</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field>
+      <mat-label>Contract ID</mat-label>
+      <input matInput type="number" [(ngModel)]="contractId" [disabled]="reportGenerated">
+    </mat-form-field>
+  </div>
+  
+  <div class="id-range-form" *ngIf="reportType == 2">
+    <div>
+      <label>Ticket Types</label>
+      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
+        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Start ID</mat-label>
+        <input matInput type="number" [(ngModel)]="startId" [disabled]="reportGenerated">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>End ID</mat-label>
+        <input matInput type="number" [(ngModel)]="endId" [disabled]="reportGenerated">
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="generateReport()" [disabled]="!validateInputs()">Generate</button>
+  <button mat-button *ngIf="reportGenerated && reportOutputType == 0">Print</button>
+  <button mat-button *ngIf="reportGenerated && reportOutputType == 1">Download</button>
+</mat-dialog-actions>
+
+<div class="printable" id="printable-report">
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Client</th>
+      <th>Contract</th>
+      <th>Tare</th>
+      <th>Gross</th>
+      <th>Net</th>
+      <th>Moisture</th>
+      <th>Discount</th>
+      <th>Dry Weight</th>
+    </tr>
+  </table>
+</div>

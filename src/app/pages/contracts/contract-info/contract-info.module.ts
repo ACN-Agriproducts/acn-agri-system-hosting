@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -14,6 +14,7 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
+import { ContractFormComponent } from './components/contract-form/contract-form.component';
 
 @NgModule({
   imports: [
@@ -23,14 +24,16 @@ import { SharedModule } from '@shared/shared.module';
     ContractInfoPageRoutingModule,
     CoreModule,
     NgxPrintModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ContractInfoPage,
     TicketsTableComponent,
     TruckerTableComponent,
     ContractLiquidationLongComponent,
-    DisplayContractComponent
+    DisplayContractComponent,
+    ContractFormComponent
   ]
 })
 export class ContractInfoPageModule {}

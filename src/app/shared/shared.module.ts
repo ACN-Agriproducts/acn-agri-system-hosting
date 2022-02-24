@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ContractPrintableComponent } from './printable/contract-printable/contract-printable.component';
 import { ScaleToFitDirective } from './scale-to-fit.directive';
+import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
 
 
 @NgModule({
@@ -17,12 +18,14 @@ import { ScaleToFitDirective } from './scale-to-fit.directive';
   exports: [
     ToolbarComponent,
     ContractPrintableComponent,
-    ScaleToFitDirective
+    ScaleToFitDirective,
+    PrintableTicketComponent
   ],
   declarations: [
     ToolbarComponent,
     ContractPrintableComponent,
-    ScaleToFitDirective
+    ScaleToFitDirective,
+    PrintableTicketComponent
   ]
 })
 export class SharedModule {}

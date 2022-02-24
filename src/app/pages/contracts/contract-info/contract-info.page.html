@@ -17,12 +17,7 @@
           <ion-card-header>
             Contract Info
           </ion-card-header>
-          <ion-list>
-            <ion-item>
-              {{currentContract.currentDelivered / currentContract.quantity | percent}}
-              <ion-progress-bar value="{{currentContract.currentDelivered / currentContract.quantity}}"></ion-progress-bar>
-            </ion-item>
-          </ion-list>
+          <app-contract-form *ngIf="currentContract && currentContract.contractType" [currentContract]="currentContract" [contractRef]="contractRef"></app-contract-form>
         </ion-card>
       </ion-col>
       <ion-col size="5">

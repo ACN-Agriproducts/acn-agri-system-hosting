@@ -1,0 +1,15 @@
+mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0;
+}
+
+h3 {
+    margin: 5px 0px;
+}
+
+@media screen {
+   .printable {
+    display: none;
+   } 
+}

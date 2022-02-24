@@ -1,0 +1,88 @@
+<div class='ticket-container' *ngIf="ticket">
+  <!-- ID Block -->
+  <div class='header' id='ticket-id-block'>
+    <h1>Ticket {{ticket.id}}</h1>
+  </div>
+
+  <!-- Date Block -->
+  <div class='header' id='ticket-date-block'>
+    <p>In: {{ticket.dateIn.toDate() | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
+    <p *ngIf="ticket.dateOut">Out: {{ticket.dateOut.toDate() | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
+  </div>
+
+  <!-- Ticket Type Block -->
+  <div class='header' id='ticket-type-block'>
+    <h1>{{ticket.in? 'In': 'Out'}} Ticket</h1>
+  </div>
+
+  <!-- Company Block -->
+  <div class='block-row' id='company-block'>
+    <h3>ACN Agriproducts, LLC.</h3>
+    <img src='assets/companyicon.png'>
+  </div>
+
+  <!-- Transport Block -->
+  <div class='block-row' id='transport-block'>
+    <b>Transport</b>
+    <div id='transport-grid'>
+      <span class='label'>Hauler ID</span>
+      <span class='label'>Vehicle ID</span>
+      <span class='label'>Plates</span>
+      <div class='info'>{{ticket.truckerID}}</div>
+      <div class='info'>{{ticket.vehicleID}}</div>
+      <div class='info'>{{ticket.plates}}</div>
+      <div class='transport-info info'>
+        <div>{{transport.name}}</div>
+        <div>{{transport.streetAddress}}</div>
+        <div>{{transport.city}} {{transport.state}} {{transport.zipCode}}</div>
+        <div>{{transport.caat}}</div>
+      </div>
+      <span class='label' id='driver'>Vehicle Driver</span>
+      <span class='label'>Tare WT</span>
+      <div class='info' id='driver'>{{ticket.driver}}</div>
+      <div class='info'></div>
+    </div>
+  </div>
+
+  <!-- Customer Block -->
+  <div class='block-row' id='customer-block'>
+    <div class='block-header'>
+      <span><b>Customer</b></span>
+      <span>ID: </span>
+    </div>
+    <div id='customer-info'>
+      <div>{{client.name}}</div>
+      <div>{{client.streetAddress}}</div>
+      <div>{{client.city}} {{client.state}} {{client.zipCode}}</div>
+    </div>
+  </div>
+  <!-- Ticket Info Block -->
+  <div id='ticket-body'>
+    <div id='ticket-body-grid'>
+      <ng-container *ngFor="let item of valuesList">
+        <div class='label'>{{item.label}}</div>
+        <div class='value'>{{item.value}}</div>
+      </ng-container>
+
+      <div class='label weight' id='gross'>Gross</div>
+      <div class='value weight' id='gross'>{{ticket.gross}}</div>
+      <div class='label weight' id='tare'>Tare</div>
+      <div class='value weight' id='tare'>{{ticket.tare}}</div>
+      <div class='label weight' id='net'>Net</div>
+      <div class='value weight' id='net'>{{ticket.gross - ticket.tare}}</div>
+      <div class='label weight' id='mtons'>Metric Tons</div>
+      <div class='value weight' id='mtons'>{{(ticket.gross - ticket.tare) / 2204.6 | number:'1.3-3'}}</div>
+    </div>
+
+    <p><b>UNITED STATES WAREHOUSE ACT, GRAIN INSPECTION CERTIFICATE</b></p>
+    <p>
+      THIS CERTIFICATE NOT VALID FOR PURPOSE OF THE UNITED STATES GRAIN STANDARDS ACT. THIS CERTIFICATE IS ISSUED BY AN INSPECTOR AND WEIGHER
+      LICENSED UNDER THE "UNITED STATES WAREHOUSE ACT" AND THE REGULATIONS THEREUNDER.
+    </p>
+
+    <div id='signature-line'>
+      <span>Driver Signature:_____________________________________</span>
+      <span>Scale Operator Signature:_____________________________</span>
+    </div>
+  </div>
+</div>
