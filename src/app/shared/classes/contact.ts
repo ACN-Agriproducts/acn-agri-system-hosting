@@ -1,0 +1,61 @@
+import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+
+import { FirebaseDocInterface } from "./FirebaseDocInterface";
+
+export class Contact extends FirebaseDocInterface {
+    caat: string;
+    city: string;
+    email: string;
+    name: string;
+    phoneNumber: string;
+    state: string;
+    streetAddress: string;
+    type: string;
+    zipCode: string;
+
+    constructor(snapshot: QueryDocumentSnapshot<any>) {
+        super(snapshot, Contact.converter);
+        const data = snapshot.data();
+
+        this.caat = data.caat;
+        this.city = data.city;
+        this.email = data.email;
+        this.name = data.name;
+        this.phoneNumber = data.phoneNumber;
+        this.state = data.state;
+        this.streetAddress = data.streetAddress;
+        this.type = data.type;
+        this.zipCode = data.zipCode;
+    }
+
+    public static converter = {
+        toFirestore(data: Contact): DocumentData {
+            return {
+                caat: data.caat, 
+                city: data.city,
+                email: data.email,
+                name: data.name,
+                phoneNumber: data.phoneNumber,
+                state: data.state,
+                streetAddress: data.streetAddress,
+                type: data.type,
+                zipCode: data.zipCode,
+            }
+        },
+        fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contact {
+            return new Contact(snapshot);
+        }
+    };
+
+    public getCollectionReference(): CollectionReference<Contact> {
+        return this.ref.parent.withConverter(Contact.converter);
+    }
+
+    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Contact> {
+        return db.firestore.collection(`companies/${company}/directory`).withConverter(Contact.converter);
+    }
+
+    public static getDocReference(db: AngularFirestore, company: string, contact: string): DocumentReference<Contact> {
+        return db.firestore.doc(`companies/${company}/directory/${contact}`).withConverter(Contact.converter);
+    }
+}

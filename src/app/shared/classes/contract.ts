@@ -1,4 +1,5 @@
 import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Ticket } from "./ticket";
@@ -7,7 +8,7 @@ export class Contract extends FirebaseDocInterface {
     afltatoxin: number;
     base: number;
     buyer_terms: number
-    client:  DocumentReference;
+    client:  DocumentReference<Contact>;
     clientName: string;
     currentDelivered: number;
     date: Date;
@@ -25,20 +26,28 @@ export class Contract extends FirebaseDocInterface {
     status: status;
     tickets: DocumentReference<Ticket>[];
     transport: string;
-    truckers: DocumentReference[];
+    truckers: DocumentReference<Contact>[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contract.converter);
         const data = snapshot.data();
 
+        let tempTicketList: DocumentReference<Ticket>[] = [];
+        let tempTruckerList: DocumentReference<Contact>[] = [];
+
         // TODO Set DocumentReference converters
         data.tickets.forEach((ticket: DocumentReference) => {
-            ticket.withConverter(Ticket.converter);
+            tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
+
+        data.truckers.forEach((trucker: DocumentReference) => {
+            tempTruckerList.push(trucker.withConverter(Contact.converter));
+        })
+        
 
         this.afltatoxin = data.afltatoxin;
         this.base = data.base;
-        this.client = data.client;
+        this.client = data.client.withConverter(Contact.converter);
         this.clientName = data.clientName;
         this.currentDelivered = data.currentDelivered;
         this.date = data.date;
@@ -110,6 +119,30 @@ export class Contract extends FirebaseDocInterface {
             
             return tickets;
         });
+    }
+
+    public getClient(): Promise<Contact> {
+        return this.client.get().then(result => {
+            return result.data();
+        });
+    }
+
+    public getTruckers(): Promise<Contact[]> {
+        const truckerList = [];
+
+        this.truckers.forEach((truckerRef) => {
+            truckerList.push(truckerRef.get())
+        });
+
+        return Promise.all(truckerList).then((result): Contact[] => {
+            const truckers: Contact[] = [];
+
+            result.forEach((truckerSnap: DocumentSnapshot<Contact>) => {
+                truckers.push(truckerSnap.data());
+            });
+
+            return truckers;
+        })
     }
 
     public static getCollectionReference(db: AngularFirestore, company: string, isPurchaseContract: boolean): CollectionReference<Contract> {
