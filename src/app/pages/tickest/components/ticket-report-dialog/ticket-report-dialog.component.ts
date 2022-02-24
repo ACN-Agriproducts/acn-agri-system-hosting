@@ -15,6 +15,7 @@ export class TicketReportDialogComponent implements OnInit {
   public reportType: number;
   public inTicket: boolean;
   public reportOutputType: OutputType;
+  public generatingReport: boolean = false;
   public reportGenerated: boolean = false;
 
   public beginDate: Date;
@@ -23,10 +24,19 @@ export class TicketReportDialogComponent implements OnInit {
   public startId: number;
   public endId: number;
 
-  public ticketList: Ticket[] = [];
+  public productTicketLists: any = {};
+  public contractList: any = {};
+  public tranposrtList: any = {};
+  public clientList: any = {};
   public totals: any = {
-    products: {},
-    inventory: {}
+    products: {
+      net: {},
+      dryWeight: {}
+    },
+    inventory: {
+      net: {},
+      dryWeight: {}
+    }
   };
 
   constructor(
@@ -46,28 +56,47 @@ export class TicketReportDialogComponent implements OnInit {
   }
 
   private getReportTickets(): Promise<void> {
+    this.generatingReport = true;
+
     return this.db.collection<Ticket>(
       Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant),
       this.getFirebaseQueryFn()).get().toPromise().then(result => {
-        const tempTicketList = [];
+        const tempTicketList = {};
 
         result.forEach(ticketSnap => {
           const ticket = ticketSnap.data();
 
-          tempTicketList.push(ticket);
-
-          if(!this.totals.products[ticket.productName]){
-            this.totals.products[ticket.productName] = 0;
-          }
-          if(!this.totals.inventory[ticket.tank]) {
-            this.totals.inventory[ticket.tank] = 0;
+          //Check if product list exists
+          if(tempTicketList[ticket.productName] == null) {
+            tempTicketList[ticket.productName] = [];
           }
 
-          this.totals.products[ticket.productName] += ticket.getNet();
-          this.totals.inventory[ticket.tank] += ticket.getNet();
+          //add ticket to product list
+          tempTicketList[ticket.productName].push(ticket);
+
+          // check if totals lists exist
+          if(!this.totals.products.net[ticket.productName]){
+            this.totals.products.net[ticket.productName] = 0;
+            this.totals.products.dryWeight[ticket.productName] = 0;
+          }
+          if(!this.totals.inventory.net[ticket.tank]) {
+            this.totals.inventory.net[ticket.tank] = 0;
+            this.totals.inventory.dryWeight[ticket.tank] = 0;
+          }
+
+          // Add to totals lists
+          this.totals.products.net[ticket.productName] += ticket.getNet();
+          this.totals.products.dryWeight[ticket.productName] += ticket.dryWeight;
+          this.totals.inventory.net[ticket.tank] += ticket.getNet();
+          this.totals.inventory.dryWeight[ticket.tank] += ticket.dryWeight;
+
+          // Get needed documents (contract, transport, client)
+          //ticket.
         })
 
-        this.ticketList = tempTicketList;
+        this.productTicketLists = tempTicketList;
+        this.generatingReport = false;
+        this.reportGenerated = true;
       });
   }
 

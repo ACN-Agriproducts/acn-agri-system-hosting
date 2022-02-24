@@ -19,6 +19,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { OptionsTicketComponent } from './components/options-ticket/options-ticket.component';
 import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 import { SharedModule } from '@shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { SharedModule } from '@shared/shared.module';
     CoreModule,
     NgxDropzoneModule,
     AngularFireStorageModule,
-    SharedModule
+    SharedModule,
+    NgxPrintModule
   ],
   declarations: [
     TickestPage,

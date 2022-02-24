@@ -73,22 +73,52 @@
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button (click)="generateReport()" [disabled]="!validateInputs()">Generate</button>
-  <button mat-button *ngIf="reportGenerated && reportOutputType == 0">Print</button>
+  <button 
+    mat-button 
+    *ngIf="reportGenerated && reportOutputType == 0"
+    ngxPrint
+    [useExistingCss]="true"
+    printSectionId="printable-report"
+    >Print</button>
   <button mat-button *ngIf="reportGenerated && reportOutputType == 1">Download</button>
 </mat-dialog-actions>
 
 <div class="printable" id="printable-report">
-  <table>
-    <tr>
-      <th>ID</th>
-      <th>Client</th>
-      <th>Contract</th>
-      <th>Tare</th>
-      <th>Gross</th>
-      <th>Net</th>
-      <th>Moisture</th>
-      <th>Discount</th>
-      <th>Dry Weight</th>
-    </tr>
-  </table>
+  <div class="product-div" *ngFor="let ticketList of productTicketLists | keyvalue">
+    <h2>{{ticketList.key}}</h2>
+    <table id='ticket-report-table'>
+      <tr>
+        <th>ID</th>
+        <th>Client</th>
+        <th>Contract</th>
+        <th>Tare</th>
+        <th>Gross</th>
+        <th>Net</th>
+        <th>Moisture</th>
+        <th>Discount</th>
+        <th>Dry Weight</th>
+      </tr>
+      <tr *ngFor="let ticket of ticketList.value">
+        <td>{{ticket.id}}</td>
+        <td>{{ticket.clientName}}</td>
+        <td>{{ticket.contractID}}</td>
+        <td>{{ticket.tare}}</td>
+        <td>{{ticket.gross}}</td>
+        <td>{{ticket.getNet()}}</td>
+        <td>{{ticket.moisture | number:'0.1'}}</td>
+        <td>{{ticket.discount}}</td>
+        <td>{{ticket.dryWeight}}</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Totals</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{totals.products.net[ticketList.key]}}</td>
+        <td></td>
+        <td>{{totals.products.net[ticketList.key] - totals.products.dryWeight[ticketList.key]}}</td>
+        <td>{{totals.products.dryWeight[ticketList.key]}}</td></tr>
+    </table>
+  </div>
 </div>

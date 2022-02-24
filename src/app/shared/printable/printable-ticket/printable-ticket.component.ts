@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 
 @Component({
@@ -6,7 +6,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
   templateUrl: './printable-ticket.component.html',
   styleUrls: ['./printable-ticket.component.scss']
 })
-export class PrintableTicketComponent implements OnInit, OnChanges {
+export class PrintableTicketComponent implements OnInit {
   @Input() ticket: any;
   @Input() contract: any;
   @Input() transport: any;
@@ -14,8 +14,6 @@ export class PrintableTicketComponent implements OnInit, OnChanges {
   public valuesList: any[] = [{label: 'test', value: 'test' }];
 
   constructor() {}
-
-  ngOnChanges(changes: SimpleChanges) {}
 
   ngOnInit(): void {
     this.valuesList = [
