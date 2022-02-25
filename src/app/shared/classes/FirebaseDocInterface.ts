@@ -8,7 +8,7 @@ export abstract class FirebaseDocInterface {
     }
 
     public set(db: AngularFirestore): Promise<void> {
-        return db.doc(this.ref).set(this);
+        return this.ref.set(this);
     }
 
     public update(db: AngularFirestore, data: any): Promise<void> {
