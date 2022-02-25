@@ -33,6 +33,9 @@ export class Ticket extends FirebaseDocInterface{
     public tare: number;
     public truckerId: string;
     public vehicleID: string;
+    public void: boolean;
+    public voidReason: string;
+    public voidRequest: boolean;
     public weight: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
@@ -68,6 +71,9 @@ export class Ticket extends FirebaseDocInterface{
         this.tare = data.tare;
         this.truckerId = data.truckerId;
         this.vehicleID = data.vehicleID;
+        this.void = data.void;
+        this.voidReason = data.voidReason;
+        this.voidRequest = data.voidRequest;
         this.weight = data.weight;
     }
 
@@ -102,6 +108,9 @@ export class Ticket extends FirebaseDocInterface{
                 tare: data.tare,
                 truckerId: data.truckerId,
                 vehicleID: data.vehicleID,
+                void: data.void,
+                voidReason: data.voidReason,
+                voidRequest: data.voidRequest,
                 weight: data.weight
             }
         },
