@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
+import { utils, WorkBook, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -54,6 +55,19 @@ export class TicketReportDialogComponent implements OnInit {
 
   async generateReport(): Promise<void> {
     await this.getReportTickets();
+  }
+
+  public createExcelDoc(): void{
+    const tableCollection = document.getElementsByClassName('ticket-report-table');
+    const workBook: WorkBook = utils.book_new();
+
+    for(let i = 0; i < tableCollection.length; i++) {
+      const table = tableCollection[i];
+      const workSheet = utils.table_to_sheet(table);
+      utils.book_append_sheet(workBook, workSheet, table.id);
+    }
+
+    writeFile(workBook, 'ticket-report.xlsx')
   }
 
   private getReportTickets(): Promise<void> {
