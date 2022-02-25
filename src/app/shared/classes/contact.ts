@@ -58,4 +58,10 @@ export class Contact extends FirebaseDocInterface {
     public static getDocReference(db: AngularFirestore, company: string, contact: string): DocumentReference<Contact> {
         return db.firestore.doc(`companies/${company}/directory/${contact}`).withConverter(Contact.converter);
     }
+
+    public static getDoc(db: AngularFirestore, company: string, contact: string): Promise<Contact> {
+        return Contact.getDocReference(db, company, contact).get().then(result => {
+            return result.data();
+        })
+    }
 }

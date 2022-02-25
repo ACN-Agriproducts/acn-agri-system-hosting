@@ -1,4 +1,5 @@
 import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Contact } from "./contact";
 import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
@@ -117,6 +118,12 @@ export class Ticket extends FirebaseDocInterface{
         const company = this.ref.parent.parent.parent.parent.id;
 
         return Contract.getDoc(db, company, this.in, this.contractID);
+    }
+
+    public getTransport(db: AngularFirestore): Promise<Contact> {
+        const company = this.ref.parent.parent.parent.parent.id;
+
+        return Contact.getDoc(db, company, this.truckerId)
     }
 
     public getPlantReference(): DocumentReference<Plant> {
