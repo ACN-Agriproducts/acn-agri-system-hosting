@@ -48,6 +48,10 @@ th, td {
     padding-right: 5px;
 }
 
+app-printable-ticket, .ticket-report-table {
+    page-break-after: always;
+}
+
 @media screen {
     .printable {
         display: none;

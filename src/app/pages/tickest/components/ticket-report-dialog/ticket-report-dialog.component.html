@@ -79,14 +79,16 @@
     ngxPrint
     [useExistingCss]="true"
     printSectionId="printable-report"
+    [printStyle]='{"app-printable-ticket, .ticket-report-table" : { "page-break-after": "always" }}'
     >Print</button>
   <button mat-button *ngIf="reportGenerated && reportOutputType == 1">Download</button>
+  <mat-spinner [diameter]="20" *ngIf="generatingReport"></mat-spinner>
 </mat-dialog-actions>
 
 <div class="printable" id="printable-report">
   <div class="product-div" *ngFor="let ticketList of productTicketLists | keyvalue">
     <h2>{{ticketList.key}}</h2>
-    <table id='ticket-report-table'>
+    <table class='ticket-report-table'>
       <tr>
         <th>ID</th>
         <th>Client</th>
@@ -120,5 +122,14 @@
         <td>{{totals.products.net[ticketList.key] - totals.products.dryWeight[ticketList.key]}}</td>
         <td>{{totals.products.dryWeight[ticketList.key]}}</td></tr>
     </table>
+
+    <app-printable-ticket
+      *ngFor="let ticket of ticketList.value"
+      [ticket]="ticket"
+      [contract]="contractList[ticket.contractID]"
+      [transport]="transportList[ticket.truckerId]"
+      [client]="clientList[ticket.clientName]"
+    >
+    </app-printable-ticket>
   </div>
 </div>

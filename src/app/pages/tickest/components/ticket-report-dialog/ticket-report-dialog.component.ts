@@ -27,7 +27,7 @@ export class TicketReportDialogComponent implements OnInit {
 
   public productTicketLists: any = {};
   public contractList: any = {};
-  public tranposrtList: any = {};
+  public transportList: any = {};
   public clientList: any = {};
   public totals: any = {
     products: {
@@ -103,19 +103,25 @@ export class TicketReportDialogComponent implements OnInit {
             }
           }
 
-          if(this.tranposrtList[ticket.truckerId] == null) {
-            this.tranposrtList[ticket.truckerId] = ticket.getTransport(this.db);
+          if(this.transportList[ticket.truckerId] == null) {
+            this.transportList[ticket.truckerId] = ticket.getTransport(this.db);
           }
         });
 
-        await this.contractList;
-        await this.clientList;
-        await this.tranposrtList;
+        await this.awaitAllObjectValues(this.contractList);
+        await this.awaitAllObjectValues(this.clientList);
+        await this.awaitAllObjectValues(this.transportList);
 
         this.productTicketLists = tempTicketList;
         this.generatingReport = false;
         this.reportGenerated = true;
       });
+  }
+
+  private async awaitAllObjectValues(object: any): Promise<void> {
+    for(let key of Object.keys(object)){
+      object[key] = await object[key];
+    }
   }
 
   private getFirebaseQueryFn(): QueryFn {
@@ -147,7 +153,7 @@ export class TicketReportDialogComponent implements OnInit {
     }
 
     if(this.reportType == ReportType.IdRange) {
-      return this.startId != null && this.endId != null && this.startId < this.endId;
+      return this.startId != null && this.endId != null && this.startId <= this.endId;
     }
   }
 
