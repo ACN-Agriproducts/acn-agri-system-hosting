@@ -38,5 +38,5 @@ export class PrintableTicketComponent implements OnInit {
       {label: 'Tank', value: this.ticket.tank},
     ];
   }
-
 }
+ 
