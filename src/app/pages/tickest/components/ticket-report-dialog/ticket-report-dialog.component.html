@@ -9,7 +9,7 @@
   
   <div>
     <label>Report Type</label>
-    <mat-radio-group [(ngModel)]="reportOutputType" [disabled]="reportGenerated">
+    <mat-radio-group [(ngModel)]="reportOutputType">
       <mat-radio-button [value]="getOutputType().pdf">PDF</mat-radio-button>
       <mat-radio-button [value]="getOutputType().excel">Excel</mat-radio-button>
     </mat-radio-group>
