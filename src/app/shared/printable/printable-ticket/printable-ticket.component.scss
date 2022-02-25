@@ -1,10 +1,8 @@
-:host {
-  background-color: white;
-  width: 197mm;
-  height: 154mm;
-}
-
 .ticket-container {
+  background-color: white;
+  width: 7.5in;
+  height: 10in;
+
   display: grid;
   height: 100%;
 
@@ -56,7 +54,7 @@
 
   #transport-grid {
     display: grid;
-    height: 90%;
+    height: 130px;
     font-size: 12px;
 
     grid-template-columns: 1fr 1fr 1fr;
@@ -86,7 +84,7 @@
     #customer-info {
       padding: 0.2em;
       outline: 1px solid black;
-      height: 90%;
+      height: 130px;
     }
   }
 }

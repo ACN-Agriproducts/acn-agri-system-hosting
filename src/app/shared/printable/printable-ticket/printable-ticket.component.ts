@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Contact } from '@shared/classes/contact';
+import { Contract } from '@shared/classes/contract';
+import { Ticket } from '@shared/classes/ticket';
 
 
 @Component({
@@ -6,16 +9,14 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
   templateUrl: './printable-ticket.component.html',
   styleUrls: ['./printable-ticket.component.scss']
 })
-export class PrintableTicketComponent implements OnInit, OnChanges {
-  @Input() ticket: any;
-  @Input() contract: any;
-  @Input() transport: any;
-  @Input() client: any;
+export class PrintableTicketComponent implements OnInit {
+  @Input() ticket: Ticket;
+  @Input() contract: Contract;
+  @Input() transport: Contact;
+  @Input() client: Contact;
   public valuesList: any[] = [{label: 'test', value: 'test' }];
 
   constructor() {}
-
-  ngOnChanges(changes: SimpleChanges) {}
 
   ngOnInit(): void {
     this.valuesList = [
@@ -26,16 +27,16 @@ export class PrintableTicketComponent implements OnInit, OnChanges {
       {label: 'PPB', value: this.ticket.PPB},
       {label: 'Lot', value: null},
       {label: 'Foreign Mat.', value: null},
-      {label: 'Load #', value: 5},
+      {label: 'Load #', value: null},
       {label: 'U.S. Grade', value: this.ticket.grade},
       {label: 'Origin', value: this.ticket.origin},
       {label: 'DryWeight', value: this.ticket.dryWeight},
       {label: 'Orig. Ticket #', value: this.ticket.original_ticket},
-      {label: 'Discount/100lbs', value: this.ticket.dryWeightPercent * 100},
+      {label: 'Discount/100lbs', value: (this.ticket.dryWeight / this.ticket.getNet() * 1000) % 1 / 10},
       {label: 'Orig Weight', value: this.ticket.original_weight},
-      {label: 'DryWeight', value: 54780},
-      {label: 'Tank', value: 'Tank 5'},
+      {label: 'DryWeight', value: this.ticket.dryWeight},
+      {label: 'Tank', value: this.ticket.tank},
     ];
   }
-
 }
+ 
