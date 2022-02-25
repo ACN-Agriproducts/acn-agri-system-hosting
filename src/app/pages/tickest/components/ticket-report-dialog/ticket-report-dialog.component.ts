@@ -63,10 +63,15 @@ export class TicketReportDialogComponent implements OnInit {
       Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant),
       this.getFirebaseQueryFn()).get().toPromise().then(async result => {
         const tempTicketList = {};
-        const promises = [];
 
-        result.forEach(ticketSnap => {
+        const sorterTicketList = result.docs.sort((a, b) => a.data().id - b.data().id);
+
+        sorterTicketList.forEach(ticketSnap => {
           const ticket = ticketSnap.data();
+
+          if(ticket.void){
+            return;
+          }
 
           //Check if product list exists
           if(tempTicketList[ticket.productName] == null) {
