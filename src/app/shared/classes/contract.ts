@@ -152,7 +152,7 @@ export class Contract extends FirebaseDocInterface {
     public static getDoc(db: AngularFirestore, company: string, isPurchaseContract: boolean, contractId: number): Promise<Contract> {
         return this.getCollectionReference(db, company, isPurchaseContract).where('id', '==', contractId).limit(1)
             .get().then(result => {
-                return result[0].data();
+                return result.docs[0].data();
             });
     }
 
