@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore, CollectionReference, QueryDocumentSnapshot, QueryFn } from '@angular/fire/compat/firestore';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
+import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -60,8 +61,9 @@ export class TicketReportDialogComponent implements OnInit {
 
     return this.db.collection<Ticket>(
       Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant),
-      this.getFirebaseQueryFn()).get().toPromise().then(result => {
+      this.getFirebaseQueryFn()).get().toPromise().then(async result => {
         const tempTicketList = {};
+        const promises = [];
 
         result.forEach(ticketSnap => {
           const ticket = ticketSnap.data();
@@ -91,8 +93,24 @@ export class TicketReportDialogComponent implements OnInit {
           this.totals.inventory.dryWeight[ticket.tank] += ticket.dryWeight;
 
           // Get needed documents (contract, transport, client)
-          //ticket.
-        })
+          if(this.contractList[ticket.contractID] == null) {
+            this.contractList[ticket.contractID] = ticket.getContract(this.db);
+
+            if(this.clientList[ticket.clientName] == null) {
+              this.clientList[ticket.clientName] = this.contractList[ticket.contractID].then((contract: Contract) => {
+                return contract.getClient();
+              });
+            }
+          }
+
+          if(this.tranposrtList[ticket.truckerId] == null) {
+            this.tranposrtList[ticket.truckerId] = ticket.getTransport(this.db);
+          }
+        });
+
+        await this.contractList;
+        await this.clientList;
+        await this.tranposrtList;
 
         this.productTicketLists = tempTicketList;
         this.generatingReport = false;
