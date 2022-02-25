@@ -91,6 +91,7 @@
     <h2>{{ticketList.key}}</h2>
     <table class='ticket-report-table' id="{{ticketList.key}}">
       <tr>
+        <th>date</th>
         <th>ID</th>
         <th>Client</th>
         <th>Contract</th>
@@ -102,6 +103,7 @@
         <th>Dry Weight</th>
       </tr>
       <tr *ngFor="let ticket of ticketList.value">
+        <td>{{ticket.dateOut | date:'shortDate'}}</td>
         <td>{{ticket.id}}</td>
         <td>{{ticket.clientName}}</td>
         <td>{{ticket.contractID}}</td>
@@ -113,6 +115,7 @@
         <td>{{ticket.dryWeight}}</td>
       </tr>
       <tr>
+        <td></td>
         <td></td>
         <td>Totals</td>
         <td></td>
