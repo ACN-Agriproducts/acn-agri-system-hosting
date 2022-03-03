@@ -390,11 +390,11 @@ h6 {
   }
   .invoice-container {
     margin: 0 !important;
-    max-width: 100% !important;
+    max-width: calc(100% - 100px) !important;
     margin: 0 !important;
     border: none !important;
     padding: 50px !important;
-    height: 100vh !important;
+    height: calc(100vh - 100px) !important;
   }
   .table td,
   .table th {
