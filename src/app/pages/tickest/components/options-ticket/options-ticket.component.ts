@@ -7,6 +7,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
 import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
+import { async } from '@firebase/util';
 
 @Component({
   selector: 'app-options-ticket',
@@ -19,6 +20,8 @@ export class OptionsTicketComponent implements OnInit {
   public downloadURL: Observable<string | null>;
   public downloadString: string;
   public userPermissions: any;
+  private userName: string;
+
 
   constructor(
     public dialog: MatDialog,
@@ -28,7 +31,7 @@ export class OptionsTicketComponent implements OnInit {
     private navController: NavController,
     private db: AngularFirestore,
     private localStorage: Storage,
-    private alertController: AlertController
+    private alertController: AlertController,
   ) { }
 
   ngOnInit() {
@@ -39,6 +42,7 @@ export class OptionsTicketComponent implements OnInit {
 
     this.localStorage.get('user').then(data => {
       this.userPermissions = data.currentPermissions;
+      this.userName = data.name;
     });
   }
   public openDialog = async () => {
@@ -80,24 +84,41 @@ export class OptionsTicketComponent implements OnInit {
     let alert = await this.alertController.create({
       header: "Alert",
       message: "Are you sure you want to void this ticket?",
+      inputs: [
+        {
+          name: 'voidReason',
+          type: 'textarea',
+          placeholder: 'reason',
+          value: this.ticket.voidReason
+        }
+      ],
       buttons: [
         {
           text: "Cancel",
-          role: 'cancel',
+          role: 'cancel'
         },
         {
           text:"Accept",
-          handler: async () => {
+          handler: async (data) => {
             alert.dismiss();
-            await this.db.doc(this.collectionPath  + '/' + this.ticket.docId).update(
-              this.userPermissions.admin || this.userPermissions.tickets.voidTicketAccept ? 
-              {
-                void: true,
-                voidRequest: false
-              } :
-              {
-                voidRequest: true
-              });
+
+            const updateDoc: any = {}
+
+            if(this.userPermissions.admin || this.userPermissions.tickets.voidTicketAccept) {
+              updateDoc.void = true;
+              updateDoc.voidRequest = false;
+              updateDoc.voidAcceptor = this.userName;
+
+              if(!this.ticket.voidRequest) {
+                updateDoc.voidReason = data.voidReason;
+              }
+            } else {
+              updateDoc.voidRequest = true;
+              updateDoc.voidReason = data.voidReason;
+              updateDoc.voidRequester = this.userName
+            }
+
+            await this.db.doc(this.collectionPath  + '/' + this.ticket.docId).update(updateDoc);
           }
         }]
     })

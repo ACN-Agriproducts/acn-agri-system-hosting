@@ -34,8 +34,10 @@ export class Ticket extends FirebaseDocInterface{
     public truckerId: string;
     public vehicleID: string;
     public void: boolean;
+    public voidAcceptor: string;
     public voidReason: string;
     public voidRequest: boolean;
+    public voidRequester: string;
     public weight: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
@@ -72,8 +74,10 @@ export class Ticket extends FirebaseDocInterface{
         this.truckerId = data.truckerId;
         this.vehicleID = data.vehicleID;
         this.void = data.void;
+        this.voidAcceptor =  data.voidAcceptor;
         this.voidReason = data.voidReason;
         this.voidRequest = data.voidRequest;
+        this.voidRequester = data.voidRequester;
         this.weight = data.weight;
     }
 
@@ -109,8 +113,10 @@ export class Ticket extends FirebaseDocInterface{
                 truckerId: data.truckerId,
                 vehicleID: data.vehicleID,
                 void: data.void,
+                voidAcceptor: data.voidAcceptor,
                 voidReason: data.voidReason,
                 voidRequest: data.voidRequest,
+                voidRquester: data.voidRequester,
                 weight: data.weight
             }
         },
