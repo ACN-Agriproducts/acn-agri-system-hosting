@@ -80,7 +80,11 @@ const routes: Routes = [
     path: '**',
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
+  },  {
+    path: 'reports',
+    loadChildren: () => import('./pages/reports/reports.module').then( m => m.ReportsPageModule)
   },
+
 ];
 
 @NgModule({
