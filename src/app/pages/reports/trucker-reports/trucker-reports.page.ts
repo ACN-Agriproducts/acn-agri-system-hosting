@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
+import { utils, WorkBook, writeFile } from 'xlsx';
 
 @Component({
   selector: 'app-trucker-reports',
@@ -118,6 +119,20 @@ export class TruckerReportsPage implements OnInit {
       this.truckerList = tempTruckerList;
       this.checkedTruckers = [];
     });
+  }
+
+  public download(): void {
+    const tableCollection = document.getElementsByClassName("trucker-table");
+    const workBook: WorkBook = utils.book_new();
+
+    for(let i = 0; i < tableCollection.length; i++) {
+      const table = tableCollection[i];
+      const workSheet = utils.table_to_sheet(table);
+      utils.book_append_sheet(workBook, workSheet, table.id);
+    }
+
+    const today = new Date();
+    writeFile(workBook, 'trucker-report' + today.toDateString() + ".xlsx");
   }
 }
 

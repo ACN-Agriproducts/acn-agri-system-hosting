@@ -55,6 +55,7 @@
             </div>
           </ion-item>
           <button mat-button (click)="mergeTruckers()">Merge</button>
+          <button mat-button (click)="download()">Download</button>
         </ion-card-content>
       </ion-card>
     </ion-col>
@@ -63,7 +64,7 @@
       <mat-card>
         <div id="printable-report">
           <div *ngFor="let trucker of truckerList">
-            <table>
+            <table class="trucker-table" id="{{trucker.name}}">
               <tr>
                 <th colspan="6">{{trucker.name}}</th>
               </tr>
