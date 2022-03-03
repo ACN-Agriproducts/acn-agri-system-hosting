@@ -34,7 +34,7 @@
               </mat-form-field>
             </ion-col>
           </ion-row>
-          <button mat-button (click)="getTickets()">Submit</button>
+          <button mat-button (click)="getTickets()" [disabled]="startDate == null || endDate == null || chosenPlants.length == 0 ">Submit</button>
         </ion-card-content>
       </ion-card>
 
@@ -43,11 +43,57 @@
           <ion-card-title>Truckers</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          
+          <ion-item class="trucker-item" *ngFor="let trucker of truckerList">
+            <mat-checkbox (change)="truckerCheckChange($event, trucker)" slot="start"></mat-checkbox>
+            {{trucker.name}}
+            <div class="freight-input" slot="end">
+              <mat-form-field appearance="standard">
+                <mat-label>Freight</mat-label>
+                <span matPrefix>$</span>
+                <input matInput type="number" [(ngModel)]="trucker.freight">
+              </mat-form-field>
+            </div>
+          </ion-item>
+          <button mat-button (click)="mergeTruckers()">Merge</button>
         </ion-card-content>
       </ion-card>
     </ion-col>
-    <ion-col size="6"></ion-col>
+    
+    <ion-col size="6">
+      <mat-card>
+        <div id="printable-report">
+          <div *ngFor="let trucker of truckerList">
+            <table>
+              <tr>
+                <th colspan="6">{{trucker.name}}</th>
+              </tr>
+              <tr>
+                <th>Date</th>
+                <th>Id</th>
+                <th>Contract</th>
+                <th>Net Weight</th>
+                <th>Freight</th>
+                <th>Total</th>
+              </tr>
+              <tr *ngFor="let ticket of trucker.tickets">
+                <td>{{ticket.dateOut | date: 'shortDate'}}</td>
+                <td>{{ticket.id}}</td>
+                <td>{{ticket.contractID}}</td>
+                <td>{{ticket.getNet()}}</td>
+                <td>{{trucker.freight | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
+                <td>{{trucker.freight * ticket.getNet() / 100 | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
+              </tr>
+              <tr>
+                <th colspan="3">Totals</th>
+                <th>{{trucker.totalWeight}}</th>
+                <th></th>
+                <th>{{trucker.freight * trucker.totalWeight / 100  | currency:'USD':'symbol-narrow':'0.3-3'}}</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </mat-card>
+    </ion-col>
   </ion-row>
 
 

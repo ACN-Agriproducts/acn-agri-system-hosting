@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
@@ -16,10 +17,12 @@ export class TruckerReportsPage implements OnInit {
   public endDate: Date;
 
   public truckerList: truckerTickets[];
+  public checkedTruckers: truckerTickets[] = [];
 
   constructor(
     private db: AngularFirestore,
-    private localStorage: Storage
+    private localStorage: Storage,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -43,9 +46,16 @@ export class TruckerReportsPage implements OnInit {
     this.endDate.setHours(23, 59, 59, 999);
 
     this.chosenPlants.forEach(plant => {
-      const promise = plant.getTicketCollectionReference().where('dateOut', '>=', this.startDate).where('dateOut', '<=', this.endDate).get().then(result =>{ 
+      const promise = plant.getTicketCollectionReference()
+        .where('dateOut', '>=', this.startDate)
+        .where('dateOut', '<=', this.endDate).get().then(result =>{ 
         result.forEach(snap => {
-          ticketList.push(snap.data());
+          const ticket = snap.data();
+          if(ticket.void) {
+            return;
+          }
+
+          ticketList.push(ticket);
         });
       });
 
@@ -57,19 +67,74 @@ export class TruckerReportsPage implements OnInit {
     const _truckerList: truckerTickets[] = [];
 
     ticketList.forEach(ticket => {
-      let trucker = _truckerList.find(t => t.name == ticket.driver);
+      let trucker = _truckerList.find(t => t.name == ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' '));
       
       if(trucker) {
         trucker.addTicket(ticket);
       }
       else {
-        trucker = new truckerTickets(ticket.driver);
+        trucker = new truckerTickets(ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' '));
         trucker.addTicket(ticket);
         _truckerList.push(trucker);
       }
     });
 
+    _truckerList.sort((a, b) => {
+      if(a.name < b.name) return -1;
+      if(a.name > b.name) return 1;
+      return 0;
+    });
+
     this.truckerList = _truckerList;
+  }
+
+  public truckerCheckChange(event: any, trucker: truckerTickets): void {
+    if(event.checked) {
+      this.checkedTruckers.push(trucker);
+    }
+    else {
+      this.checkedTruckers = this.checkedTruckers.filter(t => t.name != trucker.name);
+    }
+
+    console.log(this.checkedTruckers);
+  }
+
+  public mergeTruckers(): void {
+    this.dialog.open(DialogChooseName, {
+      data: this.checkedTruckers
+    }).afterClosed().toPromise().then((name: string) => {
+      if(!name) {
+        return;
+      }
+
+      const tempTruckerList = this.truckerList.filter(t => !this.checkedTruckers.some(trucker => trucker.name == t.name));
+      tempTruckerList.push(truckerTickets.merge(name.toUpperCase().trim(), ...this.checkedTruckers));
+      tempTruckerList.sort((a, b) => {
+        if(a.name < b.name) return -1;
+        if(a.name > b.name) return 1;
+        return 0;
+      });
+
+      this.truckerList = tempTruckerList;
+      this.checkedTruckers = [];
+    });
+  }
+}
+
+@Component({
+  selector: 'dialog-choose-name',
+  templateUrl: './dialog-choose-name.html'
+})
+export class DialogChooseName {
+  public name: string;
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogChooseName>,
+    @Inject(MAT_DIALOG_DATA) public truckerList: truckerTickets[] 
+  ) {}
+
+  onCancel(): void {
+    this.dialogRef.close();
   }
 }
 
@@ -83,6 +148,7 @@ class truckerTickets {
     this.name = _name;
     this.tickets = [];
     this.totalWeight = 0;
+    this.freight = 0;
   }
 
   addTicket(ticket: Ticket) {

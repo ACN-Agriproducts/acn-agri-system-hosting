@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { TruckerReportsPageRoutingModule } from './trucker-reports-routing.module';
 
-import { TruckerReportsPage } from './trucker-reports.page';
+import { DialogChooseName, TruckerReportsPage } from './trucker-reports.page';
 import { CoreModule } from '@core/core.module';
 
 @NgModule({
@@ -15,8 +15,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     IonicModule,
     TruckerReportsPageRoutingModule,
-    CoreModule
+    CoreModule,
   ],
-  declarations: [TruckerReportsPage]
+  declarations: [TruckerReportsPage, DialogChooseName]
 })
 export class TruckerReportsPageModule {}
