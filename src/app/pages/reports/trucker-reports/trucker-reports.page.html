@@ -17,8 +17,8 @@
             <ion-col>
               <mat-form-field>
                 <mat-label>Plants</mat-label>
-                <mat-select multiple>
-                  <mat-option *ngFor="let plant of plantList" [value]="plant" [(ngModel)]="chosenPlants">{{plant.ref.id | titlecase}}</mat-option>
+                <mat-select multiple [(ngModel)]="chosenPlants">
+                  <mat-option *ngFor="let plant of plantList" [value]="plant">{{plant.ref.id | titlecase}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </ion-col>
@@ -26,14 +26,24 @@
               <mat-form-field>
                 <mat-label>Date Range</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
-                  <input matStartDate placeholder="Start date">
-                  <input matEndDate placeholder="End date">
+                  <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                  <input matEndDate placeholder="End date" [(ngModel)]="endDate">
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
               </mat-form-field>
             </ion-col>
           </ion-row>
+          <button mat-button (click)="getTickets()">Submit</button>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card *ngIf="truckerList">
+        <ion-card-header>
+          <ion-card-title>Truckers</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          
         </ion-card-content>
       </ion-card>
     </ion-col>
