@@ -88,7 +88,8 @@ export class OptionsTicketComponent implements OnInit {
         {
           name: 'voidReason',
           type: 'textarea',
-          placeholder: 'reason'
+          placeholder: 'reason',
+          value: this.ticket.voidReason
         }
       ],
       buttons: [
