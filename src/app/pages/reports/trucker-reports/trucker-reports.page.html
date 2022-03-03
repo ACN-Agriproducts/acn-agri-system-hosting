@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Trucker Reports</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-row>
+    <ion-col size="6">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Report Information</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col>
+              <mat-form-field>
+                <mat-label>Plants</mat-label>
+                <mat-select multiple>
+                  <mat-option *ngFor="let plant of plantList" [value]="plant" [(ngModel)]="chosenPlants">{{plant.ref.id | titlecase}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ion-col>
+            <ion-col>
+              <mat-form-field>
+                <mat-label>Date Range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date">
+                  <input matEndDate placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col size="6"></ion-col>
+  </ion-row>
+
+
+</ion-content>
