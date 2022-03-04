@@ -25,3 +25,17 @@ table {
         padding-right: 5px;
     }
 }
+
+.trucker-table, app-printable-ticket {
+    page-break-after: always;
+}
+
+mat-spinner {
+    display: inline;
+}
+
+@media screen {
+    app-printable-ticket {
+        display: none;
+    }
+}

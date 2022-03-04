@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
+import { Contact } from '@shared/classes/contact';
+import { Contract } from '@shared/classes/contract';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
@@ -18,7 +20,9 @@ export class TruckerReportsPage implements OnInit {
   public endDate: Date;
 
   public truckerList: truckerTickets[];
-  public checkedTruckers: truckerTickets[] = [];
+  public checkedTruckers: truckerTickets[];
+  public printableTicketsDone: number = 0;
+  public ticketsBoxChecked: boolean = false;
 
   constructor(
     private db: AngularFirestore,
@@ -91,13 +95,18 @@ export class TruckerReportsPage implements OnInit {
 
   public truckerCheckChange(event: any, trucker: truckerTickets): void {
     if(event.checked) {
+      if(!this.checkedTruckers) {
+        this.checkedTruckers = [];
+      }
       this.checkedTruckers.push(trucker);
     }
     else {
       this.checkedTruckers = this.checkedTruckers.filter(t => t.name != trucker.name);
-    }
 
-    console.log(this.checkedTruckers);
+      if(this.checkedTruckers.length == 0) {
+        this.checkedTruckers = null;
+      }
+    }
   }
 
   public mergeTruckers(): void {
@@ -117,7 +126,7 @@ export class TruckerReportsPage implements OnInit {
       });
 
       this.truckerList = tempTruckerList;
-      this.checkedTruckers = [];
+      this.checkedTruckers = null;
     });
   }
 
@@ -133,6 +142,15 @@ export class TruckerReportsPage implements OnInit {
 
     const today = new Date();
     writeFile(workBook, 'trucker-report' + today.toDateString() + ".xlsx");
+  }
+
+  public getTruckerPrintableTickets(): void {
+    this.ticketsBoxChecked = true;
+    this.truckerList.forEach(trucker => {
+      trucker.getPrintableTicketInfo(this.db).then(result => {
+        this.printableTicketsDone++;
+      });
+    })
   }
 }
 
@@ -158,6 +176,7 @@ class truckerTickets {
   public tickets: Ticket[];
   public freight: number;
   public totalWeight: number;
+  public printableTicketInfo: [Ticket, Contract, Contact, Contact][];
 
   constructor(_name: string) {
     this.name = _name;
@@ -170,6 +189,18 @@ class truckerTickets {
     this.tickets.push(ticket);
     this.totalWeight += ticket.getNet();
   }
+
+  public getPrintableTicketInfo(db: AngularFirestore): Promise<void> {
+    const printableInfo: Promise<[Ticket, Contract, Contact, Contact]>[] = [];
+
+    this.tickets.forEach(ticket => {
+      printableInfo.push(ticket.getPrintDocs(db));
+    });
+
+     return Promise.all<[Ticket, Contract, Contact, Contact]>(printableInfo).then(result => {
+      this.printableTicketInfo = result;
+    });
+  } 
 
   static merge(name: string, ...truckers: truckerTickets[]): truckerTickets {
     const newTrucker = new truckerTickets(name);

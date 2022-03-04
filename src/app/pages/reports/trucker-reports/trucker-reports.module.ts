@@ -8,6 +8,8 @@ import { TruckerReportsPageRoutingModule } from './trucker-reports-routing.modul
 
 import { DialogChooseName, TruckerReportsPage } from './trucker-reports.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -16,6 +18,8 @@ import { CoreModule } from '@core/core.module';
     IonicModule,
     TruckerReportsPageRoutingModule,
     CoreModule,
+    SharedModule,
+    NgxPrintModule
   ],
   declarations: [TruckerReportsPage, DialogChooseName]
 })

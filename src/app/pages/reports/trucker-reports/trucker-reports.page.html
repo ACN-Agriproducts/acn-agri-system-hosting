@@ -56,6 +56,14 @@
           </ion-item>
           <button mat-button (click)="mergeTruckers()">Merge</button>
           <button mat-button (click)="download()">Download</button>
+          <button mat-button
+            ngxPrint
+            [useExistingCss]="true"
+            printSectionId="printable-report"
+            [disabled]="ticketsBoxChecked && printableTicketsDone < truckerList.length"
+          >Print</button>
+          <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">Print with tickets</mat-checkbox>
+          <mat-spinner [diameter]="20" *ngIf="ticketsBoxChecked && printableTicketsDone < truckerList.length"></mat-spinner>
         </ion-card-content>
       </ion-card>
     </ion-col>
@@ -63,7 +71,7 @@
     <ion-col size="6">
       <mat-card>
         <div id="printable-report">
-          <div *ngFor="let trucker of truckerList">
+          <div *ngFor="let trucker of (checkedTruckers || truckerList)">
             <table class="trucker-table" id="{{trucker.name}}">
               <tr>
                 <th colspan="6">{{trucker.name}}</th>
@@ -91,6 +99,13 @@
                 <th>{{trucker.freight * trucker.totalWeight / 100  | currency:'USD':'symbol-narrow':'0.3-3'}}</th>
               </tr>
             </table>
+            <app-printable-ticket 
+              *ngFor="let info of trucker.printableTicketInfo"
+              [ticket]="info[0]"
+              [contract]="info[1]"
+              [transport]="info[2]"
+              [client]="info[3]"
+              ></app-printable-ticket>
           </div>
         </div>
       </mat-card>

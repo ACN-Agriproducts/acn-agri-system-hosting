@@ -149,6 +149,14 @@ export class Ticket extends FirebaseDocInterface{
         return this.ref.parent.withConverter(Ticket.converter);
     }
 
+    public async getPrintDocs(db: AngularFirestore): Promise<[Ticket, Contract, Contact, Contact]> {
+        const contract = await this.getContract(db);
+        const transport = await this.getTransport(db);
+        const client = await contract.getClient();
+
+        return [this, contract, transport, client];
+    }
+
     public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference<Ticket> {
         return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.converter);
     }
