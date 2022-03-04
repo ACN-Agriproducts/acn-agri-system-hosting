@@ -8,6 +8,7 @@ import { ReportsPageRoutingModule } from './reports-routing.module';
 
 import { ReportsPage } from './reports.page';
 import { CoreModule } from '@core/core.module';
+import { CardButtonComponent } from './components/card-button/card-button.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { CoreModule } from '@core/core.module';
     ReportsPageRoutingModule,
     CoreModule
   ],
-  declarations: [ReportsPage]
+  declarations: [ReportsPage, CardButtonComponent]
 })
 export class ReportsPageModule {}
