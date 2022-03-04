@@ -19,7 +19,8 @@ import { NgxPrintModule } from 'ngx-print';
     TruckerReportsPageRoutingModule,
     CoreModule,
     SharedModule,
-    NgxPrintModule
+    NgxPrintModule,
+    CoreModule
   ],
   declarations: [TruckerReportsPage, DialogChooseName]
 })
