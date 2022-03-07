@@ -19,6 +19,8 @@ export class TruckerReportsPage implements OnInit {
   public chosenPlants: Plant[];
   public startDate: Date;
   public endDate: Date;
+  public startFreight: number = 0;
+  public InTicketsOnly: boolean = false;
 
   public transportList: transportGroup[];
   public printableTicketsDone: number = 0;
@@ -57,7 +59,8 @@ export class TruckerReportsPage implements OnInit {
         .where('dateOut', '<=', this.endDate).get().then(result =>{ 
         result.forEach(snap => {
           const ticket = snap.data();
-          if(ticket.void) {
+
+          if(ticket.void || this.InTicketsOnly && !ticket.in) {
             return;
           }
 
@@ -86,7 +89,7 @@ export class TruckerReportsPage implements OnInit {
         trucker = transport.addDriver(ticket.driver);
       }
 
-      trucker.addTicket(ticket);  
+      trucker.addTicket(ticket, this.startFreight);  
     });
 
     tempTransportList.forEach(transport => {
@@ -97,6 +100,7 @@ export class TruckerReportsPage implements OnInit {
       });
     });
 
+    this.ticketsBoxChecked = false;
     this.transportList = tempTransportList;
   }
 
@@ -142,7 +146,7 @@ export class TruckerReportsPage implements OnInit {
     this.transportList.forEach(transport => {
       transport.drivers.forEach(trucker => {
         trucker.getPrintableTicketInfo(this.db).then(result => {
-          this.printableTicketsDone++;
+          this.printableTicketsDone += trucker.getTicketAmount();
         });
       });
     });
@@ -207,7 +211,7 @@ class transportGroup {
     });
   }
 
-  public addTicket(ticket: Ticket): void {
+  public addTicket(ticket: Ticket, freight: number): void {
     const driverName = ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
     let driver = this.drivers.find(t => t.name == driverName);
     
@@ -215,7 +219,7 @@ class transportGroup {
       driver = this.addDriver(driverName);
     }
 
-    driver.addTicket(ticket);
+    driver.addTicket(ticket, freight);
   }
 
   public addDriver(name: string): truckerTickets {
@@ -262,11 +266,12 @@ class truckerTickets {
   constructor(_name: string) {
     this.name = _name.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
     this.tickets = [];
+    this.printableTicketInfo = [];
     this.checked = false;
   }
 
-  addTicket(ticket: Ticket) {
-    this.tickets.push(new ticketCheck(ticket));
+  addTicket(ticket: Ticket, freight: number) {
+    this.tickets.push(new ticketCheck(ticket, freight));
   }
 
   public getPrintableTicketInfo(db: AngularFirestore): Promise<void> {
@@ -328,11 +333,10 @@ class truckerTickets {
 
   public getFreightTotal(): number {
     let total: number = 0;
+    const ticketList = this.getCheckedTickets();
 
-    this.tickets.forEach(ticket => {
-      if(ticket.checked){
-        total += ticket.getFreight();
-      }
+    ticketList.forEach(ticket => {
+      total += ticket.getFreight();
     })
 
     return total;
@@ -342,12 +346,21 @@ class truckerTickets {
     return this.tickets.length;
   }
 
+  public changeAllFreight(freight: number): void {
+    console.log(freight)
+
+    this.tickets.forEach(ticket => {
+      ticket.freight = freight;
+    })
+  }
+
   static merge(name: string, ...truckers: truckerTickets[]): truckerTickets {
     const newTrucker = new truckerTickets(name);
     newTrucker.checked = true;
 
     truckers.forEach(trucker => {
       newTrucker.tickets.push(...trucker.tickets);
+      newTrucker.printableTicketInfo.push(...trucker.printableTicketInfo);
     });
 
     return newTrucker;
@@ -359,9 +372,9 @@ class ticketCheck {
   public checked: boolean;
   public freight: number;
 
-  constructor(_ticket: Ticket) {
+  constructor(_ticket: Ticket, freight: number ) {
     this.ticket = _ticket;
-    this.freight = 0;
+    this.freight = freight;
   }
 
   public getDescription(): string {
