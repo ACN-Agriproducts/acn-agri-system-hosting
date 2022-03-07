@@ -75,6 +75,12 @@ export class LayoutComponent implements OnInit {
       icon: 'bag',
       permission: p => this.hasPermission('tickets', p) && p.developer,
       permissionName: 'portfolio'
+    },
+    {
+      title: "Reports",
+      url: '/dashboard/reports',
+      icon: 'bar-chart',
+      permission: p => this.hasPermission('tickets', p),
     }
   ];
   public collapse$: Observable<boolean>;

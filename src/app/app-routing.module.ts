@@ -67,6 +67,10 @@ const routes: Routes = [
             path: 'portfolio',
             loadChildren: () => import('./pages/portfolio/portfolio.module').then( m => m.PortfolioPageModule)
           },
+          {
+            path:'reports',
+            loadChildren: () => import('./pages/reports/reports.module').then(m => m.ReportsPageModule)
+          }
         ]
       },
     ]
@@ -81,6 +85,11 @@ const routes: Routes = [
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
   },
+  {
+    path: 'reports',
+    loadChildren: () => import('./pages/reports/reports.module').then( m => m.ReportsPageModule)
+  },
+
 ];
 
 @NgModule({

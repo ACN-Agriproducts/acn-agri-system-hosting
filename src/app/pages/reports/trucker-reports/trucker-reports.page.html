@@ -1,0 +1,142 @@
+<app-header-toolbar titulo="Trucker Reports"></app-header-toolbar>
+
+
+
+<ion-content>
+  <ion-row>
+    <ion-col size="6">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Report Information</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <ion-col size="5">
+              <mat-form-field>
+                <mat-label>Plants</mat-label>
+                <mat-select multiple [(ngModel)]="chosenPlants">
+                  <mat-option *ngFor="let plant of plantList" [value]="plant">{{plant.ref.id | titlecase}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="5">
+              <mat-form-field>
+                <mat-label>Date Range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                  <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </ion-col>
+
+            <ion-col size="2">
+              <mat-form-field>
+                <mat-label>Freight</mat-label>
+                <span matPrefix>$</span>
+                <input matInput type="number" [(ngModel)]="startFreight">
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <button mat-button (click)="getTickets()" [disabled]="startDate == null || endDate == null || chosenPlants.length == 0 ">Submit</button>
+          <mat-checkbox [(ngModel)]="InTicketsOnly">Only In Tickets</mat-checkbox>
+        </ion-card-content>
+      </ion-card>
+
+      <ng-container *ngIf="transportList">
+        <ion-card *ngFor="let transport of transportList">
+          <ion-card-header>
+            <ion-card-title *ngIf="transport.transport">{{transport.transport.name}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item *ngFor="let trucker of transport.drivers">
+              <div class="trucker-item">
+                <div class="item-line">
+                  <mat-checkbox [checked]="trucker.checked"
+                                [indeterminate]="trucker.someChecked()"
+                                (change)="trucker.setAll($event.checked)">
+                    {{trucker.name}}
+                  </mat-checkbox>
+                  <mat-form-field appearance="fill" class="freight-input">
+                    <mat-label>Freight</mat-label>
+                    <span matPrefix>$</span>
+                    <input matInput type="number" [value]="startFreight" (change)="trucker.changeAllFreight($event.target.valueAsNumber)">
+                  </mat-form-field>
+                </div>
+                <div class="tickets-block">
+                  <div class="item-line" *ngFor="let ticket of trucker.tickets">
+                    <mat-checkbox [(ngModel)]="ticket.checked"
+                                  (change)="trucker.updateChecked()"
+                      >
+                      {{ticket.getDescription()}}
+                    </mat-checkbox>
+                    <mat-form-field class="freight-input">
+                      <mat-label>Freight</mat-label>
+                      <span matPrefix>$</span>
+                      <input matInput type="number" [(ngModel)]="ticket.freight">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </ion-item>
+            <button mat-button (click)="mergeTruckers(transport)">Merge</button>
+          </ion-card-content>
+        </ion-card>
+        <button mat-raised-button (click)="download()">Download</button>
+        <button mat-raised-button
+          ngxPrint
+          [useExistingCss]="true"
+          printSectionId="printable-report"
+          [disabled]="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"
+        >Print</button>
+        <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">Print with tickets</mat-checkbox>
+        <mat-spinner [diameter]="20" *ngIf="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"></mat-spinner>
+      </ng-container>
+    </ion-col>    
+    <ion-col size="6">
+      <mat-card>
+        <div id="printable-report" *ngIf="transportList">
+          <div *ngFor="let trucker of this.getCheckedTruckersOnly()">
+            <table class="trucker-table" id="{{trucker.name}}">
+              <tr>
+                <th colspan="6">{{trucker.name}}</th>
+              </tr>
+              <tr>
+                <th>Date</th>
+                <th>Id</th>
+                <th>Contract</th>
+                <th>Net Weight</th>
+                <th>Freight</th>
+                <th>Total</th>
+              </tr>
+              <tr *ngFor="let ticket of trucker.getCheckedTickets()">
+                <td>{{ticket.ticket.dateOut | date: 'shortDate'}}</td>
+                <td>{{ticket.ticket.id}}</td>
+                <td>{{ticket.ticket.contractID}}</td>
+                <td>{{ticket.ticket.getNet()}}</td>
+                <td>{{ticket.freight | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
+                <td>{{ticket.freight * ticket.ticket.getNet() / 100 | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
+              </tr>
+              <tr>
+                <th colspan="3">Totals</th>
+                <th>{{trucker.getWeightTotal()}}</th>
+                <th></th>
+                <th>{{trucker.getFreightTotal()  | currency:'USD':'symbol-narrow':'0.3-3'}}</th>
+              </tr>
+            </table>
+            <app-printable-ticket 
+              *ngFor="let info of trucker.printableTicketInfo"
+              [ticket]="info[0]"
+              [contract]="info[1]"
+              [transport]="info[2]"
+              [client]="info[3]"
+              ></app-printable-ticket>
+          </div>
+        </div>
+      </mat-card>
+    </ion-col>
+  </ion-row>
+
+
+</ion-content>
