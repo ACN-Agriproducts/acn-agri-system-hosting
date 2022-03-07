@@ -80,7 +80,7 @@ export class LayoutComponent implements OnInit {
       title: "Reports",
       url: '/dashboard/reports',
       icon: 'bar-chart',
-      permission: p => this.hasPermission('reports', p),
+      permission: p => this.hasPermission('tickets', p),
     }
   ];
   public collapse$: Observable<boolean>;

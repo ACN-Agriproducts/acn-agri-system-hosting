@@ -72,17 +72,17 @@
               </div>
             </ion-item>
             <button mat-button (click)="mergeTruckers(transport)">Merge</button>
-            <button mat-button (click)="download()">Download</button>
-            <button mat-button
-              ngxPrint
-              [useExistingCss]="true"
-              printSectionId="printable-report"
-              [disabled]="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"
-            >Print</button>
-            <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">Print with tickets</mat-checkbox>
-            <mat-spinner [diameter]="20" *ngIf="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"></mat-spinner>
           </ion-card-content>
         </ion-card>
+        <button mat-raised-button (click)="download()">Download</button>
+        <button mat-raised-button
+          ngxPrint
+          [useExistingCss]="true"
+          printSectionId="printable-report"
+          [disabled]="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"
+        >Print</button>
+        <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">Print with tickets</mat-checkbox>
+        <mat-spinner [diameter]="20" *ngIf="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"></mat-spinner>
       </ng-container>
     </ion-col>    
     <ion-col size="6">
