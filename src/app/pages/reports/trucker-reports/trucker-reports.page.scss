@@ -3,13 +3,23 @@
 }
 
 .trucker-item {
-    display: flexbox;
+    width: 100%;
+}
+
+.item-line {
+    display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tickets-block{
+    margin-left: 20px;
 }
 
 .freight-input {
     width: 100px;
-    align-self: flex-end;
+    font-size: small;
 }
 
 table {

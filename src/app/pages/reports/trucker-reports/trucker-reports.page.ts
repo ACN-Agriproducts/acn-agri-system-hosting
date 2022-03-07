@@ -14,13 +14,13 @@ import { utils, WorkBook, writeFile } from 'xlsx';
   styleUrls: ['./trucker-reports.page.scss'],
 })
 export class TruckerReportsPage implements OnInit {
+  private currentCompany: string;
   public plantList: Plant[];
   public chosenPlants: Plant[];
   public startDate: Date;
   public endDate: Date;
 
-  public truckerList: truckerTickets[];
-  public checkedTruckers: truckerTickets[];
+  public transportList: transportGroup[];
   public printableTicketsDone: number = 0;
   public ticketsBoxChecked: boolean = false;
 
@@ -32,6 +32,7 @@ export class TruckerReportsPage implements OnInit {
 
   ngOnInit() {
     this.localStorage.get('currentCompany').then(companyName => {
+      this.currentCompany = companyName;
       Plant.getCollectionReference(this.db, companyName).get().then(result => {
         const tempPlantList: Plant[] = [];
 
@@ -69,64 +70,55 @@ export class TruckerReportsPage implements OnInit {
 
     await Promise.all(promises);
 
-    const _truckerList: truckerTickets[] = [];
+    const tempTransportList: transportGroup[] = [];
 
     ticketList.forEach(ticket => {
-      let trucker = _truckerList.find(t => t.name == ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' '));
-      
-      if(trucker) {
-        trucker.addTicket(ticket);
+      let transport = tempTransportList.find(t => t.id == ticket.truckerId);
+
+      if(transport == null){ 
+        transport = new transportGroup(ticket.truckerId, this.currentCompany, this.db);
+        tempTransportList.push(transport);
       }
-      else {
-        trucker = new truckerTickets(ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' '));
-        trucker.addTicket(ticket);
-        _truckerList.push(trucker);
+
+      let trucker = transport.getDriver(ticket.driver);
+
+      if(trucker == null) {
+        trucker = transport.addDriver(ticket.driver);
       }
+
+      trucker.addTicket(ticket);  
     });
 
-    _truckerList.sort((a, b) => {
-      if(a.name < b.name) return -1;
-      if(a.name > b.name) return 1;
-      return 0;
+    tempTransportList.forEach(transport => {
+      transport.drivers.sort((a, b) => {
+        if(a.name < b.name) return -1;
+        if(a.name > b.name) return 1;
+        return 0;
+      });
     });
 
-    this.truckerList = _truckerList;
+    this.transportList = tempTransportList;
   }
 
-  public truckerCheckChange(event: any, trucker: truckerTickets): void {
-    if(event.checked) {
-      if(!this.checkedTruckers) {
-        this.checkedTruckers = [];
-      }
-      this.checkedTruckers.push(trucker);
-    }
-    else {
-      this.checkedTruckers = this.checkedTruckers.filter(t => t.name != trucker.name);
+  public mergeTruckers(transport: transportGroup): void {
+    const checkedTruckers = transport.getCheckedDrivers();
 
-      if(this.checkedTruckers.length == 0) {
-        this.checkedTruckers = null;
-      }
-    }
-  }
-
-  public mergeTruckers(): void {
     this.dialog.open(DialogChooseName, {
-      data: this.checkedTruckers
+      data: checkedTruckers
     }).afterClosed().toPromise().then((name: string) => {
       if(!name) {
         return;
       }
 
-      const tempTruckerList = this.truckerList.filter(t => !this.checkedTruckers.some(trucker => trucker.name == t.name));
-      tempTruckerList.push(truckerTickets.merge(name.toUpperCase().trim(), ...this.checkedTruckers));
+      const tempTruckerList = transport.drivers.filter(t => !checkedTruckers.some(trucker => trucker.name == t.name));
+      tempTruckerList.push(truckerTickets.merge(name.toUpperCase().trim(), ...checkedTruckers));
       tempTruckerList.sort((a, b) => {
         if(a.name < b.name) return -1;
         if(a.name > b.name) return 1;
         return 0;
       });
 
-      this.truckerList = tempTruckerList;
-      this.checkedTruckers = null;
+      transport.drivers = tempTruckerList;
     });
   }
 
@@ -146,11 +138,42 @@ export class TruckerReportsPage implements OnInit {
 
   public getTruckerPrintableTickets(): void {
     this.ticketsBoxChecked = true;
-    this.truckerList.forEach(trucker => {
-      trucker.getPrintableTicketInfo(this.db).then(result => {
-        this.printableTicketsDone++;
+
+    this.transportList.forEach(transport => {
+      transport.drivers.forEach(trucker => {
+        trucker.getPrintableTicketInfo(this.db).then(result => {
+          this.printableTicketsDone++;
+        });
       });
-    })
+    });
+  }
+
+  public getCheckedTruckersOnly(): truckerTickets[] {
+    const list = [];
+
+    this.transportList.forEach(transport => {
+      if(transport.someChecked()){
+        list.push(...transport.getCheckedDrivers());
+      }
+    });
+
+    if(list.length == 0){
+      this.transportList.forEach(transport => {
+        list.push(...transport.drivers);
+      });
+    }
+
+    return list;
+  }
+
+  public getTicketAmount(): number {
+    let total = 0;
+
+    this.transportList.forEach(transport => {
+      total += transport.getTicketAmount();
+    });
+
+    return total;
   }
 }
 
@@ -170,46 +193,182 @@ export class DialogChooseName {
     this.dialogRef.close();
   }
 }
+class transportGroup { 
+  public transport: Contact;
+  public id: string;
+  public drivers: truckerTickets[];
+
+  constructor(_id: string, company: string, db: AngularFirestore) {
+    this.id = _id;
+    this.drivers = [];
+
+    Contact.getDoc(db, company, _id).then(result => {
+      this.transport = result;
+    });
+  }
+
+  public addTicket(ticket: Ticket): void {
+    const driverName = ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
+    let driver = this.drivers.find(t => t.name == driverName);
+    
+    if(driver == null) {
+      driver = this.addDriver(driverName);
+    }
+
+    driver.addTicket(ticket);
+  }
+
+  public addDriver(name: string): truckerTickets {
+    const driver = new truckerTickets(name);
+    this.drivers.push(driver);
+    return driver;
+  }
+
+  public getDriver(name: string): truckerTickets {
+    return this.drivers.find(t => t.name == name.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' '))
+  }
+
+  public getCheckedDrivers(): truckerTickets[] {
+    const checked = this.drivers.filter(d => d.checked);
+
+    if(checked.length == 0) {
+      return this.drivers;
+    }
+
+    return checked;
+  }
+
+  public someChecked(): boolean {
+    return this.drivers.some(d => d.checked);
+  }
+
+  public getTicketAmount(): number {
+    let total = 0;
+
+    this.drivers.forEach(driver => {
+      total += driver.getTicketAmount();
+    });
+
+    return total;
+  }
+}
 
 class truckerTickets {
   public name: string;
-  public tickets: Ticket[];
-  public freight: number;
-  public totalWeight: number;
+  public checked: boolean;
+  public tickets: ticketCheck[];
   public printableTicketInfo: [Ticket, Contract, Contact, Contact][];
 
   constructor(_name: string) {
-    this.name = _name;
+    this.name = _name.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
     this.tickets = [];
-    this.totalWeight = 0;
-    this.freight = 0;
+    this.checked = false;
   }
 
   addTicket(ticket: Ticket) {
-    this.tickets.push(ticket);
-    this.totalWeight += ticket.getNet();
+    this.tickets.push(new ticketCheck(ticket));
   }
 
   public getPrintableTicketInfo(db: AngularFirestore): Promise<void> {
     const printableInfo: Promise<[Ticket, Contract, Contact, Contact]>[] = [];
 
     this.tickets.forEach(ticket => {
-      printableInfo.push(ticket.getPrintDocs(db));
+      printableInfo.push(ticket.ticket.getPrintDocs(db));
     });
 
      return Promise.all<[Ticket, Contract, Contact, Contact]>(printableInfo).then(result => {
       this.printableTicketInfo = result;
     });
-  } 
+  }
+  
+  public someChecked(): boolean {
+    const numChecked = this.tickets.filter(t => t.checked).length;
+
+    return numChecked < this.tickets.length && numChecked > 0;
+  }
+
+  public updateChecked(): void {
+    if(this.tickets.some(t => t.checked)) {
+      this.checked = true;
+      return;
+    }
+
+    this.checked = false;
+  }
+
+  public getCheckedTickets(): ticketCheck[] {
+    const list = this.tickets.filter(t => t.checked);
+
+    if(list.length == 0) {
+      return this.tickets;
+    }
+
+    return list;
+  }
+
+  public setAll(value: boolean): void {
+    this.tickets.forEach(ticket => {
+      ticket.checked = value;
+    });
+
+    this.checked = value;
+  }
+
+  public getWeightTotal(): number {
+    let total: number = 0;
+
+    this.tickets.forEach(ticket => {
+      if(ticket.checked){
+        total += ticket.ticket.getNet();
+      }
+    })
+
+    return total;
+  }
+
+  public getFreightTotal(): number {
+    let total: number = 0;
+
+    this.tickets.forEach(ticket => {
+      if(ticket.checked){
+        total += ticket.getFreight();
+      }
+    })
+
+    return total;
+  }
+
+  public getTicketAmount(): number {
+    return this.tickets.length;
+  }
 
   static merge(name: string, ...truckers: truckerTickets[]): truckerTickets {
     const newTrucker = new truckerTickets(name);
+    newTrucker.checked = true;
 
     truckers.forEach(trucker => {
       newTrucker.tickets.push(...trucker.tickets);
-      newTrucker.totalWeight += trucker.totalWeight;
     });
 
     return newTrucker;
+  }
+}
+
+class ticketCheck {
+  public ticket: Ticket;
+  public checked: boolean;
+  public freight: number;
+
+  constructor(_ticket: Ticket) {
+    this.ticket = _ticket;
+    this.freight = 0;
+  }
+
+  public getDescription(): string {
+    return `${this.ticket.in? 'IN' : 'OUT'} TICKET ${this.ticket.id}`
+  }
+
+  public getFreight(): number {
+    return this.freight * this.ticket.getNet() / 100;
   }
 }
