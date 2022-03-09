@@ -261,6 +261,7 @@ export class CreateInvoicePage implements OnInit {
     invoice.total = this.total;
     invoice.status = "pending";
     invoice.id = this.id;
+    invoice.needsAttention = true;
 
     this.db.collection(`companies/${this.currentCompany}/invoices`).add(invoice);
 
