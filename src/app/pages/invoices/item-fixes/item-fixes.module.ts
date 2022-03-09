@@ -8,7 +8,6 @@ import { ItemFixesPageRoutingModule } from './item-fixes-routing.module';
 
 import { ItemFixesPage } from './item-fixes.page';
 import { CoreModule } from '@core/core.module';
-import { ItemFormComponent } from './components/item-form/item-form.component';
 
 @NgModule({
   imports: [
@@ -20,8 +19,7 @@ import { ItemFormComponent } from './components/item-form/item-form.component';
     ReactiveFormsModule
   ],
   declarations: [
-    ItemFixesPage,
-    ItemFormComponent
+    ItemFixesPage
   ]
 })
 export class ItemFixesPageModule {}

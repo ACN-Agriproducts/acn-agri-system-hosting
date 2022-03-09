@@ -1,5 +1,5 @@
-<app-header-toolbar titulo="{{'Invoice ' + invoiceId}}"></app-header-toolbar>
-<ion-content *ngIf="invoiceData">
+<app-header-toolbar titulo="{{'Invoice ' + invoice.id}}" *ngIf="invoice"></app-header-toolbar>
+<ion-content *ngIf="invoice">
   <ion-row>
     <ion-col size='6'>
       <ion-card>
@@ -9,35 +9,35 @@
             <ion-row>
               <ion-col size='7'>
                 <span class="info-label">Name:</span>
-                <span class="info-content">{{invoiceData.seller.name}}</span>
+                <span class="info-content">{{invoice.seller.name}}</span>
               </ion-col>
               <ion-col size='5'>
                 <span class="info-label">Phone #</span>
-                <span class="info-content">{{invoiceData.seller.phone}}</span>
+                <span class="info-content">{{invoice.seller.phone}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
                 <span class="info-label">Street</span>
-                <span class="info-content">{{invoiceData.seller.street}}</span>
+                <span class="info-content">{{invoice.seller.street}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size='5'>
                 <span class="info-label">City</span>
-                <span class="info-content">{{invoiceData.seller.city}}</span>                
+                <span class="info-content">{{invoice.seller.city}}</span>                
               </ion-col>
               <ion-col size='2'>              
                 <span class="info-label">ZIP</span>
-                <span class="info-content">{{invoiceData.seller.zip}}</span>                
+                <span class="info-content">{{invoice.seller.zip}}</span>                
               </ion-col>
               <ion-col size='2'>              
                 <span class="info-label" >State</span>
-                <span class="info-content">{{invoiceData.seller.state}}</span>                
+                <span class="info-content">{{invoice.seller.state}}</span>                
               </ion-col>
               <ion-col size='3'>              
                 <span class="info-label">Country</span>
-                <span class="info-content">{{invoiceData.seller.country}}</span>                
+                <span class="info-content">{{invoice.seller.country}}</span>                
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -53,35 +53,35 @@
             <ion-row>
               <ion-col size='7'>
                 <span class="info-label">Name:</span>
-                <span class="info-content">{{invoiceData.buyer.name}}</span>
+                <span class="info-content">{{invoice.buyer.name}}</span>
               </ion-col>
               <ion-col size='5'>
                 <span class="info-label">Phone #</span>
-                <span class="info-content">{{invoiceData.buyer.phone}}</span>
+                <span class="info-content">{{invoice.buyer.phone}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
                 <span class="info-label">Street</span>
-                <span class="info-content">{{invoiceData.buyer.street}}</span>
+                <span class="info-content">{{invoice.buyer.street}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size='5'>
                 <span class="info-label">City</span>
-                <span class="info-content">{{invoiceData.buyer.city}}</span>                
+                <span class="info-content">{{invoice.buyer.city}}</span>                
               </ion-col>
               <ion-col size='2'>              
                 <span class="info-label">ZIP</span>
-                <span class="info-content">{{invoiceData.buyer.zip}}</span>                
+                <span class="info-content">{{invoice.buyer.zip}}</span>                
               </ion-col>
               <ion-col size='2'>              
                 <span class="info-label" >State</span>
-                <span class="info-content">{{invoiceData.buyer.state}}</span>                
+                <span class="info-content">{{invoice.buyer.state}}</span>                
               </ion-col>
               <ion-col size='3'>              
                 <span class="info-label">Country</span>
-                <span class="info-content">{{invoiceData.buyer.country}}</span>                
+                <span class="info-content">{{invoice.buyer.country}}</span>                
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -89,9 +89,89 @@
       </ion-card>
     </ion-col>
 
-    <ion-col *ngFor="let item of invoiceData.items; let i = index" size="6">
-      <app-item-form *ngIf="productList && plantsList" [item]="item" [invoiceRef]="invoiceDoc.ref" [index]="i" 
-        [productList]="productList" [plantsList]="plantsList"></app-item-form>
+    <ion-col *ngFor="let item of invoice.items; let i = index" size="6">
+      <ion-card>
+        <ion-card-header>
+          <span>Item {{i + 1}}</span>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <mat-form-field>
+                    <mat-label>Item Name</mat-label>
+                    <input matInput disabled [value]="item.name">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="2">
+                  <mat-form-field>
+                    <mat-label>Quantity</mat-label>
+                    <input matInput type="number" disabled [value]="item.quantity">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="2">
+                  <mat-form-field>
+                    <mat-label>Price</mat-label>
+                    <div matPrefix>$</div>
+                    <input matInput type="number" disabled [value]="item.price">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="2">
+                  <mat-checkbox [(ngModel)]="item.affectsInventory">Inv.</mat-checkbox>
+                </ion-col>
+              </ion-row>
+              <div>
+                <div>
+                  <ion-row *ngFor="let info of item.inventoryInfo; let i = index">
+                    <ion-col size="1">
+                      <button mat-icon-button color='warn' (click)="deleteInfo(item.inventoryInfo, i)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </ion-col>
+                    <ion-col size="3">
+                      <mat-form-field>
+                        <mat-label>Product</mat-label>
+                        <mat-select [(ngModel)]="info.product">
+                          <mat-option *ngFor="let product of productList" value={{product.ref.id}}>{{product.ref.id}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="2">
+                      <mat-form-field>
+                        <mat-label>Quantity</mat-label>
+                        <input matInput type="number" [(ngModel)]="info.quantity">
+                        <div matSuffix>lbs</div>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="3">
+                      <mat-form-field>
+                        <mat-label>Plant</mat-label>
+                        <mat-select [(ngModel)]="info.plant">
+                          <mat-option *ngFor="let plant of plantsList" value="{{plant.ref.id}}" >{{plant.ref.id | titlecase}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                    <ion-col size="3">
+                      <mat-form-field>
+                        <mat-label>Storage</mat-label>
+                        <mat-select [disabled]="!info.plant" [(ngModel)]="info.tank">
+                          <mat-option *ngFor="let tank of getPlantInv(info.plant)" value="{{tank.name}}">{{tank.name}}</mat-option>
+                          <mat-option value="none">None</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ion-col>
+                  </ion-row>
+                </div>
+              </div>
+            </ion-grid>
+          </ion-item>
+          <ion-item lines="none">
+            <button mat-button color="primary" (click)="addInvButton(item.inventoryInfo)">+ Add Inv...</button>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
     </ion-col>
   </ion-row>
+  <button mat-button color="primary" (click)="submit()" [disabled]="!formValid()">Submit</button>
 </ion-content>

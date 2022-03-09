@@ -7,12 +7,12 @@ export abstract class FirebaseDocInterface {
         this.ref = snapshot.ref.withConverter(converter);
     }
 
-    public set(db: AngularFirestore): Promise<void> {
+    public set(): Promise<void> {
         return this.ref.set(this);
     }
 
     public update(db: AngularFirestore, data: any): Promise<void> {
-        return db.doc(this.ref).update(data);
+        return db.doc(this.ref.parent.doc(this.ref.id)).update(data);
     }
 
     public delete(): Promise<void> {

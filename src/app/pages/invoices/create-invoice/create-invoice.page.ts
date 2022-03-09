@@ -145,11 +145,8 @@ export class CreateInvoicePage implements OnInit {
   }
 
   addInventoryInfo(index: number): void {
-    console.log(index);
     const infos = this.invoiceForm.get(['items', index, 'inventoryInfo', 'info']) as FormArray;
-    console.log(infos)
     infos.push(this.createInventoryInfo());
-    console.log(infos)
   }
 
   deleteInventoryInfo(invIndex: number, infoIndex: number): void {
@@ -195,8 +192,6 @@ export class CreateInvoicePage implements OnInit {
     let item = this.itemsList.find(i => i.name == value);
 
     if(item == null){
-      console.log(this.itemsList);
-      console.log(value);
       console.log("Item not found");
       return;
     }
@@ -213,7 +208,7 @@ export class CreateInvoicePage implements OnInit {
       inventoryInfo.removeAt(0);
     }
     
-    for(const info of item.inventoryInfo){
+    for(const info of item.inventoryInfo.info){
       inventoryInfo.push(this.fb.group({
         product: info.product,
         quantity: info.quantity,
@@ -266,6 +261,7 @@ export class CreateInvoicePage implements OnInit {
     invoice.total = this.total;
     invoice.status = "pending";
     invoice.id = this.id;
+    invoice.needsAttention = true;
 
     this.db.collection(`companies/${this.currentCompany}/invoices`).add(invoice);
 
