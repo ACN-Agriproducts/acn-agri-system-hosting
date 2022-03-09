@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, DocumentSnapshot } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { Invoice, inventoryInfo } from '@shared/classes/invoice';
+import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product'
+
 
 @Component({
   selector: 'app-item-fixes',
@@ -11,11 +15,9 @@ import { Storage } from '@ionic/storage';
 })
 export class ItemFixesPage implements OnInit {
   public firestoreId: string;
-  public invoiceId: number = 0;
-  public invoiceDoc: DocumentSnapshot<any>;
-  public invoiceData: any;
-  public productList: any[];
-  public plantsList: any[];
+  public invoice: Invoice;
+  public productList: Product[];
+  public plantsList: Plant[];
 
   private currentCompany: string = "";
   public ready: boolean = false;
@@ -32,20 +34,61 @@ export class ItemFixesPage implements OnInit {
     this.localStorage.get("currentCompany").then(val => {
       this.currentCompany = val;
 
-      this.db.doc<any>(`companies/${this.currentCompany}/invoices/${this.firestoreId}`).get().subscribe(document => {
-        this.invoiceDoc = document;
-        this.invoiceData = document.data();
-        this.invoiceId = this.invoiceData.id;
+      Invoice.getDocById(this.db, this.currentCompany, this.firestoreId).then(invoice => {
+        this.invoice = invoice;
       });
 
-      this.db.collection<any>(`companies/${this.currentCompany}/products`).get().subscribe(query => {
-        this.productList = query.docs;
-      });
-
-      this.db.collection<any>(`companies/${this.currentCompany}/plants`).get().subscribe(query => {
-        this.plantsList = query.docs;
+      Product.getProductList(this.db, this.currentCompany).then(result => {
+        this.productList = result;
       })
-    })
+      
+
+      Plant.getPlantList(this.db, this.currentCompany).then(result => {
+        this.plantsList = result;
+      });
+    });
   }
 
+  deleteInfo(item: inventoryInfo[], index: number) {
+    item.splice(index, 1);
+  }
+
+  getPlantInv(plantName: string) {
+    const plant = this.plantsList.find(p => p.ref.id == plantName);
+    
+    if(plant) {
+      return plant.inventory;
+    }
+
+    return [];
+  }
+
+  addInvButton(info: inventoryInfo[]) {
+    info.push(new inventoryInfo({}));
+  }
+
+  formValid(): boolean {
+    for(const item of this.invoice.items) {
+      if(!item.affectsInventory) {
+        continue;
+      }
+
+      if(item.inventoryInfo.length == 0) {
+        return false;
+      }
+
+      for(const info of item.inventoryInfo) {
+        if(info.plant == null || info.product == null || info.quantity == null || info.tank == null) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  submit() {
+    this.invoice.needsAttention = false;
+    this.invoice.set();
+  }
 }
