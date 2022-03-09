@@ -57,6 +57,18 @@ export class Plant extends FirebaseDocInterface {
     public static getDocReference(db: AngularFirestore, company: string, plant: string): DocumentReference<Plant> {
         return db.firestore.doc(`companies/${company}/plants/${plant}`).withConverter(Plant.converter);
     }
+
+    public static getPlantList(db: AngularFirestore, company: string): Promise<Plant[]> {
+        return Plant.getCollectionReference(db, company).get().then(result => {
+            const plantList: Plant[] = [];
+
+            result.docs.forEach(doc => {
+                plantList.push(doc.data());
+            });
+
+            return plantList;
+        });
+    }
 }
 
 class Inventory {
