@@ -6,6 +6,7 @@ export class Invoice extends FirebaseDocInterface {
     public date: Date;
     public id: number;
     public items: item[];
+    public needsAttention: boolean;
     public seller: contactInfo;
     public status: string;
     public total: number;
@@ -31,11 +32,12 @@ export class Invoice extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: Invoice): DocumentData {
             const doc = {
-                buyer: data.buyer,
-                data: data.date,
+                buyer: {...data.buyer},
+                date: data.date,
                 id: data.id,
                 items: [],
-                seller: data.seller,
+                needsAttention: data.needsAttention,
+                seller: {...data.seller},
                 status: data.status,
                 total: data.total 
             }
@@ -45,14 +47,19 @@ export class Invoice extends FirebaseDocInterface {
                     affectsInventory: item.affectsInventory,
                     details: item.details,
                     inventoryInfo: {
-                        info: item.inventoryInfo
+                        info: []
                     },
                     name: item.name,
                     price: item.price,
                     quantity: item.quantity
                 });
+
+                item.inventoryInfo.forEach(info => {
+                    doc.items[doc.items.length-1].inventoryInfo.info.push({...info});
+                });
             });
 
+            console.log(doc);
             return doc;
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Invoice {
@@ -77,11 +84,11 @@ export class Invoice extends FirebaseDocInterface {
     public static getDocById(db: AngularFirestore, company: string, id: string): Promise<Invoice> {
         return db.firestore.doc(`companies/${company}/invoices/${id}`).withConverter(Invoice.converter).get().then(result => {
             return result.data();
-        })
+        });
     }
 }
 
-class item {
+export class item {
     public affectsInventory: boolean;
     public details: string;
     public inventoryInfo: inventoryInfo[];
@@ -103,7 +110,7 @@ class item {
     }
 }
 
-class inventoryInfo {
+export class inventoryInfo {
     public plant: string;
     public product: string;
     public quantity: number;
@@ -117,7 +124,7 @@ class inventoryInfo {
     }
 }
 
-class contactInfo {
+export class contactInfo {
     public city: string;
     public country: string;
     public name: string;
