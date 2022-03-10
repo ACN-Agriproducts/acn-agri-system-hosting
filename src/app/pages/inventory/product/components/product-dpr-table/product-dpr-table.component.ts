@@ -135,7 +135,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
               tempData.endOfDay = lastDay.endOfDay + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
             } 
             else {
-              tempData.endOfDay = this.dprDoc.startingInventory;
+              tempData.endOfDay = this.dprDoc.startingInventory + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
             }
 
             this.tableData.push(tempData);
