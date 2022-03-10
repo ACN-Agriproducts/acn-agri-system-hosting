@@ -44,7 +44,7 @@
             <ion-text color="primary" class="item-text-customer">{{invoice.buyer.name}}</ion-text>
         </ion-item>
         <ion-item lines="none">
-            <ion-text>{{invoice.date.toDate() | date}}</ion-text>
+            <ion-text>{{invoice.date | date}}</ion-text>
         </ion-item>
         <ion-item lines="none">
             <ion-text>{{invoice.status}}</ion-text>
@@ -67,4 +67,8 @@
             </div>
         </ion-item>
     </div>
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="infiniteInvoice($event)">
+        <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading invoices...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-card>
