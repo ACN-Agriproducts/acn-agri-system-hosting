@@ -5,6 +5,8 @@ import { OptionsComponent } from '../options/options.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
+import { IonInfiniteScroll } from '@ionic/angular';
+import { Invoice } from '@shared/classes/invoice';
 
 @Component({
   selector: 'app-table',
@@ -20,7 +22,8 @@ export class TableComponent implements OnInit, OnDestroy {
   public billed: boolean;
 
   private currentCompany:string;
-  public invoiceList: any[];
+  public invoiceList: Invoice[];
+  private step: number = 20;
 
   private currentSub: Subscription;
 
@@ -36,13 +39,15 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
-
-      this.fb.collection(`companies/${this.currentCompany}/invoices`,
-        ref => ref.orderBy("id", "desc")
-        ).valueChanges({idField: "docId"}).subscribe(list => {
-        this.invoiceList = list;
-      })
-    })
+      this.invoiceList = [];
+      Invoice.getCollectionReference(this.fb, this.currentCompany)
+        .orderBy("id", "desc")
+        .limit(this.step)
+        .get().then(result => {
+          const tempList = result.docs.map(doc => doc.data());
+          this.invoiceList.push(...tempList);
+        })
+    });
   }
 
   ngOnDestroy() {
@@ -66,5 +71,21 @@ export class TableComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  public infiniteInvoice(event: any) {
+    Invoice.getCollectionReference(this.fb, this.currentCompany)
+      .orderBy("id", "desc")
+      .startAt(this.invoiceList[this.invoiceList.length-1].id-1)
+      .limit(this.step)
+      .get().then(result => {
+        const tempList = result.docs.map(doc => doc.data());
+        this.invoiceList.push(...tempList);
+        event.target.complete();
+
+        if(result.docs.length < 20) {
+          event.target.disabled = true;
+        }
+      });
   }
 }
