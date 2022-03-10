@@ -23,6 +23,7 @@ export class Invoice extends FirebaseDocInterface {
         this.seller = new contactInfo(data.seller);
         this.status = data.status;
         this.total = data.total;
+        this.needsAttention = data.needsAttention;
 
         data.items.forEach(element => {
             this.items.push(new item(element));
