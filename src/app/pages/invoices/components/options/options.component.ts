@@ -5,6 +5,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { PrintableInvoiceComponent } from '../printable-invoice/printable-invoice.component';
+import { Invoice } from '@shared/classes/invoice';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { PrintableInvoiceComponent } from '../printable-invoice/printable-invoic
   styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent implements OnInit {
-  @Input() public invoice: any;
+  @Input() public invoice: Invoice;
 
   constructor(
     private clipboard: Clipboard,
@@ -45,7 +46,7 @@ export class OptionsComponent implements OnInit {
           seller: this.invoice.seller,
           buyer: this.invoice.buyer,
           id: this.invoice.id,
-          date: this.invoice.date.toDate(),
+          date: this.invoice.date,
           items: this.invoice.items,
           total: this.invoice.total
         },
@@ -61,6 +62,6 @@ export class OptionsComponent implements OnInit {
   }
 
   public openFixInvPage(): void {
-    this.navController.navigateForward(`dashboard/invoices/item-fixes/${this.invoice.docId}`);
+    this.navController.navigateForward(`dashboard/invoices/item-fixes/${this.invoice.ref.id}`);
   }
 }
