@@ -36,8 +36,8 @@ export class DprInvoiceTableComponent implements OnInit {
           status: data.status
         };
         for(const item of data.items) {
-          if(item.affectsInventory && item.inventoryInfo.product == this.productName) {
-            formatedData.total += item.inventoryInfo.quantity * item.quantity;
+          if(item.affectsInventory && item.inventoryInfo.info.product == this.productName) {
+            formatedData.total += item.inventoryInfo.info.quantity * item.quantity;
           }
         }
         this.invoiceData[index] = formatedData;
