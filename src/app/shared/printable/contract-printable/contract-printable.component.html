@@ -99,7 +99,7 @@
         <div class='column-size-2'>Priced</div>
         <div class='column-size-3'>
           <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd || contractForm.delivery_dates">
-            {{contractForm.deliveryDateStart || contractForm.delivery_dates.begin.toDate() | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd || contractForm.delivery_dates.end.toDate() | date:'MM/dd/yy'}}
+            {{contractForm.deliveryDateStart || contractForm.delivery_dates.begin | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd || contractForm.delivery_dates.end | date:'MM/dd/yy'}}
           </ng-container>
           <br><br>
           <div class='underline'>

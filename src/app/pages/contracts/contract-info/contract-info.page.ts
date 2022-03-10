@@ -6,6 +6,8 @@ import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
+import { Contract } from "@shared/classes/contract";
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-contract-info',
@@ -17,14 +19,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public id: string;
   public type: string;
   public currentCompany: string;
-  public currentContract: any;
+  public currentContract: Contract;
   public ready:boolean = false;
-  public ticketList: any[];
+  public ticketList: Ticket[];
   public ticketsReady: boolean = false;
   public contractRef: AngularFirestoreDocument;
   private currentSub: Subscription;
 
-  @ViewChild(TicketsTableComponent) ticketTable: TicketsTableComponent;
   @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
   
   constructor(
@@ -39,28 +40,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.type = this.route.snapshot.paramMap.get('type')
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
-      this.contractRef = this.db.doc(`companies/${val}/${this.type}Contracts/${this.id}`);
-      this.currentSub = this.contractRef.valueChanges().subscribe(val => {
-        this.currentContract = val;
-        this.currentContract.contractType = this.type + "Contracts";
+      Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id).then(contract => {
+        this.currentContract = contract;
         this.ready = true;
-        this.ticketList = [];
-
-        let ticketCounter = 0;
-        this.currentContract.tickets.forEach(ticketRef => {
-          const temp = ticketRef as DocumentReference
-          temp.get().then(ticket => {
-            ticketCounter++;
-
-            if(!ticket.data().void){
-              this.ticketList.push(ticket);
-            }
-
-            if(ticketCounter == this.currentContract.tickets.length) {
-              this.ticketTable.renderComponent(this.ticketList);
-              this.ticketsReady = true;
-            }
-          });
+        this.currentContract.getTickets().then(tickets => {
+          this.ticketList = tickets;
         });
       });
     });

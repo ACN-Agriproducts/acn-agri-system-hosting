@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { MatTable } from '@angular/material/table';
 import { Storage } from '@ionic/storage';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-tickets-table',
@@ -10,16 +11,13 @@ import { Storage } from '@ionic/storage';
 })
 export class TicketsTableComponent implements OnInit {
 
-  public ticketList: any[] = [];
+  @Input() ticketList: Ticket[];
   public displayColumns: string[] = 
     ['id', 'date', 'gross', 'tare', 'net', 'opt'];
-  @ViewChild(MatTable) table: MatTable<any>
 
   constructor() { }
 
-  ngOnInit() {}
-
-  public renderComponent (ticketList: any[]): void {
-    this.ticketList = ticketList;
+  ngOnInit() {
+    console.log(this.ticketList)
   }
 }

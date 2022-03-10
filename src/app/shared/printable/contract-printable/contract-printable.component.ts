@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Contract } from '@shared/classes/contract';
 import { Weight } from '@shared/Weight/weight';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 
@@ -9,7 +10,7 @@ import { WeightUnits } from '@shared/WeightUnits/weight-units';
 })
 export class ContractPrintableComponent implements OnInit {
 
-  @Input() contractForm: any;
+  @Input() contractForm: Contract | any;
   @Input() productsList: any[];
   public date: Date;
 
@@ -18,6 +19,8 @@ export class ContractPrintableComponent implements OnInit {
   ngOnInit() {
     if (!(this.contractForm.date instanceof Date)) {
       this.date = this.contractForm.date.toDate();
+      this.contractForm.delivery_dates.begin = this.contractForm.delivery_dates.begin.toDate();
+      this.contractForm.delivery_dates.end = this.contractForm.delivery_dates.end.toDate();
     }
     else {
       this.date = this.contractForm.date;

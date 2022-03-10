@@ -17,7 +17,7 @@
           <ion-card-header>
             Contract Info
           </ion-card-header>
-          <app-contract-form *ngIf="currentContract && currentContract.contractType" [currentContract]="currentContract" [contractRef]="contractRef"></app-contract-form>
+          <app-contract-form *ngIf="currentContract" [currentContract]="currentContract"></app-contract-form>
         </ion-card>
       </ion-col>
       <ion-col size="5">
@@ -35,7 +35,7 @@
             Ticket List
           </ion-card-header>
           <ion-card-content>
-            <app-tickets-table #ticketTable *ngIf="currentContract != null"></app-tickets-table>
+            <app-tickets-table #ticketTable *ngIf="ticketList" [ticketList]="ticketList"></app-tickets-table>
           </ion-card-content>
         </ion-card>
       </ion-col>
