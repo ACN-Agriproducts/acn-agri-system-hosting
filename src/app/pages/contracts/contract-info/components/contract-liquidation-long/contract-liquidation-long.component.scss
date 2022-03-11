@@ -1,7 +1,7 @@
 :host {
     display: block;
     height: auto; //203.2mm;
-    width: 254mm; //266.7mm;
+    width: 10in; //266.7mm;
     background-color: white;
     // outline: black solid 1px;
     // padding: 12.7mm;
@@ -14,6 +14,7 @@ table {
     line-height: 1.5em;
     table-layout: fixed;
     width: 100%;
+    word-wrap: break-word;
 
     th, td {
         border: black solid 1px;
@@ -21,15 +22,19 @@ table {
     }
 
     .one-fr {
-        column-width: 1fr;
+        width: 42.66px;
     }
 
     .one-and-half-fr {
-        column-width: 2fr
+        width: 64px;
     }
 
     .two-fr {
-        column-width: 2fr;
+        width: 85.33px;
+    }
+
+    .four-and-half-fr {
+        width: 192px;
     }
 
     .total-row {
@@ -47,23 +52,6 @@ table {
     
     .right {
         text-align: right;
-    }
-}
-
-#main-table {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr 1fr 1.5fr 1.5fr 1.5fr 1fr 1fr 1.5fr 1fr 1fr 1.5fr 1fr 1fr 2fr 1fr 1fr 2fr;
-    grid-auto-rows: 1.5em;
-    font-size: xx-small;
-
-    * {
-        outline: black solid 1px;
-        line-height: 1em;
-        display: flex;
-        align-items: center;
-        padding: 0px 2px;
-        color: black;
     }
 }
 

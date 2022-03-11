@@ -116,6 +116,8 @@ export class Contract extends FirebaseDocInterface {
             result.forEach((ticketSnap: DocumentSnapshot<Ticket>) => {
                 tickets.push(ticketSnap.data());
             });
+
+            tickets.sort((a, b) => a.id - b.id);
             
             return tickets;
         });

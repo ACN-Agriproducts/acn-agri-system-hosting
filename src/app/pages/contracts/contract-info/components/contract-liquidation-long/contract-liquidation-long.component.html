@@ -14,6 +14,26 @@
 </div>
 
 <table>
+    <colgroup>
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-and-half-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="one-and-half-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="two-fr">
+        <col class="one-fr">
+        <col class="one-fr">
+        <col class="two-fr">
+    </colgroup>
     <tr>
         <th rowspan="2">INBOUND DATE</th>
         <th rowspan="2">TICKET #</th>
@@ -23,8 +43,8 @@
         <th rowspan="2">ADJUSTED WEIGHT</th>
         <th colspan="2">DAMAGE</th>
         <th rowspan="2">ADJUSTED WEIGHT</th>
-        <th rowspan="2">PRICE ($/BUSHEL)</th>
-        <th rowspan="2">ADJUSTED PRICE ($/BUSHEL)</th>
+        <th rowspan="2">PRICE ($/BU)</th>
+        <th rowspan="2">ADJUSTED PRICE ($/BU)</th>
         <th rowspan="2">TOTAL ($)</th>
         <th rowspan="2">INFESTED</th>
         <th rowspan="2">INSPECTION</th>
@@ -41,24 +61,24 @@
         <th>CWT</th>
     </tr>
     <tr *ngFor="let ticket of ticketList; even as even">
-        <td [class.odd]='!even' [class.even]='even' class='center one-fr'>{{ticket.data.dateIn | date:'shortDate'}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='center one-fr'>{{ticket.data.id}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='center one-fr'>{{ticket.data.contractID}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-and-half-fr'>{{ticket.data.gross}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-and-half-fr'>{{ticket.data.tare}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-and-half-fr'>{{ticket.data.gross - ticket.data.tare}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>{{ticket.data.moisture | number:'1.1-1'}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>{{ticket.data.dryWeight - (ticket.data.gross - ticket.data.tare)}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-and-half-fr'>{{ticket.data.dryWeight}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>{{ticket.data.damage || 0 | number:'1.1-1'}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>{{0 | number:'1.1-1'}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-and-half-fr'>{{ticket.data.dryWeight}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>{{contract.pricePerBushel / 0.56 | currency}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>{{contract.pricePerBushel / 0.56 | currency}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right two-fr'>{{contract.pricePerBushel / 56 * ticket.data.dryWeight | currency}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>${{ticket.discounts.infested | currency}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right one-fr'>${{ticket.discounts.inspection | currency}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right two-fr'>
+        <td [class.odd]='!even' [class.even]='even' class='center'>{{ticket.data.dateIn | date:'shortDate'}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='center'>{{ticket.data.id}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='center'>{{ticket.data.contractID}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.gross}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.tare}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.gross - ticket.data.tare}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.moisture | number:'1.1-1'}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.dryWeight - (ticket.data.gross - ticket.data.tare)}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.dryWeight}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.damage || 0 | number:'1.1-1'}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{0 | number:'1.1-1'}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.data.dryWeight}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 0.56 | currency}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 0.56 | currency}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{contract.pricePerBushel / 56 * ticket.data.dryWeight | currency}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ticket.discounts.infested | currency}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>${{ticket.discounts.inspection | currency}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>
             {{contract.pricePerBushel / 56 * ticket.data.dryWeight - ticket.discounts.infested - ticket.discounts.inspection | currency}}
         </td>
     </tr>
