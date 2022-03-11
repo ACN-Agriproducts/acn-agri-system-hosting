@@ -23,10 +23,10 @@ export class ContractLiquidationLongComponent implements OnInit {
 
   ngOnInit() {
     this.ticketList.forEach(ticket => {
-      this.gross += ticket.discounts.gross;
-      this.tare += ticket.discounts.tare;
-      this.moistureDiscount += ticket.discounts.dryWeight - (ticket.discounts.gross - ticket.discounts.tare);
-      this.moistureAdjustedWeight += ticket.discounts.dryWeight;
+      this.gross += ticket.data.gross;
+      this.tare += ticket.data.tare;
+      this.moistureDiscount += ticket.data.dryWeight - (ticket.data.gross - ticket.data.tare);
+      this.moistureAdjustedWeight += ticket.data.dryWeight;
     });
   }
 

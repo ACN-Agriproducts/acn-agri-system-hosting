@@ -33,7 +33,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private localStorage: Storage,
     private db: AngularFirestore,
-    private modalController: ModalController
     ) { }
 
   ngOnInit() {
