@@ -47,7 +47,6 @@ export class ContractLiquidationLongComponent implements OnInit {
       total += ticket.discounts.inspection;
     });
 
-    console.log(total);
     return total;
   }
 
