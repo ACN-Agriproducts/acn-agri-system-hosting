@@ -5,7 +5,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Ticket } from "./ticket";
 
 export class Contract extends FirebaseDocInterface {
-    afltatoxin: number;
+    aflatoxin: number;
     base: number;
     buyer_terms: number
     client:  DocumentReference<Contact>;
@@ -45,13 +45,13 @@ export class Contract extends FirebaseDocInterface {
         })
         
 
-        this.afltatoxin = data.afltatoxin;
+        this.aflatoxin = data.aflatoxin;
         this.base = data.base;
         this.client = data.client.withConverter(Contact.converter);
         this.clientName = data.clientName;
         this.currentDelivered = data.currentDelivered;
-        this.date = data.date;
-        this.delivery_dates = new DeliveryDates(data.delivery_dates);
+        this.date = data.date.toDate();
+        this.delivery_dates = new DeliveryDates({begin: data.delivery_dates.begin.toDate(), end: data.delivery_dates.end.toDate()});
         this.grade = data.grade;
         this.id = data.id;
         this.loads = data.loads;
@@ -71,7 +71,7 @@ export class Contract extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: Contract): DocumentData {
             return {
-                afltatoxin: data.afltatoxin,
+                aflatoxin: data.aflatoxin,
                 base: data.base,
                 client: data.client,
                 clientName: data.clientName,
@@ -106,16 +106,18 @@ export class Contract extends FirebaseDocInterface {
     public getTickets(): Promise<Ticket[]> {
         const ticketList = [];
 
-        this.tickets.forEach((ticketRef: DocumentReference<Ticket>) => {
-            ticketList.push(ticketRef.get());
+        this.tickets.forEach((ticketRef: DocumentReference<any>) => {
+            ticketList.push(ticketRef.withConverter(Ticket.converter).get());
         });
 
-        return Promise.all(ticketList).then((result): Ticket[] => {
+        return Promise.all(ticketList).then(result => {
             const tickets: Ticket[] = [];
 
             result.forEach((ticketSnap: DocumentSnapshot<Ticket>) => {
                 tickets.push(ticketSnap.data());
             });
+
+            tickets.sort((a, b) => a.id - b.id);
             
             return tickets;
         });
@@ -156,12 +158,18 @@ export class Contract extends FirebaseDocInterface {
             });
     }
 
+    public static getDocById(db: AngularFirestore, company: string, isPurchaseContract: boolean, contractId: string): Promise<Contract> {
+        return this.getCollectionReference(db, company, isPurchaseContract).doc(contractId).get().then(result => {
+            return result.data();
+        });
+    }
+
     public static getStatusEnum(): typeof status {
         return status;
     }
 }
 
-class DeliveryDates {
+export class DeliveryDates {
     begin: Date;
     end: Date;
 
@@ -171,7 +179,7 @@ class DeliveryDates {
     }
 }
 
-class PaymentTerms {
+export class PaymentTerms {
     before: boolean;
     measurement: string;
     origin: boolean;
@@ -185,7 +193,7 @@ class PaymentTerms {
     }
 }
 
-class ProductInfo {
+export class ProductInfo {
     moisture: number;
     name: string;
     weight: number;
