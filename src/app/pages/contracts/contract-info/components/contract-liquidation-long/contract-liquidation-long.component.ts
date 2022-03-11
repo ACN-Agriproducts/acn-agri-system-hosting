@@ -30,6 +30,27 @@ export class ContractLiquidationLongComponent implements OnInit {
     });
   }
 
+  public getTotalInfestedDiscount(): number {
+    let total = 0;
+
+    this.ticketList.forEach(ticket => {
+      total += ticket.discounts.infested;
+    });
+
+    return total;
+  }
+
+  public getTotalInspectionDiscount(): number {
+    let total = 0;
+
+    this.ticketList.forEach(ticket => {
+      total += ticket.discounts.inspection;
+    });
+
+    console.log(total);
+    return total;
+  }
+
   public getDate(): Date {
     return new Date();
   }
