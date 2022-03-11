@@ -1,15 +1,9 @@
 <app-header-toolbar titulo="{{type | titlecase}} Contract {{currentContract.id}}" *ngIf="ready"></app-header-toolbar>
 <mat-toolbar>
-  <button mat-button 
-    printSectionId='ContractLiquidationLong'
-    printTitle='Liquidation'
-    ngxPrint
-    [useExistingCss]='true'
-    [disabled]="!ticketsReady"
-  >Liquidation</button>
+  <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
 </mat-toolbar>
 
-<ion-content>
+<ion-content *ngIf="!showLiquidation">
   <ion-grid *ngIf="ready">
     <ion-row>
       <ion-col size="7">
@@ -53,7 +47,10 @@
   </ion-grid>
 </ion-content>
 
-<app-contract-liquidation-long id='ContractLiquidationLong' class="printable" *ngIf="ticketsReady && currentContract"
-  [ticketList] = "ticketList"
-  [contract] = "currentContract"
-></app-contract-liquidation-long>
+<ion-content *ngIf="showLiquidation">
+  <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
+    *ngIf="ticketList"
+    [ticketList] = "getTicketList()"
+    [contract] = "currentContract"
+  ></app-contract-liquidation-long>
+</ion-content>

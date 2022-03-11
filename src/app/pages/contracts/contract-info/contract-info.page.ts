@@ -24,6 +24,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketList: Ticket[];
   public ticketsReady: boolean = false;
   public contractRef: AngularFirestoreDocument;
+  public showLiquidation: boolean = false;
   private currentSub: Subscription;
 
   @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
@@ -56,15 +57,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     }
   }
 
-  async presentLiquidation(): Promise<void> {
-    const modal = await this.modalController.create({
-      component: ContractLiquidationLongComponent,
-      componentProps: {
-        ticketList: this.ticketList,
-        contract: this.currentContract
-      }
+  getTicketList(): {data: Ticket, discounts: any}[] {
+    const list = [];
+
+    this.ticketList.forEach(ticket => {
+      list.push({data: ticket, discounts: {}});
     });
 
-    return await modal.present();
+    return list;
   }
 }
