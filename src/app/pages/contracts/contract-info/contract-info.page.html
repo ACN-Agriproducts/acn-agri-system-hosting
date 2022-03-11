@@ -48,9 +48,13 @@
 </ion-content>
 
 <ion-content *ngIf="showLiquidation">
+  <div id="ticket-discounts-table">
+
+  </div>
+
   <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
-    *ngIf="ticketList"
-    [ticketList] = "getTicketList()"
+    *ngIf="ticketDiscountList"
+    [ticketList] = "ticketDiscountList"
     [contract] = "currentContract"
   ></app-contract-liquidation-long>
 </ion-content>

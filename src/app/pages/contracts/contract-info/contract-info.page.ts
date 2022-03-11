@@ -22,6 +22,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentContract: Contract;
   public ready:boolean = false;
   public ticketList: Ticket[];
+  public ticketDiscountList: {data: Ticket, discounts: any}[];
   public ticketsReady: boolean = false;
   public contractRef: AngularFirestoreDocument;
   public showLiquidation: boolean = false;
@@ -45,6 +46,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
           this.ticketList = tickets;
+          const list:{data: Ticket, discounts: any}[] = [];
+
+          this.ticketList.forEach(t => {
+            list.push({data: t, discounts: {}});
+          })
+          this.ticketDiscountList = list;
         });
       });
     });
@@ -54,15 +61,5 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     if(this.currentSub != null) {
       this.currentSub.unsubscribe();
     }
-  }
-
-  getTicketList(): {data: Ticket, discounts: any}[] {
-    const list = [];
-
-    this.ticketList.forEach(ticket => {
-      list.push({data: ticket, discounts: {}});
-    });
-
-    return list;
   }
 }
