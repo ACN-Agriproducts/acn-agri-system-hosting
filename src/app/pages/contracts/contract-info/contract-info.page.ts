@@ -49,7 +49,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
           const list:{data: Ticket, discounts: any}[] = [];
 
           this.ticketList.forEach(t => {
-            list.push({data: t, discounts: {}});
+            list.push({data: t, discounts: {infested: 0, inspection:0}});
           })
           this.ticketDiscountList = list;
         });

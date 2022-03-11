@@ -1,3 +1,30 @@
-<p>
-  ticket-discount-table works!
-</p>
+<ion-card>
+  <div class="table-row header">
+    <ion-text>Date</ion-text>
+    <ion-text>ID</ion-text>
+    <ion-text>Moisture</ion-text>
+    <ion-text>Test Wt</ion-text>
+    <ion-text>Gross</ion-text>
+    <ion-text>Tare</ion-text>
+    <ion-text>Net</ion-text>
+    <ion-text>Infested Discount</ion-text>
+    <ion-text>Inspection Discount</ion-text>
+  </div>
+  <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
+    <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
+    <ion-text>{{ticket.data.id}}</ion-text>
+    <ion-text>{{ticket.data.moisture}}</ion-text>
+    <ion-text>{{ticket.data.weight}}</ion-text>
+    <ion-text>{{ticket.data.gross}}</ion-text>
+    <ion-text>{{ticket.data.tare}}</ion-text>
+    <ion-text>{{ticket.data.getNet()}}</ion-text>
+    <mat-form-field>
+      <input matInput [(ngModel)]="ticket.discounts.infested"/>
+      <span matPrefix>$</span>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="ticket.discounts.inspection"/>
+      <span matPrefix>$</span>
+    </mat-form-field>
+  </div>
+</ion-card>
