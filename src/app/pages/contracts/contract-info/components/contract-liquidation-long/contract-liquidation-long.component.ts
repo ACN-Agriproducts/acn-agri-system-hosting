@@ -53,4 +53,8 @@ export class ContractLiquidationLongComponent implements OnInit {
   public getDate(): Date {
     return new Date();
   }
+
+  public getTable(): HTMLElement{ 
+    return document.getElementById("liquidation-table");
+  }
 }

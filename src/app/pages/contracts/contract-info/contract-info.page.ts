@@ -8,6 +8,8 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
+import { utils, WorkBook, writeFile } from 'xlsx';
+
 
 @Component({
   selector: 'app-contract-info',
@@ -61,5 +63,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     if(this.currentSub != null) {
       this.currentSub.unsubscribe();
     }
+  }
+
+  onDownloadLiquidation() {
+    const table = this.printableLiquidation.getTable();
+    const workBook:WorkBook = utils.table_to_book(table);
+
+    writeFile(workBook, `contract-${this.currentContract.id}-liquidation.xlsx`);
   }
 }

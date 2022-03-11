@@ -49,6 +49,12 @@
 
 <ion-content *ngIf="showLiquidation">
   <app-ticket-discount-table [ticketDiscountList]="ticketDiscountList"></app-ticket-discount-table>
+  <button mat-button (click)="onDownloadLiquidation()">Download</button>
+  <button mat-button
+    ngxPrint
+    [useExistingCss]="true"
+    printSectionId="ContractLiquidationLong"
+  >Print</button> 
 
   <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
     *ngIf="ticketDiscountList"
