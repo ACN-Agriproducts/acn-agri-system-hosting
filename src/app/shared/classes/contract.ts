@@ -9,7 +9,29 @@ export class Contract extends FirebaseDocInterface {
     base: number;
     buyer_terms: number
     client:  DocumentReference<Contact>;
+    clientInfo: {
+        caat: string,
+        city: string,
+        email: string,
+        name: string,
+        phoneNumber: string,
+        state: string,
+        streetAddress: string,
+        type: string,
+        zipCode: string
+    };
     clientName: string;
+    clientTicketInfo: {
+        caat: string,
+        city: string,
+        email: string,
+        name: string,
+        phoneNumber: string,
+        state: string,
+        streetAddress: string,
+        type: string,
+        zipCode: string
+    };
     currentDelivered: number;
     date: Date;
     delivery_dates: DeliveryDates;
@@ -48,7 +70,9 @@ export class Contract extends FirebaseDocInterface {
         this.aflatoxin = data.aflatoxin;
         this.base = data.base;
         this.client = data.client.withConverter(Contact.converter);
+        this.clientInfo = data.clientInfo;
         this.clientName = data.clientName;
+        this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = data.currentDelivered;
         this.date = data.date.toDate();
         this.delivery_dates = new DeliveryDates({begin: data.delivery_dates.begin.toDate(), end: data.delivery_dates.end.toDate()});
@@ -75,6 +99,7 @@ export class Contract extends FirebaseDocInterface {
                 base: data.base,
                 client: data.client,
                 clientName: data.clientName,
+                clientTicketInfo: data.clientTicketInfo,
                 currentDelivered: data.currentDelivered,
                 date: data.date,
                 delivery_dates: data.delivery_dates,
@@ -167,6 +192,11 @@ export class Contract extends FirebaseDocInterface {
     public static getStatusEnum(): typeof status {
         return status;
     }
+
+    // TODO
+    // public static new(): Contract {
+    //     return new Contract()
+    // }
 }
 
 export class DeliveryDates {

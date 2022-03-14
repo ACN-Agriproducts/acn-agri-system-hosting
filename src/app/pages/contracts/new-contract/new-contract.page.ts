@@ -150,8 +150,29 @@ export class NewContractPage implements OnInit, OnDestroy {
           base: this.getBushelPrice() - formValue.market_price,
           buyer_terms: "",   //TODO
           client: this.selectedClient.ref,
-          clientInfo: this.selectedClient,
+          clientInfo: {
+            caat: this.selectedClient.caat,
+            city: this.selectedClient.city,
+            email: this.selectedClient.email,
+            name: this.selectedClient.name,
+            phoneNumber: this.selectedClient.phoneNumber,
+            state: this.selectedClient.state,
+            streetAddress: this.selectedClient.streetAddress,
+            type: this.selectedClient.type,
+            zipCode: this.selectedClient.zipCode
+          },
           clientName: formValue.client,
+          clientTicketInfo: {
+            caat: this.ticketClient.caat,
+            city: this.ticketClient.city,
+            email: this.ticketClient.email,
+            name: this.ticketClient.name,
+            phoneNumber: this.ticketClient.phoneNumber,
+            state: this.ticketClient.state,
+            streetAddress: this.ticketClient.streetAddress,
+            type: this.ticketClient.type,
+            zipCode: this.ticketClient.zipCode
+          },
           currentDelivered: 0,
           date: new Date(),
           delivery_dates: {
