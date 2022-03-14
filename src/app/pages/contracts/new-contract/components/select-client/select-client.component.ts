@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Contact } from '@shared/classes/contact';
 
 @Component({
   selector: 'app-select-client',
@@ -7,8 +8,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./select-client.component.scss'],
 })
 export class SelectClientComponent implements OnInit {
-  public clientSelected: any;
-  public clientsList: any[];
+  public clientSelected: Contact;
+  public clientsList: Contact[];
   public searchString: string;
 
   constructor(

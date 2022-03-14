@@ -9,6 +9,8 @@ import { Weight } from '@shared/Weight/weight';
 import {MatDialog} from '@angular/material/dialog';
 import { SelectClientComponent } from './components/select-client/select-client.component';
 import { UniqueContractId } from './components/unique-contract-id';
+import { Contact } from '@shared/classes/contact';
+import { Product } from '@shared/classes/product';
 
 @Component({
   selector: 'app-new-contract',
@@ -19,13 +21,15 @@ export class NewContractPage implements OnInit, OnDestroy {
   currentCompany: string;
   currentCompanyValue: any;
   contactList: any[];
-  productsList: any[];
+  productsList: Product[];
   clientsReady: boolean = false;
   productsReady: boolean = false;
   contractForm: FormGroup;
   currentSubs: Subscription[] = [];
   contractWeight: Weight;
-  selectedClient: any;
+  
+  selectedClient: Contact;
+  ticketClient: Contact;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +43,6 @@ export class NewContractPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.localStorage.get('currentCompany').then(val =>{
       this.currentCompany = val;
-      console.log(`companies/${this.currentCompany}`)
 
       var tempSub = this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe(val => {
         this.currentCompanyValue = val;
@@ -60,12 +63,9 @@ export class NewContractPage implements OnInit, OnDestroy {
       })
       this.currentSubs.push(tempSub);
 
-      tempSub = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: 'name'}).subscribe(val => {
-        this.productsList = val;
-        this.productsReady = true;
-        console.log(this.productsList)
-      })
-      this.currentSubs.push(tempSub);
+      Product.getProductList(this.db, this.currentCompany).then(list => {
+        this.productsList = list
+      });
     })
 
     var today = new Date();
@@ -88,12 +88,14 @@ export class NewContractPage implements OnInit, OnDestroy {
       aflatoxin: [20, Validators.required],
       deliveryDateStart: [],
       deliveryDateEnd: [],
+      useSameClient: [true],
       paymentTerms: this.fb.group({
         before: [false],
         origin: [false],
         paymentTerms: [],
         measurement: []
-      })
+      }),
+      ticketClient: [{value: '', disabled: true}],
     }, { validators: form => Validators.required(form.get('client')) });
 
     this.contractForm.get('product').valueChanges.subscribe(val => {
@@ -109,7 +111,7 @@ export class NewContractPage implements OnInit, OnDestroy {
     this.contractForm.get('quantityUnits').valueChanges.subscribe(val => {
       const tempContractProduct: string = this.contractForm.getRawValue().product;
       if(tempContractProduct) {
-        const tempProduct = this.productsList.find(p => p.name == tempContractProduct);
+        const tempProduct = this.productsList.find(p => p.ref.id == tempContractProduct);
         this.contractWeight.unit = WeightUnits.getUnits(val, tempProduct.weight);
       }
       else {
@@ -220,10 +222,23 @@ export class NewContractPage implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.db.doc(`companies/${this.currentCompany}/directory/${result[0].id}`).get().subscribe(clientDoc => {
-        this.selectedClient = clientDoc.data();
-        this.selectedClient.ref = clientDoc.ref;
-        this.contractForm.controls['client'].setValue(this.selectedClient.name);
+      Contact.getDoc(this.db, this.currentCompany, result[0].id).then(client => {
+        this.selectedClient = client;
+        this.contractForm.controls['client'].setValue(client.name);
+      });
+    });
+  }
+
+  openTicketClientSelect() { 
+    const dialogRef = this.dialog.open(SelectClientComponent, {
+      width: '600px',
+      data: this.contactList
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      Contact.getDoc(this.db, this.currentCompany, result[0].id).then(client => {
+        this.ticketClient = client;
+        this.contractForm.controls['ticketClient'].setValue(client.name);
       });
     });
   }
