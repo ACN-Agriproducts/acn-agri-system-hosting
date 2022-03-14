@@ -147,7 +147,7 @@ export class NewContractPage implements OnInit, OnDestroy {
           aflatoxin: formValue.aflatoxin,
           base: this.getBushelPrice() - formValue.market_price,
           buyer_terms: "",   //TODO
-          client: this.db.doc(`companies/${this.currentCompany}/directory/${formValue.client.id}`).ref,
+          client: this.selectedClient.ref,
           clientInfo: this.selectedClient,
           clientName: formValue.client,
           currentDelivered: 0,
@@ -222,6 +222,7 @@ export class NewContractPage implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       this.db.doc(`companies/${this.currentCompany}/directory/${result[0].id}`).get().subscribe(clientDoc => {
         this.selectedClient = clientDoc.data();
+        this.selectedClient.ref = clientDoc.ref;
         this.contractForm.controls['client'].setValue(this.selectedClient.name);
       });
     });
