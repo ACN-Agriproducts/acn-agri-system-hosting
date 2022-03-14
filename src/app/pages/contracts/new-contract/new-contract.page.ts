@@ -171,7 +171,8 @@ export class NewContractPage implements OnInit, OnDestroy {
             state: this.ticketClient.state,
             streetAddress: this.ticketClient.streetAddress,
             type: this.ticketClient.type,
-            zipCode: this.ticketClient.zipCode
+            zipCode: this.ticketClient.zipCode,
+            id: this.ticketClient.ref
           },
           currentDelivered: 0,
           date: new Date(),

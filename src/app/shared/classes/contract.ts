@@ -30,7 +30,8 @@ export class Contract extends FirebaseDocInterface {
         state: string,
         streetAddress: string,
         type: string,
-        zipCode: string
+        zipCode: string,
+        id: DocumentReference,
     };
     currentDelivered: number;
     date: Date;
@@ -90,6 +91,8 @@ export class Contract extends FirebaseDocInterface {
         this.tickets = data.tickets;
         this.transport = data.transport;
         this.truckers = data.truckers;
+
+        this.clientTicketInfo.id = this.clientTicketInfo.id.withConverter(Contract.converter);
     }
 
     public static converter = {
