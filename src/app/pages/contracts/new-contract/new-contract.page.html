@@ -75,7 +75,7 @@
                 <mat-form-field>
                   <mat-label>Product</mat-label>
                   <mat-select formControlName='product'>
-                    <mat-option *ngFor="let product of productsList" [value]="product">{{product.name}}</mat-option>
+                    <mat-option *ngFor="let product of productsList" [value]="product">{{product.ref.id}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>

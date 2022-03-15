@@ -109,14 +109,7 @@ export class NewContractPage implements OnInit, OnDestroy {
     });
 
     this.contractForm.get('quantityUnits').valueChanges.subscribe(val => {
-      const tempContractProduct: string = this.contractForm.getRawValue().product;
-      if(tempContractProduct) {
-        const tempProduct = this.productsList.find(p => p.ref.id == tempContractProduct);
-        this.contractWeight.unit = WeightUnits.getUnits(val, tempProduct.weight);
-      }
-      else {
-        this.contractWeight.unit = WeightUnits.getUnits(val);
-      }
+      this.contractWeight.unit = WeightUnits.getUnits(val);
     });
   }
 
@@ -194,7 +187,7 @@ export class NewContractPage implements OnInit, OnDestroy {
           product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
           productInfo: {
             moisture: formValue.product.moisture,
-            name: formValue.product.name,
+            name: formValue.product.ref.id,
             weight: formValue.product.weight
           },
           quantity: this.contractWeight.getPounds(),
