@@ -29,7 +29,6 @@ export class DisplayContractComponent implements OnInit {
         if(this.contract.productInfo && this.contract.clientInfo) {
           this.ready = true;
           this.product = this.contract.productInfo;
-          console.log(this.contract)
         }
       });
     }
@@ -42,7 +41,6 @@ export class DisplayContractComponent implements OnInit {
         if(this.contract.productInfo && this.contract.clientInfo) {
           this.ready = true;
           this.product = this.contract.productInfo;
-          console.log(this.contract);
         }
       });
     }

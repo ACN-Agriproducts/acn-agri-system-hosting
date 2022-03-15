@@ -79,7 +79,6 @@ export class EditContactPage implements OnInit {
     this.contactForm.get('caat').setValue(this.doc['caat']);
     this.contactForm.get('type').setValue(this.doc['type']);
 
-    console.log(this.contactForm.getRawValue());
   }
 
   submitButton() {

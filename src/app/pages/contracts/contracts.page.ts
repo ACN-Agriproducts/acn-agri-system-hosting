@@ -101,7 +101,6 @@ export class ContractsPage implements OnInit, AfterViewInit {
       .orderBy(this.sortField, this.assending? 'asc': 'desc')
       .limit(this.contractLimit)
     ).valueChanges({idField: 'documentId'}).subscribe(val => {
-        console.log(val, this.contractLimit);
         this.dataList = val;
         event.target.complete();
 
@@ -136,10 +135,8 @@ export class ContractsPage implements OnInit, AfterViewInit {
     });
     await popover.present();
     await popover.onDidDismiss().then(result => {
-      console.log(result);
       const data = result.data;
       if (data) {
-        console.log(data.filterDate);
         this.dataList = result.data.list;
         this.dataListAux = this.dataList;
         this.listFilter = result.data.filter;
@@ -183,7 +180,6 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public openContractOptions= async (event: any, id: string, contract: any) => {
     event.preventDefault();
     let user = await this.localStorage.get('user')
-    console.log("Button pressed");
     const popover = await this.popoverController.create({
       component: ContractModalOptionsComponent,
       event,

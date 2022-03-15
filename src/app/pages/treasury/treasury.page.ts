@@ -18,7 +18,6 @@ export class TreasuryPage implements OnInit {
   }
 
   public down = (event) => {
-    console.log(event);
     this.press = setTimeout(() => {
       console.log('PRECIONO');
     }, 500);

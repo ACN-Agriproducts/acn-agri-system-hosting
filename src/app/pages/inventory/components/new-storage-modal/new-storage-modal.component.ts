@@ -36,7 +36,6 @@ export class NewStorageModalComponent implements OnInit {
   public async submitForm(): Promise<void> {
     return this.db.firestore.runTransaction(t => {
       return t.get(this.plantRef).then(async plant => {
-        console.log("tuasd")
         if(!plant.exists){
           throw "Document Does not exist"
         }
@@ -51,8 +50,6 @@ export class NewStorageModalComponent implements OnInit {
 
         updateDoc.inventory.push(submitInv);
         updateDoc.inventoryNames.push(submitInv.name);
-
-        console.log(updateDoc);
 
         await t.update(this.plantRef, updateDoc);
 

@@ -291,8 +291,6 @@ export class NewUserPage implements OnInit {
   }
 
   public submitForm() {
-    console.log("Subimtting form...");
-
     let form = this.userForm.getRawValue();
     form.company = this.currentCompany;
 
@@ -302,7 +300,6 @@ export class NewUserPage implements OnInit {
         sub.unsubscribe();
       },
       error => {
-        console.log(error);
         sub.unsubscribe();
       }
     );

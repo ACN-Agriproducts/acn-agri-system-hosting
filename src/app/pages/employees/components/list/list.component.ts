@@ -115,7 +115,6 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {
   }
   public openOptions = async (ev: any, item) => {
-    console.log(item);
     ev.preventDefault();
     const popover = await this.popoverController.create({
       component: OptionsComponent,

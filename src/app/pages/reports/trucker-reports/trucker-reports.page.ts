@@ -347,8 +347,6 @@ class truckerTickets {
   }
 
   public changeAllFreight(freight: number): void {
-    console.log(freight)
-
     this.tickets.forEach(ticket => {
       ticket.freight = freight;
     })

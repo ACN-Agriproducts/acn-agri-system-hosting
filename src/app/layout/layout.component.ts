@@ -100,7 +100,6 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.storage.get('user').then(data => {
-      console.log(data);
       this.dataUser = data;
       this.permissions = data.currentPermissions;
 

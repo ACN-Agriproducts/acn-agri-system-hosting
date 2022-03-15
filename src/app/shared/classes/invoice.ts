@@ -60,7 +60,6 @@ export class Invoice extends FirebaseDocInterface {
                 });
             });
 
-            console.log(doc);
             return doc;
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Invoice {
