@@ -17,6 +17,22 @@
                 </mat-form-field>
               </ion-col>
             </ion-row>
+            <ion-row *ngIf="!contractForm.get('useSameClient').value">
+              <ion-col size-xs='4' size-sm='3' size-md='2'>
+                <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
+              </ion-col>
+              <ion-col size-xs='8' size-sm='9' size-md='10'>
+                <mat-form-field>
+                  <mat-label>Ticket Client</mat-label>
+                  <input matInput formControlName='ticketClient'>
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <mat-checkbox formControlName='useSameClient'>Use client info for tickets</mat-checkbox>
+              </ion-col>
+            </ion-row>
             <ion-row>
               <ion-col size-xs='8' size-sm='9'>
                 <mat-form-field>
@@ -59,9 +75,7 @@
                 <mat-form-field>
                   <mat-label>Product</mat-label>
                   <mat-select formControlName='product'>
-                    <ng-container *ngIf="productsReady">
-                      <mat-option *ngFor="let product of productsList" [value]="product">{{product.name}}</mat-option>
-                    </ng-container>
+                    <mat-option *ngFor="let product of productsList" [value]="product">{{product.ref.id}}</mat-option>
                   </mat-select>
                 </mat-form-field>
               </ion-col>

@@ -23,8 +23,6 @@ export class InvoicesPage implements OnInit {
 
   ngOnInit() {
     const data = document.getElementById('file-html-invoice');
-    console.log(data);
-
   }
 
   public openContextMenu = async (ev) => {
@@ -83,9 +81,7 @@ export class InvoicesPage implements OnInit {
     }
   }
   fileInvoice(event) {
-    console.log(event.nativeElement);
     this.template = event.nativeElement;
-
   }
 
   public openOption = async (event) => {

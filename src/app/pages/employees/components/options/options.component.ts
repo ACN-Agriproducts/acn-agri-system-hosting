@@ -19,7 +19,6 @@ export class OptionsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data);
   }
 
   public openModal = () => {

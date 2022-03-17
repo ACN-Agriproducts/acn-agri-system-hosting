@@ -28,8 +28,8 @@ export class ContractPrintableComponent implements OnInit {
   }
 
   getProduct(): string {
-    if(typeof(this.contractForm.product.name) == "string"){
-      return this.contractForm.product.name;
+    if(this.contractForm.product.ref){
+      return this.contractForm.product.ref.id;
     }
 
     return this.contractForm.product.id;

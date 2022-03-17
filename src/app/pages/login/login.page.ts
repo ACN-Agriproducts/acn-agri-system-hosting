@@ -54,13 +54,13 @@ export class LoginPage implements OnInit, OnDestroy {
     this.auth.onAuthStateChanged(async user => {
       if(user) {
         try{
-          const val = (await this.fb.doc(`/users/${user.uid}`).get().toPromise()).data();
-          const compDoc = (await this.fb.doc(`/users/${user.uid}/companies/${val['worksAt'][0]}`).get().toPromise()).data();
+          const val = (await this.fb.doc(`/users/${user.uid}`).get().toPromise()).data() as any;
+          const compDoc = (await this.fb.doc(`/users/${user.uid}/companies/${val['worksAt'][0]}`).get().toPromise()).data() as any;
           this.storage.set('user', {
             email: user.email,
             uid: user.uid, 
             refreshToken: user.refreshToken, 
-            name: user.displayName,
+            name: val.name,
             worksAt: val['worksAt'],
             currentPermissions: compDoc["permissions"]
           });

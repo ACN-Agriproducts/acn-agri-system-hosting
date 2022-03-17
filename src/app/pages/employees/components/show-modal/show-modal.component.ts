@@ -24,8 +24,6 @@ export class ShowModalComponent implements OnInit {
     this.switchData();
   }
   private switchData = () => {
-    console.log(this.dataMovil);
-
     const mediaScreen = this.mediaMatcher.matchMedia('(max-width: 768px)');
     this.dataEmployee = mediaScreen.matches ? this.dataMovil : this.dataMovil;
   }

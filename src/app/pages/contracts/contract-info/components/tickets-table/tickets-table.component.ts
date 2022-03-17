@@ -18,6 +18,5 @@ export class TicketsTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.ticketList)
   }
 }

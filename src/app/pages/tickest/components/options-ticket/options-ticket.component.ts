@@ -118,6 +118,9 @@ export class OptionsTicketComponent implements OnInit {
               updateDoc.voidRequester = this.userName
             }
 
+            console.log(updateDoc);
+            console.log(this.collectionPath  + '/' + this.ticket.docId);
+
             await this.db.doc(this.collectionPath  + '/' + this.ticket.docId).update(updateDoc);
           }
         }]

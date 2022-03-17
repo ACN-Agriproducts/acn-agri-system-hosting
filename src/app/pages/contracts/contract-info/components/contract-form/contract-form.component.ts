@@ -27,8 +27,6 @@ export class ContractFormComponent implements OnInit {
       this.productsList = productList;
     })
 
-    console.log(this.currentContract);
-
     this.contractForm = this.fb.group({
       contractType: [{value: this.currentContract.ref.parent.id, disabled: true}, Validators.required],
       id: [{value: this.currentContract.id, disabled: true}, [Validators.required]],
@@ -103,7 +101,6 @@ export class ContractFormComponent implements OnInit {
   }
 
   private getQuantity(product: Product): number {
-    console.log(product);
     const quantity = this.contractForm.getRawValue().quantity;
     const unit = this.contractForm.getRawValue().quantityUnits;
 

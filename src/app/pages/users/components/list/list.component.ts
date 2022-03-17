@@ -30,12 +30,10 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {
     this.localStorage.get('currentCompany').then(currentCompany => {
       var sub = this.db.doc(`companies/${currentCompany}`).valueChanges().subscribe(companyDoc => {
-        console.log(currentCompany)
         this.listEmployees = [];
 
         companyDoc['employees'].forEach(element => {
           let ref = element as DocumentReference;
-          console.log(ref)
         
           ref.get().then(user => {
             ref.collection('companies').doc(currentCompany).get().then(userComp => {

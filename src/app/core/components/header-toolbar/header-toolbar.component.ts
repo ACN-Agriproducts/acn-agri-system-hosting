@@ -21,9 +21,7 @@ export class HeaderToolbarComponent implements OnInit {
     this.storage.get('currentCompany').then(val => this.currentCompany = val);
   }
 
-  ngOnInit(): void {
-    console.log(this.storage.get('user'));
-  }
+  ngOnInit(): void {}
 
   public presentPopover = async (ev: any) => {
     const popover = await this.popoverController.create({

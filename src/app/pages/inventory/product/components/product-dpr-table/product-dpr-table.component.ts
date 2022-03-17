@@ -82,7 +82,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       this.plantCollectionRef = this.db.collection(`companies/${this.currentCompany}/plants`);
 
       const plantListSub = this.plantCollectionRef.get().subscribe(plantsList => {
-        console.log(this.productDoc);
         this.currentSub = this.plantCollectionRef.doc(plantsList.docs[0].ref.id).collection("inventory", ref => 
           ref.where("month", "==", this.month)
             .where("year", "==", this.year)
@@ -164,7 +163,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   }
 
   public chosenMonthHandler(normalizedMonth: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
-    console.log(normalizedMonth);
     this.month = normalizedMonth.month() + 1;
     this.date.month(normalizedMonth.month());
     datepicker.close();
