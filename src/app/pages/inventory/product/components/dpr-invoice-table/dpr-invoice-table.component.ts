@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DocumentReference } from '@angular/fire/compat/firestore';
+import { Invoice } from '@shared/classes/invoice';
 
 @Component({
   selector: 'app-dpr-invoice-table',
@@ -17,7 +18,7 @@ export class DprInvoiceTableComponent implements OnInit {
   public ready: boolean = false;
   constructor() { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.invoiceData = new Array<any>(this.invoiceList.length);
     let counter = 0;
 
@@ -25,8 +26,9 @@ export class DprInvoiceTableComponent implements OnInit {
       this.ready = true;
     }
 
+    const promises = [];
     this.invoiceList.forEach((invoice, index) => {
-      invoice.get().then(val => {
+      const promise = invoice.withConverter(Invoice.converter).get().then(val => {
         // Add invoice data to list
         const data = val.data();
         let formatedData = {
@@ -36,19 +38,24 @@ export class DprInvoiceTableComponent implements OnInit {
           status: data.status
         };
         for(const item of data.items) {
-          if(item.affectsInventory && item.inventoryInfo.info.product == this.productName) {
-            formatedData.total += item.inventoryInfo.info.quantity * item.quantity;
+          if(!item.affectsInventory) {
+            continue;
+          }
+
+          for(const info of item.inventoryInfo) {
+            if(info.product == this.productName) {
+              formatedData.total += info.quantity * item.quantity;
+            }
           }
         }
         this.invoiceData[index] = formatedData;
-        
-        counter++;
-        
-        if(counter){
-          this.ready = true;
-        }
-      })
-    })
+      });
+
+      promises.push(promise);
+    });
+
+    await Promise.all(promises);
+    this.ready = true;
   }
 
   getTotalWeight(): number {
