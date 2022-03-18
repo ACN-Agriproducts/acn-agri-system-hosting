@@ -10,6 +10,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import * as moment from 'moment';
 import { MatTable } from '@angular/material/table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 export const MY_FORMATS = {
   parse: {
@@ -62,6 +63,17 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   public date: _moment.Moment = moment();
   public columnsToDisplay: string[] = ["Day", "inQuantity", "outQuantity", "adjustment", "endOfDay"];
   public tableData: any[] = [];
+  public dprExcelData: {
+    summary: number[][],
+    liability: number[][],
+    openStorageLiability: number[][],
+    ownedGrain: number[][]
+  } = {
+    summary: [],
+    liability: [],
+    openStorageLiability: [],
+    ownedGrain: []
+  }
 
   public expandedDay: any;
 
@@ -69,7 +81,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private db: AngularFirestore,
-    private localStorage: Storage
+    private localStorage: Storage,
+    private storage: AngularFireStorage
   ) {
     this.year = moment().year();
     this.month = moment().month() + 1;
@@ -103,17 +116,22 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
               endOfDay: 0
             }
 
+            const tempSummary = [0, 0, 0]
+
             if(data[day] != null){
               if(data[day].inQuantity != null){
                 tempData.inQuantity = data[day].inQuantity;
+                tempSummary[0] += data[day].inQuantity;
               }
 
               if(data[day].outQuantity != null){
                 tempData.outQuantity = data[day].outQuantity;
+                tempSummary[1] += data[day].outQuantity;
               }
 
               if(data[day].adjustment != null){
                 tempData.adjustment = data[day].adjustment;
+                tempSummary[2] += data[day].adjustment;
               }
 
               if(data[day].inTickets != null){
@@ -138,14 +156,27 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
             }
 
             this.tableData.push(tempData);
+            this.dprExcelData.summary.push(tempSummary);
           }
 
           this.tableView.renderRows();
         });
 
         plantListSub.unsubscribe();
-      })
-    })
+      });
+
+      this.storage.ref(`companies/${company}/acn-dpr.xlsx`).getDownloadURL().toPromise().then(url => {
+        let xhr = new XMLHttpRequest();
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = (event) => {
+        }
+
+        xhr.open('GET', url);
+        xhr.send();
+      });
+
+    });
+
   }
 
   ngOnInit() {
@@ -168,4 +199,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     datepicker.close();
   }
 
+  public downloadDpr() {
+
+  }
 }
