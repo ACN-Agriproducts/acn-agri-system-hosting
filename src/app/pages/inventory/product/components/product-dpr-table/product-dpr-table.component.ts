@@ -58,7 +58,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   private plantCollectionRef: AngularFirestoreCollection;
   @ViewChild(MatTable) tableView:MatTable<any>;
   
-  private workbook: Excel.Workbook;
+  public workbook: Excel.Workbook;
   private currentCompany: string;
   private month: number;
   private year: number;
