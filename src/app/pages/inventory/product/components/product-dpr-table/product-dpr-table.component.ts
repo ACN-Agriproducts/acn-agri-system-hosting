@@ -12,6 +12,8 @@ import { MatTable } from '@angular/material/table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
+import * as Excel from 'exceljs';
+
 export const MY_FORMATS = {
   parse: {
     dateInput: 'MM/YYYY',
@@ -56,6 +58,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   private plantCollectionRef: AngularFirestoreCollection;
   @ViewChild(MatTable) tableView:MatTable<any>;
   
+  private workbook: Excel.Workbook;
   private currentCompany: string;
   private month: number;
   private year: number;
@@ -67,12 +70,10 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     summary: number[][],
     liability: number[][],
     openStorageLiability: number[][],
-    ownedGrain: number[][]
   } = {
     summary: [],
     liability: [],
     openStorageLiability: [],
-    ownedGrain: []
   }
 
   public expandedDay: any;
@@ -165,10 +166,12 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
         plantListSub.unsubscribe();
       });
 
-      this.storage.ref(`companies/${company}/acn-dpr.xlsx`).getDownloadURL().toPromise().then(url => {
+      this.storage.ref(`companies/${company}/DPR.xlsx`).getDownloadURL().toPromise().then(url => {
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'arraybuffer';
-        xhr.onload = (event) => {
+        xhr.onload = async (event) => {
+          this.workbook = new Excel.Workbook();
+          await this.workbook.xlsx.load(xhr.response);
         }
 
         xhr.open('GET', url);
@@ -200,6 +203,51 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   }
 
   public downloadDpr() {
+    const productWeight = this.productDoc.data().weight;
+    const sheet = this.workbook.getWorksheet('Sheet1');
+    sheet.getCell("J3").value = this.productDoc.ref.id;
+    sheet.getCell("O3").value = month[this.date.month()];
+    sheet.getCell("Q3").value = this.year;
+    sheet.getCell("E8").value = this.dprDoc.startingInventory / productWeight;
+    sheet.getCell("I8").value = this.dprDoc.startingWarehouseReceipt / productWeight;
+    sheet.getCell("L8").value = this.dprDoc.startingOpenStorage / productWeight;
 
+    for(let row = 0; row < 31; row++) {
+      // Do summary section
+      sheet.getCell(`B${row+10}`).value = this.dprExcelData.summary[row][0] / productWeight;
+      sheet.getCell(`C${row+10}`).value = this.dprExcelData.summary[row][1] / productWeight;
+      sheet.getCell(`D${row+10}`).value = this.dprExcelData.summary[row][2] / productWeight;
+    }
+
+    this.workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("style", "display: none");
+      a.href = url;
+      a.download = "export.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    })
   }
+}
+
+enum month {
+  JANUARY,
+  FEBRUARY,
+  MARCH,
+  APRIL,
+  MAY,
+  JUNE,
+  JULY,
+  AUGUST,
+  SEPTEMBER,
+  OCTOBER,
+  NOVEMBER,
+  DECEMBER
 }
