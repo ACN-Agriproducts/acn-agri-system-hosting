@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./dpr-tickets-table.component.scss'],
 })
 export class DprTicketsTableComponent implements OnInit {
-  @Input() ticketList: any[] = [];
+  @Input() ticketList: DocumentReference[] = [];
   @Input() bushelWeight: number = 1;
   @Input() title: string;
   public ticketData: any[];
@@ -20,26 +20,22 @@ export class DprTicketsTableComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    this.ticketData = new Array<any>(this.ticketList.length);
-    let counter = 0;
+  async ngOnInit() {
+    this.ticketData = [];
 
-    if(this.ticketData.length == 0) {
-      this.ready = true;
-    }
+    this.ticketList.forEach(ticketRef => {
+      this.ticketData.push(
+        ticketRef.get().then(val => {
+          return val.data();
+        })
+      );
+    });
 
-    this.ticketList.forEach((ticket, index) => {
-      let ticketRef = ticket as DocumentReference<any>;
+    this.ticketData = await Promise.all(this.ticketData);
 
-      ticketRef.get().then(val => {
-        this.ticketData[index] = val.data();
-        counter++;
-
-        if(counter == this.ticketData.length){
-          this.ready = true;
-        }
-      });
-    })}
+    this.ticketData = this.ticketData.filter(t => !t.void);
+    this.ready = true;
+  }
 
   getTotalWeight():number {
     let counter = 0;
