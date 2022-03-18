@@ -161,6 +161,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
           }
 
           this.tableView.renderRows();
+          this.ready = true;
         });
 
         plantListSub.unsubscribe();
@@ -228,7 +229,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       const a = document.createElement("a");
       a.setAttribute("style", "display: none");
       a.href = url;
-      a.download = "export.xlsx";
+      a.download = `DPR-${this.year}-${month[this.date.month()]}.xlsx`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
