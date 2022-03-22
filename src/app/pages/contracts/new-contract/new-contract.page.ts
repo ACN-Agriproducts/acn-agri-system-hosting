@@ -135,6 +135,9 @@ export class NewContractPage implements OnInit, OnDestroy {
 
   public submitForm() {
     const formValue = this.contractForm.getRawValue();
+    if(formValue.useSameClient) {
+      this.ticketClient = this.selectedClient;
+    }
 
     this.db.firestore.runTransaction(transaction => {
       return transaction.get(this.db.firestore.doc(`companies/${this.currentCompany}`)).then(val => {
