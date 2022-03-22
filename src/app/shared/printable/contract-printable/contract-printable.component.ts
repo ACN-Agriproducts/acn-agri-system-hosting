@@ -39,7 +39,7 @@ export class ContractPrintableComponent implements OnInit {
     const weight = new Weight(this.contractForm.quantity, WeightUnits.Pounds);
 
     if(this.contractForm.product) {
-      const tempProduct = this.productsList.find(p => p.name == this.getProduct())
+      const tempProduct = this.productsList.find(p => p.name == this.getProduct() || p.ref.id == this.getProduct());
       return weight.convertUnit(WeightUnits.getUnits(name, tempProduct.weight)).amount;  
     }
     return weight.convertUnit(WeightUnits.getUnits(name)).amount;
