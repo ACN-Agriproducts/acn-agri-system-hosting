@@ -187,7 +187,7 @@ export class NewContractPage implements OnInit, OnDestroy {
             paymentTerms: formValue.paymentTerms.paymentTerms
           },
           pricePerBushel: this.getBushelPrice(),
-          product: this.db.doc(`companies/${this.currentCompany}/products/${formValue.product.name}`).ref,
+          product: formValue.product.ref,
           productInfo: {
             moisture: formValue.product.moisture,
             name: formValue.product.ref.id,
