@@ -13,6 +13,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import * as Excel from 'exceljs';
+import { FormControl } from '@angular/forms';
 
 export const MY_FORMATS = {
   parse: {
@@ -63,7 +64,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   private month: number;
   private year: number;
   public ready: boolean = false;
-  public date: _moment.Moment = moment();
+  public date = new FormControl(moment())
   public columnsToDisplay: string[] = ["Day", "inQuantity", "outQuantity", "adjustment", "endOfDay"];
   public tableData: any[] = [];
   public dprExcelData: {
@@ -88,8 +89,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.year = moment().year();
     this.month = moment().month() + 1;
 
-    this.date.month(this.month - 1);
-    this.date.year(this.year);
+    this.date.value.month(this.month - 1);
+    this.date.value.year(this.year);
 
     this.localStorage.get("currentCompany").then(company => {
       this.currentCompany = company;
@@ -192,14 +193,10 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public chosenYearHandler(normalizedYear: _moment.Moment) {
-    this.year = normalizedYear.year();
-    this.date.year(this.year);
-  }
-
-  public chosenMonthHandler(normalizedMonth: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
-    this.month = normalizedMonth.month() + 1;
-    this.date.month(normalizedMonth.month());
+  public chosenMonthHandler(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
+    this.date.value.year(normalizedMonthAndYear.year())
+    this.date.value.month(normalizedMonthAndYear.month());
+    console.log(this.date);
     datepicker.close();
   }
 
@@ -207,7 +204,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     const productWeight = this.productDoc.data().weight;
     const sheet = this.workbook.getWorksheet('Sheet1');
     sheet.getCell("J3").value = this.productDoc.ref.id;
-    sheet.getCell("O3").value = month[this.date.month()];
+    sheet.getCell("O3").value = month[this.date.value.month()];
     sheet.getCell("Q3").value = this.year;
     sheet.getCell("E8").value = this.dprDoc.startingInventory / productWeight;
     sheet.getCell("I8").value = this.dprDoc.startingWarehouseReceipt / productWeight;
@@ -229,7 +226,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       const a = document.createElement("a");
       a.setAttribute("style", "display: none");
       a.href = url;
-      a.download = `DPR-${this.year}-${month[this.date.month()]}.xlsx`;
+      a.download = `DPR-${this.year}-${month[this.date.value.month()]}.xlsx`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
