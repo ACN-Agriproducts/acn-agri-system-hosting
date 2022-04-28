@@ -14,7 +14,7 @@
       </ion-buttons>
       <ion-searchbar class="ion-no-padding ion-padding-vertical" animated></ion-searchbar>
       <ion-datetime ([ngModel])='date' (ionChange)="ticket_table.dateChangeFn($event)"
-        value='{{date}}' display-timezone="cst" displayFormat="MMM YYYY"></ion-datetime>
+        value='{{date}}' displayFormat="MMM YYYY"></ion-datetime>
 
       <ion-buttons class="butons">
         <ion-button (click)="openFilter()" matTooltipPosition="before" matTooltipClass="tooltip-primary"
