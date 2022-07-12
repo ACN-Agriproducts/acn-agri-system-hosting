@@ -1,0 +1,24 @@
+.table-row {
+    display: grid;
+    // grid-template-columns: 200px 1fr 200px 1fr;
+    grid-template-columns: min(30%, 300px) min(30%, 300px) min(20%, 300px) 1fr;
+    font-weight: 500;
+}
+
+.header {
+    font-size: 20px;
+    background-color: var(--ion-color-primary-light);
+    color: var(--ion-color-primary);
+    height: 2rem;
+    padding: 0px 3px 5px 0px;
+}
+
+ion-text {
+    display: flex;
+    align-items: center;
+    padding: 10px 13px;
+}
+
+.even {
+    background-color: var(--ion-color-step-5);
+}

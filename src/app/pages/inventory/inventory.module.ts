@@ -13,6 +13,7 @@ import { StoragePopoverComponent } from './components/storage-popover/storage-po
 import { MoveInvDialogComponent } from './components/storage-popover/dialogs/move-inv-dialog/move-inv-dialog.component';
 import { EditInvDialogComponent } from './components/storage-popover/dialogs/edit-inv-dialog/edit-inv-dialog.component';
 import { ZeroOutTankDialogComponent } from './components/storage-popover/dialogs/zero-out-tank-dialog/zero-out-tank-dialog.component';
+import { WarehouseReceiptsComponent } from './components/warehouse-receipts/warehouse-receipts.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { ZeroOutTankDialogComponent } from './components/storage-popover/dialogs
     StoragePopoverComponent,
     MoveInvDialogComponent,
     EditInvDialogComponent,
-    ZeroOutTankDialogComponent
+    ZeroOutTankDialogComponent,
+    WarehouseReceiptsComponent
   ],
 })
 export class InventoryPageModule {}
