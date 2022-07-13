@@ -6,6 +6,8 @@ import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
+import * as Excel from 'exceljs';
+
 @Component({
   selector: 'app-ticket-report-dialog',
   templateUrl: './ticket-report-dialog.component.html',
@@ -14,7 +16,7 @@ import { utils, WorkBook, writeFile } from 'xlsx';
 export class TicketReportDialogComponent implements OnInit {
   private currentCompany: string;
 
-  public reportType: number;
+  public reportType: ReportType;
   public inTicket: boolean;
   public reportOutputType: OutputType;
   public generatingReport: boolean = false;
@@ -58,16 +60,77 @@ export class TicketReportDialogComponent implements OnInit {
   }
 
   public createExcelDoc(): void{
-    const tableCollection = document.getElementsByClassName('ticket-report-table');
-    const workBook: WorkBook = utils.book_new();
+    if(this.reportType == ReportType.ProductBalance) {
+      const workbook = new Excel.Workbook();
 
-    for(let i = 0; i < tableCollection.length; i++) {
-      const table = tableCollection[i];
-      const workSheet = utils.table_to_sheet(table);
-      utils.book_append_sheet(workBook, workSheet, table.id);
+      for(let product in this.productTicketLists) {
+        const workSheet = workbook.addWorksheet(product);
+        workSheet.columns = [
+          {header: "Date", key: "dateOut"},
+          {header: "ID", key: "id"},
+          {header: "Client", key: "clientName"},
+          {header: "Contract", key: "contractID"},
+          {header: "Net", key: "net"},
+          {header: "Dry Weight", key: "dryWeight"},
+          {header: "Runnnig Total", key: "total"},
+        ]
+
+        const list = this.productTicketLists[product] as Ticket[];
+        for(let tIndex = 0; tIndex < list.length; tIndex++){
+          const ticket = this.productTicketLists[product][tIndex] as Ticket;
+          const thisRow = workSheet.addRow({...ticket, net: ticket.getNet() * (ticket.in? 1 : -1)});
+          thisRow.getCell('dryWeight').value = ticket.dryWeight * (ticket.in? 1 : -1);
+
+          if(tIndex == 0) {
+            thisRow.getCell('total').value = {
+              formula: 'F2',
+              sharedFormula: 'shared',
+            } as Excel.CellSharedFormulaValue;
+          }
+
+          if(tIndex == 1) {
+            thisRow.getCell('total').value = {
+              formula: 'F3 + G2',
+              sharedFormula: 'shared',
+            } as Excel.CellSharedFormulaValue;
+          }
+
+          if(tIndex > 1) {
+            thisRow.getCell('total').value = {
+              sharedFormula: 'G3'
+            } as Excel.CellSharedFormulaValue;
+          }
+        }
+      }
+
+      workbook.xlsx.writeBuffer().then((data) => {
+        const blob = new Blob([data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+  
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("style", "display: none");
+        a.href = url;
+        a.download = `ProductBalances-${this.beginDate.toDateString()}-${this.endDate.toDateString()}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      })
     }
+    else {
+      const tableCollection = document.getElementsByClassName('ticket-report-table');
+      const workBook: WorkBook = utils.book_new();
 
-    writeFile(workBook, 'ticket-report.xlsx')
+      for(let i = 0; i < tableCollection.length; i++) {
+        const table = tableCollection[i];
+        const workSheet = utils.table_to_sheet(table);
+        utils.book_append_sheet(workBook, workSheet, table.id);
+      }
+
+      writeFile(workBook, 'ticket-report.xlsx')
+    }
   }
 
   private getReportTickets(): Promise<void> {
@@ -78,7 +141,7 @@ export class TicketReportDialogComponent implements OnInit {
       this.getFirebaseQueryFn()).get().toPromise().then(async result => {
         const tempTicketList = {};
 
-        const sorterTicketList = result.docs.sort((a, b) => a.data().id - b.data().id);
+        const sorterTicketList = result.docs.sort((a, b) => a.data().dateOut.getTime() - b.data().dateOut.getTime());
 
         sorterTicketList.forEach(ticketSnap => {
           const ticket = ticketSnap.data();
@@ -156,11 +219,17 @@ export class TicketReportDialogComponent implements OnInit {
     if(this.reportType == ReportType.IdRange) {
       return (q: CollectionReference) => q.where('in', '==', this.inTicket).where('id', '>=', this.startId).where('id', '<=', this.endId);
     }
+
+    if(this.reportType == ReportType.ProductBalance) {
+      return (q: CollectionReference) => q.where('dateOut', '>=', this.beginDate).where('dateOut', '<=', this.endDate);
+    }
   }
 
   public validateInputs(): boolean {
-    if(!(this.reportType != null && this.inTicket != null && this.reportOutputType != null)) {
-      return false;
+    if(!(this.reportType != null && this.reportOutputType != null && this.inTicket != null )) {
+      if(this.reportType != ReportType.ProductBalance && this.inTicket == null) {
+        return false;
+      }
     }
 
     if(this.reportType == ReportType.DateRange) {
@@ -173,6 +242,10 @@ export class TicketReportDialogComponent implements OnInit {
 
     if(this.reportType == ReportType.IdRange) {
       return this.startId != null && this.endId != null && this.startId <= this.endId;
+    }
+
+    if(this.reportType == ReportType.ProductBalance) {
+      return this.beginDate != null && this.endDate !=null && this.reportOutputType == OutputType.excel;
     }
   }
 
@@ -188,7 +261,8 @@ export class TicketReportDialogComponent implements OnInit {
 enum ReportType {
   DateRange,
   Contract,
-  IdRange
+  IdRange,
+  ProductBalance
 }
 
 enum OutputType {
