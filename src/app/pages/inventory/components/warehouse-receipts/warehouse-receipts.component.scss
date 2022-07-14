@@ -1,7 +1,7 @@
 .table-row {
     display: grid;
     // grid-template-columns: 200px 1fr 200px 1fr;
-    grid-template-columns: min(30%, 300px) min(30%, 300px) min(20%, 300px) 1fr;
+    grid-template-columns: min(30%, 300px) min(30%, 300px) min(20%, 300px) 1fr 1fr;
     font-weight: 500;
 }
 
@@ -15,7 +15,8 @@
 
 ion-text {
     display: flex;
-    align-items: center;
+    text-align: center;
+    vertical-align: middle;
     padding: 10px 13px;
 }
 
