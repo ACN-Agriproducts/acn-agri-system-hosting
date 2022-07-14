@@ -1,21 +1,28 @@
 <div>
-  <ion-card>
-    <div class="table-row header">
-      <ion-text>ID</ion-text>
-      <ion-text>Start Date</ion-text>
-      <ion-text>State</ion-text>
-      <ion-text>Grain</ion-text>
-      <ion-text>Future Price</ion-text>
-    </div>
-    <div [class.even]="odd" class="table-row" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
-      <ion-text><b>{{ receipt.id }}</b></ion-text>
-      <ion-text>{{ receipt.startDate | date }}</ion-text>
-      <ion-text>{{ receipt.status }}</ion-text>
-      <ion-text>{{ receipt.grain }}</ion-text>
-      <ion-text>{{ receipt.futurePrice }}</ion-text>
-    </div>
-  </ion-card>
-  <ion-card class="card-button" [button]="true" (click)="newWarehouseReceiptModal()">
-    + Add New
-  </ion-card>
+  <div class="table">
+    <ion-card class="">
+      <div class="table-row header">
+        <ion-text>ID</ion-text>
+        <ion-text>Start Date</ion-text>
+        <ion-text>Status</ion-text>
+        <ion-text>Grain</ion-text>
+        <ion-text>Bushels</ion-text>
+        <ion-text>Future Price</ion-text>
+      </div>
+    </ion-card>
+    <ion-card class="">
+      <div [class.even]="odd" class="table-row body" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
+        <ion-text><b>{{ receipt.id }}</b></ion-text>
+        <ion-text>{{ receipt.startDate | date }}</ion-text>
+        <ion-text id="status">{{ receipt.status }}</ion-text>
+        <ion-text>{{ receipt.grain }}</ion-text>
+        <ion-text>{{ receipt.bushels | number }}</ion-text>
+        <ion-text>{{ receipt.futurePrice | currency }}</ion-text>
+      </div>
+    </ion-card>
+    <button id="add-button" mat-button (click)="newWarehouseReceiptModal()">
+      <mat-icon>add</mat-icon>
+      <ion-text>New</ion-text>
+    </button>
+  </div>
 </div>

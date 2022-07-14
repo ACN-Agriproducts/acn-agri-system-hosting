@@ -1,25 +1,48 @@
+.table {
+
+}
+
 .table-row {
     display: grid;
-    // grid-template-columns: 200px 1fr 200px 1fr;
-    grid-template-columns: min(30%, 300px) min(30%, 300px) min(20%, 300px) 1fr 1fr;
+    // grid-template-columns: min(10%, 300px) min(30%, 300px) 1fr min(20%, 300px) 1fr 1fr;
+    // grid-template-columns: minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr);
+    grid-template-columns: repeat(auto-fill, 180px);
+    text-align: center;
     font-weight: 500;
+
+    ion-text {
+        align-self: center;
+    }
 }
 
 .header {
-    font-size: 20px;
+    font-size: 21px;
     background-color: var(--ion-color-primary-light);
     color: var(--ion-color-primary);
-    height: 2rem;
-    padding: 0px 3px 5px 0px;
+    height: 3.25rem;
+    border-color: var(--ion-color-primary);
+    border-width: 1.5px !important;
+    border-radius: 4px;
+    border: solid;
 }
 
-ion-text {
-    display: flex;
-    text-align: center;
-    vertical-align: middle;
-    padding: 10px 13px;
+.body {
+    font-size: 15px;
+    height: 2.75rem;
 }
 
 .even {
     background-color: var(--ion-color-step-5);
+}
+
+#status {
+
+}
+
+#add-button {
+    background-color: var(--ion-color-primary);
+    color: white;
+    font-size: 17px;
+    margin: 0 10px 0;
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
