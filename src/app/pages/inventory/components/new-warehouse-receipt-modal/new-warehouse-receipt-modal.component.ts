@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
@@ -8,12 +8,14 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./new-warehouse-receipt-modal.component.scss'],
 })
 export class NewWarehouseReceiptModalComponent implements OnInit {
+  @Input() productList: any[];
 
   public warehouseReceiptForm = this.fb.group({
-    quantity: [, Validators.required],
+    quantity: [1, Validators.required],
     id: [, Validators.required],
-    startDate: ['', Validators.required],
+    startDate: [new Date(), Validators.required],
     grain: ['', Validators.required],
+    bushels: [10_000, Validators.required],
     futurePrice: [, Validators.required]
   });
 
@@ -28,5 +30,5 @@ export class NewWarehouseReceiptModalComponent implements OnInit {
   confirm () {
     return this.modalController.dismiss(this.warehouseReceiptForm.getRawValue(), 'confirm');
   }
-  
+
 }
