@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Warehouse Receipts</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form [formGroup]="warehouseReceiptForm">
+
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Quantity</mat-label>
+      <input matInput formControlName="quantity">
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>ID</mat-label>
+      <input matInput formControlName="id">
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Starting Date</mat-label>
+      <input matInput formControlName="startDate" placeholder="">
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Grain</mat-label>
+      <input matInput formControlName="grain">
+    </mat-form-field>
+    <mat-form-field appearance="fill" floatLabel="always">
+      <mat-label>Future Price</mat-label>
+      <input matInput formControlName="futurePrice">
+    </mat-form-field>
+
+    <ion-button (click)="cancel()">Cancel</ion-button>
+    <ion-button (click)="confirm()" [disabled]="warehouseReceiptForm.invalid">Confirm</ion-button>
+  </form>
+</ion-content>

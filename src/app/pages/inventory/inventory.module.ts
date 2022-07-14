@@ -14,6 +14,7 @@ import { MoveInvDialogComponent } from './components/storage-popover/dialogs/mov
 import { EditInvDialogComponent } from './components/storage-popover/dialogs/edit-inv-dialog/edit-inv-dialog.component';
 import { ZeroOutTankDialogComponent } from './components/storage-popover/dialogs/zero-out-tank-dialog/zero-out-tank-dialog.component';
 import { WarehouseReceiptsComponent } from './components/warehouse-receipts/warehouse-receipts.component';
+import { NewWarehouseReceiptModalComponent } from './components/new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { WarehouseReceiptsComponent } from './components/warehouse-receipts/ware
     MoveInvDialogComponent,
     EditInvDialogComponent,
     ZeroOutTankDialogComponent,
-    WarehouseReceiptsComponent
+    WarehouseReceiptsComponent,
+    NewWarehouseReceiptModalComponent
   ],
 })
 export class InventoryPageModule {}
