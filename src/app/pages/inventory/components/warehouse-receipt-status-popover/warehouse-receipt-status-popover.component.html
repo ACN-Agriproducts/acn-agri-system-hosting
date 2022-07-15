@@ -1,0 +1,26 @@
+<div>
+  <ion-header>
+    <ion-item>Select Status:</ion-item>
+  </ion-header>
+  <ion-list>
+    <ion-radio-group [(ngModel)]="status">
+      <ion-item>
+        <ion-radio value="active"></ion-radio>
+        <ion-text>Active</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-radio value="sold"></ion-radio>
+        <ion-text>Sold</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-radio value="financing"></ion-radio>
+        <ion-text>Financing</ion-text>
+      </ion-item>
+      <ion-item>
+        <ion-radio value="paid-closed"></ion-radio>
+        <ion-text>Paid/Closed</ion-text>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+  <ion-button class="status-select-done" (click)="submit()">Done</ion-button>
+</div>
