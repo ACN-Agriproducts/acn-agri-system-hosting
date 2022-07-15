@@ -35,7 +35,9 @@
       <input matInput formControlName="futurePrice" type="number">
     </mat-form-field>
 
-    <ion-button (click)="cancel()">Cancel</ion-button>
-    <ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptForm.invalid">Confirm</ion-button>
+    <div class="action-bar">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+      <ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptForm.invalid">Confirm</ion-button>
+    </div>
   </form>
 </ion-content>
