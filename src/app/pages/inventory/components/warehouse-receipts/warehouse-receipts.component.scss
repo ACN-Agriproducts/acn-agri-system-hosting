@@ -2,26 +2,37 @@
 
 }
 
-#total-bushels {
+.header {
+    display: flex;
+    margin: 15px 25px 30px;
+    justify-content: space-between;
+}
+
+.total-text {
     font-size: 30px;
     color: rgba(100, 100, 100, 0.731);
+    display: flex;
+}
 
+.total-bushels {
+    margin-top: 25px;
+    margin-left: -25px;
 }
 
 #diagonal-line {
-    width: calc(1.414 * 50px);
+    width: calc(1.1 * 50px);
     transform: rotate(-45deg);
     transform-origin: bottom left;
     border-top: 2.5px solid rgb(100, 100, 100, 0.531);
     position: relative;
-    bottom: -30px;
-    left: 50px;
+    bottom: -40px;
+    left: 0px;
+    margin-bottom: 30px;
     box-sizing: border-box;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
+.tabs {
+    
 }
 
 .table-row {
@@ -51,6 +62,7 @@
 .body {
     font-size: 15px;
     height: 2.75rem;
+    color: black;
 }
 
 .even {

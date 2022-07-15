@@ -24,6 +24,11 @@ export class WarehouseReceiptsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initWarehouseReceipts();
+  }
+
+  public initWarehouseReceipts = async () => {
+    let tempTotalBushels = 0;
     this.localStorage.get('currentCompany').then(company => {
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
@@ -35,11 +40,31 @@ export class WarehouseReceiptsComponent implements OnInit {
 
           // total should only be for receipts that aren't paid/closed
           if (tempReceipt.status !== 'paid-closed') {
-            this.totalBushels += tempReceipt.bushels;
+            tempTotalBushels += tempReceipt.bushels;
           }
+        });
+
+        this.totalBushels = tempTotalBushels;
+      });
+    });
+  }
+
+  public getWarehouseReceipts = async () => {
+    this.localStorage.get('currentCompany').then(company => {
+      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
+      this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
+        receiptList.forEach(receiptFirebaseDoc => {
+          const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
+          tempReceipt.ref = receiptFirebaseDoc.ref;
+          tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
+          this.warehouseReceiptList.push(tempReceipt);
         });
       });
     });
+  }
+
+  public segmentChanged = async (event: any) => {
+    this.getWarehouseReceipts();
   }
 
   public async newWarehouseReceiptModal() {
@@ -102,7 +127,6 @@ export class WarehouseReceiptsComponent implements OnInit {
 
   public updateWarehouseReceipt = async (status: string, receiptRef: DocumentReference) => {
     receiptRef.update({ status });
-
     console.log("Warehouse receipt successfully updated.");
   }
 }
