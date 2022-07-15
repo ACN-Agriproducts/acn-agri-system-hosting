@@ -5,20 +5,20 @@
   <ion-list>
     <ion-radio-group [(ngModel)]="status">
       <ion-item>
-        <ion-radio value="active"></ion-radio>
-        <ion-text>Active</ion-text>
+        <ion-label>Active</ion-label>
+        <ion-radio slot="start" value="active"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-radio value="sold"></ion-radio>
-        <ion-text>Sold</ion-text>
+        <ion-label>Sold</ion-label>
+        <ion-radio slot="start" value="sold"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-radio value="financing"></ion-radio>
-        <ion-text>Financing</ion-text>
+        <ion-label>Financing</ion-label>
+        <ion-radio slot="start" value="financing"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-radio value="paid-closed"></ion-radio>
-        <ion-text>Paid/Closed</ion-text>
+        <ion-label>Paid/Closed</ion-label>
+        <ion-radio slot="start" value="paid-closed"></ion-radio>
       </ion-item>
     </ion-radio-group>
   </ion-list>
