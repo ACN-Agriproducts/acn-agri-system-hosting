@@ -11,12 +11,13 @@ import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-sta
   styleUrls: ['./warehouse-receipts.component.scss'],
 })
 export class WarehouseReceiptsComponent implements OnInit {
-  warehouseReceiptList: WarehouseReceiptDoc[] = [];
-  warehouseReceiptCollectionRef: AngularFirestoreCollection;
   @Input() productList: any[];
-  public totalBushels: number = 0;
 
-  public currentCompany: string; //
+  public warehouseReceiptList: WarehouseReceiptDoc[] = [];
+  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
+  public totalBushels: number = 0;
+  public queryStatus: string[] = ["active", "sold", "financing", "paid-closed"];
+
 
   constructor(
     private modalController: ModalController,
@@ -32,7 +33,6 @@ export class WarehouseReceiptsComponent implements OnInit {
   public initWarehouseReceipts = async () => {
     let tempTotalBushels = 0;
     this.localStorage.get('currentCompany').then(company => {
-      this.currentCompany = company; // remove later
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
 
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
@@ -57,7 +57,7 @@ export class WarehouseReceiptsComponent implements OnInit {
     let tempReceiptList = [];
 
     this.localStorage.get('currentCompany').then(company => {
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
+      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.where('status', 'in', this.queryStatus).orderBy('id', 'asc'));
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
@@ -65,22 +65,22 @@ export class WarehouseReceiptsComponent implements OnInit {
           tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
           tempReceiptList.push(tempReceipt);
         });
-        
+
         this.warehouseReceiptList = tempReceiptList;
       });
     });
   }
 
   public segmentChanged = async (event: any) => {
+    this.queryStatus = event.detail.value.split(',');
     this.getWarehouseReceipts();
   }
 
-  public async newWarehouseReceiptModal() {
+  public newWarehouseReceiptModal = async () => {
     const modal = await this.modalController.create({
       component: NewWarehouseReceiptModalComponent,
       componentProps: {
         productList: this.productList,
-        currentCompany: this.currentCompany, //
         warehouseReceiptCollectionRef: this.warehouseReceiptCollectionRef
       }
     });
@@ -89,9 +89,8 @@ export class WarehouseReceiptsComponent implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      let tempId = data.id;
-      for (let i = 0; i < data.quantity; i++, tempId++) {
-        this.addWarehouseReceipts({id: tempId, startDate: data.startDate, status: 'active', grain: data.grain, bushels: data.bushels, futurePrice: data.futurePrice});
+      for (let i = 0; i < data.quantity; i++) {
+        this.addWarehouseReceipts({id: data.id + i, startDate: data.startDate, status: 'active', grain: data.grain, bushels: data.bushels, futurePrice: data.futurePrice});
       };
     }
   }

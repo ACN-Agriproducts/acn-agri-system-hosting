@@ -11,7 +11,6 @@ import { UniqueWarehouseReceiptIdService } from '../unique-warehouse-receipt-id.
 })
 export class NewWarehouseReceiptModalComponent implements OnInit {
   @Input() productList: any[];
-  @Input() currentCompany: string;
   @Input() warehouseReceiptCollectionRef: AngularFirestoreCollection;
 
   public warehouseReceiptForm: FormGroup;

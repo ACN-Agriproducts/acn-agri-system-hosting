@@ -7,17 +7,19 @@
 				<ion-text class="total-bushels" >{{ totalBushels | number }}</ion-text>
 			</div>
 			
-			<ion-segment (ionChange)="segmentChanged($event)">
-				<ion-segment-button>
-					<ion-label>All</ion-label>
-				</ion-segment-button>
-				<ion-segment-button>
-					<ion-label>Active</ion-label>
-				</ion-segment-button>
-				<ion-segment-button>
-					<ion-label>Paid/Closed</ion-label>
-				</ion-segment-button>
-			</ion-segment>
+			<!-- <div class="tabs"> -->
+				<ion-segment class="ion-justify-content-start tabs" (ionChange)="segmentChanged($event)">
+					<ion-segment-button value="active,sold,financing,paid-closed">
+						<ion-label>All</ion-label>
+					</ion-segment-button>
+					<ion-segment-button value="active,sold,financing">
+						<ion-label>Active</ion-label>
+					</ion-segment-button>
+					<ion-segment-button value="paid-closed">
+						<ion-label>Paid/Closed</ion-label>
+					</ion-segment-button>
+				</ion-segment>
+			<!-- </div> -->
 		</div>
 
 		<ion-card>
