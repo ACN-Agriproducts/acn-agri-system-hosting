@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { UniqueWarehouseReceiptIdService } from '../unique-warehouse-receipt-id.service';
 
 @Component({
   selector: 'app-new-warehouse-receipt-modal',
@@ -9,26 +11,42 @@ import { ModalController } from '@ionic/angular';
 })
 export class NewWarehouseReceiptModalComponent implements OnInit {
   @Input() productList: any[];
+  @Input() currentCompany: string;
+  @Input() warehouseReceiptCollectionRef: AngularFirestoreCollection;
 
-  public warehouseReceiptForm = this.fb.group({
-    quantity: [1, Validators.required],
-    id: [, Validators.required],
-    startDate: [new Date(), Validators.required],
-    grain: ['', Validators.required],
-    bushels: [10_000, Validators.required],
-    futurePrice: [, Validators.required]
-  });
+  public warehouseReceiptForm: FormGroup;
 
-  constructor(private modalController: ModalController, private fb: FormBuilder) {}
+  constructor(
+    private modalController: ModalController, 
+    private fb: FormBuilder,
+    private db: AngularFirestore,
+    private uniqueId: UniqueWarehouseReceiptIdService,
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.uniqueId.setGetterFunction(this.getWarehouseReceiptCollection.bind(this));
 
-  cancel () {
+    this.warehouseReceiptForm = this.fb.group({
+      quantity: [1, Validators.required],
+      id: [, [Validators.required], this.uniqueId.validate.bind(this.uniqueId)],
+      startDate: [new Date(), Validators.required],
+      grain: ['', Validators.required],
+      bushels: [10_000, Validators.required],
+      futurePrice: [, Validators.required]
+    });
+  }
+
+  public cancel () {
     return this.modalController.dismiss(null, 'cancel');
   }
 
-  confirm () {
+  public confirm () {
     return this.modalController.dismiss(this.warehouseReceiptForm.getRawValue(), 'confirm');
+  }
+
+  public getWarehouseReceiptCollection(): [AngularFirestoreCollection, number] {
+    // return [this.db.collection(`companies/${this.currentCompany}/warehouseReceipts`), this.warehouseReceiptForm.get('quantity').value];
+    return [this.warehouseReceiptCollectionRef, this.warehouseReceiptForm.get('quantity').value];
   }
 
 }

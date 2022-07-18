@@ -16,6 +16,8 @@ export class WarehouseReceiptsComponent implements OnInit {
   @Input() productList: any[];
   public totalBushels: number = 0;
 
+  public currentCompany: string; //
+
   constructor(
     private modalController: ModalController,
     private popoverController: PopoverController,
@@ -30,7 +32,9 @@ export class WarehouseReceiptsComponent implements OnInit {
   public initWarehouseReceipts = async () => {
     let tempTotalBushels = 0;
     this.localStorage.get('currentCompany').then(company => {
+      this.currentCompany = company; // remove later
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
+
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
@@ -51,6 +55,7 @@ export class WarehouseReceiptsComponent implements OnInit {
 
   public getWarehouseReceipts = async () => {
     let tempReceiptList = [];
+
     this.localStorage.get('currentCompany').then(company => {
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
@@ -60,6 +65,7 @@ export class WarehouseReceiptsComponent implements OnInit {
           tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
           tempReceiptList.push(tempReceipt);
         });
+        
         this.warehouseReceiptList = tempReceiptList;
       });
     });
@@ -73,7 +79,9 @@ export class WarehouseReceiptsComponent implements OnInit {
     const modal = await this.modalController.create({
       component: NewWarehouseReceiptModalComponent,
       componentProps: {
-        productList: this.productList
+        productList: this.productList,
+        currentCompany: this.currentCompany, //
+        warehouseReceiptCollectionRef: this.warehouseReceiptCollectionRef
       }
     });
     modal.present();

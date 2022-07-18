@@ -35,7 +35,7 @@ import { WarehouseReceiptStatusPopoverComponent } from './components/warehouse-r
     ZeroOutTankDialogComponent,
     WarehouseReceiptsComponent,
     NewWarehouseReceiptModalComponent,
-    WarehouseReceiptStatusPopoverComponent
+    WarehouseReceiptStatusPopoverComponent,
   ],
 })
 export class InventoryPageModule {}
