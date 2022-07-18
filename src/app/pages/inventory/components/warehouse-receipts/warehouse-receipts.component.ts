@@ -50,6 +50,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 
   public getWarehouseReceipts = async () => {
+    let tempReceiptList = [];
     this.localStorage.get('currentCompany').then(company => {
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
@@ -57,8 +58,9 @@ export class WarehouseReceiptsComponent implements OnInit {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
           tempReceipt.ref = receiptFirebaseDoc.ref;
           tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
-          this.warehouseReceiptList.push(tempReceipt);
+          tempReceiptList.push(tempReceipt);
         });
+        this.warehouseReceiptList = tempReceiptList;
       });
     });
   }
@@ -115,7 +117,6 @@ export class WarehouseReceiptsComponent implements OnInit {
     popover.present();
 
     const { data } = await popover.onWillDismiss();
-    console.log(data);
 
     this.updateWarehouseReceipt(data, receipt.ref);
     receipt.status = data ?? receipt.status;

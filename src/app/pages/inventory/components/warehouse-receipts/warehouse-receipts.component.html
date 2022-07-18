@@ -6,7 +6,6 @@
 				<div id="diagonal-line"></div>
 				<ion-text class="total-bushels" >{{ totalBushels | number }}</ion-text>
 			</div>
-
 			
 			<ion-segment (ionChange)="segmentChanged($event)">
 				<ion-segment-button>
@@ -33,6 +32,13 @@
 		</ion-card>
 
 		<ion-card>
+			<div class="table-row table-add">
+				<button id="receipt-add-button" mat-button (click)="newWarehouseReceiptModal()">
+					<mat-icon>add</mat-icon>
+				</button>
+			</div>
+			
+
 			<div [class.even]="odd" class="table-row body" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
 				<ion-text><b>{{ receipt.id }}</b></ion-text>
 				<ion-text>{{ receipt.startDate | date }}</ion-text>
@@ -48,10 +54,5 @@
 				<ion-text>{{ receipt.futurePrice | currency }}</ion-text>
 			</div>
 		</ion-card>
-
-		<button id="receipt-add-button" mat-button (click)="newWarehouseReceiptModal()">
-			<mat-icon>add</mat-icon>
-			<ion-text>New</ion-text>
-		</button>
 	</div>
 </div>
