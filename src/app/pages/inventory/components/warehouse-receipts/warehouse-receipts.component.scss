@@ -6,8 +6,6 @@
 .header {
     display: flex;
     margin: 15px 25px 25px;
-    justify-content: space-between;
-    // background-color: white;
 }
 
 // ------- My boss told me to get rid of this :( ---------
@@ -39,7 +37,8 @@
 // ---------------------------------------------------------
 
 .tabs {
-    width: 100%;
+    display: flex;
+    align-content: stretch !important;
 }
 
 .segment-button-checked {
@@ -48,8 +47,6 @@
 
 .table-row {
     display: grid;
-    // grid-template-columns: min(10%, 300px) min(30%, 300px) 1fr min(20%, 300px) 1fr 1fr;
-    // grid-template-columns: minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr) minmax(5%, 1fr);
     grid-template-columns: repeat(6, 1fr);
     text-align: center;
 
@@ -59,11 +56,11 @@
 }
 
 .table-header {
-    font-size: 21px;
+    font-size: 1.5rem;
     font-weight: 500;
     background-color: var(--ion-color-primary-light);
     color: var(--ion-color-primary);
-    height: 3.25rem;
+    height: 4rem;
     border-color: var(--ion-color-primary);
     border-width: 1.5px !important;
     border-radius: 4px;
@@ -72,8 +69,8 @@
 
 .table-add {
     background-color: var(--ion-color-step-5);
+    font-size: 1rem;
     min-height: 2.75rem;
-    padding-left: 4rem;
     position: relative;
     cursor: pointer;
     
@@ -99,16 +96,18 @@
     }
 }
 
-#receipt-add-button {
-    background-color: var(--ion-color-primary);
-    color: white;
-    font-size: 17px;
-    margin: 7px 40px;
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
-}
+// #receipt-add-button {
+//     background-color: var(--ion-color-primary);
+//     color: white;
+//     font-size: 1rem;
+//     margin: 7px 40px;
+//     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 
+//     0px 2px 2px 0px rgb(0 0 0 / 14%), 
+//     0px 1px 5px 0px rgb(0 0 0 / 12%);
+// }
 
 .body {
-    font-size: 15px;
+    font-size: 1rem;
     font-weight: 500;
     height: 2.75rem;
     color: rgb(47, 47, 47);
@@ -118,15 +117,17 @@
     background-color: var(--ion-color-step-5);
 }
 
-.status-wrap {
+.status-cell {
     display: flex;
     justify-content: center; // up and down
     align-content: center; // left and right
+    flex-direction: column;
 }
 
-.receipt-status {
+.status-text {
     font-weight: 500;
-    padding: 0 1rem;
+    font-size: 0.9em;
+    padding: 0 0.75rem;
     border-radius: 10px;
     position: relative;
     cursor: pointer;
@@ -150,7 +151,9 @@
     }
 }
 
-
+.status-date {
+    font-size: 0.7rem;
+}
 
 .active {
     background-color: rgba(var(--ion-color-success-rgb), 0.15);

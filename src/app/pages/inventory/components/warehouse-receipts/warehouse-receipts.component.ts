@@ -18,6 +18,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   public warehouseReceiptCollectionRef: AngularFirestoreCollection;
   public totalBushels: number = 0;
   public queryStatus: string[] = ["active", "sold", "financing", "cancelled"];
+  public today: Date = new Date();
   
 
   constructor(
@@ -34,7 +35,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   public initWarehouseReceipts = async () => {
     let tempTotalBushels = 0;
     this.localStorage.get('currentCompany').then(async currentCompany => {
-      this.currentPlantName = await this.localStorage.get('currentPlantName');
+      this.currentPlantName = await this.localStorage.get('currentPlant');
       console.log(this.currentPlantName);
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
 
@@ -43,6 +44,7 @@ export class WarehouseReceiptsComponent implements OnInit {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
           tempReceipt.ref = receiptFirebaseDoc.ref;
           tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
+          tempReceipt.endDate = receiptFirebaseDoc.get('endDate')?.toDate();
           this.warehouseReceiptList.push(tempReceipt);
 
           // total should only be for receipts that aren't cancelled
@@ -66,6 +68,7 @@ export class WarehouseReceiptsComponent implements OnInit {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
           tempReceipt.ref = receiptFirebaseDoc.ref;
           tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
+          tempReceipt.endDate = receiptFirebaseDoc.get('endDate')?.toDate();
           tempReceiptList.push(tempReceipt);
         });
 
@@ -116,8 +119,6 @@ export class WarehouseReceiptsComponent implements OnInit {
 
       // update totalBushels
       this.totalBushels += tempReceipt.bushels;
-
-      console.log("Warehouse Receipt Successfully Added");
     });
   }
 
@@ -141,20 +142,29 @@ export class WarehouseReceiptsComponent implements OnInit {
     this.updateWarehouseReceipt(data, receipt.ref);
     receipt.status = data ?? receipt.status;
 
+    // remove cancelled bushels from totalBushels
     if (receipt.status === 'cancelled') {
       this.totalBushels -= receipt.bushels;
     }
   }
 
   public updateWarehouseReceipt = async (status: string, receiptRef: DocumentReference) => {
-    receiptRef.update({ status });
-    console.log("Warehouse receipt successfully updated.");
+    const updateDoc: any = {status};
+
+    // add endDate to cancelled receipts
+    if (status === 'cancelled') {
+      updateDoc.endDate = new Date();
+    }
+
+    receiptRef.update(updateDoc);
+    this.getWarehouseReceipts();
   }
 }
 
 class WarehouseReceiptDoc {
   id: string;
   startDate: Date;
+  endDate: Date | null;
   status: string;
   grain: string;
   bushels: number;

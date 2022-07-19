@@ -42,13 +42,17 @@
 			<div [class.even]="odd" class="table-row body" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
 				<ion-text><b>{{ receipt.id }}</b></ion-text>
 				<ion-text>{{ receipt.startDate | date }}</ion-text>
-				<div class="status-wrap">
-					<ion-text (click)="openStatusSelect(receipt)" class="receipt-status" 
+				<div class="status-cell">
+					<ion-text (click)="openStatusSelect(receipt)" class="status-text" 
 						[class.active]="receipt.status === 'active'" 
 						[class.sold]="receipt.status === 'sold'" 
 						[class.financing]="receipt.status === 'financing'"
 						[class.cancelled]="receipt.status === 'cancelled'">
 						{{ receipt.status }}
+					</ion-text>
+
+					<ion-text class="status-date" *ngIf="receipt.status === 'cancelled'">
+						{{ receipt.endDate | date }}
 					</ion-text>
 				</div>
 				<ion-text>{{ receipt.grain }}</ion-text>
