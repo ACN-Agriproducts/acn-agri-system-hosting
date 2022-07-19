@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
+import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
+import { Plant } from '@shared/classes/plant';
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -17,10 +19,23 @@ export class HomePage implements OnInit {
   private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
   items2: Observable<any>;
-  constructor(private afs: AngularFirestore) {
-
+  constructor(
+    private db: AngularFirestore,
+    private localStorage: Storage
+  ) {
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.localStorage.get("currentPlant").then(currentPlant => {
+      if(currentPlant == null) {
+        this.setCurrentPlant();
+      }
+    });
+  }
+
+  async setCurrentPlant() {
+    const plantList = await Plant.getPlantList(this.db, await this.localStorage.get("currentCompany"));
+    await this.localStorage.set("currentPlant", plantList[0].ref.id);
+  }
 
 }
