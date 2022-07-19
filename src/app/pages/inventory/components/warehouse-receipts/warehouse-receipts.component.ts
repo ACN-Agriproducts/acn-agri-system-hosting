@@ -12,12 +12,13 @@ import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-sta
 })
 export class WarehouseReceiptsComponent implements OnInit {
   @Input() productList: any[];
-
+  
+  public currentPlantName: string;
   public warehouseReceiptList: WarehouseReceiptDoc[] = [];
   public warehouseReceiptCollectionRef: AngularFirestoreCollection;
   public totalBushels: number = 0;
-  public queryStatus: string[] = ["active", "sold", "financing", "paid-closed"];
-
+  public queryStatus: string[] = ["active", "sold", "financing", "cancelled"];
+  
 
   constructor(
     private modalController: ModalController,
@@ -32,8 +33,10 @@ export class WarehouseReceiptsComponent implements OnInit {
 
   public initWarehouseReceipts = async () => {
     let tempTotalBushels = 0;
-    this.localStorage.get('currentCompany').then(company => {
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
+    this.localStorage.get('currentCompany').then(async currentCompany => {
+      this.currentPlantName = await this.localStorage.get('currentPlantName');
+      console.log(this.currentPlantName);
+      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
 
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
@@ -42,8 +45,8 @@ export class WarehouseReceiptsComponent implements OnInit {
           tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
           this.warehouseReceiptList.push(tempReceipt);
 
-          // total should only be for receipts that aren't paid/closed
-          if (tempReceipt.status !== 'paid-closed') {
+          // total should only be for receipts that aren't cancelled
+          if (tempReceipt.status !== 'cancelled') {
             tempTotalBushels += tempReceipt.bushels;
           }
         });
@@ -56,8 +59,8 @@ export class WarehouseReceiptsComponent implements OnInit {
   public getWarehouseReceipts = async () => {
     let tempReceiptList = [];
 
-    this.localStorage.get('currentCompany').then(company => {
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${company}/warehouseReceipts`, query => query.where('status', 'in', this.queryStatus).orderBy('id', 'asc'));
+    this.localStorage.get('currentCompany').then(currentCompany => {
+      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, query => query.where('status', 'in', this.queryStatus).orderBy('id', 'asc'));
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
@@ -90,7 +93,14 @@ export class WarehouseReceiptsComponent implements OnInit {
 
     if (role === 'confirm') {
       for (let i = 0; i < data.quantity; i++) {
-        this.addWarehouseReceipts({id: data.id + i, startDate: data.startDate, status: 'active', grain: data.grain, bushels: data.bushels, futurePrice: data.futurePrice});
+        this.addWarehouseReceipts({
+          id: data.id + i, 
+          startDate: data.startDate, 
+          status: 'active', 
+          grain: data.grain, 
+          bushels: data.bushels, 
+          futurePrice: data.futurePrice
+        });
       };
     }
   }
@@ -98,7 +108,10 @@ export class WarehouseReceiptsComponent implements OnInit {
   public addWarehouseReceipts = async (data: any) => {
     this.warehouseReceiptCollectionRef.add(data).then(res => {
       // add new receipt to html
-      const tempReceipt = {...data, ref: res};
+      const tempReceipt = {
+        ...data, 
+        ref: res
+      };
       this.warehouseReceiptList.push(tempReceipt);
 
       // update totalBushels
@@ -109,7 +122,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 
   public openStatusSelect = async (receipt: WarehouseReceiptDoc) => {
-    if (receipt.status === 'paid-closed') {
+    if (receipt.status === 'cancelled') {
       return;
     }
 
@@ -128,7 +141,7 @@ export class WarehouseReceiptsComponent implements OnInit {
     this.updateWarehouseReceipt(data, receipt.ref);
     receipt.status = data ?? receipt.status;
 
-    if (receipt.status === 'paid-closed') {
+    if (receipt.status === 'cancelled') {
       this.totalBushels -= receipt.bushels;
     }
   }

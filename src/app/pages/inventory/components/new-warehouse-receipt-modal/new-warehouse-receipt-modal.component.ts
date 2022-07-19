@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { UniqueWarehouseReceiptIdService } from '../unique-warehouse-receipt-id.service';
@@ -18,7 +18,6 @@ export class NewWarehouseReceiptModalComponent implements OnInit {
   constructor(
     private modalController: ModalController, 
     private fb: FormBuilder,
-    private db: AngularFirestore,
     private uniqueId: UniqueWarehouseReceiptIdService,
   ) {}
 
@@ -31,7 +30,7 @@ export class NewWarehouseReceiptModalComponent implements OnInit {
       startDate: [new Date(), Validators.required],
       grain: ['', Validators.required],
       bushels: [10_000, Validators.required],
-      futurePrice: [, Validators.required]
+      futurePrice: [, Validators.required],
     });
   }
 
@@ -44,7 +43,6 @@ export class NewWarehouseReceiptModalComponent implements OnInit {
   }
 
   public getWarehouseReceiptCollection(): [AngularFirestoreCollection, number] {
-    // return [this.db.collection(`companies/${this.currentCompany}/warehouseReceipts`), this.warehouseReceiptForm.get('quantity').value];
     return [this.warehouseReceiptCollectionRef, this.warehouseReceiptForm.get('quantity').value];
   }
 
