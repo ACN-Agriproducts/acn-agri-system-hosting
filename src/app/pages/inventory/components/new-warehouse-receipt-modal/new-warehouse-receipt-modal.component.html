@@ -12,7 +12,8 @@
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>ID</mat-label>
-      <input matInput formControlName="id" type="number">
+      <input matInput formControlName="id" type="number" >
+      <mat-error >ID Already Exists</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Starting Date</mat-label>
@@ -25,6 +26,7 @@
       <mat-select formControlName="grain">
         <mat-option *ngFor="let product of productList" [value]="product.name">{{ product.name }}</mat-option>
       </mat-select>
+      <mat-error>Please Choose a Grain</mat-error>
     </mat-form-field>
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Bushels</mat-label>
@@ -33,6 +35,7 @@
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Future Price</mat-label>
       <input matInput formControlName="futurePrice" type="number">
+      <mat-error>Please Input a Future Price</mat-error>
     </mat-form-field>
 
     <div class="action-bar">
