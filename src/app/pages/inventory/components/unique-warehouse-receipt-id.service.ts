@@ -16,13 +16,13 @@ export class UniqueWarehouseReceiptIdService implements AsyncValidator {
     const [warehouseReceiptCollection, quantity] = this.getCollectionFunc();
     
     return warehouseReceiptCollection.ref.where('id', '>=', control.value).limit(quantity).get().then(result => {
-      let lastControlId = control.value + quantity;
-      let firstResultId = result.docs[0].get('id');
+      const resultDocArray = result.docs;
+      if (resultDocArray.length === 0) return null;
 
-      console.log(`Last Id of New Set: ${lastControlId}\nFirst Id of Retrieved Set:${firstResultId}`);
-      console.log(lastControlId <= firstResultId);
+      let lastControlId = control.value + quantity - 1;
+      let firstResultId = resultDocArray[0].get('id');
 
-      if(lastControlId <= firstResultId) {
+      if (lastControlId < firstResultId) {
         return null;
       }
       else {

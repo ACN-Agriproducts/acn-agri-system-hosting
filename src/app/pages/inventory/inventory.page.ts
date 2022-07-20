@@ -13,19 +13,22 @@ import { StoragePopoverComponent } from './components/storage-popover/storage-po
 })
 export class InventoryPage implements OnInit, OnDestroy{
 
-  currentCompany: string;
-  currentPlantName: string;
-  currentPlantId: number = 0;
-  plantList: any[];
-  productList: any[];
-  currentSubs: Subscription[] = [];
+  public currentCompany: string;
+  public currentPlantName: string;
+  public currentPlantId: number = 0;
+  public plantList: any[];
+  public productList: any[];
+  public currentSubs: Subscription[] = [];
+  public dataUser: any;
+  public permissions: any;
 
   constructor(
     private fb: AngularFirestore,
     private store: Storage,
     private navController: NavController,
     private modalController: ModalController,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private localStorage: Storage
   ) { 
     this.store.get('currentCompany').then(val => {
       this.currentCompany = val;
@@ -44,6 +47,10 @@ export class InventoryPage implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.localStorage.get('user').then(data => {
+      this.dataUser = data;
+      this.permissions = data.currentPermissions;
+    });
   }
 
   ngOnDestroy() {
@@ -81,6 +88,10 @@ export class InventoryPage implements OnInit, OnDestroy{
     });
 
     return await modal.present();
+  }
+
+  public hasReadPermission = (): Boolean => {
+    return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
   }
 
 }

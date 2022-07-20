@@ -59,6 +59,18 @@ export class NewUserPage implements OnInit {
         {
           label: 'Edit inventory space',
           controlName: 'editSpace'
+        },
+        {
+          label: 'View warehouse receipts',
+          controlName: 'warehouseReceiptRead'
+        },
+        {
+          label: 'Add new warehouse receipts',
+          controlName: 'warehouseReceiptCreate'
+        },
+        {
+          label: 'Update warehouse receipt status?',
+          controlName: 'warehouseReceiptUpdate'
         }
       ]
     },
@@ -231,7 +243,10 @@ export class NewUserPage implements OnInit {
         zeroOutInventory:  [false],
         moveInventory: [false],
         addSpace: [false],
-        editSpace: [false]
+        editSpace: [false],
+        warehouseReceiptRead: [false],
+        warehouseReceiptCreate: [false],
+        warehouseReceiptUpdate: [false]
       }),
       invoices: this.fb.group({
         read: [false],

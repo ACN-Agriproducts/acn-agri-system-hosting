@@ -26,13 +26,7 @@
 		</ion-card>
 
 		<ion-card>
-			<div class="table-add table-row" (click)="newWarehouseReceiptModal()">
-				<!-- <button id="receipt-add-button" mat-button (click)="newWarehouseReceiptModal()">
-					<mat-icon>add</mat-icon>
-				</button>
-				<ion-text>
-					New Receipt
-				</ion-text> -->
+			<div class="table-add table-row" *ngIf="hasCreatePermission()" (click)="newWarehouseReceiptModal()">
 				<ion-text>
 					<i>+ Add New Warehouse Receipt...</i>
 				</ion-text>
@@ -40,8 +34,8 @@
 			
 
 			<div [class.even]="odd" class="table-row body" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
-				<ion-text><b>{{ receipt.id }}</b></ion-text>
-				<ion-text>{{ receipt.startDate | date }}</ion-text>
+				<ion-text color="dark"><b>{{ receipt.id }}</b></ion-text>
+				<ion-text color="dark">{{ receipt.startDate | date }}</ion-text>
 				<div class="status-cell">
 					<ion-text (click)="openStatusSelect(receipt)" class="status-text" 
 						[class.active]="receipt.status === 'active'" 
@@ -51,13 +45,13 @@
 						{{ receipt.status }}
 					</ion-text>
 
-					<ion-text class="status-date" *ngIf="receipt.status === 'cancelled'">
+					<ion-text class="status-date" color="dark" *ngIf="receipt.status === 'cancelled'">
 						{{ receipt.endDate | date }}
 					</ion-text>
 				</div>
-				<ion-text>{{ receipt.grain }}</ion-text>
-				<ion-text>{{ receipt.bushels | number }}</ion-text>
-				<ion-text>{{ receipt.futurePrice | currency }}</ion-text>
+				<ion-text color="dark">{{ receipt.grain }}</ion-text>
+				<ion-text color="dark">{{ receipt.bushels | number }}</ion-text>
+				<ion-text color="dark">{{ receipt.futurePrice | currency }}</ion-text>
 			</div>
 		</ion-card>
 	</div>
