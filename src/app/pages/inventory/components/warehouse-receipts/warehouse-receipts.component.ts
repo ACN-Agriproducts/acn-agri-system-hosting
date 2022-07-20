@@ -12,6 +12,7 @@ import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-sta
 })
 export class WarehouseReceiptsComponent implements OnInit {
   @Input() productList: any[];
+  // @Input() hasPermission: () => any;
   
   public currentPlantName: string;
   public warehouseReceiptList: WarehouseReceiptDoc[] = [];
@@ -36,7 +37,6 @@ export class WarehouseReceiptsComponent implements OnInit {
     let tempTotalBushels = 0;
     this.localStorage.get('currentCompany').then(async currentCompany => {
       this.currentPlantName = await this.localStorage.get('currentPlant');
-      console.log(this.currentPlantName);
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
 
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
@@ -62,7 +62,9 @@ export class WarehouseReceiptsComponent implements OnInit {
     let tempReceiptList = [];
 
     this.localStorage.get('currentCompany').then(currentCompany => {
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, query => query.where('status', 'in', this.queryStatus).orderBy('id', 'asc'));
+      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, 
+        query => query.where('status', 'in', this.queryStatus)
+                      .orderBy('id', 'asc'));
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
@@ -96,7 +98,7 @@ export class WarehouseReceiptsComponent implements OnInit {
 
     if (role === 'confirm') {
       for (let i = 0; i < data.quantity; i++) {
-        this.addWarehouseReceipts({
+        this.addWarehouseReceipt({
           id: data.id + i, 
           startDate: data.startDate, 
           status: 'active', 
@@ -104,11 +106,13 @@ export class WarehouseReceiptsComponent implements OnInit {
           bushels: data.bushels, 
           futurePrice: data.futurePrice
         });
+        // should I reload after adding or display as is after adding to html?
+        // this.getWarehouseReceipts();
       };
     }
   }
 
-  public addWarehouseReceipts = async (data: any) => {
+  public addWarehouseReceipt = async (data: any) => {
     this.warehouseReceiptCollectionRef.add(data).then(res => {
       // add new receipt to html
       const tempReceipt = {
@@ -158,6 +162,10 @@ export class WarehouseReceiptsComponent implements OnInit {
 
     receiptRef.update(updateDoc);
     this.getWarehouseReceipts();
+  }
+
+  public hasCreatePermission = () => {
+    return false;
   }
 }
 
