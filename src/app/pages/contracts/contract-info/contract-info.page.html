@@ -49,7 +49,7 @@
 
 <ion-content *ngIf="showLiquidation">
   <app-ticket-discount-table [ticketDiscountList]="ticketDiscountList"></app-ticket-discount-table>
-  <button mat-button (click)="onDownloadLiquidation()">Download</button>
+  <button mat-button (click)="onDownloadLiquidationV2()">Download</button>
   <button mat-button
     ngxPrint
     [useExistingCss]="true"

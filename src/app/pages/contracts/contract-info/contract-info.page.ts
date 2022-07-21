@@ -10,6 +10,8 @@ import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
+import * as Excel from 'exceljs';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-contract-info',
@@ -70,5 +72,100 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     const workBook:WorkBook = utils.table_to_book(table);
 
     writeFile(workBook, `contract-${this.currentContract.id}-liquidation.xlsx`);
+  }
+
+  public onDownloadLiquidationV2 = async () => {
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet();
+
+    worksheet.mergeCells('D1:F1');
+    worksheet.getCell('D1').value = "Weight (lbs)";
+    worksheet.getCell('D1').alignment = { horizontal: 'center' };
+
+    worksheet.mergeCells('G1:H1');
+    worksheet.getCell('G1').value = "Moisture";
+    worksheet.getCell('G1').alignment = { horizontal: 'center' };
+
+    worksheet.mergeCells('J1:K1');
+    worksheet.getCell('J1').value = "Damage";
+    worksheet.getCell('J1').alignment = { horizontal: 'center' };
+
+    worksheet.getRow(2).values = [
+      "Inbound Date", 
+      "Ticket #", 
+      "Contract", 
+      "Gross", 
+      "Tare", 
+      "Net", 
+      "%", 
+      "CWT", 
+      "Adjusted Weight", 
+      "%", 
+      "CWT", 
+      "Adjusted Weight", 
+      "Price ($/BU)", 
+      "Adjusted Price ($/BU)", 
+      "Total ($)", 
+      "Infested", 
+      "Inspection", 
+      "Net to Pay ($)"
+    ];
+
+    worksheet.columns = [
+      { key: 'dateIn',  },
+      { key: 'id' },
+      { key: 'contractID' },
+      // Weight (lbs)
+        { key: 'gross' },
+        { key: 'tare' },
+        { key: 'net' },
+      // Moisture
+        { key: 'moisture' },
+        { key: 'cwtMoisture' },
+      { key: 'dryWeight' },
+      // Damage
+        { key: 'damageWeightPercent' },
+        { key: 'cwtDamage' },   // dryWeight - undamagedWeight
+      { key: 'undamagedWeight' },
+      { key: 'price' },         // ???
+      { key: 'adjustedPrice' }, // ???
+      { key: 'total' },         // AdjustedWeight / Product.weight * price
+      { key: 'infested' },      
+      { key: 'inspection' },
+      { key: 'netToPay' },      // total - infested - inspection
+    ];
+
+    worksheet.columns.forEach(column => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength;
+    });
+
+    this.ticketList.forEach(ticket => {
+      const net = ticket.getNet() * (ticket.in ? 1 : -1);
+
+      const thisRow = worksheet.addRow({
+        ...ticket,
+        net: net,
+        moisture: ticket.moisture,
+        cwtMoisture: net - ticket.dryWeight,
+      });
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();   
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.setAttribute('style', 'display: none');
+    a.href = url;
+    a.download = `contract-${this.currentContract.id}-liquidation.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
   }
 }
