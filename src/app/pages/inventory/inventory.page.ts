@@ -30,12 +30,13 @@ export class InventoryPage implements OnInit, OnDestroy{
     private popoverController: PopoverController,
     private localStorage: Storage
   ) { 
-    this.store.get('currentCompany').then(val => {
+    this.store.get('currentCompany').then(async val => {
       this.currentCompany = val;
+      this.currentPlantName = await this.store.get("currentPlant");
+
       var tempSub;
       tempSub = this.fb.collection(`companies/${this.currentCompany}/plants`).valueChanges({ idField: 'name' }).subscribe(val => {
         this.plantList = val;
-        this.currentPlantName = val[0].name;
       })
       this.currentSubs.push(tempSub);
 

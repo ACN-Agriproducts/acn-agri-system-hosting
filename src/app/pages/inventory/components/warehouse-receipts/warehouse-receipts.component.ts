@@ -12,12 +12,10 @@ import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-sta
 })
 export class WarehouseReceiptsComponent implements OnInit {
   @Input() productList: any[];
-  // @Input() hasPermission: () => any;
+  @Input() currentPlantName: string;
   
-  public currentPlantName: string;
   public warehouseReceiptList: WarehouseReceiptDoc[] = [];
   public warehouseReceiptCollectionRef: AngularFirestoreCollection;
-  public totalBushels: number = 0;
   public queryStatus: string[] = ["active", "sold", "financing", "cancelled"];
   public today: Date = new Date();
   
@@ -30,32 +28,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.initWarehouseReceipts();
-  }
-
-  public initWarehouseReceipts = async () => {
-    let tempTotalBushels = 0;
-    this.localStorage.get('currentCompany').then(async currentCompany => {
-      this.currentPlantName = await this.localStorage.get('currentPlant');
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, query => query.orderBy('id', 'asc'));
-
-      this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
-        receiptList.forEach(receiptFirebaseDoc => {
-          const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
-          tempReceipt.ref = receiptFirebaseDoc.ref;
-          tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
-          tempReceipt.endDate = receiptFirebaseDoc.get('endDate')?.toDate();
-          this.warehouseReceiptList.push(tempReceipt);
-
-          // total should only be for receipts that aren't cancelled
-          if (tempReceipt.status !== 'cancelled') {
-            tempTotalBushels += tempReceipt.bushels;
-          }
-        });
-
-        this.totalBushels = tempTotalBushels;
-      });
-    });
+    this.getWarehouseReceipts();
   }
 
   public getWarehouseReceipts = async () => {
@@ -65,6 +38,7 @@ export class WarehouseReceiptsComponent implements OnInit {
       this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, 
         query => query.where('status', 'in', this.queryStatus)
                       .orderBy('id', 'asc'));
+
       this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
@@ -84,7 +58,7 @@ export class WarehouseReceiptsComponent implements OnInit {
     this.getWarehouseReceipts();
   }
 
-  public newWarehouseReceiptModal = async () => {
+  public generateWarehouseReceiptsModal = async () => {
     const modal = await this.modalController.create({
       component: NewWarehouseReceiptModalComponent,
       componentProps: {
@@ -106,8 +80,6 @@ export class WarehouseReceiptsComponent implements OnInit {
           bushels: data.bushels, 
           futurePrice: data.futurePrice
         });
-        // should I reload after adding or display as is after adding to html?
-        // this.getWarehouseReceipts();
       };
     }
   }
@@ -120,9 +92,7 @@ export class WarehouseReceiptsComponent implements OnInit {
         ref: res
       };
       this.warehouseReceiptList.push(tempReceipt);
-
-      // update totalBushels
-      this.totalBushels += tempReceipt.bushels;
+      this.warehouseReceiptList.sort((a,b) => a.id - b.id);
     });
   }
 
@@ -145,11 +115,6 @@ export class WarehouseReceiptsComponent implements OnInit {
 
     this.updateWarehouseReceipt(data, receipt.ref);
     receipt.status = data ?? receipt.status;
-
-    // remove cancelled bushels from totalBushels
-    if (receipt.status === 'cancelled') {
-      this.totalBushels -= receipt.bushels;
-    }
   }
 
   public updateWarehouseReceipt = async (status: string, receiptRef: DocumentReference) => {
@@ -163,14 +128,10 @@ export class WarehouseReceiptsComponent implements OnInit {
     receiptRef.update(updateDoc);
     this.getWarehouseReceipts();
   }
-
-  public hasCreatePermission = () => {
-    return false;
-  }
 }
 
 class WarehouseReceiptDoc {
-  id: string;
+  id: number;
   startDate: Date;
   endDate: Date | null;
   status: string;
