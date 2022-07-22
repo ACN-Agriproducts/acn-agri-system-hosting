@@ -71,25 +71,29 @@ export class WarehouseReceiptsComponent implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      for (let i = 0; i < data.quantity; i++) {
-        this.addWarehouseReceipt({
-          id: data.id + i, 
-          startDate: data.startDate, 
-          status: 'active', 
-          grain: data.grain, 
-          bushels: data.bushels, 
-          futurePrice: data.futurePrice
-        });
-      };
+      this.addWarehouseReceipts(data);
     }
   }
 
-  public addWarehouseReceipt = async (data: any) => {
-    this.warehouseReceiptCollectionRef.add(data).then(res => {
+  public addWarehouseReceipts = async (data: any) => {
+    for (let i = 0; i < data.quantity; i++) {
+      this.addWarehouseReceipt({
+        id: data.id + i, 
+        startDate: data.startDate, 
+        status: 'active', 
+        grain: data.grain, 
+        bushels: data.bushels, 
+        futurePrice: data.futurePrice
+      });
+    };
+  }
+
+  public addWarehouseReceipt = async (receiptObject: any) => {
+    this.warehouseReceiptCollectionRef.add(receiptObject).then(result => {
       // add new receipt to html
       const tempReceipt = {
-        ...data, 
-        ref: res
+        ...receiptObject, 
+        ref: result
       };
       this.warehouseReceiptList.push(tempReceipt);
       this.warehouseReceiptList.sort((a,b) => a.id - b.id);

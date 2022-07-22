@@ -15,7 +15,7 @@ export class UniqueWarehouseReceiptIdService implements AsyncValidator {
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     const [warehouseReceiptCollection, quantity] = this.getCollectionFunc();
     
-    return warehouseReceiptCollection.ref.where('id', '>=', control.value).limit(quantity).get().then(result => {
+    return warehouseReceiptCollection.ref.where('id', '>=', control.value).limit(1).get().then(result => {
       const resultDocArray = result.docs;
       if (resultDocArray.length === 0) return null;
 
@@ -26,7 +26,7 @@ export class UniqueWarehouseReceiptIdService implements AsyncValidator {
         return null;
       }
       else {
-        return {UniqueId: true};
+        return { uniqueId: true };
       }
     });
   }
