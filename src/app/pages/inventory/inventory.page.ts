@@ -91,8 +91,8 @@ export class InventoryPage implements OnInit, OnDestroy{
     return await modal.present();
   }
 
-  public hasReadPermission = (): Boolean => {
-    return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
-  }
+  // public hasReadPermission = (): Boolean => {
+  //   return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
+  // }
 
 }

@@ -1,19 +1,20 @@
-<div>
-	<div class="table">
-		<ion-card class="header">
-			<ion-segment class="tabs" value="active,sold,financing,cancelled" (ionChange)="segmentChanged($event)">
-				<ion-segment-button value="active,sold,financing,cancelled">
-					<ion-label>All</ion-label>
-				</ion-segment-button>
-				<ion-segment-button value="active,sold,financing">
-					<ion-label>Active</ion-label>
-				</ion-segment-button>
-				<ion-segment-button value="cancelled">
-					<ion-label>Cancelled</ion-label>
-				</ion-segment-button>
-			</ion-segment>
-		</ion-card>
 
+<div class="warehouse-receipt-section">
+	<ion-card class="header">
+		<ion-segment class="tabs" value="active,sold,financing,cancelled" (ionChange)="segmentChanged($event)">
+			<ion-segment-button value="active,sold,financing,cancelled">
+				<ion-label>All</ion-label>
+			</ion-segment-button>
+			<ion-segment-button value="active,sold,financing">
+				<ion-label>Active</ion-label>
+			</ion-segment-button>
+			<ion-segment-button value="cancelled">
+				<ion-label>Cancelled</ion-label>
+			</ion-segment-button>
+		</ion-segment>
+	</ion-card>
+
+	<div class="table">
 		<ion-card>
 			<div class="table-row table-header">
 				<ion-text>ID</ion-text>
@@ -26,14 +27,14 @@
 		</ion-card>
 
 		<ion-card>
-			<div class="table-add table-row" (click)="generateWarehouseReceiptsModal()">
+			<div class="table-row table-add" (click)="generateWarehouseReceiptsModal()">
 				<ion-text>
 					<i>+ Add New Warehouse Receipt...</i>
 				</ion-text>
 			</div>
 			
 
-			<div [class.even]="odd" class="table-row body" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
+			<div [class.even]="odd" class="table-row table-body" *ngFor="let receipt of warehouseReceiptList; let odd = odd">
 				<ion-text color="dark"><b>{{ receipt.id }}</b></ion-text>
 				<ion-text color="dark">{{ receipt.startDate | date }}</ion-text>
 				<div class="status-cell">
@@ -52,6 +53,9 @@
 				<ion-text color="dark">{{ receipt.grain }}</ion-text>
 				<ion-text color="dark">{{ receipt.bushels | number }}</ion-text>
 				<ion-text color="dark">{{ receipt.futurePrice | currency }}</ion-text>
+				<div class="menu">
+					<ion-icon name="ellipsis-vertical-outline"></ion-icon>
+				</div>
 			</div>
 		</ion-card>
 	</div>
