@@ -1,7 +1,7 @@
 <div>
 	<div class="table">
 		<ion-card class="header">
-			<ion-segment class="tabs" (ionChange)="segmentChanged($event)">
+			<ion-segment class="tabs" value="active,sold,financing,cancelled" (ionChange)="segmentChanged($event)">
 				<ion-segment-button value="active,sold,financing,cancelled">
 					<ion-label>All</ion-label>
 				</ion-segment-button>
