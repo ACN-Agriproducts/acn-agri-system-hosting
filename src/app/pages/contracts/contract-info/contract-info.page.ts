@@ -1,14 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
-import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
-import { getFunctions, httpsCallable } from '@angular/fire/functions';
 import { utils, WorkBook, writeFile } from 'xlsx';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
