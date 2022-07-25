@@ -6,7 +6,7 @@ import { NewWarehouseReceiptModalComponent } from '../new-warehouse-receipt-moda
 import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 
 @Component({
-  selector: 'app-warehouse-receipts',
+  selector: 'app-warehouse-receipts-table',
   templateUrl: './warehouse-receipts.component.html',
   styleUrls: ['./warehouse-receipts.component.scss'],
 })

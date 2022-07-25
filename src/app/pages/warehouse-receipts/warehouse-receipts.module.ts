@@ -7,9 +7,9 @@ import { IonicModule } from '@ionic/angular';
 import { WarehouseReceiptsPageRoutingModule } from './warehouse-receipts-routing.module';
 
 import { WarehouseReceiptsPage } from './warehouse-receipts.page';
-import { WarehouseReceiptsComponent } from '@pages/inventory/components/warehouse-receipts/warehouse-receipts.component';
-import { NewWarehouseReceiptModalComponent } from '@pages/inventory/components/new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
-import { WarehouseReceiptStatusPopoverComponent } from '@pages/inventory/components/warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
+import { WarehouseReceiptsComponent } from '@pages/warehouse-receipts/components/warehouse-receipts/warehouse-receipts.component';
+import { NewWarehouseReceiptModalComponent } from '@pages/warehouse-receipts/components/new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
+import { WarehouseReceiptStatusPopoverComponent } from '@pages/warehouse-receipts/components/warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 
 @NgModule({
   imports: [
