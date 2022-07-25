@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
+import { Plant } from '@shared/classes/plant';
 
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -13,6 +14,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import * as Excel from 'exceljs';
+import { FormControl } from '@angular/forms';
 
 export const MY_FORMATS = {
   parse: {
@@ -60,10 +62,11 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   
   public workbook: Excel.Workbook;
   private currentCompany: string;
+  private currentPlant: string;
   private month: number;
   private year: number;
   public ready: boolean = false;
-  public date: _moment.Moment = moment();
+  public date: FormControl = new FormControl(moment())
   public columnsToDisplay: string[] = ["Day", "inQuantity", "outQuantity", "adjustment", "endOfDay"];
   public tableData: any[] = [];
   public dprExcelData: {
@@ -88,83 +91,14 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.year = moment().year();
     this.month = moment().month() + 1;
 
-    this.date.month(this.month - 1);
-    this.date.year(this.year);
+    this.date.value.month(this.month - 1);
+    this.date.value.year(this.year);
 
     this.localStorage.get("currentCompany").then(company => {
       this.currentCompany = company;
-      this.plantCollectionRef = this.db.collection(`companies/${this.currentCompany}/plants`);
-
-      const plantListSub = this.plantCollectionRef.get().subscribe(plantsList => {
-        this.currentSub = this.plantCollectionRef.doc(plantsList.docs[0].ref.id).collection("inventory", ref => 
-          ref.where("month", "==", this.month)
-            .where("year", "==", this.year)
-            .where("product", "==", this.productDoc.ref.id)
-        ).valueChanges().subscribe(dpr => {
-          this.tableData = [];
-          this.dprDoc = dpr[0];
-
-          const data = this.dprDoc.tickets as any;
-          for(let day = 1; day <= 31; day++){
-            let tempData = {
-              id: day,
-              inQuantity: 0,
-              outQuantity: 0,
-              adjustment: 0,
-              inTickets: [],
-              outTickets: [],
-              invoices: [],
-              endOfDay: 0
-            }
-
-            const tempSummary = [0, 0, 0]
-
-            if(data[day] != null){
-              if(data[day].inQuantity != null){
-                tempData.inQuantity = data[day].inQuantity;
-                tempSummary[0] += data[day].inQuantity;
-              }
-
-              if(data[day].outQuantity != null){
-                tempData.outQuantity = data[day].outQuantity;
-                tempSummary[1] += data[day].outQuantity;
-              }
-
-              if(data[day].adjustment != null){
-                tempData.adjustment = data[day].adjustment;
-                tempSummary[2] += data[day].adjustment;
-              }
-
-              if(data[day].inTickets != null){
-                tempData.inTickets = data[day].inTickets;
-              }
-
-              if(data[day].outTickets != null){
-                tempData.outTickets = data[day].outTickets;
-              }
-
-              if(data[day].invoices != null){
-                tempData.invoices = data[day].invoices;
-              }
-            }
-
-            if(day > 1){
-              const lastDay = this.tableData[this.tableData.length-1]
-              tempData.endOfDay = lastDay.endOfDay + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
-            } 
-            else {
-              tempData.endOfDay = this.dprDoc.startingInventory + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
-            }
-
-            this.tableData.push(tempData);
-            this.dprExcelData.summary.push(tempSummary);
-          }
-
-          this.tableView.renderRows();
-          this.ready = true;
-        });
-
-        plantListSub.unsubscribe();
+      this.localStorage.get("currentPlant").then(currentPlant => {
+        this.currentPlant = currentPlant;
+        this.getDprDoc();
       });
 
       this.storage.ref(`companies/${company}/DPR.xlsx`).getDownloadURL().toPromise().then(url => {
@@ -192,14 +126,85 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  public chosenYearHandler(normalizedYear: _moment.Moment) {
-    this.year = normalizedYear.year();
-    this.date.year(this.year);
+  private getDprDoc() {
+    const date = this.date.value as _moment.Moment;
+
+    Plant.getCollectionReference(this.db, this.currentCompany).doc(this.currentPlant).collection("inventory")
+      .where("month", "==", date.month())
+      .where("year", "==", date.year())
+      .where("product", "==", this.productDoc.ref.id)
+      .get().then(dpr => {
+        
+        this.tableData = [];
+        this.dprDoc = dpr.docs[0].data();
+
+        const data = this.dprDoc.tickets as any;
+        for(let day = 1; day <= 31; day++){
+          let tempData = {
+            id: day,
+            inQuantity: 0,
+            outQuantity: 0,
+            adjustment: 0,
+            inTickets: [],
+            outTickets: [],
+            invoices: [],
+            endOfDay: 0
+          }
+
+          const tempSummary = [0, 0, 0]
+
+          if(data[day] != null){
+            if(data[day].inQuantity != null){
+              tempData.inQuantity = data[day].inQuantity;
+              tempSummary[0] += data[day].inQuantity;
+            }
+
+            if(data[day].outQuantity != null){
+              tempData.outQuantity = data[day].outQuantity;
+              tempSummary[1] += data[day].outQuantity;
+            }
+
+            if(data[day].adjustment != null){
+              tempData.adjustment = data[day].adjustment;
+              tempSummary[2] += data[day].adjustment;
+            }
+
+            if(data[day].inTickets != null){
+              tempData.inTickets = data[day].inTickets;
+            }
+
+            if(data[day].outTickets != null){
+              tempData.outTickets = data[day].outTickets;
+            }
+
+            if(data[day].invoices != null){
+              tempData.invoices = data[day].invoices;
+            }
+          }
+
+          if(day > 1){
+            const lastDay = this.tableData[this.tableData.length-1]
+            tempData.endOfDay = lastDay.endOfDay + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
+          } 
+          else {
+            tempData.endOfDay = this.dprDoc.startingInventory + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
+          }
+
+          this.tableData.push(tempData);
+          this.dprExcelData.summary.push(tempSummary);
+        }
+
+        this.tableView.renderRows();
+        this.ready = true;
+      });
   }
 
-  public chosenMonthHandler(normalizedMonth: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
-    this.month = normalizedMonth.month() + 1;
-    this.date.month(normalizedMonth.month());
+  public chosenMonthHandler(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
+    this.date.value.year(normalizedMonthAndYear.year())
+    this.date.value.month(normalizedMonthAndYear.month());
+    this.date = new FormControl(normalizedMonthAndYear);
+    this.getDprDoc();
+
     datepicker.close();
   }
 
@@ -207,7 +212,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     const productWeight = this.productDoc.data().weight;
     const sheet = this.workbook.getWorksheet('Sheet1');
     sheet.getCell("J3").value = this.productDoc.ref.id;
-    sheet.getCell("O3").value = month[this.date.month()];
+    sheet.getCell("O3").value = month[this.date.value.month()];
     sheet.getCell("Q3").value = this.year;
     sheet.getCell("E8").value = this.dprDoc.startingInventory / productWeight;
     sheet.getCell("I8").value = this.dprDoc.startingWarehouseReceipt / productWeight;
@@ -229,7 +234,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       const a = document.createElement("a");
       a.setAttribute("style", "display: none");
       a.href = url;
-      a.download = `DPR-${this.year}-${month[this.date.month()]}.xlsx`;
+      a.download = `DPR-${this.year}-${month[this.date.value.month()]}.xlsx`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
