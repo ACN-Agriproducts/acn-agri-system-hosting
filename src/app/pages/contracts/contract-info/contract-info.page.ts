@@ -8,7 +8,10 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
+import { getFunctions, httpsCallable } from '@angular/fire/functions';
 import { utils, WorkBook, writeFile } from 'xlsx';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -36,6 +39,8 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private localStorage: Storage,
     private db: AngularFirestore,
+    private fns: AngularFireFunctions,
+    private snackBar: MatSnackBar
     ) { }
 
   ngOnInit() {
@@ -70,5 +75,30 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     const workBook:WorkBook = utils.table_to_book(table);
 
     writeFile(workBook, `contract-${this.currentContract.id}-liquidation.xlsx`);
+  }
+
+  reloadContractTickets() {
+    
+
+    this.fns.httpsCallable('contracts-updateTickets')({
+      company: this.currentCompany,
+      contractId: this.id,
+      isPurchase: this.type == "purchase"
+    }).toPromise().then(async result => {
+      const contract = await Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id);
+      const tickets = await contract.getTickets();
+      this.ticketList = tickets;
+      
+      const ticketsToAdd = tickets.filter(t => !this.ticketDiscountList.some(d => d.data.id == t.id));
+      this.ticketDiscountList.push(...ticketsToAdd.map(ticket => 
+      {
+        return {
+          data: ticket,
+          discounts: {infested: 0, inspection:0}
+        }
+      }));
+    }).catch(error => {
+      this.snackBar.open(error, "Dismiss", {duration: 5000});
+    });
   }
 }
