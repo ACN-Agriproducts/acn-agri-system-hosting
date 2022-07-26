@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,13 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
-  public inputDateContract = new FormGroup({
-    start: new FormControl('', Validators.required),
-    end: new FormControl('', Validators.required),
+  public inputDateContract = new UntypedFormGroup({
+    start: new UntypedFormControl('', Validators.required),
+    end: new UntypedFormControl('', Validators.required),
   });
-  public inputPeriod = new FormGroup({
-    start: new FormControl('', Validators.required),
-    end: new FormControl('', Validators.required),
+  public inputPeriod = new UntypedFormGroup({
+    start: new UntypedFormControl('', Validators.required),
+    end: new UntypedFormControl('', Validators.required),
   });
   constructor() { }
 

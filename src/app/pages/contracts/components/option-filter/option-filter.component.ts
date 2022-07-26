@@ -1,4 +1,4 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { PopoverController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { isEqual, isAfter, isBefore, isWithinInterval } from 'date-fns';
@@ -20,11 +20,11 @@ export class OptionFilterComponent implements OnInit {
   public listCancel: any;
   public list;
   @Input() public listFilter: any = [];
-  public input = new FormControl('');
-  public dateOnly = new FormControl('');
-  public range = new FormGroup({
-    start: new FormControl({ value: '', disabled: true }, Validators.required),
-    end: new FormControl({ value: '', disabled: true }, Validators.required),
+  public input = new UntypedFormControl('');
+  public dateOnly = new UntypedFormControl('');
+  public range = new UntypedFormGroup({
+    start: new UntypedFormControl({ value: '', disabled: true }, Validators.required),
+    end: new UntypedFormControl({ value: '', disabled: true }, Validators.required),
   });
   constructor(
     private popoverController: PopoverController

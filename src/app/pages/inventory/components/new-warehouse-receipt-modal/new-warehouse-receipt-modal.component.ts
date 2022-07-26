@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { UniqueWarehouseReceiptIdService } from '../unique-warehouse-receipt-id.service';
 
@@ -13,11 +13,11 @@ export class NewWarehouseReceiptModalComponent implements OnInit {
   @Input() productList: any[];
   @Input() warehouseReceiptCollectionRef: AngularFirestoreCollection;
 
-  public warehouseReceiptForm: FormGroup;
+  public warehouseReceiptForm: UntypedFormGroup;
 
   constructor(
     private modalController: ModalController, 
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private uniqueId: UniqueWarehouseReceiptIdService,
   ) {}
 

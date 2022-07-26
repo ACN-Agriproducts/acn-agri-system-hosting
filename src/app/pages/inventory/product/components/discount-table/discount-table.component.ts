@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentSnapshot } from '@angular/fire/compat/firestore';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -15,13 +15,13 @@ export class DiscountTableComponent implements OnInit {
   @ViewChild(MatTable) tableView:MatTable<any>;
 
   public ready = false;
-  public table: FormGroup;
+  public table: UntypedFormGroup;
   public currentCompany: string;
   public displayedColumns: string[] = ['low', 'high', 'weightDiscount', 'charge', 'bonus', 'delete'];
 
   constructor(
     private db: AngularFirestore,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private navController: NavController
   ) { }
 
@@ -31,7 +31,7 @@ export class DiscountTableComponent implements OnInit {
     });
     
     const sub = new AngularFirestoreDocument(this.doc.ref, this.db).collection("discounts").doc("moisture").get().subscribe(val => {
-      const data = this.table.get("data") as FormArray;
+      const data = this.table.get("data") as UntypedFormArray;
 
       if(val.data()['data']){
         val.data()['data'].forEach(row => {
@@ -48,7 +48,7 @@ export class DiscountTableComponent implements OnInit {
     })
   }
 
-  createItem(row?: any): FormGroup{
+  createItem(row?: any): UntypedFormGroup{
     if(typeof row == "undefined"){
       row = {
         low: null,
@@ -69,7 +69,7 @@ export class DiscountTableComponent implements OnInit {
   }
 
   public addItem(): void{
-    const data = this.table.get("data") as FormArray;
+    const data = this.table.get("data") as UntypedFormArray;
     data.push(this.createItem());
 
     if(this.tableView){
@@ -78,7 +78,7 @@ export class DiscountTableComponent implements OnInit {
   }
 
   public deleteItem(index: number): void{
-    const data = this.table.get("data") as FormArray;
+    const data = this.table.get("data") as UntypedFormArray;
     if(index >= data.length){
       return;
     }
@@ -120,7 +120,7 @@ export class DiscountTableComponent implements OnInit {
     return true;
   }
 
-  get data(): FormArray {
-    return this.table.get('data') as FormArray;
+  get data(): UntypedFormArray {
+    return this.table.get('data') as UntypedFormArray;
   }
 }

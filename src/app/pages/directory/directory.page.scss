@@ -6,7 +6,7 @@
 
 .content-label{
     display: grid;
-    justify-content: start;
+    justify-content: flex-start;
     span:nth-child(1){
         font-size: 16px;
         color: var(--ion-color-dark);

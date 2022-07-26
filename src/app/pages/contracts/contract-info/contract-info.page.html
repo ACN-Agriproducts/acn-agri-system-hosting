@@ -48,6 +48,7 @@
 </ion-content>
 
 <ion-content *ngIf="showLiquidation">
+  <button mat-raised-button (click)="reloadContractTickets()">Reload Tickets</button>
   <app-ticket-discount-table [ticketDiscountList]="ticketDiscountList"></app-ticket-discount-table>
   <button mat-button (click)="onDownloadLiquidation()">Download</button>
   <button mat-button

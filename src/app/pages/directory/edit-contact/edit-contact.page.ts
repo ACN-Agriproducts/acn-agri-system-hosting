@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -14,11 +14,11 @@ export class EditContactPage implements OnInit {
 
   public id: string;
   public currentCompany: string;
-  public contactForm: FormGroup;
+  public contactForm: UntypedFormGroup;
   public doc: any;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
     private db: AngularFirestore,
     private localStorage: Storage,
