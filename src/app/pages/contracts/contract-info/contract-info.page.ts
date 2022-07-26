@@ -69,21 +69,19 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet();
 
+    // initializing columns
     worksheet.columns = [
       { header: "Inbound Date", key: 'dateIn' },
       { header: "Ticket #", key: 'id' },
       { header: "Contract", key: 'contractID' },
-      // Weight (lbs)
-        { header: "Gross", key: 'gross' },
-        { header: "Tare", key: 'tare' },
-        {  header: "Net", key: 'net' },
-      // Moisture
-        { header: "%", key: 'moisture' },
-        { header: "CWT", key: 'moistureCwt' },                      // net - dryWeight
+      { header: "Gross", key: 'gross' },
+      { header: "Tare", key: 'tare' },
+      { header: "Net", key: 'net' },
+      { header: "%", key: 'moisture' },
+      { header: "CWT", key: 'moistureCwt' },                        // net - dryWeight
       { header: "Adjusted Weight", key: 'dryWeight' },
-      // Damage
-        { header: "%", key: 'damage' },                             // not in the ticket yet
-        { header: "CWT", key: 'damageCwt' },                        // damageWeight - undamagedWeight
+      { header: "%", key: 'damage' },                               // not in the ticket yet
+      { header: "CWT", key: 'damageCwt' },                          // damageWeight - undamagedWeight
       { header: "Adjusted Weight", key: 'undamagedWeight' },
       { header: "Price ($/BU)", key: 'pricePerBushel' },            // located in contract
       { header: "Adjusted Price ($/BU)", key: 'adjustedPrice' },    // ???
@@ -97,12 +95,17 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     rowValues[4] = "Weight(lbs)";
     rowValues[7] = "Moisture";
     rowValues[10] = "Damage";
-    worksheet.insertRow(1, rowValues);
+    let firstRow = worksheet.insertRow(1, rowValues);
 
+    // formatting
     worksheet.mergeCells('D1:F1');
     worksheet.mergeCells('G1:H1');
     worksheet.mergeCells('J1:K1');
-    worksheet.getRow(1).alignment = { horizontal: 'center' };
+
+    firstRow.alignment = { horizontal: 'center' };
+    firstRow.font = { bold: true };
+    worksheet.getRow(2).font = { bold: true };
+    worksheet.getRow(2).border = { bottom: { style: 'thick'}};
 
     worksheet.columns.forEach(column => {
       const lengths = column.values.map(v => v.toString().length);
@@ -110,12 +113,14 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       column.width = maxLength;
     });
 
+    // populating worksheet columns
     this.ticketDiscountList.forEach(ticket => {
-
       const net = ticket.data.getNet() * (ticket.data.in ? 1 : -1);
+
       const dryWeight = ticket.data.dryWeight;
       const moistureCwt = net - dryWeight;
-      const undamagedWeight = dryWeight;  // remove later when damage/undamagedWeight is added to tickets
+
+      const undamagedWeight = dryWeight;                // remove later when damage/undamagedWeight is added to tickets (ticket.data.undamagedWeight)
       const damageCwt = dryWeight - undamagedWeight;
       
       worksheet.addRow({
@@ -123,23 +128,55 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         net: net,
         moisture: ticket.data.moisture,
         moistureCwt: moistureCwt,
-        damage: 0,                        // change later when damage/undamagedWeight is added to tickets
+        damage: 0,                                      // change later when damage/undamagedWeight is added to tickets
         damageCwt: damageCwt,
-        undamagedWeight: undamagedWeight, // change later when damage/undamagedWeight is added to tickets
+        undamagedWeight: undamagedWeight,               // change later when damage/undamagedWeight is added to tickets
         pricePerBushel: this.currentContract.pricePerBushel,
         adjustedPrice: this.currentContract.pricePerBushel,
-        total: this.currentContract.pricePerBushel,
+        total: this.currentContract.pricePerBushel * undamagedWeight / 56,
         infested: ticket.discounts.infested,
         inspection: ticket.discounts.inspection,
-        netToPay: this.currentContract.pricePerBushel / 56 * ticket.data.dryWeight - ticket.discounts.infested - ticket.discounts.inspection,
+        netToPay: this.currentContract.pricePerBushel / 56 * dryWeight - ticket.discounts.infested - ticket.discounts.inspection
       });
     });
 
-    let totalRow = worksheet.addRow(["Totals:"]);
-    const colNamesArray = ['gross', 'tare', 'net', 'moistureCwt', 'dryWeight', 'damageCwt', 'undamagedWeight', 'pricePerBushel', 'adjustedPrice', 'total', 'infested', 'inspection', 'netToPay'];
+    // adding totals row
+    const colNamesArray = [
+      'gross',
+      'tare',
+      'net',
+      'moistureCwt',
+      'dryWeight',
+      'damageCwt',
+      'undamagedWeight',
+      'pricePerBushel',
+      'adjustedPrice',
+      'total',
+      'infested',
+      'inspection',
+      'netToPay'
+    ];
+    this.addColumnTotal(worksheet, colNamesArray);
 
-    this.addColumnTotal(worksheet, totalRow, colNamesArray);
+    this.toDownload(workbook);
+  }
 
+  public addColumnTotal = (worksheet: Excel.Worksheet, colKeys: string[]) => {
+    const totalRow = worksheet.addRow(["Totals:"]);
+    const row = totalRow.number;
+
+    colKeys.forEach(colKey => {
+      const col = String.fromCharCode('A'.charCodeAt(0) + worksheet.getColumn(colKey).number - 1);
+
+      totalRow.getCell(colKey).value = { 
+        formula: `SUM(${col}3:${col}${row - 1})`
+      } as Excel.CellFormulaValue;
+    });
+    totalRow.font = { bold: true };
+    totalRow.border = { top: { style: 'thick' } };
+  }
+  
+  public toDownload = async (workbook: Excel.Workbook) => {
     const buffer = await workbook.xlsx.writeBuffer();   
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -155,15 +192,5 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
-  }
-
-  public addColumnTotal = (worksheet: Excel.Worksheet, totalRow: Excel.Row, colKeys: string[]) => {
-    const row = totalRow.number;
-
-    colKeys.forEach(colKey => {
-      const col = String.fromCharCode('A'.charCodeAt(0) + worksheet.getColumn(colKey).number - 1);
-
-      totalRow.getCell(colKey).value = { formula: `SUM(${col}3:${col}${row - 1})`} as Excel.CellFormulaValue;
-    });
-  }
+  } 
 }
