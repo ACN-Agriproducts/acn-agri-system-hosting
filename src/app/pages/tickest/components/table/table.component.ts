@@ -89,7 +89,6 @@ export class TableComponent implements OnInit {
       .orderBy("dateOut", "desc")
       .limit(this.ticketLimit))
     .subscribe(ticketList => {
-      console.log(ticketList)
       this.ticketList = ticketList;
     });
 
@@ -119,7 +118,6 @@ export class TableComponent implements OnInit {
       .orderBy("dateOut", "desc")
       .limit(this.ticketLimit))
     .subscribe(ticketList => {
-      console.log(ticketList)
       this.ticketList = ticketList;
     });
 
@@ -158,7 +156,6 @@ export class TableComponent implements OnInit {
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
       componentProps: {
-        ticketId: ticketId,
         ticket: ticket
       },
       cssClass: 'modal-dialog-ticket'
