@@ -23,7 +23,7 @@
     display: grid;
     grid-template-columns: auto auto;
     column-gap: 5px;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
   }
 }
@@ -75,7 +75,7 @@
         position: relative;
         z-index: 80;
         display: grid;
-        justify-content: start;
+        justify-content: flex-start;
         max-width: 150px;
       }
       &:before{

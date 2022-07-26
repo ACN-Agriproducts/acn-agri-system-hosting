@@ -40,7 +40,7 @@ ion-content {
     column-gap: 15px;
     align-content: center;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
     // margin-bottom: 10px;
     min-height: 42px;
     .icon-detail {
@@ -89,7 +89,7 @@ ion-content {
       position: relative;
       z-index: 80;
       display: grid;
-      justify-content: start;
+      justify-content: flex-start;
       max-width: 150px;
     }
     &:before {

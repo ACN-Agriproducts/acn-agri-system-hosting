@@ -1,7 +1,7 @@
 import { LoginService } from './utils/services/login.service';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginPage implements OnInit, OnDestroy {
   public destroy: boolean;
-  public formulario: FormGroup;
+  public formulario: UntypedFormGroup;
 
   private currentSubs: Subscription[] = [];
   constructor(
@@ -26,7 +26,7 @@ export class LoginPage implements OnInit, OnDestroy {
     private navController: NavController,
     private loadingController: LoadingController,
     private service: LoginService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public alertController: AlertController,
     private storage: Storage,
     private fb: AngularFirestore,

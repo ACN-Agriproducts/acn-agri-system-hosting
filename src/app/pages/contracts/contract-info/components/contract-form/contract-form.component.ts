@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Contract, ProductInfo, DeliveryDates, PaymentTerms } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
 
@@ -12,13 +12,13 @@ import { Product } from '@shared/classes/product';
 export class ContractFormComponent implements OnInit {
   @Input() currentContract: Contract;
 
-  public contractForm: FormGroup;
+  public contractForm: UntypedFormGroup;
 
   public productsList: Product[] = [];
   public updateStatus: string = '';
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private db: AngularFirestore
   ) { }
 
