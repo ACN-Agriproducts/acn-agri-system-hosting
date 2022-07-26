@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
 import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
@@ -23,7 +23,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public searchIinput = new FormControl('');
+  public searchIinput = new UntypedFormControl('');
   public ready: boolean = false;
   public sortField: string = "date";
   public assending: boolean = false;

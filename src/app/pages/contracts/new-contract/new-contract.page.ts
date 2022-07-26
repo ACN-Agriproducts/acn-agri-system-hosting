@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
@@ -24,7 +24,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   productsList: Product[];
   clientsReady: boolean = false;
   productsReady: boolean = false;
-  contractForm: FormGroup;
+  contractForm: UntypedFormGroup;
   currentSubs: Subscription[] = [];
   contractWeight: Weight;
   
@@ -32,7 +32,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   ticketClient: Contact;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private db: AngularFirestore,
     private localStorage: Storage,
     private navController: NavController,
@@ -266,7 +266,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   }
 
   getContractCollection(): AngularFirestoreCollection {
-    const contractTypeControl = this.contractForm.get('contractType') as FormControl;
+    const contractTypeControl = this.contractForm.get('contractType') as UntypedFormControl;
     return this.db.collection(`companies/${this.currentCompany}/${contractTypeControl.value}`);
   }
 }

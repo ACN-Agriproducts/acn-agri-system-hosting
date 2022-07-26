@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
@@ -12,11 +12,11 @@ import { Storage } from '@ionic/storage';
 })
 export class NewContactPage implements OnInit {
 
-  contactForm: FormGroup;
+  contactForm: UntypedFormGroup;
   currentCompany: String;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private store: AngularFirestore,
     private navController: NavController,
     private localStore: Storage
