@@ -157,6 +157,11 @@ export class Ticket extends FirebaseDocInterface{
         return storage.ref(this.pdfLink).getDownloadURL().toPromise();
     }
 
+    public async getImageLinks(storage: AngularFireStorage): Promise<string[]> {
+        const promises = this.imageLinks.map(link => storage.ref(link).getDownloadURL().toPromise())
+        return Promise.all(promises);
+    }
+
     /**
      * 
      * @param db - Angularfirestore instance
