@@ -9,14 +9,23 @@ export class User extends FirebaseDocInterface {
     position: string;
     email: string;
     pictureURL: string;
+    pictureRef: string;
     worksAt: string[];
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
-        super(snapshot, User.converter);
-    }
+    constructor(snapshotOrData: QueryDocumentSnapshot<any> | any) {
+        super(snapshotOrData, User.converter);
+        let data;
 
-    constructor(data: any) {
-        super(data, User.converter)
+        if('metadata' in snapshotOrData) data = snapshotOrData.data();
+        else data = snapshotOrData;
+
+        this.name = data.name;
+        this.createdAt = data.createdAt;
+        this.type = data.type;
+        this.position = data.position;
+        this.email = data.email;
+        this.pictureRef = data.pictureURL;
+        this.worksAt = data.worksAt;
     }
 
     public static converter = {
@@ -33,7 +42,10 @@ export class User extends FirebaseDocInterface {
     }
 
     public getPictureURL(store: AngularFireStorage): Promise<string> {
-        return store.ref(this.pictureURL).getDownloadURL().toPromise();
+        return store.ref(this.pictureURL).getDownloadURL().toPromise().then(url => {
+            this.pictureURL = url;
+            return url;
+        });
     }
 
     public static getDocumentReference(db: AngularFirestore, userID: string) {
