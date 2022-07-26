@@ -1,4 +1,5 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { AngularFirestore, CollectionReference, DocumentChangeAction, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Observable } from "rxjs";
 import { Contact } from "./contact";
 import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -180,5 +181,9 @@ export class Ticket extends FirebaseDocInterface{
 
         const ticketCollectionSnapshot = await collectionReference.get();
         return ticketCollectionSnapshot.docs.map(snap => snap.data());
+    }
+
+    public static getTicketSnapshot(db: AngularFirestore, company: string, plant: string, queryFn: <T>(q:CollectionReference<T>) => Query<T> = q => q): Observable<Ticket[]> {
+        return db.collection<Ticket>(Ticket.getCollectionReference(db, company, plant), queryFn).valueChanges();
     }
 }
