@@ -36,7 +36,7 @@ export class ListComponent implements OnInit {
       const company = await Company.getCompany(this.db, currentCompany);
       this.listEmployees = await company.getCompanyUsers(this.fns, this.db);
       this.listEmployees.forEach(async user => {
-        user.pictureURL = await user.getPictureURL(this.storage);
+        user.getPictureURL(this.storage);
       });
     })
   }
