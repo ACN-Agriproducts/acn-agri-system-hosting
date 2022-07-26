@@ -16,6 +16,8 @@
   </ion-item>
 </ion-card>
 
+<mat-spinner *ngIf="listEmployees.length == 0"></mat-spinner>
+
 <ion-card *ngFor="let item of listEmployees" matRipple>
   <div class="content-data-avatar" (click)="openModal($event, item)">
     <ion-item lines="none">
