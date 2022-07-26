@@ -2,6 +2,10 @@ import { ModalController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
+import { Ticket } from '@shared/classes/ticket';
+import { Contract } from '@shared/classes/contract';
+import { Contact } from '@shared/classes/contact';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-modal-ticket',
@@ -9,11 +13,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./modal-ticket.component.scss']
 })
 export class ModalTicketComponent implements OnInit {
-  @Input() ticketId: string;
-  @Input() ticket: any;
+  @Input() ticket: Ticket;
 
-  pdfLink: Observable<string | null>;
-  imageTicketList: Observable<string | null>[] = [];
+  public contract: Contract;
+  public transport: Contact;
+  public client: Contact;
+
+  pdfLink: string;
+  imageTicketList: string[] = [];
 
   slideOpts = {
     initialSlide: 1,
@@ -22,19 +29,23 @@ export class ModalTicketComponent implements OnInit {
   };
   constructor(
     private modalController: ModalController,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private db: AngularFirestore
   ) { }
 
   ngOnInit(): void {
-    if(this.ticket.pdfLink != null) {
-      this.pdfLink = this.storage.ref(this.ticket.pdflink).getDownloadURL();
-    }
+    this.ticket.getPrintDocs(this.db).then(result => {
+      let _;
+      [_, this.contract, this.transport, this.client] = result;
+    })
 
-    if(this.ticket.imageLinks != null) {
-      this.ticket.imageLinks.forEach(element => {
-        this.imageTicketList.push(this.storage.ref(element).getDownloadURL());
-      });
-    }
+    this.ticket.getPdfLink(this.storage).then(pdfLink => {
+      this.pdfLink = pdfLink;
+    });
+
+    this.ticket.getImageLinks(this.storage).then(links => {
+      this.imageTicketList = links;
+    });
   }
   
   public closeModal = (): void => {
