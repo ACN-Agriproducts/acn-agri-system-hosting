@@ -1,4 +1,5 @@
 import { AngularFirestore, CollectionReference, DocumentChangeAction, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
 import { Contract } from "./contract";
@@ -150,6 +151,17 @@ export class Ticket extends FirebaseDocInterface{
         return this.ref.parent.withConverter(Ticket.converter);
     }
 
+    public async getPdfLink(storage: AngularFireStorage): Promise<string> {
+        if(!this.pdfLink) return "";
+
+        return storage.ref(this.pdfLink).getDownloadURL().toPromise();
+    }
+
+    /**
+     * 
+     * @param db - Angularfirestore instance
+     * @returns A promise to return an array containing [Ticket, Contract, Transport, Client]
+     */
     public async getPrintDocs(db: AngularFirestore): Promise<[Ticket, Contract, Contact, Contact]> {
         const contract = await this.getContract(db);
         const transport = await this.getTransport(db);
