@@ -39,8 +39,13 @@ export class ModalTicketComponent implements OnInit {
       [_, this.contract, this.transport, this.client] = result;
     })
 
-    this.ticket.getPdfLink(this.storage).then(pdfLink => {
+    this.ticket.getPdfLink(this.storage)
+    .then(pdfLink => {
       this.pdfLink = pdfLink;
+    })
+    .catch(reason => {
+      this.pdfLink = "";
+      console.error(reason);
     });
 
     this.ticket.getImageLinks(this.storage).then(links => {
