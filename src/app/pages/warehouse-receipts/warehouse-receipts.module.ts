@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -10,13 +10,16 @@ import { WarehouseReceiptsPage } from './warehouse-receipts.page';
 import { WarehouseReceiptsComponent } from '@pages/warehouse-receipts/components/warehouse-receipts/warehouse-receipts.component';
 import { NewWarehouseReceiptModalComponent } from '@pages/warehouse-receipts/components/new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
 import { WarehouseReceiptStatusPopoverComponent } from '@pages/warehouse-receipts/components/warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
+import { CoreModule } from '@core/core.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    WarehouseReceiptsPageRoutingModule
+    WarehouseReceiptsPageRoutingModule,
+    ReactiveFormsModule,
+    CoreModule
   ],
   declarations: [
     WarehouseReceiptsPage,

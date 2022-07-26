@@ -47,12 +47,12 @@
 					</ion-text>
 
 					<ion-text class="status-date" color="dark" *ngIf="receipt.status === 'cancelled'">
-						{{ receipt.endDate | date }}
+						{{ receipt.closeDate | date }}
 					</ion-text>
 				</div>
-				<ion-text color="dark">{{ receipt.grain }}</ion-text>
-				<ion-text color="dark">{{ receipt.bushels | number }}</ion-text>
-				<ion-text color="dark">{{ receipt.futurePrice | currency }}</ion-text>
+				<ion-text color="dark">{{ receipt.product }}</ion-text>
+				<ion-text color="dark">{{ receipt.bushelQuantity | number }}</ion-text>
+				<ion-text color="dark">{{ receipt.purchasedFuturePrice | currency }}</ion-text>
 				<div class="menu">
 					<ion-icon name="ellipsis-vertical-outline"></ion-icon>
 				</div>
