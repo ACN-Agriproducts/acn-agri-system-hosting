@@ -1,5 +1,6 @@
-import { CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Product } from "./product";
 
 
 export class WarehouseReceipt extends FirebaseDocInterface{
@@ -8,7 +9,7 @@ export class WarehouseReceipt extends FirebaseDocInterface{
     public closeDate: Date | null;
     public expDate: Date;
     public id: number;
-    public product: string;
+    public product: Product;
     public purchaseBase: number | null;
     public purchaseContractNumber: string | null;
     public purchaseDate: Date | null;
@@ -25,30 +26,22 @@ export class WarehouseReceipt extends FirebaseDocInterface{
         
         const data = snapshot.data();
 
-        let tempWarehouseReceiptList: DocumentReference<WarehouseReceipt>[] = [];
-
-        data.warehouseReceipts.forEach((warehouseReceipt: DocumentReference) => {
-            tempWarehouseReceiptList.push(warehouseReceipt.withConverter(WarehouseReceipt.converter));
-        });
-
         this.bushelQuantity = data.bushelQuantity;
-        this.cancelDate = data.cancelDate;
+        this.cancelDate = data.cancelDate?.toDate();
         this.closeDate = data.closeDate;
-        this.expDate = data.expDate;
+        this.expDate = data.expDate?.toDate();
         this.id = data.id;
         this.product = data.product;
         this.purchaseBase = data.purchaseBase;
         this.purchaseContractNumber = data.purchaseContractNumber;
-        this.purchaseDate = data.purchaseDate;
+        this.purchaseDate = data.purchaseDate?.toDate();
         this.purchaseFuturePrice = data.purchaseFuturePrice;
         this.saleContractId = data.saleContractId;
-        this.saleDate = data.saleDate;
+        this.saleDate = data.saleDate?.toDate();
         this.saleFuturePrice = data.saleFuturePrice;
         this.salePrice = data.salePrice;
-        this.startDate = data.startDate;
+        this.startDate = data.startDate?.toDate();
         this.status = data.status;
-
-
     }
 
     public static converter = {
@@ -77,12 +70,47 @@ export class WarehouseReceipt extends FirebaseDocInterface{
         }
     };
 
-    public getCollectionReference(): CollectionReference<WarehouseReceipt> {
+    public getCollectionReference = (): CollectionReference<WarehouseReceipt> => {
         return this.ref.parent.withConverter(WarehouseReceipt.converter);
     }
 
-    public getProduct(): Promise<any> {
+    public static getWRCollectionReference = (db: AngularFirestore, company: string, plant: string): CollectionReference<WarehouseReceipt> => {
+        return db.firestore.collection(`companies/${company}/plants/${plant}/warehouseReceipts`)
+            .withConverter(WarehouseReceipt.converter);
+    }
+
+    public static getWarehouseReceipts = async (
+        db: AngularFirestore, 
+        company: string, 
+        plant: string, 
+        queryFn?: <T>(q: Query<T> | CollectionReference<T>) => Query<T>
+    ): Promise<WarehouseReceipt[]> => {
+
+        let warehouseReceiptCollectionRef: CollectionReference<WarehouseReceipt> | Query<WarehouseReceipt>
+            = WarehouseReceipt.getWRCollectionReference(db, company, plant);
+
+        if(queryFn){
+            warehouseReceiptCollectionRef = queryFn<WarehouseReceipt>(warehouseReceiptCollectionRef);
+        }
+        warehouseReceiptCollectionRef = warehouseReceiptCollectionRef.orderBy('id', 'asc');
+
+        return warehouseReceiptCollectionRef.get().then(result => {
+            return result.docs.map(doc => doc.data());
+        });
+    }
+
+    // will have to use this if a Search Bar is to be added
+    public static getWarehouseReceipt = (): WarehouseReceipt => {
         return;
+    }
+
+    // get the product object corresponding to the product saved in the receipt
+    public getProductList = (): Promise<any> => {
+        return;
+    }
+
+    public static getStatus = (): typeof status => {
+       return status;
     }
 }
 
@@ -92,5 +120,5 @@ enum status {
     sold = 'sold',
     paid = 'paid',
     closed = 'closed',
-    cancelled = 'cancelled'    
+    cancelled = 'cancelled'
 }

@@ -27,7 +27,7 @@
 
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Grain</mat-label>
-      <mat-select formControlName="grain">
+      <mat-select formControlName="product">
         <mat-option *ngFor="let product of productList" [value]="product.name">{{ product.name }}</mat-option>
       </mat-select>
       <mat-error>Please Choose a Grain</mat-error>
@@ -35,12 +35,12 @@
 
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Bushels</mat-label>
-      <input matInput formControlName="bushels" type="number" step="5000" min="5000">
+      <input matInput formControlName="bushelQuantity" type="number" step="5000" min="5000">
     </mat-form-field>
 
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Future Price</mat-label>
-      <input matInput formControlName="futurePrice" type="number">
+      <input matInput formControlName="purchasedFuturePrice" type="number">
       <mat-error>Please Input a Future Price</mat-error>
     </mat-form-field>
 

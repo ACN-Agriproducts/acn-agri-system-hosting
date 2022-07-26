@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentReference } from '@angular/fire/compat/firestore';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Product } from '@shared/classes/product';
+import { WarehouseReceipt } from '@shared/classes/warehouseReceipt';
 import { NewWarehouseReceiptModalComponent } from '../new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
 import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 
@@ -11,13 +13,14 @@ import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-sta
   styleUrls: ['./warehouse-receipts.component.scss'],
 })
 export class WarehouseReceiptsComponent implements OnInit {
-  @Input() productList: any[];
-  @Input() currentPlantName: string;
-  
-  public warehouseReceiptList: WarehouseReceiptDoc[] = [];
+
+  public warehouseReceiptList: WarehouseReceipt[] = [];
   public warehouseReceiptCollectionRef: AngularFirestoreCollection;
-  public queryStatus: string[] = ["active", "sold", "financing", "cancelled"];
+  public queryStatus: string[] = ["active", "financing", "sold", "paid", "closed", "cancelled"];
   public today: Date = new Date();
+  public currentCompany: string;
+  public currentPlant: string;
+  public productList: Product[];
   
 
   constructor(
@@ -25,37 +28,36 @@ export class WarehouseReceiptsComponent implements OnInit {
     private popoverController: PopoverController,
     private db: AngularFirestore,
     private localStorage: Storage,
-  ) { }
+  ) {
 
-  ngOnInit() {
-    this.getWarehouseReceipts();
   }
 
-  public getWarehouseReceipts = async () => {
-    let tempReceiptList = [];
-
-    this.localStorage.get('currentCompany').then(currentCompany => {
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, 
-        query => query.where('status', 'in', this.queryStatus)
-                      .orderBy('id', 'asc'));
-
-      this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
-        receiptList.forEach(receiptFirebaseDoc => {
-          const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
-          tempReceipt.ref = receiptFirebaseDoc.ref;
-          tempReceipt.startDate = receiptFirebaseDoc.get('startDate').toDate();  // firebase uses timestamps for dates
-          tempReceipt.endDate = receiptFirebaseDoc.get('endDate')?.toDate();
-          tempReceiptList.push(tempReceipt);
-        });
-
-        this.warehouseReceiptList = tempReceiptList;
-      });
+  ngOnInit() {
+    this.localStorage.get('currentCompany').then(company => {
+      this.currentCompany = company;
+      return this.localStorage.get('currentPlant');
+    }).then(plant => {
+      this.currentPlant = plant;
+      return WarehouseReceipt.getWarehouseReceipts(
+        this.db, 
+        this.currentCompany, 
+        this.currentPlant
+      )
+    }).then(async result => {
+      this.warehouseReceiptList = result;
+      // this.warehouseReceiptCollectionRef = this.db.collection(WarehouseReceipt.getWRCollectionReference(this.db, this.currentCompany, this.currentPlant));
+      this.warehouseReceiptCollectionRef = this.db.collection(result[0].getCollectionReference());
+      this.productList = await Product.getProductList(this.db, this.currentCompany);
     });
   }
 
   public segmentChanged = async (event: any) => {
     this.queryStatus = event.detail.value.split(',');
-    this.getWarehouseReceipts();
+    this.warehouseReceiptList = await WarehouseReceipt.getWarehouseReceipts(this.db, 
+      this.currentCompany, 
+      this.currentPlant, 
+      query => query.where('status', 'in', this.queryStatus)
+    );
   }
 
   public generateWarehouseReceiptsModal = async () => {
@@ -100,7 +102,7 @@ export class WarehouseReceiptsComponent implements OnInit {
     });
   }
 
-  public openStatusSelect = async (receipt: WarehouseReceiptDoc) => {
+  public openStatusSelect = async (receipt: WarehouseReceipt) => {
     if (receipt.status === 'cancelled') {
       return;
     }
@@ -122,7 +124,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 
   public updateWarehouseReceipt = async (status: string, receiptRef: DocumentReference) => {
-    const updateDoc: any = {status};
+    const updateDoc: any =  { status };
 
     // add endDate to cancelled receipts
     if (status === 'cancelled') {
@@ -130,11 +132,15 @@ export class WarehouseReceiptsComponent implements OnInit {
     }
 
     receiptRef.update(updateDoc);
-    this.getWarehouseReceipts();
+    this.warehouseReceiptList = await WarehouseReceipt.getWarehouseReceipts(
+      this.db, 
+      this.currentCompany, 
+      this.currentPlant
+    );
   }
 }
 
-class WarehouseReceiptDoc {
+/* class WarehouseReceiptDoc {
   id: number;
   startDate: Date;
   endDate: Date | null;
@@ -143,4 +149,4 @@ class WarehouseReceiptDoc {
   bushels: number;
   futurePrice: number;
   ref: DocumentReference;
-}
+} */

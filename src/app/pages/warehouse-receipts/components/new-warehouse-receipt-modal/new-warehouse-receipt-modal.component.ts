@@ -28,9 +28,9 @@ export class NewWarehouseReceiptModalComponent implements OnInit {
       quantity: [1, Validators.required],
       id: [, [Validators.required], this.uniqueId.validate.bind(this.uniqueId)],
       startDate: [new Date(), Validators.required],
-      grain: ['', Validators.required],
-      bushels: [10_000, Validators.required],
-      futurePrice: [, Validators.required],
+      product: ['', Validators.required],
+      bushelQuantity: [10_000, Validators.required],
+      purchasedFuturePrice: [, Validators.required],
     });
   }
 
