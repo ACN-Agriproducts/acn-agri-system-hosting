@@ -1,17 +1,14 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
-import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
 import * as Excel from 'exceljs';
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-contract-info',
@@ -30,6 +27,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketsReady: boolean = false;
   public contractRef: AngularFirestoreDocument;
   public showLiquidation: boolean = false;
+
   private currentSub: Subscription;
 
   @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
@@ -67,73 +65,44 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     }
   }
 
-  onDownloadLiquidation() {
-    const table = this.printableLiquidation.getTable();
-    const workBook:WorkBook = utils.table_to_book(table);
-
-    writeFile(workBook, `contract-${this.currentContract.id}-liquidation.xlsx`);
-  }
-
-  public onDownloadLiquidationV2 = async () => {
+  public onDownloadLiquidation = async () => {
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet();
 
-    worksheet.mergeCells('D1:F1');
-    worksheet.getCell('D1').value = "Weight (lbs)";
-    worksheet.getCell('D1').alignment = { horizontal: 'center' };
-
-    worksheet.mergeCells('G1:H1');
-    worksheet.getCell('G1').value = "Moisture";
-    worksheet.getCell('G1').alignment = { horizontal: 'center' };
-
-    worksheet.mergeCells('J1:K1');
-    worksheet.getCell('J1').value = "Damage";
-    worksheet.getCell('J1').alignment = { horizontal: 'center' };
-
-    worksheet.getRow(2).values = [
-      "Inbound Date", 
-      "Ticket #", 
-      "Contract", 
-      "Gross", 
-      "Tare", 
-      "Net", 
-      "%", 
-      "CWT", 
-      "Adjusted Weight", 
-      "%", 
-      "CWT", 
-      "Adjusted Weight", 
-      "Price ($/BU)", 
-      "Adjusted Price ($/BU)", 
-      "Total ($)", 
-      "Infested", 
-      "Inspection", 
-      "Net to Pay ($)"
-    ];
-
     worksheet.columns = [
-      { key: 'dateIn',  },
-      { key: 'id' },
-      { key: 'contractID' },
+      { header: "Inbound Date", key: 'dateIn' },
+      { header: "Ticket #", key: 'id' },
+      { header: "Contract", key: 'contractID' },
       // Weight (lbs)
-        { key: 'gross' },
-        { key: 'tare' },
-        { key: 'net' },
+        { header: "Gross", key: 'gross' },
+        { header: "Tare", key: 'tare' },
+        {  header: "Net", key: 'net' },
       // Moisture
-        { key: 'moisture' },
-        { key: 'cwtMoisture' },
-      { key: 'dryWeight' },
+        { header: "%", key: 'moisture' },
+        { header: "CWT", key: 'moistureCwt' },                      // net - dryWeight
+      { header: "Adjusted Weight", key: 'dryWeight' },
       // Damage
-        { key: 'damageWeightPercent' },
-        { key: 'cwtDamage' },   // dryWeight - undamagedWeight
-      { key: 'undamagedWeight' },
-      { key: 'price' },         // ???
-      { key: 'adjustedPrice' }, // ???
-      { key: 'total' },         // AdjustedWeight / Product.weight * price
-      { key: 'infested' },      
-      { key: 'inspection' },
-      { key: 'netToPay' },      // total - infested - inspection
+        { header: "%", key: 'damage' },                             // not in the ticket yet
+        { header: "CWT", key: 'damageCwt' },                        // damageWeight - undamagedWeight
+      { header: "Adjusted Weight", key: 'undamagedWeight' },
+      { header: "Price ($/BU)", key: 'pricePerBushel' },            // located in contract
+      { header: "Adjusted Price ($/BU)", key: 'adjustedPrice' },    // ???
+      { header: "Total ($)", key: 'total' },                        // AdjustedWeight / Product.weight * price
+      { header: "Infested", key: 'infested' },      
+      { header: "Inspection", key: 'inspection' },
+      { header: "Net to Pay ($)", key: 'netToPay' },                // total - infested - inspection
     ];
+
+    let rowValues = [];
+    rowValues[4] = "Weight(lbs)";
+    rowValues[7] = "Moisture";
+    rowValues[10] = "Damage";
+    worksheet.insertRow(1, rowValues);
+
+    worksheet.mergeCells('D1:F1');
+    worksheet.mergeCells('G1:H1');
+    worksheet.mergeCells('J1:K1');
+    worksheet.getRow(1).alignment = { horizontal: 'center' };
 
     worksheet.columns.forEach(column => {
       const lengths = column.values.map(v => v.toString().length);
@@ -141,16 +110,35 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       column.width = maxLength;
     });
 
-    this.ticketList.forEach(ticket => {
-      const net = ticket.getNet() * (ticket.in ? 1 : -1);
+    this.ticketDiscountList.forEach(ticket => {
 
-      const thisRow = worksheet.addRow({
-        ...ticket,
+      const net = ticket.data.getNet() * (ticket.data.in ? 1 : -1);
+      const dryWeight = ticket.data.dryWeight;
+      const moistureCwt = net - dryWeight;
+      const undamagedWeight = dryWeight;  // remove later when damage/undamagedWeight is added to tickets
+      const damageCwt = dryWeight - undamagedWeight;
+      
+      worksheet.addRow({
+        ...ticket.data,
         net: net,
-        moisture: ticket.moisture,
-        cwtMoisture: net - ticket.dryWeight,
+        moisture: ticket.data.moisture,
+        moistureCwt: moistureCwt,
+        damage: 0,                        // change later when damage/undamagedWeight is added to tickets
+        damageCwt: damageCwt,
+        undamagedWeight: undamagedWeight, // change later when damage/undamagedWeight is added to tickets
+        pricePerBushel: this.currentContract.pricePerBushel,
+        adjustedPrice: this.currentContract.pricePerBushel,
+        total: this.currentContract.pricePerBushel,
+        infested: ticket.discounts.infested,
+        inspection: ticket.discounts.inspection,
+        netToPay: this.currentContract.pricePerBushel / 56 * ticket.data.dryWeight - ticket.discounts.infested - ticket.discounts.inspection,
       });
     });
+
+    let totalRow = worksheet.addRow(["Totals:"]);
+    const colNamesArray = ['gross', 'tare', 'net', 'moistureCwt', 'dryWeight', 'damageCwt', 'undamagedWeight', 'pricePerBushel', 'adjustedPrice', 'total', 'infested', 'inspection', 'netToPay'];
+
+    this.addColumnTotal(worksheet, totalRow, colNamesArray);
 
     const buffer = await workbook.xlsx.writeBuffer();   
     const blob = new Blob([buffer], {
@@ -167,5 +155,15 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
+  }
+
+  public addColumnTotal = (worksheet: Excel.Worksheet, totalRow: Excel.Row, colKeys: string[]) => {
+    const row = totalRow.number;
+
+    colKeys.forEach(colKey => {
+      const col = String.fromCharCode('A'.charCodeAt(0) + worksheet.getColumn(colKey).number - 1);
+
+      totalRow.getCell(colKey).value = { formula: `SUM(${col}3:${col}${row - 1})`} as Excel.CellFormulaValue;
+    });
   }
 }
