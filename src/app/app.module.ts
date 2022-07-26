@@ -24,34 +24,32 @@ import { MomentDateModule } from '@angular/material-moment-adapter';
 
 
 @NgModule({
-  declarations: [AppComponent, LayoutComponent],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot({
-      mode: 'md'
-    }),
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    SharedModule,
-    CoreModule,
-    AngularFireModule.initializeApp(environment.firebaseConfig),
-    IonicStorageModule.forRoot({
-      name: 'dbAgriproductos',
-    }),
-    MomentDateModule
-
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: USE_AUTH_EMULATOR, useValue: environment.production ? undefined : ['http://localhost:9099'] },
-    { provide: USE_STORAGE_EMULATOR, useValue: environment.production ? undefined :['localhost', 9199] },
-    { provide: USE_FIRESTORE_EMULATOR, useValue: environment.production ? undefined : ['localhost', 8080]  },
-    { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.production ? undefined : ['localhost', 5001] },
-    { provide: BUCKET, useValue: 'business-manager-c488c.appspot.com'}
-  ],
-  bootstrap: [AppComponent]
+    declarations: [AppComponent, LayoutComponent],
+    imports: [
+        BrowserModule,
+        IonicModule.forRoot({
+            mode: 'md'
+        }),
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        CoreModule,
+        AngularFireModule.initializeApp(environment.firebaseConfig),
+        IonicStorageModule.forRoot({
+            name: 'dbAgriproductos',
+        }),
+        MomentDateModule
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        { provide: USE_AUTH_EMULATOR, useValue: environment.production ? undefined : ['http://localhost:9099'] },
+        { provide: USE_STORAGE_EMULATOR, useValue: environment.production ? undefined : ['localhost', 9199] },
+        { provide: USE_FIRESTORE_EMULATOR, useValue: environment.production ? undefined : ['localhost', 8080] },
+        { provide: USE_FUNCTIONS_EMULATOR, useValue: environment.production ? undefined : ['localhost', 5001] },
+        { provide: BUCKET, useValue: 'business-manager-c488c.appspot.com' }
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
