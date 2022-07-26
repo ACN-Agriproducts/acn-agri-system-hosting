@@ -55,7 +55,7 @@ export class Company extends FirebaseDocInterface {
                     u.ref = User.getDocumentReference(db, u.ref);
                     u.createdAt = new Date(u.createdAt);
 
-                    return u;
+                    return new User(u);
                 });
             });
     }
