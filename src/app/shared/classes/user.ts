@@ -42,7 +42,7 @@ export class User extends FirebaseDocInterface {
     }
 
     public getPictureURL(store: AngularFireStorage): Promise<string> {
-        return store.ref(this.pictureURL).getDownloadURL().toPromise().then(url => {
+        return store.ref(this.pictureRef).getDownloadURL().toPromise().then(url => {
             this.pictureURL = url;
             return url;
         });
