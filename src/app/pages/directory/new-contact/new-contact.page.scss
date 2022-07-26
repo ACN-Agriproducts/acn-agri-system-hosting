@@ -19,7 +19,7 @@
             position: relative;
             z-index: 80;
             display: grid;
-            justify-content: start;
+            justify-content: flex-start;
             max-width: 150px;
         }
         &:before {

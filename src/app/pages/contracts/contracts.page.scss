@@ -10,7 +10,7 @@
     display: grid;
     grid-template-columns: auto auto;
     column-gap: 5px;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
   }
 }
@@ -32,13 +32,13 @@
   display: grid;
   position: relative;
   padding-left: 8px;
-  //   justify-content: start;
+  //   justify-content: flex-start;
   span{
     background-color: var(--ion-color-light);
     position: relative;
     z-index: 80;
     display: grid;
-    justify-content: start;
+    justify-content: flex-start;
     max-width: 150px;
   }
   &:before{
@@ -220,7 +220,7 @@ ion-item {
   display: grid;
   grid-template-columns: auto auto;
   // column-gap: 15px;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   cursor: pointer;
   user-select: none;
