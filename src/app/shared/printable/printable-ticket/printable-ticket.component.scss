@@ -161,3 +161,14 @@
     }
   }
 }
+
+@media screen {
+  :host {
+    display: inline-block;
+    width: 8.5in;
+    height: 11in;
+    padding: 0.5in;
+    background-color: white;
+    transform-origin: top left;
+  }
+}
