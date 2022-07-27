@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControlOptions, FormControl } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControlOptions, UntypedFormControl } from '@angular/forms';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
@@ -25,12 +25,12 @@ export class CreateInvoicePage implements OnInit {
   public total: number = 0;
   public ready: boolean = false;
   
-  invoiceForm: FormGroup;
+  invoiceForm: UntypedFormGroup;
 
   private currentSubs: Subscription[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private db: AngularFirestore,
     private localStorage: Storage,
     private navController: NavController,
@@ -101,7 +101,7 @@ export class CreateInvoicePage implements OnInit {
     })
   }
 
-  createItem(): FormGroup{
+  createItem(): UntypedFormGroup{
     return this.fb.group({
       details: [],
       name: [, Validators.required],
@@ -115,12 +115,12 @@ export class CreateInvoicePage implements OnInit {
   }
 
   addItem(){
-    const items = this.invoiceForm.get("items") as FormArray;
+    const items = this.invoiceForm.get("items") as UntypedFormArray;
     items.push(this.createItem());
   }
 
   deleteItem(i: number) {
-    const items = this.invoiceForm.get("items") as FormArray;
+    const items = this.invoiceForm.get("items") as UntypedFormArray;
     
     if(items.length <= 1 || items.length !< items.length) {
       return;
@@ -129,7 +129,7 @@ export class CreateInvoicePage implements OnInit {
     items.removeAt(i);
   }
 
-  createInventoryInfo(): FormGroup {
+  createInventoryInfo(): UntypedFormGroup {
     const options: AbstractControlOptions = {
       validators: this.ifAffectsInventory
     }
@@ -145,16 +145,16 @@ export class CreateInvoicePage implements OnInit {
   }
 
   addInventoryInfo(index: number): void {
-    const infos = this.invoiceForm.get(['items', index, 'inventoryInfo', 'info']) as FormArray;
+    const infos = this.invoiceForm.get(['items', index, 'inventoryInfo', 'info']) as UntypedFormArray;
     infos.push(this.createInventoryInfo());
   }
 
   deleteInventoryInfo(invIndex: number, infoIndex: number): void {
-    const infos = this.invoiceForm.get(['items', invIndex, 'inventoryInfo', 'info']) as FormArray;
+    const infos = this.invoiceForm.get(['items', invIndex, 'inventoryInfo', 'info']) as UntypedFormArray;
     infos.removeAt(infoIndex);
   }
 
-  ifAffectsInventory(formGroup: FormGroup) {
+  ifAffectsInventory(formGroup: UntypedFormGroup) {
     if(!formGroup.parent) {
       return null;
     }
@@ -196,14 +196,14 @@ export class CreateInvoicePage implements OnInit {
       return;
     }
 
-    const formItem = this.invoiceForm.get(["items", index]) as FormControl;
+    const formItem = this.invoiceForm.get(["items", index]) as UntypedFormControl;
     formItem.get(["inventoryInfo", "info"]).setValue([]);
 
     formItem.get("name").setValue(item.name);
     formItem.get("price").setValue(item.price);
     formItem.get("affectsInventory").setValue(item.affectsInventory);
     
-    const inventoryInfo = formItem.get(["inventoryInfo", "info"]) as FormArray;
+    const inventoryInfo = formItem.get(["inventoryInfo", "info"]) as UntypedFormArray;
     while(inventoryInfo.length > 0) {
       inventoryInfo.removeAt(0);
     }

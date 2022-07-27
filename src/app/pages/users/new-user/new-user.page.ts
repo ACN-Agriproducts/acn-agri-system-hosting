@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
@@ -59,6 +59,18 @@ export class NewUserPage implements OnInit {
         {
           label: 'Edit inventory space',
           controlName: 'editSpace'
+        },
+        {
+          label: 'View warehouse receipts',
+          controlName: 'warehouseReceiptRead'
+        },
+        {
+          label: 'Add new warehouse receipts',
+          controlName: 'warehouseReceiptCreate'
+        },
+        {
+          label: 'Update warehouse receipt status?',
+          controlName: 'warehouseReceiptUpdate'
         }
       ]
     },
@@ -213,7 +225,7 @@ export class NewUserPage implements OnInit {
     },
   ];
 
-  public userForm: FormGroup = this.fb.group({
+  public userForm: UntypedFormGroup = this.fb.group({
     name: [, Validators.required],
     email: [, [Validators.required, Validators.email]],
     password: [,Validators.required],
@@ -231,7 +243,10 @@ export class NewUserPage implements OnInit {
         zeroOutInventory:  [false],
         moveInventory: [false],
         addSpace: [false],
-        editSpace: [false]
+        editSpace: [false],
+        warehouseReceiptRead: [false],
+        warehouseReceiptCreate: [false],
+        warehouseReceiptUpdate: [false]
       }),
       invoices: this.fb.group({
         read: [false],
@@ -278,7 +293,7 @@ export class NewUserPage implements OnInit {
 
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private localStorage: Storage,
     private fns: AngularFireFunctions,
     private navController: NavController

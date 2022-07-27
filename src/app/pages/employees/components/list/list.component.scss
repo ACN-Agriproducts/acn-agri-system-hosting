@@ -7,7 +7,7 @@ ion-card {
     display: flex;
     cursor: pointer;
     align-items: center;
-    justify-content: start;
+    justify-content: flex;
   }
   ion-item {
     --min-height: 74px;
@@ -36,7 +36,7 @@ ion-card {
     --min-height: 22px;
     font-size: .789rem;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     justify-self: start;
     column-gap: 15px;

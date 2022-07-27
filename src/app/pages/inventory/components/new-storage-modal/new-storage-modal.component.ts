@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FirebaseApp } from '@angular/fire/compat';
 import { AngularFirestore, DocumentReference, QuerySnapshot } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -13,11 +13,11 @@ export class NewStorageModalComponent implements OnInit {
   @Input() plantRef: DocumentReference;
   @Input() productList: any[];
 
-  public storageForm: FormGroup;
+  public storageForm: UntypedFormGroup;
 
   constructor(
     private modalController: ModalController,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private db: AngularFirestore
   ) { }
 

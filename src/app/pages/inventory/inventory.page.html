@@ -113,5 +113,12 @@
         + Add new...
       </ion-card>
     </div>
+    <ng-container *ngIf="hasReadPermission()">
+      <div class="content-subtitle_small-inventory">
+        <h4><span>Warehouse Receipts</span></h4>
+      </div>
+      <app-warehouse-receipts [productList]="productList" [currentPlantName]="currentPlantName"></app-warehouse-receipts>
+      <!-- <app-warehouse-receipts [productList]="productList" [hasPermission]="hasReadPermission"></app-warehouse-receipts> -->
+    </ng-container>
   </div>
 </ion-content>
