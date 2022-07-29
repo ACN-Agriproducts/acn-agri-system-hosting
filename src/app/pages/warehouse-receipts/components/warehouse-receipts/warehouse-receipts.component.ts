@@ -16,7 +16,7 @@ export class WarehouseReceiptsComponent implements OnInit {
 
   public warehouseReceiptList: WarehouseReceipt[] = [];
   public warehouseReceiptCollectionRef: AngularFirestoreCollection;
-  public queryStatus: string[] = ["active", "financing", "sold", "paid", "closed", "cancelled"];
+  public queryStatus: string[] = ["pending", "active", "closed", "cancelled"];
   public today: Date = new Date();
   public currentCompany: string;
   public currentPlant: string;
@@ -140,13 +140,3 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 }
 
-/* class WarehouseReceiptDoc {
-  id: number;
-  startDate: Date;
-  endDate: Date | null;
-  status: string;
-  grain: string;
-  bushels: number;
-  futurePrice: number;
-  ref: DocumentReference;
-} */

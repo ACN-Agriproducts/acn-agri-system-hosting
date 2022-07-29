@@ -115,10 +115,8 @@ export class WarehouseReceipt extends FirebaseDocInterface{
 }
 
 enum status {
+    pending = 'pending',
     active = 'active',
-    financing = 'financing',
-    sold = 'sold',
-    paid = 'paid',
     closed = 'closed',
     cancelled = 'cancelled'
 }
