@@ -13,25 +13,30 @@
     <div class="mat-typography mat-dialog-content ion-hide-sm-down">
         <div class="content-ticket">
             <div class="panel-main">
-                <img src="./../../../../../assets/ticket.png" alt="">
+                <button 
+                    mat-raised-button
+                    ngxPrint
+                    [useExistingCss]="true"
+                    printSectionId="printableTicket"
+            
+                >Print</button>
+                <app-printable-ticket *ngIf="contract" 
+                    [ticket]="ticket"
+                    [client]="client"
+                    [contract]="contract"
+                    [transport]="transport"
+                    appScaleToFit
+                    id="printableTicket"
+                ></app-printable-ticket>
             </div>
             <div class="panel-second" >
-                <embed src="{{pdfLink}}" *ngIf="pdfLink != null"/>
-                <img src="./../../../../../assets/ticket.png" alt="" />
-                <img src="./../../../../../assets/ticket.png" alt="" />
-                <img src="./../../../../../assets/ticket.png" alt="" />
+                <img *ngFor="let image of imageTicketList" [src]="image" alt="" />
             </div>
         </div>
     </div>
     <ion-slides pager="true" [options]="slideOpts" class="ion-hide-sm-up">
-        <ion-slide>
-           <img src="./../../../../../assets/ticket.png" alt="">
-        </ion-slide>
-        <ion-slide>
-           <img src="./../../../../../assets/ticket.png" alt="">
-        </ion-slide>
-        <ion-slide>
-           <img src="./../../../../../assets/ticket.png" alt="">
+        <ion-slide *ngFor="let image of imageTicketList">
+           <img [src]="image" alt="">
         </ion-slide>
       </ion-slides>
 </ion-content>

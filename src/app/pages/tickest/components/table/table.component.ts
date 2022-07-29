@@ -8,6 +8,7 @@ import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/an
 import { Storage } from '@ionic/storage';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Subscription } from 'rxjs';
+import { Ticket } from '@shared/classes/ticket';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { Subscription } from 'rxjs';
 export class TableComponent implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public ticketList: any[];
+  public ticketList: Ticket[];
   public plantList: string[] = [];
   public currentCompany: string;
   public currentPlant: string;
@@ -81,15 +82,17 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    this.currentSub.push(this.db.collection(this.path, ref =>
+    const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, ref =>
       ref.where("in", "==", this.inTicket)
       .where("dateOut", ">=", startDate)
       .where("dateOut", "<=", endDate)
       .orderBy("dateOut", "desc")
-      .limit(this.ticketLimit)
-    ).valueChanges({idField: "docId"}).subscribe(val => {
-      this.ticketList = val;
-    }));
+      .limit(this.ticketLimit))
+    .subscribe(ticketList => {
+      this.ticketList = ticketList;
+    });
+
+    this.currentSub.push(sub);
   }
 
   async infiniteTickets(event):Promise<void> {
@@ -108,20 +111,17 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    this.currentSub.push(this.db.collection(this.path, ref =>
+    const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, ref =>
       ref.where("in", "==", this.inTicket)
       .where("dateOut", ">=", startDate)
       .where("dateOut", "<=", endDate)
       .orderBy("dateOut", "desc")
-      .limit(this.ticketLimit)
-    ).valueChanges({idField: "docId"}).subscribe(val => {
-      this.ticketList = val;
-      event.target.complete();
+      .limit(this.ticketLimit))
+    .subscribe(ticketList => {
+      this.ticketList = ticketList;
+    });
 
-      if(val.length < this.ticketLimit) {
-        this.infiniteScroll.disabled = true;
-      }
-    }))
+    this.currentSub.push(sub);
   }
 
   open() {
@@ -151,12 +151,11 @@ export class TableComponent implements OnInit {
     return await modal.present();
   }
   public openDialog = async (event, ticketId: string) => {
-    var ticket =  this.ticketList.find(t => t.docId = ticketId);
+    var ticket =  this.ticketList.find(t => t.ref.id == ticketId);
 
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
       componentProps: {
-        ticketId: ticketId,
         ticket: ticket
       },
       cssClass: 'modal-dialog-ticket'
