@@ -13,12 +13,20 @@
     <div class="mat-typography mat-dialog-content ion-hide-sm-down">
         <div class="content-ticket">
             <div class="panel-main">
+                <button 
+                    mat-raised-button
+                    ngxPrint
+                    [useExistingCss]="true"
+                    printSectionId="printableTicket"
+            
+                >Print</button>
                 <app-printable-ticket *ngIf="contract" 
                     [ticket]="ticket"
                     [client]="client"
                     [contract]="contract"
                     [transport]="transport"
                     appScaleToFit
+                    id="printableTicket"
                 ></app-printable-ticket>
             </div>
             <div class="panel-second" >
