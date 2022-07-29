@@ -30,22 +30,13 @@
                 ></app-printable-ticket>
             </div>
             <div class="panel-second" >
-                <embed src="{{pdfLink}}" *ngIf="pdfLink != null"/>
-                <img src="./../../../../../assets/ticket.png" alt="" />
-                <img src="./../../../../../assets/ticket.png" alt="" />
-                <img src="./../../../../../assets/ticket.png" alt="" />
+                <img *ngFor="let image of imageTicketList" [src]="image" alt="" />
             </div>
         </div>
     </div>
     <ion-slides pager="true" [options]="slideOpts" class="ion-hide-sm-up">
-        <ion-slide>
-           <img src="./../../../../../assets/ticket.png" alt="">
-        </ion-slide>
-        <ion-slide>
-           <img src="./../../../../../assets/ticket.png" alt="">
-        </ion-slide>
-        <ion-slide>
-           <img src="./../../../../../assets/ticket.png" alt="">
+        <ion-slide *ngFor="let image of imageTicketList">
+           <img [src]="image" alt="">
         </ion-slide>
       </ion-slides>
 </ion-content>
