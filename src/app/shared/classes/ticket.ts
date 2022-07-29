@@ -13,7 +13,7 @@ export class Ticket extends FirebaseDocInterface{
     public discount: number;
     public driver: string;
     public dryWeight: number;
-    public deryWeightPercent: number;
+    public dryWeightPercent: number;
     public grade: number;
     public gross: number;
     public id: number;
@@ -53,7 +53,7 @@ export class Ticket extends FirebaseDocInterface{
         this.discount = data.discount;
         this.driver = data.driver;
         this.dryWeight = data.dryWeight;
-        this.deryWeightPercent = data.deryWeightPercent;
+        this.dryWeightPercent = data.dryWeightPercent;
         this.grade = data.grade;
         this.gross = data.gross;
         this.id = data.id;
@@ -92,7 +92,7 @@ export class Ticket extends FirebaseDocInterface{
                 discount: data.discount,
                 driver: data.driver,
                 dryWeight: data.dryWeight,
-                deryWeightPercent: data.deryWeightPercent,
+                dryWeightPercent: data.dryWeightPercent,
                 grade: data.grade,
                 gross: data.gross,
                 id: data.id,
