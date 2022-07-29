@@ -25,7 +25,7 @@ export class PrintableTicketComponent implements OnInit {
       {label: 'TestWeight', value: this.ticket.weight},
       {label: 'Product', value: this.ticket.productName},
       {label: 'PPB', value: this.ticket.PPB},
-      {label: 'Lot', value: null},
+      {label: 'Lot', value: this.ticket.lot},
       {label: 'Foreign Mat.', value: null},
       {label: 'Load #', value: null},
       {label: 'U.S. Grade', value: this.ticket.grade},
