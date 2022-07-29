@@ -21,6 +21,7 @@ export class Ticket extends FirebaseDocInterface{
     public id: number;
     public imageLinks: string[];
     public in: boolean;
+    public lot: string;
     public moisture: number;
     public origin: string;
     public original_ticket: string;
@@ -61,6 +62,7 @@ export class Ticket extends FirebaseDocInterface{
         this.id = data.id;
         this.imageLinks = data.imageLinks;
         this.in = data.in;
+        this.lot = data.lot;
         this.moisture = data.moisture;
         this.origin = data.origin;
         this.original_ticket = data.original_ticket;
@@ -100,6 +102,7 @@ export class Ticket extends FirebaseDocInterface{
                 id: data.id,
                 imageLinks: data.imageLinks,
                 in: data.in,
+                lot: data.lot,
                 moisture: data.moisture,
                 origin: data.origin,
                 original_ticket: data.original_ticket,
