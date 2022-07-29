@@ -1,9 +1,12 @@
 // import { ShowModalComponent } from './../show-modal/show-modal.component';
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
+import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { PopoverController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Company } from '@shared/classes/company';
+import { User } from '@shared/classes/user';
 import { Subscription } from 'rxjs';
 // import { OptionsComponent } from '../options/options.component';
 
@@ -14,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class ListComponent implements OnInit {
 
-  public listEmployees = [];
+  public listEmployees: User[] = [];
   public filterEmployee: boolean;
   public filterStatus: boolean;
   public filterSalary: boolean;
@@ -24,55 +27,17 @@ export class ListComponent implements OnInit {
     private modalController: ModalController,
     private db: AngularFirestore,
     private storage: AngularFireStorage,
-    private localStorage: Storage
+    private localStorage: Storage,
+    private fns: AngularFireFunctions
   ) { }
 
   ngOnInit(): void {
-    this.localStorage.get('currentCompany').then(currentCompany => {
-      var sub = this.db.doc(`companies/${currentCompany}`).valueChanges().subscribe(companyDoc => {
-        this.listEmployees = [];
-
-        companyDoc['employees'].forEach(element => {
-          let ref = element as DocumentReference;
-        
-          ref.get().then(user => {
-            ref.collection('companies').doc(currentCompany).get().then(userComp => {
-              let status = 'User';
-              let pictureURL: string = 'users/avatar.svg';
-
-              if(userComp.data().permissions.developer) {
-                status = 'Developer'
-              } 
-              else if(userComp.data().permissions.owner) {
-                status = 'Owner'
-              }
-              else if(userComp.data().permissions.admin) {
-                status = 'Administrator'
-              }
-
-              if(user.data().profilePicPath != null) {
-                pictureURL = user.data().profilePicPath
-              }
-
-              var tempSub = this.storage.ref(pictureURL).getDownloadURL().subscribe(url => {
-                this.listEmployees = [];
-                this.listEmployees.push({
-                  name: user.data().name,
-                  createdAt: user.data().createdAt,
-                  status: status,
-                  employment: userComp.data().position,
-                  email: user.data().email,
-                  userId: user.id,
-                  pictureURL: url
-                })
-              })
-              this.currentSubs.push(tempSub);
-              sub.unsubscribe();
-            })
-          })
-        });
-      })
-
+    this.localStorage.get('currentCompany').then(async currentCompany => {      
+      const company = await Company.getCompany(this.db, currentCompany);
+      this.listEmployees = await company.getCompanyUsers(this.fns, this.db);
+      this.listEmployees.forEach(async user => {
+        user.getPictureURL(this.storage);
+      });
     })
   }
   public openOptions = async (ev: any, item) => {
