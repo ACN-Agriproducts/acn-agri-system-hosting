@@ -61,6 +61,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 
   public generateWarehouseReceiptsModal = async () => {
+    console.log(this.productList);
     const modal = await this.modalController.create({
       component: NewWarehouseReceiptModalComponent,
       componentProps: {

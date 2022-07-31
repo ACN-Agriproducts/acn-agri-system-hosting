@@ -1,9 +1,69 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Warehouse Receipts</ion-title>
-  </ion-toolbar>
+	<ion-toolbar>
+		<ion-title>Warehouse Receipts</ion-title>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-warehouse-receipts-table></app-warehouse-receipts-table>
+	<div class="warehouse-receipts-section">
+		
+
+		<div class="warehouse-receipt-list">
+			<ion-card class="warehouse-receipt-card">
+				<div class="warehouse-receipt-group-info-section">
+					+ Add Warehouse Receipts
+				</div>
+
+				<div class="warehouse-receipt-contract-section">
+					<div class="warehouse-receipt-contract-info">
+						Sale Contract
+					</div>
+
+					<div class="warehouse-receipt-contract-info">
+						Purchase Contract
+					</div>
+				</div>
+			</ion-card>
+
+			<!-- <ion-card class="warehouse-receipt-card warehouse-receipt-group">
+				<div class="warehouse-receipt-group-info-section">
+					<div class="warehouse-receipt-group-info">
+						<ion-text>Date: </ion-text>
+						<ion-text>ID Range: </ion-text>
+						<ion-text>Quantity: </ion-text>
+						<ion-text>Product: </ion-text>
+					</div>
+
+					<div class="warehouse-receipt-group-stats">
+						<ion-text>Statistics: </ion-text>
+					</div>
+				</div>
+
+				<div class="warehouse-receipt-contract-section">
+					<div class="warehouse-receipt-contract-info">
+						Sale Contract
+					</div>
+
+					<div class="warehouse-receipt-contract-info">
+						Purchase Contract
+					</div>
+				</div>
+			</ion-card> -->
+
+			<ion-card>
+				<ion-accordion-group>
+					<ion-accordion value="First">
+						<ion-item>
+							<ion-label>Warehouse Receipt Group</ion-label>
+						</ion-item>
+						<div>
+							Content
+						</div>
+					</ion-accordion>
+				</ion-accordion-group>
+			</ion-card>
+		</div>
+	</div>
+
+	<!-- <app-warehouse-receipts-table></app-warehouse-receipts-table> -->
 </ion-content>

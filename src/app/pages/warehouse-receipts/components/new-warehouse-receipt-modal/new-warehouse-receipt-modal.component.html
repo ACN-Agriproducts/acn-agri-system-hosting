@@ -28,7 +28,7 @@
     <mat-form-field appearance="fill" floatLabel="always">
       <mat-label>Grain</mat-label>
       <mat-select formControlName="product">
-        <mat-option *ngFor="let product of productList" [value]="product.name">{{ product.name }}</mat-option>
+        <mat-option *ngFor="let product of productList" [value]="product.getName()">{{ product.getName() }}</mat-option>
       </mat-select>
       <mat-error>Please Choose a Grain</mat-error>
     </mat-form-field>
