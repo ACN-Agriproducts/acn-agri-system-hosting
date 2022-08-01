@@ -5,9 +5,10 @@ import { PopoverController, ModalController, NavController, AlertController } fr
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { async } from '@firebase/util';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-options-ticket',
@@ -15,7 +16,7 @@ import { async } from '@firebase/util';
   styleUrls: ['./options-ticket.component.scss']
 })
 export class OptionsTicketComponent implements OnInit {
-  @Input() ticket: any;
+  @Input() ticket: Ticket;
   @Input() collectionPath: string;
   public downloadURL: Observable<string | null>;
   public downloadString: string;
@@ -119,9 +120,9 @@ export class OptionsTicketComponent implements OnInit {
             }
 
             console.log(updateDoc);
-            console.log(this.collectionPath  + '/' + this.ticket.docId);
+            console.log(this.collectionPath  + '/' + this.ticket.ref.id);
 
-            await this.db.doc(this.collectionPath  + '/' + this.ticket.docId).update(updateDoc);
+            await this.db.doc(this.collectionPath  + '/' + this.ticket.ref.id).update(updateDoc);
           }
         }]
     })
