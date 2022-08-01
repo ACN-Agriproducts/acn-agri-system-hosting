@@ -1,123 +1,201 @@
-/* .warehouse-receipts-section {
+
+
+.warehouse-receipt-section {
     padding: 2rem;
 }
 
-.warehouse-receipt-card {
+.card-list {
     display: flex;
-    // font-size: 150%;
-    height: 225px;
+    flex-direction: column;
+}
+
+.wr-card {
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-around; // added after changing to min-height
+
+    height: 200px; // want card to start at 200px before expansion (at least 200px)
+    //min-height: 200px;
     width: min(100% - 3rem);
     margin-inline: auto;
-    padding: 0.7rem;
+    padding: 0.7rem 0.7rem 0.2rem 0.7rem;
     color: #3A3A3A;
 }
 
-.add-warehouse-receipts {
+#add {
+    display: flex;
 
+    height: 175px;
 }
 
-.warehouse-receipt-list {
+.wr-group {
+    display: flex;
+
+    height: 95%;
+}
+
+.info-section {
     display: flex;
     flex-direction: column;
-}
 
-.warehouse-receipt-group {
-    
-}
-
-.warehouse-receipt-group-info-section {
-    display: flex;
-    flex-direction: column;
     margin: 5px;
-    width: 60%;
+    width: 50%;
 }
 
-.warehouse-receipt-group-info {
+.group-info {
+    display: flex;
+    height: 70%;
+    width: 100%;
+    padding: 0.5em;
+}
+
+.info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 70%;
-    background-color: var(--ion-color-light);
-    margin-bottom: 5px;
-}
 
-.warehouse-receipt-group-stats {
-    flex-grow: 1;
-    margin-top: 5px;
-    background-color: var(--ion-color-light);
-}
-
-.warehouse-receipt-contract-section {
-    display: grid;
-    flex-direction: column;
     width: 100%;
 }
 
-.warehouse-receipt-contract-info {
-    flex-grow: 1;
-    margin: 5px;
-    padding: 0.7em;
-    background-color: var(--ion-color-primary-light);
-} */
-
-.warehouse-receipts-section {
-    padding: 2rem;
-}
-
-.warehouse-receipt-card {
+.group-status {
     display: flex;
-    // font-size: 150%;
-    height: 225px;
-    width: min(100% - 3rem);
-    margin-inline: auto;
-    padding: 0.7rem;
-    color: #3A3A3A;
-}
+    justify-content: center;
+    align-items: center;
 
-.add-warehouse-receipts {
+    width: 100%;
 
 }
 
-.warehouse-receipt-list {
+.status-text {
+    font-weight: 500;
+    font-size: 1em;
+    padding: 0 0.75rem;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(119, 119, 119, 0.3);
+        transition: opacity .3s;
+        opacity: 0;
+        z-index: 2;
+        border-radius: 22px;
+    }
+
+    &:hover:before {
+        opacity: 1;
+    }
+}
+
+.pending {
+    background-color: rgba(var(--ion-color-secondary-rgb), 0.15);
+    color: var(--ion-color-secondary);
+}
+.status-active {
+    background-color: rgba(var(--ion-color-success-rgb), 0.15);
+    color: var(--ion-color-success);
+}
+.closed {
+    background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+    color: var(--ion-color-warning);
+}
+.cancelled { 
+    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+    color: var(--ion-color-danger);
+    cursor: initial;
+    &:before {
+        all: initial;
+    }
+}
+
+hr {
+    width: 97%;
+    height: 2.5px;
+    color: #A8A8A8;
+    background-color: #A8A8A8;
+}
+
+.group-stats {
+    flex-grow: 1;
+
+    padding: 0.5em;
+}
+
+.contract-section {
     display: flex;
     flex-direction: column;
+
+    width: 100%;
 }
 
-.warehouse-receipt-group {
+.contract-info {
+    flex-grow: 1;
+
+    margin: 5px;
+    padding: 0.7em;
+    border-radius: 5px;
+}
+
+.contract-unsigned {
+    background-color: rgb(232, 232, 232);
+}
+
+.contract-signed {
+    background-color: var(--ion-color-primary-light);
+}
+
+.expansion-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ion-icon {
+        cursor: pointer;
+        transition: 0.4s;
+        
+        width: 15%;
+        background-color: var(--ion-color-light);
+        border-radius: 20px;
+        margin-inline: 5px;
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(119, 119, 119, 0.3);
+            transition: opacity .3s;
+            opacity: 0;
+            z-index: 2;
+            border-radius: 22px;
+        }
     
+        &:hover:before {
+            opacity: 1;
+        }
+    }
+
+    hr {
+        height: 1px;
+        color: #A8A8A8;
+        background-color: #A8A8A8;
+        margin-inline: 5px;
+    }
 }
 
-.warehouse-receipt-group-info-section {
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-    width: 60%;
-}
-
-.warehouse-receipt-group-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 70%;
-    background-color: var(--ion-color-light);
-    margin-bottom: 5px;
-}
-
-.warehouse-receipt-group-stats {
-    flex-grow: 1;
-    margin-top: 5px;
+.expandable-wr-list {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
     background-color: var(--ion-color-light);
 }
 
-.warehouse-receipt-contract-section {
-    display: grid;
-    flex-direction: column;
-    width: 100%;
-}
-
-.warehouse-receipt-contract-info {
-    flex-grow: 1;
-    margin: 5px;
-    padding: 0.7em;
-    background-color: var(--ion-color-primary-light);
-}

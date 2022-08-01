@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -11,11 +11,22 @@ import { WarehouseReceipt } from '@shared/classes/warehouseReceipt';
   styleUrls: ['./warehouse-receipts.page.scss'],
 })
 export class WarehouseReceiptsPage implements OnInit {
+  
 
   constructor() { }
 
   ngOnInit() {
 
+  }
+
+  public openExpandable = () => {
+    const expandable = document.querySelector('.expandable-wr-list') as HTMLInputElement;
+
+    if (expandable.style.maxHeight){
+      expandable.style.maxHeight = null;
+    } else {
+      expandable.style.maxHeight = expandable.scrollHeight + "px";
+    }
   }
 
 }

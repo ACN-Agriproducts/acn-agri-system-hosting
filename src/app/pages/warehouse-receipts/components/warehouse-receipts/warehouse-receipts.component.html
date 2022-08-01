@@ -40,8 +40,8 @@
 				<div class="status-cell">
 					<ion-text (click)="openStatusSelect(receipt)" class="status-text" 
 						[class.active]="receipt.status === 'active'" 
-						[class.sold]="receipt.status === 'sold'" 
-						[class.financing]="receipt.status === 'financing'"
+						[class.closed]="receipt.status === 'closed'" 
+						[class.pending]="receipt.status === 'pending'"
 						[class.cancelled]="receipt.status === 'cancelled'">
 						{{ receipt.status }}
 					</ion-text>
