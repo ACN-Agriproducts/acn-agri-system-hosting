@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -6,15 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['../../warehouse-receipts.page.scss'],
 })
 export class WarehouseReceiptGroupCardComponent implements OnInit {
+  @Input() warehouseReceiptGroup: WarehouseReceiptGroup;
 
   public list: number[] = [1, 2, 3, 4, 5];
+  
 
   constructor() { }
 
   ngOnInit() {
 
   }
-
 
 
   public openExpandable = (event: Event): void => {
