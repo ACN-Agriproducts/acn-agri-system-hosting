@@ -11,6 +11,7 @@ import { WarehouseReceiptsComponent } from '@pages/warehouse-receipts/components
 import { NewWarehouseReceiptModalComponent } from '@pages/warehouse-receipts/components/new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
 import { WarehouseReceiptStatusPopoverComponent } from '@pages/warehouse-receipts/components/warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 import { CoreModule } from '@core/core.module';
+import { WarehouseReceiptGroupCardComponent } from './components/warehouse-receipt-group-card/warehouse-receipt-group-card.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { CoreModule } from '@core/core.module';
     WarehouseReceiptsComponent,
     NewWarehouseReceiptModalComponent,
     WarehouseReceiptStatusPopoverComponent,
+    WarehouseReceiptGroupCardComponent
   ]
 })
 export class WarehouseReceiptsPageModule {}

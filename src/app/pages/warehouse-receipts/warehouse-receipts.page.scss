@@ -12,10 +12,8 @@
 .wr-card {
     display: flex;
     flex-direction: column;
-    // justify-content: space-around; // added after changing to min-height
 
-    height: 200px; // want card to start at 200px before expansion (at least 200px)
-    //min-height: 200px;
+    min-height: 200px;
     width: min(100% - 3rem);
     margin-inline: auto;
     padding: 0.7rem 0.7rem 0.2rem 0.7rem;
@@ -31,7 +29,7 @@
 .wr-group {
     display: flex;
 
-    height: 95%;
+    height: 190px;
 }
 
 .info-section {

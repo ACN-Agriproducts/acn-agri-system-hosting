@@ -25,61 +25,9 @@
 				</div>
 			</ion-card>
 
-			<ion-card class="wr-card">
-				<div class="wr-group">
-					<div class="info-section">
-						<div class="group-info">
-							<div class="info">
-								<ion-text>Date: </ion-text>
-								<ion-text>ID Range: </ion-text>
-								<ion-text>Quantity: </ion-text>
-								<ion-text>Product: </ion-text>
-							</div>
-	
-							<div class="group-status">
-								<ion-text class="status-text">Status</ion-text>
-							</div>
-						</div>
-
-						<hr>
-	
-						<div class="group-stats">
-							<ion-text>Statistics: </ion-text>
-						</div>
-					</div>
-	
-					<div class="contract-section">
-						<div class="contract-info contract-signed">
-							Purchase Contract
-						</div>
-	
-						<div class="contract-info contract-signed">
-							Sale Contract
-						</div>
-					</div>
-				</div>
-
-				<div class="expandable-wr-list">
-					<ion-list>
-						<ion-item>1</ion-item>
-						<ion-item>2</ion-item>
-						<ion-item>3</ion-item>
-						<ion-item>4</ion-item>
-						<ion-item>5</ion-item>
-						<ion-item>6</ion-item>
-						<ion-item>7</ion-item>
-						<ion-item>8</ion-item>
-						<ion-item>9</ion-item>
-						<ion-item>10</ion-item>
-					</ion-list>
-				</div>
-
-				<div class="expansion-bar">
-					<hr>
-					<ion-icon (click)="openExpandable()" name="arrow-down-outline"></ion-icon>
-					<hr>
-				</div>
-			</ion-card>
+			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
+			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
+			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
 		</div>
 	</div>
 </ion-content>

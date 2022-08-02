@@ -19,14 +19,4 @@ export class WarehouseReceiptsPage implements OnInit {
 
   }
 
-  public openExpandable = () => {
-    const expandable = document.querySelector('.expandable-wr-list') as HTMLInputElement;
-
-    if (expandable.style.maxHeight){
-      expandable.style.maxHeight = null;
-    } else {
-      expandable.style.maxHeight = expandable.scrollHeight + "px";
-    }
-  }
-
 }
