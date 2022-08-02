@@ -6,26 +6,30 @@ import { Product } from "./product";
 export class WarehouseReceiptGroup extends FirebaseDocInterface {
     public purchaseContract: WarehouseReceiptContract | null;
     public saleContract: WarehouseReceiptContract | null;
-    public status: WarehouseReceiptStatus;
     public warehouseReceiptIdList: number[];
     public warehouseReceiptList: WarehouseReceipt[];
+
+    public date: Date;
+    public status: WarehouseReceiptStatus;
+    public totalBushelQuantity: number;
+    
 }
 
 class WarehouseReceipt {
-    public id: number;
-    public date: Date;
-    public product: Product;
     public bushelQuantity: number;
-    public plant: Plant;
+    public date: Date;
+    public id: number;
+    public plant: string;
+    public product: string;
 }
 
 class WarehouseReceiptContract {
-    public id: string;
-    public futurePrice: number;
     public base: number;
     public date: Date;
-    public status: WarehouseReceiptStatus;
+    public futurePrice: number;
+    public id: string;
     public pdfReference: string;
+    public status: WarehouseReceiptStatus;
 }
 
 enum WarehouseReceiptStatus {

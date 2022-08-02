@@ -1,10 +1,6 @@
-<ion-header>
-	<ion-toolbar>
-		<ion-title>Warehouse Receipts</ion-title>
-	</ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="Warehouse Receipts"></app-header-toolbar>
 
-<ion-content>
+<ion-content [fullscreen]="true" >
 	<div class="warehouse-receipt-section">
 		<div class="card-list">
 			<ion-card button="true" id="add" class="wr-card">
@@ -14,11 +10,11 @@
 					</div>
 	
 					<div class="contract-section">
-						<div class="contract-info contract-unsigned">
+						<div class="contract contract-unsigned">
 							Purchase Contract
 						</div>
 	
-						<div class="contract-info contract-unsigned">
+						<div class="contract contract-unsigned">
 							Sale Contract
 						</div>
 					</div>

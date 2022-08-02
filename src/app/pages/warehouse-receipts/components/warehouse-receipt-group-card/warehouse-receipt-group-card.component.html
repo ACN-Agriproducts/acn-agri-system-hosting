@@ -1,55 +1,64 @@
 <ion-card class="wr-card">
-  <div class="wr-group">
-    <div class="info-section">
-      <div class="group-info">
-        <div class="info">
-          <ion-text>Date: </ion-text>
-          <ion-text>ID Range: </ion-text>
-          <ion-text>Quantity: </ion-text>
-          <ion-text>Product: </ion-text>
-        </div>
+	<div class="wr-group">
+		<div class="info-section">
+			<div class="group-info">
+				<div class="info">
+					<ion-text>Date: </ion-text>
+					<ion-text>ID Range: </ion-text>
+					<ion-text>Quantity: </ion-text>
+					<ion-text>Product: </ion-text>
+				</div>
 
-        <div class="group-status">
-          <ion-text class="status-text">Status</ion-text>
-        </div>
-      </div>
+				<div class="group-status">
+					<ion-text class="status-text">Status</ion-text>
+				</div>
+			</div>
 
-      <hr>
+			<hr>
 
-      <div class="group-stats">
-        <ion-text>Statistics: </ion-text>
-      </div>
-    </div>
+			<div class="group-stats">
+				<ion-text>Statistics: </ion-text>
+			</div>
+		</div>
 
-    <div class="contract-section">
-      <div class="contract-info contract-signed">
-        Purchase Contract
-      </div>
+		<div class="contract-section">
+			<div class="contract contract-signed">
+				<span><ion-text class="label">Purchase Contract</ion-text></span>
 
-      <div class="contract-info contract-signed">
-        Sale Contract
-      </div>
-    </div>
-  </div>
+				<span><ion-text class="status-text">Status</ion-text></span>
 
-  <div class="expandable-wr-list">
-    <ion-list>
-      <ion-item>1</ion-item>
-      <ion-item>2</ion-item>
-      <ion-item>3</ion-item>
-      <ion-item>4</ion-item>
-      <ion-item>5</ion-item>
-      <ion-item>6</ion-item>
-      <ion-item>7</ion-item>
-      <ion-item>8</ion-item>
-      <ion-item>9</ion-item>
-      <ion-item>10</ion-item>
-    </ion-list>
-  </div>
+				<div class="contract-info">
+					<ion-text>ID: </ion-text>
+					<ion-text>Date: </ion-text>
+					<ion-text>Future Price: </ion-text>
+					<ion-text>Base Price: </ion-text>
+				</div>
+			</div>
 
-  <div class="expansion-bar">
-    <hr>
-    <ion-icon (click)="openExpandable($event)" name="arrow-down-outline"></ion-icon>
-    <hr>
-  </div>
+			<div class="contract contract-signed">
+				<span><ion-text class="label">Sale Contract</ion-text></span>
+
+				<span><ion-text class="status-text">Status</ion-text></span>
+
+				<div class="contract-info">
+					<ion-text>ID: </ion-text>
+					<ion-text>Date: </ion-text>
+					<ion-text>Future Price: </ion-text>
+					<ion-text>Base Price: </ion-text>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="expandable-wr-list">
+		<div class="table-row" [class.even]="odd" *ngFor="let item of list; let odd = odd">
+			<ion-text>Warehouse Receipt</ion-text>
+		</div>
+	</div>
+
+	<div class="expansion-bar">
+		<hr>
+		<ion-icon (click)="openExpandable($event)" name="arrow-down-outline"></ion-icon>
+		<hr>
+	</div>
 </ion-card>

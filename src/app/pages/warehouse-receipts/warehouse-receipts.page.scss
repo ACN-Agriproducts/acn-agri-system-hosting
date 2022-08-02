@@ -66,8 +66,9 @@
 
 .status-text {
     font-weight: 500;
-    font-size: 1em;
-    padding: 0 0.75rem;
+    font-size: 1.1em;
+    padding: 0 1rem;
+    margin: 2rem;
     border-radius: 10px;
     position: relative;
     cursor: pointer;
@@ -132,12 +133,24 @@ hr {
     width: 100%;
 }
 
-.contract-info {
+.contract {
     flex-grow: 1;
 
     margin: 5px;
-    padding: 0.7em;
+    padding: 1em;
     border-radius: 5px;
+}
+
+// .contract-header {
+//     display: flex;
+//     justify-content: space-around;
+// }
+
+.contract-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    
+    margin-top: 1em;
 }
 
 .contract-unsigned {
@@ -190,10 +203,35 @@ hr {
 }
 
 .expandable-wr-list {
-    padding: 0 18px;
+    // padding: 0 18px;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.2s ease-out;
+    transition: max-height 0.3s ease-out;
     background-color: var(--ion-color-light);
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.label {
+    font-size: 1.1em;
+}
+
+ion-text {
+    color: var(--ion-color-dark);
+}
+
+.table-row {
+    display: grid;
+    // grid-template-columns: repeat(6, 1fr) 1fr;
+    text-align: center;
+    height: 50px;
+
+    ion-text {
+        align-self: center;
+    }
+}
+
+.even {
+    background-color: white;
 }
 
