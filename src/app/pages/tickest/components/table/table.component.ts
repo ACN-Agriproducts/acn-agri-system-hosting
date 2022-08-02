@@ -56,8 +56,9 @@ export class TableComponent implements OnInit {
     })
   }
 
-  public dateChangeFn($event) {
-    this.getTickets(new Date($event.detail.value))
+  public dateChangeFn(date: Date) {
+    console.log(date);
+    this.getTickets(date)
   }
 
   async getTickets(date: Date){
