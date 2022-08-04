@@ -72,7 +72,7 @@
       <h4><span>Tanks</span></h4>
     </div>
     <div class="content-card-inventory" *ngIf="plantList != null">
-      <ion-card class="ion-no-margin " *ngFor="let item of plantList[currentPlantId]['inventory']; let index = index">
+      <ion-card class="ion-no-margin " *ngFor="let item of getCurrentPlant()['inventory']; let index = index">
         <ion-buttons class="content-btn-options">
           <ion-button (click)="inventoryMenu($event, index)">
             <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>

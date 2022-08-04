@@ -5,6 +5,7 @@ import { ModalController, NavController, PopoverController } from '@ionic/angula
 import { Subscription } from 'rxjs';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
 import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
+import { Plant } from '@shared/classes/plant';
 
 @Component({
   selector: 'app-inventory',
@@ -15,15 +16,14 @@ export class InventoryPage implements OnInit, OnDestroy{
 
   public currentCompany: string;
   public currentPlantName: string;
-  public currentPlantId: number = 0;
-  public plantList: any[];
+  public plantList: Plant[];
   public productList: any[];
   public currentSubs: Subscription[] = [];
   public dataUser: any;
   public permissions: any;
 
   constructor(
-    private fb: AngularFirestore,
+    private db: AngularFirestore,
     private store: Storage,
     private navController: NavController,
     private modalController: ModalController,
@@ -35,12 +35,12 @@ export class InventoryPage implements OnInit, OnDestroy{
       this.currentPlantName = await this.store.get("currentPlant");
 
       var tempSub;
-      tempSub = this.fb.collection(`companies/${this.currentCompany}/plants`).valueChanges({ idField: 'name' }).subscribe(val => {
+      tempSub = Plant.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
         this.plantList = val;
       })
       this.currentSubs.push(tempSub);
 
-      tempSub = this.fb.collection(`companies/${this.currentCompany}/products`).valueChanges({ idField: 'name' }).subscribe(val => {
+      tempSub = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({ idField: 'name' }).subscribe(val => {
         this.productList = val;
       })
       this.currentSubs.push(tempSub);
@@ -69,9 +69,9 @@ export class InventoryPage implements OnInit, OnDestroy{
       component: StoragePopoverComponent,
       event: ev,
       componentProps: {
-        plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        plantRef: this.db.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
         storageId: storageId,
-        tankList: this.plantList.find(p => p.name == this.currentPlantName).inventory,
+        tankList: this.plantList.find(p => p.ref.id == this.currentPlantName).inventory,
         productList: this.productList
       }
     });
@@ -83,7 +83,7 @@ export class InventoryPage implements OnInit, OnDestroy{
     const modal = await this.modalController.create({
       component: NewStorageModalComponent,
       componentProps:{
-        plantRef: this.fb.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        plantRef: this.db.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
         productList: this.productList,
       }
     });
@@ -93,6 +93,10 @@ export class InventoryPage implements OnInit, OnDestroy{
 
   public hasReadPermission = (): Boolean => {
     return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
+  }
+
+  public getCurrentPlant(): Plant {
+    return this.plantList.find(p => p.ref.id == this.currentPlantName);
   }
 
 }
