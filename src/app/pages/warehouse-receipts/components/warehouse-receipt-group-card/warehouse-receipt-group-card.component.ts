@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { WarehouseReceipt, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -10,18 +10,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   @Input() warehouseReceiptGroup: WarehouseReceiptGroup;
 
   public list: number[] = [1, 2, 3, 4, 5];
-  
+  public warehouseReceiptList: WarehouseReceipt[];
 
   constructor() { }
 
   ngOnInit() {
-
+    // populate html receipt list
+    
   }
 
 
   public openExpandable = (event: Event): void => {
-    const target = event.target as HTMLElement;
-    const card = target.parentElement.parentElement;
+    const card = (event.target as HTMLElement).parentElement.parentElement;
     const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
 
     if (expandable.style.maxHeight){

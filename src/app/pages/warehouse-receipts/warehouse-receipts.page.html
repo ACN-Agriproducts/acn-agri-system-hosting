@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true" >
 	<div class="warehouse-receipt-section">
 		<div class="card-list">
-			<ion-card button="true" id="add" class="wr-card">
+			<ion-card button="true" id="add" class="wr-card" (click)="nav('/dashboard/warehouse-receipts/create-warehouse-receipt-group')">
 				<div class="wr-group">
 					<div class="info-section">
 						+ Add Warehouse Receipts
@@ -21,6 +21,8 @@
 				</div>
 			</ion-card>
 
+			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
+			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
 			<app-warehouse-receipt-group-card 
 				*ngFor="let warehouseReceiptGroup of warehouseReceiptGroupList" 
 				[warehouseReceiptGroup]="warehouseReceiptGroup"

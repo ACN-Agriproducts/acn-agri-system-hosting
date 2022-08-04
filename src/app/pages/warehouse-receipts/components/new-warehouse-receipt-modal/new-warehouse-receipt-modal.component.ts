@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { UniqueWarehouseReceiptIdService } from '../unique-warehouse-receipt-id.service';
+import { UniqueWarehouseReceiptIdService } from '../unique-warehouse-receipt-id/unique-warehouse-receipt-id.service';
 
 @Component({
   selector: 'app-new-warehouse-receipt-modal',

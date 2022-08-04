@@ -49,7 +49,7 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         .withConverter(WarehouseReceiptGroup.converter);
     }
 
-    public static getWarehouseReceipts = async (
+    public static getWarehouseReceiptGroupList = async (
         db: AngularFirestore,
         company: string,
         queryFn?: <T>(q: Query<T> | CollectionReference<T>) => Query<T>
@@ -70,7 +70,7 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     
 }
 
-class WarehouseReceipt {
+export class WarehouseReceipt {
     public bushelQuantity: number;
     public date: Date;
     public id: number;

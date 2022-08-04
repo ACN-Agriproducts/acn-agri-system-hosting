@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
-import { ModalController, PopoverController } from '@ionic/angular';
+import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 
@@ -17,7 +17,8 @@ export class WarehouseReceiptsPage implements OnInit {
 
   constructor(
     private localStorage: Storage,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -29,7 +30,7 @@ export class WarehouseReceiptsPage implements OnInit {
     })
     .then(plant => {
       this.currentPlant = plant;
-      return WarehouseReceiptGroup.getWarehouseReceipts(this.db, this.currentCompany);
+      return WarehouseReceiptGroup.getWarehouseReceiptGroupList(this.db, this.currentCompany);
     })
     .then(async result => {
       this.warehouseReceiptGroupList = result;
@@ -37,8 +38,8 @@ export class WarehouseReceiptsPage implements OnInit {
     });
   }
 
-  public addWarehouseReceiptGroup = async () => {
-    
+  public nav = (route: string): void => {
+    this.navController.navigateForward(route);
   }
 
 }

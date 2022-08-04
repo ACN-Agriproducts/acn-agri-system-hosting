@@ -1,5 +1,9 @@
 
 
+ion-text {
+    color: var(--ion-color-dark);
+}
+
 .warehouse-receipt-section {
     padding: 2rem;
 }
@@ -216,19 +220,19 @@ hr {
     font-size: 1.1em;
 }
 
-ion-text {
-    color: var(--ion-color-dark);
-}
-
 .table-row {
     display: grid;
-    // grid-template-columns: repeat(6, 1fr) 1fr;
+    grid-template-columns: repeat(5, 1fr);
     text-align: center;
     height: 50px;
 
     ion-text {
         align-self: center;
     }
+}
+
+.table-header {
+    
 }
 
 .even {

@@ -51,8 +51,19 @@
 	</div>
 
 	<div class="expandable-wr-list">
-		<div class="table-row" [class.even]="odd" *ngFor="let item of list; let odd = odd">
-			<ion-text>Warehouse Receipt</ion-text>
+		<div class="table-row table-header">
+			<ion-text>ID</ion-text>
+			<ion-text>Start Date</ion-text>
+			<ion-text>Product</ion-text>
+			<ion-text>Bushel Qty</ion-text>
+			<ion-text>Plant</ion-text>
+		</div>
+		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of warehouseReceiptList; let odd = odd">
+			<ion-text></ion-text>
+			<ion-text></ion-text>
+			<ion-text></ion-text>
+			<ion-text></ion-text>
+			<ion-text></ion-text>
 		</div>
 	</div>
 
