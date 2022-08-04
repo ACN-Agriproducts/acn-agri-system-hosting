@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
 import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 
 @Component({
   selector: 'app-inventory',
@@ -17,7 +18,7 @@ export class InventoryPage implements OnInit, OnDestroy{
   public currentCompany: string;
   public currentPlantName: string;
   public plantList: Plant[];
-  public productList: any[];
+  public productList: Product[];
   public currentSubs: Subscription[] = [];
   public dataUser: any;
   public permissions: any;
@@ -40,7 +41,7 @@ export class InventoryPage implements OnInit, OnDestroy{
       })
       this.currentSubs.push(tempSub);
 
-      tempSub = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({ idField: 'name' }).subscribe(val => {
+      tempSub = Product.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
         this.productList = val;
       })
       this.currentSubs.push(tempSub);

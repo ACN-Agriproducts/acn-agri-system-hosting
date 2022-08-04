@@ -1,4 +1,5 @@
 import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class Product extends FirebaseDocInterface {
@@ -60,5 +61,9 @@ export class Product extends FirebaseDocInterface {
         return Product.getProductReference(db, company, productName).get().then(result => {
             return result.data()
         });
+    }
+
+    public static getCollectionSnapshot(db: AngularFirestore, company: string): Observable<Product[]> {
+        return db.collection<Product>(this.getCollectionReference(db, company)).valueChanges();
     }
 }
