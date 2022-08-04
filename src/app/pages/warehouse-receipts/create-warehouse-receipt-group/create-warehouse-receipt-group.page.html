@@ -1,48 +1,87 @@
 <app-header-toolbar titulo="Create Warehouse Receipt Group"></app-header-toolbar>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-  <form [formGroup]="warehouseReceiptGroupForm">
-    <mat-form-field appearance="fill" floatLabel="always">
-      <mat-label>Quantity</mat-label>
-      <input matInput formControlName="quantity" type="number" min="1">
-    </mat-form-field>
+	<form [formGroup]="warehouseReceiptGroupForm" class="form">
+		<ion-card>
+			<ion-card-header>Group Info</ion-card-header>
 
-    <mat-form-field appearance="fill" floatLabel="always">
-      <mat-label>ID</mat-label>
-      <input matInput formControlName="id" type="number" >
-      <mat-error *ngIf="warehouseReceiptGroupForm.controls['id'].errors?.required">Please Input an ID</mat-error>
-      <mat-error *ngIf="warehouseReceiptGroupForm.controls['id'].errors?.uniqueId">ID Already Exists</mat-error>
-    </mat-form-field>
+			<ion-card-content>
+				<ion-grid>
+					<ion-row>
+						<ion-col>
+							<mat-form-field>
+								<mat-label>Bushel Quantity (per Receipt)</mat-label>
+								<input matInput formControlName="bushelQuantity" type="number" step="5000" min="5000">
+							</mat-form-field>
+						</ion-col>
 
-    <mat-form-field appearance="fill" floatLabel="always">
-      <mat-label>Starting Date</mat-label>
-      <input matInput formControlName="startDate" [matDatepicker]="picker" readonly>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+						<ion-col>
+							<mat-form-field>
+								<mat-label># of Warehouse Receipts</mat-label>
+								<input matInput formControlName="quantity" type="number" min="1">
+							</mat-form-field>
+						</ion-col>
+					</ion-row>
 
-    <mat-form-field appearance="fill" floatLabel="always">
-      <mat-label>Grain</mat-label>
-      <mat-select formControlName="product">
-        <!-- <mat-option *ngFor="let product of productList" [value]="product.getName()">{{ product.getName() }}</mat-option> -->
-      </mat-select>
-      <mat-error>Please Choose a Grain</mat-error>
-    </mat-form-field>
+					<ion-row>
+						<ion-col>
+							<mat-form-field>
+								<mat-label>Product</mat-label>
+								<mat-select formControlName="product">
+									<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
+								</mat-select>
+								<mat-error>Please choose a product</mat-error>
+							</mat-form-field>
+						</ion-col>
 
-    <mat-form-field appearance="fill" floatLabel="always">
-      <mat-label>Bushels</mat-label>
-      <input matInput formControlName="bushelQuantity" type="number" step="5000" min="5000">
-    </mat-form-field>
+						<ion-col>
+							<mat-form-field>
+								<mat-label>Plant</mat-label>
+								<mat-select formControlName="plant">
+									<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
+								</mat-select>
+								<mat-error>Please choose a location</mat-error>
+							</mat-form-field>
+						</ion-col>
+					</ion-row>
 
-    <!-- <mat-form-field appearance="fill" floatLabel="always">
-      <mat-label>Future Price</mat-label>
-      <input matInput formControlName="purchasedFuturePrice" type="number">
-      <mat-error>Please Input a Future Price</mat-error>
-    </mat-form-field> -->
+					<ion-row>
+						<ion-col>
+							<mat-form-field>
+								<mat-label>Starting ID</mat-label>
+								<input matInput formControlName="startId">
+								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.required">Please Input an ID</mat-error>
+								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.uniqueId">ID Already Exists</mat-error>
+								</mat-form-field>
+						</ion-col>
 
-    <div class="action-bar">
-      <ion-button (click)="cancel()">Cancel</ion-button>
-      <ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptGroupForm.invalid">Confirm</ion-button>
-    </div>
-  </form>
+						<ion-col>
+							<!-- <mat-form-field>
+								<mat-label>Starting Date</mat-label>
+								<input matInput formControlName="" [matDatepicker]="picker" readonly>
+								<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+								<mat-datepicker #picker></mat-datepicker>
+							</mat-form-field> -->
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-card-content>
+		</ion-card>
+
+		<ion-card formArrayName="warehouseReceiptList" *ngIf="warehouseReceiptGroupForm.valid">
+			<ion-card-header>Warehouse Receipts</ion-card-header>
+			<ion-card-content>
+				<ion-item *ngFor="let warehouseReceipt of warehouseReceiptGroupForm?.get('warehouseReceiptList')['controls'];">
+					<ion-grid>
+						
+					</ion-grid>
+				</ion-item>
+			</ion-card-content>
+		</ion-card>
+
+		<div class="action-bar">
+			<ion-button (click)="cancel()">Cancel</ion-button>
+			<ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptGroupForm?.invalid">Confirm</ion-button>
+		</div>
+	</form>
 </ion-content>

@@ -67,7 +67,6 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
             return result.docs.map(doc => doc.data());
         });
     }
-    
 }
 
 export class WarehouseReceipt {

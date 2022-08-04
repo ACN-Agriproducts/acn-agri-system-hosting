@@ -1,4 +1,10 @@
 .action-bar {
     display: flex;
     justify-content: space-between;
+
+    margin-inline: 0.5rem;
+}
+
+.form {
+    width: 60%;
 }

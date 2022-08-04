@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
+import { NavigationExtras } from '@angular/router';
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
@@ -22,8 +23,7 @@ export class WarehouseReceiptsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.localStorage
-    .get('currentCompany')
+    this.localStorage.get('currentCompany')
     .then(company => {
       this.currentCompany = company;
       return this.localStorage.get('currentPlant');
@@ -32,13 +32,21 @@ export class WarehouseReceiptsPage implements OnInit {
       this.currentPlant = plant;
       return WarehouseReceiptGroup.getWarehouseReceiptGroupList(this.db, this.currentCompany);
     })
-    .then(async result => {
+    .then(result => {
       this.warehouseReceiptGroupList = result;
       this.warehouseReceiptCollectionRef = this.db.collection(result[0].getWrCollectionReference());
     });
   }
 
   public nav = (route: string): void => {
+    // to be able to pass data to another page
+    // let navigationExtras: NavigationExtras = {
+    //   queryParams: {
+    //     currentCompany: this.currentCompany
+    //   }
+    // };
+    // this.navController.navigateForward(route, navigationExtras);
+    
     this.navController.navigateForward(route);
   }
 
