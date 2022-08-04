@@ -1,4 +1,5 @@
 import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Observable } from "rxjs";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Ticket } from "./ticket";
@@ -68,6 +69,14 @@ export class Plant extends FirebaseDocInterface {
 
             return plantList;
         });
+    }
+
+    public static getPlantSnapshot(db: AngularFirestore, company: string, plant: string): Observable<Plant> {
+        return db.doc<Plant>(Plant.getDocReference(db, company, plant)).valueChanges();
+    }
+
+    public static getCollectionSnapshot(db: AngularFirestore, company: string): Observable<Plant[]> {
+        return db.collection<Plant>(Plant.getCollectionReference(db, company)).valueChanges();
     }
 }
 
