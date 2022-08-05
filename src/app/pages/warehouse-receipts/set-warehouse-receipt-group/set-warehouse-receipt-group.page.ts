@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
+import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
@@ -9,11 +9,11 @@ import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { UniqueWarehouseReceiptIdService } from '../components/unique-warehouse-receipt-id/unique-warehouse-receipt-id.service';
 
 @Component({
-  selector: 'app-create-warehouse-receipt-group',
-  templateUrl: './create-warehouse-receipt-group.page.html',
-  styleUrls: ['./create-warehouse-receipt-group.page.scss'],
+  selector: 'app-set-warehouse-receipt-group',
+  templateUrl: './set-warehouse-receipt-group.page.html',
+  styleUrls: ['./set-warehouse-receipt-group.page.scss'],
 })
-export class CreateWarehouseReceiptGroupPage implements OnInit {
+export class SetWarehouseReceiptGroupPage implements OnInit {
   public warehouseReceiptGroupForm: FormGroup;
   public warehouseReceiptCollectionRef: AngularFirestoreCollection;
   public currentCompany: string;
@@ -53,40 +53,35 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
       product: ['', Validators.required],
       quantity: [1, Validators.required],
       groupCreationDate: [new Date()],
-      warehouseReceiptList: this.fb.array([])
+      warehouseReceiptList: this.fb.array([], this.validateIds())
     });
-
-    // this.warehouseReceiptGroupForm.statusChanges.subscribe(() => {
-    //   // function lock with bool variable, so that addWarehouseReceipts isn't called more than needed
-    //   if (this.warehouseReceiptGroupForm.valid && !this.addingWarehouseReceipts) {
-    //     this.addingWarehouseReceipts = true;
-    //     this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
-    //     this.addingWarehouseReceipts = false;
-    //   }
-    // });
-
-    // Object.keys(this.warehouseReceiptGroupForm.controls).forEach(key => {
-    //   if (key !== 'warehouseReceiptList') {
-    //     this.warehouseReceiptGroupForm.get(key).valueChanges.subscribe(() => {
-    //       this.warehouseReceiptGroupForm.get('warehouseReceiptList').disable();
-    //       const sub = this.warehouseReceiptGroupForm.statusChanges.subscribe(status => {
-    //         sub.unsubscribe();
-    //         if (status == 'VALID') {
-    //           this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
-    //         }
-    //         this.warehouseReceiptGroupForm.get('warehouseReceiptList').enable();
-    //       });
-    //     });
-    //   }
-    // });
 
     for (const controlName in this.warehouseReceiptGroupForm.controls) {
       if (controlName == 'warehouseReceiptList') continue;
       this.warehouseReceiptGroupForm.get(controlName).statusChanges.subscribe(() => {
-        if (this.checkInfoValid) {
+        if (this.checkInfoValid()) {
           this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
         }
       })
+    }
+  }
+
+  public validateIds = (): ValidatorFn  => {
+    return (formArray: FormArray): ValidationErrors | null => {
+      const filteredArray = formArray.controls.filter(formGroup => {
+        for (let fG of formArray.controls) {
+          if (fG !== formGroup && fG.value.id === formGroup.value.id) {
+            return true;
+          }
+        }
+        return false;
+      });
+      console.log(filteredArray);
+
+      let valid = filteredArray.length === 0;
+      console.log(valid);
+
+      return valid ? null : { duplicate: true };
     }
   }
 
@@ -111,7 +106,11 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
     return this.fb.group({
       bushelQuantity: [formValues.bushelQuantity, Validators.required],
       date: [formValues.groupCreationDate, Validators.required],
-      id: [formValues.startId + index, [Validators.required], this.uniqueId.validate.bind(this.uniqueId)],
+      id: [
+        formValues.startId + index, 
+        [Validators.required], 
+        this.uniqueId.validate.bind(this.uniqueId)
+      ],
       plant: [formValues.plant, Validators.required],
       product: [formValues.product, Validators.required],
     });
@@ -122,7 +121,7 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
   }
 
   public confirm = () => {
-
+    
     return;
   }
 

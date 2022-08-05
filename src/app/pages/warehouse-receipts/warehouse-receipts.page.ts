@@ -38,15 +38,7 @@ export class WarehouseReceiptsPage implements OnInit {
     });
   }
 
-  public nav = (route: string): void => {
-    // to be able to pass data to another page
-    // let navigationExtras: NavigationExtras = {
-    //   queryParams: {
-    //     currentCompany: this.currentCompany
-    //   }
-    // };
-    // this.navController.navigateForward(route, navigationExtras);
-    
+  public nav = (route: string): void => {    
     this.navController.navigateForward(route);
   }
 
