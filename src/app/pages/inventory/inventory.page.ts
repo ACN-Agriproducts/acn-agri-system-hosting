@@ -70,9 +70,9 @@ export class InventoryPage implements OnInit, OnDestroy{
       component: StoragePopoverComponent,
       event: ev,
       componentProps: {
-        plantRef: this.db.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        plantRef: this.getCurrentPlant().ref,
         storageId: storageId,
-        tankList: this.plantList.find(p => p.ref.id == this.currentPlantName).inventory,
+        tankList: this.getCurrentPlant().inventory,
         productList: this.productList
       }
     });
