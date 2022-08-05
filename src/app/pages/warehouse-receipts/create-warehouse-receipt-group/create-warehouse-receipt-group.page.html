@@ -59,8 +59,9 @@
 			</ion-card-content>
 		</ion-card>
 
-		<ion-card formArrayName="warehouseReceiptList">
+		<ion-card formArrayName="warehouseReceiptList" *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList')">
 			<ion-card-header>Warehouse Receipts</ion-card-header>
+
 			<ion-card-content>
 				<ion-item *ngFor="let warehouseReceipt of warehouseReceiptGroupForm.get('warehouseReceiptList')['controls']; let i = index">
 					<ion-grid [formGroupName]="i">
@@ -75,7 +76,9 @@
 							<ion-col>
 								<mat-form-field>
 									<mat-label>Plant</mat-label>
-									<input matInput formControlName="plant">
+									<mat-select formControlName="plant">
+										<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
+									</mat-select>
 								</mat-form-field>
 							</ion-col>
 
@@ -98,7 +101,7 @@
 							<ion-col>
 								<mat-form-field>
 									<mat-label>Bushel Qty</mat-label>
-									<input matInput formControlName="bushelQuantity">
+									<input matInput formControlName="bushelQuantity" type="number" step="5000" min="5000">
 								</mat-form-field>
 							</ion-col>
 						</ion-row>

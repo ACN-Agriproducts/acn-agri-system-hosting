@@ -65,11 +65,24 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
       warehouseReceiptList: this.fb.array([])
     });
 
-    this.warehouseReceiptGroupForm.statusChanges.subscribe(status => {
+    /* this.warehouseReceiptGroupForm.statusChanges.subscribe(status => {
+      // function lock with bool variable, so that addWarehouseReceipts isn't called more than needed
       if (this.warehouseReceiptGroupForm.valid && !this.addingWarehouseReceipts) {
         this.addingWarehouseReceipts = true;
         this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
         this.addingWarehouseReceipts = false;
+      }
+    }); */
+
+    Object.keys(this.warehouseReceiptGroupForm.controls).forEach(key => {
+      if (key !== 'warehouseReceiptList') {
+        this.warehouseReceiptGroupForm.get(key).valueChanges.subscribe(values => {
+          console.log(this.warehouseReceiptGroupForm.status);
+          if (this.warehouseReceiptGroupForm.valid) {
+            console.log("Add Warehouse Receipts");
+            this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
+          }
+        });
       }
     });
   }
