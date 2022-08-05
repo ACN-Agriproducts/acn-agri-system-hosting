@@ -49,7 +49,7 @@
 						<ion-col>
 							<mat-form-field>
 								<mat-label>Starting ID</mat-label>
-								<input matInput formControlName="startId">
+								<input matInput formControlName="startId" type="number">
 								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.required">Please Input an ID</mat-error>
 								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.uniqueId">An ID Already Exists</mat-error>
 								</mat-form-field>
@@ -59,7 +59,7 @@
 			</ion-card-content>
 		</ion-card>
 
-		<ion-card formArrayName="warehouseReceiptList" *ngIf="warehouseReceiptGroupForm.valid">
+		<ion-card formArrayName="warehouseReceiptList">
 			<ion-card-header>Warehouse Receipts</ion-card-header>
 			<ion-card-content>
 				<ion-item *ngFor="let warehouseReceipt of warehouseReceiptGroupForm.get('warehouseReceiptList')['controls']; let i = index">
@@ -82,7 +82,7 @@
 							<ion-col>
 								<mat-form-field>
 									<mat-label>Product</mat-label>
-									<input matInput formControlName="product">
+									<input matInput formControlName="product" readonly>
 								</mat-form-field>
 							</ion-col>
 

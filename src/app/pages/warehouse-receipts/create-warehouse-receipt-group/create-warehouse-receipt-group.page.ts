@@ -20,6 +20,7 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
   public currentCompany: string;
   public plantList: string[];
   public productList: string[];
+  public addingWarehouseReceipts: boolean = false;
 
 
   constructor(
@@ -60,19 +61,23 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
       plant: ['', Validators.required],
       product: ['', Validators.required],
       quantity: [1, Validators.required],
-      groupCreationDate: [new Date(), Validators.required],
+      groupCreationDate: [new Date()],
       warehouseReceiptList: this.fb.array([])
     });
 
-    this.warehouseReceiptGroupForm.valueChanges.subscribe(formValues => {
-      if (this.warehouseReceiptGroupForm.valid) {
-        this.addWarehouseReceipts(formValues);
+    this.warehouseReceiptGroupForm.statusChanges.subscribe(status => {
+      if (this.warehouseReceiptGroupForm.valid && !this.addingWarehouseReceipts) {
+        this.addingWarehouseReceipts = true;
+        this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
+        this.addingWarehouseReceipts = false;
       }
     });
   }
 
   public addWarehouseReceipts = (formValues: any): void => {
     const warehouseReceiptList = this.warehouseReceiptGroupForm.get('warehouseReceiptList') as FormArray;
+    warehouseReceiptList.clear();
+
     console.log("Adding receipts");
     for (let i = 0; i < formValues.quantity; i++) {
       warehouseReceiptList.push(this.createWarehouseReceipt(formValues, i));
@@ -82,11 +87,11 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
   public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
     console.log("Created 1 warehouse receipt");
     return this.fb.group({
-      bushelQuantity: [formValues.bushelQuantity],
-      date: [formValues.date],
-      id: [formValues.startId + index],
-      plant: [formValues.plant],
-      product: [formValues.product],
+      bushelQuantity: [formValues.bushelQuantity, Validators.required],
+      date: [formValues.groupCreationDate, Validators.required],
+      id: [formValues.startId + index, Validators.required],
+      plant: [formValues.plant, Validators.required],
+      product: [formValues.product, Validators.required],
     });
   }
 
