@@ -51,17 +51,8 @@
 								<mat-label>Starting ID</mat-label>
 								<input matInput formControlName="startId">
 								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.required">Please Input an ID</mat-error>
-								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.uniqueId">ID Already Exists</mat-error>
+								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.uniqueId">An ID Already Exists</mat-error>
 								</mat-form-field>
-						</ion-col>
-
-						<ion-col>
-							<!-- <mat-form-field>
-								<mat-label>Starting Date</mat-label>
-								<input matInput formControlName="" [matDatepicker]="picker" readonly>
-								<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-								<mat-datepicker #picker></mat-datepicker>
-							</mat-form-field> -->
 						</ion-col>
 					</ion-row>
 				</ion-grid>
@@ -71,9 +62,46 @@
 		<ion-card formArrayName="warehouseReceiptList" *ngIf="warehouseReceiptGroupForm.valid">
 			<ion-card-header>Warehouse Receipts</ion-card-header>
 			<ion-card-content>
-				<ion-item *ngFor="let warehouseReceipt of warehouseReceiptGroupForm?.get('warehouseReceiptList')['controls'];">
-					<ion-grid>
-						
+				<ion-item *ngFor="let warehouseReceipt of warehouseReceiptGroupForm.get('warehouseReceiptList')['controls']; let i = index">
+					<ion-grid [formGroupName]="i">
+						<ion-row>
+							<ion-col>
+								<mat-form-field>
+									<mat-label>ID</mat-label>
+									<input matInput formControlName="id">
+								</mat-form-field>
+							</ion-col>
+
+							<ion-col>
+								<mat-form-field>
+									<mat-label>Plant</mat-label>
+									<input matInput formControlName="plant">
+								</mat-form-field>
+							</ion-col>
+
+							<ion-col>
+								<mat-form-field>
+									<mat-label>Product</mat-label>
+									<input matInput formControlName="product">
+								</mat-form-field>
+							</ion-col>
+
+							<ion-col>
+								<mat-form-field>
+									<mat-label>Date</mat-label>
+									<input matInput formControlName="date" [matDatepicker]="picker" readonly>
+									<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+									<mat-datepicker #picker></mat-datepicker>
+								</mat-form-field>
+							</ion-col>
+
+							<ion-col>
+								<mat-form-field>
+									<mat-label>Bushel Qty</mat-label>
+									<input matInput formControlName="bushelQuantity">
+								</mat-form-field>
+							</ion-col>
+						</ion-row>
 					</ion-grid>
 				</ion-item>
 			</ion-card-content>
@@ -81,7 +109,7 @@
 
 		<div class="action-bar">
 			<ion-button (click)="cancel()">Cancel</ion-button>
-			<ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptGroupForm?.invalid">Confirm</ion-button>
+			<ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptGroupForm.invalid">Confirm</ion-button>
 		</div>
 	</form>
 </ion-content>

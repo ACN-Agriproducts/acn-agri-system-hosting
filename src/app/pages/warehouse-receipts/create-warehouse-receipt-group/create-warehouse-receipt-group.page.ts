@@ -28,7 +28,7 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
     private localStorage: Storage,
     private navController: NavController,
     private uniqueId: UniqueWarehouseReceiptIdService,
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -63,24 +63,32 @@ export class CreateWarehouseReceiptGroupPage implements OnInit {
       groupCreationDate: [new Date(), Validators.required],
       warehouseReceiptList: this.fb.array([])
     });
-  }
 
-  public createWarehouseReceipt = (): FormGroup => {
-    return this.fb.group({
-      id: [, Validators.required],
-      plant: [],
-      product: [],
-      date: [],
-      bushelQuantity: [],
+    this.warehouseReceiptGroupForm.valueChanges.subscribe(formValues => {
+      if (this.warehouseReceiptGroupForm.valid) {
+        this.addWarehouseReceipts(formValues);
+      }
     });
   }
 
-  public addWarehouseReceipts = () => {
+  public addWarehouseReceipts = (formValues: any): void => {
     const warehouseReceiptList = this.warehouseReceiptGroupForm.get('warehouseReceiptList') as FormArray;
-
-
+    console.log("Adding receipts");
+    for (let i = 0; i < formValues.quantity; i++) {
+      warehouseReceiptList.push(this.createWarehouseReceipt(formValues, i));
+    }
   }
 
+  public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
+    console.log("Created 1 warehouse receipt");
+    return this.fb.group({
+      bushelQuantity: [formValues.bushelQuantity],
+      date: [formValues.date],
+      id: [formValues.startId + index],
+      plant: [formValues.plant],
+      product: [formValues.product],
+    });
+  }
 
   public cancel = (): void => {
     this.navController.navigateBack('/dashboard/warehouse-receipts');
