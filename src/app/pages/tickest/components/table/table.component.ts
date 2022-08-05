@@ -112,6 +112,7 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
+    console.log('Getting infinite tickets...')
     const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, ref =>
       ref.where("in", "==", this.inTicket)
       .where("dateOut", ">=", startDate)
@@ -120,7 +121,10 @@ export class TableComponent implements OnInit {
       .limit(this.ticketLimit))
     .subscribe(ticketList => {
       this.ticketList = ticketList;
+      event.target.complete();
     });
+
+    console.log(`Got ${this.ticketList.length} tickets`);
 
     this.currentSub.push(sub);
   }
