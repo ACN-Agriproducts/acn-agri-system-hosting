@@ -80,7 +80,7 @@ export class Plant extends FirebaseDocInterface {
     }
 }
 
-class Inventory {
+export class Inventory {
     current: number;
     max: number;
     name: string;
