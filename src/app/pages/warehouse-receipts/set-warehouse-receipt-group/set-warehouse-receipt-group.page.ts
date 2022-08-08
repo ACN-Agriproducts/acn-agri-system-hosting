@@ -69,8 +69,8 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     }
   }
 
-  public getWarehouseReceiptCollection = (): [AngularFirestoreCollection, number] => {
-    return [this.warehouseReceiptCollectionRef, this.warehouseReceiptGroupForm.get('quantity').value];
+  public getWarehouseReceiptCollection = (): AngularFirestoreCollection => {
+    return this.warehouseReceiptCollectionRef;
   }
 
   public validateIds = (): ValidatorFn  => {
