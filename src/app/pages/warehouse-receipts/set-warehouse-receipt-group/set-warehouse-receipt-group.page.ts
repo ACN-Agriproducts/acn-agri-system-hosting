@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { NavController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
@@ -14,14 +14,17 @@ import { UniqueWarehouseReceiptIdService } from '../components/unique-warehouse-
   styleUrls: ['./set-warehouse-receipt-group.page.scss'],
 })
 export class SetWarehouseReceiptGroupPage implements OnInit {
-  public warehouseReceiptGroupForm: FormGroup;
-  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
+  public addingWarehouseReceipts: boolean = false;
   public currentCompany: string;
   public plantList: string[];
   public productList: string[];
-  public addingWarehouseReceipts: boolean = false;
+  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
+  public warehouseReceiptGroupForm: FormGroup;
+  public totalBushelQuantity: number = 0;
+  public warehouseReceiptIdList: number[];
 
   constructor(
+    private alertController: AlertController,
     private db: AngularFirestore,
     private fb: FormBuilder,
     private localStorage: Storage,
@@ -33,7 +36,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     this.localStorage.get('currentCompany')
     .then(company => {
       this.currentCompany = company;
-      this.warehouseReceiptCollectionRef = this.db.collection(WarehouseReceiptGroup.getCollectionReference(this.db, company));
+      this.warehouseReceiptCollectionRef = this.db.collection(WarehouseReceiptGroup.getWrCollectionReference(this.db, company));
       return Plant.getPlantList(this.db, company);
     })
     .then(plantObjList => {
@@ -47,12 +50,12 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     this.uniqueId.setGetterFunction(this.getWarehouseReceiptCollection.bind(this));
 
     this.warehouseReceiptGroupForm = this.fb.group({
-      bushelQuantity: [10_000, Validators.required],
-      startId: ['', Validators.required],
-      plant: ['', Validators.required],
-      product: ['', Validators.required],
-      quantity: [1, Validators.required],
-      groupCreationDate: [new Date()],
+      bushelQuantity: [10_000, Validators.required], //
+      startId: ['', Validators.required], //
+      plant: ['', Validators.required], //
+      product: ['', Validators.required], //
+      quantity: [1, Validators.required], //
+      creationDate: [new Date()], //
       warehouseReceiptList: this.fb.array([], this.validateIds())
     });
 
@@ -66,15 +69,18 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     }
   }
 
+  public getWarehouseReceiptCollection = (): [AngularFirestoreCollection, number] => {
+    return [this.warehouseReceiptCollectionRef, this.warehouseReceiptGroupForm.get('quantity').value];
+  }
+
   public validateIds = (): ValidatorFn  => {
     return (formArray: FormArray): ValidationErrors | null => {
       const idArray = formArray.controls.map(formGroup => formGroup.value.id);
+      this.warehouseReceiptIdList = idArray;
 
-      console.log(idArray);
       const invalid = idArray.some((id, index) => {
         return idArray.indexOf(id) !== index;
       });
-      console.log(invalid);
 
       return invalid ? { duplicateId: true} : null;
     }
@@ -100,7 +106,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
     return this.fb.group({
       bushelQuantity: [formValues.bushelQuantity, Validators.required],
-      date: [formValues.groupCreationDate, Validators.required],
+      date: [formValues.creationDate, Validators.required],
       id: [
         formValues.startId + index, 
         [Validators.required], 
@@ -115,12 +121,46 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     this.navController.navigateBack('/dashboard/warehouse-receipts');
   }
 
-  public confirm = () => {
-    
-    return;
+  public confirm = async (): Promise<void> => {
+    let alert = this.alertController.create({
+      header: "Confirmation",
+      message: "Are you sure you would like to submit these Warehouse Receipts?",
+      buttons: [
+        {
+          text: "yes",
+          handler: async () => {
+            (await alert).dismiss();
+            this.submitWarehouseReceiptGroup();
+          }
+        },
+        {
+          text: "no",
+          role: 'cancel'
+        }
+      ]
+    });
+
+    (await alert).present();
   }
 
-  public getWarehouseReceiptCollection = (): [AngularFirestoreCollection, number] => {
-    return [this.warehouseReceiptCollectionRef, this.warehouseReceiptGroupForm.get('quantity').value];
+  public submitWarehouseReceiptGroup = async (): Promise<void> => {
+    const formValues = this.warehouseReceiptGroupForm.getRawValue();
+
+    formValues.warehouseReceiptList.forEach(warehouseReceipt => {
+      this.totalBushelQuantity += warehouseReceipt.bushelQuantity;
+    });
+
+    let receiptGroup = {
+      creationDate: formValues.creationDate,
+      purchaseContract: null,
+      saleContract: null,
+      status: "pending",
+      totalBushelQuantity: this.totalBushelQuantity,
+      warehouseReceiptIdList: this.warehouseReceiptIdList,
+      warehouseReceiptList: formValues.warehouseReceiptList
+    };
+
+    this.warehouseReceiptCollectionRef.add(receiptGroup);
+    this.navController.navigateForward('/dashboard/warehouse-receipts');
   }
 }

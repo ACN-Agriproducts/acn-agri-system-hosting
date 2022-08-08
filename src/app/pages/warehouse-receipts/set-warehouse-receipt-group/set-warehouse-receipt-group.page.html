@@ -70,7 +70,7 @@
 									<mat-label>ID</mat-label>
 									<input matInput formControlName="id" type="number">
 									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.required">Please Input an ID</mat-error>
-									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.uniqueId">ID Already Exists</mat-error>
+									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.idExists">ID Already Exists</mat-error>
 								</mat-form-field>
 							</ion-col>
 

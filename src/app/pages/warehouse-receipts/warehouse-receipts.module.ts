@@ -24,8 +24,6 @@ import { WarehouseReceiptGroupCardComponent } from './components/warehouse-recei
   ],
   declarations: [
     WarehouseReceiptsPage,
-    WarehouseReceiptsComponent,
-    NewWarehouseReceiptModalComponent,
     WarehouseReceiptStatusPopoverComponent,
     WarehouseReceiptGroupCardComponent
   ]

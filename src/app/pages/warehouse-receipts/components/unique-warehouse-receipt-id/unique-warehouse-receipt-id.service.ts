@@ -14,20 +14,16 @@ export class UniqueWarehouseReceiptIdService implements AsyncValidator {
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     const [warehouseReceiptCollection, quantity] = this.getCollectionFunc();
-    
-    return warehouseReceiptCollection.ref.where('id', '>=', control.value).limit(1).get().then(result => {
-      const resultDocArray = result.docs;
-      if (resultDocArray.length === 0) return null;
 
-      let lastControlId = control.value + quantity - 1;
-      let firstResultId = resultDocArray[0].get('id');
-
-      if (lastControlId < firstResultId) {
-        return null;
+    return warehouseReceiptCollection.ref.get().then(result => {
+      let warehouseReceiptIdList = result.docs[0].get('warehouseReceiptIdList');
+      
+      if (warehouseReceiptIdList.includes(control.value)) {
+        console.log("Id exists");
+        return { idExists: true };
       }
-      else {
-        return { uniqueId: true };
-      }
+      
+      return null;
     });
   }
 

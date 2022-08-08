@@ -2,23 +2,23 @@ import { AngularFirestore, AngularFirestoreCollection, CollectionReference, Docu
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class WarehouseReceiptGroup extends FirebaseDocInterface {
+    public creationDate: Date;
     public purchaseContract: WarehouseReceiptContract | null;
     public saleContract: WarehouseReceiptContract | null;
-    public warehouseReceiptIdList: number[];
-    public warehouseReceiptList: WarehouseReceipt[];
-
-    public date: Date;
     public status: WarehouseReceiptStatus;
     public totalBushelQuantity: number;
+    public warehouseReceiptIdList: number[];
+    public warehouseReceiptList: WarehouseReceipt[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, WarehouseReceiptGroup.converter);
 
         const data = snapshot.data();
 
-        this.date = data.date?.toDate();
+        this.creationDate = data.creationDate?.toDate();
         this.purchaseContract = data.purchaseContract;
         this.saleContract = data.saleContract;
+        this.status = data.status;
         this.totalBushelQuantity = data.totalBushelQuantity;
         this.warehouseReceiptIdList = data.warehouseReceiptIdList;
         this.warehouseReceiptList = data.warehouseReceiptList;
@@ -27,9 +27,10 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: WarehouseReceiptGroup): DocumentData {
             return {
-                date: data.date,
+                date: data.creationDate,
                 purchaseContract: data.purchaseContract,
                 saleContract: data.saleContract,
+                status: data.status,
                 totalBushelQuantity: data.totalBushelQuantity,
                 warehouseReceiptIdList: data.warehouseReceiptIdList,
                 warehouseReceiptList: data.warehouseReceiptList
@@ -40,11 +41,11 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         }
     };
 
-    public getWrCollectionReference = (): CollectionReference<WarehouseReceiptGroup> => {
+    public getCollectionReference = (): CollectionReference<WarehouseReceiptGroup> => {
         return this.ref.parent.withConverter(WarehouseReceiptGroup.converter);
     }
 
-    public static getCollectionReference = (db: AngularFirestore, company: string) => {
+    public static getWrCollectionReference = (db: AngularFirestore, company: string): CollectionReference<WarehouseReceiptGroup> => {
         return db.firestore.collection(`companies/${company}/warehouseReceipts`)
         .withConverter(WarehouseReceiptGroup.converter);
     }
@@ -56,12 +57,12 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     ): Promise<WarehouseReceiptGroup[]> => {
 
         let wrCollectionRef: CollectionReference<WarehouseReceiptGroup> | Query<WarehouseReceiptGroup> 
-        = WarehouseReceiptGroup.getCollectionReference(db, company);
+        = WarehouseReceiptGroup.getWrCollectionReference(db, company);
 
         if (queryFn) {
             wrCollectionRef = queryFn<WarehouseReceiptGroup>(wrCollectionRef);
         }
-        wrCollectionRef = wrCollectionRef.orderBy('id', 'asc');
+        // wrCollectionRef = wrCollectionRef.orderBy('id', 'asc');
 
         return wrCollectionRef.get().then(result => {
             return result.docs.map(doc => doc.data());
