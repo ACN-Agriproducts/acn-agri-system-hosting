@@ -5,7 +5,7 @@ import { User } from "./user";
 import { collection, doc } from "firebase/firestore";
 
 export class Company extends FirebaseDocInterface {
-    contactList: any;
+    contactList: CompanyContact[];
     createdAt: Date;
     employees: DocumentReference;
     name: string;
