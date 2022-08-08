@@ -1,4 +1,4 @@
-import { CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/firestore";
+import { doc, DocumentData, Firestore, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 

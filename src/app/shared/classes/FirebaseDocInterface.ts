@@ -1,5 +1,4 @@
 import { DocumentReference, QueryDocumentSnapshot, setDoc, updateDoc, deleteDoc } from "@angular/fire/firestore";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
 
 export abstract class FirebaseDocInterface {
     ref: DocumentReference;

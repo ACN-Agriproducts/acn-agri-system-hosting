@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, query, limit, where, getDoc, getDocs } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, query, limit, where, getDoc, getDocs } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class Invoice extends FirebaseDocInterface {
