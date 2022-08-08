@@ -1,4 +1,5 @@
-import { AngularFirestore, DocumentReference, QueryDocumentSnapshot } from "@angular/fire/compat/firestore";
+import { DocumentReference, QueryDocumentSnapshot, setDoc, updateDoc, deleteDoc } from "@angular/fire/firestore";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
 
 export abstract class FirebaseDocInterface {
     ref: DocumentReference;
@@ -8,14 +9,14 @@ export abstract class FirebaseDocInterface {
     }
 
     public set(): Promise<void> {
-        return this.ref.set(this);
+        return setDoc(this.ref, this);
     }
 
-    public update(db: AngularFirestore, data: any): Promise<void> {
-        return db.doc(this.ref.parent.doc(this.ref.id)).update(data);
+    public update(data: any): Promise<void> {
+        return updateDoc(this.ref, data)
     }
 
     public delete(): Promise<void> {
-        return this.ref.delete();
+        return deleteDoc(this.ref);
     }
 }

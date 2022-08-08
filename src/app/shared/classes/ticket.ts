@@ -1,10 +1,11 @@
-import { AngularFirestore, CollectionReference, DocumentChangeAction, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData } from "@angular/fire/firestore";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
 import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
+import { collection, getDoc } from "firebase/firestore";
 
 export class Ticket extends FirebaseDocInterface{
     public clientName: string;
@@ -125,7 +126,7 @@ export class Ticket extends FirebaseDocInterface{
                 weight: data.weight
             }
         },
-        fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Ticket {
+        fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
             return new Ticket(snapshot);
         }
     }
@@ -134,13 +135,13 @@ export class Ticket extends FirebaseDocInterface{
         return this.gross - this.tare;
     }
 
-    public getContract(db: AngularFirestore): Promise<Contract> {
+    public getContract(db: Firestore): Promise<Contract> {
         const company = this.ref.parent.parent.parent.parent.id;
 
         return Contract.getDoc(db, company, this.in, this.contractID);
     }
 
-    public getTransport(db: AngularFirestore): Promise<Contact> {
+    public getTransport(db: Firestore): Promise<Contact> {
         const company = this.ref.parent.parent.parent.parent.id;
 
         return Contact.getDoc(db, company, this.truckerId)
@@ -167,10 +168,10 @@ export class Ticket extends FirebaseDocInterface{
 
     /**
      * 
-     * @param db - Angularfirestore instance
+     * @param db - Firestore instance
      * @returns A promise to return an array containing [Ticket, Contract, Transport, Client]
      */
-    public async getPrintDocs(db: AngularFirestore): Promise<[Ticket, Contract, Contact, Contact]> {
+    public async getPrintDocs(db: Firestore): Promise<[Ticket, Contract, Contact, Contact]> {
         const contract = await this.getContract(db);
         const transport = await this.getTransport(db);
         const client = await contract.getClient();
@@ -178,32 +179,33 @@ export class Ticket extends FirebaseDocInterface{
         return [this, contract, transport, client];
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string, plant: string): CollectionReference<Ticket> {
-        return db.firestore.collection(`companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.converter);
+    public static getCollectionReference(db: Firestore, company: string, plant: string): CollectionReference<Ticket> {
+        return collection(db, `companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, plant: string, ticket: string): DocumentReference<Ticket> {
-        return db.firestore.doc(`companies/${company}/plants/${plant}/tickets/${ticket}`).withConverter(Ticket.converter);
+    public static getDocReference(db: Firestore, company: string, plant: string, ticket: string): DocumentReference<Ticket> {
+        return doc(db, `companies/${company}/plants/${plant}/tickets/${ticket}`).withConverter(Ticket.converter);
     }
 
     /**
      * Returns Documents from the chosen Tickets collection
      * 
-     * @param db - Your AngularFirestore instance
+     * @param db - Your Firestore instance
      * @param company - Company from which you want to query the tickets from
      * @param plant - Plant from which you want to query the tickets from
      * @param queryFn - Query function for the collection
      */ 
-    public static async getTickets(db: AngularFirestore, company: string, plant: string): Promise<Ticket[]>;
-    public static async getTickets(db: AngularFirestore, company: string, plant: string, queryFn: <T>(q:CollectionReference<T>) => Query<T>): Promise<Ticket[]>;
-    public static async getTickets(db: AngularFirestore, company: string, plant: string, queryFn: <T>(q:CollectionReference<T>) => Query<T> = q => q): Promise<Ticket[]> {
-        const collectionReference = queryFn(Ticket.getCollectionReference(db, company, plant));
+    public static async getTickets(db: Firestore, company: string, plant: string): Promise<Ticket[]>;
+    public static async getTickets(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<Ticket[]>;
+    public static async getTickets(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<Ticket[]> {
+        const collectionReference = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
 
-        const ticketCollectionSnapshot = await collectionReference.get();
-        return ticketCollectionSnapshot.docs.map(snap => snap.data());
+        const ticketCollectionData = await getDocs(collectionReference);
+        return ticketCollectionData.docs.map(snap => snap.data());
     }
 
-    public static getTicketSnapshot(db: AngularFirestore, company: string, plant: string, queryFn: <T>(q:CollectionReference<T>) => Query<T> = q => q): Observable<Ticket[]> {
-        return db.collection<Ticket>(Ticket.getCollectionReference(db, company, plant), queryFn).valueChanges();
+    public static getTicketSnapshot(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Observable<Ticket[]> {
+        const collectionQuery = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
+        return collectionData(collectionQuery);
     }
 }

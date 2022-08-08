@@ -1,4 +1,4 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/firestore";
 import { AngularFireStorage } from "@angular/fire/compat/storage";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -48,7 +48,7 @@ export class User extends FirebaseDocInterface {
         });
     }
 
-    public static getDocumentReference(db: AngularFirestore, userID: string) {
-        return db.firestore.doc(`users/${userID}`);
+    public static getDocumentReference(db: Firestore, userID: string) {
+        return doc(db, `users/${userID}`);
     }
 }

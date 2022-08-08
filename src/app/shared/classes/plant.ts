@@ -1,4 +1,4 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, getDocs, docData, collectionData } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -11,7 +11,7 @@ export class Plant extends FirebaseDocInterface {
     public nextInTicket: number;
     public nextOutTicket: number;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+    constructor(snapshot: QueryDocumentSnapshot<DocumentData>) {
         super(snapshot, Plant.converter);
         const data = snapshot.data();
 
@@ -44,23 +44,24 @@ export class Plant extends FirebaseDocInterface {
     }
 
     public getTicketCollectionReference(): CollectionReference<Ticket> {
-        return this.ref.collection('tickets').withConverter(Ticket.converter);
+        return collection(this.ref, 'tickets').withConverter(Ticket.converter) as CollectionReference<Ticket>;
     }
 
     public getTicketReference(ticket: string): DocumentReference<Ticket> {
-        return this.ref.collection('tickets').doc(ticket).withConverter(Ticket.converter);
+        return doc(this.ref, `tickets/${ticket}`).withConverter(Ticket.converter);
+        
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Plant> {
-        return db.firestore.collection(`companies/${company}/plants`).withConverter(Plant.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<Plant> {
+        return collection(db, `companies/${company}/plants`).withConverter(Plant.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, plant: string): DocumentReference<Plant> {
-        return db.firestore.doc(`companies/${company}/plants/${plant}`).withConverter(Plant.converter);
+    public static getDocReference(db: Firestore, company: string, plant: string): DocumentReference<Plant> {
+        return doc(db, `companies/${company}/plants/${plant}`).withConverter(Plant.converter) as DocumentReference<Plant>;
     }
 
-    public static getPlantList(db: AngularFirestore, company: string): Promise<Plant[]> {
-        return Plant.getCollectionReference(db, company).get().then(result => {
+    public static getPlantList(db: Firestore, company: string): Promise<Plant[]> {
+        return getDocs(Plant.getCollectionReference(db, company)).then(result => {
             const plantList: Plant[] = [];
 
             result.docs.forEach(doc => {
@@ -71,12 +72,12 @@ export class Plant extends FirebaseDocInterface {
         });
     }
 
-    public static getPlantSnapshot(db: AngularFirestore, company: string, plant: string): Observable<Plant> {
-        return db.doc<Plant>(Plant.getDocReference(db, company, plant)).valueChanges();
+    public static getPlantSnapshot(db: Firestore, company: string, plant: string): Observable<Plant> {
+        return docData(Plant.getDocReference(db, company, plant))
     }
 
-    public static getCollectionSnapshot(db: AngularFirestore, company: string): Observable<Plant[]> {
-        return db.collection<Plant>(Plant.getCollectionReference(db, company)).valueChanges();
+    public static getCollectionSnapshot(db: Firestore, company: string): Observable<Plant[]> {
+        return collectionData(Plant.getCollectionReference(db, company));
     }
 }
 

@@ -1,4 +1,4 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, collection, doc, getDoc } from "@angular/fire/firestore";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -51,16 +51,16 @@ export class Contact extends FirebaseDocInterface {
         return this.ref.parent.withConverter(Contact.converter);
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Contact> {
-        return db.firestore.collection(`companies/${company}/directory`).withConverter(Contact.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<Contact> {
+        return collection(db, `companies/${company}/directory`).withConverter(Contact.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, contact: string): DocumentReference<Contact> {
-        return db.firestore.doc(`companies/${company}/directory/${contact}`).withConverter(Contact.converter);
+    public static getDocReference(db: Firestore, company: string, contact: string): DocumentReference<Contact> {
+        return doc(db, `companies/${company}/directory/${contact}`).withConverter(Contact.converter);
     }
 
-    public static getDoc(db: AngularFirestore, company: string, contact: string): Promise<Contact> {
-        return Contact.getDocReference(db, company, contact).get().then(result => {
+    public static getDoc(db: Firestore, company: string, contact: string): Promise<Contact> {
+        return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
         })
     }

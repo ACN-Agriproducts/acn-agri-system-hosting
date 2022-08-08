@@ -1,7 +1,8 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/firestore";
 import { AngularFireFunctions } from "@angular/fire/compat/functions";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
+import { collection, doc } from "firebase/firestore";
 
 export class Company extends FirebaseDocInterface {
     contactList: any;
@@ -47,7 +48,7 @@ export class Company extends FirebaseDocInterface {
         }
     }
 
-    public getCompanyUsers(fns: AngularFireFunctions, db: AngularFirestore): Promise<User[]> {
+    public getCompanyUsers(fns: AngularFireFunctions, db: Firestore): Promise<User[]> {
         return fns.httpsCallable('users-getCompanyUsers')({company: this.ref.id})
             .toPromise()
             .then(result => {
@@ -60,16 +61,16 @@ export class Company extends FirebaseDocInterface {
             });
     }
 
-    public static getCollectionReference(db: AngularFirestore): CollectionReference<Company> {
-        return db.firestore.collection(`companies`).withConverter(Company.converter);
+    public static getCollectionReference(db: Firestore): CollectionReference<Company> {
+        return collection(db, 'companies').withConverter(Company.converter);
     }
 
-    public static getCompanyRef(db: AngularFirestore, company: string): DocumentReference<Company> {
-        return this.getCollectionReference(db).doc(company).withConverter(Company.converter);
+    public static getCompanyRef(db: Firestore, company: string): DocumentReference<Company> {
+        return doc(db, `companies/${company}`).withConverter(Company.converter);
     }
 
-    public static getCompany(db: AngularFirestore, company: string): Promise<Company> {
-        return this.getCompanyRef(db, company).get().then(result => {
+    public static getCompany(db: Firestore, company: string): Promise<Company> {
+        return getDoc(Company.getCompanyRef(db, company)).then(result => {
             return result.data();
         });
     }

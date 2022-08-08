@@ -1,4 +1,4 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc } from "@angular/fire/firestore";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -36,12 +36,12 @@ export class InvoiceItem extends FirebaseDocInterface {
         return this.ref.parent.withConverter(InvoiceItem.converter);
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<InvoiceItem> {
-        return db.firestore.collection(`companies/${company}/invoiceItems`).withConverter(InvoiceItem.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<InvoiceItem> {
+        return collection(db, `companies/${company}/invoiceItems`).withConverter(InvoiceItem.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, InvoiceItems: string): DocumentReference<InvoiceItem> {
-        return db.firestore.doc(`companies/${company}/InvoiceItemss/${InvoiceItems}`).withConverter(InvoiceItem.converter);
+    public static getDocReference(db: Firestore, company: string, InvoiceItems: string): DocumentReference<InvoiceItem> {
+        return doc(db, `companies/${company}/InvoiceItemss/${InvoiceItems}`).withConverter(InvoiceItem.converter);
     }
 }
 
