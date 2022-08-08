@@ -68,20 +68,15 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
   public validateIds = (): ValidatorFn  => {
     return (formArray: FormArray): ValidationErrors | null => {
-      const filteredArray = formArray.controls.filter(formGroup => {
-        for (let fG of formArray.controls) {
-          if (fG !== formGroup && fG.value.id === formGroup.value.id) {
-            return true;
-          }
-        }
-        return false;
+      const idArray = formArray.controls.map(formGroup => formGroup.value.id);
+
+      console.log(idArray);
+      const invalid = idArray.some((id, index) => {
+        return idArray.indexOf(id) !== index;
       });
-      console.log(filteredArray);
+      console.log(invalid);
 
-      let valid = filteredArray.length === 0;
-      console.log(valid);
-
-      return valid ? null : { duplicate: true };
+      return invalid ? { duplicateId: true} : null;
     }
   }
 
@@ -128,5 +123,4 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   public getWarehouseReceiptCollection = (): [AngularFirestoreCollection, number] => {
     return [this.warehouseReceiptCollectionRef, this.warehouseReceiptGroupForm.get('quantity').value];
   }
-
 }
