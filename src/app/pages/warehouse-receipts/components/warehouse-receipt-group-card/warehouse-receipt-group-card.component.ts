@@ -40,8 +40,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
         result.push(`${id} `);
         return;
       }
+      idGroup = ``
       result.push(`${id}`);
-    })
+    });
 
     return result.join();
   }
