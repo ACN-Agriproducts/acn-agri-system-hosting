@@ -33,8 +33,9 @@ export class WarehouseReceiptsPage implements OnInit {
       return WarehouseReceiptGroup.getWarehouseReceiptGroupList(this.db, this.currentCompany);
     })
     .then(result => {
+      console.log(result);
       this.warehouseReceiptGroupList = result;
-      this.warehouseReceiptCollectionRef = this.db.collection(result[0].getCollectionReference());
+      this.warehouseReceiptCollectionRef = this.db.collection(result[0]?.getCollectionReference());
     });
   }
 

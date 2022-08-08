@@ -3,14 +3,14 @@
 		<div class="info-section">
 			<div class="group-info">
 				<div class="info">
-					<ion-text>Date: </ion-text>
-					<ion-text>ID Range: </ion-text>
-					<ion-text>Quantity: </ion-text>
-					<ion-text>Product: </ion-text>
+					<ion-text>Date: {{ wrGroup.creationDate | date }}</ion-text>
+					<ion-text>ID Range: {{ idRange }}</ion-text>
+					<ion-text>Quantity: {{ wrGroup.totalBushelQuantity | number}}</ion-text>
+					<ion-text>Product: {{ product }}</ion-text>
 				</div>
 
 				<div class="group-status">
-					<ion-text class="status-text">Status</ion-text>
+					<ion-text class="status-text">{{ wrGroup.status }}</ion-text>
 				</div>
 			</div>
 
@@ -59,7 +59,7 @@
 			<ion-text>Plant</ion-text>
 		</div>
 		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of warehouseReceiptList; let odd = odd">
-			<ion-text></ion-text>
+			<ion-text>warehouseReceipt.id</ion-text>
 			<ion-text></ion-text>
 			<ion-text></ion-text>
 			<ion-text></ion-text>

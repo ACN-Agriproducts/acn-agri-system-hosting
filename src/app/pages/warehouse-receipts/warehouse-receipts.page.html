@@ -21,11 +21,9 @@
 				</div>
 			</ion-card>
 
-			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
-			<app-warehouse-receipt-group-card></app-warehouse-receipt-group-card>
 			<app-warehouse-receipt-group-card 
 				*ngFor="let warehouseReceiptGroup of warehouseReceiptGroupList" 
-				[warehouseReceiptGroup]="warehouseReceiptGroup"
+				[wrGroup]="warehouseReceiptGroup"
 			></app-warehouse-receipt-group-card>
 		</div>
 	</div>

@@ -68,6 +68,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       })
     }
   }
+  
 
   public getWarehouseReceiptCollection = (): AngularFirestoreCollection => {
     return this.warehouseReceiptCollectionRef;
@@ -159,8 +160,8 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       saleContract: null,
       status: "pending",
       totalBushelQuantity: this.totalBushelQuantity,
-      warehouseReceiptIdList: this.warehouseReceiptIdList,
-      warehouseReceiptList: formValues.warehouseReceiptList
+      warehouseReceiptIdList: this.warehouseReceiptIdList.sort(),
+      warehouseReceiptList: formValues.warehouseReceiptList.sort(receipt => receipt.id)
     };
 
     this.warehouseReceiptCollectionRef.add(receiptGroup).then(() => {

@@ -27,7 +27,7 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: WarehouseReceiptGroup): DocumentData {
             return {
-                date: data.creationDate,
+                creationDate: data.creationDate,
                 purchaseContract: data.purchaseContract,
                 saleContract: data.saleContract,
                 status: data.status,
@@ -62,7 +62,7 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         if (queryFn) {
             wrCollectionRef = queryFn<WarehouseReceiptGroup>(wrCollectionRef);
         }
-        // wrCollectionRef = wrCollectionRef.orderBy('id', 'asc');
+        wrCollectionRef = wrCollectionRef.orderBy('creationDate', 'desc');
 
         return wrCollectionRef.get().then(result => {
             return result.docs.map(doc => doc.data());

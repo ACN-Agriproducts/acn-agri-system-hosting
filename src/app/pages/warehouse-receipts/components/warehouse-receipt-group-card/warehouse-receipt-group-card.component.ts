@@ -7,18 +7,44 @@ import { WarehouseReceipt, WarehouseReceiptGroup } from '@shared/classes/Warehou
   styleUrls: ['../../warehouse-receipts.page.scss'],
 })
 export class WarehouseReceiptGroupCardComponent implements OnInit {
-  @Input() warehouseReceiptGroup: WarehouseReceiptGroup;
+  @Input() wrGroup: WarehouseReceiptGroup;
 
-  public list: number[] = [1, 2, 3, 4, 5];
-  public warehouseReceiptList: WarehouseReceipt[];
+  public wrList: WarehouseReceipt[];
+  public wrIdList: number[];
+  public idRange: string;
+  public product: string;
+
+  public 
 
   constructor() { }
 
   ngOnInit() {
-    // populate html receipt list
-    
+    this.wrList = this.wrGroup.warehouseReceiptList;
+    this.wrIdList = this.wrGroup.warehouseReceiptIdList;
+
+    this.product = this.wrList[0].product;
+    this.idRange = this.getIdRange();
   }
 
+
+  public getIdRange = (): string => {
+    let result: string[] = [];
+    let idGroup = "";
+    this.wrIdList.forEach((id, index) => {
+      if (index === this.wrIdList.length - 1) {
+        return;
+      }
+      
+      if (this.wrIdList[index + 1] - id > 1) {
+        idGroup = "";
+        result.push(`${id} `);
+        return;
+      }
+      result.push(`${id}`);
+    })
+
+    return result.join();
+  }
 
   public openExpandable = (event: Event): void => {
     const card = (event.target as HTMLElement).parentElement.parentElement;
