@@ -50,12 +50,12 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     this.uniqueId.setGetterFunction(this.getWarehouseReceiptCollection.bind(this));
 
     this.warehouseReceiptGroupForm = this.fb.group({
-      bushelQuantity: [10_000, Validators.required], //
-      startId: ['', Validators.required], //
-      plant: ['', Validators.required], //
-      product: ['', Validators.required], //
-      quantity: [1, Validators.required], //
-      creationDate: [new Date()], //
+      bushelQuantity: [10_000, Validators.required],
+      startId: ['', Validators.required],
+      plant: ['', Validators.required],
+      product: ['', Validators.required],
+      quantity: [1, Validators.required],
+      creationDate: [new Date()],
       warehouseReceiptList: this.fb.array([], this.validateIds())
     });
 
@@ -104,7 +104,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
 
   public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
-    return this.fb.group({
+    const group = this.fb.group({
       bushelQuantity: [formValues.bushelQuantity, Validators.required],
       date: [formValues.creationDate, Validators.required],
       id: [
@@ -115,6 +115,9 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       plant: [formValues.plant, Validators.required],
       product: [formValues.product, Validators.required],
     });
+
+    group.get('id').markAsTouched();
+    return group;
   }
 
   public cancel = (): void => {
@@ -160,7 +163,10 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       warehouseReceiptList: formValues.warehouseReceiptList
     };
 
-    this.warehouseReceiptCollectionRef.add(receiptGroup);
-    this.navController.navigateForward('/dashboard/warehouse-receipts');
+    this.warehouseReceiptCollectionRef.add(receiptGroup).then(() => {
+      this.navController.navigateForward('/dashboard/warehouse-receipts');
+    }).catch(error => {
+      console.log("Error submitting form: ", error);
+    });
   }
 }

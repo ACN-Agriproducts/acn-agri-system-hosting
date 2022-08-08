@@ -8,26 +8,22 @@ import { Observable } from 'rxjs';
 })
 
 export class UniqueWarehouseReceiptIdService implements AsyncValidator {
-  private getCollectionFunc: () => [AngularFirestoreCollection, number];
+  private getCollectionFunc: () => AngularFirestoreCollection;
 
   constructor() { }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    const [warehouseReceiptCollection, quantity] = this.getCollectionFunc();
+    const warehouseReceiptCollection = this.getCollectionFunc();
 
-    return warehouseReceiptCollection.ref.get().then(result => {
-      let warehouseReceiptIdList = result.docs[0].get('warehouseReceiptIdList');
-      
-      if (warehouseReceiptIdList.includes(control.value)) {
-        console.log("Id exists");
+    return warehouseReceiptCollection.ref.where('warehouseReceiptIdList', 'array-contains', control.value).get().then(result => {
+      if (!result.empty) {
         return { idExists: true };
       }
-      
       return null;
-    });
+    })
   }
 
-  public setGetterFunction (func: () => [AngularFirestoreCollection, number]): void {
+  public setGetterFunction (func: () => AngularFirestoreCollection): void {
     this.getCollectionFunc = func;
   }
 }
