@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AngularFirestore, CollectionReference, QueryDocumentSnapshot, QueryFn } from '@angular/fire/compat/firestore';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
 import { Contract } from '@shared/classes/contract';
@@ -7,6 +6,7 @@ import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
 import * as Excel from 'exceljs';
+import { Firestore, QueryConstraint, where } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -45,7 +45,7 @@ export class TicketReportDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage
   ) { }
 
@@ -136,57 +136,53 @@ export class TicketReportDialogComponent implements OnInit {
   private getReportTickets(): Promise<void> {
     this.generatingReport = true;
 
-    return this.db.collection<Ticket>(
-      Ticket.getCollectionReference(this.db, this.currentCompany, this.data.currentPlant),
-      this.getFirebaseQueryFn()).get().toPromise().then(async result => {
+    return Ticket.getTickets(this.db, this.currentCompany, this.data.currentPlant, ...this.getFirebaseQueryFn()).then(async result => {
         const tempTicketList = {};
 
-        const sorterTicketList = result.docs.sort((a, b) => a.data().dateOut.getTime() - b.data().dateOut.getTime());
+        const sorterTicketList = result.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
 
         sorterTicketList.forEach(ticketSnap => {
-          const ticket = ticketSnap.data();
-
-          if(ticket.void){
+          if(ticketSnap.void){
             return;
           }
 
           //Check if product list exists
-          if(tempTicketList[ticket.productName] == null) {
-            tempTicketList[ticket.productName] = [];
+          if(tempTicketList[ticketSnap.productName] == null) {
+            tempTicketList[ticketSnap.productName] = [];
           }
 
           //add ticket to product list
-          tempTicketList[ticket.productName].push(ticket);
+          tempTicketList[ticketSnap.productName].push(ticketSnap);
 
           // check if totals lists exist
-          if(!this.totals.products.net[ticket.productName]){
-            this.totals.products.net[ticket.productName] = 0;
-            this.totals.products.dryWeight[ticket.productName] = 0;
+          if(!this.totals.products.net[ticketSnap.productName]){
+            this.totals.products.net[ticketSnap.productName] = 0;
+            this.totals.products.dryWeight[ticketSnap.productName] = 0;
           }
-          if(!this.totals.inventory.net[ticket.tank]) {
-            this.totals.inventory.net[ticket.tank] = 0;
-            this.totals.inventory.dryWeight[ticket.tank] = 0;
+          if(!this.totals.inventory.net[ticketSnap.tank]) {
+            this.totals.inventory.net[ticketSnap.tank] = 0;
+            this.totals.inventory.dryWeight[ticketSnap.tank] = 0;
           }
 
           // Add to totals lists
-          this.totals.products.net[ticket.productName] += ticket.getNet();
-          this.totals.products.dryWeight[ticket.productName] += ticket.dryWeight;
-          this.totals.inventory.net[ticket.tank] += ticket.getNet();
-          this.totals.inventory.dryWeight[ticket.tank] += ticket.dryWeight;
+          this.totals.products.net[ticketSnap.productName] += ticketSnap.getNet();
+          this.totals.products.dryWeight[ticketSnap.productName] += ticketSnap.dryWeight;
+          this.totals.inventory.net[ticketSnap.tank] += ticketSnap.getNet();
+          this.totals.inventory.dryWeight[ticketSnap.tank] += ticketSnap.dryWeight;
 
           // Get needed documents (contract, transport, client)
-          if(this.contractList[ticket.contractID] == null) {
-            this.contractList[ticket.contractID] = ticket.getContract(this.db);
+          if(this.contractList[ticketSnap.contractID] == null) {
+            this.contractList[ticketSnap.contractID] = ticketSnap.getContract(this.db);
 
-            if(this.clientList[ticket.clientName] == null) {
-              this.clientList[ticket.clientName] = this.contractList[ticket.contractID].then((contract: Contract) => {
+            if(this.clientList[ticketSnap.clientName] == null) {
+              this.clientList[ticketSnap.clientName] = this.contractList[ticketSnap.contractID].then((contract: Contract) => {
                 return contract.getClient();
               });
             }
           }
 
-          if(this.transportList[ticket.truckerId] == null) {
-            this.transportList[ticket.truckerId] = ticket.getTransport(this.db);
+          if(this.transportList[ticketSnap.truckerId] == null) {
+            this.transportList[ticketSnap.truckerId] = ticketSnap.getTransport(this.db);
           }
         });
 
@@ -206,23 +202,27 @@ export class TicketReportDialogComponent implements OnInit {
     }
   }
 
-  private getFirebaseQueryFn(): QueryFn {
+  private getFirebaseQueryFn(): QueryConstraint[] {
+    const constraints: QueryConstraint[] = []
+
     if(this.reportType == ReportType.DateRange) {
       this.endDate.setHours(23, 59, 59, 999);
-      return (q: CollectionReference) => q.where('dateOut', '>=', this.beginDate).where('dateOut', '<=', this.endDate).where('in', '==', this.inTicket);
+      constraints.push(where('dateOut', '>=', this.beginDate), where('dateOut', '<=', this.endDate), where('in', '==', this.inTicket));
     }
 
     if(this.reportType == ReportType.Contract) {
-      return (q: CollectionReference) => q.where('in', '==', this.inTicket).where('contractID', '==', this.contractId);
+      constraints.push(where('in', '==', this.inTicket), where('contractID', '==', this.contractId));
     }
 
     if(this.reportType == ReportType.IdRange) {
-      return (q: CollectionReference) => q.where('in', '==', this.inTicket).where('id', '>=', this.startId).where('id', '<=', this.endId);
+      constraints.push(where('in', '==', this.inTicket), where('id', '>=', this.startId), where('id', '<=', this.endId));
     }
 
     if(this.reportType == ReportType.ProductBalance) {
-      return (q: CollectionReference) => q.where('dateOut', '>=', this.beginDate).where('dateOut', '<=', this.endDate);
+      constraints.push(where('dateOut', '>=', this.beginDate), where('dateOut', '<=', this.endDate));
     }
+
+    return constraints;
   }
 
   public validateInputs(): boolean {

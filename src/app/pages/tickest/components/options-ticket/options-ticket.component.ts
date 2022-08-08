@@ -7,7 +7,6 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
-import { async } from '@firebase/util';
 import { Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -17,7 +16,6 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class OptionsTicketComponent implements OnInit {
   @Input() ticket: Ticket;
-  @Input() collectionPath: string;
   public downloadURL: Observable<string | null>;
   public downloadString: string;
   public userPermissions: any;
@@ -119,10 +117,7 @@ export class OptionsTicketComponent implements OnInit {
               updateDoc.voidRequester = this.userName
             }
 
-            console.log(updateDoc);
-            console.log(this.collectionPath  + '/' + this.ticket.ref.id);
-
-            await this.db.doc(this.collectionPath  + '/' + this.ticket.ref.id).update(updateDoc);
+            await this.ticket.update(updateDoc);
           }
         }]
     })

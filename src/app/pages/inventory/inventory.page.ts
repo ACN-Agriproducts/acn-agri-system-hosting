@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -7,6 +6,7 @@ import { NewStorageModalComponent } from './components/new-storage-modal/new-sto
 import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-inventory',
@@ -24,7 +24,7 @@ export class InventoryPage implements OnInit, OnDestroy{
   public permissions: any;
 
   constructor(
-    private db: AngularFirestore,
+    private db: Firestore,
     private store: Storage,
     private navController: NavController,
     private modalController: ModalController,
@@ -84,7 +84,7 @@ export class InventoryPage implements OnInit, OnDestroy{
     const modal = await this.modalController.create({
       component: NewStorageModalComponent,
       componentProps:{
-        plantRef: this.db.doc(`companies/${this.currentCompany}/plants/${this.currentPlantName}`).ref,
+        plantRef: Plant.getDocReference(this.db, this.currentCompany, this.currentPlantName),
         productList: this.productList,
       }
     });

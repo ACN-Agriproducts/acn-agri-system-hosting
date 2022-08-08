@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData, DocumentSnapshot } from '@angular/fire/compat/firestore';
+import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -15,6 +15,7 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import * as Excel from 'exceljs';
 import { FormControl } from '@angular/forms';
+import { collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 
 export const MY_FORMATS = {
   parse: {
@@ -57,7 +58,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
 
   @Input() productDoc: DocumentSnapshot<any>;
   public dprDoc: DocumentData;
-  private plantCollectionRef: AngularFirestoreCollection;
   @ViewChild(MatTable) tableView:MatTable<any>;
   
   public workbook: Excel.Workbook;
@@ -84,7 +84,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   public currentSub: Subscription;
 
   constructor(
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
     private storage: AngularFireStorage
   ) {
@@ -129,11 +129,11 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   private getDprDoc() {
     const date = this.date.value as _moment.Moment;
 
-    Plant.getCollectionReference(this.db, this.currentCompany).doc(this.currentPlant).collection("inventory")
-      .where("month", "==", date.month())
-      .where("year", "==", date.year())
-      .where("product", "==", this.productDoc.ref.id)
-      .get().then(dpr => {
+    getDocs(query(collection(Plant.getDocReference(this.db, this.currentCompany, this.currentPlant), 'inventory'),
+      where("month", "==", date.month()),
+      where("year", "==", date.year()),
+      where("product", "==", this.productDoc.ref.id)))
+      .then(dpr => {
         
         this.tableData = [];
         this.dprDoc = dpr.docs[0].data();

@@ -1,16 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
-import { utils, WorkBook, writeFile } from 'xlsx';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as Excel from 'exceljs';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-contract-info',
@@ -27,7 +26,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketList: Ticket[];
   public ticketDiscountList: {data: Ticket, discounts: any}[];
   public ticketsReady: boolean = false;
-  public contractRef: AngularFirestoreDocument;
   public showLiquidation: boolean = false;
 
   private currentSub: Subscription;
@@ -37,7 +35,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private localStorage: Storage,
-    private db: AngularFirestore,
+    private db: Firestore,
     private fns: AngularFireFunctions,
     private snackBar: MatSnackBar
     ) { }

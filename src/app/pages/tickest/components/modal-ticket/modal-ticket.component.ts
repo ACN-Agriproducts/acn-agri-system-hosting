@@ -1,11 +1,10 @@
 import { ModalController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { Observable } from 'rxjs';
 import { Ticket } from '@shared/classes/ticket';
 import { Contract } from '@shared/classes/contract';
 import { Contact } from '@shared/classes/contact';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-modal-ticket',
@@ -30,7 +29,7 @@ export class ModalTicketComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private storage: AngularFireStorage,
-    private db: AngularFirestore
+    private db: Firestore
   ) { }
 
   ngOnInit(): void {
