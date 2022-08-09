@@ -1,7 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { collection, DocumentReference, serverTimestamp } from '@angular/fire/firestore';
+import { runTransaction, doc } from '@angular/fire/firestore'
 import { MatDialog } from '@angular/material/dialog';
 import { PopoverController } from '@ionic/angular';
+import { Inventory, Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 import { EditInvDialogComponent } from './dialogs/edit-inv-dialog/edit-inv-dialog.component';
 import { MoveInvDialogComponent } from './dialogs/move-inv-dialog/move-inv-dialog.component';
 import { ZeroOutTankDialogComponent } from './dialogs/zero-out-tank-dialog/zero-out-tank-dialog.component';
@@ -12,14 +15,14 @@ import { ZeroOutTankDialogComponent } from './dialogs/zero-out-tank-dialog/zero-
   styleUrls: ['./storage-popover.component.scss'],
 })
 export class StoragePopoverComponent implements OnInit {
-  @Input() plantRef: DocumentReference;
+  @Input() plantRef: DocumentReference<Plant>;
   @Input() storageId: number;
-  @Input() tankList: any[];
-  @Input() productList: any[];
+  @Input() tankList: Inventory[];
+  @Input() productList: Product[];
 
   constructor(
     private dialog: MatDialog,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
     ) { }
 
   ngOnInit() {}
@@ -33,33 +36,33 @@ export class StoragePopoverComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result) {
-        this.plantRef.firestore.runTransaction( transaction => {
-          return transaction.get(this.plantRef).then(async plant => {
-            let inventory = plant.data().inventory;
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if(result) {
+    //     this.plantRef.firestore.runTransaction( transaction => {
+    //       return transaction.get(this.plantRef).then(async plant => {
+    //         let inventory = plant.data().inventory;
 
-            if(inventory[result.targetTank].product.id != 'none' && inventory[result.targetTank].product.id != inventory[this.storageId].product.id ) {
-              return;
-            }
+    //         if(inventory[result.targetTank].product.id != 'none' && inventory[result.targetTank].product.id != inventory[this.storageId].product.id ) {
+    //           return;
+    //         }
 
-            if(inventory[result.targetTank].product.id == 'none') {
-              inventory[result.targetTank].product = inventory[this.storageId].product;
-            }
+    //         if(inventory[result.targetTank].product.id == 'none') {
+    //           inventory[result.targetTank].product = inventory[this.storageId].product;
+    //         }
 
-            if(result.wholeInventory || result.quantityToMove > inventory[this.storageId].current) {
-              result.quantityToMove = inventory[this.storageId].current;
-              inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
-            }
+    //         if(result.wholeInventory || result.quantityToMove > inventory[this.storageId].current) {
+    //           result.quantityToMove = inventory[this.storageId].current;
+    //           inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, 'none');
+    //         }
 
-            inventory[this.storageId].current -= result.quantityToMove;
-            inventory[result.targetTank].current += result.quantityToMove;
+    //         inventory[this.storageId].current -= result.quantityToMove;
+    //         inventory[result.targetTank].current += result.quantityToMove;
             
-            transaction.update(this.plantRef, { inventory })
-          })
-        })
-      }
-    });
+    //         transaction.update(this.plantRef, { inventory })
+    //       })
+    //     })
+    //   }
+    // });
 
     this.popoverController.dismiss();
   }
@@ -75,25 +78,34 @@ export class StoragePopoverComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.plantRef.firestore.runTransaction(transaction => {
-          return transaction.get(this.plantRef).then(async plant => {
+        runTransaction(this.plantRef.firestore, transaction => {
+          return transaction.get<Plant>(this.plantRef).then(async plant => {
             let inventory = plant.data().inventory;
+            const beforeInv = plant.data().inventory;
             
             if(result.newProduct){
-              inventory[this.storageId].product = inventory[this.storageId].product.parent.doc(result.newProduct);
+              inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, result.newProduct);
             }
 
             if(inventory[this.storageId].current + result.quantity <= 0) {
               inventory[this.storageId].current = 0;
-              inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none')
+              inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, 'none')
             }
             else {
               inventory[this.storageId].current += result.quantity;
             }
 
+            const logRef = doc(collection(this.plantRef, 'storageLogs'));
+            transaction.set(logRef, {
+              before: beforeInv,
+              after: inventory,
+              updatedBy: '',
+              updatedOn: serverTimestamp()
+            })
+
             transaction.update(this.plantRef, { inventory });
           });
-        });
+        })
       }
     });
 
@@ -108,20 +120,20 @@ export class StoragePopoverComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(async result => {
-      if(result) {
-        this.plantRef.firestore.runTransaction(transaction => {
-          return transaction.get(this.plantRef).then(async plant => {
-            let inventory = plant.data().inventory;
+    // dialogRef.afterClosed().subscribe(async result => {
+    //   if(result) {
+    //     this.plantRef.firestore.runTransaction(transaction => {
+    //       return transaction.get(this.plantRef).then(async plant => {
+    //         let inventory = plant.data().inventory;
 
-            inventory[this.storageId].current = 0;
-            inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
+    //         inventory[this.storageId].current = 0;
+    //         inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
     
-            transaction.update(this.plantRef, {inventory});
-          });
-        });
-      }
-    });
+    //         transaction.update(this.plantRef, {inventory});
+    //       });
+    //     });
+    //   }
+    // });
 
     this.popoverController.dismiss();
   }
