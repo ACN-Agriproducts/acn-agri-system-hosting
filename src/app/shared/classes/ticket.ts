@@ -1,11 +1,11 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData } from "@angular/fire/firestore";
-import { AngularFireStorage } from "@angular/fire/compat/storage";
+import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
 import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
-import { collection, getDoc } from "firebase/firestore";
+import { collection } from "firebase/firestore";
 
 export class Ticket extends FirebaseDocInterface{
     public clientName: string;
@@ -155,14 +155,14 @@ export class Ticket extends FirebaseDocInterface{
         return this.ref.parent.withConverter(Ticket.converter);
     }
 
-    public async getPdfLink(storage: AngularFireStorage): Promise<string> {
+    public async getPdfLink(storage: Storage): Promise<string> {
         if(!this.pdfLink) return "";
-
-        return storage.ref(this.pdfLink).getDownloadURL().toPromise();
+        
+        return getDownloadURL(ref(storage, this.pdfLink));
     }
 
-    public async getImageLinks(storage: AngularFireStorage): Promise<string[]> {
-        const promises = this.imageLinks.map(link => storage.ref(link).getDownloadURL().toPromise())
+    public async getImageLinks(storage: Storage): Promise<string[]> {
+        const promises = this.imageLinks.map(link => getDownloadURL(ref(storage, link)))
         return Promise.all(promises);
     }
 

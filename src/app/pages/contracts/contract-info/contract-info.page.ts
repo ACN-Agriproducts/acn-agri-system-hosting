@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as Excel from 'exceljs';
@@ -36,7 +36,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private localStorage: Storage,
     private db: Firestore,
-    private fns: AngularFireFunctions,
+    private fns: Functions,
     private snackBar: MatSnackBar
     ) { }
 
@@ -197,11 +197,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   } 
 
   reloadContractTickets() {
-    this.fns.httpsCallable('contracts-updateTickets')({
+    httpsCallable(this.fns, 'contracts-updateTickets')({
       company: this.currentCompany,
       contractId: this.id,
       isPurchase: this.type == "purchase"
-    }).toPromise().then(async result => {
+    }).then(async result => {
       const contract = await Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id);
       const tickets = await contract.getTickets();
       this.ticketList = tickets;

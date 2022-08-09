@@ -1,13 +1,11 @@
 // import { ShowModalComponent } from './../show-modal/show-modal.component';
 import { Component, OnInit } from '@angular/core';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { Functions, httpsCallable } from '@angular/fire/functions';
+import { Storage } from '@angular/fire/storage';
 import { Firestore } from '@angular/fire/firestore';
-import { PopoverController, ModalController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { Storage as IonStorage } from '@ionic/storage';
 import { Company } from '@shared/classes/company';
 import { User } from '@shared/classes/user';
-import { Subscription } from 'rxjs';
 // import { OptionsComponent } from '../options/options.component';
 
 @Component({
@@ -21,14 +19,11 @@ export class ListComponent implements OnInit {
   public filterEmployee: boolean;
   public filterStatus: boolean;
   public filterSalary: boolean;
-  private currentSubs: Subscription[] = [];
   constructor(
-    private popoverController: PopoverController,
-    private modalController: ModalController,
     private db: Firestore,
-    private storage: AngularFireStorage,
-    private localStorage: Storage,
-    private fns: AngularFireFunctions
+    private storage: Storage,
+    private localStorage: IonStorage,
+    private fns: Functions
   ) { }
 
   ngOnInit(): void {

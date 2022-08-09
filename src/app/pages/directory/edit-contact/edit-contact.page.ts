@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Contact } from '@shared/classes/contact';
 
 @Component({
   selector: 'app-edit-contact',
@@ -15,23 +16,22 @@ export class EditContactPage implements OnInit {
   public id: string;
   public currentCompany: string;
   public contactForm: UntypedFormGroup;
-  public doc: any;
+  public doc: Contact;
 
   constructor(
     private fb: UntypedFormBuilder,
     private route: ActivatedRoute,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
     private navController: NavController
   ) { 
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
 
-      const tempSub = this.db.doc(`companies/${this.currentCompany}/directory/${this.id}`).get().subscribe(doc => {
-        this.doc = doc.data();
+      Contact.getDoc(this.db, this.currentCompany, this.id).then(contact => {
+        this.doc = contact;
         this.setForm();
-        tempSub.unsubscribe();
-      });
+      })
     });
     this.id = this.route.snapshot.paramMap.get('id');
 
@@ -82,7 +82,7 @@ export class EditContactPage implements OnInit {
   }
 
   submitButton() {
-    this.db.doc(`companies/${this.currentCompany}/directory/${this.id}`).update(this.contactForm.getRawValue()).then(() => {
+    this.doc.update(this.contactForm.getRawValue()).then(() => {
       this.navController.navigateForward('dashboard/directory');
     });
 

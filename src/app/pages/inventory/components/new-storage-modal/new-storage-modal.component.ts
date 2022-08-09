@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FirebaseApp } from '@angular/fire/compat';
-import { AngularFirestore, DocumentReference, QuerySnapshot } from '@angular/fire/compat/firestore';
+import { collection, doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { runTransaction } from 'firebase/firestore';
 
 @Component({
   selector: 'app-new-storage-modal',
@@ -18,7 +18,7 @@ export class NewStorageModalComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private fb: UntypedFormBuilder,
-    private db: AngularFirestore
+    private db: Firestore
   ) { }
 
   ngOnInit() {
@@ -34,7 +34,7 @@ export class NewStorageModalComponent implements OnInit {
   }
 
   public async submitForm(): Promise<void> {
-    return this.db.firestore.runTransaction(t => {
+    return runTransaction(this.db, t => {
       return t.get(this.plantRef).then(async plant => {
         if(!plant.exists){
           throw "Document Does not exist"
@@ -46,7 +46,7 @@ export class NewStorageModalComponent implements OnInit {
         }
 
         let submitInv = this.storageForm.getRawValue();
-        submitInv.product = this.plantRef.parent.parent.collection('products').doc(submitInv.product);
+        submitInv.product = doc(collection(this.plantRef.parent.parent, 'products'), submitInv.product);
 
         updateDoc.inventory.push(submitInv);
         updateDoc.inventoryNames.push(submitInv.name);

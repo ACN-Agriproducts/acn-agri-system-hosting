@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, DocumentSnapshot } from '@angular/fire/compat/firestore';
+import { Firestore, collection, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatTable } from '@angular/material/table';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { Product } from '@shared/classes/product';
 
 @Component({
   selector: 'app-discount-table',
@@ -11,7 +11,7 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./discount-table.component.scss'],
 })
 export class DiscountTableComponent implements OnInit {
-  @Input() doc: DocumentSnapshot<any>;
+  @Input() doc: Product;
   @ViewChild(MatTable) tableView:MatTable<any>;
 
   public ready = false;
@@ -20,7 +20,7 @@ export class DiscountTableComponent implements OnInit {
   public displayedColumns: string[] = ['low', 'high', 'weightDiscount', 'charge', 'bonus', 'delete'];
 
   constructor(
-    private db: AngularFirestore,
+    private db: Firestore,
     private fb: UntypedFormBuilder,
     private navController: NavController
   ) { }
@@ -30,7 +30,7 @@ export class DiscountTableComponent implements OnInit {
       data: this.fb.array([])
     });
     
-    const sub = new AngularFirestoreDocument(this.doc.ref, this.db).collection("discounts").doc("moisture").get().subscribe(val => {
+    const sub = getDoc(doc(collection(this.doc.ref, "discounts"), "moisture")).then(val => {
       const data = this.table.get("data") as UntypedFormArray;
 
       if(val.data()['data']){
@@ -44,7 +44,6 @@ export class DiscountTableComponent implements OnInit {
       if (this.data.length == 0) {
         this.addItem();
       }
-      sub.unsubscribe();
     })
   }
 
@@ -95,7 +94,7 @@ export class DiscountTableComponent implements OnInit {
       return;
     }
 
-    this.db.doc(this.doc.ref).collection('discounts').doc('moisture').update({
+    updateDoc(doc(collection(this.doc.ref, "discounts"), "moisture"), {
       data: rawTable
     });
 

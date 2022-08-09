@@ -1,6 +1,6 @@
 import { ModalController } from '@ionic/angular';
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { Storage } from '@angular/fire/storage';
 import { Ticket } from '@shared/classes/ticket';
 import { Contract } from '@shared/classes/contract';
 import { Contact } from '@shared/classes/contact';
@@ -28,7 +28,7 @@ export class ModalTicketComponent implements OnInit {
   };
   constructor(
     private modalController: ModalController,
-    private storage: AngularFireStorage,
+    private storage: Storage,
     private db: Firestore
   ) { }
 

@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { LoginPageRoutingModule } from './login-routing.module';
 import { LoginPage } from './login.page';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @NgModule({
   imports: [
@@ -16,7 +15,6 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
     LoginPageRoutingModule,
     CoreModule,
     ReactiveFormsModule,
-    AngularFirestoreModule
   ],
   declarations: [LoginPage],
   providers: [

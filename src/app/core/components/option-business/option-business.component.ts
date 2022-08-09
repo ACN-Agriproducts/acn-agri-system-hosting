@@ -1,22 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Component, OnInit } from '@angular/core';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-option-business',
   templateUrl: './option-business.component.html',
   styleUrls: ['./option-business.component.scss']
 })
-export class OptionBusinessComponent implements OnInit, OnDestroy {
+export class OptionBusinessComponent implements OnInit {
   companyList: any;
-  private currentSub: Subscription
 
   constructor(
     private store: Storage,
     private navController: NavController,
-    private db: AngularFirestore,
+    private db: Firestore,
     ) { }
 
   ngOnInit(): void {
@@ -25,17 +23,11 @@ export class OptionBusinessComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnDestroy(): void {
-    if(this.currentSub != null) {
-      this.currentSub.unsubscribe();
-    }
-  }
-
   public changeCompany(company) {
     this.store.set('currentCompany', company);
     this.store.get('user').then(user => {
-      this.currentSub = this.db.doc(`users/${user.uid}/companies/${company}`).valueChanges().subscribe(compDoc => {
-        user.currentPermissions = compDoc['permissions']
+      getDoc(doc(this.db, `users/${user.uid}/companies/${company}`)).then(compDoc => {
+        user.currentPermissions = compDoc.get('permissions');
 
         this.store.set('user', user);
         location.reload();

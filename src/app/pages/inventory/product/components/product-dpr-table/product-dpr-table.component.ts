@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
-import { Storage } from '@ionic/storage';
+import { Storage as IonStorage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
@@ -11,7 +11,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import * as moment from 'moment';
 import { MatTable } from '@angular/material/table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 
 import * as Excel from 'exceljs';
 import { FormControl } from '@angular/forms';
@@ -85,8 +85,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private db: Firestore,
-    private localStorage: Storage,
-    private storage: AngularFireStorage
+    private localStorage: IonStorage,
+    private storage: Storage
   ) {
     this.year = moment().year();
     this.month = moment().month() + 1;
@@ -100,8 +100,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
         this.currentPlant = currentPlant;
         this.getDprDoc();
       });
-
-      this.storage.ref(`companies/${company}/DPR.xlsx`).getDownloadURL().toPromise().then(url => {
+      getDownloadURL(ref(this.storage, `companies/${company}/DPR.xlsx`)).then(url => {
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'arraybuffer';
         xhr.onload = async (event) => {

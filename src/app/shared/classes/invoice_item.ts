@@ -1,4 +1,6 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, collectionData } from "@angular/fire/firestore";
+import { getDocs } from "firebase/firestore";
+import { Observable } from "rxjs";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -42,6 +44,16 @@ export class InvoiceItem extends FirebaseDocInterface {
 
     public static getDocReference(db: Firestore, company: string, InvoiceItems: string): DocumentReference<InvoiceItem> {
         return doc(db, `companies/${company}/InvoiceItemss/${InvoiceItems}`).withConverter(InvoiceItem.converter);
+    }
+
+    public static getList(db: Firestore, company: string): Promise<InvoiceItem[]> {
+        return getDocs(InvoiceItem.getCollectionReference(db, company)).then(value => {
+            return value.docs.map(d => d.data());
+        });
+    }
+
+    public static getCollectionValueChanges(db: Firestore, company: string): Observable<InvoiceItem[]> {
+        return collectionData(InvoiceItem.getCollectionReference(db, company));
     }
 }
 

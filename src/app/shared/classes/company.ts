@@ -1,8 +1,10 @@
-import { CollectionReference, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
-import { AngularFireFunctions } from "@angular/fire/compat/functions";
+import { CollectionReference, docData, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
+import { Functions } from "@angular/fire/functions";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
 import { collection, doc } from "firebase/firestore";
+import { Observable } from "rxjs";
+import { httpsCallable } from "firebase/functions";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];
@@ -48,11 +50,12 @@ export class Company extends FirebaseDocInterface {
         }
     }
 
-    public getCompanyUsers(fns: AngularFireFunctions, db: Firestore): Promise<User[]> {
-        return fns.httpsCallable('users-getCompanyUsers')({company: this.ref.id})
-            .toPromise()
+    public getCompanyUsers(fns: Functions, db: Firestore): Promise<User[]> {
+        return httpsCallable(fns, 'users-getCompanyUsers')
+        ({company: this.ref.id})
             .then(result => {
-                return result.map(u => {
+                const data = result.data as any;
+                return data.map(u => {
                     u.ref = User.getDocumentReference(db, u.ref);
                     u.createdAt = new Date(u.createdAt);
 
@@ -73,6 +76,10 @@ export class Company extends FirebaseDocInterface {
         return getDoc(Company.getCompanyRef(db, company)).then(result => {
             return result.data();
         });
+    }
+
+    public static getCompanyValueChanges(db: Firestore, company: string): Observable<Company> {
+        return docData(Company.getCompanyRef(db, company));
     }
 }
 

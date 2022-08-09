@@ -193,6 +193,10 @@ export class Contract extends FirebaseDocInterface {
         });
     }
 
+    public static getDocRef(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): DocumentReference<Contract> {
+        return doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId);
+    }
+
     public static getStatusEnum(): typeof status {
         return status;
     }
