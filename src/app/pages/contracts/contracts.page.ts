@@ -10,7 +10,7 @@ import { OptionsContractComponent } from './components/options-contract/options-
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { Subscription } from 'rxjs';
-import { collectionData, docData, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
+import { collectionData, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 
 
@@ -40,7 +40,6 @@ export class ContractsPage implements OnInit, AfterViewInit {
   private contractStep = 20;
 
   constructor(
-    private modal: MatDialog,
     private modalController: ModalController,
     private popoverController: PopoverController,
     private cd: ChangeDetectorRef,
