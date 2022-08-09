@@ -116,7 +116,10 @@ export class TableComponent implements OnInit {
       limit(this.ticketLimit))
     .subscribe(ticketList => {
       this.ticketList = ticketList;
+      event.target.complete();
     });
+
+    console.log(`Got ${this.ticketList.length} tickets`);
 
     this.currentSub.push(sub);
   }
