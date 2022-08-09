@@ -36,33 +36,65 @@ export class StoragePopoverComponent implements OnInit {
       }
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if(result) {
-    //     this.plantRef.firestore.runTransaction( transaction => {
-    //       return transaction.get(this.plantRef).then(async plant => {
-    //         let inventory = plant.data().inventory;
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        runTransaction(this.plantRef.firestore, transaction => {
+          return transaction.get(this.plantRef).then(async plant => {
+            const inventory = plant.data().getRawInventory();
+            const beforeInv = plant.data().getRawInventory();
+            const changes = [];
 
-    //         if(inventory[result.targetTank].product.id != 'none' && inventory[result.targetTank].product.id != inventory[this.storageId].product.id ) {
-    //           return;
-    //         }
+            if(inventory[result.targetTank].product.id != 'none' && inventory[result.targetTank].product.id != inventory[this.storageId].product.id ) {
+              return;
+            }
 
-    //         if(inventory[result.targetTank].product.id == 'none') {
-    //           inventory[result.targetTank].product = inventory[this.storageId].product;
-    //         }
+            if(inventory[result.targetTank].product.id == 'none') {
+              inventory[result.targetTank].product = inventory[this.storageId].product;
+              changes.push({
+                type: 'Add Product Type',
+                tank: inventory[result.targetTank].name,
+              });
+            }
 
-    //         if(result.wholeInventory || result.quantityToMove > inventory[this.storageId].current) {
-    //           result.quantityToMove = inventory[this.storageId].current;
-    //           inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, 'none');
-    //         }
+            if(result.wholeInventory || result.quantityToMove > inventory[this.storageId].current) {
+              result.quantityToMove = inventory[this.storageId].current;
+              inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, 'none');
+              changes.push({
+                type: "Remove product type",
+                tank: inventory[result.targetTank].name
+              });
+            }
 
-    //         inventory[this.storageId].current -= result.quantityToMove;
-    //         inventory[result.targetTank].current += result.quantityToMove;
+            inventory[this.storageId].current -= result.quantityToMove;
+            inventory[result.targetTank].current += result.quantityToMove;
+
+            changes.push({
+              type: "Edit tank",
+              tank: inventory[this.storageId].name,
+              amount: -result.quantityToMove
+            });
+
+            changes.push({
+              type: "Edit tank",
+              tank: inventory[result.targetTank].name,
+              amount: result.quantityToMove
+            });
+
+            const logRef = doc(collection(this.plantRef, 'storageLogs'));
+            transaction.set(logRef, {
+              before: beforeInv,
+              after: inventory,
+              updatedBy: '',
+              updatedOn: serverTimestamp(),
+              change: changes,
+              updateType: 'Manual'
+            })
             
-    //         transaction.update(this.plantRef, { inventory })
-    //       })
-    //     })
-    //   }
-    // });
+            transaction.update(this.plantRef, { inventory, lastStorageUpdate: logRef });
+          })
+        })
+      }
+    });
 
     this.popoverController.dismiss();
   }
@@ -80,19 +112,34 @@ export class StoragePopoverComponent implements OnInit {
       if(result) {
         runTransaction(this.plantRef.firestore, transaction => {
           return transaction.get<Plant>(this.plantRef).then(async plant => {
-            let inventory = plant.data().inventory;
-            const beforeInv = plant.data().inventory;
+            const inventory = plant.data().getRawInventory();
+            const beforeInv = plant.data().getRawInventory();
+            const changes = []
             
             if(result.newProduct){
               inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, result.newProduct);
+              changes.push({
+                type: 'New Product',
+                tank: inventory[this.storageId].name
+              })
             }
 
             if(inventory[this.storageId].current + result.quantity <= 0) {
               inventory[this.storageId].current = 0;
               inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, 'none')
+              changes.push({
+                type: 'Inventory Empty',
+                tank: inventory[this.storageId].name,
+                amount: result.quantity
+              });
             }
             else {
               inventory[this.storageId].current += result.quantity;
+              changes.push({
+                type: 'Inventory Edit',
+                tank: inventory[this.storageId].name,
+                amount: result.quantity
+              });
             }
 
             const logRef = doc(collection(this.plantRef, 'storageLogs'));
@@ -100,10 +147,12 @@ export class StoragePopoverComponent implements OnInit {
               before: beforeInv,
               after: inventory,
               updatedBy: '',
-              updatedOn: serverTimestamp()
+              updatedOn: serverTimestamp(),
+              change: changes,
+              updateType: 'Manual'
             })
 
-            transaction.update(this.plantRef, { inventory });
+            transaction.update(this.plantRef, { inventory, lastStorageUpdate: logRef });
           });
         })
       }
@@ -120,20 +169,37 @@ export class StoragePopoverComponent implements OnInit {
       }
     });
 
-    // dialogRef.afterClosed().subscribe(async result => {
-    //   if(result) {
-    //     this.plantRef.firestore.runTransaction(transaction => {
-    //       return transaction.get(this.plantRef).then(async plant => {
-    //         let inventory = plant.data().inventory;
+    dialogRef.afterClosed().subscribe(async result => {
+      if(result) {
+        runTransaction(this.plantRef.firestore, transaction => {
+          return transaction.get(this.plantRef).then(async plant => {
+            const beforeInv = plant.data().getRawInventory();
+            const inventory = plant.data().getRawInventory();
 
-    //         inventory[this.storageId].current = 0;
-    //         inventory[this.storageId].product = inventory[this.storageId].product.parent.doc('none');
-    
-    //         transaction.update(this.plantRef, {inventory});
-    //       });
-    //     });
-    //   }
-    // });
+            inventory[this.storageId].current = 0;
+            inventory[this.storageId].product = doc(inventory[this.storageId].product.parent, 'none');
+            
+            const changes = [{
+              type: 'Zero out inventory',
+              tank: inventory[this.storageId].name,
+              amount: -beforeInv[this.storageId].current
+            }]
+
+            const logRef = doc(collection(this.plantRef, 'storageLogs'));
+            transaction.set(logRef, {
+              before: beforeInv,
+              after: inventory,
+              updatedBy: '',
+              updatedOn: serverTimestamp(),
+              change: changes,
+              updateType: 'Manual'
+            })
+
+            transaction.update(this.plantRef, {inventory, lastStorageUpdate: logRef});
+          });
+        });
+      }
+    });
 
     this.popoverController.dismiss();
   }
