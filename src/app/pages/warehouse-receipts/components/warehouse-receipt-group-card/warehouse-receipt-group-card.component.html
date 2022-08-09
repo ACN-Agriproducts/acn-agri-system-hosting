@@ -6,7 +6,7 @@
 					<ion-text>Date: {{ wrGroup.creationDate | date }}</ion-text>
 					<ion-text>ID Range: {{ idRange }}</ion-text>
 					<ion-text>Quantity: {{ wrGroup.totalBushelQuantity | number}}</ion-text>
-					<ion-text>Product: {{ product }}</ion-text>
+					<ion-text>Product: {{ wrGroup.product }}</ion-text>
 				</div>
 
 				<div class="group-status">
@@ -59,11 +59,11 @@
 			<ion-text>Plant</ion-text>
 		</div>
 		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
-			<ion-text></ion-text>
-			<ion-text></ion-text>
-			<ion-text></ion-text>
-			<ion-text></ion-text>
-			<ion-text></ion-text>
+			<ion-text>{{ warehouseReceipt.id }}</ion-text>
+			<ion-text>{{ warehouseReceipt.startDate | date }}</ion-text>
+			<ion-text>{{ warehouseReceipt.product }}</ion-text>
+			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
+			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
 		</div>
 	</div>
 

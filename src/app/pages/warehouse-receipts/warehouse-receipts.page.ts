@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
-import { NavigationExtras } from '@angular/router';
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 
@@ -14,12 +13,11 @@ export class WarehouseReceiptsPage implements OnInit {
   public currentCompany: string;
   public currentPlant: string;
   public warehouseReceiptGroupList: WarehouseReceiptGroup[] = [];
-  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
 
   constructor(
     private localStorage: Storage,
+    private navController: NavController,
     private db: AngularFirestore,
-    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -30,12 +28,12 @@ export class WarehouseReceiptsPage implements OnInit {
     })
     .then(plant => {
       this.currentPlant = plant;
-      return WarehouseReceiptGroup.getWarehouseReceiptGroupList(this.db, this.currentCompany);
+      return WarehouseReceiptGroup.getWrGroupListValueChanges(this.db, this.currentCompany);
     })
     .then(result => {
-      console.log(result);
-      this.warehouseReceiptGroupList = result;
-      this.warehouseReceiptCollectionRef = this.db.collection(result[0]?.getCollectionReference());
+      result.subscribe(list => {
+        this.warehouseReceiptGroupList = list.sort((a, b) => a.creationDate.getTime() - b.creationDate.getTime());
+      });
     });
   }
 

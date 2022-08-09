@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { AlertController, NavController } from '@ionic/angular';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
@@ -29,6 +30,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     private fb: FormBuilder,
     private localStorage: Storage,
     private navController: NavController,
+    private snackbar: MatSnackBar,
     private uniqueId: UniqueWarehouseReceiptIdService,
   ) { }
 
@@ -36,7 +38,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     this.localStorage.get('currentCompany')
     .then(company => {
       this.currentCompany = company;
-      this.warehouseReceiptCollectionRef = this.db.collection(WarehouseReceiptGroup.getWrCollectionReference(this.db, company));
+      this.warehouseReceiptCollectionRef = this.db.collection(WarehouseReceiptGroup.getWrCollectionReference(this.db, company).withConverter(null));
       return Plant.getPlantList(this.db, company);
     })
     .then(plantObjList => {
@@ -51,11 +53,12 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
     this.warehouseReceiptGroupForm = this.fb.group({
       bushelQuantity: [10_000, Validators.required],
-      startId: ['', Validators.required],
+      creationDate: [new Date()],
       plant: ['', Validators.required],
       product: ['', Validators.required],
       quantity: [1, Validators.required],
-      creationDate: [new Date()],
+      receiptDates: [new Date()],
+      startId: ['', Validators.required],
       warehouseReceiptList: this.fb.array([], this.validateIds())
     });
 
@@ -65,7 +68,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
         if (this.checkInfoValid()) {
           this.addWarehouseReceipts(this.warehouseReceiptGroupForm.getRawValue());
         }
-      })
+      });
     }
   }
   
@@ -74,7 +77,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     return this.warehouseReceiptCollectionRef;
   }
 
-  public validateIds = (): ValidatorFn  => {
+  public validateIds = (): ValidatorFn => {
     return (formArray: FormArray): ValidationErrors | null => {
       const idArray = formArray.controls.map(formGroup => formGroup.value.id);
       this.warehouseReceiptIdList = idArray;
@@ -82,6 +85,8 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       const invalid = idArray.some((id, index) => {
         return idArray.indexOf(id) !== index;
       });
+
+      if (invalid) this.openSnackbar("Cannot create group with multiple ID's", true);
 
       return invalid ? { duplicateId: true} : null;
     }
@@ -102,19 +107,20 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     for (let i = 0; i < formValues.quantity; i++) {
       warehouseReceiptList.push(this.createWarehouseReceipt(formValues, i));
     }
+    this.openSnackbar("Warehouse Receipt Preview Updated");
   }
 
   public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
     const group = this.fb.group({
       bushelQuantity: [formValues.bushelQuantity, Validators.required],
-      date: [formValues.creationDate, Validators.required],
+      startDate: [formValues.receiptDates, Validators.required],
       id: [
         formValues.startId + index, 
         [Validators.required], 
-        this.uniqueId.validate.bind(this.uniqueId)
+        [this.uniqueId.validate.bind(this.uniqueId)]
       ],
       plant: [formValues.plant, Validators.required],
-      product: [formValues.product, Validators.required],
+      product: [{ value: formValues.product, disabled: true }, Validators.required],
     });
 
     group.get('id').markAsTouched();
@@ -122,18 +128,19 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
 
   public cancel = (): void => {
+    this.openSnackbar("Cancelled New Warehouse Receipt Group");
     this.navController.navigateBack('/dashboard/warehouse-receipts');
   }
 
   public confirm = async (): Promise<void> => {
-    let alert = this.alertController.create({
+    let alert = await this.alertController.create({
       header: "Confirmation",
       message: "Are you sure you would like to submit these Warehouse Receipts?",
       buttons: [
         {
           text: "yes",
           handler: async () => {
-            (await alert).dismiss();
+            alert.dismiss();
             this.submitWarehouseReceiptGroup();
           }
         },
@@ -144,7 +151,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       ]
     });
 
-    (await alert).present();
+    alert.present();
   }
 
   public submitWarehouseReceiptGroup = async (): Promise<void> => {
@@ -155,19 +162,30 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     });
 
     let receiptGroup = {
+      // closeDate: null,
       creationDate: formValues.creationDate,
-      purchaseContract: null,
-      saleContract: null,
+      // expireDate: null,
+      // purchaseContract: null,
+      // saleContract: null,
       status: "pending",
       totalBushelQuantity: this.totalBushelQuantity,
-      warehouseReceiptIdList: this.warehouseReceiptIdList.sort(),
-      warehouseReceiptList: formValues.warehouseReceiptList.sort(receipt => receipt.id)
+      warehouseReceiptIdList: this.warehouseReceiptIdList.sort((a, b) => a - b),
+      warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.id - b.id)
     };
 
     this.warehouseReceiptCollectionRef.add(receiptGroup).then(() => {
+      this.openSnackbar("Warehouse Receipt Group Created");
       this.navController.navigateForward('/dashboard/warehouse-receipts');
     }).catch(error => {
-      console.log("Error submitting form: ", error);
+      this.openSnackbar(`Error submitting form: ${error}`, true);
     });
+  }
+
+  public openSnackbar = (message: string, error?: boolean) => {
+    if (error) {
+      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
+      return;
+    }
+    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
   }
 }

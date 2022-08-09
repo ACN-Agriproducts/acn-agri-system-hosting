@@ -12,9 +12,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public wrList: WarehouseReceipt[];
   public wrIdList: number[];
   public idRange: string;
-  public product: string;
-
-  public 
 
   constructor() { }
 
@@ -22,7 +19,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrList = this.wrGroup.warehouseReceiptList;
     this.wrIdList = this.wrGroup.warehouseReceiptIdList;
 
-    this.product = this.wrList[0].product;
     this.idRange = this.getIdRange();
   }
 

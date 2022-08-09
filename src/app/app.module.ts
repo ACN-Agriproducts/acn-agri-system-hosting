@@ -21,6 +21,7 @@ import { USE_EMULATOR as USE_FIRESTORE_EMULATOR } from '@angular/fire/compat/fir
 import { USE_EMULATOR as USE_FUNCTIONS_EMULATOR } from '@angular/fire/compat/functions';
 import { BUCKET, USE_EMULATOR as USE_STORAGE_EMULATOR } from '@angular/fire/compat/storage' 
 import { MomentDateModule } from '@angular/material-moment-adapter';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 
 @NgModule({
