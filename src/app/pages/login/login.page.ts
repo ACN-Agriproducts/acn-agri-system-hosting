@@ -52,6 +52,7 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.auth.onAuthStateChanged(async user => {
+      console.log(user);
       if(user) {
         try{
           const val = await User.getUser(this.db, user.uid);
@@ -62,14 +63,13 @@ export class LoginPage implements OnInit, OnDestroy {
             refreshToken: user.refreshToken, 
             name: val.name,
             worksAt: val['worksAt'],
-            currentPermissions: compDoc["permissions"]
+            currentPermissions: compDoc
           });
           
           this.storage.set('currentCompany', val['worksAt'][0])
-
-          this.loadingController.dismiss().then((res) => {
-            this.navController.navigateForward('/dashboard/home');
-          });
+          console.log("Final")
+          this.navController.navigateForward('/dashboard/home');
+          this.loadingController.dismiss();
           
         }
         catch(error) {

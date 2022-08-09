@@ -50,7 +50,7 @@ export class User extends FirebaseDocInterface {
     }
 
     public getPermissions(company: string): Promise<any> {
-        return getDoc(doc(collection(this.ref, 'permissions'), company)).then(val => {
+        return getDoc(doc(collection(this.ref, 'companies'), company)).then(val => {
             return val.get('permissions');
         })
     }

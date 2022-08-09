@@ -102,6 +102,9 @@ export class LayoutComponent implements OnInit {
     this.storage.get('user').then(data => {
       this.dataUser = data;
       this.permissions = data.currentPermissions;
+      if(!this.permissions) {
+        this.authentication.logout();
+      }
 
       this.ready = true;
     });

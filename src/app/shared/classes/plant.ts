@@ -10,6 +10,7 @@ export class Plant extends FirebaseDocInterface {
     public inventoryNames: string[];
     public nextInTicket: number;
     public nextOutTicket: number;
+    public lastStorageUpdate: DocumentReference;
 
     constructor(snapshot: QueryDocumentSnapshot<DocumentData>) {
         super(snapshot, Plant.converter);
@@ -19,6 +20,7 @@ export class Plant extends FirebaseDocInterface {
         this.inventoryNames = data.inventoryNames;
         this.nextInTicket = data.nextInTicket;
         this.nextOutTicket = data.nextOutTicket;
+        this.lastStorageUpdate = data.lastStorageUpdate;
 
         data.inventory.forEach(inv => {
             this.inventory.push(new Inventory(inv));
@@ -31,12 +33,23 @@ export class Plant extends FirebaseDocInterface {
                 inventory: data.inventory,
                 inventoryNames: data.inventoryNames,
                 nextInTicket: data.nextInTicket,
-                nextOutTicket: data.nextOutTicket
+                nextOutTicket: data.nextOutTicket,
+                lastStorageUpdate: data.lastStorageUpdate
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Plant {
             return new Plant(snapshot);
         }
+    }
+
+    public getRawInventory() {
+        const inventory = [];
+
+        this.inventory.forEach(tank => {
+            inventory.push(tank.getRawData());
+        })
+
+        return inventory;
     }
 
     public getCollectionReference(): CollectionReference<Plant> {
@@ -94,5 +107,15 @@ export class Inventory {
         this.name = inv.name;
         this.product = inv.product;
         this.type = inv.type;
+    }
+
+    public getRawData() {
+        const data = {};
+        
+        Object.keys(this).forEach(key => {
+            data[key] = this[key];
+        });
+
+        return data;
     }
 }
