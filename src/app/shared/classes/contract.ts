@@ -1,4 +1,4 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, query, QueryDocumentSnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -135,7 +135,7 @@ export class Contract extends FirebaseDocInterface {
         const ticketList = [];
 
         this.tickets.forEach((ticketRef: DocumentReference<any>) => {
-            ticketList.push(ticketRef.withConverter(Ticket.converter).get());
+            ticketList.push(getDoc(ticketRef.withConverter(Ticket.converter)));
         });
 
         return Promise.all(ticketList).then(result => {
@@ -152,7 +152,7 @@ export class Contract extends FirebaseDocInterface {
     }
 
     public getClient(): Promise<Contact> {
-        return this.client.get().then(result => {
+        return getDoc(this.client).then(result => {
             return result.data();
         });
     }
@@ -161,7 +161,7 @@ export class Contract extends FirebaseDocInterface {
         const truckerList = [];
 
         this.truckers.forEach((truckerRef) => {
-            truckerList.push(truckerRef.get())
+            truckerList.push(getDoc(truckerRef))
         });
 
         return Promise.all(truckerList).then((result): Contact[] => {
@@ -175,21 +175,26 @@ export class Contract extends FirebaseDocInterface {
         })
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string, isPurchaseContract: boolean): CollectionReference<Contract> {
-        return db.firestore.collection(`companies/${company}/${isPurchaseContract? 'purchase' : 'sales'}Contracts/`).withConverter(Contract.converter);
+    public static getCollectionReference(db: Firestore, company: string, isPurchaseContract: boolean): CollectionReference<Contract> {
+        return collection(db, `companies/${company}/${isPurchaseContract? 'purchase' : 'sales'}Contracts/`).withConverter(Contract.converter);
     }
 
-    public static getDoc(db: AngularFirestore, company: string, isPurchaseContract: boolean, contractId: number): Promise<Contract> {
-        return this.getCollectionReference(db, company, isPurchaseContract).where('id', '==', contractId).limit(1)
-            .get().then(result => {
+    public static getDoc(db: Firestore, company: string, isPurchaseContract: boolean, contractId: number): Promise<Contract> {
+        return getDocs(query(Contract.getCollectionReference(db, company, isPurchaseContract), where('id', '==', contractId), limit(1)))
+            .then(result => {
                 return result.docs[0].data();
             });
     }
 
-    public static getDocById(db: AngularFirestore, company: string, isPurchaseContract: boolean, contractId: string): Promise<Contract> {
-        return this.getCollectionReference(db, company, isPurchaseContract).doc(contractId).get().then(result => {
+    public static getDocById(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): Promise<Contract> {
+        const docRef = doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId)
+        return getDoc(docRef).then(result => {
             return result.data();
         });
+    }
+
+    public static getDocRef(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): DocumentReference<Contract> {
+        return doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId);
     }
 
     public static getStatusEnum(): typeof status {

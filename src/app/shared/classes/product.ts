@@ -1,4 +1,6 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, doc, getDoc } from "@angular/fire/firestore";
+import { collectionData } from "rxfire/firestore";
+import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class Product extends FirebaseDocInterface {
@@ -42,23 +44,27 @@ export class Product extends FirebaseDocInterface {
         return this.ref.id;
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Product> {
-        return db.firestore.collection(`companies/${company}/products`).withConverter(Product.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<Product> {
+        return collection(db, `companies/${company}/products`).withConverter(Product.converter);
     }
 
-    public static getProductList(db: AngularFirestore, company: string): Promise<Product[]> {
-        return Product.getCollectionReference(db, company).get().then(result => {
+    public static getProductList(db: Firestore, company: string): Promise<Product[]> {
+        return getDocs(Product.getCollectionReference(db, company)).then(result => {
             return result.docs.map(doc => doc.data());
         });
     }
 
-    public static getProductReference(db: AngularFirestore, company: string, productName: string): DocumentReference<Product> {
-        return Product.getCollectionReference(db, company).doc(productName).withConverter(Product.converter);
+    public static getProductReference(db: Firestore, company: string, productName: string): DocumentReference<Product> {
+        return doc(Product.getCollectionReference(db, company), productName).withConverter(Product.converter);
     }
 
-    public static getProduct(db: AngularFirestore, company: string, productName: string): Promise<Product> {
-        return Product.getProductReference(db, company, productName).get().then(result => {
+    public static getProduct(db: Firestore, company: string, productName: string): Promise<Product> {
+        return getDoc(Product.getProductReference(db, company, productName)).then(result => {
             return result.data()
         });
+    }
+
+    public static getCollectionSnapshot(db: Firestore, company: string): Observable<Product[]> {
+        return collectionData(Product.getCollectionReference(db, company));
     }
 }

@@ -1,6 +1,7 @@
 import { DataUser } from './../../models/DataUser';
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Auth, signOut } from '@angular/fire/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 
 @Injectable({
@@ -8,21 +9,19 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class AuthenticationService {
 
-  constructor(public auth: AngularFireAuth) {}
+  constructor(public auth: Auth) {}
 
   public login = (email: string, password: string) => {
-    return this.auth.signInWithEmailAndPassword(email, password);
+    return signInWithEmailAndPassword(this.auth, email, password)
   }
   public logout = (): void => {
-    this.auth.signOut();
+    signOut(this.auth);
   }
 
   public registerNewUser = (dataUser: DataUser) => {
-    return this.auth.createUserWithEmailAndPassword(dataUser.email, dataUser.password);
+    return createUserWithEmailAndPassword(this.auth, dataUser.email, dataUser.password)
   }
-  public user = () => {
-    // return this.auth.createUserWithEmailAndPassword(dataUser.email, dataUser.password);
-     
-    return this.auth.user;
-  }
+  // public user = () => {
+  //   return this.auth.user;
+  // }
 }

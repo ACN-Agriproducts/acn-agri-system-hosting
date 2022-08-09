@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { addDoc, Firestore } from '@angular/fire/firestore';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControlOptions, UntypedFormControl } from '@angular/forms';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Company } from '@shared/classes/company';
+import { Invoice } from '@shared/classes/invoice';
+import { InvoiceItem } from '@shared/classes/invoice_item';
+import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 import { Subscription } from 'rxjs';
 import { PrintableInvoiceComponent } from '../components/printable-invoice/printable-invoice.component';
 
@@ -14,9 +19,9 @@ import { PrintableInvoiceComponent } from '../components/printable-invoice/print
 export class CreateInvoicePage implements OnInit {
 
   public currentCompany: string;
-  public plantsList: any[];
+  public plantsList: Plant[];
   public itemsList: any[];
-  public productsList: any[];
+  public productsList: Product[];
   public userPermissions: any[];
   public storageList: any;
 
@@ -31,7 +36,7 @@ export class CreateInvoicePage implements OnInit {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
     private navController: NavController,
     private modalController: ModalController,
@@ -72,32 +77,29 @@ export class CreateInvoicePage implements OnInit {
       this.currentCompany = company;
       var tempSub;
 
-      tempSub = this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe( val => {
-        this.id = val['nextInvoice'];
+      tempSub = Company.getCompanyValueChanges(this.db, this.currentCompany).subscribe(val => {
+        this.id = val.nextInvoice;
       })
       this.currentSubs.push(tempSub);
 
-      const sub = this.db.collection(`companies/${this.currentCompany}/plants`).valueChanges({idField: "name"}).subscribe(list => {
+      Plant.getPlantList(this.db, this.currentCompany).then(list => {
         this.plantsList = list;
         this.storageList = {};
 
         for(const plant of list) {
-          this.storageList[plant.name] = plant['inventory'];
+          this.storageList[plant.ref.id] = plant['inventory'];
         }
+      })    
 
-        sub.unsubscribe();
-      })
       
-
-      tempSub = this.db.collection(`companies/${this.currentCompany}/invoiceItems`).valueChanges({idField: "docId"}).subscribe(list => {
+      tempSub = InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
         this.itemsList = list;
       })
       this.currentSubs.push(tempSub)
 
-      const sub2 = this.db.collection(`companies/${this.currentCompany}/products`).valueChanges({idField: "name"}).subscribe(list => {
+      Product.getProductList(this.db, this.currentCompany).then(list => {
         this.productsList = list;
-        sub2.unsubscribe();
-      })
+      });
     })
   }
 
@@ -263,7 +265,7 @@ export class CreateInvoicePage implements OnInit {
     invoice.id = this.id;
     invoice.needsAttention = true;
 
-    this.db.collection(`companies/${this.currentCompany}/invoices`).add(invoice);
+    addDoc(Invoice.getCollectionReference(this.db, this.currentCompany), invoice);
 
     let modal = await this.modalController.create({
       component: PrintableInvoiceComponent,

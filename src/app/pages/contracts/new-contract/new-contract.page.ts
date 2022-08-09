@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference } from '@angular/fire/compat/firestore';
-import { AbstractControl, AsyncValidatorFn, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { addDoc, collection, CollectionReference, docData } from '@angular/fire/firestore';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,8 @@ import { SelectClientComponent } from './components/select-client/select-client.
 import { UniqueContractId } from './components/unique-contract-id';
 import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
+import { Firestore } from '@angular/fire/firestore';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'app-new-contract',
@@ -19,7 +21,7 @@ import { Product } from '@shared/classes/product';
 })
 export class NewContractPage implements OnInit, OnDestroy {
   currentCompany: string;
-  currentCompanyValue: any;
+  currentCompanyValue: Company;
   contactList: any[];
   productsList: Product[];
   clientsReady: boolean = false;
@@ -33,7 +35,7 @@ export class NewContractPage implements OnInit, OnDestroy {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
     private navController: NavController,
     private dialog: MatDialog,
@@ -44,9 +46,9 @@ export class NewContractPage implements OnInit, OnDestroy {
     this.localStorage.get('currentCompany').then(val =>{
       this.currentCompany = val;
 
-      var tempSub = this.db.doc(`companies/${this.currentCompany}`).valueChanges().subscribe(val => {
+      var tempSub = docData(Company.getCompanyRef(this.db, this.currentCompany)).subscribe(val => {
         this.currentCompanyValue = val;
-        this.contactList = val['contactList'].sort((a, b) =>{
+        this.contactList = val.contactList.sort((a, b) =>{
             var nameA = a.name.toUpperCase()
             var nameB = b.name.toUpperCase()
 
@@ -139,78 +141,72 @@ export class NewContractPage implements OnInit, OnDestroy {
       this.ticketClient = this.selectedClient;
     }
 
-    this.db.firestore.runTransaction(transaction => {
-      return transaction.get(this.db.firestore.doc(`companies/${this.currentCompany}`)).then(val => {
-        var submit = {
-          aflatoxin: formValue.aflatoxin,
-          base: this.getBushelPrice() - formValue.market_price,
-          buyer_terms: "",   //TODO
-          client: this.selectedClient.ref,
-          clientInfo: {
-            caat: this.selectedClient.caat,
-            city: this.selectedClient.city,
-            email: this.selectedClient.email,
-            name: this.selectedClient.name,
-            phoneNumber: this.selectedClient.phoneNumber,
-            state: this.selectedClient.state,
-            streetAddress: this.selectedClient.streetAddress,
-            type: this.selectedClient.type,
-            zipCode: this.selectedClient.zipCode
-          },
-          clientName: formValue.client,
-          clientTicketInfo: {
-            caat: this.ticketClient.caat,
-            city: this.ticketClient.city,
-            email: this.ticketClient.email,
-            name: this.ticketClient.name,
-            phoneNumber: this.ticketClient.phoneNumber,
-            state: this.ticketClient.state,
-            streetAddress: this.ticketClient.streetAddress,
-            type: this.ticketClient.type,
-            zipCode: this.ticketClient.zipCode,
-            ref: this.ticketClient.ref
-          },
-          currentDelivered: 0,
-          date: new Date(),
-          delivery_dates: {
-            begin: new Date(formValue.deliveryDateStart),
-            end: new Date(formValue.deliveryDateEnd),
-          },
-          grade: formValue.grade,
-          id: formValue.id,
-          loads: 0,
-          market_price: formValue.market_price,
-          paymentTerms: {
-            before: formValue.paymentTerms.before,
-            measurement: formValue.paymentTerms.measurement,
-            origin: formValue.paymentTerms.origin,
-            paymentTerms: formValue.paymentTerms.paymentTerms
-          },
-          pricePerBushel: this.getBushelPrice(),
-          product: formValue.product.ref,
-          productInfo: {
-            moisture: formValue.product.moisture,
-            name: formValue.product.ref.id,
-            weight: formValue.product.weight
-          },
-          quantity: this.contractWeight.getPounds(),
-          seller_terms: "",     //TODO
-          status: "pending",
-          tickets: [],
-          transport: 'truck',
-          truckers: []
-        };
+    var submit = {
+      aflatoxin: formValue.aflatoxin,
+      base: this.getBushelPrice() - formValue.market_price,
+      buyer_terms: "",   //TODO
+      client: this.selectedClient.ref,
+      clientInfo: {
+        caat: this.selectedClient.caat,
+        city: this.selectedClient.city,
+        email: this.selectedClient.email,
+        name: this.selectedClient.name,
+        phoneNumber: this.selectedClient.phoneNumber,
+        state: this.selectedClient.state,
+        streetAddress: this.selectedClient.streetAddress,
+        type: this.selectedClient.type,
+        zipCode: this.selectedClient.zipCode
+      },
+      clientName: formValue.client,
+      clientTicketInfo: {
+        caat: this.ticketClient.caat,
+        city: this.ticketClient.city,
+        email: this.ticketClient.email,
+        name: this.ticketClient.name,
+        phoneNumber: this.ticketClient.phoneNumber,
+        state: this.ticketClient.state,
+        streetAddress: this.ticketClient.streetAddress,
+        type: this.ticketClient.type,
+        zipCode: this.ticketClient.zipCode,
+        ref: this.ticketClient.ref
+      },
+      currentDelivered: 0,
+      date: new Date(),
+      delivery_dates: {
+        begin: new Date(formValue.deliveryDateStart),
+        end: new Date(formValue.deliveryDateEnd),
+      },
+      grade: formValue.grade,
+      id: formValue.id,
+      loads: 0,
+      market_price: formValue.market_price,
+      paymentTerms: {
+        before: formValue.paymentTerms.before,
+        measurement: formValue.paymentTerms.measurement,
+        origin: formValue.paymentTerms.origin,
+        paymentTerms: formValue.paymentTerms.paymentTerms
+      },
+      pricePerBushel: this.getBushelPrice(),
+      product: formValue.product.ref,
+      productInfo: {
+        moisture: formValue.product.moisture,
+        name: formValue.product.ref.id,
+        weight: formValue.product.weight
+      },
+      quantity: this.contractWeight.getPounds(),
+      seller_terms: "",     //TODO
+      status: "pending",
+      tickets: [],
+      transport: 'truck',
+      truckers: []
+    };
     
-        var docRef = this.db.firestore.collection(`companies/${this.currentCompany}/${formValue.contractType}`).doc();
-  
-        transaction.set(docRef, submit);
-      })
-
-    }).then(() => {
-      this.navController.navigateForward('dashboard/contracts');
-    }).catch(error => {
-      console.log("Error submitting form: ", error);
-    })
+    addDoc(this.getContractCollection(), submit)
+      .then(() => {
+        this.navController.navigateForward('dashboard/contracts');
+      }).catch(error => {
+        console.log("Error submitting form: ", error);
+      });
   }
 
   private getBushelPrice(): number{
@@ -265,8 +261,8 @@ export class NewContractPage implements OnInit, OnDestroy {
     this.contractForm.get('id').enable();
   }
 
-  getContractCollection(): AngularFirestoreCollection {
+  getContractCollection(): CollectionReference {
     const contractTypeControl = this.contractForm.get('contractType') as UntypedFormControl;
-    return this.db.collection(`companies/${this.currentCompany}/${contractTypeControl.value}`);
+    return collection(this.currentCompanyValue.ref, contractTypeControl.value);
   }
 }

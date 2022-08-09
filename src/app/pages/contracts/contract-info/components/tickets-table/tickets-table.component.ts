@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
 import { MatTable } from '@angular/material/table';
 import { Storage } from '@ionic/storage';
 import { Ticket } from '@shared/classes/ticket';

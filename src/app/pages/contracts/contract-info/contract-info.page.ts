@@ -1,16 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
-import { utils, WorkBook, writeFile } from 'xlsx';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as Excel from 'exceljs';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-contract-info',
@@ -27,7 +26,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketList: Ticket[];
   public ticketDiscountList: {data: Ticket, discounts: any}[];
   public ticketsReady: boolean = false;
-  public contractRef: AngularFirestoreDocument;
   public showLiquidation: boolean = false;
 
   private currentSub: Subscription;
@@ -37,8 +35,8 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private localStorage: Storage,
-    private db: AngularFirestore,
-    private fns: AngularFireFunctions,
+    private db: Firestore,
+    private fns: Functions,
     private snackBar: MatSnackBar
     ) { }
 
@@ -47,7 +45,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.type = this.route.snapshot.paramMap.get('type')
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
-      Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id).then(contract => {
+      Contract.getDocById(this.db, this.currentCompany, this.type == "purchaseContracts", this.id).then(contract => {
         this.currentContract = contract;
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
@@ -199,11 +197,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   } 
 
   reloadContractTickets() {
-    this.fns.httpsCallable('contracts-updateTickets')({
+    httpsCallable(this.fns, 'contracts-updateTickets')({
       company: this.currentCompany,
       contractId: this.id,
       isPurchase: this.type == "purchase"
-    }).toPromise().then(async result => {
+    }).then(async result => {
       const contract = await Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id);
       const tickets = await contract.getTickets();
       this.ticketList = tickets;

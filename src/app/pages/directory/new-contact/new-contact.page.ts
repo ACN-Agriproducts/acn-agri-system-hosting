@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { addDoc, Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Contact } from '@shared/classes/contact';
 
 
 @Component({
@@ -13,11 +14,11 @@ import { Storage } from '@ionic/storage';
 export class NewContactPage implements OnInit {
 
   contactForm: UntypedFormGroup;
-  currentCompany: String;
+  currentCompany: string;
 
   constructor(
     private fb: UntypedFormBuilder,
-    private store: AngularFirestore,
+    private db: Firestore,
     private navController: NavController,
     private localStore: Storage
   ) { }
@@ -39,7 +40,7 @@ export class NewContactPage implements OnInit {
   }
 
   public submitModal(){
-    this.store.collection(`companies/${this.currentCompany}/directory`).add(this.contactForm.getRawValue());
-    this.navController.navigateForward('dashboard/directory')
+    addDoc(Contact.getCollectionReference(this.db, this.currentCompany), this.contactForm.getRawValue())
+    this.navController.navigateForward('dashboard/directory');
   }
 }

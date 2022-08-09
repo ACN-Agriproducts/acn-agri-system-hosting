@@ -15,7 +15,6 @@ import { AddPictureComponent } from './components/add-picture/add-picture.compon
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ModalTicketComponent } from './components/modal-ticket/modal-ticket.component';
 import { ShowDetailsComponent } from './components/table/show-details/show-details.component';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { OptionsTicketComponent } from './components/options-ticket/options-ticket.component';
 import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 import { SharedModule } from '@shared/shared.module';
@@ -29,7 +28,6 @@ import { NgxPrintModule } from 'ngx-print';
     TickestPageRoutingModule,
     CoreModule,
     NgxDropzoneModule,
-    AngularFireStorageModule,
     SharedModule,
     NgxPrintModule
   ],

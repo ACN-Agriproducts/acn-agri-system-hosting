@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { AbstractControl, AsyncValidator, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { CollectionReference, getDocs, limit, query, where } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class UniqueWarehouseReceiptIdService implements AsyncValidator {
-  private getCollectionFunc: () => [AngularFirestoreCollection, number];
+  private getCollectionFunc: () => [CollectionReference, number];
 
   constructor() { }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
     const [warehouseReceiptCollection, quantity] = this.getCollectionFunc();
     
-    return warehouseReceiptCollection.ref.where('id', '>=', control.value).limit(1).get().then(result => {
+    return getDocs(query(warehouseReceiptCollection, where('id', '>=', control.value), limit(1))).then(result => {
       const resultDocArray = result.docs;
       if (resultDocArray.length === 0) return null;
 
@@ -31,7 +31,7 @@ export class UniqueWarehouseReceiptIdService implements AsyncValidator {
     });
   }
 
-  public setGetterFunction (func: () => [AngularFirestoreCollection, number]): void {
+  public setGetterFunction (func: () => [CollectionReference, number]): void {
     this.getCollectionFunc = func;
   }
 }

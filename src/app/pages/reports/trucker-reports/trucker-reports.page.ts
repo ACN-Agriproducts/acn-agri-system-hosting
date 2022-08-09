@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@ionic/storage';
 import { Contact } from '@shared/classes/contact';
@@ -27,7 +27,7 @@ export class TruckerReportsPage implements OnInit {
   public ticketsBoxChecked: boolean = false;
 
   constructor(
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
     private dialog: MatDialog
   ) {}
@@ -35,15 +35,9 @@ export class TruckerReportsPage implements OnInit {
   ngOnInit() {
     this.localStorage.get('currentCompany').then(companyName => {
       this.currentCompany = companyName;
-      Plant.getCollectionReference(this.db, companyName).get().then(result => {
-        const tempPlantList: Plant[] = [];
-
-        result.forEach(snap => {
-          tempPlantList.push(snap.data());
-        });
-
-        this.plantList = tempPlantList;
-        this.chosenPlants = tempPlantList;
+      Plant.getPlantList(this.db, companyName).then(result => {
+        this.plantList = result;
+        this.chosenPlants = result;
       });
     });
   }
@@ -54,9 +48,9 @@ export class TruckerReportsPage implements OnInit {
     this.endDate.setHours(23, 59, 59, 999);
 
     this.chosenPlants.forEach(plant => {
-      const promise = plant.getTicketCollectionReference()
-        .where('dateOut', '>=', this.startDate)
-        .where('dateOut', '<=', this.endDate).get().then(result =>{ 
+      const promise = getDocs(query(plant.getTicketCollectionReference(),
+        where('dateOut', '>=', this.startDate),
+        where('dateOut', '<=', this.endDate))).then(result =>{ 
         result.forEach(snap => {
           const ticket = snap.data();
 
@@ -202,7 +196,7 @@ class transportGroup {
   public id: string;
   public drivers: truckerTickets[];
 
-  constructor(_id: string, company: string, db: AngularFirestore) {
+  constructor(_id: string, company: string, db: Firestore) {
     this.id = _id;
     this.drivers = [];
 
@@ -274,7 +268,7 @@ class truckerTickets {
     this.tickets.push(new ticketCheck(ticket, freight));
   }
 
-  public getPrintableTicketInfo(db: AngularFirestore): Promise<void> {
+  public getPrintableTicketInfo(db: Firestore): Promise<void> {
     const printableInfo: Promise<[Ticket, Contract, Contact, Contact]>[] = [];
 
     this.tickets.forEach(ticket => {

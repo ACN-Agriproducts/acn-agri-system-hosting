@@ -3,10 +3,10 @@ import { AlertController, LoadingController, NavController } from '@ionic/angula
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Storage } from '@ionic/storage';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Firestore } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
+import { User } from '@shared/classes/user';
 
 
 @Component({
@@ -29,8 +29,8 @@ export class LoginPage implements OnInit, OnDestroy {
     private formBuilder: UntypedFormBuilder,
     public alertController: AlertController,
     private storage: Storage,
-    private fb: AngularFirestore,
-    private auth: AngularFireAuth
+    private db: Firestore,
+    private auth: Auth
   ) {
     this.buildForm();
   }
@@ -52,24 +52,24 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.auth.onAuthStateChanged(async user => {
+      console.log(user);
       if(user) {
         try{
-          const val = (await this.fb.doc(`/users/${user.uid}`).get().toPromise()).data() as any;
-          const compDoc = (await this.fb.doc(`/users/${user.uid}/companies/${val['worksAt'][0]}`).get().toPromise()).data() as any;
+          const val = await User.getUser(this.db, user.uid);
+          const compDoc = await val.getPermissions(val.worksAt[0]);
           this.storage.set('user', {
             email: user.email,
             uid: user.uid, 
             refreshToken: user.refreshToken, 
             name: val.name,
             worksAt: val['worksAt'],
-            currentPermissions: compDoc["permissions"]
+            currentPermissions: compDoc
           });
           
           this.storage.set('currentCompany', val['worksAt'][0])
-
-          this.loadingController.dismiss().then((res) => {
-            this.navController.navigateForward('/dashboard/home');
-          });
+          console.log("Final")
+          this.navController.navigateForward('/dashboard/home');
+          this.loadingController.dismiss();
           
         }
         catch(error) {

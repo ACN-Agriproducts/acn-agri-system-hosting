@@ -1,10 +1,13 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
-import { AngularFireFunctions } from "@angular/fire/compat/functions";
+import { CollectionReference, docData, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
+import { Functions } from "@angular/fire/functions";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
+import { collection, doc } from "firebase/firestore";
+import { Observable } from "rxjs";
+import { httpsCallable } from "firebase/functions";
 
 export class Company extends FirebaseDocInterface {
-    contactList: any;
+    contactList: CompanyContact[];
     createdAt: Date;
     employees: DocumentReference;
     name: string;
@@ -47,11 +50,12 @@ export class Company extends FirebaseDocInterface {
         }
     }
 
-    public getCompanyUsers(fns: AngularFireFunctions, db: AngularFirestore): Promise<User[]> {
-        return fns.httpsCallable('users-getCompanyUsers')({company: this.ref.id})
-            .toPromise()
+    public getCompanyUsers(fns: Functions, db: Firestore): Promise<User[]> {
+        return httpsCallable(fns, 'users-getCompanyUsers')
+        ({company: this.ref.id})
             .then(result => {
-                return result.map(u => {
+                const data = result.data as any;
+                return data.map(u => {
                     u.ref = User.getDocumentReference(db, u.ref);
                     u.createdAt = new Date(u.createdAt);
 
@@ -60,18 +64,22 @@ export class Company extends FirebaseDocInterface {
             });
     }
 
-    public static getCollectionReference(db: AngularFirestore): CollectionReference<Company> {
-        return db.firestore.collection(`companies`).withConverter(Company.converter);
+    public static getCollectionReference(db: Firestore): CollectionReference<Company> {
+        return collection(db, 'companies').withConverter(Company.converter);
     }
 
-    public static getCompanyRef(db: AngularFirestore, company: string): DocumentReference<Company> {
-        return this.getCollectionReference(db).doc(company).withConverter(Company.converter);
+    public static getCompanyRef(db: Firestore, company: string): DocumentReference<Company> {
+        return doc(db, `companies/${company}`).withConverter(Company.converter);
     }
 
-    public static getCompany(db: AngularFirestore, company: string): Promise<Company> {
-        return this.getCompanyRef(db, company).get().then(result => {
+    public static getCompany(db: Firestore, company: string): Promise<Company> {
+        return getDoc(Company.getCompanyRef(db, company)).then(result => {
             return result.data();
         });
+    }
+
+    public static getCompanyValueChanges(db: Firestore, company: string): Observable<Company> {
+        return docData(Company.getCompanyRef(db, company));
     }
 }
 

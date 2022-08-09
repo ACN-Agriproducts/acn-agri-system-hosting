@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentReference } from '@angular/fire/compat/firestore';
+import { CollectionReference, DocumentReference, Firestore, orderBy, query, where, Query, collectionData, addDoc } from '@angular/fire/firestore';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { collection } from 'firebase/firestore';
+import { docData } from 'rxfire/firestore';
 import { NewWarehouseReceiptModalComponent } from '../new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
 import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 
@@ -15,7 +17,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   @Input() currentPlantName: string;
   
   public warehouseReceiptList: WarehouseReceiptDoc[] = [];
-  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
+  public warehouseReceiptCollectionRef: CollectionReference;
   public queryStatus: string[] = ["active", "sold", "financing", "cancelled"];
   public today: Date = new Date();
   
@@ -23,7 +25,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private popoverController: PopoverController,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
   ) { }
 
@@ -35,11 +37,9 @@ export class WarehouseReceiptsComponent implements OnInit {
     let tempReceiptList = [];
 
     this.localStorage.get('currentCompany').then(currentCompany => {
-      this.warehouseReceiptCollectionRef = this.db.collection(`companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`, 
-        query => query.where('status', 'in', this.queryStatus)
-                      .orderBy('id', 'asc'));
-
-      this.warehouseReceiptCollectionRef.get().subscribe(receiptList => {
+      this.warehouseReceiptCollectionRef = collection(this.db, `companies/${currentCompany}/plants/${this.currentPlantName}/warehouseReceipts`)
+      
+      collectionData(query(this.warehouseReceiptCollectionRef, where('status', 'in', this.queryStatus), orderBy('id', 'asc'))).subscribe(receiptList => {
         receiptList.forEach(receiptFirebaseDoc => {
           const tempReceipt = receiptFirebaseDoc.data() as WarehouseReceiptDoc;
           tempReceipt.ref = receiptFirebaseDoc.ref;
@@ -89,7 +89,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 
   public addWarehouseReceipt = async (receiptObject: any) => {
-    this.warehouseReceiptCollectionRef.add(receiptObject).then(result => {
+    addDoc(this.warehouseReceiptCollectionRef, receiptObject).then(result => {
       // add new receipt to html
       const tempReceipt = {
         ...receiptObject, 
@@ -129,7 +129,7 @@ export class WarehouseReceiptsComponent implements OnInit {
       updateDoc.endDate = new Date();
     }
 
-    receiptRef.update(updateDoc);
+    updateDoc(receiptRef, updateDoc)
     this.getWarehouseReceipts();
   }
 }

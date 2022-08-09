@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { DocumentReference, getDoc } from '@angular/fire/firestore';
 import { Invoice } from '@shared/classes/invoice';
 
 @Component({
@@ -28,7 +28,7 @@ export class DprInvoiceTableComponent implements OnInit {
 
     const promises = [];
     this.invoiceList.forEach((invoice, index) => {
-      const promise = invoice.withConverter(Invoice.converter).get().then(val => {
+      const promise = getDoc(invoice.withConverter(Invoice.converter)).then(val => {
         // Add invoice data to list
         const data = val.data();
         let formatedData = {

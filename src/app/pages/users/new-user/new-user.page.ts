@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -295,7 +295,7 @@ export class NewUserPage implements OnInit {
   constructor(
     private fb: UntypedFormBuilder,
     private localStorage: Storage,
-    private fns: AngularFireFunctions,
+    private fns: Functions,
     private navController: NavController
   ) { }
 
@@ -309,13 +309,9 @@ export class NewUserPage implements OnInit {
     let form = this.userForm.getRawValue();
     form.company = this.currentCompany;
 
-    const sub = this.fns.httpsCallable('users-createUser')(form).subscribe(
+    httpsCallable(this.fns, 'users-createUser')(form).then(
       val => {
         this.navController.navigateForward('dashboard/users');
-        sub.unsubscribe();
-      },
-      error => {
-        sub.unsubscribe();
       }
     );
   }

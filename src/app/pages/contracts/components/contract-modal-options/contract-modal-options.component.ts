@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { IonicModule, NavController } from '@ionic/angular';
+import { Firestore, updateDoc } from '@angular/fire/firestore';
+import { NavController } from '@ionic/angular';
+import { Contract } from '@shared/classes/contract';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -18,7 +19,7 @@ export class ContractModalOptionsComponent implements OnInit {
 
   constructor(
     private navController: NavController,
-    private fb: AngularFirestore
+    private db: Firestore
     ) { }
 
   ngOnInit() {}
@@ -32,8 +33,7 @@ export class ContractModalOptionsComponent implements OnInit {
       return;
     }
 
-    let type = this.isPurchase? 'purchaseContracts' : 'salesContracts'
-    this.fb.doc(`companies/${this.currentCompany}/${type}/${this.contractId}`).update({
+    updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "active"
     })
   }
@@ -43,8 +43,7 @@ export class ContractModalOptionsComponent implements OnInit {
       return;
     }
 
-    let type = this.isPurchase? 'purchaseContracts' : 'salesContracts'
-    this.fb.doc(`companies/${this.currentCompany}/${type}/${this.contractId}`).update({
+    updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "closed"
     })
   }

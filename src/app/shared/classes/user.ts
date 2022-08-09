@@ -1,6 +1,7 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
-import { AngularFireStorage } from "@angular/fire/compat/storage";
+import { doc, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
+import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { collection } from "firebase/firestore";
 
 export class User extends FirebaseDocInterface {
     name: string;
@@ -31,9 +32,9 @@ export class User extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: User): DocumentData {
             return {
-                createdAt: this.createdAt,
-                email: this.email,
-                name: this.name,
+                createdAt: data.createdAt,
+                email: data.email,
+                name: data.name,
             }
         },
         fromFirestore(snapshot:QueryDocumentSnapshot<any>, options: SnapshotOptions): User {
@@ -41,14 +42,26 @@ export class User extends FirebaseDocInterface {
         }
     }
 
-    public getPictureURL(store: AngularFireStorage): Promise<string> {
-        return store.ref(this.pictureRef).getDownloadURL().toPromise().then(url => {
+    public getPictureURL(storage: Storage): Promise<string> {
+        return getDownloadURL(ref(storage,this.pictureRef)).then(url => {
             this.pictureURL = url;
             return url;
         });
     }
 
-    public static getDocumentReference(db: AngularFirestore, userID: string) {
-        return db.firestore.doc(`users/${userID}`);
+    public getPermissions(company: string): Promise<any> {
+        return getDoc(doc(collection(this.ref, 'companies'), company)).then(val => {
+            return val.get('permissions');
+        })
+    }
+
+    public static getDocumentReference(db: Firestore, userID: string): DocumentReference<User> {
+        return doc(db, `users/${userID}`).withConverter(User.converter);
+    }
+
+    public static getUser(db: Firestore, userID: string): Promise<User> {
+        return getDoc(this.getDocumentReference(db, userID)).then(val => {
+            return val.data();
+        });
     }
 }

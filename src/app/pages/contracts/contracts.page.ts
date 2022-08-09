@@ -2,16 +2,16 @@ import { IonInfiniteScroll, ModalController, NavController, PopoverController } 
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
 import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { collectionData, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
+import { Contract } from '@shared/classes/contract';
 
 
 @Component({
@@ -40,12 +40,11 @@ export class ContractsPage implements OnInit, AfterViewInit {
   private contractStep = 20;
 
   constructor(
-    private modal: MatDialog,
     private modalController: ModalController,
     private popoverController: PopoverController,
     private cd: ChangeDetectorRef,
     private dataService: DataContractService,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
     private navController: NavController
   ) { }
@@ -77,12 +76,12 @@ export class ContractsPage implements OnInit, AfterViewInit {
     this.currentSub = [];
     this.contractLimit = this.contractStep;
     this.infiniteScroll.disabled = false;
+    const ColQuery = query(Contract.getCollectionReference(this.db, this.currentCompany, this.contractType == 'purchaseContract'),
+                    where("status", "in", this.orderStatus),
+                    orderBy(this.sortField),
+                    limit(this.contractLimit));
 
-    this.currentSub.push(this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
-      ref.where("status", "in", this.orderStatus)
-      .orderBy(this.sortField, this.assending? 'asc': 'desc')
-      .limit(this.contractLimit)
-    ).valueChanges({idField: 'documentId'}).subscribe(val => {
+    this.currentSub.push(collectionData(ColQuery).subscribe(val => {
         this.dataList = val;
         this.ready = true;
       }));
@@ -95,12 +94,12 @@ export class ContractsPage implements OnInit, AfterViewInit {
 
     this.currentSub = [];
     this.contractLimit += this.contractStep;
+    const colQuery = query(Contract.getCollectionReference(this.db, this.currentCompany, this.contractType == 'purchaseContract'),
+                    where("status", "in", this.orderStatus),
+                    orderBy(this.sortField, this.assending? 'asc': 'desc'),
+                    limit(this.contractLimit));
 
-    const tempSub = this.db.collection(`companies/${this.currentCompany}/${this.contractType}`, ref => 
-    ref.where("status", "in", this.orderStatus)
-      .orderBy(this.sortField, this.assending? 'asc': 'desc')
-      .limit(this.contractLimit)
-    ).valueChanges({idField: 'documentId'}).subscribe(val => {
+    const tempSub = collectionData(colQuery).subscribe(val => {
         this.dataList = val;
         event.target.complete();
 

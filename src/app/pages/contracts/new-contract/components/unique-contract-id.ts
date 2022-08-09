@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { AngularFirestoreCollection } from "@angular/fire/compat/firestore";
 import { AbstractControl, AsyncValidator, ValidationErrors } from "@angular/forms";
 import { Observable } from "rxjs";
+import { CollectionReference, getDocs, limit, query, where } from '@angular/fire/firestore'
 
 @Injectable({ providedIn: 'root' })
 
 export class UniqueContractId implements AsyncValidator{
-    private getCollectionFunc: () => AngularFirestoreCollection;
+    private getCollectionFunc: () => CollectionReference;
 
     constructor() {}
 
@@ -15,10 +15,10 @@ export class UniqueContractId implements AsyncValidator{
     ) : Promise<ValidationErrors | null> | Observable<ValidationErrors | null> 
     {
         const contractsCollections = this.getCollectionFunc();
-        return contractsCollections.ref
-            .where('id', '==', control.value)
-            .limit(1)
-            .get().then(result => {
+        return getDocs(query(contractsCollections, 
+            where('id', '==', control.value),
+            limit(1)))
+            .then(result => {
                 if(result.empty) {
                     return null;
                 }
@@ -28,7 +28,7 @@ export class UniqueContractId implements AsyncValidator{
             });
     }
 
-    setGetterFunction(func: () => AngularFirestoreCollection): void {
+    setGetterFunction(func: () => CollectionReference): void {
         this.getCollectionFunc = func;
     }
 }

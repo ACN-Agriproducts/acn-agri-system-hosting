@@ -139,7 +139,7 @@
                         </ion-text>
                     </ion-item>
                     <ion-item lines="none">
-                        <ion-text>{{item.date.toDate() | date}}</ion-text>
+                        <ion-text>{{item.date | date}}</ion-text>
                     </ion-item>
                     <ion-item lines="none">
                         <ion-text class="item-status" [class.pending]="item.status === 'pending'"
@@ -175,7 +175,7 @@
                     <ion-item lines="none" class="ion-hide-md-down">
                         <div class="content-button">
                             <ion-buttons>
-                                <ion-button color="medium" slot="end" (click)='openContractOptions($event, item.documentId, item)'>
+                                <ion-button color="medium" slot="end" (click)='openContractOptions($event, item.ref.id, item)'>
                                     <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
                                 </ion-button>
                             </ion-buttons>

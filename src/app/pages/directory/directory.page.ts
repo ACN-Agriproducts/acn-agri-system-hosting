@@ -2,9 +2,10 @@ import { ModalController, NavController, PopoverController } from '@ionic/angula
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
+import { collectionData, Firestore, orderBy, query } from '@angular/fire/firestore';
+import { Contact } from '@shared/classes/contact';
 
 @Component({
   selector: 'app-directory',
@@ -21,7 +22,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   constructor(
     private popoverController: PopoverController,
     private modalController: ModalController,
-    private store: AngularFirestore,
+    private db: Firestore,
     private navController: NavController,
     private localStore: Storage
   ) { 
@@ -41,10 +42,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   private updateList = async () => {
-    this.currentSub = this.store.collection(`companies/${this.currentCompany}/directory`, col => 
-      col.orderBy('name')
-    ).valueChanges({idField: 'docId'})
-      .subscribe(val => this.contacts = val);
+    this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => this.contacts = val);
   }
 
   public openOptions = async (ev: any) => {
