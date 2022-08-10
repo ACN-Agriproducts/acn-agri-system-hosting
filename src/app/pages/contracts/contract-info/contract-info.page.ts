@@ -45,7 +45,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.type = this.route.snapshot.paramMap.get('type')
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
-      Contract.getDocById(this.db, this.currentCompany, this.type == "purchaseContracts", this.id).then(contract => {
+      Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id).then(contract => {
         this.currentContract = contract;
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
