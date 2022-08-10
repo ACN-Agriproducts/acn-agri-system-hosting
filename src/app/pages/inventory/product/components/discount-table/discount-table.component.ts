@@ -30,7 +30,7 @@ export class DiscountTableComponent implements OnInit {
       data: this.fb.array([])
     });
     
-    const sub = getDoc(doc(collection(this.doc.ref, "discounts"), "moisture")).then(val => {
+    getDoc(doc(collection(this.doc.ref, "discounts"), "moisture")).then(val => {
       const data = this.table.get("data") as UntypedFormArray;
 
       if(val.data()['data']){

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DocumentReference } from '@angular/fire/compat/firestore';
+import { DocumentReference, getDoc } from '@angular/fire/firestore';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,7 +15,6 @@ export class DprTicketsTableComponent implements OnInit {
 
   public displayedColumns: string[] = ['id', 'client', 'net']
   
-  private currentSub: Subscription[] = [];
   public ready: boolean = false;
 
   constructor() {}
@@ -25,7 +24,7 @@ export class DprTicketsTableComponent implements OnInit {
 
     this.ticketList.forEach(ticketRef => {
       this.ticketData.push(
-        ticketRef.get().then(val => {
+        getDoc(ticketRef).then(val => {
           return val.data();
         })
       );
