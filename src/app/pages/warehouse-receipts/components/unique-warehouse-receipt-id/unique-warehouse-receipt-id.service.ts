@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { CollectionReference, getDocs, query, where } from '@angular/fire/firestore';
 import { AbstractControl, AsyncValidator, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 
@@ -8,14 +8,14 @@ import { Observable } from 'rxjs';
 })
 
 export class UniqueWarehouseReceiptIdService implements AsyncValidator {
-  private getCollectionFunc: () => AngularFirestoreCollection;
+  private getCollectionFunc: () => CollectionReference;
 
   constructor() { }
 
   validate(control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> {
-    const warehouseReceiptCollection = this.getCollectionFunc();
+    const wrCollectionQuery = query(this.getCollectionFunc(), where('warehouseReceiptIdList', 'array-contains', control.value));
 
-    return warehouseReceiptCollection.ref.where('warehouseReceiptIdList', 'array-contains', control.value).get().then(result => {
+    return getDocs(wrCollectionQuery).then(result => {
       if (!result.empty) {
         return { idExists: true };
       }
@@ -23,7 +23,7 @@ export class UniqueWarehouseReceiptIdService implements AsyncValidator {
     })
   }
 
-  public setGetterFunction (func: () => AngularFirestoreCollection): void {
+  public setGetterFunction (func: () => CollectionReference): void {
     this.getCollectionFunc = func;
   }
 }

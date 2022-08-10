@@ -71,8 +71,9 @@
 			<ion-card-header>Warehouse Receipts</ion-card-header>
 
 			<ion-card-content>
-				<ion-item *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId">
-					<mat-error>Cannot create group with duplicate ID's</mat-error>
+				<ion-item>
+					<mat-error *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId; else nothing">Cannot create group with duplicate ID's</mat-error>
+					<ng-template #nothing></ng-template>
 				</ion-item>
 
 				<ion-item *ngFor="let warehouseReceipt of warehouseReceiptGroupForm.get('warehouseReceiptList')['controls']; let i = index">
@@ -122,8 +123,9 @@
 					</ion-grid>
 				</ion-item>
 
-				<ion-item *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId">
-					<mat-error>Cannot create group with duplicate ID's</mat-error>
+				<ion-item lines="none">
+					<mat-error *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId; else nothing">Cannot create group with duplicate ID's</mat-error>
+					<ng-template #nothing></ng-template>
 				</ion-item>
 
 				<div class="action-bar">

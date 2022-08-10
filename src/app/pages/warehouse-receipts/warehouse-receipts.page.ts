@@ -32,7 +32,7 @@ export class WarehouseReceiptsPage implements OnInit {
     })
     .then(result => {
       result.subscribe(list => {
-        this.warehouseReceiptGroupList = list.sort((a, b) => a.creationDate.getTime() - b.creationDate.getTime());
+        this.warehouseReceiptGroupList = list;
       });
     });
   }

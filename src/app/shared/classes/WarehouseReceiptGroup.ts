@@ -66,22 +66,23 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         .withConverter(WarehouseReceiptGroup.converter);
     }
 
-    public static getWarehouseReceiptGroupList = async (
+    /* public static getWarehouseReceiptGroupList = async (
         db: Firestore, 
         company: string, 
         ...constraints: QueryConstraint[]
     ): Promise<WarehouseReceiptGroup[]> => {
 
-        constraints.push(orderBy('creationDate', 'desc'))
-        const wrCollectionRef = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), ...constraints);
+        constraints.push(orderBy('creationDate', 'desc'));
+        const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), ...constraints);
 
-        return getDocs(wrCollectionRef).then(result => {
+        return getDocs(wrCollectionQuery).then(result => {
             return result.docs.map(doc => doc.data());
         });
-    }
+    } */
 
     public static getWrGroupListValueChanges = (db: Firestore, company: string): Observable<WarehouseReceiptGroup[]> => {
-        return collectionData(WarehouseReceiptGroup.getWrCollectionReference(db, company))
+        const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), orderBy('creationDate', 'desc'));
+        return collectionData(wrCollectionQuery);
     }
 }
 

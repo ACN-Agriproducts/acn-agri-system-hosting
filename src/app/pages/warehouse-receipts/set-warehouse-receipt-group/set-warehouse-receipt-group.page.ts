@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { addDoc, collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
@@ -170,7 +170,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       status: "pending",
       totalBushelQuantity: this.totalBushelQuantity,
       warehouseReceiptIdList: this.warehouseReceiptIdList.sort((a, b) => a - b),
-      warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.id - b.id)
+      warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
     };
 
     addDoc(this.warehouseReceiptCollectionRef, receiptGroup).then(() => {

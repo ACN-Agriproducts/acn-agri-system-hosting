@@ -16,8 +16,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.wrList = this.wrGroup.warehouseReceiptList;
-    this.wrIdList = this.wrGroup.warehouseReceiptIdList;
+    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
 
     this.idRange = this.getIdRange();
   }
