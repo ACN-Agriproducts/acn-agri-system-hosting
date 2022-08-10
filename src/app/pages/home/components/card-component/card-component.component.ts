@@ -10,5 +10,5 @@ export class CardComponentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {}
-
+  
 }

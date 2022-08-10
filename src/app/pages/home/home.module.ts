@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { HomePageRoutingModule } from './home-routing.module';
 
 import { HomePage } from './home.page';
+import { CardComponentComponent } from './components/card-component/card-component.component';
+import { NeedsAdminAttentionComponent } from './components/needs-admin-attention/needs-admin-attention.component';
 
 @NgModule({
   imports: [
@@ -17,6 +19,6 @@ import { HomePage } from './home.page';
     HomePageRoutingModule,
     CoreModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage, CardComponentComponent, NeedsAdminAttentionComponent]
 })
 export class HomePageModule {}
