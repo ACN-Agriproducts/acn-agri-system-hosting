@@ -2,6 +2,7 @@ import { collection, CollectionReference, doc, DocumentData, DocumentReference, 
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Product } from "./product";
 import { Ticket } from "./ticket";
 
 export class Contract extends FirebaseDocInterface {
@@ -42,7 +43,7 @@ export class Contract extends FirebaseDocInterface {
     market_price: number;
     paymentTerms: PaymentTerms;
     pricePerBushel: number;
-    product: DocumentReference;
+    product: DocumentReference<Product>;
     productInfo: ProductInfo;
     quantity: number;
     seller_terms: string;
@@ -83,7 +84,7 @@ export class Contract extends FirebaseDocInterface {
         this.market_price = data.market_price;
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
         this.pricePerBushel = data.pricePerBushel;
-        this.product = data.product;
+        this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
         this.quantity = data.quantity;
         this.seller_terms = data.seller_terms;
