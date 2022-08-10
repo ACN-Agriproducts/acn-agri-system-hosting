@@ -15,8 +15,9 @@ export interface Item {
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  items: Observable<Item[]>;
-  items2: Observable<any>;
+  public permissions: any;
+  public currentCompany: string;
+
   constructor(
     private db: Firestore,
     private localStorage: Storage
@@ -24,11 +25,19 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+    this.localStorage.get('user').then(user => {
+      this.permissions = user.currentPermissions;
+    });
+
     this.localStorage.get("currentPlant").then(currentPlant => {
       if(currentPlant == null) {
         this.setCurrentPlant();
       }
     });
+
+    this.localStorage.get('currentCompany').then(company => {
+      this.currentCompany = company;
+    })
   }
 
   async setCurrentPlant() {
