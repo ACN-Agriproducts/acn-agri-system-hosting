@@ -94,7 +94,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
 
     this.currentSub = [];
     this.contractLimit += this.contractStep;
-    const colQuery = query(Contract.getCollectionReference(this.db, this.currentCompany, this.contractType == 'purchaseContract'),
+    const colQuery = query(Contract.getCollectionReference(this.db, this.currentCompany, this.contractType == 'purchaseContracts'),
                     where("status", "in", this.orderStatus),
                     orderBy(this.sortField, this.assending? 'asc': 'desc'),
                     limit(this.contractLimit));
