@@ -95,8 +95,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.date.value.month(this.month - 1);
     this.date.value.year(this.year);
 
-    console.log(this.month)
-
     this.localStorage.get("currentCompany").then(company => {
       this.currentCompany = company;
       this.localStorage.get("currentPlant").then(currentPlant => {
