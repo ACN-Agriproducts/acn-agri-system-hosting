@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NewWarehouseReceiptModalComponent } from './new-warehouse-receipt-modal.component';
+import { SetWarehouseReceiptGroupPage } from './set-warehouse-receipt-group.page';
 
-describe('NewWarehouseReceiptModalComponent', () => {
-  let component: NewWarehouseReceiptModalComponent;
-  let fixture: ComponentFixture<NewWarehouseReceiptModalComponent>;
+describe('SetWarehouseReceiptGroupPage', () => {
+  let component: SetWarehouseReceiptGroupPage;
+  let fixture: ComponentFixture<SetWarehouseReceiptGroupPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewWarehouseReceiptModalComponent ],
+      declarations: [ SetWarehouseReceiptGroupPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NewWarehouseReceiptModalComponent);
+    fixture = TestBed.createComponent(SetWarehouseReceiptGroupPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

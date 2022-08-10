@@ -1,0 +1,30 @@
+<app-header-toolbar titulo="Warehouse Receipts"></app-header-toolbar>
+
+<ion-content [fullscreen]="true" >
+	<div class="warehouse-receipt-section">
+		<div class="card-list">
+			<ion-card button="true" id="add" class="wr-card" (click)="nav('/dashboard/warehouse-receipts/set')">
+				<div class="wr-group">
+					<div class="info-section">
+						+ Add Warehouse Receipts
+					</div>
+	
+					<div class="contract-section">
+						<div class="contract contract-unsigned">
+							Purchase Contract
+						</div>
+	
+						<div class="contract contract-unsigned">
+							Sale Contract
+						</div>
+					</div>
+				</div>
+			</ion-card>
+
+			<app-warehouse-receipt-group-card 
+				*ngFor="let warehouseReceiptGroup of warehouseReceiptGroupList" 
+				[wrGroup]="warehouseReceiptGroup"
+			></app-warehouse-receipt-group-card>
+		</div>
+	</div>
+</ion-content>

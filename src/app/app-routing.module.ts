@@ -70,7 +70,11 @@ const routes: Routes = [
           {
             path:'reports',
             loadChildren: () => import('./pages/reports/reports.module').then(m => m.ReportsPageModule)
-          }
+          },
+          {
+            path: 'warehouse-receipts',
+            loadChildren: () => import('./pages/warehouse-receipts/warehouse-receipts.module').then( m => m.WarehouseReceiptsPageModule)
+          },
         ]
       },
     ]
@@ -85,10 +89,8 @@ const routes: Routes = [
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
   },
-  {
-    path: 'reports',
-    loadChildren: () => import('./pages/reports/reports.module').then( m => m.ReportsPageModule)
-  },
+  
+
 
 ];
 

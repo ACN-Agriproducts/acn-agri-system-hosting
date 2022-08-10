@@ -7,7 +7,6 @@ import { StoragePopoverComponent } from './components/storage-popover/storage-po
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
-import { Functions, httpsCallable } from '@angular/fire/functions';
 
 @Component({
   selector: 'app-inventory',
@@ -30,8 +29,7 @@ export class InventoryPage implements OnInit, OnDestroy{
     private navController: NavController,
     private modalController: ModalController,
     private popoverController: PopoverController,
-    private localStorage: Storage,
-    private fns: Functions
+    private localStorage: Storage
   ) { 
     this.store.get('currentCompany').then(async val => {
       this.currentCompany = val;
@@ -94,16 +92,12 @@ export class InventoryPage implements OnInit, OnDestroy{
     return await modal.present();
   }
 
-  public hasReadPermission = (): Boolean => {
-    return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
-  }
+  // public hasReadPermission = (): Boolean => {
+  //   return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
+  // }
 
   public getCurrentPlant(): Plant {
     return this.plantList.find(p => p.ref.id == this.currentPlantName);
-  }
-
-  public updateProductInv(): void {
-    httpsCallable(this.fns, 'helperFunctions-calculateProductValues')({company: this.currentCompany});
   }
 
 }

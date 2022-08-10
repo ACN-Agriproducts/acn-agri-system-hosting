@@ -35,6 +35,13 @@ export class LayoutComponent implements OnInit {
       permissionName: 'inventory'
     },
     {
+      title: 'Warehouse Receipts',
+      url: 'dashboard/warehouse-receipts',
+      icon: 'file-tray-full',
+      permission: p => this.hasPermission('warehouseReceipts', p),
+      permissionName: 'warehouseReceipts'
+    },
+    {
       title: 'Invoices',
       url: '/dashboard/invoices',
       icon: 'document-text',
