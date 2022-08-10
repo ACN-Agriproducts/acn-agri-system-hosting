@@ -27,22 +27,22 @@
 
   <ng-container matColumnDef="inQuantity">
     <th mat-header-cell *matHeaderCellDef> Received </th>
-    <td mat-cell *matCellDef="let day"> {{day.inQuantity / this.productDoc.data().weight | number: '1.3-3'}} </td>
+    <td mat-cell *matCellDef="let day"> {{day.inQuantity / this.productDoc.weight | number: '1.3-3'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="outQuantity">
     <th mat-header-cell *matHeaderCellDef> Loaded Out </th>
-    <td mat-cell *matCellDef="let day"> {{day.outQuantity / this.productDoc.data().weight | number: '1.3-3'}} </td>
+    <td mat-cell *matCellDef="let day"> {{day.outQuantity / this.productDoc.weight | number: '1.3-3'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="adjustment">
     <th mat-header-cell *matHeaderCellDef> Adjustment </th>
-    <td mat-cell *matCellDef="let day"> {{day.adjustment / this.productDoc.data().weight | number: '1.3-3'}} </td>
+    <td mat-cell *matCellDef="let day"> {{day.adjustment / this.productDoc.weight | number: '1.3-3'}} </td>
   </ng-container>
 
   <ng-container matColumnDef="endOfDay">
     <th mat-header-cell *matHeaderCellDef> Total </th>
-    <td mat-cell *matCellDef="let day"> {{day.endOfDay / this.productDoc.data().weight | number: '1.3-3'}} </td>
+    <td mat-cell *matCellDef="let day"> {{day.endOfDay / this.productDoc.weight | number: '1.3-3'}} </td>
   </ng-container>
 
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -60,10 +60,10 @@
           {{element.description}}
           <span class="example-element-description-attribution"> -- Wikipedia </span>
         </div> -->
-        <app-dpr-tickets-table class="dayTable" [title]="'In Tickets'" [ticketList]="day.inTickets" [bushelWeight]="this.productDoc.data().weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
+        <app-dpr-tickets-table class="dayTable" [title]="'In Tickets'" [ticketList]="day.inTickets" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
         <div class="dayTable">
-          <app-dpr-tickets-table [title]="'Out Tickets'" [ticketList]="day.outTickets" [bushelWeight]="this.productDoc.data().weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
-          <app-dpr-invoice-table [productName]="this.productDoc.id" [invoiceList]="day.invoices" [bushelWeight]="this.productDoc.data().weight" *ngIf="day == expandedDay"></app-dpr-invoice-table>
+          <app-dpr-tickets-table [title]="'Out Tickets'" [ticketList]="day.outTickets" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
+          <app-dpr-invoice-table [productName]="this.productDoc.ref.id" [invoiceList]="day.invoices" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-invoice-table>
         </div>
       </div>
     </td>
