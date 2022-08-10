@@ -1,4 +1,5 @@
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy } from "@angular/fire/firestore";
+import { collectionData } from "rxfire/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -60,32 +61,27 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         return this.ref.parent.withConverter(WarehouseReceiptGroup.converter);
     }
 
-    public static getWrCollectionReference = (db: AngularFirestore, company: string): CollectionReference<WarehouseReceiptGroup> => {
-        return db.firestore.collection(`companies/${company}/warehouseReceipts`)
+    public static getWrCollectionReference = (db: Firestore, company: string): CollectionReference<WarehouseReceiptGroup> => {
+        return collection(db, `companies/${company}/warehouseReceipts`)
         .withConverter(WarehouseReceiptGroup.converter);
     }
 
     public static getWarehouseReceiptGroupList = async (
-        db: AngularFirestore,
-        company: string,
-        queryFn?: <T>(q: Query<T> | CollectionReference<T>) => Query<T>
+        db: Firestore, 
+        company: string, 
+        ...constraints: QueryConstraint[]
     ): Promise<WarehouseReceiptGroup[]> => {
 
-        let wrCollectionRef: CollectionReference<WarehouseReceiptGroup> | Query<WarehouseReceiptGroup> 
-        = WarehouseReceiptGroup.getWrCollectionReference(db, company);
+        constraints.push(orderBy('creationDate', 'desc'))
+        const wrCollectionRef = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), ...constraints);
 
-        if (queryFn) {
-            wrCollectionRef = queryFn<WarehouseReceiptGroup>(wrCollectionRef);
-        }
-        wrCollectionRef = wrCollectionRef.orderBy('creationDate', 'desc');
-
-        return wrCollectionRef.get().then(result => {
+        return getDocs(wrCollectionRef).then(result => {
             return result.docs.map(doc => doc.data());
         });
     }
 
-    public static getWrGroupListValueChanges = (db: AngularFirestore, company: string): Observable<WarehouseReceiptGroup[]> => {
-        return db.collection<WarehouseReceiptGroup>(WarehouseReceiptGroup.getWrCollectionReference(db, company)).valueChanges();
+    public static getWrGroupListValueChanges = (db: Firestore, company: string): Observable<WarehouseReceiptGroup[]> => {
+        return collectionData(WarehouseReceiptGroup.getWrCollectionReference(db, company))
     }
 }
 

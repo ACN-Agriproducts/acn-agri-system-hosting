@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
@@ -17,7 +17,7 @@ export class WarehouseReceiptsPage implements OnInit {
   constructor(
     private localStorage: Storage,
     private navController: NavController,
-    private db: AngularFirestore,
+    private db: Firestore,
   ) { }
 
   ngOnInit() {

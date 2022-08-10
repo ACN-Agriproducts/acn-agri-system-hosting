@@ -1,4 +1,4 @@
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData, DocumentReference, Query, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, Query, QueryDocumentSnapshot, SnapshotOptions, collection, QueryConstraint, query, orderBy, getDocs } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Product } from "./product";
 
@@ -74,27 +74,22 @@ export class WarehouseReceipt extends FirebaseDocInterface{
         return this.ref.parent.withConverter(WarehouseReceipt.converter);
     }
 
-    public static getWRCollectionReference = (db: AngularFirestore, company: string, plant: string): CollectionReference<WarehouseReceipt> => {
-        return db.firestore.collection(`companies/${company}/plants/${plant}/warehouseReceipts`)
+    public static getWRCollectionReference = (db: Firestore, company: string, plant: string): CollectionReference<WarehouseReceipt> => {
+        return collection(db, `companies/${company}/plants/${plant}/warehouseReceipts`)
             .withConverter(WarehouseReceipt.converter);
     }
 
     public static getWarehouseReceipts = async (
-        db: AngularFirestore, 
+        db: Firestore, 
         company: string, 
         plant: string, 
-        queryFn?: <T>(q: Query<T> | CollectionReference<T>) => Query<T>
+        ...constraints: QueryConstraint[]
     ): Promise<WarehouseReceipt[]> => {
 
-        let warehouseReceiptCollectionRef: CollectionReference<WarehouseReceipt> | Query<WarehouseReceipt>
-            = WarehouseReceipt.getWRCollectionReference(db, company, plant);
+        constraints.push(orderBy('id', 'asc'));
+        const warehouseReceiptCollectionRef = query(WarehouseReceipt.getWRCollectionReference(db, company, plant));
 
-        if(queryFn){
-            warehouseReceiptCollectionRef = queryFn<WarehouseReceipt>(warehouseReceiptCollectionRef);
-        }
-        warehouseReceiptCollectionRef = warehouseReceiptCollectionRef.orderBy('id', 'asc');
-
-        return warehouseReceiptCollectionRef.get().then(result => {
+        return getDocs(warehouseReceiptCollectionRef).then(result => {
             return result.docs.map(doc => doc.data());
         });
     }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
+import { addDoc, collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController, NavController, ToastController } from '@ionic/angular';
@@ -19,14 +19,14 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   public currentCompany: string;
   public plantList: string[];
   public productList: string[];
-  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
+  public warehouseReceiptCollectionRef: CollectionReference;
   public warehouseReceiptGroupForm: FormGroup;
   public totalBushelQuantity: number = 0;
   public warehouseReceiptIdList: number[];
 
   constructor(
     private alertController: AlertController,
-    private db: AngularFirestore,
+    private db: Firestore,
     private fb: FormBuilder,
     private localStorage: Storage,
     private navController: NavController,
@@ -38,7 +38,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     this.localStorage.get('currentCompany')
     .then(company => {
       this.currentCompany = company;
-      this.warehouseReceiptCollectionRef = this.db.collection(WarehouseReceiptGroup.getWrCollectionReference(this.db, company).withConverter(null));
+      this.warehouseReceiptCollectionRef = WarehouseReceiptGroup.getWrCollectionReference(this.db, company).withConverter(null);
       return Plant.getPlantList(this.db, company);
     })
     .then(plantObjList => {
@@ -73,7 +73,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
   
 
-  public getWarehouseReceiptCollection = (): AngularFirestoreCollection => {
+  public getWarehouseReceiptCollection = (): CollectionReference => {
     return this.warehouseReceiptCollectionRef;
   }
 
@@ -162,18 +162,18 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     });
 
     let receiptGroup = {
-      // closeDate: null,
+      closeDate: null,
       creationDate: formValues.creationDate,
-      // expireDate: null,
-      // purchaseContract: null,
-      // saleContract: null,
+      expireDate: null,
+      purchaseContract: null,
+      saleContract: null,
       status: "pending",
       totalBushelQuantity: this.totalBushelQuantity,
       warehouseReceiptIdList: this.warehouseReceiptIdList.sort((a, b) => a - b),
       warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.id - b.id)
     };
 
-    this.warehouseReceiptCollectionRef.add(receiptGroup).then(() => {
+    addDoc(this.warehouseReceiptCollectionRef, receiptGroup).then(() => {
       this.openSnackbar("Warehouse Receipt Group Created");
       this.navController.navigateForward('/dashboard/warehouse-receipts');
     }).catch(error => {
