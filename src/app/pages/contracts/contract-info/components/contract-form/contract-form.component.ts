@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Contract, ProductInfo, DeliveryDates, PaymentTerms } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
@@ -19,7 +19,7 @@ export class ContractFormComponent implements OnInit {
 
   constructor(
     private fb: UntypedFormBuilder,
-    private db: AngularFirestore
+    private db: Firestore
   ) { }
 
   ngOnInit() {

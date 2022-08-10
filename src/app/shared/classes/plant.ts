@@ -1,4 +1,5 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, getDocs, docData, collectionData } from "@angular/fire/firestore";
+import { Observable } from "rxjs";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Ticket } from "./ticket";
@@ -9,8 +10,9 @@ export class Plant extends FirebaseDocInterface {
     public inventoryNames: string[];
     public nextInTicket: number;
     public nextOutTicket: number;
+    public lastStorageUpdate: DocumentReference;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+    constructor(snapshot: QueryDocumentSnapshot<DocumentData>) {
         super(snapshot, Plant.converter);
         const data = snapshot.data();
 
@@ -18,6 +20,7 @@ export class Plant extends FirebaseDocInterface {
         this.inventoryNames = data.inventoryNames;
         this.nextInTicket = data.nextInTicket;
         this.nextOutTicket = data.nextOutTicket;
+        this.lastStorageUpdate = data.lastStorageUpdate;
 
         data.inventory.forEach(inv => {
             this.inventory.push(new Inventory(inv));
@@ -30,7 +33,8 @@ export class Plant extends FirebaseDocInterface {
                 inventory: data.inventory,
                 inventoryNames: data.inventoryNames,
                 nextInTicket: data.nextInTicket,
-                nextOutTicket: data.nextOutTicket
+                nextOutTicket: data.nextOutTicket,
+                lastStorageUpdate: data.lastStorageUpdate
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Plant {
@@ -38,28 +42,39 @@ export class Plant extends FirebaseDocInterface {
         }
     }
 
+    public getRawInventory() {
+        const inventory = [];
+
+        this.inventory.forEach(tank => {
+            inventory.push(tank.getRawData());
+        })
+
+        return inventory;
+    }
+
     public getCollectionReference(): CollectionReference<Plant> {
         return this.ref.parent.withConverter(Plant.converter);
     }
 
     public getTicketCollectionReference(): CollectionReference<Ticket> {
-        return this.ref.collection('tickets').withConverter(Ticket.converter);
+        return collection(this.ref, 'tickets').withConverter(Ticket.converter) as CollectionReference<Ticket>;
     }
 
     public getTicketReference(ticket: string): DocumentReference<Ticket> {
-        return this.ref.collection('tickets').doc(ticket).withConverter(Ticket.converter);
+        return doc(this.ref, `tickets/${ticket}`).withConverter(Ticket.converter);
+        
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Plant> {
-        return db.firestore.collection(`companies/${company}/plants`).withConverter(Plant.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<Plant> {
+        return collection(db, `companies/${company}/plants`).withConverter(Plant.converter);
     }
 
-    public static getDocReference(db: AngularFirestore, company: string, plant: string): DocumentReference<Plant> {
-        return db.firestore.doc(`companies/${company}/plants/${plant}`).withConverter(Plant.converter);
+    public static getDocReference(db: Firestore, company: string, plant: string): DocumentReference<Plant> {
+        return doc(db, `companies/${company}/plants/${plant}`).withConverter(Plant.converter) as DocumentReference<Plant>;
     }
 
-    public static getPlantList(db: AngularFirestore, company: string): Promise<Plant[]> {
-        return Plant.getCollectionReference(db, company).get().then(result => {
+    public static getPlantList(db: Firestore, company: string): Promise<Plant[]> {
+        return getDocs(Plant.getCollectionReference(db, company)).then(result => {
             const plantList: Plant[] = [];
 
             result.docs.forEach(doc => {
@@ -69,9 +84,17 @@ export class Plant extends FirebaseDocInterface {
             return plantList;
         });
     }
+
+    public static getPlantSnapshot(db: Firestore, company: string, plant: string): Observable<Plant> {
+        return docData(Plant.getDocReference(db, company, plant))
+    }
+
+    public static getCollectionSnapshot(db: Firestore, company: string): Observable<Plant[]> {
+        return collectionData(Plant.getCollectionReference(db, company));
+    }
 }
 
-class Inventory {
+export class Inventory {
     current: number;
     max: number;
     name: string;
@@ -84,5 +107,15 @@ class Inventory {
         this.name = inv.name;
         this.product = inv.product;
         this.type = inv.type;
+    }
+
+    public getRawData() {
+        const data = {};
+        
+        Object.keys(this).forEach(key => {
+            data[key] = this[key];
+        });
+
+        return data;
     }
 }

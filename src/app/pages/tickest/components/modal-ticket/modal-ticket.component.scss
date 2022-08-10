@@ -1,20 +1,32 @@
 .mat-dialog-content {
   padding: 18px;
+  max-height: 100%;
+  *{
+    max-height: 100%;
+  }
 }
 .content-ticket {
-  display: grid;
-  grid-template-columns: 1.5fr 0.5fr;
+  display: flex;
+  width: calc(100% - 36px);
   column-gap: 15px;
+  max-height: 100%;
 }
+
+.panel-main {
+  flex: 0 0 auto;
+  flex-basis: 75%;
+  max-width: 75%;
+  max-height: 100%;
+}
+
 .panel-second {
-  display: grid;
-  img {
-    height: 270px;
-    width: auto;
-  }
-  embed {
-    height: 270px;
-    width:auto;
+  flex: none;
+  flex-basis: 25%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  img, embed {
+    object-fit: scale-down;
   }
 }
 @media screen and (max-width: 768px) {

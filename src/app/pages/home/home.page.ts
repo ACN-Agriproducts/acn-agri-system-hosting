@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentReference } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { Plant } from '@shared/classes/plant';
+import { DocumentReference, Firestore } from '@angular/fire/firestore';
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -15,12 +15,10 @@ export interface Item {
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  private itemDoc: AngularFirestoreDocument<Item>;
-  private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
   items2: Observable<any>;
   constructor(
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage
   ) {
   }

@@ -1,4 +1,4 @@
-import { AngularFirestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/compat/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, query, limit, where, getDoc, getDocs } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class Invoice extends FirebaseDocInterface {
@@ -71,18 +71,19 @@ export class Invoice extends FirebaseDocInterface {
         return this.ref.parent.withConverter(Invoice.converter);
     }
 
-    public static getCollectionReference(db: AngularFirestore, company: string): CollectionReference<Invoice> {
-        return db.firestore.collection(`companies/${company}/invoices`).withConverter(Invoice.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<Invoice> {
+        return collection(db, `companies/${company}/invoices`).withConverter(Invoice.converter);
     }
 
-    public static getDoc(db: AngularFirestore, company: string, id: number): Promise<Invoice> {
-        return Invoice.getCollectionReference(db, company).where("id", "==", id).limit(1).get().then(result => {
+    public static getDoc(db: Firestore, company: string, id: number): Promise<Invoice> {
+        const invoiceQuery = query(Invoice.getCollectionReference(db, company), where("id", "==", id), limit(1))
+        return getDocs(invoiceQuery).then(result => {
             return result.docs[0].data();
         });
     }
 
-    public static getDocById(db: AngularFirestore, company: string, id: string): Promise<Invoice> {
-        return db.firestore.doc(`companies/${company}/invoices/${id}`).withConverter(Invoice.converter).get().then(result => {
+    public static getDocById(db: Firestore, company: string, id: string): Promise<Invoice> {
+        return getDoc(doc(db, `companies/${company}/invoices/${id}`).withConverter(Invoice.converter)).then(result => {
             return result.data();
         });
     }

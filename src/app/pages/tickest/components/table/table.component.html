@@ -84,7 +84,7 @@
         </div>
     </div>
     <!-- ================================= -->
-    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.docId)"
+    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
         *ngFor="let item of ticketList">
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
@@ -93,14 +93,14 @@
                     <ion-text class="item-text-md item-costomer" 
                         [class.request]="item.voidRequest" 
                         [class.void]="item.void">{{item.clientName}}</ion-text>
-                    <ion-text class="item-text-md item-label-small">{{item.dateOut.toDate() | date}}</ion-text>
+                    <ion-text class="item-text-md item-label-small">{{item.dateOut | date}}</ion-text>
                 </div>
             </ion-item>
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text class="ion-hide-xl-down">{{item.dateOut.toDate() | date}}</ion-text>
-                <ion-text class="ion-hide-xl-up">{{item.dateOut.toDate() | date}}</ion-text>
+                <ion-text class="ion-hide-xl-down">{{item.dateOut | date}}</ion-text>
+                <ion-text class="ion-hide-xl-up">{{item.dateOut | date}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-lg-down" size="1">
@@ -203,7 +203,7 @@
                 <h2>Ticket # <span>{{item.id}}</span></h2>
                 <p class="item-subtitle" [class.request]="item.voidRequest" 
                 [class.void]="item.void">{{item.clientName}}</p>
-                <p class="item-subtitle">{{item.dateOut.toDate() | date}</p>
+                <p class="item-subtitle">{{item.dateOut | date}</p>
                 <ul>
                     <li>Product: <b>{{item.productName}}</b></li>
                     <li>Moisture: <b>{{item.moisture}}</b></li>

@@ -173,7 +173,7 @@
                         <mat-form-field>
                           <mat-label>Product</mat-label>
                           <mat-select [disabled]='productsList == null' formControlName="product">
-                            <mat-option *ngFor="let product of productsList" value={{product.name}}>{{product.name}}</mat-option>
+                            <mat-option *ngFor="let product of productsList" value={{product.ref.id}}>{{product.ref.id}}</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </ion-col>
@@ -188,7 +188,7 @@
                         <mat-form-field>
                           <mat-label>Plant</mat-label>
                           <mat-select [disabled]='plantsList == null' formControlName="plant">
-                            <mat-option *ngFor="let plant of plantsList" value="{{plant.name}}" >{{plant.name | titlecase}}</mat-option>
+                            <mat-option *ngFor="let plant of plantsList" value="{{plant.ref.id}}" >{{plant.ref.id | titlecase}}</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </ion-col>

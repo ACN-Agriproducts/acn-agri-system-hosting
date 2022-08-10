@@ -1,4 +1,4 @@
-<app-header-toolbar titulo="{{type | titlecase}} Contract {{currentContract.id}}" *ngIf="ready"></app-header-toolbar>
+<app-header-toolbar titulo="{{type | titlecase}} Contract {{currentContract?.ref.id}}" *ngIf="ready"></app-header-toolbar>
 <mat-toolbar>
   <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
 </mat-toolbar>

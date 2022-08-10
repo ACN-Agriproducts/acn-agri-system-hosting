@@ -16,11 +16,13 @@
   </ion-item>
 </ion-card>
 
+<mat-spinner *ngIf="listEmployees.length == 0"></mat-spinner>
+
 <ion-card *ngFor="let item of listEmployees" matRipple>
   <div class="content-data-avatar" (click)="openModal($event, item)">
     <ion-item lines="none">
       <ion-avatar>
-        <img [src]="item.pictureURL" >
+        <img [src]="item.pictureURL ?? 'assets/avatar.svg'" >
       </ion-avatar>
     </ion-item>
     <ion-item lines="none">
@@ -28,7 +30,7 @@
         <div class="content-label">
           <span>{{item.name}} </span>
           <!-- <span class="label-text">{{  item.employment}}</span> -->
-          <span class="label-text-normal">Create At: {{item.createdAt}}</span>
+          <span class="label-text-normal">Created At: {{item.createdAt}}</span>
         </div>
       </ion-label>
     </ion-item>
@@ -54,7 +56,7 @@
     <ion-label>
       <div class="content-label">
         <span>{{item.email}} </span>
-        <span class="label-text">Id: {{item.userId}}</span>
+        <span class="label-text">Id: {{item.ref.id}}</span>
       </div>
     </ion-label>
   </ion-item>
@@ -66,3 +68,4 @@
     </ion-buttons>
   </ion-item>
 </ion-card>
+ 

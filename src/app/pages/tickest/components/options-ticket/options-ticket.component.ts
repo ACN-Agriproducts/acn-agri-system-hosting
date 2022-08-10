@@ -3,11 +3,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { AngularFirestore, DocumentReference } from '@angular/fire/compat/firestore';
-import { Storage } from '@ionic/storage';
-import { async } from '@firebase/util';
+import { Firestore } from '@angular/fire/firestore';
+import { Storage as IonStorage } from '@ionic/storage';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-options-ticket',
@@ -15,8 +15,7 @@ import { async } from '@firebase/util';
   styleUrls: ['./options-ticket.component.scss']
 })
 export class OptionsTicketComponent implements OnInit {
-  @Input() ticket: any;
-  @Input() collectionPath: string;
+  @Input() ticket: Ticket;
   public downloadURL: Observable<string | null>;
   public downloadString: string;
   public userPermissions: any;
@@ -27,17 +26,15 @@ export class OptionsTicketComponent implements OnInit {
     public dialog: MatDialog,
     public popoverController: PopoverController,
     private modalController: ModalController,
-    private storage: AngularFireStorage,
+    private storage: Storage,
     private navController: NavController,
-    private db: AngularFirestore,
-    private localStorage: Storage,
+    private localStorage: IonStorage,
     private alertController: AlertController,
   ) { }
 
   ngOnInit() {
-    var sub = this.storage.ref(this.ticket.pdfLink).getDownloadURL().subscribe(val => {
+    getDownloadURL(ref(this.storage, this.ticket.pdfLink)).then(val => {
       this.downloadString = val;
-      sub.unsubscribe();
     });
 
     this.localStorage.get('user').then(data => {
@@ -118,10 +115,7 @@ export class OptionsTicketComponent implements OnInit {
               updateDoc.voidRequester = this.userName
             }
 
-            console.log(updateDoc);
-            console.log(this.collectionPath  + '/' + this.ticket.docId);
-
-            await this.db.doc(this.collectionPath  + '/' + this.ticket.docId).update(updateDoc);
+            await this.ticket.update(updateDoc);
           }
         }]
     })

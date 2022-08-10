@@ -2,11 +2,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { OptionsComponent } from '../options/options.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { Invoice } from '@shared/classes/invoice';
+import { Firestore, getDocs, limit, orderBy, query, startAt } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-table',
@@ -30,7 +30,7 @@ export class TableComponent implements OnInit, OnDestroy {
   constructor(
     private popoverController: PopoverController,
     private snackBar: MatSnackBar,
-    private fb: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage
 
     // private clipboard: Clipboard
@@ -40,10 +40,10 @@ export class TableComponent implements OnInit, OnDestroy {
     this.localStorage.get('currentCompany').then(val => {
       this.currentCompany = val;
       this.invoiceList = [];
-      Invoice.getCollectionReference(this.fb, this.currentCompany)
-        .orderBy("id", "desc")
-        .limit(this.step)
-        .get().then(result => {
+      getDocs(query(Invoice.getCollectionReference(this.db, this.currentCompany),
+        orderBy("id", "desc"),
+        limit(this.step)))
+        .then(result => {
           const tempList = result.docs.map(doc => doc.data());
           this.invoiceList.push(...tempList);
         })
@@ -74,11 +74,11 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   public infiniteInvoice(event: any) {
-    Invoice.getCollectionReference(this.fb, this.currentCompany)
-      .orderBy("id", "desc")
-      .startAt(this.invoiceList[this.invoiceList.length-1].id-1)
-      .limit(this.step)
-      .get().then(result => {
+    getDocs(query(Invoice.getCollectionReference(this.db, this.currentCompany),
+      orderBy("id", "desc"),
+      startAt(this.invoiceList[this.invoiceList.length-1].id-1),
+      limit(this.step)))
+      .then(result => {
         const tempList = result.docs.map(doc => doc.data());
         this.invoiceList.push(...tempList);
         event.target.complete();

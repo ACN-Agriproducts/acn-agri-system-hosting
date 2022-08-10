@@ -30,10 +30,10 @@
         <ion-label color="dark" class="ion-hide-md-down">{{item.email}}</ion-label>
         
         <ion-buttons class="ion-hide-sm-down">
-          <ion-button color="primary" slot="end" (click)="$event.stopPropagation(); editButton(item.docId)">
+          <ion-button color="primary" slot="end" (click)="$event.stopPropagation(); editButton(item.ref.id)">
             <ion-icon slot="icon-only" name="create-outline"></ion-icon>
           </ion-button>
-          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); deleteButton(item.docId)">
+          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); deleteButton(item.ref.id)">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
           <!-- <ion-button color="medium" slot="end">

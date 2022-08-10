@@ -1,13 +1,14 @@
 import { FiltersComponent } from './components/filters/filters.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController } from '@ionic/angular';
 import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 import { MatDatepicker } from '@angular/material/datepicker';
-import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import * as _moment from 'moment';
+import { TableComponent } from './components/table/table.component';
 
 const moment = _moment;
 
@@ -43,6 +44,7 @@ export const MY_FORMATS = {
 export class TickestPage implements OnInit {
   public date: _moment.Moment = moment();
   public currentPlant: string = 'progreso';
+  @ViewChild(TableComponent) ticketTable: TableComponent;
 
   constructor(
     public popoverController: PopoverController,
@@ -70,10 +72,11 @@ export class TickestPage implements OnInit {
   }
 
   setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
-    const ctrlValue = this.date!;
+    const ctrlValue = moment();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
-    this.date= ctrlValue;
+    this.date = ctrlValue;
     datepicker.close();
+    this.ticketTable.dateChangeFn(this.date.toDate());
   }
 }

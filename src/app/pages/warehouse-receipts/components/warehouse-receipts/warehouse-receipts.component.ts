@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentReference } from '@angular/fire/compat/firestore';
+import { CollectionReference, DocumentReference, Firestore, orderBy, query, where, Query, collectionData, addDoc } from '@angular/fire/firestore';
 import { ModalController, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { collection } from 'firebase/firestore';
+import { docData } from 'rxfire/firestore';
 import { Product } from '@shared/classes/product';
 import { WarehouseReceipt } from '@shared/classes/warehouseReceipt';
 import { NewWarehouseReceiptModalComponent } from '../new-warehouse-receipt-modal/new-warehouse-receipt-modal.component';
@@ -15,7 +17,7 @@ import { WarehouseReceiptStatusPopoverComponent } from '../warehouse-receipt-sta
 export class WarehouseReceiptsComponent implements OnInit {
 
   public warehouseReceiptList: WarehouseReceipt[] = [];
-  public warehouseReceiptCollectionRef: AngularFirestoreCollection;
+  public warehouseReceiptCollectionRef: CollectionReference;
   public queryStatus: string[] = ["pending", "active", "closed", "cancelled"];
   public today: Date = new Date();
   public currentCompany: string;
@@ -26,7 +28,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private popoverController: PopoverController,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
   ) {
 
@@ -92,7 +94,7 @@ export class WarehouseReceiptsComponent implements OnInit {
   }
 
   public addWarehouseReceipt = async (receiptObject: any) => {
-    this.warehouseReceiptCollectionRef.add(receiptObject).then(result => {
+    addDoc(this.warehouseReceiptCollectionRef, receiptObject).then(result => {
       // add new receipt to html
       const tempReceipt = {
         ...receiptObject, 

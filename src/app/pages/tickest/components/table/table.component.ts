@@ -6,8 +6,10 @@ import { OptionsTicketComponent } from './../options-ticket/options-ticket.compo
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Subscription } from 'rxjs';
+import { Ticket } from '@shared/classes/ticket';
+import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
+import { Plant } from '@shared/classes/plant';
 
 
 @Component({
@@ -18,13 +20,12 @@ import { Subscription } from 'rxjs';
 export class TableComponent implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public ticketList: any[];
-  public plantList: string[] = [];
+  public ticketList: Ticket[];
+  public plantList: Plant[] = [];
   public currentCompany: string;
   public currentPlant: string;
   public inTicket: boolean = true;
   private date: Date;
-  private path: string;
   private currentSub: Subscription[] = [];
 
   private ticketStep: number = 20;
@@ -34,29 +35,26 @@ export class TableComponent implements OnInit {
     private popoverController: PopoverController,
     private dialog: MatDialog,
     private modalController: ModalController,
-    private db: AngularFirestore,
+    private db: Firestore,
     private localStorage: Storage,
   ) { }
 
   ngOnInit(): void {
-    this.localStorage.get('currentCompany').then(currentComp => {
+    this.localStorage.get('currentCompany').then(async currentComp => {
       this.currentCompany = currentComp;
+      this.currentPlant = await this.localStorage.get('currentPlant');
 
-      const tempsub = this.db.collection(`companies/${this.currentCompany}/plants`).get().subscribe(val => {
-        this.currentPlant = val.docs[0].id;
-        val.forEach(element => {
-          this.plantList.push(element.id);
-        });
+      const tempsub = Plant.getPlantList(this.db, this.currentCompany).then(val => {
+        this.plantList = val;
 
-        this.path = `companies/${this.currentCompany}/plants/${this.currentPlant}/tickets`;
         this.getTickets(new Date());
-        tempsub.unsubscribe();
       });
     })
   }
 
-  public dateChangeFn($event) {
-    this.getTickets(new Date($event.detail.value))
+  public dateChangeFn(date: Date) {
+    console.log(date);
+    this.getTickets(date)
   }
 
   async getTickets(date: Date){
@@ -81,15 +79,17 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    this.currentSub.push(this.db.collection(this.path, ref =>
-      ref.where("in", "==", this.inTicket)
-      .where("dateOut", ">=", startDate)
-      .where("dateOut", "<=", endDate)
-      .orderBy("dateOut", "desc")
-      .limit(this.ticketLimit)
-    ).valueChanges({idField: "docId"}).subscribe(val => {
-      this.ticketList = val;
-    }));
+    const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, 
+      where("in", "==", this.inTicket),
+      where("dateOut", ">=", startDate),
+      where("dateOut", "<=", endDate),
+      orderBy("dateOut", "desc"),
+      limit(this.ticketLimit))
+    .subscribe(ticketList => {
+      this.ticketList = ticketList;
+    });
+
+    this.currentSub.push(sub);
   }
 
   async infiniteTickets(event):Promise<void> {
@@ -108,20 +108,20 @@ export class TableComponent implements OnInit {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    this.currentSub.push(this.db.collection(this.path, ref =>
-      ref.where("in", "==", this.inTicket)
-      .where("dateOut", ">=", startDate)
-      .where("dateOut", "<=", endDate)
-      .orderBy("dateOut", "desc")
-      .limit(this.ticketLimit)
-    ).valueChanges({idField: "docId"}).subscribe(val => {
-      this.ticketList = val;
+    const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, 
+      where("in", "==", this.inTicket),
+      where("dateOut", ">=", startDate),
+      where("dateOut", "<=", endDate),
+      orderBy("dateOut", "desc"),
+      limit(this.ticketLimit))
+    .subscribe(ticketList => {
+      this.ticketList = ticketList;
       event.target.complete();
+    });
 
-      if(val.length < this.ticketLimit) {
-        this.infiniteScroll.disabled = true;
-      }
-    }))
+    console.log(`Got ${this.ticketList.length} tickets`);
+
+    this.currentSub.push(sub);
   }
 
   open() {
@@ -135,7 +135,6 @@ export class TableComponent implements OnInit {
       component: OptionsTicketComponent,
       componentProps: {
         ticket: ticket,
-        collectionPath: this.path
       },
       cssClass: 'my-custom-class',
       event: ev,
@@ -151,12 +150,11 @@ export class TableComponent implements OnInit {
     return await modal.present();
   }
   public openDialog = async (event, ticketId: string) => {
-    var ticket =  this.ticketList.find(t => t.docId = ticketId);
+    var ticket =  this.ticketList.find(t => t.ref.id == ticketId);
 
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
       componentProps: {
-        ticketId: ticketId,
         ticket: ticket
       },
       cssClass: 'modal-dialog-ticket'
