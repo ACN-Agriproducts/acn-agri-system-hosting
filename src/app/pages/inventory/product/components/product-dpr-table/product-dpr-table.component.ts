@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
+import { DocumentData } from '@angular/fire/firestore';
 import { Storage as IonStorage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -16,6 +16,7 @@ import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import * as Excel from 'exceljs';
 import { FormControl } from '@angular/forms';
 import { collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
+import { Product } from '@shared/classes/product';
 
 export const MY_FORMATS = {
   parse: {
@@ -56,7 +57,7 @@ export const MY_FORMATS = {
 export class ProductDprTableComponent implements OnInit, OnDestroy {
   @ViewChild(MatDatepicker) matDatePicker: MatDatepicker<_moment.Moment>;
 
-  @Input() productDoc: DocumentSnapshot<any>;
+  @Input() productDoc: Product;
   public dprDoc: DocumentData;
   @ViewChild(MatTable) tableView:MatTable<any>;
   
@@ -94,6 +95,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.date.value.month(this.month - 1);
     this.date.value.year(this.year);
 
+    console.log(this.month)
+
     this.localStorage.get("currentCompany").then(company => {
       this.currentCompany = company;
       this.localStorage.get("currentPlant").then(currentPlant => {
@@ -129,7 +132,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     const date = this.date.value as _moment.Moment;
 
     getDocs(query(collection(Plant.getDocReference(this.db, this.currentCompany, this.currentPlant), 'inventory'),
-      where("month", "==", date.month()),
+      where("month", "==", date.month() - 1),
       where("year", "==", date.year()),
       where("product", "==", this.productDoc.ref.id)))
       .then(dpr => {
@@ -208,7 +211,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   }
 
   public downloadDpr() {
-    const productWeight = this.productDoc.data().weight;
+    const productWeight = this.productDoc.weight;
     const sheet = this.workbook.getWorksheet('Sheet1');
     sheet.getCell("J3").value = this.productDoc.ref.id;
     sheet.getCell("O3").value = month[this.date.value.month()];
