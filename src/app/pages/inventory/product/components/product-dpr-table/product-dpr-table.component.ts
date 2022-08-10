@@ -132,7 +132,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     const date = this.date.value as _moment.Moment;
 
     getDocs(query(collection(Plant.getDocReference(this.db, this.currentCompany, this.currentPlant), 'inventory'),
-      where("month", "==", date.month() - 1),
+      where("month", "==", date.month() + 1),
       where("year", "==", date.year()),
       where("product", "==", this.productDoc.ref.id)))
       .then(dpr => {
