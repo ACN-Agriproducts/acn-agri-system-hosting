@@ -4,7 +4,6 @@ import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
-import { orderBy } from 'firebase/firestore';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -29,8 +28,8 @@ export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
 
     Plant.getPlantList(this.db, this.company).then(plants => {
       plants.forEach(plant => {
-        this.ticketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('voidRequest', '==', true), orderBy('dateOut')).subscribe(tickets => {
-          this.ticketsList = tickets;
+        this.ticketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('voidRequest', '==', true)).subscribe(tickets => {
+          this.ticketsList = tickets.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
         }); 
       });
     });
