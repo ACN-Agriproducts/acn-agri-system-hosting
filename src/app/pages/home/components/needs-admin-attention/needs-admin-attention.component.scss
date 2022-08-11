@@ -5,4 +5,37 @@
 
 mat-card {
     height: 100%;
+
+    mat-card-content{
+        height: calc(100% - 20px);
+        overflow-y: auto;
+    }   
+}
+
+.table-row{
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+
+    .id {
+        flex: 70px 0 0;
+    }
+    .date {
+        flex: 100px 0 0;
+    }
+
+    .net {
+        flex: 91px 0 0;
+    }
+
+    .reason {
+        flex: calc(100% - 301px) 1 0;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    button {
+        flex: 40px 0 0;
+    }
 }
