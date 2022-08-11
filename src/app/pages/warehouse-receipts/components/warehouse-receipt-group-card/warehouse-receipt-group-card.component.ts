@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WarehouseReceipt, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { ModalController } from '@ionic/angular';
+import { WarehouseReceipt, WarehouseReceiptGroup, WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup';
+import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -12,8 +14,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public wrList: WarehouseReceipt[];
   public wrIdList: number[];
   public idRange: string;
+  public purchaseContract: WarehouseReceiptContract = null;
+  public saleContract: WarehouseReceiptContract = null;
 
-  constructor() { }
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
@@ -23,7 +27,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
 
-  public getIdRange = (): string => {
+  public getIdRange(): string {
     let result: string[] = [];
     let idGroup = "";
     this.wrIdList.forEach((id, index) => {
@@ -43,13 +47,36 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public openExpandable = (event: Event): void => {
-    const card = (event.target as HTMLElement).parentElement.parentElement;
+  public async setContract() {
+    console.log("Set Contract");
+
+    const modal = await this.modalController.create({
+      component: SetContractModalComponent,
+      
+    });
+    modal.present();
+
+    const { data, role } = await modal.onDidDismiss();
+
+    if (role === 'confirm') {
+
+    }
+  }
+
+  public addContract() {
+    
+  }
+
+  public toggleExpandable(event: Event): void {
+    const icon = event.target as HTMLElement;
+    const card = icon.parentElement.parentElement;
     const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
 
     if (expandable.style.maxHeight){
+      icon.setAttribute('name', "arrow-down-outline");
       expandable.style.maxHeight = null;
     } else {
+      icon.setAttribute('name', "arrow-up-outline");
       expandable.style.maxHeight = expandable.scrollHeight + "px";
     }
   }
