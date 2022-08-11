@@ -1,0 +1,41 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Set Warehouse Receipt Contract</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+	<form [formGroup]="contractForm" class="form">
+		<mat-form-field appearance="standard">
+			<mat-label>Base Price</mat-label>
+			<span matPrefix>$ &nbsp;</span>
+			<input matInput formControlName="basePrice" type="number">
+			<mat-error *ngIf="contractForm.get('basePrice').invalid">Base Price is <strong>required</strong></mat-error>
+		</mat-form-field>
+
+		<mat-form-field appearance="standard">
+			<mat-label>Future Price</mat-label>
+			<span matPrefix>$ &nbsp;</span>
+			<input matInput formControlName="futurePrice" type="number">
+			<mat-error *ngIf="contractForm.get('futurePrice').invalid">Future Price is <strong>required</strong></mat-error>
+		</mat-form-field>
+
+		<mat-form-field appearance="standard">
+			<mat-label>ID</mat-label>
+			<input matInput formControlName="id" type="number">
+			<mat-error *ngIf="contractForm.get('id').invalid">ID is <strong>required</strong></mat-error>
+		</mat-form-field>
+
+		<mat-form-field appearance="standard">
+			<mat-label>Date</mat-label>
+			<input matInput formControlName="startDate" [matDatepicker]="picker">
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+	</form>
+
+	<div class="action-bar">
+		<ion-button (click)="cancel()">Cancel</ion-button>
+		<ion-button id="confirm-button" (click)="confirm()" [disabled]="contractForm.invalid">Confirm</ion-button>
+	</div>
+</ion-content>

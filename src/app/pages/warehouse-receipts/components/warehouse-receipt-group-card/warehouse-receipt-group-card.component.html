@@ -22,30 +22,47 @@
 		</div>
 
 		<div class="contract-section">
-			<div class="contract contract-signed">
-				<span><ion-text class="label">Purchase Contract</ion-text></span>
+			<div class="contract" [class.contract-signed]="wrGroup.purchaseContract">
+				<div class="contract-header">
+					<ion-text class="label">Purchase Contract</ion-text>
 
-				<span><ion-text class="status-text">Status</ion-text></span>
+					<ion-text class="status-text">NONE</ion-text>
 
-				<div class="contract-info">
-					<ion-text>ID: </ion-text>
-					<ion-text>Date: </ion-text>
-					<ion-text>Future Price: </ion-text>
-					<ion-text>Base Price: </ion-text>
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract()">
+						<mat-icon>more_vert</mat-icon>
+					</button>
 				</div>
+
+				<ng-template [ngIf]="wrGroup.purchaseContract">
+					<div class="contract-info">
+						<ion-text>ID: </ion-text>
+						<ion-text>Date: </ion-text>
+						<ion-text>Future Price: </ion-text>
+						<ion-text>Base Price: </ion-text>
+					</div>
+				</ng-template>
 			</div>
 
-			<div class="contract contract-signed">
-				<span><ion-text class="label">Sale Contract</ion-text></span>
+			<div class="contract" [class.contract-signed]="wrGroup.saleContract">
+				<div class="contract-header">
+					<ion-text class="label">Sale Contract</ion-text>
 
-				<span><ion-text class="status-text">Status</ion-text></span>
+					<ion-text class="status-text">NONE</ion-text>
 
-				<div class="contract-info">
-					<ion-text>ID: </ion-text>
-					<ion-text>Date: </ion-text>
-					<ion-text>Future Price: </ion-text>
-					<ion-text>Base Price: </ion-text>
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract()">
+						<mat-icon>more_vert</mat-icon>
+					</button>
+
 				</div>
+
+				<ng-template [ngIf]="wrGroup.saleContract">
+					<div class="contract-info">
+						<ion-text>ID: </ion-text>
+						<ion-text>Date: </ion-text>
+						<ion-text>Future Price: </ion-text>
+						<ion-text>Base Price: </ion-text>
+					</div>
+				</ng-template>
 			</div>
 		</div>
 	</div>
@@ -69,7 +86,7 @@
 
 	<div class="expansion-bar">
 		<hr>
-		<ion-icon (click)="openExpandable($event)" name="arrow-down-outline"></ion-icon>
+		<ion-icon matTooltip="Toggle Warehouse Receipt List" (click)="toggleExpandable($event)" name="arrow-down-outline"></ion-icon>
 		<hr>
 	</div>
 </ion-card>

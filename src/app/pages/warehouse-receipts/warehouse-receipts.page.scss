@@ -27,7 +27,25 @@ ion-text {
 #add {
     display: flex;
 
-    height: 175px;
+    height: 170px;
+    cursor: pointer;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(119, 119, 119, 0.3);
+        transition: opacity .3s;
+        opacity: 0;
+        z-index: 2;
+    }
+
+    &:hover:before {
+        opacity: 1;
+    }
 }
 
 .wr-group {
@@ -143,26 +161,37 @@ hr {
     margin: 5px;
     padding: 1em;
     border-radius: 5px;
-}
-
-// .contract-header {
-//     display: flex;
-//     justify-content: space-around;
-// }
-
-.contract-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    
-    margin-top: 1em;
-}
-
-.contract-unsigned {
     background-color: rgb(232, 232, 232);
 }
 
 .contract-signed {
     background-color: var(--ion-color-primary-light);
+}
+
+.contract-header {
+    padding-bottom: 0.8em;
+    position: relative;
+
+    button {
+        position: absolute;
+        right: 0%;
+        top: -25%;
+    }
+
+    /* mat-icon {
+        vertical-align: top;
+    } */
+}
+
+.contract-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    
+    padding-top: 0.8em;
+}
+
+.add-contract {
+    margin-inline: 1em;
 }
 
 .expansion-bar {
@@ -217,7 +246,7 @@ hr {
 }
 
 .label {
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 
 .table-row {

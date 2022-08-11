@@ -30,7 +30,7 @@
 						<ion-col>
 							<mat-form-field>
 								<mat-label>Starting ID</mat-label>
-								<input matInput formControlName="startId" type="number">
+								<input matInput formControlName="startId" type="number" min="1">
 								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.required">Please input an ID</mat-error>
 							</mat-form-field>
 						</ion-col>
@@ -82,7 +82,7 @@
 							<ion-col>
 								<mat-form-field>
 									<mat-label>ID</mat-label>
-									<input matInput formControlName="id" type="number">
+									<input matInput formControlName="id" type="number" min="1">
 									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.required">Please input an ID</mat-error>
 									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.idExists">ID already exists</mat-error>
 								</mat-form-field>
@@ -130,7 +130,7 @@
 
 				<div class="action-bar">
 					<ion-button (click)="cancel()">Cancel</ion-button>
-					<ion-button id="confirm-button" (click)="confirm()" [disabled]="warehouseReceiptGroupForm.invalid">Confirm</ion-button>
+					<ion-button (click)="confirm()" [disabled]="warehouseReceiptGroupForm.invalid">Confirm</ion-button>
 				</div>
 			</ion-card-content>
 		</ion-card>

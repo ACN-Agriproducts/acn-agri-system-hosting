@@ -167,7 +167,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       expireDate: null,
       purchaseContract: null,
       saleContract: null,
-      status: "pending",
+      status: "PENDING",
       totalBushelQuantity: this.totalBushelQuantity,
       warehouseReceiptIdList: this.warehouseReceiptIdList.sort((a, b) => a - b),
       warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())

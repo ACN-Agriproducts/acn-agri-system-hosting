@@ -101,8 +101,8 @@ export class WarehouseReceipt {
     }
 }
 
-class WarehouseReceiptContract {
-    public base: number;
+export class WarehouseReceiptContract {
+    public basePrice: number;
     public futurePrice: number;
     public id: string;
     public pdfReference: string;
@@ -110,7 +110,7 @@ class WarehouseReceiptContract {
     public status: Status;
 
     constructor(data: any) {
-        this.base = data.base;
+        this.basePrice = data.basePrice;
         this.futurePrice = data.futurePrice;
         this.id = data.id;
         this.pdfReference = data.pdfReference;
@@ -120,8 +120,8 @@ class WarehouseReceiptContract {
 }
 
 enum Status {
-    pending = 'pending',
-    active = 'active',
-    closed = 'closed',
-    cancelled = 'cancelled'
+    pending = 'PENDING',
+    active = 'ACTIVE',
+    closed = 'CLOSED',
+    cancelled = 'CANCELLED'
 }
