@@ -1,0 +1,75 @@
+<ion-card class="wr-card">
+	<div class="wr-group">
+		<div class="info-section">
+			<div class="group-info">
+				<div class="info">
+					<ion-text>Date: {{ wrGroup.creationDate | date }}</ion-text>
+					<ion-text>ID Range: {{ idRange }}</ion-text>
+					<ion-text>Quantity: {{ wrGroup.totalBushelQuantity | number}}</ion-text>
+					<ion-text>Product: {{ wrGroup.product }}</ion-text>
+				</div>
+
+				<div class="group-status">
+					<ion-text class="status-text">{{ wrGroup.status }}</ion-text>
+				</div>
+			</div>
+
+			<hr>
+
+			<div class="group-stats">
+				<ion-text>Statistics: </ion-text>
+			</div>
+		</div>
+
+		<div class="contract-section">
+			<div class="contract contract-signed">
+				<span><ion-text class="label">Purchase Contract</ion-text></span>
+
+				<span><ion-text class="status-text">Status</ion-text></span>
+
+				<div class="contract-info">
+					<ion-text>ID: </ion-text>
+					<ion-text>Date: </ion-text>
+					<ion-text>Future Price: </ion-text>
+					<ion-text>Base Price: </ion-text>
+				</div>
+			</div>
+
+			<div class="contract contract-signed">
+				<span><ion-text class="label">Sale Contract</ion-text></span>
+
+				<span><ion-text class="status-text">Status</ion-text></span>
+
+				<div class="contract-info">
+					<ion-text>ID: </ion-text>
+					<ion-text>Date: </ion-text>
+					<ion-text>Future Price: </ion-text>
+					<ion-text>Base Price: </ion-text>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="expandable-wr-list">
+		<div class="table-row table-header">
+			<ion-text>ID</ion-text>
+			<ion-text>Start Date</ion-text>
+			<ion-text>Product</ion-text>
+			<ion-text>Bushel Qty</ion-text>
+			<ion-text>Plant</ion-text>
+		</div>
+		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
+			<ion-text>{{ warehouseReceipt.id }}</ion-text>
+			<ion-text>{{ warehouseReceipt.startDate | date }}</ion-text>
+			<ion-text>{{ warehouseReceipt.product }}</ion-text>
+			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
+			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
+		</div>
+	</div>
+
+	<div class="expansion-bar">
+		<hr>
+		<ion-icon (click)="openExpandable($event)" name="arrow-down-outline"></ion-icon>
+		<hr>
+	</div>
+</ion-card>

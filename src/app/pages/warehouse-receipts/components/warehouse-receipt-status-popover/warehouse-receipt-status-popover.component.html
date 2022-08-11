@@ -5,16 +5,16 @@
   <ion-list>
     <ion-radio-group [(ngModel)]="status">
       <ion-item>
+        <ion-label>Pending</ion-label>
+        <ion-radio slot="start" value="pending"></ion-radio>
+      </ion-item>
+      <ion-item>
         <ion-label>Active</ion-label>
         <ion-radio slot="start" value="active"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>Sold</ion-label>
-        <ion-radio slot="start" value="sold"></ion-radio>
-      </ion-item>
-      <ion-item>
-        <ion-label>Financing</ion-label>
-        <ion-radio slot="start" value="financing"></ion-radio>
+        <ion-label>Closed</ion-label>
+        <ion-radio slot="start" value="closed"></ion-radio>
       </ion-item>
       <ion-item>
         <ion-label>Cancelled</ion-label>
@@ -22,5 +22,5 @@
       </ion-item>
     </ion-radio-group>
   </ion-list>
-  <ion-button class="status-select-done" (click)="submit()">Done</ion-button>
+  <ion-button class="submit" (click)="submit()">Done</ion-button>
 </div>

@@ -1,10 +1,8 @@
-import { CollectionReference, docData, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
-import { Functions } from "@angular/fire/functions";
+import { CollectionReference, docData, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions, collection, doc } from "@angular/fire/firestore";
+import { Functions, httpsCallable } from "@angular/fire/functions";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
-import { collection, doc } from "firebase/firestore";
 import { Observable } from "rxjs";
-import { httpsCallable } from "firebase/functions";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];

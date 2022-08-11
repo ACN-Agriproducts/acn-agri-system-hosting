@@ -4,6 +4,7 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <div id="container">
     <div class="content-actions">
+
       <ion-buttons class="butons buttons-main">
         <ion-button slot="start" color="dark">
           <ion-label class="label-branch_office">
@@ -14,12 +15,8 @@
       </ion-buttons>
     </div>
     <div class="content-subtitle_small-inventory">
-      <ion-button fill="clear" size="small" (click)="updateProductInv()" *ngIf="permissions?.developer">
-        <ion-icon name="reload-outline"></ion-icon>
-      </ion-button>
       <h4><span>Products</span></h4>
     </div>
-    
     <div class="content-card-inventory">
       <ion-card class="ion-no-margin" *ngFor="let item of productList">
         <!-- <ion-buttons class="content-btn-options">
@@ -30,7 +27,7 @@
         <ion-card-header>
           <!-- <ion-card-subtitle>Max Capacity: 25,000M tons.</ion-card-subtitle> -->
           <ion-card-title>{{item.ref.id}}</ion-card-title>
-          <button mat-icon-button class='inventory-info-button' (click)="nav('dashboard/inventory/' + item.ref.id)">
+          <button mat-icon-button class='inventory-info-button' (click)="nav('dashboard/inventory/' + item.name)">
             <mat-icon>info</mat-icon>
           </button>
         </ion-card-header>
@@ -39,7 +36,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Total Physical: </span>
-                <b>{{item.physicalInventory / 2204.62 | number:'1.3-3'}} Mt</b>
+                <b>{{item.physicalInventory}} Mt</b>
               </p>
             </div>
           </div>
@@ -47,7 +44,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Storage: </span>
-                <b>{{(item.physicalInventory - item.ownedPhysical) / 2204.62 | number:'1.3-3'}} Mt</b>
+                <b>{{item.physicalInventory - item.ownedPhysical}} Mt</b>
               </p>
             </div>
           </div>
@@ -55,7 +52,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Owned Physical: </span>
-                <b> {{item.ownedPhysical / 2204.62 | number:'1.3-3'}} Mt</b>
+                <b> {{item.ownedPhysical}} Mt</b>
               </p>
             </div>
           </div>
@@ -63,7 +60,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>For Sale: </span>
-                <b>{{item.forSale / 2204.62 | number:'1.3-3'}} Mt</b>
+                <b>{{item.forSale}} Mt</b>
               </p>
             </div>
           </div>
@@ -116,12 +113,11 @@
         + Add new...
       </ion-card>
     </div>
-    <ng-container *ngIf="hasReadPermission()">
+    <!-- <ng-container *ngIf="hasReadPermission()"> -->
       <div class="content-subtitle_small-inventory">
         <h4><span>Warehouse Receipts</span></h4>
       </div>
-      <app-warehouse-receipts [productList]="productList" [currentPlantName]="currentPlantName"></app-warehouse-receipts>
-      <!-- <app-warehouse-receipts [productList]="productList" [hasPermission]="hasReadPermission"></app-warehouse-receipts> -->
-    </ng-container>
+      <!-- <app-warehouse-receipts [productList]="productList" [currentPlantName]="currentPlantName"></app-warehouse-receipts> -->
+    <!-- </ng-container> -->
   </div>
 </ion-content>

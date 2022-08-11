@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { WarehouseReceiptsComponent } from './warehouse-receipts.component';
+import { WarehouseReceiptGroupCardComponent } from './warehouse-receipt-group-card.component';
 
-describe('WarehouseReceiptsComponent', () => {
-  let component: WarehouseReceiptsComponent;
-  let fixture: ComponentFixture<WarehouseReceiptsComponent>;
+describe('WarehouseReceiptGroupCardComponent', () => {
+  let component: WarehouseReceiptGroupCardComponent;
+  let fixture: ComponentFixture<WarehouseReceiptGroupCardComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ WarehouseReceiptsComponent ],
+      declarations: [ WarehouseReceiptGroupCardComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(WarehouseReceiptsComponent);
+    fixture = TestBed.createComponent(WarehouseReceiptGroupCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
