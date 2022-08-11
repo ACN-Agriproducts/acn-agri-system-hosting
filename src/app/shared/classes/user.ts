@@ -1,7 +1,6 @@
-import { doc, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
+import { doc, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions, collection } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { collection } from "firebase/firestore";
 
 export class User extends FirebaseDocInterface {
     name: string;

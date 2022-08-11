@@ -1,5 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy } from "@angular/fire/firestore";
-import { collectionData } from "rxfire/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
