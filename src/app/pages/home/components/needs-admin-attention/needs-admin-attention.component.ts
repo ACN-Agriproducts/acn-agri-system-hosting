@@ -13,9 +13,11 @@ import { Subscription } from 'rxjs';
 })
 export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
   @Input() company: string;
-  public ticketsList: Ticket[];
+  public voidTicketsList: Ticket[];
+  public needsAttentionTicketList: Ticket[];
   public user: any;
-  public ticketSubscription: Subscription;
+  public voidTicketSubscription: Subscription;
+  public needsAttentionTicketSubscription: Subscription;
 
   constructor(
     private db: Firestore,
@@ -24,12 +26,17 @@ export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.ticketsList = [];
+    this.voidTicketsList = [];
+    this.needsAttentionTicketList = [];
 
     Plant.getPlantList(this.db, this.company).then(plants => {
       plants.forEach(plant => {
-        this.ticketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('voidRequest', '==', true)).subscribe(tickets => {
-          this.ticketsList = tickets.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
+        this.voidTicketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('voidRequest', '==', true)).subscribe(tickets => {
+          this.voidTicketsList = tickets.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
+        }); 
+
+        this.needsAttentionTicketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('needsAttention', '==', true)).subscribe(tickets => {
+          this.needsAttentionTicketList = tickets.filter(t => !t.void).sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
         }); 
       });
     });
@@ -80,7 +87,8 @@ export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ticketSubscription.unsubscribe();
+    this.voidTicketSubscription.unsubscribe();
+    this.needsAttentionTicketSubscription.unsubscribe();
   }
 
 
