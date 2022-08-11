@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-header>Items Need Attention</mat-card-header>
+  <mat-card-content>
+    <div *ngFor="let ticket of ticketsList" class='table-row'>
+      <ion-item class="id" lines='none'><b>{{ticket.id}}</b></ion-item>
+      <ion-item class="date" lines='none'>{{ticket.dateOut | date:'shortDate'}}</ion-item>
+      <ion-item class="net" lines='none'>{{ticket.getNet() | number}}</ion-item>
+      <ion-item class="reason" lines='none' [matTooltip]="ticket.voidReason">{{ticket.voidReason}}</ion-item>
+      <button mat-icon-button (click)="voidTicket(ticket)" matTooltip="Void" color="warn">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
