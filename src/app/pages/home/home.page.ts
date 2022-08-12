@@ -26,5 +26,6 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.permissions = this.session.getPermissions();
+    this.currentCompany = this.session.getCompany();
   }
 }
