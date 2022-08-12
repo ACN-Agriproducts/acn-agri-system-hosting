@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup';
 
 @Component({
   selector: 'app-set-contract-modal',
@@ -7,11 +8,13 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./set-contract-modal.component.scss'],
 })
 export class SetContractModalComponent implements OnInit {
-  public contract: ConstructorData = { startDate: new Date() };
+  @Input() contract: WarehouseReceiptContract;
 
   constructor(private modalController: ModalController) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.contract);
+  }
 
   public cancel() {
     return this.modalController.dismiss(null, 'cancel');
@@ -20,12 +23,4 @@ export class SetContractModalComponent implements OnInit {
   public confirm() {
     return this.modalController.dismiss(this.contract, 'confirm');
   }
-}
-
-interface ConstructorData {
-  basePrice?: number;
-  futurePrice?: number;
-  id?: number;
-  startDate: Date;
-  pdfReference?: string;
 }

@@ -19,9 +19,9 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   public currentCompany: string;
   public plantList: string[];
   public productList: string[];
+  public totalBushelQuantity: number = 0;
   public warehouseReceiptCollectionRef: CollectionReference;
   public warehouseReceiptGroupForm: FormGroup;
-  public totalBushelQuantity: number = 0;
   public warehouseReceiptIdList: number[];
 
   constructor(
@@ -159,6 +159,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
     formValues.warehouseReceiptList.forEach(warehouseReceipt => {
       this.totalBushelQuantity += warehouseReceipt.bushelQuantity;
+      warehouseReceipt.isPaid = false;
     });
 
     let receiptGroup = {
@@ -170,7 +171,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
       status: "PENDING",
       totalBushelQuantity: this.totalBushelQuantity,
       warehouseReceiptIdList: this.warehouseReceiptIdList.sort((a, b) => a - b),
-      warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+      warehouseReceiptList: formValues.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime()),
     };
 
     addDoc(this.warehouseReceiptCollectionRef, receiptGroup).then(() => {

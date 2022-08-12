@@ -28,17 +28,17 @@
 
 					<ion-text class="status-text">NONE</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.purchaseContract)">
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.purchaseContract, true)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 				</div>
 
 				<ng-template [ngIf]="wrGroup.purchaseContract">
 					<div class="contract-info">
-						<ion-text>ID: </ion-text>
-						<ion-text>Date: </ion-text>
-						<ion-text>Future Price: </ion-text>
-						<ion-text>Base Price: </ion-text>
+						<ion-text>ID: {{ wrGroup.purchaseContract.id }}</ion-text>
+						<ion-text>Date: {{ wrGroup.purchaseContract.startDate | date }}</ion-text>
+						<ion-text>Future Price: {{ wrGroup.purchaseContract.futurePrice | currency }}</ion-text>
+						<ion-text>Base Price: {{ wrGroup.purchaseContract.basePrice | currency }}</ion-text>
 					</div>
 				</ng-template>
 			</div>
@@ -47,9 +47,9 @@
 				<div class="contract-header">
 					<ion-text class="label">Sale Contract</ion-text>
 
-					<ion-text class="status-text">NONE</ion-text>
+					<ion-text class="status-text">NONE<span *ngIf="hasPaid()">{{ hasPaid() }}/6</span></ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.saleContract)">
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.saleContract, false)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 
@@ -74,6 +74,7 @@
 			<ion-text>Product</ion-text>
 			<ion-text>Bushel Qty</ion-text>
 			<ion-text>Plant</ion-text>
+			<ion-text>Paid</ion-text>
 		</div>
 		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
@@ -81,6 +82,7 @@
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
+			<ion-text>{{ warehouseReceipt.isPaid }}</ion-text>
 		</div>
 	</div>
 

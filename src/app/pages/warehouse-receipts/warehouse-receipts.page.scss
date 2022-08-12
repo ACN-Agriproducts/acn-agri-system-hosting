@@ -88,7 +88,7 @@ ion-text {
 
 .status-text {
     font-weight: 500;
-    font-size: 1.1em;
+    font-size: 1em;
     padding: 0 1rem;
     margin: 2rem;
     border-radius: 10px;
@@ -246,12 +246,12 @@ hr {
 }
 
 .label {
-    font-size: 1.2em;
+    font-size: 1.15em;
 }
 
 .table-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     text-align: center;
     height: 50px;
 

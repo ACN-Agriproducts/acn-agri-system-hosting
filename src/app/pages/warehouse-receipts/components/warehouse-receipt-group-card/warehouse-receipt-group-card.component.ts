@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { WarehouseReceipt, WarehouseReceiptGroup, WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup';
+import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 
 @Component({
@@ -11,11 +11,9 @@ import { SetContractModalComponent } from '../set-contract-modal/set-contract-mo
 export class WarehouseReceiptGroupCardComponent implements OnInit {
   @Input() wrGroup: WarehouseReceiptGroup;
 
-  public wrList: WarehouseReceipt[];
-  public wrIdList: number[];
   public idRange: string;
-  public purchaseContract: WarehouseReceiptContract = null;
-  public saleContract: WarehouseReceiptContract = null;
+  public wrIdList: number[];
+  public wrList: WarehouseReceipt[];
 
   constructor(private modalController: ModalController) { }
 
@@ -24,6 +22,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
 
     this.idRange = this.getIdRange();
+    console.log(this.wrGroup);
   }
 
 
@@ -47,10 +46,16 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public async setContract(contract: any) {
+  public async setContract(contract: ContractData, isPurchase: boolean) {
+    if (contract === null) {
+      contract = { startDate: new Date() };
+    }
+
     const modal = await this.modalController.create({
       component: SetContractModalComponent,
-      componentProps: contract,
+      componentProps: {
+        contract
+      },
       backdropDismiss: false
     });
     modal.present();
@@ -58,12 +63,14 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const { data, role } = await modal.onDidDismiss();
 
     if (role === 'confirm') {
-      console.log(data);
+      this.wrGroup.update({
+        [isPurchase? 'purchaseContract' : 'saleContract']: data
+      });
     }
   }
 
-  public addContract() {
-    
+  public hasPaid(): number {
+    return this.wrList.filter(wr => wr.isPaid).length;
   }
 
   public toggleExpandable(event: Event): void {
@@ -79,5 +86,12 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       expandable.style.maxHeight = expandable.scrollHeight + "px";
     }
   }
+}
 
+interface ContractData {
+  basePrice?: number;
+  futurePrice?: number;
+  id?: string;
+  startDate: Date;
+  pdfReference?: string;
 }

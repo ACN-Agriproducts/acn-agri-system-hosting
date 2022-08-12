@@ -23,8 +23,8 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         this.closeDate = data.closeDate?.toDate();
         this.creationDate = data.creationDate?.toDate();
         this.expireDate = data.expireDate?.toDate();
-        this.purchaseContract = data.purchaseContract;
-        this.saleContract = data.saleContract;
+        this.purchaseContract = new WarehouseReceiptContract(data.purchaseContract);
+        this.saleContract = new WarehouseReceiptContract(data.saleContract);
         this.status = data.status;
         this.totalBushelQuantity = data.totalBushelQuantity;
         this.warehouseReceiptIdList = data.warehouseReceiptIdList;
@@ -91,6 +91,7 @@ export class WarehouseReceipt {
     public id: number;
     public plant: string;
     public product: string;
+    public isPaid: boolean;
 
     constructor(data: any) {
         this.bushelQuantity = data.bushelQuantity;
@@ -98,6 +99,7 @@ export class WarehouseReceipt {
         this.id = data.id;
         this.plant = data.plant;
         this.product = data.product;
+        this.isPaid = data.isPaid;
     }
 }
 
@@ -114,7 +116,7 @@ export class WarehouseReceiptContract {
         this.futurePrice = data.futurePrice;
         this.id = data.id;
         this.pdfReference = data.pdfReference;
-        this.startDate = data.startDate;
+        this.startDate = data.startDate?.toDate();
         this.status = data.status;
     }
 }
