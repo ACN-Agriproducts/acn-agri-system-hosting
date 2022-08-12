@@ -29,6 +29,7 @@ interface ContractData {
   basePrice?: number;
   futurePrice?: number;
   id?: string;
-  startDate: Date;
   pdfReference?: string;
+  startDate: Date;
+  status?: string;
 }

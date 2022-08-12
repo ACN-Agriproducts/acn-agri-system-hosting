@@ -10,7 +10,11 @@
 				</div>
 
 				<div class="group-status">
-					<ion-text class="status-text">{{ wrGroup.status }}</ion-text>
+					<ion-text class="status-text" 
+					[class.pending]="wrGroup.status === 'PENDING'" 
+					[class.active]="wrGroup.status === 'ACTIVE'" 
+					[class.closed]="wrGroup.status === 'CLOSED'" 
+					[class.cancelled]="wrGroup.status === 'CANCELLED'">{{ wrGroup.status }}</ion-text>
 				</div>
 			</div>
 
@@ -26,7 +30,8 @@
 				<div class="contract-header">
 					<ion-text class="label">Purchase Contract</ion-text>
 
-					<ion-text class="status-text">{{ wrGroup.purchaseContract?.status ?? "NONE" }}</ion-text>
+					<ion-text class="status-text" 
+					[class.closed]="wrGroup.purchaseContract?.status === 'CLOSED'">{{ wrGroup.purchaseContract?.status ?? "NONE" }}</ion-text>
 
 					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.purchaseContract, true)">
 						<mat-icon>more_vert</mat-icon>
@@ -47,7 +52,9 @@
 				<div class="contract-header">
 					<ion-text class="label">Sale Contract</ion-text>
 
-					<ion-text class="status-text">{{ wrGroup.saleContract?.status ?? "NONE" }}<span *ngIf="hasPaid()">{{ hasPaid() }}/6</span></ion-text>
+					<ion-text class="status-text" 
+					[class.pending]="wrGroup.saleContract?.status === 'PENDING'" 
+					[class.closed]="wrGroup.saleContract?.status === 'CLOSED'">{{ wrGroup.saleContract?.status ?? "NONE" }}<span *ngIf="hasPaid()">{{ hasPaid() }}/6</span></ion-text>
 
 					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.saleContract, false)">
 						<mat-icon>more_vert</mat-icon>
