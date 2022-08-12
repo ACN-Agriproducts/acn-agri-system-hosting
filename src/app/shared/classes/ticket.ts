@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
@@ -148,6 +148,12 @@ export class Ticket extends FirebaseDocInterface{
 
     public getPlantReference(): DocumentReference<Plant> {
         return this.ref.parent.parent.withConverter(Plant.converter);
+    }
+
+    public getPlant(): Promise<Plant> {
+        return getDoc(this.getPlantReference()).then(snap => {
+            return snap.data();
+        });
     }
 
     public getCollectionReference(): CollectionReference<Ticket> {
