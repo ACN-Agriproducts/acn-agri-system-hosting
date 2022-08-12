@@ -20,7 +20,6 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private session: SessionInfoService
   ) {
     this.initializeApp();
   }
@@ -30,7 +29,5 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-    
-    console.log(this.session);
   }
 }
