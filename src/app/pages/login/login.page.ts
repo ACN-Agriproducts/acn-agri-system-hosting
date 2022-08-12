@@ -7,6 +7,9 @@ import { Firestore } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Subscription } from 'rxjs';
 import { User } from '@shared/classes/user';
+import { SessionInfoService } from '@core/services/session-info/session-info.service';
+import { Company } from '@shared/classes/company';
+import { Plant } from '@shared/classes/plant';
 
 
 @Component({
@@ -28,9 +31,9 @@ export class LoginPage implements OnInit, OnDestroy {
     private service: LoginService,
     private formBuilder: UntypedFormBuilder,
     public alertController: AlertController,
-    private storage: Storage,
     private db: Firestore,
-    private auth: Auth
+    private auth: Auth,
+    private session: SessionInfoService
   ) {
     this.buildForm();
   }
@@ -57,7 +60,13 @@ export class LoginPage implements OnInit, OnDestroy {
         try{
           const val = await User.getUser(this.db, user.uid);
           const compDoc = await val.getPermissions(val.worksAt[0]);
-          await this.storage.set('user', {
+
+          Company.getCompany(this.db, val.worksAt[0]).then(async company => {
+            const plants = await Plant.getPlantList(this.db, company.ref.id);
+            this.session.set('currentPlant', plants[0].ref.id);
+          });
+
+          this.session.set('user', {
             email: user.email,
             uid: user.uid, 
             refreshToken: user.refreshToken, 
@@ -66,7 +75,7 @@ export class LoginPage implements OnInit, OnDestroy {
             currentPermissions: compDoc
           });
           
-          await this.storage.set('currentCompany', val['worksAt'][0])
+          this.session.set('currentCompany', val['worksAt'][0])
 
           this.navController.navigateForward('/dashboard/home');
           this.loadingController.dismiss();
