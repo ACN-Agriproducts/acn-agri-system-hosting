@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Storage } from '@angular/fire/storage';
 import { environment } from '@enviroment/environment';
 import { Auth } from '@angular/fire/auth';
+import { SessionInfoService } from '@core/services/session-info/session-info.service';
 // import { jsPDF } from "jspdf";
 
 // import html2canvas from 'html2canvas';
@@ -19,6 +20,7 @@ export class AppComponent {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
+    private session: SessionInfoService
   ) {
     this.initializeApp();
   }
@@ -28,5 +30,7 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+    
+    console.log(this.session);
   }
 }

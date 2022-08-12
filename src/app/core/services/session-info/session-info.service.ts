@@ -23,7 +23,9 @@ export class SessionInfoService {
 
   constructor(
     private localStorage: Storage
-  ) { }
+  ) { 
+    this.load();
+  }
 
   public load(): Promise<void> {
     const promises = [];

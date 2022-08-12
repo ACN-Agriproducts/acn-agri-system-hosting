@@ -22,6 +22,7 @@ import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fir
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
 import { initSessionInfoFactory } from './initApp.factory';
+import { SessionInfoService } from '@core/services/session-info/session-info.service';
 
 
 @NgModule({
@@ -73,8 +74,8 @@ import { initSessionInfoFactory } from './initApp.factory';
     providers: [
         StatusBar,
         SplashScreen,
+        SessionInfoService,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        { provide: APP_INITIALIZER, useFactory: initSessionInfoFactory }
     ],
     bootstrap: [AppComponent]
 })
