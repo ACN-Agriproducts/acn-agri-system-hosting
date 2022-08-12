@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -9,11 +11,15 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class FixTicketStorageComponent implements OnInit {
   @Input() ticket: Ticket;
+  newPlant: string;
 
   constructor(
-    private firebase: Firestore
+    private db: Firestore,
+    private session: SessionInfo
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    Plant.getPlant(this.db, this.session.getCompany(), this.session.getPlant());
+  }
 
 }
