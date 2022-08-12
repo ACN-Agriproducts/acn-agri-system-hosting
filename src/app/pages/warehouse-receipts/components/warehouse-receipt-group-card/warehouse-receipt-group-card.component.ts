@@ -15,6 +15,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public wrIdList: number[];
   public wrList: WarehouseReceipt[];
 
+  public purchaseContract: WarehouseReceiptContract;
+  public saleContract: WarehouseReceiptContract;
+
   constructor(private modalController: ModalController) { }
 
   ngOnInit() {
@@ -23,7 +26,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     this.idRange = this.getIdRange();
   }
-
 
   public getIdRange(): string {
     let result: string[] = [];
@@ -54,6 +56,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractUpdateDoc.id = contract.id;
       contractUpdateDoc.startDate = contract.startDate;
       contractUpdateDoc.pdfReference = contract.pdfReference;
+      contractUpdateDoc.status = isPurchase ? "CLOSED" : "PENDING";
     }
     
     const modal = await this.modalController.create({
@@ -71,7 +74,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     if (role === 'confirm') {
       this.wrGroup.update({
         [isPurchase ? 'purchaseContract' : 'saleContract']: data,
-        status: [isPurchase ? "CLOSED" : "PENDING"]
+        status: "ACTIVE"
       })
       .catch(error => {
         console.log(`Error: `, error);
@@ -102,6 +105,7 @@ interface ContractData {
   basePrice?: number;
   futurePrice?: number;
   id?: string;
-  startDate: Date;
   pdfReference?: string;
+  startDate: Date;
+  status?: string;
 }
