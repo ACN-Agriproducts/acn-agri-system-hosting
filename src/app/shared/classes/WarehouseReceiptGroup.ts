@@ -23,8 +23,8 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         this.closeDate = data.closeDate?.toDate();
         this.creationDate = data.creationDate?.toDate();
         this.expireDate = data.expireDate?.toDate();
-        this.purchaseContract = new WarehouseReceiptContract(data.purchaseContract);
-        this.saleContract = new WarehouseReceiptContract(data.saleContract);
+        this.purchaseContract = data.purchaseContract ? new WarehouseReceiptContract(data.purchaseContract) : null;
+        this.saleContract = data.saleContract ? new WarehouseReceiptContract(data.saleContract) : null;
         this.status = data.status;
         this.totalBushelQuantity = data.totalBushelQuantity;
         this.warehouseReceiptIdList = data.warehouseReceiptIdList;
