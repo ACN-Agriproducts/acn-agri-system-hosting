@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-fix-ticket-storage',
@@ -6,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./fix-ticket-storage.component.scss'],
 })
 export class FixTicketStorageComponent implements OnInit {
+  @Input() ticket: Ticket;
 
-  constructor() { }
+  constructor(
+    private firebase: Firestore
+  ) { }
 
   ngOnInit() {}
 
