@@ -47,19 +47,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public async setContract() {
-    console.log("Set Contract");
-
+  public async setContract(contract: any) {
     const modal = await this.modalController.create({
       component: SetContractModalComponent,
-      
+      componentProps: contract,
+      backdropDismiss: false
     });
     modal.present();
 
     const { data, role } = await modal.onDidDismiss();
 
     if (role === 'confirm') {
-
+      console.log(data);
     }
   }
 
