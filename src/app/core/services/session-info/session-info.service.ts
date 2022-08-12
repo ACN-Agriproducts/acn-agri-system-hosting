@@ -13,7 +13,6 @@ interface User {
 
 declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user'
 
-
 @Injectable({
   providedIn: 'root'
 })
