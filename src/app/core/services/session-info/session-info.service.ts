@@ -21,10 +21,15 @@ export class SessionInfo {
   private plant: string;
   private user: User;
 
+  private keyMap: Map<keyOpts, string>;
+
   constructor(
     private localStorage: Storage
   ) { 
-    this.load();
+    this.keyMap= new Map<keyOpts, string>();
+    this.keyMap.set('currentCompany', 'company');
+    this.keyMap.set('currentPlant', 'plant');
+    this.keyMap.set('user', 'user');
   }
 
   public load(): Promise<void> {
@@ -46,13 +51,9 @@ export class SessionInfo {
   }
 
   public set(key: keyOpts, data: any): Promise<void> {
-    const keyMap= new Map<keyOpts, string>();
-    keyMap.set('currentCompany', 'company');
-    keyMap.set('currentPlant', 'plant');
-    keyMap.set('user', 'user');
-
-    const objectKey: string = this[keyMap.get(key)];
+    const objectKey: string = this.keyMap.get(key);
     if(objectKey == null) {
+      console.log("Key not set", key);
       return;
     }
 
@@ -74,5 +75,13 @@ export class SessionInfo {
 
   public getPermissions(): any {
     return this.user?.currentPermissions;
+  }
+
+  public clear(): Promise<void> {
+    this.company = null;
+    this.plant = null;
+    this.user = null;
+
+    return this.localStorage.clear();
   }
 }
