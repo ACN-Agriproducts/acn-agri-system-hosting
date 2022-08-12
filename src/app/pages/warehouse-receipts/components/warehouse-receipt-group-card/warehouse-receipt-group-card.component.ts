@@ -22,7 +22,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
 
     this.idRange = this.getIdRange();
-    console.log(this.wrGroup);
   }
 
 
@@ -64,7 +63,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     if (role === 'confirm') {
       this.wrGroup.update({
-        [isPurchase? 'purchaseContract' : 'saleContract']: data
+        [isPurchase ? 'purchaseContract' : 'saleContract']: data,
+        status: [isPurchase ? "CLOSED" : "PENDING"]
       });
     }
   }
