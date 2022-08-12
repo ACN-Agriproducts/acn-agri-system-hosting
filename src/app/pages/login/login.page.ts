@@ -2,12 +2,10 @@ import { LoginService } from './utils/services/login.service';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Storage } from '@ionic/storage';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
-import { Subscription } from 'rxjs';
 import { User } from '@shared/classes/user';
-import { SessionInfoService } from '@core/services/session-info/session-info.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
 import { Plant } from '@shared/classes/plant';
 
@@ -23,7 +21,6 @@ export class LoginPage implements OnInit, OnDestroy {
   public destroy: boolean;
   public formulario: UntypedFormGroup;
 
-  private currentSubs: Subscription[] = [];
   constructor(
     private cd: ChangeDetectorRef,
     private navController: NavController,
@@ -33,7 +30,7 @@ export class LoginPage implements OnInit, OnDestroy {
     public alertController: AlertController,
     private db: Firestore,
     private auth: Auth,
-    private session: SessionInfoService
+    private session: SessionInfo
   ) {
     this.buildForm();
   }
@@ -46,10 +43,6 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.cd.markForCheck();
-
-    for(const sub of this.currentSubs) {
-      sub.unsubscribe();
-    }
   }
   ionViewDidLeave() {
   }

@@ -21,7 +21,7 @@ import { connectFirestoreEmulator, enableIndexedDbPersistence, provideFirestore,
 import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
-import { SessionInfoService } from '@core/services/session-info/session-info.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 
 @NgModule({
@@ -73,7 +73,7 @@ import { SessionInfoService } from '@core/services/session-info/session-info.ser
     providers: [
         StatusBar,
         SplashScreen,
-        SessionInfoService,
+        SessionInfo,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     ],
     bootstrap: [AppComponent]

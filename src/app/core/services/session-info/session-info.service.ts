@@ -16,7 +16,7 @@ declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user'
 @Injectable({
   providedIn: 'root'
 })
-export class SessionInfoService {
+export class SessionInfo {
   private company: string;
   private plant: string;
   private user: User;
