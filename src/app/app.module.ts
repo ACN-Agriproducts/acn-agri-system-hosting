@@ -21,7 +21,6 @@ import { connectFirestoreEmulator, enableIndexedDbPersistence, provideFirestore,
 import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
-import { initSessionInfoFactory } from './initApp.factory';
 import { SessionInfoService } from '@core/services/session-info/session-info.service';
 
 

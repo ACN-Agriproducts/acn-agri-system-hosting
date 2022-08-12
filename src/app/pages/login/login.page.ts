@@ -57,7 +57,7 @@ export class LoginPage implements OnInit, OnDestroy {
         try{
           const val = await User.getUser(this.db, user.uid);
           const compDoc = await val.getPermissions(val.worksAt[0]);
-          this.storage.set('user', {
+          await this.storage.set('user', {
             email: user.email,
             uid: user.uid, 
             refreshToken: user.refreshToken, 
@@ -66,8 +66,8 @@ export class LoginPage implements OnInit, OnDestroy {
             currentPermissions: compDoc
           });
           
-          this.storage.set('currentCompany', val['worksAt'][0])
-          console.log("Final")
+          await this.storage.set('currentCompany', val['worksAt'][0])
+
           this.navController.navigateForward('/dashboard/home');
           this.loadingController.dismiss();
           
