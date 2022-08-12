@@ -75,6 +75,12 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
         SplashScreen,
         SessionInfo,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (session: SessionInfo) => { return () => session.load() },
+            multi: true,
+            deps: [SessionInfo]
+        }
     ],
     bootstrap: [AppComponent]
 })
