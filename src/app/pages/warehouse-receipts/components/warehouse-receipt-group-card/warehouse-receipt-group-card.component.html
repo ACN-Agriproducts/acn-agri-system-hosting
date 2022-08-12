@@ -22,13 +22,13 @@
 		</div>
 
 		<div class="contract-section">
-			<div class="contract" [class.contract-signed]="wrGroup.purchaseContract">
+			<div class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
 				<div class="contract-header">
 					<ion-text class="label">Purchase Contract</ion-text>
 
 					<ion-text class="status-text">NONE</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" (click)="setContract()">
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.purchaseContract)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 				</div>
@@ -43,13 +43,13 @@
 				</ng-template>
 			</div>
 
-			<div class="contract" [class.contract-signed]="wrGroup.saleContract">
+			<div class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
 				<div class="contract-header">
 					<ion-text class="label">Sale Contract</ion-text>
 
 					<ion-text class="status-text">NONE</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" (click)="setContract()">
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.saleContract)">
 						<mat-icon>more_vert</mat-icon>
 					</button>
 

@@ -105,7 +105,7 @@ export class WarehouseReceiptContract {
     public basePrice: number;
     public futurePrice: number;
     public id: string;
-    public pdfReference: string;
+    public pdfReference: string | null;
     public startDate: Date;
     public status: Status;
 

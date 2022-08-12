@@ -19,7 +19,8 @@ import { SetContractModalComponent } from './components/set-contract-modal/set-c
     IonicModule,
     WarehouseReceiptsPageRoutingModule,
     ReactiveFormsModule,
-    CoreModule
+    CoreModule,
+    FormsModule
   ],
   declarations: [
     WarehouseReceiptsPage,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup';
 
 @Component({
   selector: 'app-set-contract-modal',
@@ -8,26 +9,25 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./set-contract-modal.component.scss'],
 })
 export class SetContractModalComponent implements OnInit {
+  public contract: ConstructorData = { startDate: new Date() };
 
-  public contractForm: FormGroup;
+  constructor(private modalController: ModalController) { }
 
-  constructor(private fb: FormBuilder, private modalController: ModalController) { }
-
-  ngOnInit() {
-    this.contractForm = this.fb.group({
-      basePrice: [, Validators.required],
-      futurePrice: [, Validators.required],
-      id: [, Validators.required],
-      startDate: [new Date(), Validators.required],
-    });
-  }
+  ngOnInit() {}
 
   public cancel() {
     return this.modalController.dismiss(null, 'cancel');
   }
 
   public confirm() {
-    return this.modalController.dismiss(this.contractForm.getRawValue(), 'confirm');
+    return this.modalController.dismiss(this.contract, 'confirm');
   }
+}
 
+interface ConstructorData {
+  basePrice?: number;
+  futurePrice?: number;
+  id?: number;
+  startDate: Date;
+  pdfReference?: string;
 }
