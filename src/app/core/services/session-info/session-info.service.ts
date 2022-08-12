@@ -44,7 +44,18 @@ export class SessionInfoService {
   }
 
   public set(key: keyOpts, data: any): Promise<void> {
-    return this.localStorage.set(key, data);
+    const keyMap= new Map<keyOpts, string>();
+    keyMap.set('currentCompany', 'company');
+    keyMap.set('currentPlant', 'plant');
+    keyMap.set('user', 'user');
+
+    const objectKey: string = this[keyMap.get(key)];
+    if(objectKey == null) {
+      return;
+    }
+
+    this.localStorage.set(key, data);
+    this[objectKey] = data;
   }
 
   public getCompany(): string {
