@@ -8,7 +8,7 @@ import { WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup'
   styleUrls: ['./set-contract-modal.component.scss'],
 })
 export class SetContractModalComponent implements OnInit {
-  @Input() contract: WarehouseReceiptContract;
+  @Input() contract: ContractData;
 
   constructor(private modalController: ModalController) { }
 
@@ -23,4 +23,12 @@ export class SetContractModalComponent implements OnInit {
   public confirm() {
     return this.modalController.dismiss(this.contract, 'confirm');
   }
+}
+
+interface ContractData {
+  basePrice?: number;
+  futurePrice?: number;
+  id?: string;
+  startDate: Date;
+  pdfReference?: string;
 }

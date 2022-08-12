@@ -45,17 +45,24 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public async setContract(contract: ContractData, isPurchase: boolean) {
-    if (contract === null) {
-      contract = { startDate: new Date() };
-    }
+  public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
+    const contractUpdateDoc: ContractData = { startDate: new Date() };
 
+    if (contract) {
+      contractUpdateDoc.basePrice = contract.basePrice;
+      contractUpdateDoc.futurePrice = contract.futurePrice;
+      contractUpdateDoc.id = contract.id;
+      contractUpdateDoc.startDate = contract.startDate;
+      contractUpdateDoc.pdfReference = contract.pdfReference;
+    }
+    
     const modal = await this.modalController.create({
       component: SetContractModalComponent,
       componentProps: {
-        contract
+        contract: contractUpdateDoc
       },
-      backdropDismiss: false
+      backdropDismiss: false,
+      cssClass: 'set-wr-contract-modal',
     });
     modal.present();
 
@@ -65,6 +72,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       this.wrGroup.update({
         [isPurchase ? 'purchaseContract' : 'saleContract']: data,
         status: [isPurchase ? "CLOSED" : "PENDING"]
+      })
+      .catch(error => {
+        console.log(`Error: `, error);
       });
     }
   }
