@@ -7,6 +7,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ContractPrintableComponent } from './printable/contract-printable/contract-printable.component';
 import { ScaleToFitDirective } from './scale-to-fit.directive';
 import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
+import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-ticket-storage.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { PrintableTicketComponent } from './printable/printable-ticket/printable
     ToolbarComponent,
     ContractPrintableComponent,
     ScaleToFitDirective,
-    PrintableTicketComponent
+    PrintableTicketComponent,
+    FixTicketStorageComponent
   ]
 })
 export class SharedModule {}
