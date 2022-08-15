@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     <span *ngIf="voidTicketsList.length > 0">Tickets void requests</span>
-    <div *ngFor="let ticket of voidTicketsList; let even = even" class='table-row' [class.even-row]="even" hidden>
+    <div *ngFor="let ticket of voidTicketsList; let even = even" class='table-row' [class.even-row]="even">
       <div class="id" lines='none'><b><ion-text>{{ticket.id}}</ion-text></b></div>
       <div class="date" lines='none'><ion-text>{{ticket.dateOut | date:'shortDate'}}</ion-text></div>
       <div class="net" lines='none'><ion-text>{{ticket.getNet() | number}}</ion-text></div>
