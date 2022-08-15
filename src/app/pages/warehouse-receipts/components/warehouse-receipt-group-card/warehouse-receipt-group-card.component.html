@@ -42,8 +42,8 @@
 						<div class="prices">
 							<ion-card-title class="border-right">Future Price</ion-card-title>
 							<ion-card-title>Base Price</ion-card-title>
-							<ion-text class="border-right">{{ wrGroup.purchaseContract.futurePrice | currency }}</ion-text>
-							<ion-text>{{ wrGroup.purchaseContract.basePrice | currency }}</ion-text>
+							<ion-text class="border-right">{{ wrGroup.purchaseContract.futurePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
+							<ion-text>{{ wrGroup.purchaseContract.basePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
 						</div>
 					</div>
 				</ng-template>
@@ -73,8 +73,8 @@
 						<div class="prices">
 							<ion-card-title class="border-right">Future Price </ion-card-title>
 							<ion-card-title>Base Price </ion-card-title>
-							<ion-text class="border-right">{{ wrGroup.saleContract.futurePrice | currency }}</ion-text>
-							<ion-text>{{ wrGroup.saleContract.basePrice | currency }}</ion-text>
+							<ion-text class="border-right">{{ wrGroup.saleContract.futurePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
+							<ion-text>{{ wrGroup.saleContract.basePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
 						</div>
 					</div>
 				</ng-template>
