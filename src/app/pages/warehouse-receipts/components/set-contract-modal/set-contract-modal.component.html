@@ -1,42 +1,38 @@
-<ion-header>
-	<ion-toolbar>
-		<ion-title>Set Warehouse Receipt Contract</ion-title>
-	</ion-toolbar>
-</ion-header>
+<h2 mat-dialog-title>Set Warehouse Receipt Contract</h2>
 
-<ion-content class="ion-padding">
+<mat-dialog-content>
 	<form #contractForm="ngForm" class="form">
 		<mat-form-field appearance="standard">
 			<mat-label>Date</mat-label>
 			<input matInput [matDatepicker]="picker" readonly required 
-			[(ngModel)]="contract.startDate" name="startDate">
+			[(ngModel)]="data.startDate" name="startDate">
 			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 			<mat-datepicker #picker></mat-datepicker>
 		</mat-form-field>
 
 		<mat-form-field appearance="standard">
 			<mat-label>ID</mat-label>
-			<input matInput required [(ngModel)]="contract.id" name="id">
+			<input matInput required [(ngModel)]="data.id" name="id">
 			<mat-error>ID is <strong>required</strong></mat-error>
 		</mat-form-field>
 
 		<mat-form-field appearance="standard">
 			<mat-label>Future Price</mat-label>
 			<span matPrefix>$ &nbsp;</span>
-			<input matInput type="number" required [(ngModel)]="contract.futurePrice" name="futurePrice">
+			<input matInput type="number" required [(ngModel)]="data.futurePrice" name="futurePrice">
 			<mat-error>Future Price is <strong>required</strong></mat-error>
 		</mat-form-field>
 
 		<mat-form-field appearance="standard">
 			<mat-label>Base Price</mat-label>
 			<span matPrefix>$ &nbsp;</span>
-			<input matInput type="number" required [(ngModel)]="contract.basePrice" name="basePrice">
+			<input matInput type="number" required [(ngModel)]="data.basePrice" name="basePrice">
 			<mat-error>Base Price is <strong>required</strong></mat-error>
 		</mat-form-field>
-
-		<div class="action-bar">
-			<ion-button (click)="cancel()">Cancel</ion-button>
-			<ion-button (click)="confirm()" [disabled]="contractForm.invalid">Confirm</ion-button>
-		</div>
 	</form>
-</ion-content>
+</mat-dialog-content>
+
+<mat-dialog-actions class="action-bar">
+	<ion-button (click)="cancel()">Cancel</ion-button>
+	<ion-button [mat-dialog-close]="data" [disabled]="contractForm.invalid">Confirm</ion-button>
+</mat-dialog-actions>

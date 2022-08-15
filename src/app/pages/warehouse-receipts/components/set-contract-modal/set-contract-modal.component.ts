@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ModalController } from '@ionic/angular';
-import { WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup';
 
 @Component({
   selector: 'app-set-contract-modal',
@@ -8,19 +8,17 @@ import { WarehouseReceiptContract } from '@shared/classes/WarehouseReceiptGroup'
   styleUrls: ['./set-contract-modal.component.scss'],
 })
 export class SetContractModalComponent implements OnInit {
-  @Input() contract: ContractData;
 
-  constructor(private modalController: ModalController) { }
+  constructor(
+    public dialogRef: MatDialogRef<SetContractModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ContractData
+  ) { }
 
   ngOnInit() {
   }
 
-  public cancel() {
-    return this.modalController.dismiss(null, 'cancel');
-  }
-
-  public confirm() {
-    return this.modalController.dismiss(this.contract, 'confirm');
+  public cancel(): void {
+    this.dialogRef.close();
   }
 }
 

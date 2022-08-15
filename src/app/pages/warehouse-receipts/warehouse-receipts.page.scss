@@ -170,7 +170,6 @@ hr {
 }
 
 .contract-header {
-    padding-bottom: 0.8em;
     position: relative;
 
     button {
@@ -181,7 +180,8 @@ hr {
 }
 
 .contract-info {
-    padding-top: 0.6em;
+    margin: 1em;
+    padding-top: 0.5em;
     
     ion-text {
         color: var(--ion-color-dark);
@@ -195,7 +195,7 @@ hr {
     text-align: center;
 
     height: 5em;
-    padding-top: 1.5em;
+    padding-top: 1.3em;
     font-size: 1.05em;
 
     ion-card-title {
