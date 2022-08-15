@@ -3,10 +3,10 @@
 		<div class="info-section">
 			<div class="group-info">
 				<div class="info">
-					<ion-text>Date: {{ wrGroup.creationDate | date }}</ion-text>
-					<ion-text>ID Range: {{ idRange }}</ion-text>
-					<ion-text>Quantity: {{ wrGroup.totalBushelQuantity | number}}</ion-text>
-					<ion-text>Product: {{ wrGroup.product }}</ion-text>
+					<ion-text>Created: <b>{{ wrGroup.creationDate | date }}</b></ion-text>
+					<ion-text>ID Range: <b>{{ idRange }}</b></ion-text>
+					<ion-text>Quantity: <b>{{ wrGroup.totalBushelQuantity | number}} BU</b></ion-text>
+					<ion-text>Product: <b>{{ wrGroup.product }}</b></ion-text>
 				</div>
 
 				<div class="group-status">
@@ -24,7 +24,7 @@
 		<div class="contract-section">
 			<div class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
 				<div class="contract-header">
-					<ion-text class="label">Purchase Contract</ion-text>
+					<ion-card-title>Purchase Contract</ion-card-title>
 
 					<ion-text class="status-text" [ngClass]="wrGroup.purchaseContract?.status.toLocaleLowerCase()">
 						{{ wrGroup.purchaseContract?.status ?? "NONE" }}
@@ -37,17 +37,21 @@
 
 				<ng-template [ngIf]="wrGroup.purchaseContract">
 					<div class="contract-info">
-						<ion-text>ID: {{ wrGroup.purchaseContract.id }}</ion-text>
-						<ion-text>Date: {{ wrGroup.purchaseContract.startDate | date }}</ion-text>
-						<ion-text>Future Price: {{ wrGroup.purchaseContract.futurePrice | currency }}</ion-text>
-						<ion-text>Base Price: {{ wrGroup.purchaseContract.basePrice | currency }}</ion-text>
+						<ion-text>ID: &nbsp; {{ wrGroup.purchaseContract.id }}</ion-text>
+						<ion-text style="float: right;">{{ wrGroup.purchaseContract.startDate | date }}</ion-text>
+						<div class="prices">
+							<ion-card-title class="border-right">Future Price</ion-card-title>
+							<ion-card-title>Base Price</ion-card-title>
+							<ion-text class="border-right">{{ wrGroup.purchaseContract.futurePrice | currency }}</ion-text>
+							<ion-text>{{ wrGroup.purchaseContract.basePrice | currency }}</ion-text>
+						</div>
 					</div>
 				</ng-template>
 			</div>
 
 			<div class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
 				<div class="contract-header">
-					<ion-text class="label">Sale Contract</ion-text>
+					<ion-card-title>Sale Contract</ion-card-title>
 
 					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
 						{{ wrGroup.saleContract?.status ?? "NONE" }}
@@ -64,10 +68,14 @@
 
 				<ng-template [ngIf]="wrGroup.saleContract">
 					<div class="contract-info">
-						<ion-text>ID: {{ wrGroup.saleContract.id }}</ion-text>
-						<ion-text>Date: {{ wrGroup.saleContract.startDate | date }}</ion-text>
-						<ion-text>Future Price: {{ wrGroup.saleContract.futurePrice | currency }}</ion-text>
-						<ion-text>Base Price: {{ wrGroup.saleContract.basePrice | currency }}</ion-text>
+						<ion-text>ID: &nbsp; {{ wrGroup.saleContract.id }}</ion-text>
+						<ion-text style="float: right;">{{ wrGroup.saleContract.startDate | date }}</ion-text>
+						<div class="prices">
+							<ion-card-title class="border-right">Future Price </ion-card-title>
+							<ion-card-title>Base Price </ion-card-title>
+							<ion-text class="border-right">{{ wrGroup.saleContract.futurePrice | currency }}</ion-text>
+							<ion-text>{{ wrGroup.saleContract.basePrice | currency }}</ion-text>
+						</div>
 					</div>
 				</ng-template>
 			</div>
