@@ -8,19 +8,21 @@ import { ContractPrintableComponent } from './printable/contract-printable/contr
 import { ScaleToFitDirective } from './scale-to-fit.directive';
 import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
 import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-ticket-storage.component';
+import { CoreModule } from '@core/core.module';
 
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule
+    IonicModule,
+    CoreModule
   ],
   exports: [
     ToolbarComponent,
     ContractPrintableComponent,
     ScaleToFitDirective,
-    PrintableTicketComponent
+    PrintableTicketComponent,
   ],
   declarations: [
     ToolbarComponent,

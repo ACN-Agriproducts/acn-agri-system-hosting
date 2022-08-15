@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Firestore, where } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
+import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage/fix-ticket-storage.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -22,7 +24,8 @@ export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
   constructor(
     private db: Firestore,
     private localStorage: Storage,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -86,10 +89,15 @@ export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
+  async fixTicketModal(ticket: Ticket) {
+    this.dialog.open(FixTicketStorageComponent, {
+      width: '50%',
+      data: ticket
+    });
+  }
+
   ngOnDestroy(): void {
     this.voidTicketSubscription.unsubscribe();
     this.needsAttentionTicketSubscription.unsubscribe();
   }
-
-
 }

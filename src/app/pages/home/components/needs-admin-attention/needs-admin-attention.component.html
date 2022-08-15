@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     <span *ngIf="voidTicketsList.length > 0">Tickets void requests</span>
-    <div *ngFor="let ticket of voidTicketsList; let even = even" class='table-row' [class.even-row]="even">
+    <div *ngFor="let ticket of voidTicketsList; let even = even" class='table-row' [class.even-row]="even" hidden>
       <div class="id" lines='none'><b><ion-text>{{ticket.id}}</ion-text></b></div>
       <div class="date" lines='none'><ion-text>{{ticket.dateOut | date:'shortDate'}}</ion-text></div>
       <div class="net" lines='none'><ion-text>{{ticket.getNet() | number}}</ion-text></div>
@@ -17,9 +17,9 @@
       <div class="id" lines='none'><b><ion-text>{{ticket.id}}</ion-text></b></div>
       <div class="date" lines='none'><ion-text>{{ticket.dateOut | date:'shortDate'}}</ion-text></div>
       <div class="net" lines='none'><ion-text>{{ticket.getNet() | number}}</ion-text></div>
-      <div class="reason" lines='none' [matTooltip]="ticket.voidReason"><ion-text>{{ticket.voidReason}}</ion-text></div>
-      <button mat-icon-button (click)="voidTicket(ticket)" matTooltip="Void" color="warn">
-        <mat-icon>close</mat-icon>
+      <div class="reason" lines='none'><ion-text>{{ticket.tank}}</ion-text></div>
+      <button mat-icon-button matTooltip="Void" color="accent" (click)="fixTicketModal(ticket)">
+        <mat-icon>edit</mat-icon>
       </button>
     </div>
   </mat-card-content>
