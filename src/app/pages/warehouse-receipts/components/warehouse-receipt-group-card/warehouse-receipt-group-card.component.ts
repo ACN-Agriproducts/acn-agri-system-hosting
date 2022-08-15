@@ -48,7 +48,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
-    const contractUpdateDoc: ContractData = { startDate: new Date() };
+    const contractUpdateDoc: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
 
     if (contract) {
       contractUpdateDoc.basePrice = contract.basePrice;
@@ -56,7 +56,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractUpdateDoc.id = contract.id;
       contractUpdateDoc.startDate = contract.startDate;
       contractUpdateDoc.pdfReference = contract.pdfReference;
-      contractUpdateDoc.status = isPurchase ? "CLOSED" : "PENDING";
     }
     
     const modal = await this.modalController.create({

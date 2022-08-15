@@ -19,7 +19,6 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         super(snapshot, WarehouseReceiptGroup.converter);
 
         const data = snapshot.data();
-        console.log(data);
 
         this.closeDate = data.closeDate?.toDate();
         this.creationDate = data.creationDate?.toDate();
