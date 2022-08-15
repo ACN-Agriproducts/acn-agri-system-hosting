@@ -55,7 +55,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractUpdateDoc.futurePrice = contract.futurePrice;
       contractUpdateDoc.id = contract.id;
       contractUpdateDoc.startDate = contract.startDate;
-      contractUpdateDoc.pdfReference = contract.pdfReference;
+      contractUpdateDoc.pdfReference = contract.pdfReference ?? null;
     }
     
     const modal = await this.modalController.create({
