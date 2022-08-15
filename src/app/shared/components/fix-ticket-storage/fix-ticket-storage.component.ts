@@ -73,6 +73,8 @@ export class FixTicketStorageComponent implements OnInit {
           lastStorageUpdate: logRef
         });
       });
+    }).then(() => {
+      this.dialogRef.close();
     });
   }
 }
