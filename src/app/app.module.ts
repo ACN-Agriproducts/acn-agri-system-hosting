@@ -1,6 +1,6 @@
 import { CoreModule } from './core/core.module';
 import { SharedModule } from '@shared/shared.module';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
@@ -21,6 +21,7 @@ import { connectFirestoreEmulator, enableIndexedDbPersistence, provideFirestore,
 import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 
 @NgModule({
@@ -72,7 +73,14 @@ import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angul
     providers: [
         StatusBar,
         SplashScreen,
+        SessionInfo,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        {
+            provide: APP_INITIALIZER,
+            useFactory: (session: SessionInfo) => { return () => session.load() },
+            multi: true,
+            deps: [SessionInfo]
+        }
     ],
     bootstrap: [AppComponent]
 })

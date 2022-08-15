@@ -2,11 +2,12 @@ import { LoginService } from './utils/services/login.service';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Storage } from '@ionic/storage';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
-import { Subscription } from 'rxjs';
 import { User } from '@shared/classes/user';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Company } from '@shared/classes/company';
+import { Plant } from '@shared/classes/plant';
 
 
 @Component({
@@ -20,7 +21,6 @@ export class LoginPage implements OnInit, OnDestroy {
   public destroy: boolean;
   public formulario: UntypedFormGroup;
 
-  private currentSubs: Subscription[] = [];
   constructor(
     private cd: ChangeDetectorRef,
     private navController: NavController,
@@ -28,9 +28,9 @@ export class LoginPage implements OnInit, OnDestroy {
     private service: LoginService,
     private formBuilder: UntypedFormBuilder,
     public alertController: AlertController,
-    private storage: Storage,
     private db: Firestore,
-    private auth: Auth
+    private auth: Auth,
+    private session: SessionInfo
   ) {
     this.buildForm();
   }
@@ -43,10 +43,6 @@ export class LoginPage implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.cd.markForCheck();
-
-    for(const sub of this.currentSubs) {
-      sub.unsubscribe();
-    }
   }
   ionViewDidLeave() {
   }
@@ -57,7 +53,13 @@ export class LoginPage implements OnInit, OnDestroy {
         try{
           const val = await User.getUser(this.db, user.uid);
           const compDoc = await val.getPermissions(val.worksAt[0]);
-          this.storage.set('user', {
+
+          Company.getCompany(this.db, val.worksAt[0]).then(async company => {
+            const plants = await Plant.getPlantList(this.db, company.ref.id);
+            this.session.set('currentPlant', plants[0].ref.id);
+          });
+
+          this.session.set('user', {
             email: user.email,
             uid: user.uid, 
             refreshToken: user.refreshToken, 
@@ -66,8 +68,8 @@ export class LoginPage implements OnInit, OnDestroy {
             currentPermissions: compDoc
           });
           
-          this.storage.set('currentCompany', val['worksAt'][0])
-          console.log("Final")
+          this.session.set('currentCompany', val['worksAt'][0])
+
           this.navController.navigateForward('/dashboard/home');
           this.loadingController.dismiss();
           
@@ -79,6 +81,11 @@ export class LoginPage implements OnInit, OnDestroy {
           }
         }
       }
+      else {
+        this.session.clear();
+      }
+
+      console
     })
   }
   public submit = (event: any): void => {

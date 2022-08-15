@@ -90,6 +90,7 @@
 			<ion-text>Bushel Qty</ion-text>
 			<ion-text>Plant</ion-text>
 			<ion-text>Paid</ion-text>
+			<ion-text>Paid</ion-text>
 		</div>
 		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
@@ -97,6 +98,7 @@
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
+			<ion-text>{{ warehouseReceipt.isPaid }}</ion-text>
 			<ion-text>{{ warehouseReceipt.isPaid }}</ion-text>
 		</div>
 	</div>

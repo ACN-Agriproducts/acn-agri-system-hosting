@@ -3,6 +3,7 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { Plant } from '@shared/classes/plant';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -15,25 +16,16 @@ export interface Item {
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  items: Observable<Item[]>;
-  items2: Observable<any>;
+  public permissions: any;
+  public currentCompany: string;
+
   constructor(
-    private db: Firestore,
-    private localStorage: Storage
+    private session: SessionInfo
   ) {
   }
 
   ngOnInit() {
-    this.localStorage.get("currentPlant").then(currentPlant => {
-      if(currentPlant == null) {
-        this.setCurrentPlant();
-      }
-    });
+    this.permissions = this.session.getPermissions();
+    this.currentCompany = this.session.getCompany();
   }
-
-  async setCurrentPlant() {
-    const plantList = await Plant.getPlantList(this.db, await this.localStorage.get("currentCompany"));
-    await this.localStorage.set("currentPlant", plantList[0].ref.id);
-  }
-
 }
