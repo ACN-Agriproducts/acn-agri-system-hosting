@@ -13,7 +13,6 @@ export class SetContractModalComponent implements OnInit {
   constructor(private modalController: ModalController) { }
 
   ngOnInit() {
-    console.log(this.contract);
   }
 
   public cancel() {

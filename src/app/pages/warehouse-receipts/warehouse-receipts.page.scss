@@ -52,6 +52,7 @@ ion-text {
     display: flex;
 
     height: 190px;
+    padding-bottom: 13px;
 }
 
 .info-section {
@@ -93,7 +94,6 @@ ion-text {
     margin: 2rem;
     border-radius: 10px;
     position: relative;
-    cursor: pointer;
 
     &:before {
         content: "";
@@ -123,8 +123,8 @@ ion-text {
     color: var(--ion-color-success);
 }
 .closed {
-    background-color: rgba(var(--ion-color-warning-rgb), 0.15);
-    color: var(--ion-color-warning);
+    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+    color: var(--ion-color-danger);
 }
 .cancelled { 
     background-color: rgba(var(--ion-color-danger-rgb), 0.15);
