@@ -73,8 +73,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public openDialog(contractUpdateDoc: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractUpdateDoc,
-      height: '500px',
-      width: '500px'
+      height: '300px',
+      width: '550px'
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {
