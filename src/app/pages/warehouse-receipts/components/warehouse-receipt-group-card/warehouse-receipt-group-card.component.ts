@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { MatDialog } from '@angular/material/dialog';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 
 @Component({
@@ -18,7 +19,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public purchaseContract: WarehouseReceiptContract;
   public saleContract: WarehouseReceiptContract;
 
-  constructor(private modalController: ModalController) { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
@@ -48,37 +49,37 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
-    const contractUpdateDoc: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
+    const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
 
     if (contract) {
-      contractUpdateDoc.basePrice = contract.basePrice;
-      contractUpdateDoc.futurePrice = contract.futurePrice;
-      contractUpdateDoc.id = contract.id;
-      contractUpdateDoc.startDate = contract.startDate;
-      contractUpdateDoc.pdfReference = contract.pdfReference ?? null;
+      contractData.basePrice = contract.basePrice;
+      contractData.futurePrice = contract.futurePrice;
+      contractData.id = contract.id;
+      contractData.startDate = contract.startDate;
+      contractData.pdfReference = contract.pdfReference ?? null;
     }
-    
-    const modal = await this.modalController.create({
-      component: SetContractModalComponent,
-      componentProps: {
-        contract: contractUpdateDoc
-      },
-      backdropDismiss: false,
-      cssClass: 'set-wr-contract-modal',
+
+    const updateData = await this.openDialog(contractData);
+
+    this.wrGroup.update({
+      [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
+      status: "ACTIVE"
+    })
+    .catch(error => {
+      console.log(`Error: `, error);
     });
-    modal.present();
+  }
 
-    const { data, role } = await modal.onDidDismiss();
+  public openDialog(contractUpdateDoc: ContractData): any {
+    const dailogRef = this.dialog.open(SetContractModalComponent, {
+      data: contractUpdateDoc,
+      height: '500px',
+      width: '500px'
+    });
 
-    if (role === 'confirm') {
-      this.wrGroup.update({
-        [isPurchase ? 'purchaseContract' : 'saleContract']: data,
-        status: "ACTIVE"
-      })
-      .catch(error => {
-        console.log(`Error: `, error);
-      });
-    }
+    return lastValueFrom(dailogRef.afterClosed()).then(result => {
+      return result;
+    });
   }
 
   public hasPaid(): number {
