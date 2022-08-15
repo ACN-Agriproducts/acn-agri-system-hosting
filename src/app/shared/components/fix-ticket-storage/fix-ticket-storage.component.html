@@ -38,6 +38,12 @@
   </div>
   <div mat-dialog-actions>
     <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
-    <button mat-flat-button (click)="submitChange()" color="primary">Submit</button>
+    <button 
+      mat-flat-button 
+      (click)="submitChange()" 
+      color="primary"
+      [disabled]="chosenInv?.product.id != data.productName"
+      >Submit</button>
+      <mat-spinner diameter="16" *ngIf="submitting"></mat-spinner>
   </div>
 </div>

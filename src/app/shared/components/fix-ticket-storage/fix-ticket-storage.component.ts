@@ -13,6 +13,7 @@ import { Ticket } from '@shared/classes/ticket';
 export class FixTicketStorageComponent implements OnInit {
   public plant: Plant;
   public chosenInv: Inventory;
+  public submitting: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<FixTicketStorageComponent>,
@@ -37,7 +38,7 @@ export class FixTicketStorageComponent implements OnInit {
       updatedBy: this.session.getUser().uid,
       updatedOn: serverTimestamp(),
       change: [],
-      updatedType: 'Ticket storage fix',
+      updateType: 'Ticket storage fix',
     }
 
     plant.inventory.forEach((inv, index) => {
@@ -63,10 +64,16 @@ export class FixTicketStorageComponent implements OnInit {
   }
 
   submitChange() {
+    this.submitting = true;
     runTransaction(this.db, transaction => {
       return transaction.get(this.plant.ref.withConverter(Plant.converter)).then(async plant => {
         const {inventory, log} = this.getUpdateDoc(plant.data());
         const logRef = doc(collection(plant.ref, 'storageLogs'));
+        transaction.update(this.data.ref.withConverter(Ticket.converter), {
+          needsAttention: false,
+          tank: this.chosenInv.name,
+          tankId: this.plant.inventory.findIndex(tank => tank.name == this.chosenInv.name)
+        });
         transaction.set(logRef, log);
         transaction.update(plant.ref, {
           inventory,
@@ -74,7 +81,10 @@ export class FixTicketStorageComponent implements OnInit {
         });
       });
     }).then(() => {
+      console.log("Submited!");
       this.dialogRef.close();
+    }).catch(() => {
+      this.submitting = false;
     });
   }
 }
