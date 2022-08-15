@@ -12,7 +12,7 @@
     </div>
 
     <hr>
-    <span *ngIf="needsAttentionTicketList.length > 0">Tickets need attentiton</span>
+    <span *ngIf="needsAttentionTicketList.length > 0">Tickets need attention</span>
     <div *ngFor="let ticket of needsAttentionTicketList; let even = even" class='table-row' [class.even-row]="even">
       <div class="id" lines='none'><b><ion-text>{{ticket.id}}</ion-text></b></div>
       <div class="date" lines='none'><ion-text>{{ticket.dateOut | date:'shortDate'}}</ion-text></div>
