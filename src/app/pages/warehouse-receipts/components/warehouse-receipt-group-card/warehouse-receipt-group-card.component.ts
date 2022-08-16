@@ -58,7 +58,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const HOUR_TO_MS = 1000 * 60 * 60;
 
     const now = new Date().getTime();
-    const then = contract?.createdAt.getTime();
+    const then = contract?.closedAt?.getTime();
 
     const diff = (now - then) / HOUR_TO_MS;
 
@@ -76,11 +76,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    const updateData = await this.openDialog(contractData);
+    const updateData = await this.updateContractDialog(contractData, isPurchase);
     if (updateData === undefined) return;
 
     this.wrGroup.update({
-      [isPurchase ? 'purchaseContract' : 'saleContract']: {...updateData, createdAt: serverTimestamp() },
+      [isPurchase ? 'purchaseContract' : 'saleContract']: isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData,
       status: "ACTIVE"
     })
     .catch(error => {
@@ -88,14 +88,15 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public openDialog(contractUpdateDoc: ContractData): any {
+  public updateContractDialog(contractData: ContractData, isPurchase: boolean): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
-      data: contractUpdateDoc,
+      data: contractData,
       height: '300px',
       width: '550px'
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {
+      // return isPurchase ? { ...result, closedAt: serverTimestamp() } : result ;
       return result;
     });
   }

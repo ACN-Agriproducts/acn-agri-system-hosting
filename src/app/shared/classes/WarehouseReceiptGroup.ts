@@ -91,7 +91,7 @@ export class WarehouseReceipt {
 
 export class WarehouseReceiptContract {
     public basePrice: number;
-    public createdAt: Date;
+    public closedAt: Date;
     public futurePrice: number;
     public id: string;
     public pdfReference: string | null;
@@ -100,7 +100,7 @@ export class WarehouseReceiptContract {
 
     constructor(data: any) {
         this.basePrice = data.basePrice;
-        this.createdAt = data.createdAt?.toDate();
+        this.closedAt = data.closedAt?.toDate();
         this.futurePrice = data.futurePrice;
         this.id = data.id;
         this.pdfReference = data.pdfReference;
