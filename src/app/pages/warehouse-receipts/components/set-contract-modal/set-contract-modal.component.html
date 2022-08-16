@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Set Warehouse Receipt Contract</h2>
+
+<mat-dialog-content>
+	<form #contractForm="ngForm" class="form">
+		<mat-form-field appearance="fill">
+			<mat-label>Date</mat-label>
+			<input matInput [matDatepicker]="picker" readonly required 
+			[(ngModel)]="data.startDate" name="startDate">
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+
+		<mat-form-field appearance="fill">
+			<mat-label>ID</mat-label>
+			<input matInput required [(ngModel)]="data.id" name="id">
+			<mat-error>ID is <strong>required</strong></mat-error>
+		</mat-form-field>
+
+		<mat-form-field appearance="fill">
+			<mat-label>Future Price</mat-label>
+			<span matPrefix>$ &nbsp;</span>
+			<input matInput type="number" required [(ngModel)]="data.futurePrice" name="futurePrice">
+			<mat-error>Future Price is <strong>required</strong></mat-error>
+		</mat-form-field>
+
+		<mat-form-field appearance="fill">
+			<mat-label>Base Price</mat-label>
+			<span matPrefix>$ &nbsp;</span>
+			<input matInput type="number" required [(ngModel)]="data.basePrice" name="basePrice">
+			<mat-error>Base Price is <strong>required</strong></mat-error>
+		</mat-form-field>
+	</form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="action-bar">
+	<button mat-button color="primary" (click)="cancel()">Cancel</button>
+	<button mat-button color="primary" [mat-dialog-close]="data" [disabled]="contractForm.invalid">Confirm</button>
+</mat-dialog-actions>

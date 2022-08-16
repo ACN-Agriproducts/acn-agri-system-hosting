@@ -171,3 +171,11 @@ ion-content {
 .snackbar {
   justify-content: center !important;
 }
+.set-wr-contract-modal {
+  align-items: center;
+  justify-content: center;
+  &::part(content){
+    width: 26%;
+    height: 40%; 
+  }
+}

@@ -3,14 +3,14 @@
 		<div class="info-section">
 			<div class="group-info">
 				<div class="info">
-					<ion-text>Date: {{ wrGroup.creationDate | date }}</ion-text>
-					<ion-text>ID Range: {{ idRange }}</ion-text>
-					<ion-text>Quantity: {{ wrGroup.totalBushelQuantity | number}}</ion-text>
-					<ion-text>Product: {{ wrGroup.product }}</ion-text>
+					<ion-text>Created: <b>{{ wrGroup.creationDate | date }}</b></ion-text>
+					<ion-text>ID Range: <b>{{ idRange }}</b></ion-text>
+					<ion-text>Quantity: <b>{{ wrGroup.totalBushelQuantity | number}} BU</b></ion-text>
+					<ion-text>Product: <b>{{ wrGroup.product }}</b></ion-text>
 				</div>
 
 				<div class="group-status">
-					<ion-text class="status-text">{{ wrGroup.status }}</ion-text>
+					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ wrGroup.status }}</ion-text>
 				</div>
 			</div>
 
@@ -22,30 +22,62 @@
 		</div>
 
 		<div class="contract-section">
-			<div class="contract contract-signed">
-				<span><ion-text class="label">Purchase Contract</ion-text></span>
+			<div class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
+				<div class="contract-header">
+					<ion-card-title>Purchase Contract</ion-card-title>
 
-				<span><ion-text class="status-text">Status</ion-text></span>
+					<ion-text class="status-text" [ngClass]="wrGroup.purchaseContract?.status.toLocaleLowerCase()">
+						{{ wrGroup.purchaseContract?.status ?? "NONE" }}
+					</ion-text>
 
-				<div class="contract-info">
-					<ion-text>ID: </ion-text>
-					<ion-text>Date: </ion-text>
-					<ion-text>Future Price: </ion-text>
-					<ion-text>Base Price: </ion-text>
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.purchaseContract, true)">
+						<mat-icon>edit</mat-icon>
+					</button>
 				</div>
+
+				<ng-template [ngIf]="wrGroup.purchaseContract">
+					<div class="contract-info">
+						<ion-text>ID: &nbsp; {{ wrGroup.purchaseContract.id }}</ion-text>
+						<ion-text class="align-right">{{ wrGroup.purchaseContract.startDate | date }}</ion-text>
+						<div class="prices">
+							<ion-card-title class="border-right">Future Price</ion-card-title>
+							<ion-card-title>Base Price</ion-card-title>
+							<ion-text class="border-right">{{ wrGroup.purchaseContract.futurePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
+							<ion-text>{{ wrGroup.purchaseContract.basePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
+						</div>
+					</div>
+				</ng-template>
 			</div>
 
-			<div class="contract contract-signed">
-				<span><ion-text class="label">Sale Contract</ion-text></span>
+			<div class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
+				<div class="contract-header">
+					<ion-card-title>Sale Contract</ion-card-title>
 
-				<span><ion-text class="status-text">Status</ion-text></span>
+					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
+						{{ wrGroup.saleContract?.status ?? "NONE" }}
+						<span *ngIf="hasPaid()">
+							{{ hasPaid() }}/6
+						</span>
+					</ion-text>
 
-				<div class="contract-info">
-					<ion-text>ID: </ion-text>
-					<ion-text>Date: </ion-text>
-					<ion-text>Future Price: </ion-text>
-					<ion-text>Base Price: </ion-text>
+					<button mat-icon-button matTooltip="Set Contract" (click)="setContract(wrGroup.saleContract, false)">
+						<mat-icon>edit</mat-icon>
+					</button>
+
 				</div>
+
+				<ng-template [ngIf]="wrGroup.saleContract">
+					<div class="contract-info">
+						<ion-text>ID: &nbsp; {{ wrGroup.saleContract.id }}</ion-text>
+						<ion-text class="align-right">{{ wrGroup.saleContract.startDate | date }}</ion-text>
+						<div class="prices">
+							<ion-card-title class="border-right">Future Price </ion-card-title>
+							<ion-card-title>Base Price </ion-card-title>
+							<ion-text class="border-right">{{ wrGroup.saleContract.futurePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
+							<ion-text>{{ wrGroup.saleContract.basePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
+						</div>
+					</div>
+				</ng-template>
 			</div>
 		</div>
 	</div>
@@ -57,6 +89,7 @@
 			<ion-text>Product</ion-text>
 			<ion-text>Bushel Qty</ion-text>
 			<ion-text>Plant</ion-text>
+			<ion-text>Paid</ion-text>
 		</div>
 		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
@@ -64,12 +97,13 @@
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
+			<ion-text>{{ warehouseReceipt.isPaid }}</ion-text>
 		</div>
 	</div>
 
 	<div class="expansion-bar">
 		<hr>
-		<ion-icon (click)="openExpandable($event)" name="arrow-down-outline"></ion-icon>
+		<ion-icon matTooltip="Toggle Warehouse Receipt List" (click)="toggleExpandable($event)" name="arrow-down-outline"></ion-icon>
 		<hr>
 	</div>
 </ion-card>

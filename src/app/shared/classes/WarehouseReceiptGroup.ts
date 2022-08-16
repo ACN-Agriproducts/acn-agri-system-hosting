@@ -23,8 +23,8 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         this.closeDate = data.closeDate?.toDate();
         this.creationDate = data.creationDate?.toDate();
         this.expireDate = data.expireDate?.toDate();
-        this.purchaseContract = data.purchaseContract;
-        this.saleContract = data.saleContract;
+        this.purchaseContract = data.purchaseContract ? new WarehouseReceiptContract(data.purchaseContract) : null;
+        this.saleContract = data.saleContract ? new WarehouseReceiptContract(data.saleContract) : null;
         this.status = data.status;
         this.totalBushelQuantity = data.totalBushelQuantity;
         this.warehouseReceiptIdList = data.warehouseReceiptIdList;
@@ -65,20 +65,6 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         .withConverter(WarehouseReceiptGroup.converter);
     }
 
-    /* public static getWarehouseReceiptGroupList = async (
-        db: Firestore, 
-        company: string, 
-        ...constraints: QueryConstraint[]
-    ): Promise<WarehouseReceiptGroup[]> => {
-
-        constraints.push(orderBy('creationDate', 'desc'));
-        const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), ...constraints);
-
-        return getDocs(wrCollectionQuery).then(result => {
-            return result.docs.map(doc => doc.data());
-        });
-    } */
-
     public static getWrGroupListValueChanges = (db: Firestore, company: string): Observable<WarehouseReceiptGroup[]> => {
         const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), orderBy('creationDate', 'desc'));
         return collectionData(wrCollectionQuery);
@@ -91,6 +77,7 @@ export class WarehouseReceipt {
     public id: number;
     public plant: string;
     public product: string;
+    public isPaid: boolean;
 
     constructor(data: any) {
         this.bushelQuantity = data.bushelQuantity;
@@ -98,30 +85,31 @@ export class WarehouseReceipt {
         this.id = data.id;
         this.plant = data.plant;
         this.product = data.product;
+        this.isPaid = data.isPaid;
     }
 }
 
-class WarehouseReceiptContract {
-    public base: number;
+export class WarehouseReceiptContract {
+    public basePrice: number;
     public futurePrice: number;
     public id: string;
-    public pdfReference: string;
+    public pdfReference: string | null;
     public startDate: Date;
     public status: Status;
 
     constructor(data: any) {
-        this.base = data.base;
+        this.basePrice = data.basePrice;
         this.futurePrice = data.futurePrice;
         this.id = data.id;
         this.pdfReference = data.pdfReference;
-        this.startDate = data.startDate;
+        this.startDate = data.startDate?.toDate();
         this.status = data.status;
     }
 }
 
 enum Status {
-    pending = 'pending',
-    active = 'active',
-    closed = 'closed',
-    cancelled = 'cancelled'
+    pending = 'PENDING',
+    active = 'ACTIVE',
+    closed = 'CLOSED',
+    cancelled = 'CANCELLED'
 }

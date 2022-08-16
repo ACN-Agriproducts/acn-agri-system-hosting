@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { WarehouseReceipt, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { MatDialog } from '@angular/material/dialog';
+import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { lastValueFrom } from 'rxjs';
+import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -9,11 +12,14 @@ import { WarehouseReceipt, WarehouseReceiptGroup } from '@shared/classes/Warehou
 export class WarehouseReceiptGroupCardComponent implements OnInit {
   @Input() wrGroup: WarehouseReceiptGroup;
 
-  public wrList: WarehouseReceipt[];
-  public wrIdList: number[];
   public idRange: string;
+  public wrIdList: number[];
+  public wrList: WarehouseReceipt[];
 
-  constructor() { }
+  public purchaseContract: WarehouseReceiptContract;
+  public saleContract: WarehouseReceiptContract;
+
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
@@ -22,8 +28,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.idRange = this.getIdRange();
   }
 
-
-  public getIdRange = (): string => {
+  public getIdRange(): string {
     let result: string[] = [];
     let idGroup = "";
     this.wrIdList.forEach((id, index) => {
@@ -43,15 +48,64 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public openExpandable = (event: Event): void => {
-    const card = (event.target as HTMLElement).parentElement.parentElement;
+  public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
+    const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
+
+    if (contract) {
+      contractData.basePrice = contract.basePrice;
+      contractData.futurePrice = contract.futurePrice;
+      contractData.id = contract.id;
+      contractData.startDate = contract.startDate;
+      contractData.pdfReference = contract.pdfReference ?? null;
+    }
+
+    const updateData = await this.openDialog(contractData);
+
+    this.wrGroup.update({
+      [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
+      status: "ACTIVE"
+    })
+    .catch(error => {
+      console.log(`Error: `, error);
+    });
+  }
+
+  public openDialog(contractUpdateDoc: ContractData): any {
+    const dailogRef = this.dialog.open(SetContractModalComponent, {
+      data: contractUpdateDoc,
+      height: '300px',
+      width: '550px'
+    });
+
+    return lastValueFrom(dailogRef.afterClosed()).then(result => {
+      return result;
+    });
+  }
+
+  public hasPaid(): number {
+    return this.wrList.filter(wr => wr.isPaid).length;
+  }
+
+  public toggleExpandable(event: Event): void {
+    const icon = event.target as HTMLElement;
+    const card = icon.parentElement.parentElement;
     const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
 
     if (expandable.style.maxHeight){
+      icon.setAttribute('name', "arrow-down-outline");
       expandable.style.maxHeight = null;
     } else {
+      icon.setAttribute('name', "arrow-up-outline");
       expandable.style.maxHeight = expandable.scrollHeight + "px";
     }
   }
+}
 
+interface ContractData {
+  basePrice?: number;
+  futurePrice?: number;
+  id?: string;
+  pdfReference?: string;
+  startDate: Date;
+  status?: string;
 }

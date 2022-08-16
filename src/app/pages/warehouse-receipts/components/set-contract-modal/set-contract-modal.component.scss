@@ -1,0 +1,25 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+.action-bar {
+	display: flex;
+	justify-content: space-between;
+	grid-column-end: span 2;
+
+	margin-inline: 0.5rem;
+}
+
+.form {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 2rem;
+}
