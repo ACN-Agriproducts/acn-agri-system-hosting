@@ -23,13 +23,15 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
+    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    
+    this.idRange = this.getIdRange();
 
     this.purchaseContract = this.wrGroup.purchaseContract ?? null;
     this.saleContract = this.wrGroup.saleContract ?? null;
 
-    this.idRange = this.getIdRange();
+
   }
 
   public getIdRange(): string {
@@ -67,7 +69,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return hoursSinceCreated < 24 ? true : false;
   }
 
-  public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
+  public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
     const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
 
     if (contract) {
@@ -78,11 +80,13 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    const updateData = await this.modifyContractDialog(contractData, isPurchase);
+    let updateData = await this.modifyContractDialog(contractData);
     if (updateData === undefined) return;
+    
+    updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
 
     this.wrGroup.update({
-      [isPurchase ? 'purchaseContract' : 'saleContract']: isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData,
+      [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
       status: "ACTIVE"
     })
     .catch(error => {
@@ -90,7 +94,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public modifyContractDialog(contractData: ContractData, isPurchase: boolean): any {
+  public modifyContractDialog(contractData: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractData,
       height: '300px',
@@ -98,7 +102,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {
-      // return isPurchase ? { ...result, closedAt: serverTimestamp() } : result;
       return result;
     });
   }
