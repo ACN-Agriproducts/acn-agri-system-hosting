@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, getDocs, docData, collectionData } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, SnapshotOptions, getDocs, docData, collectionData, getDoc } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -71,6 +71,12 @@ export class Plant extends FirebaseDocInterface {
 
     public static getDocReference(db: Firestore, company: string, plant: string): DocumentReference<Plant> {
         return doc(db, `companies/${company}/plants/${plant}`).withConverter(Plant.converter) as DocumentReference<Plant>;
+    }
+
+    public static getPlant(db: Firestore, company: string, plant: string): Promise<Plant> {
+        return getDoc(this.getDocReference(db, company, plant)).then(snap => {
+            return snap.data();
+        })
     }
 
     public static getPlantList(db: Firestore, company: string): Promise<Plant[]> {

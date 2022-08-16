@@ -1,0 +1,49 @@
+<div mat-dialog-content>
+  <div class="fix-ticket-content">
+    <ion-card>
+      <ion-card-content>
+        <h2 mat-card-title>
+          {{ data.in ? 'In': 'Out'}} Ticket {{ data.id }}
+        </h2>
+        <div><span class="ticket-label">Product: </span><b>{{data.productName}}</b></div>
+        <div><span class="ticket-label">Tank: </span><b>{{data.tank}}</b></div>
+        <div><span class="ticket-label">Gross: </span><b>{{data.gross | number}}</b></div>
+        <div><span class="ticket-label">Tare: </span><b>{{data.tare | number}}</b></div>
+        <div><span class="ticket-label">Net: </span><b>{{data.getNet() | number}}</b></div>
+        <div><span class="ticket-label">Dry Weight: </span><b>{{data.dryWeight | number}}</b></div>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-content>
+        <h2 mat-card-title>
+          Storage
+          <mat-spinner diameter="16" *ngIf="!plant"></mat-spinner>
+        </h2>
+        <mat-form-field *ngIf="plant">
+          <mat-label>Tank</mat-label>
+          <mat-select [(ngModel)]="chosenInv">
+            <mat-option *ngFor="let tank of plant.inventory" [value]="tank">{{tank.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <p>Product: <b>{{chosenInv?.product.id}}</b> <mat-error *ngIf="chosenInv?.product.id != data.productName">*Product doesn't match</mat-error></p>
+        <p id="tank-inv-display">
+          Inv: <b>{{chosenInv?.current/2204.62 | number}}/{{chosenInv?.max/2204.62 | number}} MT </b>
+          <mat-icon>arrow_right_alt</mat-icon> 
+          <b>{{(chosenInv?.current + data.dryWeight * (data.in? 1: -1))/2204.62 | number}} MT </b>
+        </p>
+        <mat-progress-bar mode="determinate" [value]="chosenInv?.current/chosenInv?.max * 100"></mat-progress-bar>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
+  <button 
+    mat-flat-button 
+    (click)="submitChange()" 
+    color="primary"
+    [disabled]="chosenInv?.product.id != data.productName"
+    >Submit</button>
+    <mat-spinner diameter="16" *ngIf="submitting"></mat-spinner>
+</div>

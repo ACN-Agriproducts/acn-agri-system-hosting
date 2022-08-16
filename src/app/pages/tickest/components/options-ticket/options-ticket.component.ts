@@ -5,9 +5,9 @@ import { PopoverController, ModalController, NavController, AlertController } fr
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-import { Firestore } from '@angular/fire/firestore';
-import { Storage as IonStorage } from '@ionic/storage';
 import { Ticket } from '@shared/classes/ticket';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage/fix-ticket-storage.component';
 
 @Component({
   selector: 'app-options-ticket',
@@ -28,8 +28,8 @@ export class OptionsTicketComponent implements OnInit {
     private modalController: ModalController,
     private storage: Storage,
     private navController: NavController,
-    private localStorage: IonStorage,
     private alertController: AlertController,
+    private session: SessionInfo,
   ) { }
 
   ngOnInit() {
@@ -37,10 +37,8 @@ export class OptionsTicketComponent implements OnInit {
       this.downloadString = val;
     });
 
-    this.localStorage.get('user').then(data => {
-      this.userPermissions = data.currentPermissions;
-      this.userName = data.name;
-    });
+    this.userPermissions = this.session.getPermissions();
+    this.userName = this.session.getUser().name;
   }
   public openDialog = async () => {
     this.closePanel();
@@ -121,5 +119,14 @@ export class OptionsTicketComponent implements OnInit {
     })
 
     await alert.present();
+  }
+
+  public fixStorageModal(): void {
+    this.dialog.open(FixTicketStorageComponent, {
+      width: '50%',
+      data: this.ticket
+    });
+    
+    this.popoverController.dismiss();
   }
 }
