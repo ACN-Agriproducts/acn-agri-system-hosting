@@ -79,15 +79,15 @@ export class DPRDay {
     }
 
     public getInvoices(): Promise<Invoice[]> {
-        return Promise.all(this.invoices.map(ref => getDoc(ref).then(doc => doc.data())));
+        return Promise.all(this.invoices.map(ref => getDoc(ref).then(doc => doc.data() as Invoice)));
     }
 
     public getInTickets(): Promise<Ticket[]> {
-        return Promise.all(this.inTickets.map(ref => getDoc(ref).then(doc => doc.data())));
+        return Promise.all(this.inTickets.map(ref => getDoc(ref).then(doc => doc.data() as Ticket)));
     }
 
     public getOutTickets(): Promise<Ticket[]> {
-        return Promise.all(this.outTickets.map(ref => getDoc(ref).then(doc => doc.data())));
+        return Promise.all(this.outTickets.map(ref => getDoc(ref).then(doc => doc.data() as Ticket)));
     }
 }
 
