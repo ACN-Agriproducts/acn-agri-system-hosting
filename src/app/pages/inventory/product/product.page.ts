@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentSnapshot, Firestore } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { Storage } from '@ionic/storage';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Product } from '@shared/classes/product';
 
 @Component({
@@ -10,28 +10,25 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./product.page.scss'],
 })
 export class ProductPage implements OnInit {
-  public product:string;
-  public currentCompany:string;
-  public ready:boolean = false;
+  public product: string;
+  public currentCompany: string;
+  public ready: boolean = false;
   public doc: Product;
 
   constructor(
     private route: ActivatedRoute,
     private db: Firestore,
-    private storage: Storage
+    private session: SessionInfo
   ) { 
     this.product = route.snapshot.paramMap.get('product');
   }
 
   ngOnInit() {
-    this.storage.get("currentCompany").then(company => {
-      this.currentCompany = company;
+    this.currentCompany = this.session.getCompany();
 
-      Product.getProduct(this.db, this.currentCompany, this.product).then(val => {
-        this.doc = val;
-        this.ready = true;
-      })
+    Product.getProduct(this.db, this.currentCompany, this.product).then(val => {
+      this.doc = val;
+      this.ready = true;
     })
   }
-
 }
