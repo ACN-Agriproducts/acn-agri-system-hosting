@@ -88,10 +88,10 @@
 }
 
 .status-text {
+    display: inline-block;
     font-weight: 500;
     font-size: 1em;
     padding: 0 1rem;
-    margin: 2rem;
     border-radius: 10px;
     position: relative;
 
@@ -186,6 +186,10 @@ hr {
     ion-text {
         color: var(--ion-color-dark);
     }
+}
+
+.align-right {
+    float: right;
 }
 
 .prices {
