@@ -97,8 +97,8 @@
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
-			<mat-icon color="warn" *ngIf="warehouseReceipt.isPaid">highlight_off</mat-icon>
-			<mat-icon color="primary" *ngIf="!warehouseReceipt.isPaid">check_circle</mat-icon>
+			<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
+			<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
 		</div>
 	</ion-card>
 
