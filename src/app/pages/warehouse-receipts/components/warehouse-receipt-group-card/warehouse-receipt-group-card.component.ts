@@ -26,6 +26,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
 
+    this.purchaseContract = this.wrGroup.purchaseContract ?? null;
+    this.saleContract = this.wrGroup.saleContract ?? null;
+
     this.idRange = this.getIdRange();
   }
 
@@ -49,10 +52,17 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public isEditable(): boolean {
+  public isEditable(contract: WarehouseReceiptContract): boolean {
+    if (contract === null) return true;
 
+    const HOUR_TO_MS = 1000 * 60 * 60;
 
-    return true;
+    const now = new Date().getTime();
+    const then = contract?.createdAt.getTime();
+
+    const diff = (now - then) / HOUR_TO_MS;
+
+    return diff < 24 ? true : false;
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {

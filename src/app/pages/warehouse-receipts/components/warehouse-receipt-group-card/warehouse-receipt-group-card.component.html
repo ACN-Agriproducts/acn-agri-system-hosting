@@ -30,7 +30,7 @@
 						{{ wrGroup.purchaseContract?.status ?? "NONE" }}
 					</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" *ngIf="isEditable()" (click)="setContract(wrGroup.purchaseContract, true)">
+					<button mat-icon-button matTooltip="Set Contract" *ngIf="isEditable(wrGroup.purchaseContract)" (click)="setContract(wrGroup.purchaseContract, true)">
 						<mat-icon>edit</mat-icon>
 					</button>
 				</div>
@@ -60,7 +60,7 @@
 						</span>
 					</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" *ngIf="isEditable()" (click)="setContract(wrGroup.saleContract, false)">
+					<button mat-icon-button matTooltip="Set Contract" *ngIf="isEditable(wrGroup.saleContract)" (click)="setContract(wrGroup.saleContract, false)">
 						<mat-icon>edit</mat-icon>
 					</button>
 
