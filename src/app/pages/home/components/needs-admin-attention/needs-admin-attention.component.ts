@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Firestore, where } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
+import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage/fix-ticket-storage.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,23 +15,31 @@ import { Subscription } from 'rxjs';
 })
 export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
   @Input() company: string;
-  public ticketsList: Ticket[];
+  public voidTicketsList: Ticket[];
+  public needsAttentionTicketList: Ticket[];
   public user: any;
-  public ticketSubscription: Subscription;
+  public voidTicketSubscription: Subscription;
+  public needsAttentionTicketSubscription: Subscription;
 
   constructor(
     private db: Firestore,
     private localStorage: Storage,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.ticketsList = [];
+    this.voidTicketsList = [];
+    this.needsAttentionTicketList = [];
 
     Plant.getPlantList(this.db, this.company).then(plants => {
       plants.forEach(plant => {
-        this.ticketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('voidRequest', '==', true)).subscribe(tickets => {
-          this.ticketsList = tickets.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
+        this.voidTicketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('voidRequest', '==', true)).subscribe(tickets => {
+          this.voidTicketsList = tickets.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
+        }); 
+
+        this.needsAttentionTicketSubscription = Ticket.getTicketSnapshot(this.db, this.company, plant.ref.id, where('needsAttention', '==', true)).subscribe(tickets => {
+          this.needsAttentionTicketList = tickets.filter(t => !t.void).sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
         }); 
       });
     });
@@ -79,9 +89,15 @@ export class NeedsAdminAttentionComponent implements OnInit, OnDestroy {
     alert.present();
   }
 
-  ngOnDestroy(): void {
-    this.ticketSubscription.unsubscribe();
+  async fixTicketModal(ticket: Ticket) {
+    this.dialog.open(FixTicketStorageComponent, {
+      width: '50%',
+      data: ticket
+    });
   }
 
-
+  ngOnDestroy(): void {
+    this.voidTicketSubscription.unsubscribe();
+    this.needsAttentionTicketSubscription.unsubscribe();
+  }
 }

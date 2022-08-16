@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
@@ -23,6 +23,7 @@ export class Ticket extends FirebaseDocInterface{
     public in: boolean;
     public lot: string;
     public moisture: number;
+    public needsAttention: boolean;
     public origin: string;
     public original_ticket: string;
     public original_weight: number;
@@ -64,6 +65,7 @@ export class Ticket extends FirebaseDocInterface{
         this.in = data.in;
         this.lot = data.lot;
         this.moisture = data.moisture;
+        this.needsAttention = data.needsAttention;
         this.origin = data.origin;
         this.original_ticket = data.original_ticket;
         this.original_weight = data.original_weight;
@@ -104,6 +106,7 @@ export class Ticket extends FirebaseDocInterface{
                 in: data.in,
                 lot: data.lot,
                 moisture: data.moisture,
+                needsAttention: data.needsAttention,
                 origin: data.origin,
                 original_ticket: data.original_ticket,
                 original_weight: data.original_weight,
@@ -148,6 +151,12 @@ export class Ticket extends FirebaseDocInterface{
 
     public getPlantReference(): DocumentReference<Plant> {
         return this.ref.parent.parent.withConverter(Plant.converter);
+    }
+
+    public getPlant(): Promise<Plant> {
+        return getDoc(this.getPlantReference()).then(snap => {
+            return snap.data();
+        });
     }
 
     public getCollectionReference(): CollectionReference<Ticket> {

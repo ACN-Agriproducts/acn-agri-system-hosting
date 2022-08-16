@@ -1,0 +1,57 @@
+.fix-ticket-content {
+    display: flex;
+    row-gap: 1rem;
+    column-gap: 1rem;
+    flex-wrap: wrap;
+}
+
+ion-card {
+    min-width: 380px;
+}
+
+.ticket-label {
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+    padding-right: 0.5rem;
+}
+
+h2 {
+    display: flex;
+    align-items: baseline;
+
+    mat-spinner {
+        margin-left: 1rem;
+    }
+}
+
+#tank-inv-display {
+    display: flex;
+    align-items: center;
+}
+
+mat-error {
+    display: inline;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgba(#f1f1f1, 0.2);
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(#888, 0.4);
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
