@@ -1,3 +1,4 @@
+import { getDoc } from "@angular/fire/firestore";
 import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -75,6 +76,18 @@ export class DPRDay {
         this.cancelledWarehouseReceipt = data.cancelledWarehouseReceipt;
         this.increaseStorageLiability = data.increaseStorageLiability;
         this.decreaseStorageLiability = data.decreaseStorageLiability;
+    }
+
+    public getInvoices(): Promise<Invoice[]> {
+        return Promise.all(this.invoices.map(ref => getDoc(ref).then(doc => doc.data())));
+    }
+
+    public getInTickets(): Promise<Ticket[]> {
+        return Promise.all(this.inTickets.map(ref => getDoc(ref).then(doc => doc.data())));
+    }
+
+    public getOutTickets(): Promise<Ticket[]> {
+        return Promise.all(this.outTickets.map(ref => getDoc(ref).then(doc => doc.data())));
     }
 }
 
