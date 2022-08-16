@@ -53,16 +53,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public isEditable(contract: WarehouseReceiptContract): boolean {
-    if (contract === null) return true;
+    if (contract?.closedAt === undefined) {
+      return true;
+    }
 
     const HOUR_TO_MS = 1000 * 60 * 60;
 
     const now = new Date().getTime();
     const then = contract?.closedAt?.getTime();
 
-    const diff = (now - then) / HOUR_TO_MS;
+    const hoursSinceCreated = (now - then) / HOUR_TO_MS;
 
-    return diff < 24 ? true : false;
+    return hoursSinceCreated < 24 ? true : false;
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
@@ -76,7 +78,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    const updateData = await this.updateContractDialog(contractData, isPurchase);
+    const updateData = await this.modifyContractDialog(contractData, isPurchase);
     if (updateData === undefined) return;
 
     this.wrGroup.update({
@@ -88,7 +90,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public updateContractDialog(contractData: ContractData, isPurchase: boolean): any {
+  public modifyContractDialog(contractData: ContractData, isPurchase: boolean): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractData,
       height: '300px',
@@ -96,7 +98,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {
-      // return isPurchase ? { ...result, closedAt: serverTimestamp() } : result ;
+      // return isPurchase ? { ...result, closedAt: serverTimestamp() } : result;
       return result;
     });
   }
