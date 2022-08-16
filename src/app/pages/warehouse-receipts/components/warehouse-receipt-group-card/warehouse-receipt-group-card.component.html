@@ -25,7 +25,7 @@
 			<ion-card class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
 				<div class="contract-header">
 					<ion-card-title>Purchase Contract</ion-card-title>
-
+					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.purchaseContract?.status.toLocaleLowerCase()">
 						{{ wrGroup.purchaseContract?.status ?? "NONE" }}
 					</ion-text>
@@ -52,7 +52,7 @@
 			<ion-card class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
 				<div class="contract-header">
 					<ion-card-title>Sale Contract</ion-card-title>
-
+					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
 						{{ wrGroup.saleContract?.status ?? "NONE" }}
 						<span *ngIf="hasPaid()">
