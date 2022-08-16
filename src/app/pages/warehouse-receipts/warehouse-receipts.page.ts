@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
@@ -15,30 +16,22 @@ export class WarehouseReceiptsPage implements OnInit {
   public warehouseReceiptGroupList: WarehouseReceiptGroup[] = [];
 
   constructor(
-    private localStorage: Storage,
     private navController: NavController,
     private db: Firestore,
+    private session: SessionInfo
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany')
-    .then(company => {
-      this.currentCompany = company;
-      return this.localStorage.get('currentPlant');
-    })
-    .then(plant => {
-      this.currentPlant = plant;
-      return WarehouseReceiptGroup.getWrGroupListValueChanges(this.db, this.currentCompany);
-    })
-    .then(result => {
-      result.subscribe(list => {
-        this.warehouseReceiptGroupList = list;
-      });
+    this.currentCompany = this.session.getCompany();
+    this.currentPlant = this.session.getPlant();
+
+    WarehouseReceiptGroup.getWrGroupListValueChanges(this.db, this.currentCompany)
+    .subscribe(list => {
+      this.warehouseReceiptGroupList = list;
     });
   }
 
   public nav = (route: string): void => {    
     this.navController.navigateForward(route);
   }
-
 }

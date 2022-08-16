@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
@@ -48,6 +49,12 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
+  public isEditable(): boolean {
+
+
+    return true;
+  }
+
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
     const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
 
@@ -60,9 +67,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     const updateData = await this.openDialog(contractData);
+    if (updateData === undefined) return;
 
     this.wrGroup.update({
-      [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
+      [isPurchase ? 'purchaseContract' : 'saleContract']: {...updateData, createdAt: serverTimestamp() },
       status: "ACTIVE"
     })
     .catch(error => {

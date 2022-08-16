@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, Firestore } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController, NavController } from '@ionic/angular';
@@ -164,7 +164,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
     let receiptGroup = {
       closeDate: null,
-      creationDate: formValues.creationDate,
+      creationDate: serverTimestamp(),
       expireDate: null,
       purchaseContract: null,
       saleContract: null,
