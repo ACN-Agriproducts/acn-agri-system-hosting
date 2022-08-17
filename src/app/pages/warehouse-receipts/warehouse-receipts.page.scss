@@ -20,7 +20,6 @@
 
 #add {
     display: flex;
-
     height: 150px;
     cursor: pointer;
 
@@ -90,10 +89,13 @@
 .status-text {
     display: inline-block;
     font-weight: 500;
-    font-size: 1em;
+    font-size: 0.9em;
     padding: 0 1rem;
     border-radius: 10px;
     position: relative;
+
+    border-style: solid;
+    border-width: 0.5px;
 
     &:before {
         content: "";
@@ -195,7 +197,6 @@ hr {
 .prices {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    // align-items: center;
     text-align: center;
 
     height: 5em;
@@ -213,13 +214,15 @@ hr {
 
 .expansion-bar {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 
-    ion-icon {
+    mat-icon {
         cursor: pointer;
         transition: 0.4s;
+        position: relative;
+        font-size: 1.4em;
         
+        height: 15px;
         width: 15%;
         background-color: var(--ion-color-light);
         border-radius: 20px;
@@ -256,7 +259,7 @@ hr {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
-    background-color: var(--ion-color-light);
+    background-color: white;
     border-radius: 5px;
     margin: 5px;
 }
@@ -273,10 +276,50 @@ hr {
 }
 
 .table-header {
-    
+    background-color: var(--ion-color-primary-light);
+    color: var(--ion-color-primary);
+    font-weight: 500;
+
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 6px 5px 0 0;
 }
 
-.even {
-    background-color: white;
+.table-body {
+    position: relative;
+
+    ion-text {
+        color: var(--ion-color-dark);
+    }
+
+    .paid-button {
+        z-index: 3;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(var(--ion-color-primary-rgb), 0.15);
+        transition: opacity .3s;
+        opacity: 0;
+        z-index: 2;
+    }
+
+    &:hover:before {
+        opacity: 1;
+    }
+
+    &:hover {
+        background-color: transparent !important;
+        transition: .2s;
+    }
+}
+
+.odd {
+    background-color: var(--ion-color-light);
 }
 

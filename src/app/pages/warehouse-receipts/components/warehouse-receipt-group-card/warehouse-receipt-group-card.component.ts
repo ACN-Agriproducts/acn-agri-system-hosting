@@ -91,13 +91,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const card = icon.parentElement.parentElement;
     const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
 
-    if (expandable.style.maxHeight){
-      icon.setAttribute('name', "arrow-down-outline");
+    if (expandable.style.maxHeight) {
+      icon.innerHTML = "keyboard_arrow_down";
       expandable.style.maxHeight = null;
-    } else {
-      icon.setAttribute('name', "arrow-up-outline");
+    }
+    else {
+      icon.innerHTML = "keyboard_arrow_up";
       expandable.style.maxHeight = expandable.scrollHeight + "px";
     }
+  }
+
+  public onClick() {
+    console.log("Icon click working");
   }
 }
 

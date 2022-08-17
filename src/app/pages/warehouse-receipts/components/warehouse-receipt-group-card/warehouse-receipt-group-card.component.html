@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="contract-section">
-			<div class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
+			<ion-card class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
 				<div class="contract-header">
 					<ion-card-title>Purchase Contract</ion-card-title>
 
@@ -47,9 +47,9 @@
 						</div>
 					</div>
 				</ng-template>
-			</div>
+			</ion-card>
 
-			<div class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
+			<ion-card class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
 				<div class="contract-header">
 					<ion-card-title>Sale Contract</ion-card-title>
 
@@ -78,11 +78,11 @@
 						</div>
 					</div>
 				</ng-template>
-			</div>
+			</ion-card>
 		</div>
 	</div>
 
-	<div class="expandable-wr-list">
+	<ion-card class="expandable-wr-list">
 		<div class="table-row table-header">
 			<ion-text>ID</ion-text>
 			<ion-text>Start Date</ion-text>
@@ -91,19 +91,24 @@
 			<ion-text>Plant</ion-text>
 			<ion-text>Paid</ion-text>
 		</div>
-		<div class="table-row" [class.even]="!odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
+		<div class="table-row table-body" [class.odd]="odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
 			<ion-text>{{ warehouseReceipt.startDate | date }}</ion-text>
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
-			<ion-text>{{ warehouseReceipt.isPaid }}</ion-text>
+			<div>
+				<button mat-icon-button class="paid-button" (click)="onClick()">
+					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
+					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
+				</button>
+			</div>
 		</div>
-	</div>
+	</ion-card>
 
 	<div class="expansion-bar">
 		<hr>
-		<ion-icon matTooltip="Toggle Warehouse Receipt List" (click)="toggleExpandable($event)" name="arrow-down-outline"></ion-icon>
+		<mat-icon matTooltip="Toggle Warehouse Receipt List" (click)="toggleExpandable($event)">keyboard_arrow_down</mat-icon>
 		<hr>
 	</div>
 </ion-card>
