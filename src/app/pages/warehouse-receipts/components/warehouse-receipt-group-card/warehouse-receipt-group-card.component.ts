@@ -100,6 +100,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       expandable.style.maxHeight = expandable.scrollHeight + "px";
     }
   }
+
+  public onClick() {
+    console.log("Icon click working");
+  }
 }
 
 interface ContractData {

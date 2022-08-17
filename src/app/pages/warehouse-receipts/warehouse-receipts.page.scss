@@ -20,7 +20,6 @@
 
 #add {
     display: flex;
-
     height: 150px;
     cursor: pointer;
 
@@ -90,7 +89,7 @@
 .status-text {
     display: inline-block;
     font-weight: 500;
-    font-size: 1em;
+    font-size: 0.9em;
     padding: 0 1rem;
     border-radius: 10px;
     position: relative;
@@ -288,7 +287,14 @@ hr {
 
 .table-body {
     position: relative;
-    cursor: pointer;
+
+    ion-text {
+        color: var(--ion-color-dark);
+    }
+
+    .paid-button {
+        z-index: 3;
+    }
 
     &:before {
         content: "";
@@ -310,10 +316,6 @@ hr {
     &:hover {
         background-color: transparent !important;
         transition: .2s;
-    }
-
-    ion-text {
-        color: var(--ion-color-dark);
     }
 }
 
