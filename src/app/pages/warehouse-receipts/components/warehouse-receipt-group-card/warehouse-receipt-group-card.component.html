@@ -91,14 +91,14 @@
 			<ion-text>Plant</ion-text>
 			<ion-text>Paid</ion-text>
 		</div>
-		<div class="table-row table-body" [class.odd]="odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
+		<div class="table-row table-body" [class.odd]="odd" *ngFor="let warehouseReceipt of wrList; let odd = odd; let i = index">
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
 			<ion-text>{{ warehouseReceipt.startDate | date }}</ion-text>
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
 			<div>
-				<button mat-icon-button class="paid-button" (click)="paidWarehouseReceipt()">
+				<button mat-icon-button class="paid-button" (click)="paidWarehouseReceipt(warehouseReceipt, i)">
 					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
 					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
 				</button>
