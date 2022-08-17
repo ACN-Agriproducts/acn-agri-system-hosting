@@ -101,7 +101,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
   }
 
-  public paidWarehouseReceipt() {
+  public paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): void {
+    if (this.wrGroup.saleContract === null) {
+      console.log("Error: Sale Contract must be present.");
+      return;
+    }
+
+    this.wrList[index].isPaid = true;
+
+    /* this.wrGroup.update({
+      warehouseReceiptList: this.wrList
+    }) */
+
     console.log("Warehouse Receipt has been paid");
   }
 }
