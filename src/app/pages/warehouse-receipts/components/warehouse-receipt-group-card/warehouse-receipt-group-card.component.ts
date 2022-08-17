@@ -101,8 +101,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
   }
 
-  public onClick() {
-    console.log("Icon click working");
+  public paidWarehouseReceipt() {
+    console.log("Warehouse Receipt has been paid");
   }
 }
 
