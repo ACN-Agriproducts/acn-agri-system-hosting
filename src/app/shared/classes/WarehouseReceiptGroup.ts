@@ -1,4 +1,5 @@
-import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData, Query } from "@angular/fire/firestore";
+import { onSnapshot } from "firebase/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -68,6 +69,31 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     public static getWrGroupListValueChanges = (db: Firestore, company: string): Observable<WarehouseReceiptGroup[]> => {
         const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), orderBy('creationDate', 'desc'));
         return collectionData(wrCollectionQuery);
+    }
+
+    public static onSnapshot = (ref: CollectionReference<WarehouseReceiptGroup> | Query<WarehouseReceiptGroup>, list: WarehouseReceiptGroup[]) => {
+        let first = true;
+        onSnapshot(ref, next => {
+            if (first) {
+                list.push(...next.docs.map(doc => doc.data()));
+                first = false;
+                return;
+            }
+            
+            next.docChanges().forEach(change => {
+                if (change.type === 'added') {
+                    console.log("added", change.doc.data());
+                }
+
+                if (change.type === 'modified') {
+                    console.log("modified", change.doc.data());
+                }
+
+                if (change.type === 'removed') {
+                    console.log("removed", change.doc.data());
+                }
+            });
+        });
     }
 }
 

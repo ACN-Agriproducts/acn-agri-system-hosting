@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { onSnapshot } from 'firebase/firestore';
 
 @Component({
   selector: 'app-warehouse-receipts',
@@ -29,6 +29,8 @@ export class WarehouseReceiptsPage implements OnInit {
     .subscribe(list => {
       this.warehouseReceiptGroupList = list;
     });
+
+    
   }
 
   public nav = (route: string): void => {    
