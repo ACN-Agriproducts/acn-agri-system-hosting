@@ -98,18 +98,13 @@
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
 			<div>
-				<button mat-icon-button 
+				<button mat-icon-button
 					class="paid-button" 
-					*ngIf="!warehouseReceipt.isPaid"
-					(click)="paidWarehouseReceipt(warehouseReceipt, i)"
+					(click)="paidWarehouseReceipt(warehouseReceipt, i)" 
+					[disabled]="warehouseReceipt.isPaid"
 				>
-					<mat-icon color="warn">highlight_off</mat-icon>
-				</button>
-				<button mat-icon-button 
-					class="paid-button" 
-					*ngIf="warehouseReceipt.isPaid"
-				>
-					<mat-icon color="primary">check_circle</mat-icon>
+					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
+					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
 				</button>
 			</div>
 		</div>

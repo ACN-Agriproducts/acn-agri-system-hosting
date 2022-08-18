@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { arrayRemove, arrayUnion } from 'firebase/firestore';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 
@@ -20,12 +22,15 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public purchaseContract: WarehouseReceiptContract;
   public saleContract: WarehouseReceiptContract;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private alertCtrl: AlertController
+  ) { }
 
   ngOnInit() {
+    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.id - b.id);
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
-    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-    
+
     this.idRange = this.getIdRange();
 
     this.purchaseContract = this.wrGroup.purchaseContract ?? null;
@@ -80,10 +85,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    let updateData = await this.modifyContractDialog(contractData);
-    if (updateData === undefined) return;
-    
-    updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
+    const updateData = await this.setContractDialog(contractData);
 
     this.wrGroup.update({
       [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
@@ -94,9 +96,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public modifyContractDialog(contractData: ContractData): any {
+  public setContractDialog(contractUpdateDoc: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
-      data: contractData,
+      data: contractUpdateDoc,
       height: '300px',
       width: '550px'
     });
@@ -125,19 +127,50 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
   }
 
-  public paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): void {
+  public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
       console.log("Error: Sale Contract must be present.");
       return;
     }
 
-    this.wrList[index].isPaid = true;
+    const alert = await this.alertCtrl.create({
+      header: "Confirmation",
+      message: `Are you sure you would like to set the status of Warehouse Receipt ${warehouseReceipt.id} as paid?`,
+      buttons: [
+        {
+          text: 'yes',
+          handler: () => {
+            alert.dismiss();
+            this.updateIsPaid(warehouseReceipt);
+          }
+        },
+        {
+          text: 'no',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
+  }
 
-    /* this.wrGroup.update({
-      warehouseReceiptList: this.wrList
-    }) */
+  public updateIsPaid(warehouseReceipt: WarehouseReceiptData) {
+    const updateData = Object.assign({}, warehouseReceipt);
+    console.log(updateData);
 
-    console.log("Warehouse Receipt has been paid");
+    this.wrGroup.update({
+      warehouseReceiptList: arrayRemove(updateData)
+    })
+    .then(() => {
+      updateData.isPaid = true;
+      this.wrGroup.update({
+        warehouseReceiptList: arrayUnion(updateData)
+      });
+    })
+    .catch(error => {
+      console.log("Error: ", error);
+    });
+    
+    console.log("Warehouse Receipt has been paid.");
   }
 }
 
@@ -148,4 +181,13 @@ interface ContractData {
   pdfReference?: string;
   startDate: Date;
   status?: string;
+}
+
+interface WarehouseReceiptData {
+  bushelQuantity: number;
+  id: number;
+  isPaid: boolean;
+  plant: string;
+  product: string;
+  startDate: Date;
 }
