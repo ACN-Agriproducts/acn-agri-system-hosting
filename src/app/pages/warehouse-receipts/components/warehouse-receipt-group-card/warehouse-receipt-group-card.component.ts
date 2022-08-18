@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
@@ -22,10 +23,15 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
-    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
-
+    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    
     this.idRange = this.getIdRange();
+
+    this.purchaseContract = this.wrGroup.purchaseContract ?? null;
+    this.saleContract = this.wrGroup.saleContract ?? null;
+
+
   }
 
   public getIdRange(): string {
@@ -48,7 +54,22 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result.join();
   }
 
-  public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean) {
+  public isEditable(contract: WarehouseReceiptContract): boolean {
+    if (contract?.closedAt === undefined) {
+      return true;
+    }
+
+    const HOUR_TO_MS = 1000 * 60 * 60;
+
+    const now = new Date().getTime();
+    const then = contract?.closedAt?.getTime();
+
+    const hoursSinceCreated = (now - then) / HOUR_TO_MS;
+
+    return hoursSinceCreated < 24 ? true : false;
+  }
+
+  public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
     const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
 
     if (contract) {
@@ -59,7 +80,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    const updateData = await this.openDialog(contractData);
+    let updateData = await this.modifyContractDialog(contractData);
+    if (updateData === undefined) return;
+    
+    updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
 
     this.wrGroup.update({
       [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
@@ -70,9 +94,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public openDialog(contractUpdateDoc: ContractData): any {
+  public modifyContractDialog(contractData: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
-      data: contractUpdateDoc,
+      data: contractData,
       height: '300px',
       width: '550px'
     });
