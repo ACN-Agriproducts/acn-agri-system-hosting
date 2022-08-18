@@ -75,6 +75,7 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         let first = true;
         onSnapshot(ref, next => {
             if (first) {
+                console.table(next.docs.map(doc => doc.data()));
                 list.push(...next.docs.map(doc => doc.data()));
                 first = false;
                 return;
@@ -82,15 +83,15 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
             
             next.docChanges().forEach(change => {
                 if (change.type === 'added') {
-                    console.log("added", change.doc.data());
+                    list.splice(change.newIndex, 0, change.doc.data());
                 }
 
                 if (change.type === 'modified') {
-                    console.log("modified", change.doc.data());
+                    list[change.oldIndex] = change.doc.data();
                 }
 
                 if (change.type === 'removed') {
-                    console.log("removed", change.doc.data());
+                    list.splice(change.oldIndex, 1);
                 }
             });
         });

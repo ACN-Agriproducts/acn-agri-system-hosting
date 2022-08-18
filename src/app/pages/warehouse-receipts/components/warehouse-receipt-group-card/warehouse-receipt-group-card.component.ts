@@ -141,7 +141,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
           text: 'yes',
           handler: () => {
             alert.dismiss();
-            this.updateIsPaid(warehouseReceipt);
+            this.updatePaidStatus(warehouseReceipt);
           }
         },
         {
@@ -153,7 +153,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     alert.present();
   }
 
-  public updateIsPaid(warehouseReceipt: WarehouseReceiptData) {
+  public updatePaidStatus(warehouseReceipt: WarehouseReceiptData) {
     const updateData = Object.assign({}, warehouseReceipt);
     console.log(updateData);
 
