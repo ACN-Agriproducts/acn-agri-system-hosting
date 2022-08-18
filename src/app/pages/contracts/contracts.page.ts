@@ -10,7 +10,7 @@ import { OptionsContractComponent } from './components/options-contract/options-
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { Subscription } from 'rxjs';
-import { collectionData, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
+import { collectionData, Firestore, limit, onSnapshot, orderBy, query, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 
 
@@ -27,7 +27,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public ready: boolean = false;
   public sortField: string = "date";
   public assending: boolean = false;
-  public dataList: any = [];
+  public dataList: Contract[] = [];
   public dataListAux: any;
   public listFilter: any = [];
   public activeFilter: boolean;
@@ -75,16 +75,18 @@ export class ContractsPage implements OnInit, AfterViewInit {
 
     this.currentSub = [];
     this.contractLimit = this.contractStep;
-    this.infiniteScroll.disabled = false;
+    // this.infiniteScroll.disabled = false;
     const ColQuery = query(Contract.getCollectionReference(this.db, this.currentCompany, this.contractType == 'purchaseContracts'),
                     where("status", "in", this.orderStatus),
                     orderBy(this.sortField, this.assending? 'asc': 'desc'),
                     limit(this.contractLimit));
 
-    this.currentSub.push(collectionData(ColQuery).subscribe(val => {
-        this.dataList = val;
-        this.ready = true;
-      }));
+    Contract.onSnapshot(ColQuery, this.dataList);    
+
+    // this.currentSub.push(collectionData(ColQuery).subscribe(val => {
+    //     this.dataList = val;
+    //     this.ready = true;
+    //   }));
   };
 
   public async infiniteContracts(event) {
