@@ -87,7 +87,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    const updateData = await this.setContractDialog(contractData);
+    let updateData = await this.setContractDialog(contractData);
+    if (updateData === undefined) return;
+    
+    updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
 
     this.wrGroup.update({
       [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
