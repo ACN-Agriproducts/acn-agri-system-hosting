@@ -197,7 +197,7 @@
     </div>
 </ion-card>
 <div class="ion-hide-sm-up">
-    <ion-card class="item-card" *ngFor="let item of ticketList">
+    <ion-card class="item-card" *ngFor="let item of paginator?.list">
         <ion-item lines="none" button (click)="openDetails($event)">
             <ion-label slot="start">
                 <h2>Ticket # <span>{{item.id}}</span></h2>
