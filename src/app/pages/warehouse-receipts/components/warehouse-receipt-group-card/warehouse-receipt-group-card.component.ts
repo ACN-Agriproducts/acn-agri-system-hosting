@@ -36,8 +36,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     this.purchaseContract = this.wrGroup.purchaseContract ?? null;
     this.saleContract = this.wrGroup.saleContract ?? null;
-
-    console.log(this.idRange);
   }
 
   public getIdRange(): string {
@@ -95,17 +93,19 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     let updateData = await this.setContractDialog(contractData);
     if (updateData === undefined) return;
-    
-    const fallback = this.wrGroup[isPurchase ? 'purchaseContract' : 'saleContract'];
+
+    const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
+    const fallback = this.wrGroup[contractType];
+  
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
-    this.wrGroup[isPurchase ? 'purchaseContract' : 'saleContract'] = updateData;
+    this.wrGroup[contractType] = updateData;
 
     this.wrGroup.update({
-      [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
+      [contractType]: updateData,
       status: "ACTIVE"
     })
     .catch(error => {
-      this.wrGroup[isPurchase ? 'purchaseContract' : 'saleContract'] = fallback;
+      this.wrGroup[contractType] = fallback;
       console.log(`Error: `, error);
     });
   }
@@ -169,6 +169,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public updatePaidStatus(index: number) {
+    const fallback = this.wrList;
     this.wrList[index].isPaid = true;
 
     const updateList = this.wrGroup.getRawReceiptList();
@@ -181,6 +182,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       console.log(this.wrGroup.warehouseReceiptList[index].isPaid);
     })
     .catch(error => {
+      this.wrGroup.warehouseReceiptList = fallback; // ??
       console.log("Error: ", error);
     });
     

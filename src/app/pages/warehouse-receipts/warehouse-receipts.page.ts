@@ -30,6 +30,8 @@ export class WarehouseReceiptsPage implements OnInit {
     WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('creationDate', 'desc')).then(val => {
       this.warehouseReceiptGroupList = val;
     });
+
+    // use onSnapshot as well to listen for changes to the group as as whole
     // WarehouseReceiptGroup.onSnapshot(
     //   wrGroupQuery, 
     //   this.warehouseReceiptGroupList
