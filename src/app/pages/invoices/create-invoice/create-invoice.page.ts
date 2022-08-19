@@ -265,7 +265,7 @@ export class CreateInvoicePage implements OnInit {
     invoice.id = this.id;
     invoice.needsAttention = true;
 
-    addDoc(Invoice.getCollectionReference(this.db, this.currentCompany), invoice);
+    addDoc(Invoice.getCollectionReference(this.db, this.currentCompany).withConverter(null), invoice);
 
     let modal = await this.modalController.create({
       component: PrintableInvoiceComponent,

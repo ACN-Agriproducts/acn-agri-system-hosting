@@ -36,7 +36,7 @@
     </ion-item>
 </ion-card>
 <ion-card class="table-body">
-    <div (contextmenu)="openOptions($event, invoice)" class="grid-item item-table" *ngFor="let invoice of invoiceList">
+    <div (contextmenu)="openOptions($event, invoice)" class="grid-item item-table" *ngFor="let invoice of paginator?.list">
         <ion-item lines="none">
             <ion-text color="dark" class="item-text-number" [class.attention]="invoice.needsAttention">{{invoice.id}}</ion-text>
         </ion-item>
@@ -67,7 +67,7 @@
             </div>
         </ion-item>
     </div>
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="infiniteInvoice($event)">
+    <ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteInvoice($event)">
         <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="Loading invoices...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>

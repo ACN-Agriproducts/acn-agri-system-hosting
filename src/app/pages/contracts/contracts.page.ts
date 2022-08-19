@@ -1,7 +1,6 @@
 import { IonInfiniteScroll, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
-import { MatDialog } from '@angular/material/dialog';
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
@@ -10,8 +9,9 @@ import { OptionsContractComponent } from './components/options-contract/options-
 import { Storage } from '@ionic/storage';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { Subscription } from 'rxjs';
-import { collectionData, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
+import { Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
+import { Pagination } from '@shared/classes/FirebaseDocInterface';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { Contract } from '@shared/classes/contract';
   templateUrl: './contracts.page.html',
   styleUrls: ['./contracts.page.scss'],
 })
-export class ContractsPage implements OnInit, AfterViewInit {
+export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
@@ -27,7 +27,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public ready: boolean = false;
   public sortField: string = "date";
   public assending: boolean = false;
-  public dataList: any = [];
+  public dataList: Contract[][] = [];
   public dataListAux: any;
   public listFilter: any = [];
   public activeFilter: boolean;
@@ -35,6 +35,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
   public contractType: string = "purchaseContracts";
   public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
   public currentSub: Subscription[] = [];
+  public contractPagination: Pagination<Contract>;
 
   private contractLimit = 20;
   private contractStep = 20;
@@ -81,34 +82,18 @@ export class ContractsPage implements OnInit, AfterViewInit {
                     orderBy(this.sortField, this.assending? 'asc': 'desc'),
                     limit(this.contractLimit));
 
-    this.currentSub.push(collectionData(ColQuery).subscribe(val => {
-        this.dataList = val;
-        this.ready = true;
-      }));
+    if(this.contractPagination) this.contractPagination.end();
+    this.contractPagination = new Pagination<Contract>(ColQuery, 20);
   };
 
   public async infiniteContracts(event) {
-    for(const sub of this.currentSub){
-      sub.unsubscribe();
-    };
+    this.contractPagination.getNext(snapshot => {
+      event.target.complete();
 
-    this.currentSub = [];
-    this.contractLimit += this.contractStep;
-    const colQuery = query(Contract.getCollectionReference(this.db, this.currentCompany, this.contractType == 'purchaseContracts'),
-                    where("status", "in", this.orderStatus),
-                    orderBy(this.sortField, this.assending? 'asc': 'desc'),
-                    limit(this.contractLimit));
-
-    const tempSub = collectionData(colQuery).subscribe(val => {
-        this.dataList = val;
-        event.target.complete();
-
-        if(val.length < this.contractLimit) {
-          this.infiniteScroll.disabled = true;
-        }
-    })
-
-    this.currentSub.push(tempSub);
+      if(snapshot.docs.length < this.contractStep) {
+        this.infiniteScroll.disabled = true;
+      }
+    });
   }
 
   public openModal = async () => {
@@ -192,5 +177,9 @@ export class ContractsPage implements OnInit, AfterViewInit {
       }
     })
     await popover.present();
+  }
+
+  ngOnDestroy(): void {
+      this.contractPagination.end();
   }
 }

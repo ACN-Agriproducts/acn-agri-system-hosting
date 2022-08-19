@@ -3,13 +3,13 @@ import { ShowDetailsComponent } from './show-details/show-details.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalTicketComponent } from './../modal-ticket/modal-ticket.component';
 import { OptionsTicketComponent } from './../options-ticket/options-ticket.component';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
-import { Subscription } from 'rxjs';
 import { Ticket } from '@shared/classes/ticket';
 import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
 import { Plant } from '@shared/classes/plant';
+import { Pagination } from '@shared/classes/FirebaseDocInterface';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 
 @Component({
@@ -17,39 +17,34 @@ import { Plant } from '@shared/classes/plant';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public ticketList: Ticket[];
+  public paginator: Pagination<Ticket>;
   public plantList: Plant[] = [];
   public currentCompany: string;
   public currentPlant: string;
   public inTicket: boolean = true;
   private date: Date;
-  private currentSub: Subscription[] = [];
-
-  private ticketStep: number = 20;
-  private ticketLimit: number = 20;
+  public ticketStep = 30;
 
   constructor(
     private popoverController: PopoverController,
     private dialog: MatDialog,
     private modalController: ModalController,
     private db: Firestore,
-    private localStorage: Storage,
+    private session: SessionInfo
   ) { }
 
   ngOnInit(): void {
-    this.localStorage.get('currentCompany').then(async currentComp => {
-      this.currentCompany = currentComp;
-      this.currentPlant = await this.localStorage.get('currentPlant');
+    this.currentCompany = this.session.getCompany();
+    this.currentPlant = this.session.getPlant();
 
-      const tempsub = Plant.getPlantList(this.db, this.currentCompany).then(val => {
-        this.plantList = val;
+    Plant.getPlantList(this.db, this.currentCompany).then(val => {
+      this.plantList = val;
 
-        this.getTickets(new Date());
-      });
-    })
+      this.getTickets(new Date());
+    });
   }
 
   public dateChangeFn(date: Date) {
@@ -58,16 +53,7 @@ export class TableComponent implements OnInit {
   }
 
   async getTickets(date: Date){
-    if(this.currentSub.length > 0) {
-      for(const sub of this.currentSub){
-        sub.unsubscribe();
-      };
-
-      this.currentSub = [];
-    }
-
     this.infiniteScroll.disabled = false;
-    this.ticketLimit = this.ticketStep;
     this.date = date;
 
     let startDate: Date = new Date(date.valueOf());
@@ -78,50 +64,24 @@ export class TableComponent implements OnInit {
     endDate.setDate(0);
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
-
-    const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, 
+    const colRef = Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant, 
       where("in", "==", this.inTicket),
       where("dateOut", ">=", startDate),
       where("dateOut", "<=", endDate),
-      orderBy("dateOut", "desc"),
-      limit(this.ticketLimit))
-    .subscribe(ticketList => {
-      this.ticketList = ticketList;
-    });
+      orderBy("dateOut", "desc"));
 
-    this.currentSub.push(sub);
+    if(this.paginator) this.paginator.end();
+    this.paginator = new Pagination(colRef, this.ticketStep);
   }
 
   async infiniteTickets(event):Promise<void> {
-    for(const sub of this.currentSub){
-      sub.unsubscribe();
-    };
-    this.currentSub = [];
-    this.ticketLimit += this.ticketStep;
-
-    let startDate: Date = new Date(this.date.valueOf());
-    let endDate: Date = new Date(this.date.valueOf());
-
-    startDate.setDate(1);
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(0);
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(23,59,59,59);
-
-    const sub = Ticket.getTicketSnapshot(this.db, this.currentCompany, this.currentPlant, 
-      where("in", "==", this.inTicket),
-      where("dateOut", ">=", startDate),
-      where("dateOut", "<=", endDate),
-      orderBy("dateOut", "desc"),
-      limit(this.ticketLimit))
-    .subscribe(ticketList => {
-      this.ticketList = ticketList;
+    this.paginator.getNext(snapshot => {
       event.target.complete();
+
+      if(snapshot.docs.length < this.ticketStep) {
+        this.infiniteScroll.disabled = true;
+      }
     });
-
-    console.log(`Got ${this.ticketList.length} tickets`);
-
-    this.currentSub.push(sub);
   }
 
   open() {
@@ -150,7 +110,7 @@ export class TableComponent implements OnInit {
     return await modal.present();
   }
   public openDialog = async (event, ticketId: string) => {
-    var ticket =  this.ticketList.find(t => t.ref.id == ticketId);
+    var ticket =  this.paginator.list.find(t => t.ref.id == ticketId);
 
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
@@ -184,5 +144,9 @@ export class TableComponent implements OnInit {
 
     this.inTicket = false;
     this.getTickets(this.date)
+  }
+
+  ngOnDestroy(): void {
+      this.paginator.end();
   }
 }
