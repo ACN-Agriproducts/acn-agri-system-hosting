@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
@@ -187,8 +187,8 @@ export class Ticket extends FirebaseDocInterface{
         return [this, contract, transport, client];
     }
 
-    public static getCollectionReference(db: Firestore, company: string, plant: string): CollectionReference<Ticket> {
-        return collection(db, `companies/${company}/plants/${plant}/tickets`).withConverter(Ticket.converter);
+    public static getCollectionReference(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Query<Ticket> {
+        return query(collection(db, `companies/${company}/plants/${plant}/tickets`), ...constraints).withConverter(Ticket.converter);
     }
 
     public static getDocReference(db: Firestore, company: string, plant: string, ticket: string): DocumentReference<Ticket> {
