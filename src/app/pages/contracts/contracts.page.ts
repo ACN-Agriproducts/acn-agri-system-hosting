@@ -1,6 +1,6 @@
 import { IonInfiniteScroll, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
 import { OptionFilterComponent } from './components/option-filter/option-filter.component';
@@ -19,7 +19,7 @@ import { Pagination } from '@shared/classes/FirebaseDocInterface';
   templateUrl: './contracts.page.html',
   styleUrls: ['./contracts.page.scss'],
 })
-export class ContractsPage implements OnInit, AfterViewInit {
+export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
@@ -82,6 +82,7 @@ export class ContractsPage implements OnInit, AfterViewInit {
                     orderBy(this.sortField, this.assending? 'asc': 'desc'),
                     limit(this.contractLimit));
 
+    if(this.contractPagination) this.contractPagination.end();
     this.contractPagination = new Pagination<Contract>(ColQuery, 20);
   };
 
@@ -176,5 +177,9 @@ export class ContractsPage implements OnInit, AfterViewInit {
       }
     })
     await popover.present();
+  }
+
+  ngOnDestroy(): void {
+      this.contractPagination.end();
   }
 }
