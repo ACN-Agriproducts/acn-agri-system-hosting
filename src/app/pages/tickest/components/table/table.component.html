@@ -85,7 +85,7 @@
     </div>
     <!-- ================================= -->
     <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
-        *ngFor="let item of ticketList">
+        *ngFor="let item of paginator?.list">
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
                 <div class="content-item-text">
