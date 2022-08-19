@@ -74,7 +74,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
-    const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
+    const contractData: ContractData = { 
+      startDate: new Date(), 
+      status: isPurchase ? "CLOSED" : "PENDING"
+    };
 
     if (contract) {
       contractData.basePrice = contract.basePrice;
