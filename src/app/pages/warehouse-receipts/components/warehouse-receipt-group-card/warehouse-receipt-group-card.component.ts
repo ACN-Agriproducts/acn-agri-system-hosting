@@ -3,7 +3,6 @@ import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
-import { arrayRemove, arrayUnion } from 'firebase/firestore';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 
@@ -141,7 +140,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
           text: 'yes',
           handler: () => {
             alert.dismiss();
-            this.updatePaidStatus(warehouseReceipt);
+            this.updatePaidStatus(index);
           }
         },
         {
@@ -153,18 +152,14 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     alert.present();
   }
 
-  public updatePaidStatus(warehouseReceipt: WarehouseReceiptData) {
-    const updateData = Object.assign({}, warehouseReceipt);
-    console.log(updateData);
+  public updatePaidStatus(index: number) {
+    this.wrList[index].isPaid = true;
+
+    const updateList = this.wrGroup.getRawReceiptList();
+    updateList[index].isPaid = true;
 
     this.wrGroup.update({
-      warehouseReceiptList: arrayRemove(updateData)
-    })
-    .then(() => {
-      updateData.isPaid = true;
-      this.wrGroup.update({
-        warehouseReceiptList: arrayUnion(updateData)
-      });
+      warehouseReceiptList: updateList
     })
     .catch(error => {
       console.log("Error: ", error);

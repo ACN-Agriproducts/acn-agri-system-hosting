@@ -25,11 +25,6 @@ export class WarehouseReceiptsPage implements OnInit {
     this.currentCompany = this.session.getCompany();
     this.currentPlant = this.session.getPlant();
 
-    /* WarehouseReceiptGroup.getWrGroupListValueChanges(this.db, this.currentCompany)
-    .subscribe(list => {
-      this.warehouseReceiptGroupList = list;
-    }); */
-
     WarehouseReceiptGroup.onSnapshot(
       WarehouseReceiptGroup.getWrCollectionReference(this.db, this.currentCompany), 
       this.warehouseReceiptGroupList

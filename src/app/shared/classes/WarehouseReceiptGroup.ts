@@ -1,4 +1,5 @@
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData, Query } from "@angular/fire/firestore";
+import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -71,11 +72,23 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         return collectionData(wrCollectionQuery);
     }
 
-    public static onSnapshot = (ref: CollectionReference<WarehouseReceiptGroup> | Query<WarehouseReceiptGroup>, list: WarehouseReceiptGroup[]) => {
+    public getRawReceiptList = () => {
+        const receiptList = [];
+
+        this.warehouseReceiptList.forEach(receipt => {
+            receiptList.push(receipt.getRawData());
+        })
+
+        return receiptList;
+    }
+
+    public static onSnapshot = (
+        ref: CollectionReference<WarehouseReceiptGroup> | Query<WarehouseReceiptGroup>, 
+        list: WarehouseReceiptGroup[]
+    ) => {
         let first = true;
         onSnapshot(ref, next => {
             if (first) {
-                console.table(next.docs.map(doc => doc.data()));
                 list.push(...next.docs.map(doc => doc.data()));
                 first = false;
                 return;
@@ -87,13 +100,16 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
                 }
 
                 if (change.type === 'modified') {
-                    list[change.oldIndex] = change.doc.data();
+                    list[change.oldIndex].warehouseReceiptList = change.doc.data().warehouseReceiptList;
                 }
 
                 if (change.type === 'removed') {
                     list.splice(change.oldIndex, 1);
                 }
             });
+        },
+        error => {
+            console.log("Error: ", error);
         });
     }
 }
@@ -113,6 +129,10 @@ export class WarehouseReceipt {
         this.plant = data.plant;
         this.product = data.product;
         this.isPaid = data.isPaid;
+    }
+
+    public getRawData() {
+        return Object.assign({}, this);
     }
 }
 
