@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Invoice, inventoryInfo } from '@shared/classes/invoice';
 import { Plant } from '@shared/classes/plant';
@@ -24,27 +26,26 @@ export class ItemFixesPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private db: Firestore,
-    private localStorage: Storage
+    private session: SessionInfo,
+    private navController: NavController
   ) {
     this.firestoreId = route.snapshot.paramMap.get('id');
   }
 
   ngOnInit() {
-    this.localStorage.get("currentCompany").then(val => {
-      this.currentCompany = val;
+    this.currentCompany = this.session.getCompany();
 
-      Invoice.getDocById(this.db, this.currentCompany, this.firestoreId).then(invoice => {
-        this.invoice = invoice;
-      });
+    Invoice.getDocById(this.db, this.currentCompany, this.firestoreId).then(invoice => {
+      this.invoice = invoice;
+    });
 
-      Product.getProductList(this.db, this.currentCompany).then(result => {
-        this.productList = result;
-      })
-      
+    Product.getProductList(this.db, this.currentCompany).then(result => {
+      this.productList = result;
+    })
+    
 
-      Plant.getPlantList(this.db, this.currentCompany).then(result => {
-        this.plantsList = result;
-      });
+    Plant.getPlantList(this.db, this.currentCompany).then(result => {
+      this.plantsList = result;
     });
   }
 
@@ -53,6 +54,8 @@ export class ItemFixesPage implements OnInit {
   }
 
   getPlantInv(plantName: string) {
+    if(!this.plantsList) return [];
+
     const plant = this.plantsList.find(p => p.ref.id == plantName);
     
     if(plant) {
@@ -88,6 +91,8 @@ export class ItemFixesPage implements OnInit {
 
   submit() {
     this.invoice.needsAttention = false;
-    this.invoice.set();
+    this.invoice.set().then(() => {
+      this.navController.navigateForward('dashboard/invoices');
+    })
   }
 }
