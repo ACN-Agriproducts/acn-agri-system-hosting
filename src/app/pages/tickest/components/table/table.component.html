@@ -85,7 +85,7 @@
     </div>
     <!-- ================================= -->
     <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
-        *ngFor="let item of ticketList">
+        *ngFor="let item of paginator?.list">
         <div class="item-content ion-hide-lg-up">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
                 <div class="content-item-text">
@@ -197,7 +197,7 @@
     </div>
 </ion-card>
 <div class="ion-hide-sm-up">
-    <ion-card class="item-card" *ngFor="let item of ticketList">
+    <ion-card class="item-card" *ngFor="let item of paginator?.list">
         <ion-item lines="none" button (click)="openDetails($event)">
             <ion-label slot="start">
                 <h2>Ticket # <span>{{item.id}}</span></h2>
@@ -232,7 +232,7 @@
     </ion-card>
 </div>
 
-<ion-infinite-scroll threshold="100px" (ionInfinite)="infiniteTickets($event)">
+<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteTickets($event)">
     <ion-infinite-scroll-content
         loadingSpinner="bubbles"
         loadingText="Loading more data...">

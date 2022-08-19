@@ -122,10 +122,10 @@
           </div>
       </ion-item> -->
         </ion-card>
-        <ion-card class="table-body" *ngIf='ready'>
+        <ion-card class="table-body" *ngIf='contractPagination?.list'>
             <!-- (contextmenu)="openOptions($event)" -->
             <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
-            <div *ngFor="let item of dataList;">
+            <div *ngFor="let item of contractPagination.list;">
                 <div (contextmenu)="openOptions($event)" class="grid-item item-table">
                     <ion-item lines="none">
                         <ion-text color="dark" class="item-text-number">{{item.id}}</ion-text>
@@ -187,7 +187,7 @@
             <!-- </ion-virtual-scroll> -->
         </ion-card>
     </div>
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="infiniteContracts($event)">
+    <ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
         <ion-infinite-scroll-content
             loadingSpinner="bubbles"
             loadingText="Loading more data...">

@@ -60,9 +60,10 @@ class inventoryInfo {
     info: info[];
 
     constructor(data: any) {
+        console.log(data);
         this.info = [];
 
-        data.forEach(element => {
+        data.info.forEach(element => {
             this.info.push(new info(element));
         });
     }

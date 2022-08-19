@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, query, QueryDocumentSnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -77,7 +77,7 @@ export class Contract extends FirebaseDocInterface {
         this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = data.currentDelivered;
         this.date = data.date.toDate();
-        this.delivery_dates = new DeliveryDates({begin: data.delivery_dates.begin.toDate(), end: data.delivery_dates.end.toDate()});
+        this.delivery_dates = new DeliveryDates({begin: data.delivery_dates?.begin?.toDate(), end: data.delivery_dates?.end?.toDate()});
         this.grade = data.grade;
         this.id = data.id;
         this.loads = data.loads;
@@ -200,6 +200,33 @@ export class Contract extends FirebaseDocInterface {
 
     public static getStatusEnum(): typeof status {
         return status;
+    }
+
+    public static onSnapshot(ref: CollectionReference<Contract> | Query<Contract>, list: Contract[], onNext: (snapshot: QuerySnapshot<Contract>) => void = () => {}) {
+        let first = true;
+        onSnapshot(ref, next => {
+            onNext(next);
+
+            if(first) {
+              list.push(...next.docs.map(c => c.data()));
+              first = false;
+              return;
+            }
+      
+            next.docChanges().forEach(change => {
+              if(change.type == 'added') {
+                list.splice(change.newIndex, 0, change.doc.data());
+              }
+      
+              if(change.type == 'modified') {
+                list[change.oldIndex] = change.doc.data();
+              }
+      
+              if(change.type == 'removed') {
+                list.splice(change.oldIndex, 1);
+              }
+            });
+          })
     }
 
     // TODO
