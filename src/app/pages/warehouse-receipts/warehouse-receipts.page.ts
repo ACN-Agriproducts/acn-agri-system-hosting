@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, orderBy, query } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
+import { Pagination } from '@shared/classes/FirebaseDocInterface';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
-import { onSnapshot } from 'firebase/firestore';
 
 @Component({
   selector: 'app-warehouse-receipts',
@@ -14,6 +14,7 @@ export class WarehouseReceiptsPage implements OnInit {
   public currentCompany: string;
   public currentPlant: string;
   public warehouseReceiptGroupList: WarehouseReceiptGroup[] = [];
+  public paginator: Pagination<WarehouseReceiptGroup>;
 
   constructor(
     private navController: NavController,
@@ -22,13 +23,17 @@ export class WarehouseReceiptsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.currentCompany = this.session.getCompany();
     this.currentPlant = this.session.getPlant();
 
-    WarehouseReceiptGroup.onSnapshot(
-      WarehouseReceiptGroup.getWrCollectionReference(this.db, this.currentCompany), 
-      this.warehouseReceiptGroupList
-    );
+    WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('creationDate', 'desc')).then(val => {
+      this.warehouseReceiptGroupList = val;
+    });
+    // WarehouseReceiptGroup.onSnapshot(
+    //   wrGroupQuery, 
+    //   this.warehouseReceiptGroupList
+    // );
   }
 
   public nav = (route: string): void => {    

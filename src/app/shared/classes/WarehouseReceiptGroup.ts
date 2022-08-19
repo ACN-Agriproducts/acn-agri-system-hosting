@@ -81,26 +81,59 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
 
         return receiptList;
     }
+    
+    public static getGroupList(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<WarehouseReceiptGroup[]> {
+        const colQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), ...constraints);
+        return getDocs(colQuery).then(value => {
+            return value.docs.map(wrg => wrg.data());
+        });
+    }
 
     public static onSnapshot = (
         ref: CollectionReference<WarehouseReceiptGroup> | Query<WarehouseReceiptGroup>, 
         list: WarehouseReceiptGroup[]
     ) => {
         let first = true;
+        let cloneList;
+
         onSnapshot(ref, next => {
+            cloneList = JSON.parse(JSON.stringify(list));
+
             if (first) {
+                console.log('FIRST');
                 list.push(...next.docs.map(doc => doc.data()));
                 first = false;
                 return;
             }
             
             next.docChanges().forEach(change => {
+                const data = change.doc.data();
+
                 if (change.type === 'added') {
-                    list.splice(change.newIndex, 0, change.doc.data());
+                    list.splice(change.newIndex, 0, data);
                 }
 
                 if (change.type === 'modified') {
-                    list[change.oldIndex].warehouseReceiptList = change.doc.data().warehouseReceiptList;
+                    console.log("modified");
+                    const listChanged = data.warehouseReceiptList.some((receipt, index) => {
+                        const cloneReceipt = cloneList[change.oldIndex].warehouseReceiptList[index];
+
+                        console.log("Original: ", JSON.stringify(receipt));
+                        console.log("Copy: ", JSON.stringify(cloneReceipt));
+
+                        return JSON.stringify(receipt) != JSON.stringify(cloneReceipt)
+                    });
+
+                    console.log(listChanged);
+
+                    if (listChanged) {
+                        console.log("Warehouse Receipt List changed");
+                        list[change.oldIndex].warehouseReceiptList = data.warehouseReceiptList;
+                    }
+                    else {
+                        console.log("Something else changed.");
+                        list[change.oldIndex] = data;
+                    }
                 }
 
                 if (change.type === 'removed') {

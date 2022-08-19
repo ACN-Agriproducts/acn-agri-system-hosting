@@ -21,6 +21,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public purchaseContract: WarehouseReceiptContract;
   public saleContract: WarehouseReceiptContract;
 
+  public expanded: boolean = false;
+
   constructor(
     private dialog: MatDialog,
     private alertCtrl: AlertController
@@ -35,27 +37,31 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.purchaseContract = this.wrGroup.purchaseContract ?? null;
     this.saleContract = this.wrGroup.saleContract ?? null;
 
-
+    console.log(this.idRange);
   }
 
   public getIdRange(): string {
-    let result: string[] = [];
-    let idGroup = "";
+    let sequence: any[][] = [];
+    let subseq = [];
+
     this.wrIdList.forEach((id, index) => {
-      if (index === this.wrIdList.length - 1) {
-        return;
+      if (index === 0 || id === this.wrIdList[index - 1] + 1) {
+        subseq.push(id);
       }
-      
-      if (this.wrIdList[index + 1] - id > 1) {
-        idGroup = "";
-        result.push(`${id} `);
-        return;
+      else {
+        sequence.push(subseq);
+        subseq = [];
+        subseq.push(id);
       }
-      idGroup = ``
-      result.push(`${id}`);
+    });
+    sequence.push(subseq);
+
+    let result = ``;
+    sequence.forEach((sub, index) => {
+      result += `${sub[0]}-${sub[sub.length - 1]}` + (index !== sequence.length - 1 ? `, `: ``);
     });
 
-    return result.join();
+    return result;
   }
 
   public isEditable(contract: WarehouseReceiptContract): boolean {
@@ -90,13 +96,16 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     let updateData = await this.setContractDialog(contractData);
     if (updateData === undefined) return;
     
+    const fallback = this.wrGroup[isPurchase ? 'purchaseContract' : 'saleContract'];
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
+    this.wrGroup[isPurchase ? 'purchaseContract' : 'saleContract'] = updateData;
 
     this.wrGroup.update({
       [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
       status: "ACTIVE"
     })
     .catch(error => {
+      this.wrGroup[isPurchase ? 'purchaseContract' : 'saleContract'] = fallback;
       console.log(`Error: `, error);
     });
   }
@@ -118,18 +127,19 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public toggleExpandable(event: Event): void {
-    const icon = event.target as HTMLElement;
-    const card = icon.parentElement.parentElement;
-    const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
+    this.expanded = !this.expanded;
+    // const icon = event.target as HTMLElement;
+    // const card = icon.parentElement.parentElement;
+    // // const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
 
-    if (expandable.style.maxHeight) {
-      icon.innerHTML = "keyboard_arrow_down";
-      expandable.style.maxHeight = null;
-    }
-    else {
-      icon.innerHTML = "keyboard_arrow_up";
-      expandable.style.maxHeight = expandable.scrollHeight + "px";
-    }
+    // // // if (expandable.style.maxHeight) {
+    // // //   icon.innerHTML = "keyboard_arrow_down";
+    // // //   expandable.style.maxHeight = null;
+    // // // }
+    // // // else {
+    // // //   icon.innerHTML = "keyboard_arrow_up";
+    // // //   expandable.style.maxHeight = expandable.scrollHeight + "px";
+    // // // }
   }
 
   public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
@@ -166,6 +176,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     this.wrGroup.update({
       warehouseReceiptList: updateList
+    })
+    .then(() => {
+      console.log(this.wrGroup.warehouseReceiptList[index].isPaid);
     })
     .catch(error => {
       console.log("Error: ", error);
