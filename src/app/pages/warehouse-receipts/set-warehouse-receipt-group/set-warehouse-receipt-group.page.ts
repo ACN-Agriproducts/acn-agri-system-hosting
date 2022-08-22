@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { addDoc, collection, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
@@ -28,19 +29,17 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     private alertController: AlertController,
     private db: Firestore,
     private fb: FormBuilder,
-    private localStorage: Storage,
     private navController: NavController,
+    private session: SessionInfo,
     private snackbar: MatSnackBar,
     private uniqueId: UniqueWarehouseReceiptIdService,
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany')
-    .then(company => {
-      this.currentCompany = company;
-      this.warehouseReceiptCollectionRef = WarehouseReceiptGroup.getWrCollectionReference(this.db, company).withConverter(null);
-      return Plant.getPlantList(this.db, company);
-    })
+    this.currentCompany = this.session.getCompany();
+    this.warehouseReceiptCollectionRef = WarehouseReceiptGroup.getWrCollectionReference(this.db, this.currentCompany).withConverter(null);
+    
+    Plant.getPlantList(this.db, this.currentCompany)
     .then(plantObjList => {
       this.plantList = plantObjList.map(plant => plant.ref.id);
       return Product.getProductList(this.db, this.currentCompany);
