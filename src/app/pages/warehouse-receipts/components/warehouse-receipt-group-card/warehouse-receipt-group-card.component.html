@@ -1,5 +1,5 @@
 <ion-card class="wr-card">
-	<div class="wr-group">
+	<div class="group-main">
 		<div class="info-section">
 			<div class="group-info">
 				<div class="info">
@@ -13,11 +13,21 @@
 					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ wrGroup.status }}</ion-text>
 				</div>
 
-				<button mat-icon-button [matMenuTriggerFor]="groupOptions" matTooltip="Options" [disabled]="wrGroup.status === 'CANCELLED'">
+				<button 
+					mat-icon-button 
+					[matMenuTriggerFor]="groupOptions" 
+					matTooltip="Options" 
+					[disabled]="wrGroup.status === 'CANCELLED'"
+				>
 					<mat-icon>more_vert</mat-icon>
 				</button>
-				<mat-menu #groupOptions="matMenu" >
-					<button mat-menu-item [disabled]="wrGroup.purchaseContract" (click)="cancelGroupConfirmation()">
+				<mat-menu #groupOptions="matMenu">
+					<button 
+						mat-menu-item 
+						class="cancel-group"
+						[disabled]="wrGroup.purchaseContract" 
+						(click)="cancelGroupConfirmation()"
+					>
 						<mat-icon>cancel</mat-icon>
 						<span>Cancel Group</span>
 					</button>
