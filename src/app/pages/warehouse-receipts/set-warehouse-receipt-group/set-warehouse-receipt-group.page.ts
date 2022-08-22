@@ -52,7 +52,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
     this.warehouseReceiptGroupForm = this.fb.group({
       bushelQuantity: [10_000, Validators.required],
-      creationDate: [new Date()],
+      createdAt: [new Date()],
       plant: ['', Validators.required],
       product: ['', Validators.required],
       quantity: [1, Validators.required],
@@ -128,7 +128,9 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
   public cancel = (): void => {
     this.openSnackbar("Cancelled New Warehouse Receipt Group");
-    this.navController.navigateBack('/dashboard/warehouse-receipts');
+    this.navController.navigateBack('/dashboard/warehouse-receipts', {
+      replaceUrl: true
+    });
   }
 
   public confirm = async (): Promise<void> => {
@@ -162,9 +164,9 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     });
 
     let receiptGroup = {
-      closeDate: null,
-      creationDate: serverTimestamp(),
-      expireDate: null,
+      closedAt: null,
+      createdAt: serverTimestamp(),
+      expiredAt: null,
       purchaseContract: null,
       saleContract: null,
       status: "PENDING",

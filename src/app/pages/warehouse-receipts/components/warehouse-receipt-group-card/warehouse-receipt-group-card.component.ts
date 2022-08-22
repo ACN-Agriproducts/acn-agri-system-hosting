@@ -100,6 +100,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(()=> {
       this.wrGroup[contractType] = { ...updateData, closedAt: new Date() };
+      this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
       this.openSnackbar("Contract Successfully Updated.");
     })
     .catch(error => {
@@ -175,7 +176,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(() => {
       this.wrList[index].isPaid = true;
       this.openSnackbar(`Warehouse Receipt has been paid.`);
-
       this.checkIfAllPaid();
     })
     .catch(error => {
@@ -193,9 +193,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrGroup.update({
       saleContract: { status: "CLOSED" },
       status: "CLOSED",
+      closedAt: serverTimestamp()
     })
     .then(() => {
       this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
+      this.wrGroup.closedAt = new Date();
       this.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and WArehouse Receipt Group are now CLOSED.`);
     })
     .catch(error => {

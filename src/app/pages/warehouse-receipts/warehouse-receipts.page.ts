@@ -27,7 +27,7 @@ export class WarehouseReceiptsPage implements OnInit {
     this.currentCompany = this.session.getCompany();
     this.currentPlant = this.session.getPlant();
 
-    WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('creationDate', 'desc')).then(val => {
+    WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('createdAt', 'desc')).then(val => {
       this.warehouseReceiptGroupList = val;
     });
   }
@@ -39,6 +39,5 @@ export class WarehouseReceiptsPage implements OnInit {
   }
 
   ngOndestroy() {
-    console.log('Cleared');
   }
 }
