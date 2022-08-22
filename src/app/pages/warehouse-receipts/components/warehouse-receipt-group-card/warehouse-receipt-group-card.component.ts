@@ -59,6 +59,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result;
   }
 
+  public cancelGroup() {
+    this.openSnackbar("Warehouse Receipt Group has been cancelled");
+  }
+
   public isEditable(contract: WarehouseReceiptContract): boolean {
     if (contract?.closedAt === undefined) {
       return true;
@@ -184,7 +188,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public checkIfAllPaid() {
+  public checkIfAllPaid(): void {
     if (this.hasPaid() !== this.wrList.length) {
       return;
     }
@@ -204,7 +208,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
   }
 
-  public openSnackbar = (message: string, error?: boolean) => {
+  public openSnackbar (message: string, error?: boolean): void {
     if (error) {
       this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
       return;
