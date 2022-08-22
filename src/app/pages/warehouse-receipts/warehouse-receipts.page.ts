@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Firestore, orderBy, query } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
@@ -30,15 +30,15 @@ export class WarehouseReceiptsPage implements OnInit {
     WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('creationDate', 'desc')).then(val => {
       this.warehouseReceiptGroupList = val;
     });
-
-    // use onSnapshot as well to listen for changes to the group as as whole
-    // WarehouseReceiptGroup.onSnapshot(
-    //   wrGroupQuery, 
-    //   this.warehouseReceiptGroupList
-    // );
   }
 
-  public nav = (route: string): void => {    
-    this.navController.navigateForward(route);
+  public nav = (route: string): void => {
+    this.navController.navigateForward(route, {
+      replaceUrl: true
+    });
+  }
+
+  ngOndestroy() {
+    console.log('Cleared');
   }
 }

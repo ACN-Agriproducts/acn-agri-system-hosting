@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
@@ -21,11 +22,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public purchaseContract: WarehouseReceiptContract;
   public saleContract: WarehouseReceiptContract;
 
-  public expanded: boolean = false;
-
   constructor(
     private dialog: MatDialog,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -34,8 +34,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     this.idRange = this.getIdRange();
 
-    this.purchaseContract = this.wrGroup.purchaseContract ?? null;
-    this.saleContract = this.wrGroup.saleContract ?? null;
+    // this.purchaseContract = this.wrGroup.purchaseContract ?? null;
+    // this.saleContract = this.wrGroup.saleContract ?? null;
   }
 
   public getIdRange(): string {
@@ -68,12 +68,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     const HOUR_TO_MS = 1000 * 60 * 60;
-
     const now = new Date().getTime();
     const then = contract?.closedAt?.getTime();
 
     const hoursSinceCreated = (now - then) / HOUR_TO_MS;
-
     return hoursSinceCreated < 24 ? true : false;
   }
 
@@ -98,15 +96,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const fallback = this.wrGroup[contractType];
   
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
-    this.wrGroup[contractType] = updateData;
 
     this.wrGroup.update({
       [contractType]: updateData,
       status: "ACTIVE"
     })
+    .then(()=> {
+      this.wrGroup[contractType] = { ...updateData, closedAt: new Date() };
+      this.openSnackbar("Contract Successfully Updated.");
+    })
     .catch(error => {
       this.wrGroup[contractType] = fallback;
-      console.log(`Error: `, error);
+      this.openSnackbar(error, true);
     });
   }
 
@@ -127,24 +128,23 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public toggleExpandable(event: Event): void {
-    this.expanded = !this.expanded;
-    // const icon = event.target as HTMLElement;
-    // const card = icon.parentElement.parentElement;
-    // // const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
+    const icon = event.target as HTMLElement;
+    const card = icon.parentElement.parentElement;
+    const expandable = card.querySelector('.expandable-wr-list') as HTMLElement;
 
-    // // // if (expandable.style.maxHeight) {
-    // // //   icon.innerHTML = "keyboard_arrow_down";
-    // // //   expandable.style.maxHeight = null;
-    // // // }
-    // // // else {
-    // // //   icon.innerHTML = "keyboard_arrow_up";
-    // // //   expandable.style.maxHeight = expandable.scrollHeight + "px";
-    // // // }
+    if (expandable.style.maxHeight) {
+      icon.innerHTML = "keyboard_arrow_down";
+      expandable.style.maxHeight = null;
+    }
+    else {
+      icon.innerHTML = "keyboard_arrow_up";
+      expandable.style.maxHeight = expandable.scrollHeight + "px";
+    }
   }
 
   public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
-      console.log("Error: Sale Contract must be present.");
+      this.openSnackbar("Error: Sale Contract must be present.", true);
       return;
     }
 
@@ -169,9 +169,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public updatePaidStatus(index: number) {
-    const fallback = this.wrList;
-    this.wrList[index].isPaid = true;
-
     const updateList = this.wrGroup.getRawReceiptList();
     updateList[index].isPaid = true;
 
@@ -179,14 +176,21 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       warehouseReceiptList: updateList
     })
     .then(() => {
-      console.log(this.wrGroup.warehouseReceiptList[index].isPaid);
+      this.wrList[index].isPaid = true;
+      this.openSnackbar(`Warehouse Receipt has been paid.`);
     })
     .catch(error => {
-      this.wrGroup.warehouseReceiptList = fallback; // ??
-      console.log("Error: ", error);
+      this.wrList[index].isPaid = false;
+      this.openSnackbar(error, true);
     });
-    
-    console.log("Warehouse Receipt has been paid.");
+  }
+
+  public openSnackbar = (message: string, error?: boolean) => {
+    if (error) {
+      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
+      return;
+    }
+    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
   }
 }
 
