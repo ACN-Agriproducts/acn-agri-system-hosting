@@ -186,12 +186,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public checkIfAllPaid() {
     if (this.hasPaid() !== this.wrList.length) {
-      console.log("Not all paid yet.");
       return;
     }
 
     this.wrGroup.update({
-      saleContract: { status: "CLOSED" },
+      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED" },
       status: "CLOSED",
       closedAt: serverTimestamp()
     })
