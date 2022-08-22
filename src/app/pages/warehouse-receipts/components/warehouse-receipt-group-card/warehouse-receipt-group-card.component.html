@@ -17,7 +17,7 @@
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu" >
-					<button mat-menu-item [disabled]="wrGroup.purchaseContract" (click)="cancelGroup()">
+					<button mat-menu-item [disabled]="wrGroup.purchaseContract" (click)="cancelGroupConfirmation()">
 						<mat-icon>cancel</mat-icon>
 						<span>Cancel Group</span>
 					</button>

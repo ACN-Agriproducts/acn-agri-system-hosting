@@ -59,7 +59,28 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result;
   }
 
-  public cancelGroup() {
+  public async cancelGroupConfirmation(): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: "Confirmation",
+      message: `Are you sure you would like to cancel this Warehouse Receipt Group?`,
+      buttons: [
+        {
+          text: 'yes',
+          handler: () => {
+            alert.dismiss();
+            this.cancelGroup();
+          }
+        },
+        {
+          text: 'no',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  public cancelGroup(): void {
     this.wrGroup.update({
       status: "CANCELLED"
     })
