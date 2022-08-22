@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { AlertController, NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';

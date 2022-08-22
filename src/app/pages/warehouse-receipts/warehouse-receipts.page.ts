@@ -1,5 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Firestore, orderBy, query } from '@angular/fire/firestore';
+import { Component, OnInit } from '@angular/core';
+import { Firestore, orderBy } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
