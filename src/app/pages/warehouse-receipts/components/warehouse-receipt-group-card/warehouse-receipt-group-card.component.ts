@@ -23,9 +23,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public saleContract: WarehouseReceiptContract;
 
   constructor(
-    private dialog: MatDialog,
     private alertCtrl: AlertController,
-    private snackbar: MatSnackBar
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar,
   ) { }
 
   ngOnInit() {
@@ -33,9 +33,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
 
     this.idRange = this.getIdRange();
-
-    // this.purchaseContract = this.wrGroup.purchaseContract ?? null;
-    // this.saleContract = this.wrGroup.saleContract ?? null;
   }
 
   public getIdRange(): string {
@@ -178,11 +175,32 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(() => {
       this.wrList[index].isPaid = true;
       this.openSnackbar(`Warehouse Receipt has been paid.`);
+
+      this.checkIfAllPaid();
     })
     .catch(error => {
       this.wrList[index].isPaid = false;
       this.openSnackbar(error, true);
     });
+  }
+
+  public checkIfAllPaid() {
+    if (this.hasPaid() !== this.wrList.length) {
+      console.log("Not all paid yet.");
+      return;
+    }
+
+    this.wrGroup.update({
+      saleContract: { status: "CLOSED" },
+      status: "CLOSED",
+    })
+    .then(() => {
+      this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
+      this.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and WArehouse Receipt Group are now CLOSED.`);
+    })
+    .catch(error => {
+      this.openSnackbar(error, true);
+    })
   }
 
   public openSnackbar = (message: string, error?: boolean) => {
@@ -201,13 +219,4 @@ interface ContractData {
   pdfReference?: string;
   startDate: Date;
   status?: string;
-}
-
-interface WarehouseReceiptData {
-  bushelQuantity: number;
-  id: number;
-  isPaid: boolean;
-  plant: string;
-  product: string;
-  startDate: Date;
 }

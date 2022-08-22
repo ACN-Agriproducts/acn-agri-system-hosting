@@ -1,5 +1,4 @@
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData, Query } from "@angular/fire/firestore";
-import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -77,7 +76,7 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
 
         this.warehouseReceiptList.forEach(receipt => {
             receiptList.push(receipt.getRawData());
-        })
+        });
 
         return receiptList;
     }
@@ -144,6 +143,10 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
         error => {
             console.log("Error: ", error);
         });
+    }
+
+    public static getStatusType(): typeof Status {
+        return Status;
     }
 }
 
