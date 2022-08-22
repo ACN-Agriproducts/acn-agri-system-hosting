@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
@@ -20,38 +22,41 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public purchaseContract: WarehouseReceiptContract;
   public saleContract: WarehouseReceiptContract;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private alertCtrl: AlertController,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar,
+  ) { }
 
   ngOnInit() {
+    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.id - b.id);
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
-    this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-    
+
     this.idRange = this.getIdRange();
-
-    this.purchaseContract = this.wrGroup.purchaseContract ?? null;
-    this.saleContract = this.wrGroup.saleContract ?? null;
-
-
   }
 
   public getIdRange(): string {
-    let result: string[] = [];
-    let idGroup = "";
+    let sequence: any[][] = [];
+    let subseq = [];
+
     this.wrIdList.forEach((id, index) => {
-      if (index === this.wrIdList.length - 1) {
-        return;
+      if (index === 0 || id === this.wrIdList[index - 1] + 1) {
+        subseq.push(id);
       }
-      
-      if (this.wrIdList[index + 1] - id > 1) {
-        idGroup = "";
-        result.push(`${id} `);
-        return;
+      else {
+        sequence.push(subseq);
+        subseq = [];
+        subseq.push(id);
       }
-      idGroup = ``
-      result.push(`${id}`);
+    });
+    sequence.push(subseq);
+
+    let result = ``;
+    sequence.forEach((sub, index) => {
+      result += `${sub[0]}-${sub[sub.length - 1]}` + (index !== sequence.length - 1 ? `, `: ``);
     });
 
-    return result.join();
+    return result;
   }
 
   public isEditable(contract: WarehouseReceiptContract): boolean {
@@ -60,17 +65,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     const HOUR_TO_MS = 1000 * 60 * 60;
-
     const now = new Date().getTime();
     const then = contract?.closedAt?.getTime();
 
     const hoursSinceCreated = (now - then) / HOUR_TO_MS;
-
     return hoursSinceCreated < 24 ? true : false;
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
-    const contractData: ContractData = { startDate: new Date(), status: isPurchase ? "CLOSED" : "PENDING" };
+    const contractData: ContractData = { 
+      startDate: new Date(), 
+      status: isPurchase ? "CLOSED" : "PENDING"
+    };
 
     if (contract) {
       contractData.basePrice = contract.basePrice;
@@ -80,23 +86,32 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    let updateData = await this.modifyContractDialog(contractData);
+    let updateData = await this.setContractDialog(contractData);
     if (updateData === undefined) return;
-    
+
+    const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
+    const fallback = this.wrGroup[contractType];
+  
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
 
     this.wrGroup.update({
-      [isPurchase ? 'purchaseContract' : 'saleContract']: updateData,
+      [contractType]: updateData,
       status: "ACTIVE"
     })
+    .then(()=> {
+      this.wrGroup[contractType] = { ...updateData, closedAt: new Date() };
+      this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
+      this.openSnackbar("Contract Successfully Updated.");
+    })
     .catch(error => {
-      console.log(`Error: `, error);
+      this.wrGroup[contractType] = fallback;
+      this.openSnackbar(error, true);
     });
   }
 
-  public modifyContractDialog(contractData: ContractData): any {
+  public setContractDialog(contractUpdateDoc: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
-      data: contractData,
+      data: contractUpdateDoc,
       height: '300px',
       width: '550px'
     });
@@ -125,8 +140,76 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
   }
 
-  public onClick() {
-    console.log("Icon click working");
+  public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
+    if (this.wrGroup.saleContract === null) {
+      this.openSnackbar("Error: Sale Contract must be present.", true);
+      return;
+    }
+
+    const alert = await this.alertCtrl.create({
+      header: "Confirmation",
+      message: `Are you sure you would like to set the status of Warehouse Receipt ${warehouseReceipt.id} as paid?`,
+      buttons: [
+        {
+          text: 'yes',
+          handler: () => {
+            alert.dismiss();
+            this.updatePaidStatus(index);
+          }
+        },
+        {
+          text: 'no',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  public updatePaidStatus(index: number) {
+    const updateList = this.wrGroup.getRawReceiptList();
+    updateList[index].isPaid = true;
+
+    this.wrGroup.update({
+      warehouseReceiptList: updateList
+    })
+    .then(() => {
+      this.wrList[index].isPaid = true;
+      this.openSnackbar(`Warehouse Receipt has been paid.`);
+      this.checkIfAllPaid();
+    })
+    .catch(error => {
+      this.wrList[index].isPaid = false;
+      this.openSnackbar(error, true);
+    });
+  }
+
+  public checkIfAllPaid() {
+    if (this.hasPaid() !== this.wrList.length) {
+      return;
+    }
+
+    this.wrGroup.update({
+      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED" },
+      status: "CLOSED",
+      closedAt: serverTimestamp()
+    })
+    .then(() => {
+      this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
+      this.wrGroup.closedAt = new Date();
+      this.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and WArehouse Receipt Group are now CLOSED.`);
+    })
+    .catch(error => {
+      this.openSnackbar(error, true);
+    })
+  }
+
+  public openSnackbar = (message: string, error?: boolean) => {
+    if (error) {
+      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
+      return;
+    }
+    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
   }
 }
 

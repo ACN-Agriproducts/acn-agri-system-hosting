@@ -3,7 +3,7 @@
 		<div class="info-section">
 			<div class="group-info">
 				<div class="info">
-					<ion-text>Created: <b>{{ wrGroup.creationDate | date }}</b></ion-text>
+					<ion-text>Created: <b>{{ wrGroup.createdAt | date }}</b></ion-text>
 					<ion-text>ID Range: <b>{{ idRange }}</b></ion-text>
 					<ion-text>Quantity: <b>{{ wrGroup.totalBushelQuantity | number}} BU</b></ion-text>
 					<ion-text>Product: <b>{{ wrGroup.product }}</b></ion-text>
@@ -56,7 +56,7 @@
 					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
 						{{ wrGroup.saleContract?.status ?? "NONE" }}
 						<span *ngIf="hasPaid()">
-							{{ hasPaid() }}/6
+							{{ hasPaid() }} / {{ wrList.length }}
 						</span>
 					</ion-text>
 
@@ -91,14 +91,18 @@
 			<ion-text>Plant</ion-text>
 			<ion-text>Paid</ion-text>
 		</div>
-		<div class="table-row table-body" [class.odd]="odd" *ngFor="let warehouseReceipt of wrList; let odd = odd">
+		<div class="table-row table-body" [class.odd]="odd" *ngFor="let warehouseReceipt of wrList; let odd = odd; let i = index">
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
 			<ion-text>{{ warehouseReceipt.startDate | date }}</ion-text>
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
 			<div>
-				<button mat-icon-button class="paid-button" (click)="onClick()">
+				<button mat-icon-button
+					class="paid-button" 
+					(click)="paidWarehouseReceipt(warehouseReceipt, i)" 
+					[disabled]="warehouseReceipt.isPaid"
+				>
 					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
 					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
 				</button>

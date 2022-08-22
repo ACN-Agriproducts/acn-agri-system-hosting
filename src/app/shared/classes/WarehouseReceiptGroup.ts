@@ -1,11 +1,12 @@
-import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData, Query } from "@angular/fire/firestore";
+import { onSnapshot } from "firebase/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class WarehouseReceiptGroup extends FirebaseDocInterface {
-    public closeDate: Date | null;
-    public creationDate: Date;
-    public expireDate: Date | null;
+    public closedAt: Date | null;
+    public createdAt: Date;
+    public expiredAt: Date | null;
     public purchaseContract: WarehouseReceiptContract | null;
     public saleContract: WarehouseReceiptContract | null;
     public status: Status;
@@ -20,9 +21,9 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
 
         const data = snapshot.data();
 
-        this.closeDate = data.closeDate?.toDate();
-        this.creationDate = data.creationDate?.toDate();
-        this.expireDate = data.expireDate?.toDate();
+        this.closedAt = data.closedAt?.toDate();
+        this.createdAt = data.createdAt?.toDate();
+        this.expiredAt = data.expiredAt?.toDate();
         this.purchaseContract = data.purchaseContract ? new WarehouseReceiptContract(data.purchaseContract) : null;
         this.saleContract = data.saleContract ? new WarehouseReceiptContract(data.saleContract) : null;
         this.status = data.status;
@@ -40,9 +41,9 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: WarehouseReceiptGroup): DocumentData {
             return {
-                closeDate: data.closeDate,
-                creationDate: data.creationDate,
-                expireDate: data.expireDate,
+                closedAt: data.closedAt,
+                createdAt: data.createdAt,
+                expiredAt: data.expiredAt,
                 purchaseContract: data.purchaseContract,
                 saleContract: data.saleContract,
                 status: data.status,
@@ -66,8 +67,29 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
     }
 
     public static getWrGroupListValueChanges = (db: Firestore, company: string): Observable<WarehouseReceiptGroup[]> => {
-        const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), orderBy('creationDate', 'desc'));
+        const wrCollectionQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), orderBy('createdAt', 'desc'));
         return collectionData(wrCollectionQuery);
+    }
+
+    public getRawReceiptList = () => {
+        const receiptList = [];
+
+        this.warehouseReceiptList.forEach(receipt => {
+            receiptList.push(receipt.getRawData());
+        });
+
+        return receiptList;
+    }
+    
+    public static getGroupList(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<WarehouseReceiptGroup[]> {
+        const colQuery = query(WarehouseReceiptGroup.getWrCollectionReference(db, company), ...constraints);
+        return getDocs(colQuery).then(value => {
+            return value.docs.map(wrg => wrg.data());
+        });
+    }
+
+    public static getStatusType(): typeof Status {
+        return Status;
     }
 }
 
@@ -86,6 +108,10 @@ export class WarehouseReceipt {
         this.plant = data.plant;
         this.product = data.product;
         this.isPaid = data.isPaid;
+    }
+
+    public getRawData() {
+        return Object.assign({}, this);
     }
 }
 

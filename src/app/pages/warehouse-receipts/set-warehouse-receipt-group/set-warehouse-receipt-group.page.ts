@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { AlertController, NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
@@ -28,19 +28,17 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     private alertController: AlertController,
     private db: Firestore,
     private fb: FormBuilder,
-    private localStorage: Storage,
     private navController: NavController,
+    private session: SessionInfo,
     private snackbar: MatSnackBar,
     private uniqueId: UniqueWarehouseReceiptIdService,
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany')
-    .then(company => {
-      this.currentCompany = company;
-      this.warehouseReceiptCollectionRef = WarehouseReceiptGroup.getWrCollectionReference(this.db, company).withConverter(null);
-      return Plant.getPlantList(this.db, company);
-    })
+    this.currentCompany = this.session.getCompany();
+    this.warehouseReceiptCollectionRef = WarehouseReceiptGroup.getWrCollectionReference(this.db, this.currentCompany).withConverter(null);
+    
+    Plant.getPlantList(this.db, this.currentCompany)
     .then(plantObjList => {
       this.plantList = plantObjList.map(plant => plant.ref.id);
       return Product.getProductList(this.db, this.currentCompany);
@@ -53,7 +51,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
     this.warehouseReceiptGroupForm = this.fb.group({
       bushelQuantity: [10_000, Validators.required],
-      creationDate: [new Date()],
+      createdAt: [new Date()],
       plant: ['', Validators.required],
       product: ['', Validators.required],
       quantity: [1, Validators.required],
@@ -129,7 +127,9 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
   public cancel = (): void => {
     this.openSnackbar("Cancelled New Warehouse Receipt Group");
-    this.navController.navigateBack('/dashboard/warehouse-receipts');
+    this.navController.navigateBack('/dashboard/warehouse-receipts', {
+      replaceUrl: true
+    });
   }
 
   public confirm = async (): Promise<void> => {
@@ -163,9 +163,9 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     });
 
     let receiptGroup = {
-      closeDate: null,
-      creationDate: serverTimestamp(),
-      expireDate: null,
+      closedAt: null,
+      createdAt: serverTimestamp(),
+      expiredAt: null,
       purchaseContract: null,
       saleContract: null,
       status: "PENDING",

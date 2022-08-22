@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, orderBy } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { Pagination } from '@shared/classes/FirebaseDocInterface';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 
 @Component({
@@ -14,6 +14,7 @@ export class WarehouseReceiptsPage implements OnInit {
   public currentCompany: string;
   public currentPlant: string;
   public warehouseReceiptGroupList: WarehouseReceiptGroup[] = [];
+  public paginator: Pagination<WarehouseReceiptGroup>;
 
   constructor(
     private navController: NavController,
@@ -22,16 +23,21 @@ export class WarehouseReceiptsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.currentCompany = this.session.getCompany();
     this.currentPlant = this.session.getPlant();
 
-    WarehouseReceiptGroup.getWrGroupListValueChanges(this.db, this.currentCompany)
-    .subscribe(list => {
-      this.warehouseReceiptGroupList = list;
+    WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('createdAt', 'desc')).then(val => {
+      this.warehouseReceiptGroupList = val;
     });
   }
 
-  public nav = (route: string): void => {    
-    this.navController.navigateForward(route);
+  public nav = (route: string): void => {
+    this.navController.navigateForward(route, {
+      replaceUrl: true
+    });
+  }
+
+  ngOndestroy() {
   }
 }
