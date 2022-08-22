@@ -60,7 +60,16 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public cancelGroup() {
-    this.openSnackbar("Warehouse Receipt Group has been cancelled");
+    this.wrGroup.update({
+      status: "CANCELLED"
+    })
+    .then(() => {
+      this.wrGroup.status = WarehouseReceiptGroup.getStatusType().cancelled;
+      this.openSnackbar("Warehouse Receipt Group has been cancelled");
+    })
+    .catch(error => {
+      this.openSnackbar(error, true);
+    });
   }
 
   public isEditable(contract: WarehouseReceiptContract): boolean {

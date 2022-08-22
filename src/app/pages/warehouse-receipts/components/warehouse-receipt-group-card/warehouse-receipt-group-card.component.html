@@ -13,7 +13,7 @@
 					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ wrGroup.status }}</ion-text>
 				</div>
 
-				<button mat-icon-button [matMenuTriggerFor]="groupOptions" matTooltip="Options">
+				<button mat-icon-button [matMenuTriggerFor]="groupOptions" matTooltip="Options" [disabled]="wrGroup.status === 'CANCELLED'">
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu" >
@@ -32,7 +32,12 @@
 		</div>
 
 		<div class="contract-section">
-			<ion-card class="contract" id="purchase-contract" [class.contract-signed]="wrGroup.purchaseContract">
+			<ion-card 
+				class="contract" 
+				id="purchase-contract" 
+				[class.contract-signed]="wrGroup.purchaseContract" 
+				[disabled]="wrGroup.status === 'CANCELLED'"
+			>
 				<div class="contract-header">
 					<ion-card-title>Purchase Contract</ion-card-title>
 					&nbsp;
@@ -40,7 +45,12 @@
 						{{ wrGroup.purchaseContract?.status ?? "NONE" }}
 					</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" *ngIf="isEditable(wrGroup.purchaseContract)" (click)="setContract(wrGroup.purchaseContract, true)">
+					<button 
+						mat-icon-button 
+						matTooltip="Set Contract" 
+						*ngIf="isEditable(wrGroup.purchaseContract)" 
+						(click)="setContract(wrGroup.purchaseContract, true)"
+					>
 						<mat-icon>edit</mat-icon>
 					</button>
 				</div>
@@ -59,7 +69,12 @@
 				</ng-template>
 			</ion-card>
 
-			<ion-card class="contract" id="sale-contract" [class.contract-signed]="wrGroup.saleContract">
+			<ion-card 
+				class="contract" 
+				id="sale-contract" 
+				[class.contract-signed]="wrGroup.saleContract"
+				[disabled]="wrGroup.status === 'CANCELLED'"
+			>
 				<div class="contract-header">
 					<ion-card-title>Sale Contract</ion-card-title>
 					&nbsp;
@@ -70,7 +85,12 @@
 						</span>
 					</ion-text>
 
-					<button mat-icon-button matTooltip="Set Contract" *ngIf="isEditable(wrGroup.saleContract)" (click)="setContract(wrGroup.saleContract, false)">
+					<button 
+						mat-icon-button 
+						matTooltip="Set Contract" 
+						*ngIf="isEditable(wrGroup.saleContract)" 
+						(click)="setContract(wrGroup.saleContract, false)"
+					>
 						<mat-icon>edit</mat-icon>
 					</button>
 
@@ -92,7 +112,7 @@
 		</div>
 	</div>
 
-	<ion-card class="expandable-wr-list">
+	<ion-card class="expandable-wr-list" [disabled]="wrGroup.status === 'CANCELLED'">
 		<div class="table-row table-header">
 			<ion-text>ID</ion-text>
 			<ion-text>Start Date</ion-text>
@@ -108,7 +128,8 @@
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
 			<div>
-				<button mat-icon-button
+				<button 
+					mat-icon-button
 					class="paid-button" 
 					(click)="paidWarehouseReceipt(warehouseReceipt, i)" 
 					[disabled]="warehouseReceipt.isPaid"

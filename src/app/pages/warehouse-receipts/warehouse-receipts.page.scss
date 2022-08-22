@@ -16,6 +16,10 @@
     width: min(100% - 3rem);
     margin-inline: auto;
     padding: 0.7rem 0.7rem 0.2rem 0.7rem;
+    
+    &:disabled {
+        
+    }
 }
 
 #add {
@@ -86,7 +90,7 @@
     font-size: 1.1em;
 }
 .group-options {
-    
+
 }
 
 .status-text {
