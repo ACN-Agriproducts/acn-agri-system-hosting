@@ -1,12 +1,12 @@
 
 ion-toolbar {
-    min-height: 45px;
-    height: 45px;
+    min-height: 42px;
+    height: 42px;
 }
 ion-segment-button {
     font-size: 0.9em;
-    min-height: 45px;
-    height: 45px;
+    min-height: 42px;
+    height: 42px;
 }
 .segment-button-checked {
     --background: rgba(var(--ion-color-primary-rgb),0.075);
@@ -121,6 +121,7 @@ ion-segment-button {
     font-size: 0.9em;
     // font-family: 'Lucida Console', monospace;
     font-family: sans-serif;
+    text-transform: capitalize;
     padding: 0 1rem;
     border-radius: 10px;
     position: relative;

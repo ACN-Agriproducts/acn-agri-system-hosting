@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, orderBy } from '@angular/fire/firestore';
+import { Firestore, orderBy, where } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
@@ -15,6 +15,7 @@ export class WarehouseReceiptsPage implements OnInit {
   public currentPlant: string;
   public warehouseReceiptGroupList: WarehouseReceiptGroup[] = [];
   public paginator: Pagination<WarehouseReceiptGroup>;
+  public statusFilter: string[] = ["PENDING", "ACTIVE", "CLOSED", "CANCELLED"];
 
   constructor(
     private navController: NavController,
@@ -23,11 +24,13 @@ export class WarehouseReceiptsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.currentCompany = this.session.getCompany();
     this.currentPlant = this.session.getPlant();
+    this.getWarehouseReceipts();
+  }
 
-    WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('createdAt', 'desc')).then(val => {
+  public getWarehouseReceipts = (): void => {
+    WarehouseReceiptGroup.getGroupList(this.db, this.currentCompany, orderBy('createdAt', 'desc'), where("status", "in", this.statusFilter)).then(val => {
       this.warehouseReceiptGroupList = val;
     });
   }
@@ -38,8 +41,9 @@ export class WarehouseReceiptsPage implements OnInit {
     });
   }
 
-  public statusFilterChange = () => {
-    
+  public statusFilterChange = (event: any): void => {
+    this.statusFilter = event.detail.value.split(',');
+    this.getWarehouseReceipts();
   }
 
   ngOndestroy() {
