@@ -13,22 +13,17 @@
 					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ wrGroup.status }}</ion-text>
 				</div>
 
-				<button 
-					mat-icon-button 
-					[matMenuTriggerFor]="groupOptions" 
-					matTooltip="Options" 
-					[disabled]="wrGroup.status === 'CANCELLED'"
-				>
+				<button mat-icon-button [matMenuTriggerFor]="groupOptions" matTooltip="Options">
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu">
 					<button 
 						mat-menu-item 
-						class="cancel-group"
-						[disabled]="wrGroup.purchaseContract" 
+						class="cancel-group" 
+						[disabled]="wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
 						(click)="cancelGroupConfirmation()"
 					>
-						<mat-icon>cancel</mat-icon>
+						<mat-icon color="warn">cancel</mat-icon>
 						<span>Cancel Group</span>
 					</button>
 				</mat-menu>
