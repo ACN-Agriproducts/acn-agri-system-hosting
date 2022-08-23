@@ -1,4 +1,6 @@
 
+// ---------------------------------- warehouse-receipts.page.html ----------------------------------
+
 ion-toolbar {
     min-height: 42px;
     height: 42px;
@@ -35,7 +37,6 @@ ion-segment-button {
         opacity: 0;
         z-index: 2;
     }
-
     &:hover:before {
         opacity: 1;
     }
@@ -44,10 +45,11 @@ ion-segment-button {
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-size: 1.2em;
     }
 }
+
+// -------------------- warehouse-receipts.page.html & warehouse-receipt-group-card.component.html --------------------
 
 .wr-card {
     display: flex;
@@ -67,7 +69,6 @@ ion-segment-button {
 .info-section {
     display: flex;
     flex-direction: column;
-
     margin: 5px;
     width: 50%;
 }
@@ -90,7 +91,7 @@ ion-segment-button {
     }
 }
 
-// ----------------------- warehouse-receipts.page.html needs above only -------------------------
+// ------------------------- warehouse-receipt-group-card.component.html -------------------------
 
 .group-info {
     display: flex;
@@ -103,7 +104,6 @@ ion-segment-button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
     width: 120%;
 }
 
@@ -111,7 +111,6 @@ ion-segment-button {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 100%;
 }
 
@@ -141,7 +140,6 @@ ion-segment-button {
         z-index: 2;
         border-radius: 22px;
     }
-
     &:hover:before {
         opacity: 1;
     }
@@ -162,6 +160,7 @@ ion-segment-button {
 .cancelled { 
     background-color: rgba(var(--ion-color-danger-rgb), 0.15);
     color: var(--ion-color-danger);
+    
     cursor: initial;
     &:before {
         all: initial;
@@ -254,7 +253,6 @@ hr {
             z-index: 2;
             border-radius: 22px;
         }
-    
         &:hover:before {
             opacity: 1;
         }
@@ -321,11 +319,9 @@ hr {
         opacity: 0;
         z-index: 2;
     }
-
     &:hover:before {
         opacity: 1;
     }
-
     &:hover {
         background-color: transparent !important;
         transition: .2s;
