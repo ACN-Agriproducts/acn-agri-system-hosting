@@ -1,4 +1,18 @@
 
+ion-toolbar {
+    min-height: 45px;
+    height: 45px;
+}
+ion-segment-button {
+    font-size: 0.9em;
+    min-height: 45px;
+    height: 45px;
+}
+.segment-button-checked {
+    --background: rgba(var(--ion-color-primary-rgb),0.075);
+    background: rgba(var(--ion-color-primary-rgb),0.075);
+}
+
 .card-list {
     display: flex;
     flex-direction: column;
@@ -75,8 +89,6 @@
         font-size: 1.2em;
     }
 }
-
-
 
 // ----------------------- warehouse-receipts.page.html needs above only -------------------------
 

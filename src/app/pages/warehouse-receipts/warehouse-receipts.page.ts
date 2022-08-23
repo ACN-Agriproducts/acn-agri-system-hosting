@@ -38,6 +38,10 @@ export class WarehouseReceiptsPage implements OnInit {
     });
   }
 
+  public statusFilterChange = () => {
+    
+  }
+
   ngOndestroy() {
   }
 }

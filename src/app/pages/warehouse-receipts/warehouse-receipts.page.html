@@ -1,4 +1,23 @@
 <app-header-toolbar titulo="Warehouse Receipts"></app-header-toolbar>
+<ion-toolbar>
+	<ion-segment value="all" (ionChange)="statusFilterChange()">
+		<ion-segment-button value="all">
+			<ion-label>All</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="pending">
+			<ion-label>Pending</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="active">
+			<ion-label>Active</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="closed">
+			<ion-label>Closed</ion-label>
+		</ion-segment-button>
+		<ion-segment-button value="cancelled">
+			<ion-label>Cancelled</ion-label>
+		</ion-segment-button>
+	</ion-segment>
+</ion-toolbar>
 
 <ion-content class="ion-padding" [fullscreen]="true">
 	<div class="card-list">
