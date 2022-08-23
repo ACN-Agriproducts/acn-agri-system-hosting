@@ -4,7 +4,7 @@ ion-toolbar {
     height: 42px;
 }
 ion-segment-button {
-    font-size: 0.9em;
+    font-size: 0.85em;
     min-height: 42px;
     height: 42px;
 }
@@ -119,8 +119,7 @@ ion-segment-button {
     display: inline-block;
     font-weight: 600;
     font-size: 0.9em;
-    // font-family: 'Lucida Console', monospace;
-    font-family: sans-serif;
+    font-family: 'Verdana', 'Arial', sans-serif;
     text-transform: capitalize;
     padding: 0 1rem;
     border-radius: 10px;
