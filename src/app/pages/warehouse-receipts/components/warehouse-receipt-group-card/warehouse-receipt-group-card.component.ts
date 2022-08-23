@@ -59,6 +59,40 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result;
   }
 
+  public async cancelGroupConfirmation(): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: "Confirmation",
+      message: `Are you sure you would like to cancel this Warehouse Receipt Group?`,
+      buttons: [
+        {
+          text: 'yes',
+          handler: () => {
+            alert.dismiss();
+            this.cancelGroup();
+          }
+        },
+        {
+          text: 'no',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  public cancelGroup(): void {
+    this.wrGroup.update({
+      status: "CANCELLED"
+    })
+    .then(() => {
+      this.wrGroup.status = WarehouseReceiptGroup.getStatusType().cancelled;
+      this.openSnackbar("Warehouse Receipt Group has been cancelled");
+    })
+    .catch(error => {
+      this.openSnackbar(error, true);
+    });
+  }
+
   public isEditable(contract: WarehouseReceiptContract): boolean {
     if (contract?.closedAt === undefined) {
       return true;
@@ -184,7 +218,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public checkIfAllPaid() {
+  public checkIfAllPaid(): void {
     if (this.hasPaid() !== this.wrList.length) {
       return;
     }
@@ -204,7 +238,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
   }
 
-  public openSnackbar = (message: string, error?: boolean) => {
+  public openSnackbar (message: string, error?: boolean): void {
     if (error) {
       this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
       return;
