@@ -113,13 +113,14 @@ ion-segment-button {
     align-items: center;
 
     width: 100%;
-
 }
 
 .status-text {
     display: inline-block;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.9em;
+    // font-family: 'Lucida Console', monospace;
+    font-family: sans-serif;
     padding: 0 1rem;
     border-radius: 10px;
     position: relative;
