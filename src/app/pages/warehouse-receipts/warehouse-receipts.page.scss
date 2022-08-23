@@ -1,21 +1,7 @@
 
-.warehouse-receipt-section {
-    padding: 2rem;
-}
-
 .card-list {
     display: flex;
     flex-direction: column;
-}
-
-.wr-card {
-    display: flex;
-    flex-direction: column;
-
-    min-height: 200px;
-    width: min(100% - 3rem);
-    margin-inline: auto;
-    padding: 0.7rem 0.7rem 0.2rem 0.7rem;
 }
 
 #add {
@@ -49,6 +35,16 @@
     }
 }
 
+.wr-card {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 200px;
+    width: min(100% - 3rem);
+    margin-inline: auto;
+    padding: 0.7rem 0.7rem 0.2rem 0.7rem;
+}
+
 .wr-group {
     display: flex;
     height: 190px;
@@ -61,6 +57,28 @@
     margin: 5px;
     width: 50%;
 }
+
+.contract-section {
+    display: flex;
+    width: 100%;
+}
+
+.contract {
+    width: 100%;
+    margin: 5px;
+    padding: 1em;
+    border-radius: 5px;
+    background-color: rgb(232, 232, 232);
+
+    ion-card-title {
+        display: inline;
+        font-size: 1.2em;
+    }
+}
+
+
+
+// ----------------------- warehouse-receipts.page.html needs above only -------------------------
 
 .group-info {
     display: flex;
@@ -147,24 +165,6 @@ hr {
 .group-stats {
     flex-grow: 1;
     padding: 0.5em;
-}
-
-.contract-section {
-    display: flex;
-    width: 100%;
-}
-
-.contract {
-    width: 100%;
-    margin: 5px;
-    padding: 1em;
-    border-radius: 5px;
-    background-color: rgb(232, 232, 232);
-
-    ion-card-title {
-        display: inline;
-        font-size: 1.2em;
-    }
 }
 
 .contract-signed {
