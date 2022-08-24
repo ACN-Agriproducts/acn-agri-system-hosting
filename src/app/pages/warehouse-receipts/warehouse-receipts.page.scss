@@ -1,6 +1,18 @@
 
-.warehouse-receipt-section {
-    padding: 2rem;
+// ---------------------------------- warehouse-receipts.page.html ----------------------------------
+
+ion-toolbar {
+    min-height: 42px;
+    height: 42px;
+}
+ion-segment-button {
+    font-size: 0.85em;
+    min-height: 42px;
+    height: 42px;
+}
+.segment-button-checked {
+    --background: rgba(var(--ion-color-primary-rgb),0.075);
+    background: rgba(var(--ion-color-primary-rgb),0.075);
 }
 
 .card-list {
@@ -8,19 +20,11 @@
     flex-direction: column;
 }
 
-.wr-card {
+#add-card {
     display: flex;
-    flex-direction: column;
-
-    min-height: 200px;
-    width: min(100% - 3rem);
-    margin-inline: auto;
-    padding: 0.7rem 0.7rem 0.2rem 0.7rem;
-}
-
-#add {
-    display: flex;
-    height: 150px;
+    flex-direction: row !important;
+    min-height: 140px;
+    padding-bottom: 0.7rem;
     cursor: pointer;
 
     &:before {
@@ -35,7 +39,6 @@
         opacity: 0;
         z-index: 2;
     }
-
     &:hover:before {
         opacity: 1;
     }
@@ -44,12 +47,27 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
         font-size: 1.2em;
+    }
+
+    .wr-group{
+        height: 100%;
     }
 }
 
-.group-main {
+// -------------------- warehouse-receipts.page.html & warehouse-receipt-group-card.component.html --------------------
+
+.wr-card {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 200px;
+    width: min(100% - 3rem);
+    margin-inline: auto;
+    padding: 0.7rem 0.7rem 0.2rem 0.7rem;
+}
+
+.wr-group {
     display: flex;
     height: 190px;
 }
@@ -57,10 +75,29 @@
 .info-section {
     display: flex;
     flex-direction: column;
-
     margin: 5px;
     width: 50%;
 }
+
+.contract-section {
+    display: flex;
+    width: 100%;
+}
+
+.contract {
+    width: 100%;
+    margin: 5px;
+    padding: 1em;
+    border-radius: 5px;
+    background-color: rgb(232, 232, 232);
+
+    ion-card-title {
+        display: inline;
+        font-size: 1.2em;
+    }
+}
+
+// ------------------------- warehouse-receipt-group-card.component.html -------------------------
 
 .group-info {
     display: flex;
@@ -73,7 +110,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
     width: 120%;
 }
 
@@ -81,7 +117,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 100%;
     font-size: 1.1em;
 }
@@ -106,8 +141,10 @@
 
 .status-text {
     display: inline-block;
-    font-weight: 500;
-    font-size: 0.9em;
+    font-weight: 600;
+    font-size: 0.75em;
+    font-family: 'Verdana', 'Arial', sans-serif;
+    text-transform: capitalize;
     padding: 0 1rem;
     border-radius: 10px;
     position: relative;
@@ -128,7 +165,6 @@
         z-index: 2;
         border-radius: 22px;
     }
-
     &:hover:before {
         opacity: 1;
     }
@@ -149,6 +185,7 @@
 .cancelled { 
     background-color: rgba(var(--ion-color-danger-rgb), 0.15);
     color: var(--ion-color-danger);
+
     cursor: initial;
     &:before {
         all: initial;
@@ -167,24 +204,6 @@ hr {
     padding: 0.5em;
 }
 
-.contract-section {
-    display: flex;
-    width: 100%;
-}
-
-.contract {
-    width: 100%;
-    margin: 5px;
-    padding: 1em;
-    border-radius: 5px;
-    background-color: rgb(232, 232, 232);
-
-    ion-card-title {
-        display: inline;
-        font-size: 1.2em;
-    }
-}
-
 .contract-signed {
     background-color: var(--ion-color-primary-light);
 }
@@ -198,13 +217,13 @@ hr {
         top: -50%;
 
         mat-icon {
-            font-size: 21px;
+            font-size: 20px;
         }
     }
 }
 
 .contract-info {
-    margin: 1em;
+    margin: 1em 0.6em;
     padding-top: 0.5em;
     
     ion-text {
@@ -224,9 +243,24 @@ hr {
     height: 5em;
     padding-top: 1.3em;
     font-size: 1.05em;
+    margin: 0 -0.3em;
 
     ion-card-title {
         font-size: 1.1em;
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 95%;
+            border-top: 2px solid var(--ion-color-primary);
+        }
+    }
+    ion-card-title, ion-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 
@@ -263,7 +297,6 @@ hr {
             z-index: 2;
             border-radius: 22px;
         }
-    
         &:hover:before {
             opacity: 1;
         }
@@ -300,6 +333,7 @@ hr {
 .table-header {
     background-color: var(--ion-color-primary-light);
     color: var(--ion-color-primary);
+    font-size: 1.05em;
     font-weight: 500;
 
     border-style: solid;
@@ -330,11 +364,9 @@ hr {
         opacity: 0;
         z-index: 2;
     }
-
     &:hover:before {
         opacity: 1;
     }
-
     &:hover {
         background-color: transparent !important;
         transition: .2s;

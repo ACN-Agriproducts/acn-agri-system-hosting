@@ -1,30 +1,49 @@
-<app-header-toolbar titulo="Warehouse Receipts"></app-header-toolbar>
+<ion-header>
+	<app-header-toolbar titulo="Warehouse Receipts"></app-header-toolbar>
+	<ion-toolbar>
+		<ion-segment value="PENDING,ACTIVE,CLOSED,CANCELLED" (ionChange)="statusFilterChange($event)">
+			<ion-segment-button value="PENDING,ACTIVE,CLOSED,CANCELLED">
+				<ion-label>All</ion-label>
+			</ion-segment-button>
+			<ion-segment-button value="PENDING">
+				<ion-label>Pending</ion-label>
+			</ion-segment-button>
+			<ion-segment-button value="ACTIVE">
+				<ion-label>Active</ion-label>
+			</ion-segment-button>
+			<ion-segment-button value="CLOSED">
+				<ion-label>Closed</ion-label>
+			</ion-segment-button>
+			<ion-segment-button value="CANCELLED">
+				<ion-label>Cancelled</ion-label>
+			</ion-segment-button>
+		</ion-segment>
+	</ion-toolbar>
+</ion-header>
 
-<ion-content [fullscreen]="true" >
-	<div class="warehouse-receipt-section">
-		<div class="card-list">
-			<ion-card button="true" id="add" class="wr-card" (click)="nav('/dashboard/warehouse-receipts/set')">
-				<div class="group-main">
-					<div class="info-section">
-						<ion-card-title>+ Add Warehouse Receipts</ion-card-title>
-					</div>
-	
-					<div class="contract-section">
-						<ion-card class="contract">
-							<ion-card-title>Purchase Contract</ion-card-title>
-						</ion-card>
-	
-						<ion-card class="contract">
-							<ion-card-title>Sale Contract</ion-card-title>
-						</ion-card>
-					</div>
+<ion-content class="ion-padding" [fullscreen]="true">
+	<div class="card-list">
+		<ion-card button="true" id="add-card" class="wr-card" (click)="nav('/dashboard/warehouse-receipts/set')">
+			<div class="wr-group">
+				<div class="info-section">
+					<ion-card-title>+ Add Warehouse Receipts</ion-card-title>
 				</div>
-			</ion-card>
 
-			<app-warehouse-receipt-group-card 
-				*ngFor="let warehouseReceiptGroup of warehouseReceiptGroupList" 
-				[wrGroup]="warehouseReceiptGroup"
-			></app-warehouse-receipt-group-card>
-		</div>
+				<div class="contract-section">
+					<ion-card class="contract">
+						<ion-card-title>Purchase Contract</ion-card-title>
+					</ion-card>
+
+					<ion-card class="contract">
+						<ion-card-title>Sale Contract</ion-card-title>
+					</ion-card>
+				</div>
+			</div>
+		</ion-card>
+
+		<app-warehouse-receipt-group-card 
+			*ngFor="let warehouseReceiptGroup of warehouseReceiptGroupList" 
+			[wrGroup]="warehouseReceiptGroup"
+		></app-warehouse-receipt-group-card>
 	</div>
 </ion-content>
