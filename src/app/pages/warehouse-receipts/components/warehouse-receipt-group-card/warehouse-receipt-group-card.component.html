@@ -13,12 +13,17 @@
 					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ wrGroup.status }}</ion-text>
 				</div>
 
-				<button mat-icon-button [matMenuTriggerFor]="groupOptions" matTooltip="Options" class="group-options-button">
+				<button mat-icon-button class="group-options-button" 
+					[matMenuTriggerFor]="groupOptions" 
+					matTooltip="Options" 
+					matTooltipClass="tooltip-primary-solid" 
+					matTooltipPosition="left" 
+					matTooltipShowDelay="750"
+				>
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu">
-					<button 
-						mat-menu-item 
+					<button mat-menu-item 
 						class="group-option"
 						[disabled]="wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
 						(click)="cancelGroupConfirmation()"
@@ -47,14 +52,16 @@
 					<ion-card-title>Purchase Contract</ion-card-title>
 					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.purchaseContract?.status.toLocaleLowerCase()">
-						{{ wrGroup.purchaseContract?.status ?? "NONE" }}
+						{{ wrGroup.purchaseContract?.status ?? "N/A" }}
 					</ion-text>
 
-					<button 
-						mat-icon-button 
-						matTooltip="Set Contract" 
+					<button mat-icon-button 
 						*ngIf="isEditable(wrGroup.purchaseContract)" 
-						(click)="setContract(wrGroup.purchaseContract, true)"
+						(click)="setContract(wrGroup.purchaseContract, true)" 
+						matTooltip="Set Contract" 
+						matTooltipClass="tooltip-primary-solid" 
+						matTooltipPosition="left" 
+						matTooltipShowDelay="750"
 					>
 						<mat-icon>edit</mat-icon>
 					</button>
@@ -84,17 +91,19 @@
 					<ion-card-title>Sale Contract</ion-card-title>
 					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
-						{{ wrGroup.saleContract?.status ?? "NONE" }}
+						{{ wrGroup.saleContract?.status ?? "N/A" }}
 						<span *ngIf="hasPaid()">
 							{{ hasPaid() }} / {{ wrList.length }}
 						</span>
 					</ion-text>
 
-					<button 
-						mat-icon-button 
-						matTooltip="Set Contract" 
+					<button mat-icon-button 
 						*ngIf="isEditable(wrGroup.saleContract)" 
-						(click)="setContract(wrGroup.saleContract, false)"
+						(click)="setContract(wrGroup.saleContract, false)" 
+						matTooltip="Set Contract" 
+						matTooltipClass="tooltip-primary-solid" 
+						matTooltipPosition="left" 
+						matTooltipShowDelay="750"
 					>
 						<mat-icon>edit</mat-icon>
 					</button>
@@ -133,8 +142,7 @@
 			<ion-text>{{ warehouseReceipt.bushelQuantity | number }}</ion-text>
 			<ion-text>{{ warehouseReceipt.plant }}</ion-text>
 			<div>
-				<button 
-					mat-icon-button
+				<button mat-icon-button
 					class="paid-button" 
 					(click)="paidWarehouseReceipt(warehouseReceipt, i)" 
 					[disabled]="warehouseReceipt.isPaid"
@@ -148,7 +156,12 @@
 
 	<div class="expansion-bar">
 		<hr>
-		<mat-icon matTooltip="Toggle Warehouse Receipt List" (click)="toggleExpandable($event)">keyboard_arrow_down</mat-icon>
+		<mat-icon (click)="toggleExpandable($event)" 
+			matTooltip="Toggle Warehouse Receipt List" 
+			matTooltipClass="tooltip-primary-solid" 
+			matTooltipPosition="left" 
+			matTooltipShowDelay="750"
+		>keyboard_arrow_down</mat-icon>
 		<hr>
 	</div>
 </ion-card>

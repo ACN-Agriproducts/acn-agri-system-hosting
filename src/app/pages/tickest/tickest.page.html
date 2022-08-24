@@ -27,7 +27,7 @@
 
       <ion-buttons class="butons">
         <ion-button (click)="openFilter()" matTooltipPosition="before" matTooltipClass="tooltip-primary"
-          matTooltip="Filter by" color="primary">
+          matTooltip="Filter by" color="primary" [matTooltipHideDelay]="1000000000000000000">
           <ion-icon slot="icon-only" name="options-outline"></ion-icon>
         </ion-button>
         <ion-button color="primary" fill="solid" (click)="openTicketReportDialog()">REPORT</ion-button>
