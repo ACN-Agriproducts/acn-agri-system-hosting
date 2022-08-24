@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
+import { UploadContractDialogComponent } from '../upload-contract-dialog/upload-contract-dialog.component';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -26,6 +28,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     private alertCtrl: AlertController,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
+    private storage: Storage
   ) { }
 
   ngOnInit() {
@@ -57,6 +60,27 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
 
     return result;
+  }
+
+  public uploadContract(isPurchase: boolean): void {
+    const dialogRef = this.dialog.open(UploadContractDialogComponent, {
+      height: '50%',
+      width: '25%'
+    });
+
+
+    const contractRef = ref(this.storage, 'companies/ACN Agriproducts, LLC./warehouseReceipts/id/ContractName');
+    
+    // uploadBytes(contractRef, file)
+    // .then(() => {
+    //   //update Warehouse Receipt Group to save ref
+    //   this.openSnackbar("Contract has been uploaded.");
+    // })
+    // .catch(error => {
+    //   this.openSnackbar(error, true);
+    // });
+
+    // getDownloadURL(ref(WRG.purchaseContract.PDFRef));
   }
 
   public async cancelGroupConfirmation(): Promise<void> {
