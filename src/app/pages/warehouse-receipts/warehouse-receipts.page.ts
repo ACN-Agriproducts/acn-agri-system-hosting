@@ -33,8 +33,8 @@ export class WarehouseReceiptsPage implements OnInit {
     WarehouseReceiptGroup.getGroupList(
       this.db, 
       this.currentCompany, 
-      orderBy('createdAt', 'desc'), 
-      where("status", "in", this.statusFilter)
+      where("status", "in", this.statusFilter), 
+      orderBy('createdAt', 'desc')
     )
     .then(val => {
       this.warehouseReceiptGroupList = val;
