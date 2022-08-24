@@ -18,17 +18,31 @@
 					matTooltip="Options" 
 					matTooltipClass="tooltip-primary-solid" 
 					matTooltipPosition="left" 
-					matTooltipShowDelay="750"
+					matTooltipShowDelay="1000"
 				>
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu">
 					<button mat-menu-item 
 						class="group-option"
+						[disabled]="!wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
+					>
+						<mat-icon>cloud_upload</mat-icon>
+						<span>Upload Purchase Contract</span>
+					</button>
+					<button mat-menu-item 
+						class="group-option"
+						[disabled]="!wrGroup.saleContract || wrGroup.status === 'CANCELLED'" 
+					>
+						<mat-icon>cloud_upload</mat-icon>
+						<span>Upload Sale Contract</span>
+					</button>
+					<button mat-menu-item 
+						class="group-option cancel-group"
 						[disabled]="wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
 						(click)="cancelGroupConfirmation()"
 					>
-						<mat-icon color="warn">cancel</mat-icon>
+						<mat-icon>cancel</mat-icon>
 						<span>Cancel Group</span>
 					</button>
 				</mat-menu>
@@ -61,7 +75,7 @@
 						matTooltip="Set Contract" 
 						matTooltipClass="tooltip-primary-solid" 
 						matTooltipPosition="left" 
-						matTooltipShowDelay="750"
+						matTooltipShowDelay="1000"
 					>
 						<mat-icon>edit</mat-icon>
 					</button>
@@ -103,7 +117,7 @@
 						matTooltip="Set Contract" 
 						matTooltipClass="tooltip-primary-solid" 
 						matTooltipPosition="left" 
-						matTooltipShowDelay="750"
+						matTooltipShowDelay="1000"
 					>
 						<mat-icon>edit</mat-icon>
 					</button>
@@ -146,6 +160,10 @@
 					class="paid-button" 
 					(click)="paidWarehouseReceipt(warehouseReceipt, i)" 
 					[disabled]="warehouseReceipt.isPaid"
+					matTooltip="Set as paid" 
+					matTooltipClass="tooltip-primary-solid" 
+					matTooltipPosition="after" 
+					matTooltipShowDelay="1000"
 				>
 					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
 					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
@@ -160,7 +178,7 @@
 			matTooltip="Toggle Warehouse Receipt List" 
 			matTooltipClass="tooltip-primary-solid" 
 			matTooltipPosition="left" 
-			matTooltipShowDelay="750"
+			matTooltipShowDelay="1000"
 		>keyboard_arrow_down</mat-icon>
 		<hr>
 	</div>
