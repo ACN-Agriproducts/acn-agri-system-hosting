@@ -68,7 +68,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       width: '25%'
     });
 
-
     const contractRef = ref(this.storage, 'companies/ACN Agriproducts, LLC./warehouseReceipts/id/ContractName');
     
     // uploadBytes(contractRef, file)
@@ -170,8 +169,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public setContractDialog(contractUpdateDoc: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractUpdateDoc,
-      height: '300px',
-      width: '550px'
+      height: '325px',
+      width: '450px'
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {

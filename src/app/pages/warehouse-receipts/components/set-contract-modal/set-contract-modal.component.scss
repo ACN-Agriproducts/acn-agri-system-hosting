@@ -14,12 +14,9 @@ input[type=number] {
 	display: flex;
 	justify-content: space-between;
 	grid-column-end: span 2;
-
 	margin-inline: 0.5rem;
-}
 
-.form {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	column-gap: 2rem;
+	button {
+		color: var(--ion-color-primary);
+	}
 }

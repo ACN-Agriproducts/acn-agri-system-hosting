@@ -1,34 +1,41 @@
 <h2 mat-dialog-title>Set Group Contract</h2>
 
 <mat-dialog-content>
-	<form #contractForm="ngForm" class="form">
-		<mat-form-field appearance="fill">
-			<mat-label>Date</mat-label>
-			<input matInput [matDatepicker]="picker" readonly required 
-			[(ngModel)]="data.startDate" name="startDate">
-			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-			<mat-datepicker #picker></mat-datepicker>
-		</mat-form-field>
-
-		<mat-form-field appearance="fill">
-			<mat-label>ID</mat-label>
-			<input matInput required [(ngModel)]="data.id" name="id">
-			<mat-error>ID is <strong>required</strong></mat-error>
-		</mat-form-field>
-
-		<mat-form-field appearance="fill">
-			<mat-label>Future Price</mat-label>
-			<span matPrefix>$ &nbsp;</span>
-			<input matInput type="number" required [(ngModel)]="data.futurePrice" name="futurePrice">
-			<mat-error>Future Price is <strong>required</strong></mat-error>
-		</mat-form-field>
-
-		<mat-form-field appearance="fill">
-			<mat-label>Base Price</mat-label>
-			<span matPrefix>$ &nbsp;</span>
-			<input matInput type="number" required [(ngModel)]="data.basePrice" name="basePrice">
-			<mat-error>Base Price is <strong>required</strong></mat-error>
-		</mat-form-field>
+	<form #contractForm="ngForm">
+		<mat-grid-list cols="6" rowHeight="70px" gutterSize="15px">
+			<mat-grid-tile colspan="4">
+				<mat-form-field appearance="fill" class="id-field">
+					<mat-label>ID</mat-label>
+					<input matInput required [(ngModel)]="data.id" name="id">
+					<mat-error>ID is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="2">
+				<mat-form-field appearance="fill" class="date-field">
+					<mat-label>Date</mat-label>
+					<input matInput [matDatepicker]="picker" readonly required 
+					[(ngModel)]="data.startDate" name="startDate">
+					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+					<mat-datepicker #picker></mat-datepicker>
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill" class="future-field">
+					<mat-label>Future Price</mat-label>
+					<span matPrefix>$ &nbsp;</span>
+					<input matInput type="number" required [(ngModel)]="data.futurePrice" name="futurePrice">
+					<mat-error>Future Price is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill" class="base-field">
+					<mat-label>Base Price</mat-label>
+					<span matPrefix>$ &nbsp;</span>
+					<input matInput type="number" required [(ngModel)]="data.basePrice" name="basePrice">
+					<mat-error>Base Price is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+		</mat-grid-list>
 	</form>
 </mat-dialog-content>
 
