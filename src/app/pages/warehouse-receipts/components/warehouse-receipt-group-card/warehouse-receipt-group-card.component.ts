@@ -135,7 +135,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     let updateData = await this.setContractDialog(contractData);
-    if (updateData === null) return;
+    if (updateData === null || updateData === undefined) return;
 
     const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
     const fallback = this.wrGroup[contractType];
@@ -231,6 +231,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .catch(error => {
       this.wrList[index].isPaid = false;
       this.openSnackbar(error, true);
+      console.log(error);
+      console.log(this.wrList[index]);
     });
   }
 
@@ -259,7 +261,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
       return;
     }
-    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
+    this.snackbar.open(message, "", { duration: 2000, panelClass: 'snackbar' });
   }
 }
 

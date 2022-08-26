@@ -35,6 +35,11 @@ export class SetContractModalComponent implements OnInit {
   }
 
   public confirm(): void {
+    if (this.files.length === 0) {
+      this.dialogRef.close(this.data);
+      return;
+    }
+
     uploadBytes(ref(this.storage, this.data.contractRef), this.files[0])
     .then(() => {
       getDownloadURL(ref(this.storage, this.data.contractRef))
