@@ -31,18 +31,20 @@ export class SetContractModalComponent implements OnInit {
   }
 
   public cancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
 
   public confirm(): void {
-    getDownloadURL(ref(this.storage, this.data.contractRef)).then(res => {
-      this.data.pdfReference = res;
-    });
-
     uploadBytes(ref(this.storage, this.data.contractRef), this.files[0])
-    .then(async res => {
-      console.log(res);
-
+    .then(() => {
+      getDownloadURL(ref(this.storage, this.data.contractRef))
+      .then(res => {
+        this.data.pdfReference = res;
+        this.dialogRef.close(this.data);
+      })
+      .catch(error => {
+        this.openSnackbar(error, true);
+      });
     })
     .catch(error => {
       this.openSnackbar(error, true);
