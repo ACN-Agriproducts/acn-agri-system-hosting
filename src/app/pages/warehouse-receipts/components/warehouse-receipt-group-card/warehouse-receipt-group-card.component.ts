@@ -231,8 +231,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .catch(error => {
       this.wrList[index].isPaid = false;
       this.openSnackbar(error, true);
-      console.log(error);
-      console.log(this.wrList[index]);
     });
   }
 
@@ -258,7 +256,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public openSnackbar (message: string, error?: boolean): void {
     if (error) {
-      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
+      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
       return;
     }
     this.snackbar.open(message, "", { duration: 2000, panelClass: 'snackbar' });

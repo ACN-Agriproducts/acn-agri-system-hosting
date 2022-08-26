@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { url } from 'inspector';
 
 @Component({
   selector: 'app-set-contract-modal',
@@ -11,6 +10,7 @@ import { url } from 'inspector';
 })
 export class SetContractModalComponent implements OnInit {
   public files: File[] = [];
+  public contractType: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ContractData,
@@ -19,7 +19,9 @@ export class SetContractModalComponent implements OnInit {
     private storage: Storage,
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.contractType = this.data.status === 'PENDING' ? 'Sale' : 'Purchase';
+  }
 
   public onSelect(event: any):void {
     this.files = [];
@@ -67,7 +69,7 @@ export class SetContractModalComponent implements OnInit {
 
   public openSnackbar (message: string, error?: boolean): void {
     if (error) {
-      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
+      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
       return;
     }
     this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
