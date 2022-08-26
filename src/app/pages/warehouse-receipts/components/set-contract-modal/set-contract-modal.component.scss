@@ -15,8 +15,15 @@ input[type=number] {
 	justify-content: space-between;
 	grid-column-end: span 2;
 	margin-inline: 0.5rem;
+}
 
-	button {
-		color: var(--ion-color-primary);
-	}
+.dropzone {
+	height: 175px;
+}
+
+.empty {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	height: 60px;
 }

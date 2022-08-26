@@ -10,6 +10,7 @@
 					<mat-error>ID is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
+
 			<mat-grid-tile colspan="2">
 				<mat-form-field appearance="fill" class="date-field">
 					<mat-label>Date</mat-label>
@@ -19,6 +20,7 @@
 					<mat-datepicker #picker></mat-datepicker>
 				</mat-form-field>
 			</mat-grid-tile>
+
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill" class="future-field">
 					<mat-label>Future Price</mat-label>
@@ -27,6 +29,7 @@
 					<mat-error>Future Price is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
+
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill" class="base-field">
 					<mat-label>Base Price</mat-label>
@@ -37,9 +40,27 @@
 			</mat-grid-tile>
 		</mat-grid-list>
 	</form>
+
+	<ngx-dropzone class="dropzone"  [multiple]="false" (change)="onSelect($event)">
+		<ngx-dropzone-label>
+			<mat-icon>cloud_upload</mat-icon>
+			<h3>Upload File Here</h3>
+		</ngx-dropzone-label>
+
+		<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+			<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+		</ngx-dropzone-preview>
+	</ngx-dropzone>
+
+	<div class="empty">
+		<ng-template [ngIf]="data.pdfReference">
+			<span>Current Contract: </span>
+			<a href="{{ data.pdfReference }}">{{ shortUrl() }}</a>
+		</ng-template>
+	</div>
 </mat-dialog-content>
 
 <mat-dialog-actions class="action-bar">
 	<button mat-button color="primary" (click)="cancel()">Cancel</button>
-	<button mat-button color="primary" [mat-dialog-close]="data" [disabled]="contractForm.invalid">Confirm</button>
+	<button mat-button color="primary" (click)="confirm()" [mat-dialog-close]="data" [disabled]="contractForm.invalid">Confirm</button>
 </mat-dialog-actions>

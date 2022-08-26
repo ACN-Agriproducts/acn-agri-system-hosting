@@ -43,7 +43,7 @@
 
 		<app-warehouse-receipt-group-card 
 			*ngFor="let warehouseReceiptGroup of warehouseReceiptGroupList" 
-			[wrGroup]="warehouseReceiptGroup"
+			[wrGroup]="warehouseReceiptGroup" [currentCompany]="currentCompany"
 		></app-warehouse-receipt-group-card>
 	</div>
 </ion-content>

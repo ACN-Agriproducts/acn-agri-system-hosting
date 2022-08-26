@@ -4,10 +4,6 @@
 	grid-column-end: span 2;
 	margin-inline: 0.5rem;
 	bottom: 0;
-
-	button {
-		color: var(--ion-color-primary);
-	}
 }
 
 .fix-action-row {
@@ -18,4 +14,8 @@
 
 .spacer {
 	flex-grow: 1;
+}
+
+.dropzone {
+	height: 300px;
 }

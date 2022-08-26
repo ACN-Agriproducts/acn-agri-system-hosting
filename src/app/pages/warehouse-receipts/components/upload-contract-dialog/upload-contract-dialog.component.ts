@@ -7,12 +7,24 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./upload-contract-dialog.component.scss'],
 })
 export class UploadContractDialogComponent implements OnInit {
+  public files: File[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<UploadContractDialogComponent>,
   ) { }
 
   ngOnInit() {}
+
+  public onSelect(event: any):void {
+    console.log(event);
+    this.files = [];
+    this.files.push(...event.addedFiles);
+  }
+
+  public onRemove(event: any):void {
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
+  }
 
   public cancel(): void {
     this.dialogRef.close();

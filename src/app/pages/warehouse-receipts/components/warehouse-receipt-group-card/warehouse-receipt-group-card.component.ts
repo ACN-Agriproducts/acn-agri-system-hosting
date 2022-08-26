@@ -16,13 +16,12 @@ import { UploadContractDialogComponent } from '../upload-contract-dialog/upload-
 })
 export class WarehouseReceiptGroupCardComponent implements OnInit {
   @Input() wrGroup: WarehouseReceiptGroup;
+  @Input() currentCompany: string;
 
   public idRange: string;
   public wrIdList: number[];
   public wrList: WarehouseReceipt[];
-
-  public purchaseContract: WarehouseReceiptContract;
-  public saleContract: WarehouseReceiptContract;
+  public contractRef: string;
 
   constructor(
     private alertCtrl: AlertController,
@@ -34,7 +33,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   ngOnInit() {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.id - b.id);
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
-
     this.idRange = this.getIdRange();
   }
 
@@ -64,11 +62,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public uploadContract(isPurchase: boolean): void {
     const dialogRef = this.dialog.open(UploadContractDialogComponent, {
-      height: '50%',
-      width: '25%'
+      autoFocus: false,
+      minHeight: '500px',
+      minWidth: '500px'
     });
-
-    const contractRef = ref(this.storage, 'companies/ACN Agriproducts, LLC./warehouseReceipts/id/ContractName');
     
     // uploadBytes(contractRef, file)
     // .then(() => {
@@ -79,7 +76,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     //   this.openSnackbar(error, true);
     // });
 
-    // getDownloadURL(ref(WRG.purchaseContract.PDFRef));
+    // getDownloadURL(ref(WRG.purchaseContract.PDFRef)); // for downloading purposes
   }
 
   public async cancelGroupConfirmation(): Promise<void> {
@@ -130,9 +127,12 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
+    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+
     const contractData: ContractData = { 
       startDate: new Date(), 
-      status: isPurchase ? "CLOSED" : "PENDING"
+      status: isPurchase ? "CLOSED" : "PENDING",
+      contractRef: contractRef
     };
 
     if (contract) {
@@ -140,16 +140,20 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.futurePrice = contract.futurePrice;
       contractData.id = contract.id;
       contractData.startDate = contract.startDate;
+      contractData.status = contract.status;
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
     let updateData = await this.setContractDialog(contractData);
     if (updateData === undefined) return;
 
+    console.log(updateData.pdfReference);
+
     const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
     const fallback = this.wrGroup[contractType];
   
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
+    delete updateData['contractRef'];
 
     this.wrGroup.update({
       [contractType]: updateData,
@@ -169,8 +173,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public setContractDialog(contractUpdateDoc: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractUpdateDoc,
-      height: '325px',
-      width: '450px'
+      autoFocus: false,
+      minHeight: '425px',
+      minWidth: '450px'
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {
@@ -276,5 +281,6 @@ interface ContractData {
   id?: string;
   pdfReference?: string;
   startDate: Date;
-  status?: string;
+  status: string;
+  contractRef?: string;
 }
