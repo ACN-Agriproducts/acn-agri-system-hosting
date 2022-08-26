@@ -55,7 +55,7 @@
 	<div class="empty">
 		<ng-template [ngIf]="data.pdfReference">
 			<span>Current Contract: </span>
-			<a href="{{ data.pdfReference }}">{{ shortUrl() }}</a>
+			<a href="{{ data.pdfReference }}" target="_blank">{{ shortUrl() }}</a>
 		</ng-template>
 	</div>
 </mat-dialog-content>

@@ -27,7 +27,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     private alertCtrl: AlertController,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    private storage: Storage
   ) { }
 
   ngOnInit() {
@@ -56,27 +55,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     sequence.forEach((sub, index) => {
       result += (sub.length === 1 ? sub[0] : `${sub[0]}-${sub[sub.length-1]}`) + (index !== sequence.length - 1 ? `, `: ``);
     });
-
     return result;
   }
 
   public uploadContract(isPurchase: boolean): void {
+    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+
     const dialogRef = this.dialog.open(UploadContractDialogComponent, {
+      data: contractRef,
       autoFocus: false,
       minHeight: '500px',
       minWidth: '500px'
     });
-    
-    // uploadBytes(contractRef, file)
-    // .then(() => {
-    //   //update Warehouse Receipt Group to save ref
-    //   this.openSnackbar("Contract has been uploaded.");
-    // })
-    // .catch(error => {
-    //   this.openSnackbar(error, true);
-    // });
-
-    // getDownloadURL(ref(WRG.purchaseContract.PDFRef)); // for downloading purposes
   }
 
   public async cancelGroupConfirmation(): Promise<void> {

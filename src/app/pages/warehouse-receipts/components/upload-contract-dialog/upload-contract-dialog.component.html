@@ -2,7 +2,7 @@
 	<h2 mat-dialog-title>Upload Group Contract</h2>
 
 	<mat-dialog-content>
-		<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
+		<!-- <ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
 			<ngx-dropzone-label>
 				<mat-icon>cloud_upload</mat-icon>
 				<h3>Upload File Here</h3>
@@ -11,7 +11,21 @@
 			<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
 				<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
 			</ngx-dropzone-preview>
-		</ngx-dropzone>
+		</ngx-dropzone> -->
+
+		<!-- <iframe>
+			<html>
+			<body>
+				<object data="{{ source }}" type="application/pdf">
+					<div>No online PDF viewer installed.</div>
+				</object>
+			</body>
+			</html>
+		</iframe> -->
+
+		<!-- <object data="{{ source }}" type="application/pdf" height="450px" width="425px"></object> -->
+
+		<iframe src="{{ source }}" height="450px" width="425px"></iframe>
 	</mat-dialog-content>
 
 	<div class="spacer"></div>
