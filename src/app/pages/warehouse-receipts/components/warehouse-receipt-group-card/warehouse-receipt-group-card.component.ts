@@ -54,7 +54,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     let result = ``;
     sequence.forEach((sub, index) => {
-      result += `${sub[0]}-${sub[sub.length - 1]}` + (index !== sequence.length - 1 ? `, `: ``);
+      result += (sub.length === 1 ? sub[0] : `${sub[0]}-${sub[sub.length-1]}`) + (index !== sequence.length - 1 ? `, `: ``);
     });
 
     return result;
