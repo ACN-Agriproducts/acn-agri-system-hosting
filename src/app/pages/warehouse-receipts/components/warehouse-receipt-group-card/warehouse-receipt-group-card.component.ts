@@ -104,9 +104,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public isEditable(contract: WarehouseReceiptContract): boolean {
-    if (contract?.closedAt === undefined) {
-      return true;
-    }
+    if (this.wrGroup.status === 'CANCELLED' || this.wrGroup.status === 'CLOSED') return false;
+    if (contract?.closedAt === undefined) return true;
 
     const HOUR_TO_MS = 1000 * 60 * 60;
     const now = new Date().getTime();

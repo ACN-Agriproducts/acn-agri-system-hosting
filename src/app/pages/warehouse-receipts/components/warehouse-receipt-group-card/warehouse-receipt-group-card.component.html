@@ -72,7 +72,7 @@
 					</ion-text>
 
 					<button mat-icon-button 
-						*ngIf="isEditable(wrGroup.purchaseContract) && wrGroup.status !== 'CLOSED'" 
+						*ngIf="isEditable(wrGroup.purchaseContract)" 
 						(click)="setContract(wrGroup.purchaseContract, true)" 
 						matTooltip="Set Contract" 
 						matTooltipClass="tooltip-primary-solid" 
@@ -114,7 +114,7 @@
 					</ion-text>
 
 					<button mat-icon-button 
-						*ngIf="isEditable(wrGroup.saleContract) && wrGroup.status !== 'CLOSED'" 
+						*ngIf="isEditable(wrGroup.saleContract)" 
 						(click)="setContract(wrGroup.saleContract, false)" 
 						matTooltip="Set Contract" 
 						matTooltipClass="tooltip-primary-solid" 
