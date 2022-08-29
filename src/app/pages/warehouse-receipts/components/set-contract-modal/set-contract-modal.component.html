@@ -44,7 +44,8 @@
 	<ngx-dropzone class="dropzone"  [multiple]="false" (change)="onSelect($event)">
 		<ngx-dropzone-label>
 			<mat-icon>cloud_upload</mat-icon>
-			<h3>Upload File Here</h3>
+			<h3>Upload {{ contractType }} Contract</h3>
+			<p>Simply drag and drop or click here to choose a file.</p>
 		</ngx-dropzone-label>
 
 		<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
