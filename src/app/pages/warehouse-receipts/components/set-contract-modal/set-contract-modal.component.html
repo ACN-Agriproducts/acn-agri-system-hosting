@@ -41,7 +41,7 @@
 		</mat-grid-list>
 	</form>
 
-	<ngx-dropzone class="dropzone"  [multiple]="false" (change)="onSelect($event)">
+	<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
 		<ngx-dropzone-label>
 			<mat-icon>cloud_upload</mat-icon>
 			<h3>Upload {{ contractType }} Contract</h3>
@@ -49,15 +49,17 @@
 		</ngx-dropzone-label>
 
 		<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-			<ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+			<ngx-dropzone-label>{{ f.name }} <!-- ({{ f.type }}) --></ngx-dropzone-label>
 		</ngx-dropzone-preview>
 	</ngx-dropzone>
 
-	<div class="empty">
-		<ng-template [ngIf]="data.pdfReference">
-			<span>Current Contract: </span>
+	<div class="current-contract">
+		<span>Current Contract: </span>
+		&nbsp;
+		<ng-template [ngIf]="data.pdfReference" [ngIfElse]="notAvailable">
 			<a href="{{ data.pdfReference }}" target="_blank">{{ shortUrl() }}</a>
 		</ng-template>
+		<ng-template #notAvailable>N / A</ng-template>
 	</div>
 </mat-dialog-content>
 

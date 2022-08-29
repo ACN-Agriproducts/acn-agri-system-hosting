@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ref, Storage } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { getDownloadURL } from 'firebase/storage';
 
 @Component({
@@ -10,17 +11,18 @@ import { getDownloadURL } from 'firebase/storage';
 })
 export class UploadContractDialogComponent implements OnInit {
   public files: File[] = [];
-  public source: string;
+  public source: SafeResourceUrl;
 
   constructor(
     public dialogRef: MatDialogRef<UploadContractDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
     private storage: Storage,
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit() {
     getDownloadURL(ref(this.storage, this.data)).then(res => {
-      this.source = res;
+      this.source = this.sanitizer.bypassSecurityTrustResourceUrl(res);
       console.log(this.source);
     })
     .catch(error => {
