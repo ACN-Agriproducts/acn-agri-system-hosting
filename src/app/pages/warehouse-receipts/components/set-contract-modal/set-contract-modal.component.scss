@@ -44,8 +44,9 @@ mat-dialog-content {
 	ngx-dropzone-preview {
 		position: relative;
 		display: flex;
-		background-image: none !important;
-		background-color: var(--ion-color-primary-light);
+		// background-image: none !important;
+		background-image: linear-gradient(to bottom, #c2d3c1, var(--ion-color-primary-light), white) !important;
+		// background-color: var(--ion-color-primary-light);
 
 		ngx-dropzone-label {
 			position: absolute;
@@ -55,7 +56,7 @@ mat-dialog-content {
 
 		&:hover,
 		&:focus {
-			filter: brightness(0.95);
+			filter: brightness(1.05);
 		}
 	}
 }

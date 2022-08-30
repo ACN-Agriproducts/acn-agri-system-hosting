@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
+import { PreviewContractDialogComponent } from '../preview-contract-dialog/preview-contract-dialog.component';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 import { UploadContractDialogComponent } from '../upload-contract-dialog/upload-contract-dialog.component';
 
@@ -62,6 +63,17 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
 
     const dialogRef = this.dialog.open(UploadContractDialogComponent, {
+      data: contractRef,
+      autoFocus: false,
+      minHeight: '500px',
+      minWidth: '500px'
+    });
+  }
+
+  public previewContract(isPurchase: boolean): void {
+    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+
+    const dialogRef = this.dialog.open(PreviewContractDialogComponent, {
       data: contractRef,
       autoFocus: false,
       minHeight: '500px',
