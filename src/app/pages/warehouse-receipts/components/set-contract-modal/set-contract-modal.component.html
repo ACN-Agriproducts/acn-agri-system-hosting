@@ -54,8 +54,7 @@
 	</ngx-dropzone>
 
 	<div class="current-contract">
-		<span>Current Contract: </span>
-		&nbsp;
+		<span>Link to view {{ contractType }} Contract in new window: </span>
 		<ng-template [ngIf]="data.pdfReference" [ngIfElse]="notAvailable">
 			<a href="{{ data.pdfReference }}" target="_blank">{{ shortUrl() }}</a>
 		</ng-template>

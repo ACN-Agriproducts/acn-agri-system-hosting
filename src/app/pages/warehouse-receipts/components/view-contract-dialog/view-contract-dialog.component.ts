@@ -10,20 +10,19 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./view-contract-dialog.component.scss'],
 })
 export class ViewContractDialogComponent implements OnInit {
-  public files: File[] = [];
-  public source: SafeResourceUrl;
   public ready: boolean = false;
+  public source: SafeResourceUrl;
 
   constructor(
-    public dialogRef: MatDialogRef<ViewContractDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
-    private storage: Storage,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<ViewContractDialogComponent>,
     private sanitizer: DomSanitizer,
     private snackbar: MatSnackBar,
+    private storage: Storage,
   ) { }
 
   ngOnInit() {
-    getDownloadURL(ref(this.storage, this.data)).then(res => {
+    getDownloadURL(ref(this.storage, this.data.contractRef)).then(res => {
       this.source = this.sanitizer.bypassSecurityTrustResourceUrl(res);
     })
     .then(() => {

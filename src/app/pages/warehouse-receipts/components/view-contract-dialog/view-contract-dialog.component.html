@@ -1,5 +1,5 @@
 
-<h2 mat-dialog-title>Upload Group Contract</h2>
+<h2 mat-dialog-title>{{ this.data.isPurchase? 'Purchase' : 'Sale' }} Contract</h2>
 
 <mat-dialog-content>
   <mat-spinner *ngIf="!ready else pdfView"></mat-spinner>

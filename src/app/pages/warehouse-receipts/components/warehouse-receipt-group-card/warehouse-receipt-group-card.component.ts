@@ -6,7 +6,6 @@ import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
-import { UploadContractDialogComponent } from '../upload-contract-dialog/upload-contract-dialog.component';
 import { ViewContractDialogComponent } from '../view-contract-dialog/view-contract-dialog.component';
 
 @Component({
@@ -58,22 +57,14 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     return result;
   }
 
-  public uploadContract(isPurchase: boolean): void {
+  public viewContractDialog(isPurchase: boolean): void {
     const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
 
-    const dialogRef = this.dialog.open(UploadContractDialogComponent, {
-      data: contractRef,
-      autoFocus: false,
-      minHeight: '500px',
-      minWidth: '500px'
-    });
-  }
-
-  public viewContract(isPurchase: boolean): void {
-    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
-
-    const dialogRef = this.dialog.open(ViewContractDialogComponent, {
-      data: contractRef,
+    this.dialog.open(ViewContractDialogComponent, {
+      data: {
+        contractRef,
+        isPurchase
+      },
       autoFocus: false,
       minHeight: '400px',
       minWidth: '400px'
@@ -173,7 +164,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       data: contractUpdateDoc,
       autoFocus: false,
       minHeight: '425px',
-      minWidth: '450px'
+      minWidth: '475px'
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {

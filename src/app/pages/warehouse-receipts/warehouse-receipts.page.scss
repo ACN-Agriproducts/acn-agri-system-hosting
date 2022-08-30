@@ -275,6 +275,7 @@ hr {
 .expansion-bar {
 	display: flex;
 	text-align: center;
+	padding-top: 5px;
 
 	mat-icon {
 		cursor: pointer;
@@ -316,10 +317,14 @@ hr {
 .expandable-wr-list {
 	max-height: 0;
 	overflow: hidden;
-	transition: max-height 0.3s ease-out;
+	transition: max-height 0.25s ease-out;
 	background-color: white;
-	border-radius: 5px;
 	margin: 5px;
+	border-radius: 5px;
+	box-shadow:
+		rgb(0 0 0 / 20%) 0px 1px 1px -2px,
+		rgb(0 0 0 / 14%) 0px 1px 2px 0px,
+		rgb(0 0 0 / 12%) 0px 1px 5px 0px;
 }
 
 .table-row {
@@ -341,7 +346,7 @@ hr {
 
 	border-style: solid;
 	border-width: 1px;
-	border-radius: 6px 5px 0 0;
+	border-radius: 6px 6px 0 0;
 }
 
 .table-body {
@@ -378,11 +383,6 @@ hr {
 
 .odd {
 	background-color: var(--ion-color-light);
-}
-
-.shrunk {
-	max-height: 0;
-	transition: max-height 0.3s ease-out;
 }
 
 .tooltip-primary-solid {

@@ -63,7 +63,8 @@ mat-dialog-content {
 
 .current-contract {
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	align-items: center;
 	padding: 20px 50px 10px;
 
 	span {

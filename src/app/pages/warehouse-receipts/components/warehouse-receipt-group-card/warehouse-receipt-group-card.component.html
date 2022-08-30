@@ -23,26 +23,10 @@
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu">
-					<!-- <button mat-menu-item 
-						class="group-option"
-						[disabled]="!wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
-						(click)="uploadContract(true)"
-					>
-						<mat-icon>cloud_upload</mat-icon>
-						<span>Upload Purchase Contract</span>
-					</button>
-					<button mat-menu-item 
-						class="group-option"
-						[disabled]="!wrGroup.saleContract || wrGroup.status === 'CANCELLED'" 
-						(click)="uploadContract(false)"
-					>
-						<mat-icon>cloud_upload</mat-icon>
-						<span>Upload Sale Contract</span>
-					</button> -->
 					<button mat-menu-item
 						class="group-option"
 						[disabled]="!wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'"
-						(click)="viewContract(true)"
+						(click)="viewContractDialog(true)"
 					>
 						<mat-icon>picture_as_pdf</mat-icon>
 						<span>View Purchase Contract</span>
@@ -50,7 +34,7 @@
 					<button mat-menu-item
 						class="group-option"
 						[disabled]="!wrGroup.saleContract || wrGroup.status === 'CANCELLED'"
-						(click)="viewContract(false)"
+						(click)="viewContractDialog(false)"
 					>
 						<mat-icon>picture_as_pdf</mat-icon>
 						<span>View Sale Contract</span>
@@ -165,7 +149,10 @@
 			<ion-text>Plant</ion-text>
 			<ion-text>Paid</ion-text>
 		</div>
-		<div class="table-row table-body" [class.odd]="odd" *ngFor="let warehouseReceipt of wrList; let odd = odd; let i = index">
+		<div class="table-row table-body" 
+			[class.odd]="odd" 
+			*ngFor="let warehouseReceipt of wrList; let odd = odd; let i = index"
+		>
 			<ion-text>{{ warehouseReceipt.id }}</ion-text>
 			<ion-text>{{ warehouseReceipt.startDate | date }}</ion-text>
 			<ion-text>{{ warehouseReceipt.product }}</ion-text>
