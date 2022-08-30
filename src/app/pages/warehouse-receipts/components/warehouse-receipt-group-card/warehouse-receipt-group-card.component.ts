@@ -75,8 +75,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const dialogRef = this.dialog.open(ViewContractDialogComponent, {
       data: contractRef,
       autoFocus: false,
-      minHeight: '500px',
-      minWidth: '500px'
+      minHeight: '400px',
+      minWidth: '400px'
     });
   }
 
