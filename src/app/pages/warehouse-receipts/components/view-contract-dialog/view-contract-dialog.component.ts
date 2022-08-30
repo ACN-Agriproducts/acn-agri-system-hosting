@@ -4,16 +4,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-preview-contract-dialog',
-  templateUrl: './preview-contract-dialog.component.html',
-  styleUrls: ['./preview-contract-dialog.component.scss'],
+  selector: 'app-view-contract-dialog',
+  templateUrl: './view-contract-dialog.component.html',
+  styleUrls: ['./view-contract-dialog.component.scss'],
 })
-export class PreviewContractDialogComponent implements OnInit {
+export class ViewContractDialogComponent implements OnInit {
   public files: File[] = [];
   public source: SafeResourceUrl;
 
   constructor(
-    public dialogRef: MatDialogRef<PreviewContractDialogComponent>,
+    public dialogRef: MatDialogRef<ViewContractDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
     private storage: Storage,
     private sanitizer: DomSanitizer,

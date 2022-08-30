@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
-import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
-import { PreviewContractDialogComponent } from '../preview-contract-dialog/preview-contract-dialog.component';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 import { UploadContractDialogComponent } from '../upload-contract-dialog/upload-contract-dialog.component';
+import { ViewContractDialogComponent } from '../view-contract-dialog/view-contract-dialog.component';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -70,10 +69,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public previewContract(isPurchase: boolean): void {
+  public viewContract(isPurchase: boolean): void {
     const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
 
-    const dialogRef = this.dialog.open(PreviewContractDialogComponent, {
+    const dialogRef = this.dialog.open(ViewContractDialogComponent, {
       data: contractRef,
       autoFocus: false,
       minHeight: '500px',

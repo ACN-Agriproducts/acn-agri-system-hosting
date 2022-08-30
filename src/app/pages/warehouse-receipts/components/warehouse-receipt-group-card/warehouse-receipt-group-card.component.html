@@ -23,7 +23,7 @@
 					<mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #groupOptions="matMenu">
-					<button mat-menu-item 
+					<!-- <button mat-menu-item 
 						class="group-option"
 						[disabled]="!wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
 						(click)="uploadContract(true)"
@@ -38,6 +38,22 @@
 					>
 						<mat-icon>cloud_upload</mat-icon>
 						<span>Upload Sale Contract</span>
+					</button> -->
+					<button mat-menu-item
+						class="group-option"
+						[disabled]="!wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'"
+						(click)="viewContract(true)"
+					>
+						<mat-icon>picture_as_pdf</mat-icon>
+						<span>View Purchase Contract</span>
+					</button>
+					<button mat-menu-item
+						class="group-option"
+						[disabled]="!wrGroup.saleContract || wrGroup.status === 'CANCELLED'"
+						(click)="viewContract(false)"
+					>
+						<mat-icon>picture_as_pdf</mat-icon>
+						<span>View Sale Contract</span>
 					</button>
 					<button mat-menu-item 
 						class="group-option cancel-group"

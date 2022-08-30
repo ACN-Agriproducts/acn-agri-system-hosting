@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PreviewContractDialogComponent } from './preview-contract-dialog.component';
+import { ViewContractDialogComponent } from './view-contract-dialog.component';
 
-describe('PreviewContractDialogComponent', () => {
-  let component: PreviewContractDialogComponent;
-  let fixture: ComponentFixture<PreviewContractDialogComponent>;
+describe('ViewContractDialogComponent', () => {
+  let component: ViewContractDialogComponent;
+  let fixture: ComponentFixture<ViewContractDialogComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PreviewContractDialogComponent ],
+      declarations: [ ViewContractDialogComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PreviewContractDialogComponent);
+    fixture = TestBed.createComponent(ViewContractDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
