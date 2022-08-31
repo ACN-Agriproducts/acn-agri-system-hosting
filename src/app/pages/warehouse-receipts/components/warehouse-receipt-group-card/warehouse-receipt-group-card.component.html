@@ -165,11 +165,23 @@
 					[disabled]="warehouseReceipt.isPaid"
 					matTooltip="Set as paid" 
 					matTooltipClass="tooltip-primary-solid" 
-					matTooltipPosition="after" 
+					matTooltipPosition="before" 
 					matTooltipShowDelay="1000"
 				>
 					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
 					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
+				</button>
+			</div>
+			<div>
+				<button mat-icon-button
+					class="upload-wr-button" 
+					(click)="uploadWarehouseReceipt(i)"
+					matTooltip="Upload Document"
+					matTooltipClass="tooltip-primary-solid"
+					matTooltipPosition="before"
+					matTooltipShowDelay="1000"
+				>
+					<mat-icon color="primary">cloud_upload</mat-icon>
 				</button>
 			</div>
 		</div>

@@ -71,12 +71,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public uploadWarehouseReceipts(): void {
-    console.log("Upload Warehouse Receipts");
-  }
-
-  public uploadWarehouseReceipt(): void {
+  public uploadWarehouseReceipt(i: number): void {
     console.log("Upload a Warehouse Receipt");
+    console.log(this.wrList[i]);
+
+    
   }
 
   public async cancelGroupConfirmation(): Promise<void> {
