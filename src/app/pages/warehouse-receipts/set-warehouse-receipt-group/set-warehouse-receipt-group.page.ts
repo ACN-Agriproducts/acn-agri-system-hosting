@@ -160,6 +160,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     formValues.warehouseReceiptList.forEach(warehouseReceipt => {
       this.totalBushelQuantity += warehouseReceipt.bushelQuantity;
       warehouseReceipt.isPaid = false;
+      warehouseReceipt.pdfReference = null;
     });
 
     let receiptGroup = {

@@ -71,6 +71,14 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
+  public uploadWarehouseReceipts(): void {
+    console.log("Upload Warehouse Receipts");
+  }
+
+  public uploadWarehouseReceipt(): void {
+    console.log("Upload a Warehouse Receipt");
+  }
+
   public async cancelGroupConfirmation(): Promise<void> {
     const alert = await this.alertCtrl.create({
       header: "Confirmation",
