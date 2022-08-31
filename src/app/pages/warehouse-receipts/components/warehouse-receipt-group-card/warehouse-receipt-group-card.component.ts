@@ -123,6 +123,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const contractData: ContractData = { 
       startDate: new Date(), 
       status: isPurchase ? "CLOSED" : "PENDING",
+      pdfReference: null,
       contractRef: contractRef
     };
 
