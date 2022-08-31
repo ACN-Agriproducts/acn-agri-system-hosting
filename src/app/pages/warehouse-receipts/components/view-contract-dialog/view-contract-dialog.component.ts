@@ -22,11 +22,17 @@ export class ViewContractDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    getDownloadURL(ref(this.storage, this.data.contractRef)).then(res => {
-      this.source = this.sanitizer.bypassSecurityTrustResourceUrl(res);
-    })
-    .then(() => {
-      this.ready = true;
+    this.data.contractRef = this.data.contractRef ?? '';
+    if (this.data.contractRef.length === 0) {
+      this.openSnackbar("The reference/path to the contract does not exist.", true);
+      return;
+    }
+
+    getDownloadURL(ref(this.storage, this.data.contractRef))
+    .then(res => {
+      this.source = this.sanitizer.bypassSecurityTrustResourceUrl(res) ?? null;
+      this.ready = this.source !== null;
+      if (!this.ready) throw "The resource could not secured for use.";
     })
     .catch(error => {
       this.openSnackbar(error, true);

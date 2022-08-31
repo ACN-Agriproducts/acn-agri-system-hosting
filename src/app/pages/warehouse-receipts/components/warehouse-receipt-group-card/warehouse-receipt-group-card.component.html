@@ -25,7 +25,7 @@
 				<mat-menu #groupOptions="matMenu">
 					<button mat-menu-item
 						class="group-option"
-						[disabled]="!wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'"
+						[disabled]="wrGroup.purchaseContract?.pdfReference == undefined || wrGroup.status === 'CANCELLED'"
 						(click)="viewContractDialog(true)"
 					>
 						<mat-icon>picture_as_pdf</mat-icon>
@@ -33,7 +33,7 @@
 					</button>
 					<button mat-menu-item
 						class="group-option"
-						[disabled]="!wrGroup.saleContract || wrGroup.status === 'CANCELLED'"
+						[disabled]="wrGroup.saleContract?.pdfReference == undefined || wrGroup.status === 'CANCELLED'"
 						(click)="viewContractDialog(false)"
 					>
 						<mat-icon>picture_as_pdf</mat-icon>

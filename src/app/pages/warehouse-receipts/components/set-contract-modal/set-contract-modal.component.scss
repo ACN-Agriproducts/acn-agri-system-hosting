@@ -44,19 +44,35 @@ mat-dialog-content {
 	ngx-dropzone-preview {
 		position: relative;
 		display: flex;
+		border-radius: 12px !important;
 		// background-image: none !important;
-		background-image: linear-gradient(to bottom, #c2d3c1, var(--ion-color-primary-light), white) !important;
 		// background-color: var(--ion-color-primary-light);
+		// border-style: solid;
+		// border-color: var(--ion-color-primary);
+
+		background: 
+			linear-gradient(70deg, 
+				#325c30 10%,
+				#437b40, 
+				#4d8c4a, 
+				#579e55, 
+				#61ad5e, 
+				#76b975, 
+				#8dc58d, 
+				#acd5ad, 
+				#cce5cc 85%
+			);
 
 		ngx-dropzone-label {
 			position: absolute;
 			align-self: center;
-			color: var(--ion-color-dark);
+			color: var(--ion-color-primary-contrast);
+			font-weight: 500;
 		}
 
 		&:hover,
 		&:focus {
-			filter: brightness(1.05);
+			filter: brightness(0.92);
 		}
 	}
 }
@@ -64,8 +80,8 @@ mat-dialog-content {
 .current-contract {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	padding: 20px 50px 10px;
+	align-items: flex-start;
+	padding: 20px 20px 10px;
 
 	span {
 		font-weight: 500;

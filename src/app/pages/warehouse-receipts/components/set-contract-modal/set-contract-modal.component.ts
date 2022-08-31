@@ -43,15 +43,9 @@ export class SetContractModalComponent implements OnInit {
     }
 
     uploadBytes(ref(this.storage, this.data.contractRef), this.files[0])
-    .then(() => {
-      getDownloadURL(ref(this.storage, this.data.contractRef))
-      .then(res => {
-        this.data.pdfReference = res;
-        this.dialogRef.close(this.data);
-      })
-      .catch(error => {
-        this.openSnackbar(error, true);
-      });
+    .then(async () => {
+      this.data.pdfReference = await getDownloadURL(ref(this.storage, this.data.contractRef));
+      this.dialogRef.close(this.data);
     })
     .catch(error => {
       this.openSnackbar(error, true);
