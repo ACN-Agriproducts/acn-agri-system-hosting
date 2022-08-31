@@ -136,7 +136,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     let updateData = await this.setContractDialog(contractData);
-    if (updateData === null || updateData === undefined) return;
+    if (updateData == null) return;
 
     const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
     const fallback = this.wrGroup[contractType];
@@ -241,7 +241,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     this.wrGroup.update({
-      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED" },
+      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
       status: "CLOSED",
       closedAt: serverTimestamp()
     })
