@@ -21,7 +21,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public idRange: string;
   public wrIdList: number[];
   public wrList: WarehouseReceipt[];
-  public contractRef: string;
+  public groupRef: string;
 
   constructor(
     private alertCtrl: AlertController,
@@ -33,6 +33,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.id - b.id);
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
     this.idRange = this.getIdRange();
+    this.groupRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/`;
   }
 
   public getIdRange(): string {
@@ -59,7 +60,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public viewContractDialog(isPurchase: boolean): void {
-    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+    const contractRef = this.groupRef + (isPurchase ? 'purchaseContract' : 'saleContract');
 
     this.dialog.open(ViewContractDialogComponent, {
       data: {
@@ -72,15 +73,33 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public uploadWarehouseReceipt(i: number): void {
-    console.log("Upload a Warehouse Receipt");
-    console.log(this.wrList[i].id);
-    console.log(this.wrIdList[i]);
-    const wrRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/warehouseReceipt#${this.wrIdList[i]}`;
+  public async uploadWarehouseReceipt(id: number): Promise<void> {
+    const wrRef = this.groupRef + `list/warehouseReceipt#${id}`;
+    if (wrRef == null) return;
 
-    this.dialog.open(UploadWarehouseReceiptDialogComponent, {
-      
+    const dialogRef = this.dialog.open(UploadWarehouseReceiptDialogComponent, {
+      data: wrRef,
+      autoFocus: false,
     });
+    const pdfReference = await lastValueFrom(dialogRef.afterClosed());
+    console.log(pdfReference);
+    if (pdfReference == null) return;
+
+    const updateList = this.wrGroup.getRawReceiptList();
+    updateList.find(receipt => receipt.id === id).pdfReference = pdfReference;
+
+    this.wrGroup.update({
+      warehouseReceiptList: updateList
+    })
+    .then(() => {
+      this.wrList.find(receipt => receipt.id === id).pdfReference = pdfReference;
+      this.openSnackbar("Upload successful");
+      console.log(this.wrList);
+    })
+    .catch(error => {
+      this.openSnackbar(error, true);
+      console.log(error);
+    })
   }
 
   public async cancelGroupConfirmation(): Promise<void> {
@@ -130,7 +149,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
-    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+    const contractRef = this.groupRef + (isPurchase ? 'purchaseContract' : 'saleContract');
 
     const contractData: ContractData = { 
       startDate: new Date(), 
@@ -172,7 +191,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public setContractDialog(contractUpdateDoc: ContractData): any {
+  public setContractDialog(contractUpdateDoc: ContractData): Promise<any> {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractUpdateDoc,
       autoFocus: false,
@@ -180,9 +199,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       minWidth: '475px'
     });
 
-    return lastValueFrom(dailogRef.afterClosed()).then(result => {
-      return result;
-    });
+    return lastValueFrom(dailogRef.afterClosed());
   }
 
   public hasPaid(): number {
