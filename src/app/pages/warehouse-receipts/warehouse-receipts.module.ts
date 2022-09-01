@@ -12,7 +12,7 @@ import { WarehouseReceiptGroupCardComponent } from './components/warehouse-recei
 import { SetContractModalComponent } from './components/set-contract-modal/set-contract-modal.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ViewContractDialogComponent } from './components/view-contract-dialog/view-contract-dialog.component';
-import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
+import { UploadWarehouseReceiptDialogComponent } from './components/upload-warehouse-receipt-dialog/upload-warehouse-receipt-dialog.component';
 
 @NgModule({
   imports: [
@@ -30,7 +30,7 @@ import { UploadDocumentDialogComponent } from './components/upload-document-dial
     WarehouseReceiptGroupCardComponent,
     SetContractModalComponent,
     ViewContractDialogComponent,
-    UploadDocumentDialogComponent,
+    UploadWarehouseReceiptDialogComponent,
   ]
 })
 export class WarehouseReceiptsPageModule {}

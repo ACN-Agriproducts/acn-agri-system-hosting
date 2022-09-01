@@ -6,7 +6,7 @@ import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
-import { UploadDocumentDialogComponent } from '../upload-document-dialog/upload-document-dialog.component';
+import { UploadWarehouseReceiptDialogComponent } from '../upload-warehouse-receipt-dialog/upload-warehouse-receipt-dialog.component';
 import { ViewContractDialogComponent } from '../view-contract-dialog/view-contract-dialog.component';
 
 @Component({
@@ -78,7 +78,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     console.log(this.wrIdList[i]);
     const wrRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/warehouseReceipt#${this.wrIdList[i]}`;
 
-    this.dialog.open(UploadDocumentDialogComponent, {
+    this.dialog.open(UploadWarehouseReceiptDialogComponent, {
       
     });
   }
