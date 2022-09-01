@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { WarehouseReceiptsPageRoutingModule } from './warehouse-receipts-routing.module';
 
 import { WarehouseReceiptsPage } from './warehouse-receipts.page';
-import { WarehouseReceiptStatusPopoverComponent } from '@pages/warehouse-receipts/components/warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 import { CoreModule } from '@core/core.module';
 import { WarehouseReceiptGroupCardComponent } from './components/warehouse-receipt-group-card/warehouse-receipt-group-card.component';
 import { SetContractModalComponent } from './components/set-contract-modal/set-contract-modal.component';
@@ -30,7 +29,6 @@ import { UploadDocumentDialogComponent } from './components/upload-document-dial
     WarehouseReceiptsPage,
     WarehouseReceiptGroupCardComponent,
     SetContractModalComponent,
-    WarehouseReceiptStatusPopoverComponent,
     ViewContractDialogComponent,
     UploadDocumentDialogComponent,
   ]
