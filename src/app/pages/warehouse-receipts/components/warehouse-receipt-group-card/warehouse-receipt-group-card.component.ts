@@ -74,31 +74,35 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async uploadWarehouseReceipt(id: number): Promise<void> {
-    const wrRef = this.groupRef + `list/warehouseReceipt#${id}`;
-    if (wrRef == null) return;
+    const receipt = this.wrList.find(receipt => receipt.id === id);
 
+    const hasDoc = receipt.pdfReference !== null;
+    const pdfRef = receipt.pdfReference !== null 
+      ? receipt.pdfReference 
+      : this.groupRef + `list/warehouseReceipt#${id}`;
+    
     const dialogRef = this.dialog.open(UploadWarehouseReceiptDialogComponent, {
-      data: wrRef,
+      data: {
+        pdfRef,
+        hasDoc
+      },
       autoFocus: false,
     });
-    const pdfReference = await lastValueFrom(dialogRef.afterClosed());
-    console.log(pdfReference);
-    if (pdfReference == null) return;
+    const updatePdfRef = await lastValueFrom(dialogRef.afterClosed());
+    if (updatePdfRef == null) return;
 
     const updateList = this.wrGroup.getRawReceiptList();
-    updateList.find(receipt => receipt.id === id).pdfReference = pdfReference;
+    updateList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
 
     this.wrGroup.update({
       warehouseReceiptList: updateList
     })
     .then(() => {
-      this.wrList.find(receipt => receipt.id === id).pdfReference = pdfReference;
+      this.wrList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
       this.openSnackbar("Upload successful");
-      console.log(this.wrList);
     })
     .catch(error => {
       this.openSnackbar(error, true);
-      console.log(error);
     })
   }
 
@@ -149,7 +153,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
-    const contractRef = this.groupRef + (isPurchase ? 'purchaseContract' : 'saleContract');
+    const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
+    const contractRef = this.groupRef + contractType;
 
     const contractData: ContractData = { 
       startDate: new Date(), 
@@ -170,9 +175,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     let updateData = await this.setContractDialog(contractData);
     if (updateData == null) return;
 
-    const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
     const fallback = this.wrGroup[contractType];
-  
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
     delete updateData['contractRef'];
 

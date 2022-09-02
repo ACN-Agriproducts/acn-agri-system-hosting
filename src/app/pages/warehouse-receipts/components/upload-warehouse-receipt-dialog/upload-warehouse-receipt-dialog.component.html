@@ -1,28 +1,36 @@
 
 <div class="dialog">
-	<h2 mat-dialog-title>Upload Warehouse Receipt</h2>
+	<h2 mat-dialog-title>{{ !data.hasDoc ? 'Upload' : 'View / Re-Upload' }} Warehouse Receipt</h2>
 	
-	<mat-dialog-content>
-		<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
-			<ngx-dropzone-label>
-				<mat-icon>cloud_upload</mat-icon>
-				<h3>Upload Warehouse Receipt</h3>
-				<p>Simply drag and drop or click here to choose a file.</p>
-			</ngx-dropzone-label>
-	
-			<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-				<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
-			</ngx-dropzone-preview>
-		</ngx-dropzone>
+	<mat-dialog-content dynamicHeight>
+		<mat-tab-group>
+			<mat-tab *ngIf="data.hasDoc" label="View Document">
+				<div class="tab-content">
+					<mat-spinner *ngIf="!ready else pdfView"></mat-spinner>
+					<ng-template #pdfView>
+						<object [data]="source" height="400px" width="600px" type="application/pdf"></object>
+					</ng-template>
+				</div>
+			</mat-tab>
+			<mat-tab label="Re-Upload Document">
+				<div class="tab-content">
+					<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
+						<ngx-dropzone-label>
+							<mat-icon>cloud_upload</mat-icon>
+							<h3>Upload Warehouse Receipt</h3>
+							<p>Simply drag and drop or click here to choose a file.</p>
+						</ngx-dropzone-label>
+						<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+							<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+						</ngx-dropzone-preview>
+					</ngx-dropzone>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
 	</mat-dialog-content>
 	
-	<mat-dialog-actions [align]="status ? 'none' : 'end'">
-		<ng-template [ngIf]="status" [ngIfElse]="groupClosed">
-			<button mat-button [mat-dialog-close]="null" color="primary">Cancel</button>
-			<button mat-button color="primary" (click)="confirm()">Confirm</button>
-		</ng-template>
-		<ng-template #groupClosed>
-			<button mat-button [mat-dialog-close]="null" color="primary">Close</button>
-		</ng-template>
+	<mat-dialog-actions>
+		<button mat-button [mat-dialog-close]="null" color="primary">Close</button>
+		<button mat-button [disabled]="files.length === 0" color="primary" (click)="confirm()">Confirm</button>
 	</mat-dialog-actions>
 </div>

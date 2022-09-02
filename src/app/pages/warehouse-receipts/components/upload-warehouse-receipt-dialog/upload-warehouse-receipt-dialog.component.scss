@@ -1,19 +1,26 @@
 
-.dialog {
-    // display: flex;
-    // flex-direction: column;
-    // height: 400px - (24px * 2);
+mat-dialog-content {
+	display: flex;
+	height: 475px;
+	width: 600px;
 }
 
-mat-dialog-content {
-
+mat-tab-group, mat-tab-label {
+	width: 100%;
+}
+.tab-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 25px;
+	height: 400px;
 }
 
 .dropzone {
-	align-self: center;
-	height: 175px;
-	width: 385px;
+	height: 250px;
+	width: 375px;
 	background-color: var(--ion-color-light);
+	border-radius: 20px;
 
 	display: flex;
 	justify-content: center;
@@ -36,7 +43,6 @@ mat-dialog-content {
 		// background-color: var(--ion-color-primary-light);
 		// border-style: solid;
 		// border-color: var(--ion-color-primary);
-
 		background: 
 			linear-gradient(70deg, 
 				#325c30 10%,

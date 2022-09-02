@@ -176,12 +176,15 @@
 				<button mat-icon-button
 					class="upload-wr-button" 
 					(click)="uploadWarehouseReceipt(warehouseReceipt.id)"
-					matTooltip="Upload Document"
+					matTooltip="{{ !warehouseReceipt.pdfReference ? 'Upload' : 'View / Re-Upload' }} Document"
 					matTooltipClass="tooltip-primary-solid"
 					matTooltipPosition="before"
 					matTooltipShowDelay="1000"
 				>
-					<mat-icon color="primary">cloud_upload</mat-icon>
+					<mat-icon *ngIf="!warehouseReceipt.pdfReference else exists" color="accent">cloud_upload</mat-icon>
+					<ng-template #exists>
+						<mat-icon color="primary">cloud_done</mat-icon>
+					</ng-template>
 				</button>
 			</div>
 		</div>

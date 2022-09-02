@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-warehouse-receipt-dialog',
@@ -10,7 +10,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class UploadWarehouseReceiptDialogComponent implements OnInit {
   public files: File[] = [];
-  public status: boolean = true;
+  public source: SafeResourceUrl;
+  public ready: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -20,7 +21,23 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+    if (this.data.pdfRef == null) {
+      console.log("The reference/path to the warehouse receipt document does not exist.");
+      return;
+    }
+    if (!this.data.hasDoc) {
+      return;
+    }
+
+    getDownloadURL(ref(this.storage, this.data.pdfRef))
+    .then(res => {
+      this.source = this.sanitizer.bypassSecurityTrustResourceUrl(res) ?? null;
+      this.ready = this.source !== null;
+      if (!this.ready) throw "The resource could not be secured for use.";
+    })
+    .catch(error => {
+      console.log(error);
+    });
   }
 
   public onSelect(event: any):void {
@@ -38,9 +55,9 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
       return;
     }
 
-    uploadBytes(ref(this.storage, this.data), this.files[0])
+    uploadBytes(ref(this.storage, this.data.pdfRef), this.files[0])
     .then(async () => {
-      this.dialogRef.close(await getDownloadURL(ref(this.storage, this.data)));
+      this.dialogRef.close(ref(this.storage, this.data.pdfRef).fullPath);
     })
     .catch(error => {
       console.log(error);
