@@ -1,6 +1,10 @@
 
 <div class="dialog">
-	<h2 mat-dialog-title>{{ !data.hasDoc ? 'Upload' : 'View / Re-Upload' }} Warehouse Receipt</h2>
+	<h2 mat-dialog-title>{{ 
+		!data.hasDoc ? 'Upload' : 
+		data.groupStatus !== 'CLOSED' ? 'View / Re-Upload' : 
+		'View' 
+	}} Warehouse Receipt</h2>
 	
 	<mat-dialog-content dynamicHeight>
 		<mat-tab-group>
@@ -12,7 +16,7 @@
 					</ng-template>
 				</div>
 			</mat-tab>
-			<mat-tab *ngIf="data.groupStatus !== 'CLOSED'" label="Re-Upload Document">
+			<mat-tab *ngIf="data.groupStatus !== 'CLOSED'" [label]="!data.hasDoc ? 'Upload' : 'Re-Upload Document'">
 				<div class="tab-content">
 					<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
 						<ngx-dropzone-label>
