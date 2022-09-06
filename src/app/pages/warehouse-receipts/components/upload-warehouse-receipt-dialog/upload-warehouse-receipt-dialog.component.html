@@ -12,7 +12,7 @@
 					</ng-template>
 				</div>
 			</mat-tab>
-			<mat-tab label="Re-Upload Document">
+			<mat-tab *ngIf="data.groupStatus !== 'CLOSED'" label="Re-Upload Document">
 				<div class="tab-content">
 					<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
 						<ngx-dropzone-label>

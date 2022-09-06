@@ -84,7 +84,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const dialogRef = this.dialog.open(UploadWarehouseReceiptDialogComponent, {
       data: {
         pdfRef,
-        hasDoc
+        hasDoc,
+        groupStatus: this.wrGroup.status
       },
       autoFocus: false,
     });
