@@ -283,7 +283,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(() => {
       this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
       this.wrGroup.closedAt = new Date();
-      this.snack.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and Warehouse Receipt Group are now CLOSED.`);
+      this.snack.openSnackbar(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
     })
     .catch(error => {
       this.snack.openSnackbar(error, 'error');

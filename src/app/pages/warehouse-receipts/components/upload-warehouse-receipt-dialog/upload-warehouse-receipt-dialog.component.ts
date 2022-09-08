@@ -20,13 +20,11 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private storage: Storage,
     private snack: SnackbarService,
-  ) {
-    this.snack.openSnackbar('Testing Snackbar', 'info');
-  }
+  ) { }
 
   ngOnInit() {
     if (this.data.pdfRef == null) {
-      console.log("The reference/path to the warehouse receipt document does not exist.");
+      this.snack.openSnackbar("The reference/path to the warehouse receipt document does not exist.", 'error');
       return;
     }
     if (!this.data.hasDoc) {
@@ -40,7 +38,7 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
       if (!this.ready) throw "The resource could not be secured for use.";
     })
     .catch(error => {
-      console.log(error);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -63,7 +61,7 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
       this.dialogRef.close(ref(this.storage, this.data.pdfRef).fullPath);
     })
     .catch(error => {
-      console.log(error);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 }

@@ -1,17 +1,17 @@
-.snack-container {
+.snack-container, .main-icon {
     display: flex;
     align-items: center;
+}
 
+.snack-container {
     button {
         margin-left: auto;
-        // width: 40px !important;
-        // min-width: unset !important;
-
         mat-icon{
             font-size: 17px;
         }
     }
 }
 .text {
-    padding: 0 10px;
+    padding: 0 12px;
+    white-space: pre-line;
 }
