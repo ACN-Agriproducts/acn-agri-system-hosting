@@ -3,6 +3,7 @@ import { addDoc, CollectionReference, Firestore, serverTimestamp } from '@angula
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController, NavController } from '@ionic/angular';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
@@ -30,7 +31,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     private fb: FormBuilder,
     private navController: NavController,
     private session: SessionInfo,
-    private snackbar: MatSnackBar,
+    private snack: SnackbarService,
     private uniqueId: UniqueWarehouseReceiptIdService,
   ) { }
 
@@ -84,7 +85,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
         return idArray.indexOf(id) !== index;
       });
 
-      if (invalid) this.openSnackbar("Cannot create group with multiple ID's", true);
+      if (invalid) this.snack.openSnackbar("Cannot create group with multiple ID's", 'warn');
 
       return invalid ? { duplicateId: true} : null;
     }
@@ -105,7 +106,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     for (let i = 0; i < formValues.quantity; i++) {
       warehouseReceiptList.push(this.createWarehouseReceipt(formValues, i));
     }
-    this.openSnackbar("Warehouse Receipt Preview Updated");
+    this.snack.openSnackbar("Warehouse Receipt Preview Updated", 'info');
   }
 
   public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
@@ -126,7 +127,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
 
   public cancel = (): void => {
-    this.openSnackbar("Cancelled New Warehouse Receipt Group");
+    this.snack.openSnackbar("Cancelled New Warehouse Receipt Group", 'info');
     this.navController.navigateBack('/dashboard/warehouse-receipts', {
       replaceUrl: true
     });
@@ -176,18 +177,10 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     };
 
     addDoc(this.warehouseReceiptCollectionRef, receiptGroup).then(() => {
-      this.openSnackbar("Warehouse Receipt Group Created");
+      this.snack.openSnackbar("Warehouse Receipt Group Created", 'success');
       this.navController.navigateForward('/dashboard/warehouse-receipts');
     }).catch(error => {
-      this.openSnackbar(`Error submitting form: ${error}`, true);
+      this.snack.openSnackbar(`Error submitting form: ${error}`, 'error');
     });
-  }
-
-  public openSnackbar = (message: string, error?: boolean) => {
-    if (error) {
-      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
-      return;
-    }
-    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
   }
 }
