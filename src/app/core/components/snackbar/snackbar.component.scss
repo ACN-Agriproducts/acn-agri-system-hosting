@@ -4,11 +4,14 @@
 
     button {
         margin-left: auto;
-        width: 40px !important;
-        min-width: unset !important;
+        // width: 40px !important;
+        // min-width: unset !important;
 
-        .mat-icon{
+        mat-icon{
             font-size: 17px;
         }
     }
+}
+.text {
+    padding: 0 10px;
 }
