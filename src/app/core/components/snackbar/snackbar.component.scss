@@ -4,5 +4,11 @@
 
     button {
         margin-left: auto;
+        width: 40px !important;
+        min-width: unset !important;
+
+        .mat-icon{
+            font-size: 17px;
+        }
     }
 }

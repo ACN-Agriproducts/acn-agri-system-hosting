@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
@@ -26,7 +27,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
+    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
@@ -100,10 +101,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
-      this.openSnackbar("Upload successful");
+      this.snack.openSnackbar("Upload Successful", 'success');
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     })
   }
 
@@ -134,10 +135,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().cancelled;
-      this.openSnackbar("Warehouse Receipt Group has been cancelled");
+      this.snack.openSnackbar("Warehouse Receipt Group has been cancelled.");
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -187,11 +188,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(()=> {
       this.wrGroup[contractType] = { ...updateData, closedAt: new Date() };
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
-      this.openSnackbar("Contract Successfully Updated.");
+      this.snack.openSnackbar("Contract Successfully Updated", 'success');
     })
     .catch(error => {
       this.wrGroup[contractType] = fallback;
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -227,7 +228,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
-      this.openSnackbar("Error: Sale Contract must be present.", true);
+      this.snack.openSnackbar("Error: Sale Contract must be present.", 'error');
       return;
     }
 
@@ -260,12 +261,12 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrList[index].isPaid = true;
-      this.openSnackbar(`Warehouse Receipt has been paid.`);
+      this.snack.openSnackbar(`Warehouse Receipt has been paid.`, 'success');
       this.checkIfAllPaid();
     })
     .catch(error => {
       this.wrList[index].isPaid = false;
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -282,19 +283,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(() => {
       this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
       this.wrGroup.closedAt = new Date();
-      this.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and WArehouse Receipt Group are now CLOSED.`);
+      this.snack.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and Warehouse Receipt Group are now CLOSED.`);
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     })
-  }
-
-  public openSnackbar (message: string, error?: boolean): void {
-    if (error) {
-      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
-      return;
-    }
-    this.snackbar.open(message, "", { duration: 2000, panelClass: 'snackbar' });
   }
 }
 

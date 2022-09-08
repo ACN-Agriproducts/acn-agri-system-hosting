@@ -180,6 +180,9 @@ ion-content {
 }
 .snackbar-info {
 }
+.snackbar-close {
+  padding: 0;
+}
 
 // temporary fix until Angular Team Fixes Bug with matTooltips
 .mat-tooltip-hide { display: none!important; }
