@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-upload-warehouse-receipt-dialog',
@@ -18,7 +19,10 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<UploadWarehouseReceiptDialogComponent>,
     private sanitizer: DomSanitizer,
     private storage: Storage,
-  ) { }
+    private snack: SnackbarService,
+  ) {
+    this.snack.openSnackbar('Testing Snackbar', 'info');
+  }
 
   ngOnInit() {
     if (this.data.pdfRef == null) {

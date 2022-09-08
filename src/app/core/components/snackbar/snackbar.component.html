@@ -1,3 +1,11 @@
-<p>
-  snackbar works!
-</p>
+<div class="snack-container">
+	<mat-icon>{{ getIcon }}</mat-icon>
+	&nbsp;
+	<span>{{ data.message }}</span>
+	<button mat-button *ngIf="!data.action else action" (click)="close()">
+		<mat-icon *ngIf="!data.action else action">close</mat-icon>
+	</button>
+	<ng-template #action>
+		<button mat-button (click)="close()">{{ data.action }}</button>
+	</ng-template>
+</div>

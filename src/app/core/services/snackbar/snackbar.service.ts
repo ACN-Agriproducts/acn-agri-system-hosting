@@ -9,14 +9,16 @@ export class SnackbarService {
 
   constructor(private snackbar: MatSnackBar) { }
 
-  public openSnackbar(message: string, action: string, snackType?: string) {
-    const _snackType = typeof snackType !== undefined ? snackType : 'Success';
+  public openSnackbar(message: string, snackType: string = 'success', action?: string) {
+    const className = `snackbar-${snackType}`;
 
     this.snackbar.openFromComponent(SnackbarComponent, {
-      duration: 2000,
+      duration: 1000000,
+      panelClass: className,
       data: {
         message,
-        snackType
+        snackType,
+        action
       }
     });
   }

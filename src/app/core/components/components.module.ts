@@ -9,6 +9,7 @@ import { ButtonBusinessComponent } from './button-business/button-business.compo
 import { HeaderToolbarComponent } from './header-toolbar/header-toolbar.component';
 import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { MaterialModule } from '@core/modules/material.module';
+import { SnackbarComponent } from './snackbar/snackbar.component';
 // import { NgxDropzoneModule } from 'ngx-dropzone';
 
 
@@ -25,7 +26,8 @@ import { MaterialModule } from '@core/modules/material.module';
     ButtonBusinessComponent,
     HeaderToolbarComponent,
     ContextMenuComponent,
-    FileInvoiceComponent
+    FileInvoiceComponent,
+    SnackbarComponent
   ],
   exports: [
     OptionBusinessComponent,
