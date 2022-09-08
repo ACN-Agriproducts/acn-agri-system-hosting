@@ -134,7 +134,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
 
   public confirm = async (): Promise<void> => {
-    let alert = await this.alertController.create({
+    const alert = await this.alertController.create({
       header: "Confirmation",
       message: "Are you sure you would like to submit these Warehouse Receipts?",
       buttons: [
@@ -151,7 +151,6 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
         }
       ]
     });
-
     alert.present();
   }
 
