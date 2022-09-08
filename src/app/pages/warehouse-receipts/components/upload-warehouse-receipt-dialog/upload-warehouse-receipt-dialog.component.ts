@@ -18,8 +18,8 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<UploadWarehouseReceiptDialogComponent>,
     private sanitizer: DomSanitizer,
-    private storage: Storage,
     private snack: SnackbarService,
+    private storage: Storage,
   ) { }
 
   ngOnInit() {
