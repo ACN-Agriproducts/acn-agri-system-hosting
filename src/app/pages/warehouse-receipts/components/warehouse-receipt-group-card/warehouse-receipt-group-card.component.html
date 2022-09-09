@@ -42,7 +42,7 @@
 					<button mat-menu-item 
 						class="group-option cancel-group"
 						[disabled]="wrGroup.purchaseContract || wrGroup.status === 'CANCELLED'" 
-						(click)="cancelGroupConfirmation()"
+						(click)="cancelGroup()"
 					>
 						<mat-icon>cancel</mat-icon>
 						<span>Cancel Group</span>
@@ -161,7 +161,7 @@
 			<div>
 				<button mat-icon-button
 					class="paid-button" 
-					(click)="paidWarehouseReceipt(warehouseReceipt, i)" 
+					(click)="updatePaidStatus(warehouseReceipt, i)" 
 					[disabled]="warehouseReceipt.isPaid"
 					matTooltip="Set as paid" 
 					matTooltipClass="tooltip-primary-solid" 

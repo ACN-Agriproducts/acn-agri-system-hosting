@@ -109,12 +109,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
   }
 
-  public async cancelGroupConfirmation(): Promise<void> {
+  public async cancelGroup(): Promise<void> {
     if (!await this.confirmation.openDialog("cancel this Warehouse Receipt Group")) return;
-    this.cancelGroup();
-  }
 
-  public cancelGroup(): void {
     this.wrGroup.update({
       status: "CANCELLED"
     })
@@ -159,19 +156,19 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    let updateData = await this.setContractDialog(contractData);
-    if (updateData == null) return;
+    let newContractData = await this.setContractDialog(contractData);
+    if (newContractData == null) return;
 
     const fallback = this.wrGroup[contractType];
-    updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
-    delete updateData['contractRef'];
+    newContractData = isPurchase ? { ...newContractData, closedAt: serverTimestamp() } : newContractData;
+    delete newContractData['contractRef'];
 
     this.wrGroup.update({
-      [contractType]: updateData,
+      [contractType]: newContractData,
       status: "ACTIVE"
     })
     .then(()=> {
-      this.wrGroup[contractType] = { ...updateData, closedAt: new Date() };
+      this.wrGroup[contractType] = { ...newContractData, closedAt: new Date() };
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
       this.snack.openSnackbar("Contract Successfully Updated", 'success');
     })
@@ -211,22 +208,22 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
   }
 
-  public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
+  public async updatePaidStatus(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
       this.snack.openSnackbar("Error: Sale Contract must be present.", 'error');
       return;
     }
 
     if (!await this.confirmation.openDialog(`mark Warehouse Receipt ${warehouseReceipt.id} as paid`)) return;
-    this.updatePaidStatus(index);
+    this.updateList(index);
   }
 
-  public updatePaidStatus(index: number) {
-    const updateList = this.wrGroup.getRawReceiptList();
-    updateList[index].isPaid = true;
+  public updateList(index: number) {
+    const newListData = this.wrGroup.getRawReceiptList();
+    newListData[index].isPaid = true;
 
     this.wrGroup.update({
-      warehouseReceiptList: updateList
+      warehouseReceiptList: newListData
     })
     .then(() => {
       this.wrList[index].isPaid = true;
