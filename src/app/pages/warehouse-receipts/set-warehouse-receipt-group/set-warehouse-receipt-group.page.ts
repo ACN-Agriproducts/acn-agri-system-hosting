@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { addDoc, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController, NavController } from '@ionic/angular';
@@ -25,13 +26,13 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   public warehouseReceiptIdList: number[];
 
   constructor(
-    private alertController: AlertController,
     private db: Firestore,
     private fb: FormBuilder,
     private navController: NavController,
     private session: SessionInfo,
     private snack: SnackbarService,
     private uniqueId: UniqueWarehouseReceiptIdService,
+    private confirmation: ConfirmationDialogService,
   ) { }
 
   ngOnInit() {
@@ -133,24 +134,8 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
 
   public confirm = async (): Promise<void> => {
-    const alert = await this.alertController.create({
-      header: "Confirmation",
-      message: "Are you sure you would like to submit these Warehouse Receipts?",
-      buttons: [
-        {
-          text: "yes",
-          handler: async () => {
-            alert.dismiss();
-            this.submitWarehouseReceiptGroup();
-          }
-        },
-        {
-          text: "no",
-          role: 'cancel'
-        }
-      ]
-    });
-    alert.present();
+    if (!await this.confirmation.openDialog("submit these Warehouse Receipts")) return;
+    this.submitWarehouseReceiptGroup();
   }
 
   public submitWarehouseReceiptGroup = async (): Promise<void> => {

@@ -1,0 +1,11 @@
+.action-bar {
+	display: flex;
+	justify-content: space-between;
+	grid-column-end: span 2;
+	margin-inline: 0.5rem;
+}
+
+mat-dialog-content {
+    width: 250px;
+    font-size: 1.15em;
+}

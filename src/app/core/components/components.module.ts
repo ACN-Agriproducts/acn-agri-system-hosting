@@ -10,6 +10,7 @@ import { HeaderToolbarComponent } from './header-toolbar/header-toolbar.componen
 import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { MaterialModule } from '@core/modules/material.module';
 import { SnackbarComponent } from './snackbar/snackbar.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 // import { NgxDropzoneModule } from 'ngx-dropzone';
 
 
@@ -27,7 +28,8 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
     HeaderToolbarComponent,
     ContextMenuComponent,
     FileInvoiceComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    ConfirmationDialogComponent,
   ],
   exports: [
     OptionBusinessComponent,

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
@@ -27,6 +28,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     private alertCtrl: AlertController,
     private dialog: MatDialog,
     private snack: SnackbarService,
+    private confirmation: ConfirmationDialogService,
   ) { }
 
   ngOnInit() {
@@ -108,24 +110,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async cancelGroupConfirmation(): Promise<void> {
-    const alert = await this.alertCtrl.create({
-      header: "Confirmation",
-      message: `Are you sure you would like to cancel this Warehouse Receipt Group?`,
-      buttons: [
-        {
-          text: 'yes',
-          handler: () => {
-            alert.dismiss();
-            this.cancelGroup();
-          }
-        },
-        {
-          text: 'no',
-          role: 'cancel'
-        }
-      ]
-    });
-    alert.present();
+    if (!await this.confirmation.openDialog("cancel this Warehouse Receipt Group")) return;
+    this.cancelGroup();
   }
 
   public cancelGroup(): void {
@@ -231,24 +217,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       return;
     }
 
-    const alert = await this.alertCtrl.create({
-      header: "Confirmation",
-      message: `Are you sure you would like to set the status of Warehouse Receipt ${warehouseReceipt.id} as paid?`,
-      buttons: [
-        {
-          text: 'yes',
-          handler: () => {
-            alert.dismiss();
-            this.updatePaidStatus(index);
-          }
-        },
-        {
-          text: 'no',
-          role: 'cancel'
-        }
-      ]
-    });
-    alert.present();
+    if (!await this.confirmation.openDialog(`mark Warehouse Receipt ${warehouseReceipt.id} as paid`)) return;
+    this.updatePaidStatus(index);
   }
 
   public updatePaidStatus(index: number) {
