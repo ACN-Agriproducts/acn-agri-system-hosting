@@ -91,22 +91,26 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       },
       autoFocus: false,
     });
-    const updatePdfRef = await lastValueFrom(dialogRef.afterClosed());
-    if (updatePdfRef == null) return;
+    const newPdfRef = await lastValueFrom(dialogRef.afterClosed());
+    if (newPdfRef == null) return;
 
-    const updateList = this.wrGroup.getRawReceiptList();
-    updateList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
+    this.updateWarehouseReceipt(id, newPdfRef);
+  }
+
+  public updateWarehouseReceipt(id: number, newPdfRef: any) {
+    const newListData = this.wrGroup.getRawReceiptList();
+    newListData.find(receipt => receipt.id === id).pdfReference = newPdfRef;
 
     this.wrGroup.update({
-      warehouseReceiptList: updateList
+      warehouseReceiptList: newListData
     })
     .then(() => {
-      this.wrList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
+      this.wrList.find(receipt => receipt.id === id).pdfReference = newPdfRef;
       this.snack.openSnackbar("Upload Successful", 'success');
     })
     .catch(error => {
       this.snack.openSnackbar(error, 'error');
-    })
+    });
   }
 
   public async cancelGroup(): Promise<void> {
@@ -156,11 +160,21 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    let newContractData = await this.setContractDialog(contractData);
+    const dailogRef = this.dialog.open(SetContractModalComponent, {
+      data: contractData,
+      autoFocus: false,
+      minHeight: '425px',
+      minWidth: '475px'
+    });
+    const newContractData = await lastValueFrom(dailogRef.afterClosed());
     if (newContractData == null) return;
 
+    this.updateContract(newContractData, contractType);
+  }
+
+  public updateContract(newContractData: any, contractType: string): void {
     const fallback = this.wrGroup[contractType];
-    newContractData = isPurchase ? { ...newContractData, closedAt: serverTimestamp() } : newContractData;
+    newContractData = contractType === 'purchaseContract' ? { ...newContractData, closedAt: serverTimestamp() } : newContractData;
     delete newContractData['contractRef'];
 
     this.wrGroup.update({
@@ -176,17 +190,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       this.wrGroup[contractType] = fallback;
       this.snack.openSnackbar(error, 'error');
     });
-  }
-
-  public setContractDialog(contractUpdateDoc: ContractData): Promise<any> {
-    const dailogRef = this.dialog.open(SetContractModalComponent, {
-      data: contractUpdateDoc,
-      autoFocus: false,
-      minHeight: '425px',
-      minWidth: '475px'
-    });
-
-    return lastValueFrom(dailogRef.afterClosed());
   }
 
   public hasPaid(): number {
@@ -237,9 +240,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public checkIfAllPaid(): void {
-    if (this.hasPaid() !== this.wrList.length) {
-      return;
-    }
+    if (this.hasPaid() !== this.wrList.length) return;
 
     this.wrGroup.update({
       saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
