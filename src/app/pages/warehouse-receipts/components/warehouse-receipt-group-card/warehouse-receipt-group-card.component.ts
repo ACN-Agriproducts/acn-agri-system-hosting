@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
@@ -29,7 +27,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     private alertCtrl: AlertController,
     private dialog: MatDialog,
     private snack: SnackbarService,
-    private confirm: ConfirmationDialogService,
   ) { }
 
   ngOnInit() {
@@ -129,7 +126,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       ]
     });
     alert.present();
-    // this.confirm.openConfirmationDialog("cancel this Warehouse Receipt Group", this.cancelGroup); // throws error
   }
 
   public cancelGroup(): void {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { addDoc, CollectionReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController, NavController } from '@ionic/angular';
