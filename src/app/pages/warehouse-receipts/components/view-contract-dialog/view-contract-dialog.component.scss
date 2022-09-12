@@ -1,0 +1,15 @@
+
+mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    max-height: 1000px;
+}
+
+.action-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-self: flex-end;
+}

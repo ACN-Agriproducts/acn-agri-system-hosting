@@ -6,6 +6,7 @@ import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
 import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
+import { ViewContractDialogComponent } from '../view-contract-dialog/view-contract-dialog.component';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -14,13 +15,12 @@ import { SetContractModalComponent } from '../set-contract-modal/set-contract-mo
 })
 export class WarehouseReceiptGroupCardComponent implements OnInit {
   @Input() wrGroup: WarehouseReceiptGroup;
+  @Input() currentCompany: string;
 
   public idRange: string;
   public wrIdList: number[];
   public wrList: WarehouseReceipt[];
-
-  public purchaseContract: WarehouseReceiptContract;
-  public saleContract: WarehouseReceiptContract;
+  public contractRef: string;
 
   constructor(
     private alertCtrl: AlertController,
@@ -31,7 +31,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   ngOnInit() {
     this.wrList = this.wrGroup.warehouseReceiptList.sort((a, b) => a.id - b.id);
     this.wrIdList = this.wrGroup.warehouseReceiptIdList.sort((a, b) => a - b);
-
     this.idRange = this.getIdRange();
   }
 
@@ -53,10 +52,23 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
     let result = ``;
     sequence.forEach((sub, index) => {
-      result += `${sub[0]}-${sub[sub.length - 1]}` + (index !== sequence.length - 1 ? `, `: ``);
+      result += (sub.length === 1 ? sub[0] : `${sub[0]}-${sub[sub.length-1]}`) + (index !== sequence.length - 1 ? `, `: ``);
     });
-
     return result;
+  }
+
+  public viewContractDialog(isPurchase: boolean): void {
+    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+
+    this.dialog.open(ViewContractDialogComponent, {
+      data: {
+        contractRef,
+        isPurchase
+      },
+      autoFocus: false,
+      minHeight: '400px',
+      minWidth: '400px'
+    });
   }
 
   public async cancelGroupConfirmation(): Promise<void> {
@@ -94,9 +106,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public isEditable(contract: WarehouseReceiptContract): boolean {
-    if (contract?.closedAt === undefined) {
-      return true;
-    }
+    if (this.wrGroup.status === 'CANCELLED' || this.wrGroup.status === 'CLOSED') return false;
+    if (contract?.closedAt === undefined) return true;
 
     const HOUR_TO_MS = 1000 * 60 * 60;
     const now = new Date().getTime();
@@ -107,9 +118,13 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 
   public async setContract(contract: WarehouseReceiptContract, isPurchase: boolean): Promise<void> {
+    const contractRef = `companies/${this.currentCompany}/warehouseReceipts/${this.wrGroup.ref.id}/${isPurchase ? 'purchaseContract' : 'saleContract'}`;
+
     const contractData: ContractData = { 
       startDate: new Date(), 
-      status: isPurchase ? "CLOSED" : "PENDING"
+      status: isPurchase ? "CLOSED" : "PENDING",
+      pdfReference: null,
+      contractRef: contractRef
     };
 
     if (contract) {
@@ -117,16 +132,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.futurePrice = contract.futurePrice;
       contractData.id = contract.id;
       contractData.startDate = contract.startDate;
+      contractData.status = contract.status;
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
     let updateData = await this.setContractDialog(contractData);
-    if (updateData === undefined) return;
+    if (updateData == null) return;
 
     const contractType = isPurchase ? 'purchaseContract' : 'saleContract';
     const fallback = this.wrGroup[contractType];
   
     updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
+    delete updateData['contractRef'];
 
     this.wrGroup.update({
       [contractType]: updateData,
@@ -146,8 +163,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public setContractDialog(contractUpdateDoc: ContractData): any {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
       data: contractUpdateDoc,
-      height: '300px',
-      width: '550px'
+      autoFocus: false,
+      minHeight: '425px',
+      minWidth: '475px'
     });
 
     return lastValueFrom(dailogRef.afterClosed()).then(result => {
@@ -224,7 +242,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
 
     this.wrGroup.update({
-      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED" },
+      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
       status: "CLOSED",
       closedAt: serverTimestamp()
     })
@@ -240,10 +258,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public openSnackbar (message: string, error?: boolean): void {
     if (error) {
-      this.snackbar.open(message, "Close", { duration: 4000, panelClass: 'snackbar-error' });
+      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
       return;
     }
-    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
+    this.snackbar.open(message, "", { duration: 2000, panelClass: 'snackbar' });
   }
 }
 
@@ -253,5 +271,6 @@ interface ContractData {
   id?: string;
   pdfReference?: string;
   startDate: Date;
-  status?: string;
+  status: string;
+  contractRef?: string;
 }

@@ -1,0 +1,13 @@
+
+<h2 mat-dialog-title>{{ this.data.isPurchase? 'Purchase' : 'Sale' }} Contract</h2>
+
+<mat-dialog-content>
+  <mat-spinner *ngIf="!ready else pdfView"></mat-spinner>
+  <ng-template #pdfView>
+    <object [data]="source" height="650px" width="700px" type="application/pdf"></object>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions class="action-bar">
+  <button mat-button color="primary" (click)="close()">Close</button>
+</mat-dialog-actions>

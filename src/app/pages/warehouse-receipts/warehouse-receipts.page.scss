@@ -2,382 +2,391 @@
 // ---------------------------------- warehouse-receipts.page.html ----------------------------------
 
 ion-toolbar {
-    min-height: 42px;
-    height: 42px;
+	min-height: 42px;
+	height: 42px;
 }
 ion-segment-button {
-    font-size: 0.85em;
-    min-height: 42px;
-    height: 42px;
+	font-size: 0.85em;
+	min-height: 42px;
+	height: 42px;
 }
 .segment-button-checked {
-    --background: rgba(var(--ion-color-primary-rgb),0.075);
-    background: rgba(var(--ion-color-primary-rgb),0.075);
+	--background: rgba(var(--ion-color-primary-rgb),0.075);
+	background: rgba(var(--ion-color-primary-rgb),0.075);
 }
 
 .card-list {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 #add-card {
-    display: flex;
-    flex-direction: row !important;
-    min-height: 140px;
-    padding-bottom: 0.7rem;
-    cursor: pointer;
+	display: flex;
+	flex-direction: row !important;
+	min-height: 140px;
+	padding-bottom: 0.7rem;
+	cursor: pointer;
+	position: relative;
 
-    &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(119, 119, 119, 0.3);
-        transition: opacity .3s;
-        opacity: 0;
-        z-index: 2;
-    }
-    &:hover:before {
-        opacity: 1;
-    }
+	&:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(119, 119, 119, 0.3);
+		transition: opacity .3s;
+		opacity: 0;
+		z-index: 2;
+	}
+	&:hover:before {
+		opacity: 1;
+	}
 
-    .info-section, .contract {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2em;
-    }
+	.info-section, .contract {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.2em;
+	}
 
-    .wr-group{
-        height: 100%;
-    }
+	.wr-group{
+		height: 100%;
+	}
 }
 
 // -------------------- warehouse-receipts.page.html & warehouse-receipt-group-card.component.html --------------------
 
 .wr-card {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-    min-height: 200px;
-    width: min(100% - 3rem);
-    margin-inline: auto;
-    padding: 0.7rem 0.7rem 0.2rem 0.7rem;
+	min-height: 200px;
+	width: min(100% - 3rem);
+	margin-inline: auto;
+	padding: 0.7rem 0.7rem 0.2rem 0.7rem;
 }
 
 .wr-group {
-    display: flex;
-    height: 190px;
+	display: flex;
+	height: 190px;
 }
 
 .info-section {
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-    width: 50%;
+	display: flex;
+	flex-direction: column;
+	margin: 5px;
+	width: 50%;
 }
 
 .contract-section {
-    display: flex;
-    width: 100%;
+	display: flex;
+	width: 100%;
 }
 
 .contract {
-    width: 100%;
-    margin: 5px;
-    padding: 1em;
-    border-radius: 5px;
-    background-color: rgb(232, 232, 232);
+	width: 100%;
+	margin: 5px;
+	padding: 1em;
+	border-radius: 5px;
+	background-color: rgb(232, 232, 232);
 
-    ion-card-title {
-        display: inline;
-        font-size: 1.2em;
-    }
+	ion-card-title {
+		display: inline;
+		font-size: 1.2em;
+	}
 }
 
 // ------------------------- warehouse-receipt-group-card.component.html -------------------------
 
 .group-info {
-    display: flex;
-    height: 70%;
-    width: 100%;
-    padding: 0.5em;
+	display: flex;
+	height: 70%;
+	width: 100%;
+	padding: 0.5em;
 }
 
 .info {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 120%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 120%;
 }
 
 .group-status {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    font-size: 1.1em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	font-size: 1.1em;
 }
 
 .group-options-button {
-    top: -10%;
+	top: -10%;
 
-    mat-icon {
-        font-size: 26px;
-    }
+	mat-icon {
+		font-size: 26px;
+	}
 }
-
 .group-option {
-    /* background-color: var(--ion-color-danger);
-    color: var(--ion-color-danger-accent); */
-    font-size: 1.1em;
-
-    mat-icon {
-        color: var(--ion-color-danger);
-    }
+	mat-icon {
+		color: var(--ion-color-primary);
+	}
+}
+.cancel-group {
+	mat-icon {
+		color: var(--ion-color-danger);
+	}
 }
 
 .status-text {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 0.75em;
-    font-family: 'Verdana', 'Arial', sans-serif;
-    text-transform: capitalize;
-    padding: 0 1rem;
-    border-radius: 10px;
-    position: relative;
-
-    border-style: solid;
-    border-width: 0.5px;
-
-    &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(119, 119, 119, 0.3);
-        transition: opacity .3s;
-        opacity: 0;
-        z-index: 2;
-        border-radius: 22px;
-    }
-    &:hover:before {
-        opacity: 1;
-    }
+	display: inline-block;
+	font-weight: 600;
+	font-size: 0.75em;
+	font-family: 'Verdana', 'Arial', sans-serif;
+	text-transform: capitalize;
+	padding: 0 1rem;
+	border-radius: 10px;    
+	border-style: solid;
+	border-width: 0.5px;
+	// filter: brightness(0.85);
+	transition: 300ms;
+	
+	/* &:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(119, 119, 119, 0.3);
+		transition: opacity .3s;
+		opacity: 0;
+		z-index: 2;
+		border-radius: 22px;
+	}
+	&:hover:before {
+		opacity: 1;
+	} */
+	&:hover {
+		filter: brightness(.8);
+	}
 }
 
 .pending {
-    background-color: rgba(var(--ion-color-warning-rgb), 0.15);
-    color: var(--ion-color-warning);
+	background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+	color: var(--ion-color-warning);
 }
 .active {
-    background-color: rgba(var(--ion-color-success-rgb), 0.15);
-    color: var(--ion-color-success);
+	background-color: rgba(var(--ion-color-success-rgb), 0.15);
+	color: var(--ion-color-success);
 }
 .closed {
-    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-    color: var(--ion-color-danger);
+	background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+	color: var(--ion-color-danger);
 }
 .cancelled { 
-    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-    color: var(--ion-color-danger);
+	background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+	color: var(--ion-color-danger);
 
-    cursor: initial;
-    &:before {
-        all: initial;
-    }
+	cursor: initial;
+	&:before {
+		all: initial;
+	}
 }
 
 hr {
-    width: 97%;
-    height: 2.5px;
-    color: #A8A8A8;
-    background-color: #A8A8A8;
+	width: 97%;
+	height: 2.5px;
+	color: #A8A8A8;
+	background-color: #A8A8A8;
 }
 
 .group-stats {
-    flex-grow: 1;
-    padding: 0.5em;
+	flex-grow: 1;
+	padding: 0.5em;
 }
 
 .contract-signed {
-    background-color: var(--ion-color-primary-light);
+	background-color: var(--ion-color-primary-light);
 }
 
 .contract-header {
-    position: relative;
+	position: relative;
 
-    button {
-        position: absolute;
-        right: -4%;
-        top: -50%;
+	button {
+		position: absolute;
+		right: -4%;
+		top: -50%;
 
-        mat-icon {
-            font-size: 20px;
-        }
-    }
+		mat-icon {
+			font-size: 20px;
+		}
+	}
 }
 
 .contract-info {
-    margin: 1em 0.6em;
-    padding-top: 0.5em;
-    
-    ion-text {
-        color: var(--ion-color-dark);
-    }
+	margin: 1em 0.6em;
+	padding-top: 0.5em;
+	
+	ion-text {
+		color: var(--ion-color-dark);
+	}
 }
 
 .align-right {
-    float: right;
+	float: right;
 }
 
 .prices {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	text-align: center;
 
-    height: 5em;
-    padding-top: 1.3em;
-    font-size: 1.05em;
-    margin: 0 -0.3em;
+	height: 5em;
+	padding-top: 1.3em;
+	font-size: 1.05em;
+	margin: 0 -0.3em;
 
-    ion-card-title {
-        font-size: 1.1em;
-        position: relative;
+	ion-card-title {
+		font-size: 1.1em;
+		position: relative;
 
-        &:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 95%;
-            border-top: 2px solid var(--ion-color-primary);
-        }
-    }
-    ion-card-title, ion-text {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+		&:before {
+			content: '';
+			position: absolute;
+			top: 0;
+			width: 95%;
+			border-top: 2px solid var(--ion-color-primary);
+		}
+	}
+	ion-card-title, ion-text {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 }
 
 .border-right {
-    border-right: 2px solid var(--ion-color-primary);
+	border-right: 2px solid var(--ion-color-primary);
 }
 
 .expansion-bar {
-    display: flex;
-    text-align: center;
+	display: flex;
+	text-align: center;
+	padding-top: 5px;
 
-    mat-icon {
-        cursor: pointer;
-        transition: 0.4s;
-        position: relative;
-        font-size: 1.4em;
-        
-        height: 15px;
-        width: 15%;
-        background-color: var(--ion-color-light);
-        border-radius: 20px;
-        margin-inline: 5px;
+	mat-icon {
+		cursor: pointer;
+		transition: 0.4s;
+		font-size: 1.4em;
+		height: 15px;
+		width: 15%;
+		background-color: var(--ion-color-light);
+		border-radius: 20px;
+		margin-inline: 5px;
+		position: relative;
 
-        &:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(119, 119, 119, 0.3);
-            transition: opacity .3s;
-            opacity: 0;
-            z-index: 2;
-            border-radius: 22px;
-        }
-        &:hover:before {
-            opacity: 1;
-        }
-    }
+		&:before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(119, 119, 119, 0.3);
+			transition: opacity .3s;
+			opacity: 0;
+			z-index: 2;
+			border-radius: 22px;
+		}
+		&:hover:before {
+			opacity: 1;
+		}
+	}
 
-    hr {
-        height: 1px;
-        color: #A8A8A8;
-        background-color: #A8A8A8;
-        margin-inline: 5px;
-    }
+	hr {
+		height: 1px;
+		color: #A8A8A8;
+		background-color: #A8A8A8;
+		margin-inline: 5px;
+	}
 }
 
 .expandable-wr-list {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
-    background-color: white;
-    border-radius: 5px;
-    margin: 5px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.25s ease-out;
+	background-color: white;
+	margin: 5px;
+	border-radius: 5px;
+	box-shadow:
+		rgb(0 0 0 / 20%) 0px 1px 1px -2px,
+		rgb(0 0 0 / 14%) 0px 1px 2px 0px,
+		rgb(0 0 0 / 12%) 0px 1px 5px 0px;
 }
 
 .table-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    text-align: center;
-    height: 50px;
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	text-align: center;
+	height: 50px;
 
-    ion-text {
-        align-self: center;
-    }
+	ion-text {
+		align-self: center;
+	}
 }
 
 .table-header {
-    background-color: var(--ion-color-primary-light);
-    color: var(--ion-color-primary);
-    font-size: 1.05em;
-    font-weight: 500;
+	background-color: var(--ion-color-primary-light);
+	color: var(--ion-color-primary);
+	font-size: 1.05em;
+	font-weight: 500;
 
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 6px 5px 0 0;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 6px 6px 0 0;
 }
 
 .table-body {
-    position: relative;
+	position: relative;
 
-    ion-text {
-        color: var(--ion-color-dark);
-    }
+	ion-text {
+		color: var(--ion-color-dark);
+	}
 
-    .paid-button {
-        z-index: 3;
-    }
+	.paid-button {
+		z-index: 3;
+	}
 
-    &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-        transition: opacity .3s;
-        opacity: 0;
-        z-index: 2;
-    }
-    &:hover:before {
-        opacity: 1;
-    }
-    &:hover {
-        background-color: transparent !important;
-        transition: .2s;
-    }
+	&:before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(var(--ion-color-primary-rgb), 0.15);
+		transition: opacity .3s;
+		opacity: 0;
+		z-index: 2;
+	}
+	&:hover:before {
+		opacity: 1;
+	}
+	&:hover {
+		background-color: transparent !important;
+		transition: .2s;
+	}
 }
 
 .odd {
-    background-color: var(--ion-color-light);
+	background-color: var(--ion-color-light);
 }
 
-.shrunk {
-    max-height: 0;
-    transition: max-height 0.3s ease-out;
+.tooltip-primary-solid {
+	background-color: rgba(var(--ion-color-primary-rgb), 0.85);
+	font-size: 12px;
+	font-weight: 500;
 }

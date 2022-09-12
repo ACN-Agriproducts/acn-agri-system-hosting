@@ -10,16 +10,81 @@ input[type=number] {
 	-moz-appearance: textfield;
 }
 
+mat-dialog-content {
+	display: flex;
+	flex-direction: column;
+}
+
 .action-bar {
 	display: flex;
 	justify-content: space-between;
 	grid-column-end: span 2;
-
 	margin-inline: 0.5rem;
 }
 
-.form {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	column-gap: 2rem;
+.dropzone {
+	align-self: center;
+	height: 175px;
+	width: 385px;
+	background-color: var(--ion-color-light);
+
+	display: flex;
+	justify-content: center;
+
+	h3 {
+		margin: 0;
+		padding: 0;
+		font-size: 1.1em;
+		font-weight: 500;
+	}
+	p {
+		font-size: 0.85em;
+	}
+
+	ngx-dropzone-preview {
+		position: relative;
+		display: flex;
+		border-radius: 12px !important;
+		// background-image: none !important;
+		// background-color: var(--ion-color-primary-light);
+		// border-style: solid;
+		// border-color: var(--ion-color-primary);
+
+		background: 
+			linear-gradient(70deg, 
+				#325C2A 15%, 
+				#437b40 40%, 
+				#4d8c4a 60%, 
+				#579e55, 
+				#61ad5e, 
+				#76b975 90%
+			);
+
+		ngx-dropzone-label {
+			position: absolute;
+			align-self: center;
+			color: var(--ion-color-primary-contrast);
+			font-weight: 500;
+		}
+
+		&:hover,
+		&:focus {
+			filter: brightness(0.9);
+		}
+
+		&:hover ngx-dropzone-remove-badge:hover {
+			background: #f44336 !important;
+		}
+	}
+}
+
+.current-contract {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 20px 20px 10px;
+
+	span {
+		font-weight: 500;
+	}
 }
