@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Firestore, updateDoc } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
 
@@ -19,7 +20,8 @@ export class ContractModalOptionsComponent implements OnInit {
 
   constructor(
     private navController: NavController,
-    private db: Firestore
+    private db: Firestore,
+    private dialog: MatDialog,
     ) { }
 
   ngOnInit() {}
@@ -36,6 +38,12 @@ export class ContractModalOptionsComponent implements OnInit {
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "active"
     })
+  }
+
+  public uploadSignedContract() {
+    if(this.contract.status == 'closed') return;
+
+    
   }
 
   public closeContract() {
