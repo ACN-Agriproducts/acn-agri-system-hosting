@@ -3,6 +3,7 @@ import { Firestore, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
+import { UploadSignedContractComponent } from '@shared/components/upload-signed-contract/upload-signed-contract.component';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -43,7 +44,12 @@ export class ContractModalOptionsComponent implements OnInit {
   public uploadSignedContract() {
     if(this.contract.status == 'closed') return;
 
-    
+    const dialogRef = this.dialog.open(UploadSignedContractComponent, {
+      data: {
+
+      },
+      autoFocus: false
+    });
   }
 
   public closeContract() {
