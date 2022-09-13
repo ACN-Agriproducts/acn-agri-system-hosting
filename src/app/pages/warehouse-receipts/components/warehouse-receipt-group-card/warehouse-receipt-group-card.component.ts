@@ -76,8 +76,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public async uploadWarehouseReceipt(id: number): Promise<void> {
     const receipt = this.wrList.find(receipt => receipt.id === id);
 
-    const hasDoc = receipt.pdfReference !== null;
-    const pdfRef = receipt.pdfReference !== null 
+    const hasDoc = receipt.pdfReference != null;
+    const pdfRef = receipt.pdfReference != null 
       ? receipt.pdfReference 
       : this.groupRef + `list/warehouseReceipt#${id}`;
     
