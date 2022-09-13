@@ -7,12 +7,12 @@ import { IonicModule } from '@ionic/angular';
 import { WarehouseReceiptsPageRoutingModule } from './warehouse-receipts-routing.module';
 
 import { WarehouseReceiptsPage } from './warehouse-receipts.page';
-import { WarehouseReceiptStatusPopoverComponent } from '@pages/warehouse-receipts/components/warehouse-receipt-status-popover/warehouse-receipt-status-popover.component';
 import { CoreModule } from '@core/core.module';
 import { WarehouseReceiptGroupCardComponent } from './components/warehouse-receipt-group-card/warehouse-receipt-group-card.component';
 import { SetContractModalComponent } from './components/set-contract-modal/set-contract-modal.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ViewContractDialogComponent } from './components/view-contract-dialog/view-contract-dialog.component';
+import { UploadWarehouseReceiptDialogComponent } from './components/upload-warehouse-receipt-dialog/upload-warehouse-receipt-dialog.component';
 
 @NgModule({
   imports: [
@@ -29,8 +29,8 @@ import { ViewContractDialogComponent } from './components/view-contract-dialog/v
     WarehouseReceiptsPage,
     WarehouseReceiptGroupCardComponent,
     SetContractModalComponent,
-    WarehouseReceiptStatusPopoverComponent,
     ViewContractDialogComponent,
+    UploadWarehouseReceiptDialogComponent,
   ]
 })
 export class WarehouseReceiptsPageModule {}

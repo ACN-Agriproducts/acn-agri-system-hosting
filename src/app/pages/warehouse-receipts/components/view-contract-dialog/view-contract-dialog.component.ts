@@ -24,7 +24,7 @@ export class ViewContractDialogComponent implements OnInit {
   ngOnInit() {
     this.data.contractRef = this.data.contractRef ?? '';
     if (this.data.contractRef.length === 0) {
-      this.openSnackbar("The reference/path to the contract does not exist.", true);
+      this.openSnackbar("The reference/path to the contract document does not exist.", true);
       return;
     }
 

@@ -24,8 +24,7 @@ export class SetContractModalComponent implements OnInit {
   }
 
   public onSelect(event: any):void {
-    this.files = [];
-    this.files.push(...event.addedFiles);
+    this.files = event.addedFiles;
   }
 
   public onRemove(event: any):void {

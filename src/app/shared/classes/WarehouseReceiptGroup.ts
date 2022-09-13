@@ -1,5 +1,4 @@
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, query, QueryConstraint, getDocs, orderBy, collectionData, Query } from "@angular/fire/firestore";
-import { onSnapshot } from "firebase/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
@@ -95,19 +94,21 @@ export class WarehouseReceiptGroup extends FirebaseDocInterface {
 
 export class WarehouseReceipt {
     public bushelQuantity: number;
-    public startDate: Date;
     public id: number;
+    public isPaid: boolean;
+    public pdfReference: string | null;
     public plant: string;
     public product: string;
-    public isPaid: boolean;
+    public startDate: Date;
 
     constructor(data: any) {
         this.bushelQuantity = data.bushelQuantity;
-        this.startDate = data.startDate?.toDate();
         this.id = data.id;
+        this.isPaid = data.isPaid;
+        this.pdfReference = data.pdfReference;
         this.plant = data.plant;
         this.product = data.product;
-        this.isPaid = data.isPaid;
+        this.startDate = data.startDate?.toDate();
     }
 
     public getRawData() {

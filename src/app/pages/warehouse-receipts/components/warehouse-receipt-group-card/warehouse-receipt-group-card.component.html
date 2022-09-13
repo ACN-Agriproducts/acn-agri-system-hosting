@@ -165,11 +165,31 @@
 					[disabled]="warehouseReceipt.isPaid"
 					matTooltip="Set as paid" 
 					matTooltipClass="tooltip-primary-solid" 
-					matTooltipPosition="after" 
+					matTooltipPosition="before" 
 					matTooltipShowDelay="1000"
 				>
 					<mat-icon color="warn" *ngIf="!warehouseReceipt.isPaid">highlight_off</mat-icon>
 					<mat-icon color="primary" *ngIf="warehouseReceipt.isPaid">check_circle</mat-icon>
+				</button>
+			</div>
+			<div>
+				<button mat-icon-button
+					class="upload-wr-button" 
+					(click)="uploadWarehouseReceipt(warehouseReceipt.id)"
+					[disabled]="!warehouseReceipt.pdfReference && wrGroup.status === 'CLOSED'"
+					matTooltip="{{ 
+						!warehouseReceipt.pdfReference ? 'Upload' : 
+						wrGroup.status !== 'CLOSED' ? 'View / Re-Upload' : 
+						'View'
+					}} Document"
+					matTooltipClass="tooltip-primary-solid"
+					matTooltipPosition="before"
+					matTooltipShowDelay="1000"
+				>
+					<mat-icon *ngIf="!warehouseReceipt.pdfReference else exists" color="accent">cloud_upload</mat-icon>
+					<ng-template #exists>
+						<mat-icon color="primary">cloud_done</mat-icon>
+					</ng-template>
 				</button>
 			</div>
 		</div>

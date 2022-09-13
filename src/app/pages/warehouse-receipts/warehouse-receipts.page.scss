@@ -329,7 +329,7 @@ hr {
 
 .table-row {
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(5, 1fr) 0.6fr 0.6fr;
 	text-align: center;
 	height: 50px;
 
@@ -356,8 +356,11 @@ hr {
 		color: var(--ion-color-dark);
 	}
 
-	.paid-button {
+	.paid-button, .upload-wr-button {
 		z-index: 3;
+		&:hover {
+			filter: brightness(1.15);
+		}
 	}
 
 	&:before {
