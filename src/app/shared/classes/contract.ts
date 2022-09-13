@@ -42,6 +42,7 @@ export class Contract extends FirebaseDocInterface {
     loads: number;
     market_price: number;
     paymentTerms: PaymentTerms;
+    pdfReference: string;
     pricePerBushel: number;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
@@ -83,6 +84,7 @@ export class Contract extends FirebaseDocInterface {
         this.loads = data.loads;
         this.market_price = data.market_price;
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
+        this.pdfReference = data.pdfReference;
         this.pricePerBushel = data.pricePerBushel;
         this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
@@ -112,6 +114,7 @@ export class Contract extends FirebaseDocInterface {
                 loads: data.loads,
                 market_price: data.market_price,
                 paymentTerms: data.paymentTerms,
+                pdfReference: data.pdfReference,
                 pricePerBushel: data.pricePerBushel,
                 product: data.product,
                 productInfo: data.productInfo,
