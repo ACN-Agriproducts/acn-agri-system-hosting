@@ -4,6 +4,10 @@ mat-dialog-content {
 	height: 650px;
 	width: 700px;
 }
+.noDoc {
+	height: unset;
+	width: unset;
+}
 
 mat-tab-group, mat-tab-label {
 	width: 100%;
@@ -14,12 +18,15 @@ mat-tab-group, mat-tab-label {
 	justify-content: space-around;
 	align-items: center;
 	margin-top: 25px;
+}
+.consistent-height {
 	height: 470px;
 }
 
 .dropzone {
 	height: 250px;
 	width: 375px;
+	margin: 10px 20px 20px;
 	background-color: var(--ion-color-light);
 	border-radius: 12px;
 

@@ -2,10 +2,10 @@
 <div class="dialog">
 	<h2 mat-dialog-title>{{ (!data.hasDoc ? 'Upload ' : '') + data.docType }}</h2>
 	
-	<mat-dialog-content>
+	<mat-dialog-content [class.noDoc]="!data.hasDoc">
 		<mat-tab-group>
 			<mat-tab *ngIf="data.hasDoc" label="View">
-				<div class="tab-content">
+				<div class="tab-content" [class.consistent-height]="data.hasDoc">
 					<mat-spinner *ngIf="!ready else pdfView"></mat-spinner>
 
 					<ng-template #pdfView>
@@ -15,7 +15,7 @@
 			</mat-tab>
 
 			<mat-tab *ngIf="data.uploadable" [label]="!data.hasDoc ? 'Upload' : 'Re-Upload'">
-				<div class="tab-content">
+				<div class="tab-content" [class.consistent-height]="data.hasDoc">
 					<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
 						<ngx-dropzone-label>
 							<mat-icon>cloud_upload</mat-icon>
