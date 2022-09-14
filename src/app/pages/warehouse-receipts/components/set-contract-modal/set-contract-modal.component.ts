@@ -61,7 +61,7 @@ export class SetContractModalComponent implements OnInit {
   }
 }
 
-interface ContractData {
+export interface ContractData {
   basePrice?: number;
   futurePrice?: number;
   id?: string;

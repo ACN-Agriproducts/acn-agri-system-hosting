@@ -15,7 +15,7 @@ export class UploadDocumentDialogComponent implements OnInit {
   public ready: boolean = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: UploadDialogData,
     private dialogRef: MatDialogRef<UploadDocumentDialogComponent>,
     private sanitizer: DomSanitizer,
     private snack: SnackbarService,
@@ -64,4 +64,11 @@ export class UploadDocumentDialogComponent implements OnInit {
       this.snack.openSnackbar(error, 'error');
     });
   }
+}
+
+export interface UploadDialogData {
+  docType: string;
+  hasDoc: boolean;
+  pdfRef: string;
+  uploadable: boolean;
 }

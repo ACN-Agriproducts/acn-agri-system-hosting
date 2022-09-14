@@ -49,7 +49,7 @@
 		</ngx-dropzone-label>
 
 		<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-			<ngx-dropzone-label>{{ f.name }} <!-- ({{ f.type }}) --></ngx-dropzone-label>
+			<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
 		</ngx-dropzone-preview>
 	</ngx-dropzone>
 </mat-dialog-content>

@@ -2,7 +2,7 @@
 <div class="dialog">
 	<h2 mat-dialog-title>{{ (!data.hasDoc ? 'Upload ' : '') + data.docType }}</h2>
 	
-	<mat-dialog-content dynamicHeight>
+	<mat-dialog-content>
 		<mat-tab-group>
 			<mat-tab *ngIf="data.hasDoc" label="View">
 				<div class="tab-content">
@@ -23,7 +23,12 @@
 							<p>Simply drag and drop or click here to choose a file.</p>
 						</ngx-dropzone-label>
 
-						<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+						<ngx-dropzone-preview 
+							*ngFor="let f of files" 
+							[file]="f" 
+							[removable]="true" 
+							(removed)="onRemove(f)"
+						>
 							<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
 						</ngx-dropzone-preview>
 					</ngx-dropzone>
@@ -33,7 +38,13 @@
 	</mat-dialog-content>
 	
 	<mat-dialog-actions>
-		<button mat-button [mat-dialog-close]="null" color="primary">Close</button>
-		<button mat-button *ngIf="data.uploadable" [disabled]="files.length === 0" color="primary" (click)="confirm()">Confirm</button>
+		<button mat-button color="primary" [mat-dialog-close]="null">Close</button>
+		<button mat-button color="primary" 
+			*ngIf="data.uploadable" 
+			[disabled]="files.length === 0" 
+			(click)="confirm()"
+		>
+			Confirm
+		</button>
 	</mat-dialog-actions>
 </div>

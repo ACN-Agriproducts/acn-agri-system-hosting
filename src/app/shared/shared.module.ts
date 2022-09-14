@@ -10,7 +10,6 @@ import { PrintableTicketComponent } from './printable/printable-ticket/printable
 import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-ticket-storage.component';
 import { CoreModule } from '@core/core.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { UploadDocumentComponent } from './components/upload-document/upload-document.component';
 import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 
 
@@ -34,7 +33,6 @@ import { UploadDocumentDialogComponent } from './components/upload-document-dial
     ScaleToFitDirective,
     PrintableTicketComponent,
     FixTicketStorageComponent,
-    UploadDocumentComponent,
     UploadDocumentDialogComponent,
   ]
 })

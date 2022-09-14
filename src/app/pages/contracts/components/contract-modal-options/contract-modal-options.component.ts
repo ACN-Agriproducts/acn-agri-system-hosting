@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
-import { UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
+import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -45,18 +45,18 @@ export class ContractModalOptionsComponent implements OnInit {
   }
 
   public async signedContract() {
-    const hasDoc = this.contract.pdfReference != null;
-    const pdfRef = this.contract.pdfReference != null 
-      ? this.contract.pdfReference 
-      : `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContract' : 'salesContract'}/${this.contractId}`;
+    const pdfRef = this.contract.pdfReference ?? 
+      `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContract' : 'salesContract'}/${this.contractId}`;
+
+    const dialogData: UploadDialogData = {
+      docType: "Signed Contract",
+      hasDoc: this.contract.pdfReference != null,
+      pdfRef,
+      uploadable: this.contract.status !== 'closed'
+    };
 
     const dialogRef = this.dialog.open(UploadDocumentDialogComponent, {
-      data: {
-        pdfRef,
-        hasDoc,
-        uploadable: this.contract.status !== 'closed',
-        docType: "Signed Contract"
-      },
+      data: dialogData,
       autoFocus: false
     });
     const updatePdfRef = await lastValueFrom(dialogRef.afterClosed());
