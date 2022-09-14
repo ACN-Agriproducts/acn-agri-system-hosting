@@ -9,8 +9,8 @@ import { ScaleToFitDirective } from './scale-to-fit.directive';
 import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
 import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-ticket-storage.component';
 import { CoreModule } from '@core/core.module';
-import { UploadSignedContractComponent } from './components/upload-signed-contract/upload-signed-contract.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { UploadDocumentComponent } from './components/upload-document/upload-document.component';
 
 
 @NgModule({
@@ -33,7 +33,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     ScaleToFitDirective,
     PrintableTicketComponent,
     FixTicketStorageComponent,
-    UploadSignedContractComponent,
+    UploadDocumentComponent,
   ]
 })
 export class SharedModule {}

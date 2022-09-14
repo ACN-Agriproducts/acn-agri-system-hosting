@@ -5,18 +5,18 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
-  selector: 'app-upload-signed-contract',
-  templateUrl: './upload-signed-contract.component.html',
-  styleUrls: ['./upload-signed-contract.component.scss'],
+  selector: 'app-upload-document',
+  templateUrl: './upload-document.component.html',
+  styleUrls: ['./upload-document.component.scss'],
 })
-export class UploadSignedContractComponent implements OnInit {
+export class UploadDocumentComponent implements OnInit {
   public files: File[] = [];
   public source: SafeResourceUrl;
   public ready: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<UploadSignedContractComponent>,
+    private dialogRef: MatDialogRef<UploadDocumentComponent>,
     private sanitizer: DomSanitizer,
     private snack: SnackbarService,
     private storage: Storage,
