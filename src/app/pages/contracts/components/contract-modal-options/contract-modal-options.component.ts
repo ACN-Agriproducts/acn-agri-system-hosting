@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
-import { UploadDocumentComponent } from '@shared/components/upload-document/upload-document.component';
+import { UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -50,7 +50,7 @@ export class ContractModalOptionsComponent implements OnInit {
       ? this.contract.pdfReference 
       : `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContract' : 'salesContract'}/${this.contractId}`;
 
-    const dialogRef = this.dialog.open(UploadDocumentComponent, {
+    const dialogRef = this.dialog.open(UploadDocumentDialogComponent, {
       data: {
         pdfRef,
         hasDoc,

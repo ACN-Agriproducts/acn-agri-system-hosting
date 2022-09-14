@@ -11,6 +11,7 @@ import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-t
 import { CoreModule } from '@core/core.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { UploadDocumentComponent } from './components/upload-document/upload-document.component';
+import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { UploadDocumentComponent } from './components/upload-document/upload-doc
     PrintableTicketComponent,
     FixTicketStorageComponent,
     UploadDocumentComponent,
+    UploadDocumentDialogComponent,
   ]
 })
 export class SharedModule {}
