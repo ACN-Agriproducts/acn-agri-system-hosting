@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Firestore, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
 import { UploadSignedContractComponent } from '@shared/components/upload-signed-contract/upload-signed-contract.component';
@@ -21,9 +22,10 @@ export class ContractModalOptionsComponent implements OnInit {
   @Input() contract: any;
 
   constructor(
-    private navController: NavController,
     private db: Firestore,
     private dialog: MatDialog,
+    private navController: NavController,
+    private snack: SnackbarService,
     ) { }
 
   ngOnInit() {}
@@ -63,10 +65,10 @@ export class ContractModalOptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      console.log("Contract pdfReference successfully updated.");
+      this.snack.openSnackbar("Contract pdfReference successfully updated.", 'success');
     })
     .catch(error => {
-      console.log(error);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 

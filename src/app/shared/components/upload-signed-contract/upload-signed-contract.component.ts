@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-upload-signed-contract',
@@ -17,12 +18,13 @@ export class UploadSignedContractComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<UploadSignedContractComponent>,
     private sanitizer: DomSanitizer,
+    private snack: SnackbarService,
     private storage: Storage,
   ) { }
 
   ngOnInit() {
     if (this.data.pdfRef == null) {
-      console.log("The reference/path to the document does not exist.");
+      this.snack.openSnackbar("The reference/path to the document does not exist.", 'error');
       return;
     }
     if (!this.data.hasDoc) {
@@ -36,7 +38,7 @@ export class UploadSignedContractComponent implements OnInit {
       if (!this.ready) throw "The resource could not be secured for use.";
     })
     .catch(error => {
-      console.log(error);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -59,7 +61,7 @@ export class UploadSignedContractComponent implements OnInit {
       this.dialogRef.close(ref(this.storage, this.data.pdfRef).fullPath);
     })
     .catch(error => {
-      console.log(error);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 }
