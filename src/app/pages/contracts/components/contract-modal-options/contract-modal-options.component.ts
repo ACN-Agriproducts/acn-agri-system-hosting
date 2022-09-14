@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
 import { UploadSignedContractComponent } from '@shared/components/upload-signed-contract/upload-signed-contract.component';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -41,14 +42,31 @@ export class ContractModalOptionsComponent implements OnInit {
     })
   }
 
-  public uploadSignedContract() {
-    if(this.contract.status == 'closed') return;
+  public async signedContract() {
+    const hasDoc = this.contract.pdfReference != null;
+    const pdfRef = this.contract.pdfReference != null 
+      ? this.contract.pdfReference 
+      : `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContract' : 'salesContract'}/${this.contractId}`;
 
     const dialogRef = this.dialog.open(UploadSignedContractComponent, {
       data: {
-
+        pdfRef,
+        hasDoc,
+        status: this.contract.status
       },
       autoFocus: false
+    });
+    const updatePdfRef = await lastValueFrom(dialogRef.afterClosed());
+    if (updatePdfRef == null) return;
+
+    this.contract.update({
+      pdfReference: updatePdfRef
+    })
+    .then(() => {
+      console.log("Contract pdfReference successfully updated.");
+    })
+    .catch(error => {
+      console.log(error);
     });
   }
 

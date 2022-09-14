@@ -9,9 +9,9 @@
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
   </ng-container>
-  <ng-container *ngIf="contract.status != 'closed'">
-    <ion-item lines="none" button (click)="uploadSignedContract()">
-      Upload Signed
+  <ng-container *ngIf="contract.status != 'closed' || contract.pdfReference != null">
+    <ion-item lines="none" button (click)="signedContract()">
+      Signed
       <ion-icon slot='end' name="cloud-upload-outline"></ion-icon>
     </ion-item>
   </ng-container>
