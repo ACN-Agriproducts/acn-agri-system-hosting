@@ -69,9 +69,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
         contractRef,
         isPurchase
       },
-      autoFocus: false,
-      minHeight: '400px',
-      minWidth: '400px'
+      autoFocus: false
     });
   }
 

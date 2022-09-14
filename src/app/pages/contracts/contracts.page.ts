@@ -168,6 +168,7 @@ export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
     const popover = await this.popoverController.create({
       component: ContractModalOptionsComponent,
       event,
+      dismissOnSelect: true,
       componentProps: {
         contractId: id,
         isPurchase: this.contractType == 'purchaseContracts',
