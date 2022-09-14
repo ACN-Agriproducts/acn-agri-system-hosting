@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
 import { lastValueFrom } from 'rxjs';
@@ -26,7 +27,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar,
+    private snack: SnackbarService,
+    private confirmation: ConfirmationDialogService,
   ) { }
 
   ngOnInit() {
@@ -89,55 +91,40 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       },
       autoFocus: false,
     });
-    const updatePdfRef = await lastValueFrom(dialogRef.afterClosed());
-    if (updatePdfRef == null) return;
+    const newPdfRef = await lastValueFrom(dialogRef.afterClosed());
+    if (newPdfRef == null) return;
 
-    const updateList = this.wrGroup.getRawReceiptList();
-    updateList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
+    this.updateWarehouseReceipt(id, newPdfRef);
+  }
+
+  public updateWarehouseReceipt(id: number, newPdfRef: any) {
+    const newListData = this.wrGroup.getRawReceiptList();
+    newListData.find(receipt => receipt.id === id).pdfReference = newPdfRef;
 
     this.wrGroup.update({
-      warehouseReceiptList: updateList
+      warehouseReceiptList: newListData
     })
     .then(() => {
-      this.wrList.find(receipt => receipt.id === id).pdfReference = updatePdfRef;
-      this.openSnackbar("Upload successful");
+      this.wrList.find(receipt => receipt.id === id).pdfReference = newPdfRef;
+      this.snack.openSnackbar("Upload Successful", 'success');
     })
     .catch(error => {
-      this.openSnackbar(error, true);
-    })
-  }
-
-  public async cancelGroupConfirmation(): Promise<void> {
-    const alert = await this.alertCtrl.create({
-      header: "Confirmation",
-      message: `Are you sure you would like to cancel this Warehouse Receipt Group?`,
-      buttons: [
-        {
-          text: 'yes',
-          handler: () => {
-            alert.dismiss();
-            this.cancelGroup();
-          }
-        },
-        {
-          text: 'no',
-          role: 'cancel'
-        }
-      ]
+      this.snack.openSnackbar(error, 'error');
     });
-    alert.present();
   }
 
-  public cancelGroup(): void {
+  public async cancelGroup(): Promise<void> {
+    if (!await this.confirmation.openDialog("cancel this Warehouse Receipt Group")) return;
+
     this.wrGroup.update({
       status: "CANCELLED"
     })
     .then(() => {
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().cancelled;
-      this.openSnackbar("Warehouse Receipt Group has been cancelled");
+      this.snack.openSnackbar("Warehouse Receipt Group has been cancelled.");
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -173,37 +160,36 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       contractData.pdfReference = contract.pdfReference ?? null;
     }
 
-    let updateData = await this.setContractDialog(contractData);
-    if (updateData == null) return;
-
-    const fallback = this.wrGroup[contractType];
-    updateData = isPurchase ? { ...updateData, closedAt: serverTimestamp() } : updateData;
-    delete updateData['contractRef'];
-
-    this.wrGroup.update({
-      [contractType]: updateData,
-      status: "ACTIVE"
-    })
-    .then(()=> {
-      this.wrGroup[contractType] = { ...updateData, closedAt: new Date() };
-      this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
-      this.openSnackbar("Contract Successfully Updated.");
-    })
-    .catch(error => {
-      this.wrGroup[contractType] = fallback;
-      this.openSnackbar(error, true);
-    });
-  }
-
-  public setContractDialog(contractUpdateDoc: ContractData): Promise<any> {
     const dailogRef = this.dialog.open(SetContractModalComponent, {
-      data: contractUpdateDoc,
+      data: contractData,
       autoFocus: false,
       minHeight: '425px',
       minWidth: '475px'
     });
+    const newContractData = await lastValueFrom(dailogRef.afterClosed());
+    if (newContractData == null) return;
 
-    return lastValueFrom(dailogRef.afterClosed());
+    this.updateContract(newContractData, contractType);
+  }
+
+  public updateContract(newContractData: any, contractType: string): void {
+    const fallback = this.wrGroup[contractType];
+    newContractData = contractType === 'purchaseContract' ? { ...newContractData, closedAt: serverTimestamp() } : newContractData;
+    delete newContractData['contractRef'];
+
+    this.wrGroup.update({
+      [contractType]: newContractData,
+      status: "ACTIVE"
+    })
+    .then(()=> {
+      this.wrGroup[contractType] = { ...newContractData, closedAt: new Date() };
+      this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
+      this.snack.openSnackbar("Contract Successfully Updated", 'success');
+    })
+    .catch(error => {
+      this.wrGroup[contractType] = fallback;
+      this.snack.openSnackbar(error, 'error');
+    });
   }
 
   public hasPaid(): number {
@@ -225,54 +211,36 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     }
   }
 
-  public async paidWarehouseReceipt(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
+  public async updatePaidStatus(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
-      this.openSnackbar("Error: Sale Contract must be present.", true);
+      this.snack.openSnackbar("Error: Sale Contract must be present.", 'error');
       return;
     }
 
-    const alert = await this.alertCtrl.create({
-      header: "Confirmation",
-      message: `Are you sure you would like to set the status of Warehouse Receipt ${warehouseReceipt.id} as paid?`,
-      buttons: [
-        {
-          text: 'yes',
-          handler: () => {
-            alert.dismiss();
-            this.updatePaidStatus(index);
-          }
-        },
-        {
-          text: 'no',
-          role: 'cancel'
-        }
-      ]
-    });
-    alert.present();
+    if (!await this.confirmation.openDialog(`mark Warehouse Receipt ${warehouseReceipt.id} as paid`)) return;
+    this.updateList(index);
   }
 
-  public updatePaidStatus(index: number) {
-    const updateList = this.wrGroup.getRawReceiptList();
-    updateList[index].isPaid = true;
+  public updateList(index: number) {
+    const newListData = this.wrGroup.getRawReceiptList();
+    newListData[index].isPaid = true;
 
     this.wrGroup.update({
-      warehouseReceiptList: updateList
+      warehouseReceiptList: newListData
     })
     .then(() => {
       this.wrList[index].isPaid = true;
-      this.openSnackbar(`Warehouse Receipt has been paid.`);
+      this.snack.openSnackbar(`Warehouse Receipt has been paid.`, 'success');
       this.checkIfAllPaid();
     })
     .catch(error => {
       this.wrList[index].isPaid = false;
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
   public checkIfAllPaid(): void {
-    if (this.hasPaid() !== this.wrList.length) {
-      return;
-    }
+    if (this.hasPaid() !== this.wrList.length) return;
 
     this.wrGroup.update({
       saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
@@ -282,19 +250,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(() => {
       this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
       this.wrGroup.closedAt = new Date();
-      this.openSnackbar(`All Warehouse Receipts are paid. Sale Contract and WArehouse Receipt Group are now CLOSED.`);
+      this.snack.openSnackbar(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     })
-  }
-
-  public openSnackbar (message: string, error?: boolean): void {
-    if (error) {
-      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
-      return;
-    }
-    this.snackbar.open(message, "", { duration: 2000, panelClass: 'snackbar' });
   }
 }
 

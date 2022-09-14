@@ -3,6 +3,7 @@ import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-view-contract-dialog',
@@ -17,14 +18,14 @@ export class ViewContractDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<ViewContractDialogComponent>,
     private sanitizer: DomSanitizer,
-    private snackbar: MatSnackBar,
+    private snack: SnackbarService,
     private storage: Storage,
   ) { }
 
   ngOnInit() {
     this.data.contractRef = this.data.contractRef ?? '';
     if (this.data.contractRef.length === 0) {
-      this.openSnackbar("The reference/path to the contract document does not exist.", true);
+      this.snack.openSnackbar("The reference/path to the contract document does not exist.", 'error');
       return;
     }
 
@@ -35,19 +36,11 @@ export class ViewContractDialogComponent implements OnInit {
       if (!this.ready) throw "The resource could not secured for use.";
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
   public close(): void {
     this.dialogRef.close();
-  }
-
-  public openSnackbar (message: string, error?: boolean): void {
-    if (error) {
-      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
-      return;
-    }
-    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
   }
 }

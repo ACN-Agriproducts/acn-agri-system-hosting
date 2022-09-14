@@ -1,0 +1,12 @@
+<div class="snack-container">
+	<span class="main-icon">
+		<mat-icon>{{ getIcon }}</mat-icon>
+	</span>
+	<span class="text">{{ data.message }}</span>
+	<button mat-icon-button *ngIf="!data.action else action" (click)="close()">
+		<mat-icon *ngIf="!data.action else action">close</mat-icon>
+	</button>
+	<ng-template #action>
+		<button mat-button (click)="close()">{{ data.action }}</button>
+	</ng-template>
+</div>

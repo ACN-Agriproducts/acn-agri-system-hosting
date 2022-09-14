@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { getDownloadURL, ref, Storage, uploadBytes } from '@angular/fire/storage';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-set-contract-modal',
@@ -15,7 +15,7 @@ export class SetContractModalComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ContractData,
     private dialogRef: MatDialogRef<SetContractModalComponent>,
-    private snackbar: MatSnackBar,
+    private snack: SnackbarService,
     private storage: Storage,
   ) { }
 
@@ -47,7 +47,7 @@ export class SetContractModalComponent implements OnInit {
       this.dialogRef.close(this.data);
     })
     .catch(error => {
-      this.openSnackbar(error, true);
+      this.snack.openSnackbar(error, 'error');
     });
   }
 
@@ -58,14 +58,6 @@ export class SetContractModalComponent implements OnInit {
       return url.substring(0, 21) + " .... " + url.substring(len - 9, len);
     }
     return url;
-  }
-
-  public openSnackbar (message: string, error?: boolean): void {
-    if (error) {
-      this.snackbar.open(message, "Close", { duration: 5000, panelClass: 'snackbar-error' });
-      return;
-    }
-    this.snackbar.open(message, "", { duration: 1500, panelClass: 'snackbar' });
   }
 }
 
