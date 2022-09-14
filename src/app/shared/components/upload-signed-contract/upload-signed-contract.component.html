@@ -1,14 +1,10 @@
 
 <div class="dialog">
-	<h2 mat-dialog-title>{{ 
-		!data.hasDoc ? 'Upload' : 
-		data.status !== 'closed' ? 'View / Re-Upload' : 
-		'View' 
-	}} Signed Contract</h2>
+	<h2 mat-dialog-title>{{ (!data.hasDoc ? 'Upload ' : '') + data.docType }}</h2>
 	
 	<mat-dialog-content dynamicHeight>
 		<mat-tab-group>
-			<mat-tab *ngIf="data.hasDoc" label="View Document">
+			<mat-tab *ngIf="data.hasDoc" label="View">
 				<div class="tab-content">
 					<mat-spinner *ngIf="!ready else pdfView"></mat-spinner>
 
@@ -18,12 +14,12 @@
 				</div>
 			</mat-tab>
 
-			<mat-tab *ngIf="data.status !== 'closed'" [label]="!data.hasDoc ? 'Upload' : 'Re-Upload Document'">
+			<mat-tab *ngIf="data.uploadable" [label]="!data.hasDoc ? 'Upload' : 'Re-Upload'">
 				<div class="tab-content">
 					<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
 						<ngx-dropzone-label>
 							<mat-icon>cloud_upload</mat-icon>
-							<h3>Upload Signed Contract</h3>
+							<h3>Upload {{ data.docType }}</h3>
 							<p>Simply drag and drop or click here to choose a file.</p>
 						</ngx-dropzone-label>
 
@@ -38,6 +34,6 @@
 	
 	<mat-dialog-actions>
 		<button mat-button [mat-dialog-close]="null" color="primary">Close</button>
-		<button mat-button [disabled]="files.length === 0" color="primary" (click)="confirm()">Confirm</button>
+		<button mat-button *ngIf="data.uploadable" [disabled]="files.length === 0" color="primary" (click)="confirm()">Confirm</button>
 	</mat-dialog-actions>
 </div>

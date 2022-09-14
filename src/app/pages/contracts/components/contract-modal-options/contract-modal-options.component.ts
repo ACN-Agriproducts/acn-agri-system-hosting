@@ -54,7 +54,8 @@ export class ContractModalOptionsComponent implements OnInit {
       data: {
         pdfRef,
         hasDoc,
-        status: this.contract.status
+        uploadable: this.contract.status !== 'closed',
+        docType: "Signed Contract"
       },
       autoFocus: false
     });
