@@ -1,6 +1,6 @@
 
 
-declare type units = 'kg' | 'lb' | 't';
+declare type units = 'kg' | 'lb' | 't' | 'bu';
 
 export class WeightUnit {
     constructor(private amount: number, private unit?: units) {};
@@ -10,7 +10,7 @@ export class WeightUnit {
     ]);
 
     public get(unit: units = this.unit): number {
-        return this.amount;
+        return this.amount * this.conversions.get(this.unit) / this.conversions.get(unit);
     }
 
     public set(amount: number, unit: units = this.unit): void {
@@ -25,7 +25,7 @@ export class WeightUnit {
         return this.amount;
     }
 
-    public defineBushels(productName: string, bushelAmount: number) {
-        this.conversions.set(productName + "Bushels", bushelAmount);
+    public defineBushels(bushelAmount: number) {
+        this.conversions.set("bu", bushelAmount * this.conversions.get('lb'));
     }
 }
