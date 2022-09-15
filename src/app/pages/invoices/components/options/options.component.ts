@@ -61,6 +61,10 @@ export class OptionsComponent implements OnInit {
     });
   }
 
+  public async paymentProofDoc() {
+    
+  }
+
   public openFixInvPage(): void {
     this.navController.navigateForward(`dashboard/invoices/item-fixes/${this.invoice.ref.id}`);
   }

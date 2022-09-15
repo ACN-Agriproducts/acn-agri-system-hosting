@@ -7,6 +7,7 @@ export class Invoice extends FirebaseDocInterface {
     public id: number;
     public items: item[];
     public needsAttention: boolean;
+    public pdfReference: string;
     public seller: contactInfo;
     public status: string;
     public total: number;
@@ -20,10 +21,11 @@ export class Invoice extends FirebaseDocInterface {
         this.date = data.date.toDate();
         this.id = data.id;
         this.items = [];
+        this.needsAttention = data.needsAttention;
+        this.pdfReference = data.pdfReference;
         this.seller = new contactInfo(data.seller);
         this.status = data.status;
         this.total = data.total;
-        this.needsAttention = data.needsAttention;
 
         data.items.forEach(element => {
             this.items.push(new item(element));
@@ -37,6 +39,7 @@ export class Invoice extends FirebaseDocInterface {
                 date: data.date,
                 id: data.id,
                 items: [],
+                pdfReference: data.pdfReference,
                 needsAttention: data.needsAttention,
                 seller: {...data.seller},
                 status: data.status,
