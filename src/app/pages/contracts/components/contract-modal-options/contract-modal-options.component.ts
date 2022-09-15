@@ -66,10 +66,10 @@ export class ContractModalOptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      this.snack.openSnackbar("Signed Contract successfully uploaded.", 'success');
+      this.snack.open("Signed Contract successfully uploaded.", 'success');
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 

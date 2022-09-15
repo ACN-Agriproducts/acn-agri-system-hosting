@@ -97,10 +97,10 @@ export class OptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      this.snack.openSnackbar("Proof of Payment successfully uploaded.", 'success');
+      this.snack.open("Proof of Payment successfully uploaded.", 'success');
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 

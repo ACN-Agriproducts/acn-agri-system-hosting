@@ -101,10 +101,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrList.find(receipt => receipt.id === id).pdfReference = newPdfRef;
-      this.snack.openSnackbar("Upload Successful", 'success');
+      this.snack.open("Upload Successful", 'success');
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 
@@ -116,10 +116,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().cancelled;
-      this.snack.openSnackbar("Warehouse Receipt Group has been cancelled.");
+      this.snack.open("Warehouse Receipt Group has been cancelled.");
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 
@@ -179,11 +179,11 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(()=> {
       this.wrGroup[contractType] = { ...newContractData, closedAt: new Date() };
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
-      this.snack.openSnackbar("Contract Successfully Updated", 'success');
+      this.snack.open("Contract Successfully Updated", 'success');
     })
     .catch(error => {
       this.wrGroup[contractType] = fallback;
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 
@@ -208,7 +208,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public async updatePaidStatus(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
-      this.snack.openSnackbar("Error: Sale Contract must be present.", 'error');
+      this.snack.open("Error: Sale Contract must be present.", 'error');
       return;
     }
 
@@ -225,12 +225,12 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrList[index].isPaid = true;
-      this.snack.openSnackbar(`Warehouse Receipt has been paid.`, 'success');
+      this.snack.open(`Warehouse Receipt has been paid.`, 'success');
       this.checkIfAllPaid();
     })
     .catch(error => {
       this.wrList[index].isPaid = false;
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 
@@ -245,20 +245,10 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(() => {
       this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
       this.wrGroup.closedAt = new Date();
-      this.snack.openSnackbar(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
+      this.snack.open(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     })
   }
 }
-
-/* interface ContractData {
-  basePrice?: number;
-  futurePrice?: number;
-  id?: string;
-  pdfReference?: string;
-  startDate: Date;
-  status: string;
-  contractRef?: string;
-} */

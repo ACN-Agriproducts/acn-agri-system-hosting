@@ -25,7 +25,7 @@ export class ViewContractDialogComponent implements OnInit {
   ngOnInit() {
     this.data.contractRef = this.data.contractRef ?? '';
     if (this.data.contractRef.length === 0) {
-      this.snack.openSnackbar("The reference/path to the contract document does not exist.", 'error');
+      this.snack.open("The reference/path to the contract document does not exist.", 'error');
       return;
     }
 
@@ -36,7 +36,7 @@ export class ViewContractDialogComponent implements OnInit {
       if (!this.ready) throw "The resource could not secured for use.";
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 

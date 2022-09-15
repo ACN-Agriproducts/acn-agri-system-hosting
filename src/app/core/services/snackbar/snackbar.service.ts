@@ -11,7 +11,7 @@ export class SnackbarService {
 
   constructor(private snackbar: MatSnackBar) { }
 
-  public openSnackbar(message: string, snackType: string = 'info', action?: actions) {
+  public open(message: string, snackType: string = 'info', action?: actions) {
     const className = `snackbar-${snackType}`;
 
     this.snackbar.openFromComponent(SnackbarComponent, {
