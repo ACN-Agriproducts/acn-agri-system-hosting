@@ -46,7 +46,7 @@ export class ContractModalOptionsComponent implements OnInit {
 
   public async signedContract() {
     const pdfRef = this.contract.pdfReference ?? 
-      `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContract' : 'salesContract'}/${this.contractId}`;
+      `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContracts' : 'salesContracts'}/${this.contractId}`;
 
     const dialogData: UploadDialogData = {
       docType: "Signed Contract",
