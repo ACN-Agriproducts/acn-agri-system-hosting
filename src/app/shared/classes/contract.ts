@@ -42,6 +42,7 @@ export class Contract extends FirebaseDocInterface {
     loads: number;
     market_price: number;
     paymentTerms: PaymentTerms;
+    plants: string[];
     pricePerBushel: number;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
