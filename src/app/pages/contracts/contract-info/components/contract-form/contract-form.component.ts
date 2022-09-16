@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Contract, ProductInfo, DeliveryDates, PaymentTerms } from '@shared/classes/contract';
+import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 
 @Component({
@@ -15,6 +16,7 @@ export class ContractFormComponent implements OnInit {
   public contractForm: UntypedFormGroup;
 
   public productsList: Product[] = [];
+  public plantList: Plant[];
   public updateStatus: string = '';
 
   constructor(
@@ -25,7 +27,11 @@ export class ContractFormComponent implements OnInit {
   ngOnInit() {
     Product.getProductList(this.db, this.currentContract.ref.parent.parent.id).then(productList => {
       this.productsList = productList;
-    })
+    });
+
+    Plant.getPlantList(this.db, this.currentContract.ref.parent.parent.id).then(plantList => {
+      this.plantList = plantList;
+    });
 
     this.contractForm = this.fb.group({
       contractType: [{value: this.currentContract.ref.parent.id, disabled: true}, Validators.required],
