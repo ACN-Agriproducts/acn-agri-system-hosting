@@ -131,7 +131,7 @@
                       [value]="plant"
                       (removed)="removePlantChip(plant)">
                       {{plant.ref.id | titlecase}}
-                      <button matChipRemove *ngIf="chipIsChosen(plant); else addPlantButton" ngIfElse="">
+                      <button matChipRemove *ngIf="chipIsChosen(plant); else addPlantButton">
                         <mat-icon>cancel</mat-icon>
                       </button>
                       <ng-template #addPlantButton>
