@@ -49,17 +49,9 @@
 		</ngx-dropzone-label>
 
 		<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-			<ngx-dropzone-label>{{ f.name }} <!-- ({{ f.type }}) --></ngx-dropzone-label>
+			<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
 		</ngx-dropzone-preview>
 	</ngx-dropzone>
-
-	<div class="current-contract">
-		<span>Link to view {{ contractType }} Contract in new window: </span>
-		<ng-template [ngIf]="data.pdfReference" [ngIfElse]="notAvailable">
-			<a href="{{ data.pdfReference }}" target="_blank">{{ shortUrl() }}</a>
-		</ng-template>
-		<ng-template #notAvailable>N / A</ng-template>
-	</div>
 </mat-dialog-content>
 
 <mat-dialog-actions class="action-bar">
