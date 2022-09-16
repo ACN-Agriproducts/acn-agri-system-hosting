@@ -57,11 +57,11 @@ export class TableComponent implements OnInit, OnDestroy {
     this.date = date;
 
     let startDate: Date = new Date(date.valueOf());
-    let endDate: Date = new Date(date.valueOf());
+    let endDate: Date = new Date(2022, 8, 15); //new Date(date.valueOf());
 
     startDate.setDate(1);
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(0);
+    //endDate.setMonth(endDate.getMonth() + 1);
+    //endDate.setDate(0);
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
     const colRef = Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant, 
