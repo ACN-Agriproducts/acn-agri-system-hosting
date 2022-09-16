@@ -96,15 +96,15 @@
   </ion-row>
   <ion-row>
     <ion-col>
-      <mat-form-field>
+      <mat-form-field *ngIf="plantsList">
         <mat-label>Delivery Plants</mat-label>
         <mat-chip-list multiple formControlName="plants" #chipList>
           <mat-chip 
             *ngFor="let plant of plantsList"
             [value]="plant"
             (removed)="removePlantChip(plant)">
-            {{plant.ref.id | titlecase}}
-            <button matChipRemove *ngIf="chipIsChosen(plant); else addPlantButton" ngIfElse="">
+            {{plant | titlecase}}
+            <button matChipRemove *ngIf="chipIsChosen(plant); else addPlantButton">
               <mat-icon>cancel</mat-icon>
             </button>
             <ng-template #addPlantButton>
