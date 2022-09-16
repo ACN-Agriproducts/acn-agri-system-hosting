@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
+import { WeightUnit } from '@shared/classes/unit';
 
 
 @Component({
@@ -167,6 +168,7 @@ export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
     const popover = await this.popoverController.create({
       component: ContractModalOptionsComponent,
       event,
+      dismissOnSelect: true,
       componentProps: {
         contractId: id,
         isPurchase: this.contractType == 'purchaseContracts',
@@ -177,6 +179,30 @@ export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
       }
     })
     await popover.present();
+  }
+
+  public toUnit(pounds: number, contract: Contract): WeightUnit {
+    const unit =  new WeightUnit(pounds, 'lb');
+    unit.defineBushels(contract.productInfo.weight);
+    return unit;
+  }
+
+  public getDeliveredTooltip(contract: Contract): string {
+    const unit =  new WeightUnit(contract.currentDelivered, 'lb');
+    unit.defineBushels(contract.productInfo.weight);
+
+    return `${unit.get('lb').toFixed(3)} lbs
+    ${unit.get('bu').toFixed(3)} bu
+    ${unit.get('t').toFixed(3)} mTon`
+  }
+
+  public getQuantityTooltip(contract: Contract): string {
+    const unit =  new WeightUnit(contract.quantity, 'lb');
+    unit.defineBushels(contract.productInfo.weight);
+
+    return `${unit.get('lb').toFixed(3)} lbs
+    ${unit.get('bu').toFixed(3)} bu
+    ${unit.get('t').toFixed(3)} mTon`
   }
 
   ngOnDestroy(): void {

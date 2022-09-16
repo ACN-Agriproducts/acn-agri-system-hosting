@@ -3,11 +3,10 @@ import { serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { AlertController } from '@ionic/angular';
 import { WarehouseReceipt, WarehouseReceiptContract, WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
+import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
-import { SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
-import { UploadWarehouseReceiptDialogComponent } from '../upload-warehouse-receipt-dialog/upload-warehouse-receipt-dialog.component';
+import { ContractData, SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 import { ViewContractDialogComponent } from '../view-contract-dialog/view-contract-dialog.component';
 
 @Component({
@@ -25,7 +24,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   public groupRef: string;
 
   constructor(
-    private alertCtrl: AlertController,
     private dialog: MatDialog,
     private snack: SnackbarService,
     private confirmation: ConfirmationDialogService,
@@ -69,26 +67,23 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
         contractRef,
         isPurchase
       },
-      autoFocus: false,
-      minHeight: '400px',
-      minWidth: '400px'
+      autoFocus: false
     });
   }
 
   public async uploadWarehouseReceipt(id: number): Promise<void> {
     const receipt = this.wrList.find(receipt => receipt.id === id);
+    const pdfRef = receipt.pdfReference ?? this.groupRef + `list/warehouseReceipt#${id}`;
 
-    const hasDoc = receipt.pdfReference != null;
-    const pdfRef = receipt.pdfReference != null 
-      ? receipt.pdfReference 
-      : this.groupRef + `list/warehouseReceipt#${id}`;
+    const dialogData: UploadDialogData = {
+      docType: "Warehouse Receipt",
+      hasDoc: receipt.pdfReference != null,
+      pdfRef,
+      uploadable: this.wrGroup.status !== 'CLOSED' && this.wrGroup.status !== 'CANCELLED',
+    };
     
-    const dialogRef = this.dialog.open(UploadWarehouseReceiptDialogComponent, {
-      data: {
-        pdfRef,
-        hasDoc,
-        groupStatus: this.wrGroup.status
-      },
+    const dialogRef = this.dialog.open(UploadDocumentDialogComponent, {
+      data: dialogData,
       autoFocus: false,
     });
     const newPdfRef = await lastValueFrom(dialogRef.afterClosed());
@@ -258,7 +253,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
   }
 }
 
-interface ContractData {
+/* interface ContractData {
   basePrice?: number;
   futurePrice?: number;
   id?: string;
@@ -266,4 +261,4 @@ interface ContractData {
   startDate: Date;
   status: string;
   contractRef?: string;
-}
+} */

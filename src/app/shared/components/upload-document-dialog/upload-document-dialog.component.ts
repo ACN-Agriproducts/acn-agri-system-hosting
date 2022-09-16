@@ -5,18 +5,18 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
-  selector: 'app-upload-warehouse-receipt-dialog',
-  templateUrl: './upload-warehouse-receipt-dialog.component.html',
-  styleUrls: ['./upload-warehouse-receipt-dialog.component.scss'],
+  selector: 'app-upload-document-dialog',
+  templateUrl: './upload-document-dialog.component.html',
+  styleUrls: ['./upload-document-dialog.component.scss'],
 })
-export class UploadWarehouseReceiptDialogComponent implements OnInit {
+export class UploadDocumentDialogComponent implements OnInit {
   public files: File[] = [];
   public source: SafeResourceUrl;
   public ready: boolean = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<UploadWarehouseReceiptDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: UploadDialogData,
+    private dialogRef: MatDialogRef<UploadDocumentDialogComponent>,
     private sanitizer: DomSanitizer,
     private snack: SnackbarService,
     private storage: Storage,
@@ -24,7 +24,7 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.pdfRef == null) {
-      this.snack.openSnackbar("The reference/path to the warehouse receipt document does not exist.", 'error');
+      this.snack.openSnackbar("The reference/path to the document does not exist.", 'error');
       return;
     }
     if (!this.data.hasDoc) {
@@ -64,4 +64,11 @@ export class UploadWarehouseReceiptDialogComponent implements OnInit {
       this.snack.openSnackbar(error, 'error');
     });
   }
+}
+
+export interface UploadDialogData {
+  docType: string;
+  hasDoc: boolean;
+  pdfRef: string;
+  uploadable: boolean;
 }

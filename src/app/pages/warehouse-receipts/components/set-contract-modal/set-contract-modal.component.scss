@@ -26,7 +26,9 @@ mat-dialog-content {
 	align-self: center;
 	height: 175px;
 	width: 385px;
+	margin: 15px 0;
 	background-color: var(--ion-color-light);
+	border-radius: 12px;
 
 	display: flex;
 	justify-content: center;
