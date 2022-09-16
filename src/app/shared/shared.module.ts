@@ -9,6 +9,8 @@ import { ScaleToFitDirective } from './scale-to-fit.directive';
 import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
 import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-ticket-storage.component';
 import { CoreModule } from '@core/core.module';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 
 
 @NgModule({
@@ -16,7 +18,8 @@ import { CoreModule } from '@core/core.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    CoreModule
+    CoreModule,
+    NgxDropzoneModule,
   ],
   exports: [
     ToolbarComponent,
@@ -29,7 +32,8 @@ import { CoreModule } from '@core/core.module';
     ContractPrintableComponent,
     ScaleToFitDirective,
     PrintableTicketComponent,
-    FixTicketStorageComponent
+    FixTicketStorageComponent,
+    UploadDocumentDialogComponent,
   ]
 })
 export class SharedModule {}

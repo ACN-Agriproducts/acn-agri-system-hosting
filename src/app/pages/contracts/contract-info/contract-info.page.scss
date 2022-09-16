@@ -1,3 +1,21 @@
+.flex-row {
+    display: flex;
+    flex-wrap: wrap;
+
+    #info-card {
+        flex: 1 0 475px;
+    }
+
+    #printable-card {
+        flex: 0 0 auto;
+    }
+}
+
+app-display-contract {
+    transform-origin: 0 0;
+    transform: scale(.2);
+}
+
 @media screen {
     app-contract-liquidation-long {
         display: none;
