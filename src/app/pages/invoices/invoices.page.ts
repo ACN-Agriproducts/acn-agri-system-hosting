@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { SetItemsDialogComponent } from './components/set-items-dialog/set-items-dialog.component';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
@@ -18,7 +20,8 @@ export class InvoicesPage implements OnInit {
 
   constructor(
     private popoverController: PopoverController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -92,6 +95,16 @@ export class InvoicesPage implements OnInit {
       showBackdrop: false
     });
     return await popover.present();
+  }
+
+  public setInvoiceItems = () => {
+    const dialogRef = this.dialog.open(SetItemsDialogComponent, {
+      data: {
+
+      },
+      autoFocus: false
+    });
+
   }
 
   chosenYearHandler(event: any) {
