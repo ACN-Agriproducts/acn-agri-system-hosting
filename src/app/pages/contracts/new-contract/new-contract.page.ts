@@ -194,6 +194,7 @@ export class NewContractPage implements OnInit, OnDestroy {
         origin: formValue.paymentTerms.origin,
         paymentTerms: formValue.paymentTerms.paymentTerms
       },
+      plants: formValue.plants.map(p => p.ref.id),
       pricePerBushel: this.getBushelPrice(),
       product: formValue.product.ref,
       productInfo: {
