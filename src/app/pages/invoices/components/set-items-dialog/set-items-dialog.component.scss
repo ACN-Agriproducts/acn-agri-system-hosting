@@ -25,6 +25,20 @@ input[type=number] {
 mat-option {
     font-size: 1em;
 }
+.add-option {
+    display: flex;
+    align-items: center;
+    mat-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.25em;
+    }
+}
+
+.aff-inv-check {
+    top: -10px;
+}
 
 mat-dialog-actions {
     display: flex;

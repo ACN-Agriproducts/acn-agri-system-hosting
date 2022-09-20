@@ -3,18 +3,22 @@
 
 <mat-dialog-content>
 	<form [formGroup]="invoiceItemForm">
-		<mat-grid-list cols="6" rowHeight="70px" gutterSize="15px">
-			<mat-grid-tile colspan="4">
+		<mat-grid-list cols="7" rowHeight="70px">
+			<mat-grid-tile colspan="7">
 				<mat-form-field appearance="fill">
 					<mat-label>Name</mat-label>
-					<input matInput 
-					formControlName="name" 
-					[matAutocomplete]="auto"
-					readonly
-					ondblclick="this.readOnly=!readOnly"
-					>
+					<input matInput formControlName="name" [matAutocomplete]="auto">
+					<mat-icon matSuffix>
+						arrow_drop_down
+					</mat-icon>
 					<mat-autocomplete #auto="matAutocomplete">
-						<mat-option>New Item</mat-option>
+						<mat-option (click)="settingNew=true">
+							<span class="add-option">
+								Add Item
+								&nbsp;
+								<mat-icon>add_box</mat-icon>
+							</span>
+						</mat-option>
 						<mat-option *ngFor="let option of filteredOptions | async" [value]="option">
 							{{ option }}
 						</mat-option>
@@ -22,7 +26,7 @@
 				</mat-form-field>
 			</mat-grid-tile>
 	
-			<mat-grid-tile colspan="2">
+			<mat-grid-tile colspan="4">
 				<mat-form-field appearance="fill">
 					<mat-label>Price</mat-label>
 					<span matPrefix>$ &nbsp;</span>
@@ -31,15 +35,15 @@
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="3">
-				<mat-checkbox formControlName="affectsInventory">Affects Inv.</mat-checkbox>
+				<mat-checkbox class="aff-inv-check" formControlName="affectsInventory">Affects Inv.</mat-checkbox>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="3">
+			<!-- <mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
 					<mat-label>Inventory Info.</mat-label>
 					<input matInput formControlName="price" type="number">
 				</mat-form-field>
-			</mat-grid-tile>
+			</mat-grid-tile> -->
 		</mat-grid-list>
 	</form>
 </mat-dialog-content>
