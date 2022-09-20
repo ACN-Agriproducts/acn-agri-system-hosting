@@ -6,6 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { PrintableInvoiceComponent } from '../printable-invoice/printable-invoice.component';
 import { Invoice } from '@shared/classes/invoice';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { lastValueFrom } from 'rxjs';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 
 @Component({
@@ -16,15 +21,24 @@ import { Invoice } from '@shared/classes/invoice';
 export class OptionsComponent implements OnInit {
   @Input() public invoice: Invoice;
 
+  public currentCompany: string;
+
+
   constructor(
     private clipboard: Clipboard,
-    private popoverController: PopoverController,
-    private storage: Storage,
+    private dialog: MatDialog,
     private modalController: ModalController,
-    private navController: NavController
+    private navController: NavController,
+    private popoverController: PopoverController,
+    private session: SessionInfo,
+    private snack: SnackbarService,
+    private storage: Storage,
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentCompany = this.session.getCompany();
+  }
+
   public addClipboard = (itemCilpboard: string) => {
     let clipboard = [];
     this.storage.get('clipboard').then(data => {
@@ -58,6 +72,35 @@ export class OptionsComponent implements OnInit {
   public print = () => {
     this.openInvoice().then(() => {
       window.print();
+    });
+  }
+
+  public async proofPaymentDoc() {
+    const pdfRef = this.invoice.pdfReference ?? 
+      `/companies/${this.currentCompany}/invoices/${this.invoice.id}/proofPayment`;
+
+    const dialogData: UploadDialogData = {
+      docType: "Proof of Payment",
+      hasDoc: this.invoice.pdfReference != null,
+      pdfRef,
+      uploadable: this.invoice.status !== 'closed'
+    };
+
+    const dialogRef = this.dialog.open(UploadDocumentDialogComponent, {
+      data: dialogData,
+      autoFocus: false
+    });
+    const updatePdfRef = await lastValueFrom(dialogRef.afterClosed());
+    if (updatePdfRef == null) return;
+
+    this.invoice.update({
+      pdfReference: updatePdfRef
+    })
+    .then(() => {
+      this.snack.open("Proof of Payment successfully uploaded.", 'success');
+    })
+    .catch(error => {
+      this.snack.open(error, 'error');
     });
   }
 

@@ -175,7 +175,7 @@
 			<div>
 				<button mat-icon-button
 					class="upload-wr-button" 
-					(click)="uploadWarehouseReceipt(warehouseReceipt.id)"
+					(click)="warehouseReceiptDocument(warehouseReceipt.id)"
 					[disabled]="!warehouseReceipt.pdfReference && wrGroup.status === 'CLOSED'"
 					matTooltip="{{ 
 						!warehouseReceipt.pdfReference ? 'Upload' : 
