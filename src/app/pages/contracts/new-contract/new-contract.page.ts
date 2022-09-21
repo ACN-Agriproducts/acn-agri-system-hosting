@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { addDoc, collection, CollectionReference, docData } from '@angular/fire/firestore';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
 import {MatDialog} from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
 import { Company } from '@shared/classes/company';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-contract',
@@ -23,12 +24,14 @@ export class NewContractPage implements OnInit, OnDestroy {
   currentCompany: string;
   currentCompanyValue: Company;
   contactList: any[];
+  truckerList: any[];
   productsList: Product[];
   clientsReady: boolean = false;
   productsReady: boolean = false;
   contractForm: UntypedFormGroup;
   currentSubs: Subscription[] = [];
   contractWeight: Weight;
+  filteredTruckerOptions: Observable<string[]>[] = [];
   
   selectedClient: Contact;
   ticketClient: Contact;
@@ -61,6 +64,7 @@ export class NewContractPage implements OnInit, OnDestroy {
 
             return 0;
           });
+        this.truckerList = this.contactList.filter(c => !c.isClient);
         this.clientsReady = true;
       })
       this.currentSubs.push(tempSub);
@@ -98,6 +102,7 @@ export class NewContractPage implements OnInit, OnDestroy {
         measurement: []
       }),
       ticketClient: [{value: '', disabled: true}],
+      truckers: this.fb.array([])
     }, { validators: form => Validators.required(form.get('client')) });
 
     this.contractForm.get('product').valueChanges.subscribe(val => {
@@ -264,5 +269,31 @@ export class NewContractPage implements OnInit, OnDestroy {
   getContractCollection(): CollectionReference {
     const contractTypeControl = this.contractForm.get('contractType') as UntypedFormControl;
     return collection(this.currentCompanyValue.ref, contractTypeControl.value);
+  }
+
+  private newTruckerGroup(): UntypedFormGroup {
+    return this.fb.group({
+      trucker: [,Validators.required],
+      freight: [,Validators.required]
+    });
+  }
+
+  addTruckerGroup(): void {
+    const truckers = this.contractForm.get('truckers') as UntypedFormArray;
+    truckers.push(this.newTruckerGroup());
+    this.filteredTruckerOptions.push(truckers.get([truckers.length-1, 'trucker']).valueChanges.pipe(
+      startWith(''), map(value => this._filter(value || ''))
+    ));
+  }
+
+  removeTruckerGroup(index: number): void {
+    const truckers = this.contractForm.get('truckers') as UntypedFormArray;
+    truckers.removeAt(index);
+    this.filteredTruckerOptions.splice(index, 1);
+  }
+
+  _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
   }
 }
