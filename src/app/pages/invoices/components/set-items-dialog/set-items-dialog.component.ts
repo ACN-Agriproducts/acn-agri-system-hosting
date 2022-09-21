@@ -51,5 +51,6 @@ export class SetItemsDialogComponent implements OnInit {
 
   public displayInvoiceItem(event: any) {
     console.log(event.option.value);
+    this.invoiceItemForm.get('name').setValue(event.option.value.name);
   }
 }
