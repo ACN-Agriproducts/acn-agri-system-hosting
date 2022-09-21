@@ -35,15 +35,59 @@
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="3">
-				<mat-checkbox class="aff-inv-check" formControlName="affectsInventory">Affects Inv.</mat-checkbox>
+				<mat-checkbox color="primary" formControlName="affectsInventory">Affects Inv.</mat-checkbox>
 			</mat-grid-tile>
 
-			<!-- <mat-grid-tile colspan="3">
-				<mat-form-field appearance="fill">
-					<mat-label>Inventory Info.</mat-label>
-					<input matInput formControlName="price" type="number">
-				</mat-form-field>
-			</mat-grid-tile> -->
+			<mat-grid-tile colspan="7" rowspan="3" class="inventory-info">
+				<mat-grid-tile-header class="info-header">Inventory Info.</mat-grid-tile-header>
+
+				<div class="info-list">
+					<mat-grid-list cols="2" rowHeight="50px" class="info-grid">
+						<mat-grid-tile>
+							1
+						</mat-grid-tile>
+						<mat-grid-tile>
+							2
+						</mat-grid-tile>
+						<mat-grid-tile>
+							3
+						</mat-grid-tile>
+						<mat-grid-tile>
+							4
+						</mat-grid-tile>
+					</mat-grid-list>
+
+					<mat-grid-list cols="2" rowHeight="50px" class="info-grid">
+						<mat-grid-tile>
+							1
+						</mat-grid-tile>
+						<mat-grid-tile>
+							2
+						</mat-grid-tile>
+						<mat-grid-tile>
+							3
+						</mat-grid-tile>
+						<mat-grid-tile>
+							4
+						</mat-grid-tile>
+					</mat-grid-list>
+
+					<mat-grid-list cols="2" rowHeight="50px" class="info-grid">
+						<mat-grid-tile>
+							1
+						</mat-grid-tile>
+						<mat-grid-tile>
+							2
+						</mat-grid-tile>
+						<mat-grid-tile>
+							3
+						</mat-grid-tile>
+						<mat-grid-tile>
+							4
+						</mat-grid-tile>
+					</mat-grid-list>
+				</div>
+			</mat-grid-tile>
 		</mat-grid-list>
 	</form>
 </mat-dialog-content>

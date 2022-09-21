@@ -7,7 +7,6 @@ mat-dialog-content {
 
 form {
     width: 100%;
-    height: 100%;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -22,7 +21,7 @@ input[type=number] {
 	-moz-appearance: textfield;
 }
 
-mat-option {
+mat-option, .mat-list-item  {
     font-size: 1em;
 }
 .add-option {
@@ -36,8 +35,28 @@ mat-option {
     }
 }
 
-.aff-inv-check {
+mat-checkbox {
     top: -10px;
+}
+
+.inventory-info {
+    background-color: var(--ion-color-light);
+    border-radius: 5px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.info-header {
+    background-color: var(--ion-color-primary) !important;
+    color: var(--ion-color-primary-contrast) !important;
+}
+.info-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.info-grid {
+    border: 1px solid red;
+    min-width: 100%;
 }
 
 mat-dialog-actions {
