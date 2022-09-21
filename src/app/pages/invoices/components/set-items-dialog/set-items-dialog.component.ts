@@ -14,6 +14,8 @@ export class SetItemsDialogComponent implements OnInit {
   public invoiceItemForm: FormGroup;
   public filteredOptions: Observable<string[]>;
   public settingNew: boolean = true;
+  
+  list = [1, 2, 3, 4];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,18 +36,20 @@ export class SetItemsDialogComponent implements OnInit {
     this.filteredOptions = this.invoiceItemForm.valueChanges
     .pipe(
       startWith(''),
-      map(value => this._filter(value.name ?? ''))
+      map(value => this._filter(value.name?.name ?? ''))
     );
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.data
-    .map(item => item.name)
-    .filter(option => option.toLowerCase().includes(filterValue));
+    return this.data.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   public editName() {
     console.log("Edit Name");
+  }
+
+  public displayInvoiceItem(event: any) {
+    console.log(event.option.value);
   }
 }

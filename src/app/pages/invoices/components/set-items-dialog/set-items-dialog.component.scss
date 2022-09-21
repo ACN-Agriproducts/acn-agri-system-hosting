@@ -44,20 +44,26 @@ mat-checkbox {
     border-radius: 5px;
     flex-grow: 1;
     overflow-y: auto;
+    height: 275px;
 }
 .info-header {
     background-color: var(--ion-color-primary) !important;
     color: var(--ion-color-primary-contrast) !important;
+    height: 30px;
+    padding: 10px 15px;
+
+    h3 {
+        font-size: 1em;
+    }
 }
 .info-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+
 }
 .info-grid {
     border: 1px solid red;
-    min-width: 100%;
 }
+
+
 
 mat-dialog-actions {
     display: flex;
