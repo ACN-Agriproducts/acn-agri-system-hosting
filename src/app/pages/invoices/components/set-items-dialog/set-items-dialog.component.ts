@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { map, Observable, startWith } from 'rxjs';
@@ -24,7 +24,7 @@ export class SetItemsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
+    if (this.data == null) this.snack.open("Item list could not be retrieved.", 'error');
 
     this.invoiceItemForm = this.fb.group({
       affectsInventory: false,
@@ -54,12 +54,24 @@ export class SetItemsDialogComponent implements OnInit {
     this.setProp('affectsInventory', selectedItem);
     this.setProp('name', selectedItem);
     this.setProp('price', selectedItem);
-
-    this.currentInventoryInfo = event.option.value.inventoryInfo.info;
+    this.setProp('inventoryInfo', selectedItem);
   }
 
-  public setProp(key: string, item: any) {
-    this.invoiceItemForm.get(key).setValue(item[key]);
+  public setProp(key: string, item: any): void {
+    if (key !== 'inventoryInfo') {
+      this.invoiceItemForm.get(key).setValue(item[key]);
+      return;
+    }
+
+    const infoList = this.invoiceItemForm.get([key, 'info']) as FormArray;
+    for (let info of item[key].info) {
+      infoList.push(this.fb.group({
+        plant: info.plant,
+        product: info.product,
+        quantity: info.quantity,
+        tank: info.tank
+      }));
+    }
   }
 }
 
