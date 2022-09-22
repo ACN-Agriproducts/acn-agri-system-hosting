@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, docData } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, CollectionReference, doc, docData } from '@angular/fire/firestore';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -11,7 +11,6 @@ import { SelectClientComponent } from './components/select-client/select-client.
 import { UniqueContractId } from './components/unique-contract-id';
 import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
-import { Firestore } from '@angular/fire/firestore';
 import { Company } from '@shared/classes/company';
 import {map, startWith} from 'rxjs/operators';
 
@@ -204,7 +203,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       tickets: [],
       transport: 'truck',
       truckers: formValue.truckers.map(t => {
-        t.trucker = this.truckerList.find(trucker => trucker.name == t.trucker).id;
+        t.trucker = Contact.getDocReference(this.db, this.currentCompany, this.truckerList.find(trucker => trucker.name == t.trucker).id);
         return t;
       })
     };
