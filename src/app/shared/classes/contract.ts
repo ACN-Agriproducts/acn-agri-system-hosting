@@ -58,15 +58,15 @@ export class Contract extends FirebaseDocInterface {
         const data = snapshot.data();
 
         let tempTicketList: DocumentReference<Ticket>[] = [];
-        let tempTruckerList: DocumentReference<Contact>[] = [];
+        let tempTruckerList: TruckerInfo[] = [];
 
         // TODO Set DocumentReference converters
         data.tickets.forEach((ticket: DocumentReference) => {
             tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
 
-        data.truckers.forEach((trucker: DocumentReference) => {
-            tempTruckerList.push(trucker.withConverter(Contact.converter));
+        data.truckers.forEach((trucker: any) => {
+            tempTruckerList.push(new TruckerInfo(trucker));
         })
         
 
@@ -275,7 +275,7 @@ export class TruckerInfo {
 
     constructor(data: any) {
         if(data instanceof DocumentReference){
-            this.trucker = data;
+            this.trucker = data.withConverter(Contact.converter);
             return;
         }
 
