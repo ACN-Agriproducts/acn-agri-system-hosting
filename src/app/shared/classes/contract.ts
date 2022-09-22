@@ -231,11 +231,6 @@ export class Contract extends FirebaseDocInterface {
             });
           })
     }
-
-    // TODO
-    // public static new(): Contract {
-    //     return new Contract()
-    // }
 }
 
 export class DeliveryDates {
@@ -271,6 +266,21 @@ export class ProductInfo {
         this.moisture = data.moisture;
         this.name = data.name;
         this.weight = data.weight;
+    }
+}
+
+export class TruckerInfo {
+    trucker: DocumentReference<Contact>;
+    freight: number;
+
+    constructor(data: any) {
+        if(data instanceof DocumentReference){
+            this.trucker = data;
+            return;
+        }
+
+        this.trucker = data.trucker.withConverter(Contact.converter);
+        this.freight = data.freight;
     }
 }
 
