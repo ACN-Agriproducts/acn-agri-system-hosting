@@ -10,12 +10,12 @@ import { map, Observable, startWith } from 'rxjs';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  public currentItem: any = null;
   public invoiceItemForm: FormGroup;
   public filteredOptions: Observable<string[]>;
   public settingNew: boolean = true;
-  
-  list = [1, 2, 3, 4];
+  public currentInventoryInfo: any[];
+
+  list = [1,2,3,4];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -28,7 +28,9 @@ export class SetItemsDialogComponent implements OnInit {
 
     this.invoiceItemForm = this.fb.group({
       affectsInventory: false,
-      inventoryInfo: [],
+      inventoryInfo: this.fb.group({
+        info: this.fb.array([])
+      }),
       name: '',
       price: [, Validators.required],
     });
@@ -45,12 +47,50 @@ export class SetItemsDialogComponent implements OnInit {
     return this.data.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
-  public editName() {
-    console.log("Edit Name");
-  }
-
   public displayInvoiceItem(event: any) {
     console.log(event.option.value);
-    this.invoiceItemForm.get('name').setValue(event.option.value.name);
+    const selectedItem = event.option.value;
+
+    this.setProp('affectsInventory', selectedItem);
+    this.setProp('name', selectedItem);
+    this.setProp('price', selectedItem);
+
+    this.currentInventoryInfo = event.option.value.inventoryInfo.info;
   }
+
+  public setProp(key: string, item: any) {
+    this.invoiceItemForm.get(key).setValue(item[key]);
+  }
+}
+
+interface InvoiceItem {
+  affectsInventory: boolean;
+  inventoryInfo: {
+    info: {
+      plant: string;
+      product: string;
+      quantity: number;
+      tank: string;
+    }[]
+  };
+  name: string;
+  price: number;
+}
+
+interface InvoiceItem2 {
+  affectsInventory: boolean;
+  inventoryInfo: InventoryInfo
+  name: string;
+  price: number;
+}
+
+interface InventoryInfo {
+  info: Info[]
+}
+
+interface Info {
+  plant: string;
+  product: string;
+  quantity: number;
+  tank: string;
 }

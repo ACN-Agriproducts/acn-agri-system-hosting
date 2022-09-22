@@ -49,6 +49,7 @@ mat-checkbox {
 .info-header {
     background-color: var(--ion-color-primary) !important;
     color: var(--ion-color-primary-contrast) !important;
+    border-radius: 5px 5px 0 0;
     height: 30px;
     padding: 10px 15px;
 
@@ -60,10 +61,26 @@ mat-checkbox {
 
 }
 .info-grid {
-    border: 1px solid red;
+    // border: 1px solid red;
+    padding: 20px;
+
+    /* ::ng-deep {
+        .mat-form-field-appearance-fill .mat-form-field-flex,
+        .mat-form-field-outline-start,
+        .mat-form-field-outline-gap,
+        .mat-form-field-outline-end {
+            background-color: white;
+        }
+    } */
 }
-
-
+.info-grid ::ng-deep {
+    .mat-form-field-appearance-fill .mat-form-field-flex,
+    .mat-form-field-outline-start,
+    .mat-form-field-outline-gap,
+    .mat-form-field-outline-end {
+        background-color: white;
+    }
+}
 
 mat-dialog-actions {
     display: flex;

@@ -60,7 +60,6 @@ class inventoryInfo {
     info: info[];
 
     constructor(data: any) {
-        console.log(data);
         this.info = [];
 
         data.info.forEach(element => {
