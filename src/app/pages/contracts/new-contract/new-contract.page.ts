@@ -203,7 +203,10 @@ export class NewContractPage implements OnInit, OnDestroy {
       status: "pending",
       tickets: [],
       transport: 'truck',
-      truckers: []
+      truckers: formValue.truckers.map(t => {
+        t.trucker = this.truckerList.find(trucker => trucker.name == t.trucker).id;
+        return t;
+      })
     };
     
     addDoc(this.getContractCollection(), submit)

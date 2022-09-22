@@ -200,8 +200,7 @@
                           type="text"
                           placeholder="Trucker Name..."
                           [matAutocomplete]="truckerAuto"
-                          formControlName="trucker"
-                          >
+                          formControlName="trucker">
                   <mat-autocomplete autoActiveFirstOption #truckerAuto>
                     <mat-option *ngFor="let trucker of filteredTruckerOptions[index] | async" [value]="trucker.name">
                       {{trucker.name}}
@@ -211,9 +210,12 @@
               </ion-col>
               <ion-col size-xs='4' size-sm='3'>
                 <mat-form-field>
-                  <mat-label></mat-label>
+                  <mat-label>Freight</mat-label>
                   <span matPrefix>$</span>
-                  <input matInput formControlName="freight">
+                  <input  matInput 
+                          formControlName="freight"
+                          type="number"
+                          min="0">
                 </mat-form-field>
               </ion-col>
             </ion-row>
