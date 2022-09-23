@@ -15,7 +15,8 @@ import { map, Observable, startWith } from 'rxjs';
 })
 export class SetItemsDialogComponent implements OnInit {
   public currentItem: InvoiceItem;
-  public filteredOptions: Observable<string[]>;
+  // public filteredOptions: Observable<string[]>;
+  public filteredOptions: any;
   public settingNew: boolean = true;
 
   public currentCompany: string;
@@ -30,20 +31,6 @@ export class SetItemsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.currentItem = {
-      name: "",
-      inventoryInfo: {
-        info: [{
-          plant: "",
-          product: "",
-          tank: "",
-          quantity: null
-        }]
-      },
-      affectsInventory: false,
-      price: null
-    }
-
     if (this.data == null) {
       this.snack.open("Data could not be retrieved.", 'error');
       return;
@@ -65,19 +52,46 @@ export class SetItemsDialogComponent implements OnInit {
     //   startWith(''),
     //   map(value => this._filter(value.name?.name ?? value.name ?? ''))
     // );
+
+    this.currentItem = {
+      affectsInventory: false,
+      inventoryInfo: {
+        info: [{
+          plant: "",
+          product: "",
+          tank: "",
+          quantity: null
+        }]
+      },
+      name: "",
+      price: null,
+    };
+
+    this.filteredOptions = this.data;
   }
 
-  private _filter(value: string): string[] {
+  public applyFilter(event: any) {
+    console.log(event);
+    let value = '';
+    try {
+      value = event.toLowerCase();
+    } catch (error) {
+      value = event?.name.toLowerCase() ?? value;
+    }
+    this.filteredOptions = this.data.filter(item => item.name.toLowerCase().includes(value));
+  }
+
+  /* private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
     return this.data.filter(item => item.name.toLowerCase().includes(filterValue));
-  }
+  } */
 
   public displayFn(event: any) {
-    return event?.name;
+    return event ?? "";
   }
 
   public displayInvoiceItem(event: any) {
-    this.currentItem = event.option.value;
+    this.currentItem = event.option.value ?? this.currentItem;
   }
 
   // public displayInvoiceItem(event: any) {

@@ -6,7 +6,7 @@
 		<mat-grid-tile colspan="7">
 			<mat-form-field appearance="fill">
 				<mat-label>Name</mat-label>
-				<input matInput [(ngModel)]="currentItem.name" [matAutocomplete]="auto">
+				<input matInput [(ngModel)]="currentItem.name" [matAutocomplete]="auto" (ngModelChange)="applyFilter($event)">
 				<mat-icon matSuffix>
 					arrow_drop_down
 				</mat-icon>
@@ -18,7 +18,7 @@
 							<mat-icon>add_box</mat-icon>
 						</span>
 					</mat-option>
-					<mat-option *ngFor="let option of data" [value]="option">
+					<mat-option *ngFor="let option of filteredOptions" [value]="option">
 						{{ option.name }}
 					</mat-option>
 				</mat-autocomplete>
