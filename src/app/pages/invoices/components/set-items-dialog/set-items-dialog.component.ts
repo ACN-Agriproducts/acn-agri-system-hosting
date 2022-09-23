@@ -13,7 +13,6 @@ export class SetItemsDialogComponent implements OnInit {
   public invoiceItemForm: FormGroup;
   public filteredOptions: Observable<string[]>;
   public settingNew: boolean = true;
-  public currentInventoryInfo: any[];
 
   list = [1,2,3,4];
 
@@ -48,7 +47,6 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public displayInvoiceItem(event: any) {
-    console.log(event.option.value);
     const selectedItem = event.option.value;
 
     this.setProp('affectsInventory', selectedItem);
@@ -64,6 +62,7 @@ export class SetItemsDialogComponent implements OnInit {
     }
 
     const infoList = this.invoiceItemForm.get([key, 'info']) as FormArray;
+    infoList.clear();
     for (let info of item[key].info) {
       infoList.push(this.fb.group({
         plant: info.plant,
