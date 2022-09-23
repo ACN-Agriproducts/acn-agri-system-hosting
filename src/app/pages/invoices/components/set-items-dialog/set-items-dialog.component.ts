@@ -1,7 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 import { map, Observable, startWith } from 'rxjs';
 
 @Component({
@@ -13,17 +17,34 @@ export class SetItemsDialogComponent implements OnInit {
   public invoiceItemForm: FormGroup;
   public filteredOptions: Observable<string[]>;
   public settingNew: boolean = true;
-
-  list = [1,2,3,4];
+  public currentCompany: string;
+  public plantList: string[];
+  public productList: string[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snack: SnackbarService,
     private fb: FormBuilder,
+    private db: Firestore,
+    private session: SessionInfo
   ) { }
 
   ngOnInit() {
-    if (this.data == null) this.snack.open("Item list could not be retrieved.", 'error');
+    if (this.data == null) {
+      this.snack.open("Data could not be retrieved.", 'error');
+      return;
+    }
+
+    this.currentCompany = this.session.getCompany();
+
+    Plant.getPlantList(this.db, this.currentCompany)
+    .then(plantObjList => {
+      this.plantList = plantObjList.map(plant => plant.ref.id);
+      return Product.getProductList(this.db, this.currentCompany);
+    })
+    .then(productObjList => {
+      this.productList = productObjList.map(product => product.getName());
+    });
 
     this.invoiceItemForm = this.fb.group({
       affectsInventory: false,
@@ -37,13 +58,17 @@ export class SetItemsDialogComponent implements OnInit {
     this.filteredOptions = this.invoiceItemForm.valueChanges
     .pipe(
       startWith(''),
-      map(value => this._filter(value.name?.name ?? ''))
+      map(value => this._filter(value.name?.name ?? value.name ?? ''))
     );
+
+    this.invoiceItemForm.valueChanges.subscribe(value => {
+      console.log(value);
+    });
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.data.filter(item => item.name.toLowerCase().includes(filterValue));
+    return this.data.itemList.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   public displayInvoiceItem(event: any) {
@@ -63,7 +88,8 @@ export class SetItemsDialogComponent implements OnInit {
 
     const infoList = this.invoiceItemForm.get([key, 'info']) as FormArray;
     infoList.clear();
-    for (let info of item[key].info) {
+
+    for (const info of item[key].info) {
       infoList.push(this.fb.group({
         plant: info.plant,
         product: info.product,

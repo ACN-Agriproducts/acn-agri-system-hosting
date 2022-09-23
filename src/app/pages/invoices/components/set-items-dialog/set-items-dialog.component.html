@@ -50,9 +50,13 @@
 							<mat-grid-tile colspan="3">
 								<mat-form-field appearance="fill">
 									<mat-label>Product</mat-label>
-									<input matInput formControlName="product"/>
+									<mat-select formControlName="product">
+										<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
+									</mat-select>
+									<!-- <input matInput formControlName="product"/> -->
 								</mat-form-field>
 							</mat-grid-tile>
+
 							<mat-grid-tile colspan="2">
 								<mat-form-field appearance="fill">
 									<mat-label>Quantity</mat-label>
@@ -61,13 +65,18 @@
 								</mat-form-field>
 							</mat-grid-tile>
 						</mat-grid-list>
+
 						<mat-grid-list cols="5" gutterSize="20px" rowHeight="75px">
 							<mat-grid-tile colspan="3">
 								<mat-form-field appearance="fill">
 									<mat-label>Plant</mat-label>
-									<input matInput formControlName="plant"/>
+									<mat-select [disableOptionCentering]="true" formControlName="plant">
+ata										<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
+									</mat-select>
+									<!-- <input matInput type="number" formControlName="plant"/> -->
 								</mat-form-field>
 							</mat-grid-tile>
+
 							<mat-grid-tile colspan="2">
 								<mat-form-field appearance="fill">
 									<mat-label>Tank</mat-label>
@@ -86,5 +95,5 @@
 
 <mat-dialog-actions>
 	<button mat-button color="primary" [mat-dialog-close]="null">Close</button>
-	<button mat-button color="primary" [disabled]="invoiceItemForm.invalid" [mat-dialog-close]="null">Confirm</button>
+	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="invoiceItemForm.invalid" >Confirm</button>
 </mat-dialog-actions>

@@ -12,6 +12,8 @@ import { InvoiceItem } from '@shared/classes/invoice_item';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
@@ -23,6 +25,8 @@ export class InvoicesPage implements OnInit {
   public filter: boolean;
   public itemList: InvoiceItem[];
   public template: any;
+  public plantList: string[];
+  public productList: string[];
 
   constructor(
     private db: Firestore,
@@ -36,8 +40,19 @@ export class InvoicesPage implements OnInit {
   ngOnInit() {
     const data = document.getElementById('file-html-invoice');
     this.currentCompany = this.session.getCompany();
+
+    /* Plant.getPlantList(this.db, this.currentCompany)
+    .then(plantObjList => {
+      this.plantList = plantObjList.map(plant => plant.ref.id);
+      return Product.getProductList(this.db, this.currentCompany);
+    })
+    .then(productObjList => {
+      this.productList = productObjList.map(product => product.getName());
+    }); */
+
     InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
       this.itemList = list;
+      return 
     });
   }
 
@@ -111,8 +126,14 @@ export class InvoicesPage implements OnInit {
   }
 
   public setInvoiceItems = () => {
+    console.log(this.plantList);
+    console.log(this.productList);
     const dialogRef = this.dialog.open(SetItemsDialogComponent, {
-      data: this.itemList,
+      data: {
+        itemList: this.itemList,
+        plantList: this.plantList,
+        productList: this.productList,
+      },
       autoFocus: false
     });
   }
