@@ -25,7 +25,6 @@ export class SetItemsDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snack: SnackbarService,
-    private fb: FormBuilder,
     private db: Firestore,
     private session: SessionInfo
   ) { }
