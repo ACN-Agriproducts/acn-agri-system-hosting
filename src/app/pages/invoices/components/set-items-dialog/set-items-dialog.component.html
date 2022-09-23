@@ -12,7 +12,7 @@
 						arrow_drop_down
 					</mat-icon>
 					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="displayInvoiceItem($event)">
-						<mat-option (click)="settingNew=true">
+						<mat-option (click)="settingNew=true" [value]="null">
 							<span class="add-option">
 								Add Item
 								&nbsp;

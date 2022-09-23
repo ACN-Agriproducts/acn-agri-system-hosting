@@ -41,15 +41,6 @@ export class InvoicesPage implements OnInit {
     const data = document.getElementById('file-html-invoice');
     this.currentCompany = this.session.getCompany();
 
-    /* Plant.getPlantList(this.db, this.currentCompany)
-    .then(plantObjList => {
-      this.plantList = plantObjList.map(plant => plant.ref.id);
-      return Product.getProductList(this.db, this.currentCompany);
-    })
-    .then(productObjList => {
-      this.productList = productObjList.map(product => product.getName());
-    }); */
-
     InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
       this.itemList = list;
       return 
@@ -126,16 +117,11 @@ export class InvoicesPage implements OnInit {
   }
 
   public setInvoiceItems = () => {
-    console.log(this.plantList);
-    console.log(this.productList);
     const dialogRef = this.dialog.open(SetItemsDialogComponent, {
-      data: {
-        itemList: this.itemList,
-        plantList: this.plantList,
-        productList: this.productList,
-      },
+      data: this.itemList,
       autoFocus: false
     });
+    
   }
 
   chosenYearHandler(event: any) {

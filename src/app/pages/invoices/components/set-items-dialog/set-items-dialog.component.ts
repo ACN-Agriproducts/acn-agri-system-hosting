@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -14,9 +14,11 @@ import { map, Observable, startWith } from 'rxjs';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  public invoiceItemForm: FormGroup;
+  public currentItem: DocumentReference;
   public filteredOptions: Observable<string[]>;
+  public invoiceItemForm: FormGroup;
   public settingNew: boolean = true;
+
   public currentCompany: string;
   public plantList: string[];
   public productList: string[];
@@ -60,20 +62,22 @@ export class SetItemsDialogComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value.name?.name ?? value.name ?? ''))
     );
-
-    this.invoiceItemForm.valueChanges.subscribe(value => {
-      console.log(value);
-    });
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.data.itemList.filter(item => item.name.toLowerCase().includes(filterValue));
+    return this.data.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
   public displayInvoiceItem(event: any) {
-    const selectedItem = event.option.value;
+    if (this.settingNew) {
 
+    }
+
+    const selectedItem = event.option.value;
+    if (selectedItem == null) return;
+
+    this.currentItem = selectedItem.ref;
     this.setProp('affectsInventory', selectedItem);
     this.setProp('name', selectedItem);
     this.setProp('price', selectedItem);
@@ -83,6 +87,8 @@ export class SetItemsDialogComponent implements OnInit {
   public setProp(key: string, item: any): void {
     if (key !== 'inventoryInfo') {
       this.invoiceItemForm.get(key).setValue(item[key]);
+      this.data.find(item => item.ref.id === this.currentItem.id)[key] = item[key];
+      console.log(this.data);
       return;
     }
 
@@ -97,6 +103,17 @@ export class SetItemsDialogComponent implements OnInit {
         tank: info.tank
       }));
     }
+  }
+
+  public setProps(item: any): void {
+    for (const controlName in this.invoiceItemForm.controls) {
+      if (controlName === 'inventoryInfo') this.setInventoryInfo(item);
+
+    }
+  }
+
+  public setInventoryInfo(item: any) {
+
   }
 }
 
