@@ -14,9 +14,8 @@ import { map, Observable, startWith } from 'rxjs';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  public currentItem: DocumentReference;
+  public currentItem: InvoiceItem;
   public filteredOptions: Observable<string[]>;
-  public invoiceItemForm: FormGroup;
   public settingNew: boolean = true;
 
   public currentCompany: string;
@@ -32,6 +31,20 @@ export class SetItemsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentItem = {
+      name: "",
+      inventoryInfo: {
+        info: [{
+          plant: "",
+          product: "",
+          tank: "",
+          quantity: null
+        }]
+      },
+      affectsInventory: false,
+      price: null
+    }
+
     if (this.data == null) {
       this.snack.open("Data could not be retrieved.", 'error');
       return;
@@ -48,20 +61,11 @@ export class SetItemsDialogComponent implements OnInit {
       this.productList = productObjList.map(product => product.getName());
     });
 
-    this.invoiceItemForm = this.fb.group({
-      affectsInventory: false,
-      inventoryInfo: this.fb.group({
-        info: this.fb.array([])
-      }),
-      name: '',
-      price: [, Validators.required],
-    });
-
-    this.filteredOptions = this.invoiceItemForm.valueChanges
-    .pipe(
-      startWith(''),
-      map(value => this._filter(value.name?.name ?? value.name ?? ''))
-    );
+    // this.filteredOptions = this.invoiceItemForm.valueChanges
+    // .pipe(
+    //   startWith(''),
+    //   map(value => this._filter(value.name?.name ?? value.name ?? ''))
+    // );
   }
 
   private _filter(value: string): string[] {
@@ -69,48 +73,56 @@ export class SetItemsDialogComponent implements OnInit {
     return this.data.filter(item => item.name.toLowerCase().includes(filterValue));
   }
 
+  public displayFn(event: any) {
+    return event?.name;
+  }
+
   public displayInvoiceItem(event: any) {
-    if (this.settingNew) {
-
-    }
-
-    const selectedItem = event.option.value;
-    if (selectedItem == null) return;
-
-    this.currentItem = selectedItem.ref;
-    this.setProp('affectsInventory', selectedItem);
-    this.setProp('name', selectedItem);
-    this.setProp('price', selectedItem);
-    this.setProp('inventoryInfo', selectedItem);
+    this.currentItem = event.option.value;
   }
 
-  public setProp(key: string, item: any): void {
-    if (key !== 'inventoryInfo') {
-      this.invoiceItemForm.get(key).setValue(item[key]);
-      this.data.find(item => item.ref.id === this.currentItem.id)[key] = item[key];
-      console.log(this.data);
-      return;
-    }
+  // public displayInvoiceItem(event: any) {
+  //   if (this.settingNew) {
 
-    const infoList = this.invoiceItemForm.get([key, 'info']) as FormArray;
-    infoList.clear();
+  //   }
 
-    for (const info of item[key].info) {
-      infoList.push(this.fb.group({
-        plant: info.plant,
-        product: info.product,
-        quantity: info.quantity,
-        tank: info.tank
-      }));
-    }
-  }
+  //   const selectedItem = event.option.value;
+  //   if (selectedItem == null) return;
 
-  public setProps(item: any): void {
-    for (const controlName in this.invoiceItemForm.controls) {
-      if (controlName === 'inventoryInfo') this.setInventoryInfo(item);
+  //   this.currentItem = selectedItem.ref;
+  //   this.setProp('affectsInventory', selectedItem);
+  //   this.setProp('name', selectedItem);
+  //   this.setProp('price', selectedItem);
+  //   this.setProp('inventoryInfo', selectedItem);
+  // }
 
-    }
-  }
+  // public setProp(key: string, item: any): void {
+  //   if (key !== 'inventoryInfo') {
+  //     this.invoiceItemForm.get(key).setValue(item[key]);
+  //     this.data.find(item => item.ref.id === this.currentItem.id)[key] = item[key];
+  //     console.log(this.data);
+  //     return;
+  //   }
+
+  //   const infoList = this.invoiceItemForm.get([key, 'info']) as FormArray;
+  //   infoList.clear();
+
+  //   for (const info of item[key].info) {
+  //     infoList.push(this.fb.group({
+  //       plant: info.plant,
+  //       product: info.product,
+  //       quantity: info.quantity,
+  //       tank: info.tank
+  //     }));
+  //   }
+  // }
+
+  // public setProps(item: any): void {
+  //   for (const controlName in this.invoiceItemForm.controls) {
+  //     if (controlName === 'inventoryInfo') this.setInventoryInfo(item);
+
+  //   }
+  // }
 
   public setInventoryInfo(item: any) {
 
