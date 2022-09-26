@@ -8,43 +8,27 @@ import html2canvas from 'html2canvas';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { SetItemsDialogComponent } from './components/set-items-dialog/set-items-dialog.component';
-import { InvoiceItem } from '@shared/classes/invoice_item';
-import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Plant } from '@shared/classes/plant';
-import { Product } from '@shared/classes/product';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
   styleUrls: ['./invoices.page.scss'],
 })
 export class InvoicesPage implements OnInit {
-  public currentCompany: string;
   public date: Date;
   public filter: boolean;
-  public itemList: InvoiceItem[];
   public template: any;
-  public plantList: string[];
-  public productList: string[];
 
   constructor(
-    private db: Firestore,
     private dialog: MatDialog,
     private popoverController: PopoverController,
-    private session: SessionInfo,
     private snack: SnackbarService,
     private toastController: ToastController,
   ) { }
 
   ngOnInit() {
     const data = document.getElementById('file-html-invoice');
-    this.currentCompany = this.session.getCompany();
-
-    InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
-      this.itemList = list;
-      return 
-    });
   }
 
   public openContextMenu = async (ev) => {
@@ -118,7 +102,6 @@ export class InvoicesPage implements OnInit {
 
   public setInvoiceItems = () => {
     const dialogRef = this.dialog.open(SetItemsDialogComponent, {
-      data: this.itemList,
       autoFocus: false
     });
     

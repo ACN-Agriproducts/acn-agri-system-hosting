@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { InvoiceItem } from '@shared/classes/invoice_item';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { map, Observable, startWith } from 'rxjs';
@@ -14,29 +15,34 @@ import { map, Observable, startWith } from 'rxjs';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  public currentItem: InvoiceItem;
+  public currentItem: InvoiceItemDialogData;
   // public filteredOptions: Observable<string[]>;
   public filteredOptions: any;
   public settingNew: boolean = true;
+  public itemList: InvoiceItemDialogData[];
 
   public currentCompany: string;
   public plantList: string[];
   public productList: string[];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    // @Inject(MAT_DIALOG_DATA) public data: any,
     private snack: SnackbarService,
     private db: Firestore,
     private session: SessionInfo
   ) { }
 
   ngOnInit() {
-    if (this.data == null) {
+    /* if (this.data == null) {
       this.snack.open("Data could not be retrieved.", 'error');
       return;
-    }
+    } */
 
     this.currentCompany = this.session.getCompany();
+
+    InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
+      this.filteredOptions = this.itemList = list;
+    });
 
     Plant.getPlantList(this.db, this.currentCompany)
     .then(plantObjList => {
@@ -45,6 +51,9 @@ export class SetItemsDialogComponent implements OnInit {
     })
     .then(productObjList => {
       this.productList = productObjList.map(product => product.getName());
+    })
+    .catch(error => {
+      this.snack.open(error, 'error');
     });
 
     // this.filteredOptions = this.invoiceItemForm.valueChanges
@@ -66,19 +75,18 @@ export class SetItemsDialogComponent implements OnInit {
       name: "",
       price: null,
     };
-
-    this.filteredOptions = this.data;
   }
 
   public applyFilter(event: any) {
     console.log(event);
+    console.log(this.filteredOptions);
     let value = '';
     try {
       value = event.toLowerCase();
     } catch (error) {
       value = event?.name.toLowerCase() ?? value;
     }
-    this.filteredOptions = this.data.filter(item => item.name.toLowerCase().includes(value));
+    this.filteredOptions = this.itemList.filter(item => item.name.toLowerCase().includes(value));
   }
 
   /* private _filter(value: string): string[] {
@@ -142,7 +150,7 @@ export class SetItemsDialogComponent implements OnInit {
   }
 }
 
-interface InvoiceItem {
+interface InvoiceItemDialogData {
   affectsInventory: boolean;
   inventoryInfo: {
     info: {
@@ -156,7 +164,7 @@ interface InvoiceItem {
   price: number;
 }
 
-interface InvoiceItem2 {
+interface InvoiceItemDialogData2 {
   affectsInventory: boolean;
   inventoryInfo: InventoryInfo
   name: string;
