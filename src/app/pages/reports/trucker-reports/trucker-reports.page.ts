@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Storage } from '@ionic/storage';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Plant } from '@shared/classes/plant';
@@ -28,17 +28,15 @@ export class TruckerReportsPage implements OnInit {
 
   constructor(
     private db: Firestore,
-    private localStorage: Storage,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private session: SessionInfo
   ) {}
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(companyName => {
-      this.currentCompany = companyName;
-      Plant.getPlantList(this.db, companyName).then(result => {
-        this.plantList = result;
-        this.chosenPlants = result;
-      });
+    this.currentCompany = this.session.getCompany();
+    Plant.getPlantList(this.db, this.currentCompany).then(result => {
+      this.plantList = result;
+      this.chosenPlants = result;
     });
   }
 
