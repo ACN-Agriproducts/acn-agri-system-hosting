@@ -14,19 +14,6 @@ import { Product } from '@shared/classes/product';
 })
 export class SetItemsDialogComponent implements OnInit {
   public currentItem: InvoiceItemDialogData;
-  public defaultItem: InvoiceItemDialogData = {
-    affectsInventory: false,
-    inventoryInfo: {
-      info: [{
-        plant: "",
-        product: "",
-        tank: "",
-        quantity: null
-      }]
-    },
-    name: "",
-    price: null,
-  };
   public filteredOptions: any;
   public itemList: InvoiceItemDialogData[];
   public settingName: boolean = false;
@@ -61,7 +48,7 @@ export class SetItemsDialogComponent implements OnInit {
       this.snack.open(error, 'error');
     });
 
-    this.currentItem = this.defaultItem;
+    this.currentItem = this.defaultItem();
   }
 
   public applyFilter(event: any) {
@@ -77,9 +64,32 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentItem = event.option.value ?? this.currentItem;
   }
 
+  public setNew() {
+    this.settingNew = true;
+    this.settingName = true;
+    this.itemList.push(this.defaultItem());
+    this.currentItem = this.itemList[this.itemList.length - 1];
+  }
+
   public reset() {
-    this.currentItem = this.defaultItem;
+    this.currentItem = this.defaultItem();
     this.filteredOptions = this.itemList;
+  }
+
+  public defaultItem():InvoiceItemDialogData {
+    return {
+      affectsInventory: false,
+      inventoryInfo: {
+        info: [{
+          plant: "",
+          product: "",
+          tank: "",
+          quantity: null
+        }]
+      },
+      name: "",
+      price: null,
+    };
   }
 }
 

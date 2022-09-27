@@ -9,7 +9,7 @@
 				<ng-container *ngIf="!settingName else setName">
 					<input matInput [(ngModel)]="currentItem" [matAutocomplete]="auto" (ngModelChange)="applyFilter($event)">
 					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="displayInvoiceItem($event)" [displayWith]="displayFn">
-						<mat-option (click)="settingNew = true" [value]="null">
+						<mat-option (click)="setNew()" [value]="defaultItem()">
 							<span class="add-option">
 								Add Item
 								&nbsp;
@@ -25,7 +25,7 @@
 					<input matInput [(ngModel)]="currentItem.name" (ngModelChange)="applyFilter($event)" (blur)="settingName = false">
 				</ng-template>
 				<span matSuffix class="name-icons">
-					<button mat-icon-button *ngIf="currentItem !== defaultItem" (click)="reset()">
+					<button mat-icon-button *ngIf="currentItem.name !== ''" (click)="reset()">
 						<mat-icon>close</mat-icon>
 					</button>
 					<mat-icon matSuffix>arrow_drop_down</mat-icon>
@@ -34,7 +34,7 @@
 		</mat-grid-tile>
 
 		<mat-grid-tile colspan="2">
-			<ion-button (click)="settingName = !settingName" [color]="settingName ? 'danger': 'primary'">
+			<ion-button (click)="settingName = !settingName" [color]="settingName ? 'danger': 'primary'" [disabled]="currentItem == null">
 				<ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
 			</ion-button>
 		</mat-grid-tile>
