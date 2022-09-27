@@ -6,27 +6,35 @@
 		<mat-grid-tile colspan="8">
 			<mat-form-field appearance="fill">
 				<mat-label>Name</mat-label>
-				<input matInput [(ngModel)]="currentItem.name" [matAutocomplete]="auto" (ngModelChange)="applyFilter($event)">
-				<mat-icon matSuffix>
-					arrow_drop_down
-				</mat-icon>
-				<mat-autocomplete #auto="matAutocomplete" (optionSelected)="displayInvoiceItem($event)" [displayWith]="displayFn">
-					<mat-option (click)="settingNew=true" [value]="null">
-						<span class="add-option">
-							Add Item
-							&nbsp;
-							<mat-icon>add_box</mat-icon>
-						</span>
-					</mat-option>
-					<mat-option *ngFor="let option of filteredOptions" [value]="option">
-						{{ option.name }}
-					</mat-option>
-				</mat-autocomplete>
+				<ng-container *ngIf="!settingName else setName">
+					<input matInput [(ngModel)]="currentItem" [matAutocomplete]="auto" (ngModelChange)="applyFilter($event)">
+					<mat-autocomplete #auto="matAutocomplete" (optionSelected)="displayInvoiceItem($event)" [displayWith]="displayFn">
+						<mat-option (click)="settingNew = true" [value]="null">
+							<span class="add-option">
+								Add Item
+								&nbsp;
+								<mat-icon>add_box</mat-icon>
+							</span>
+						</mat-option>
+						<mat-option *ngFor="let option of filteredOptions" [value]="option">
+							{{ option.name }}
+						</mat-option>
+					</mat-autocomplete>
+				</ng-container>
+				<ng-template #setName>
+					<input matInput [(ngModel)]="currentItem.name" (ngModelChange)="applyFilter($event)" (blur)="settingName = false">
+				</ng-template>
+				<span matSuffix class="name-icons">
+					<button mat-icon-button *ngIf="currentItem !== defaultItem" (click)="reset()">
+						<mat-icon>close</mat-icon>
+					</button>
+					<mat-icon matSuffix>arrow_drop_down</mat-icon>
+				</span>
 			</mat-form-field>
 		</mat-grid-tile>
 
 		<mat-grid-tile colspan="2">
-			<ion-button>
+			<ion-button (click)="settingName = !settingName" [color]="settingName ? 'danger': 'primary'">
 				<ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
 			</ion-button>
 		</mat-grid-tile>
