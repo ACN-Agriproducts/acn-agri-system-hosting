@@ -81,10 +81,6 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentItem = this.defaultItem;
     this.filteredOptions = this.itemList;
   }
-
-  public setInventoryInfo(item: any) {
-
-  }
 }
 
 interface InvoiceItemDialogData {
