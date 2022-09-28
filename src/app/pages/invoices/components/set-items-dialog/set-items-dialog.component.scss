@@ -87,6 +87,11 @@ mat-checkbox {
     padding: 20px 20px 0 20px;
 }
 
+mat-grid-tile:has(button) {
+    
+    button {align-self: flex-end;}
+}
+
 mat-dialog-actions {
     display: flex;
     justify-content: space-between;

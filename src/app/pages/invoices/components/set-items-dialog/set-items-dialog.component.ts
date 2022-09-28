@@ -101,6 +101,13 @@ export class SetItemsDialogComponent implements OnInit {
     };
   }
 
+  public deleteItem(index: number): void {
+    const infoList = this.currentItem.inventoryInfo.info;
+    infoList.splice(index, 1);
+
+    if (infoList.length === 0) infoList.push(this.createInfo());
+  }
+
   public getTankList(index: number): string[] {
     const plant = this.plantsObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
     return plant ? plant.inventoryNames : [];

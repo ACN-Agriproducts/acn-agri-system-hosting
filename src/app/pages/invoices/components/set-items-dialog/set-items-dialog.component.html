@@ -51,7 +51,7 @@
 				[disabled]="currentItem == null"
 				matTooltip="Edit Name"
 				matTooltipClass="tooltip-primary-solid" 
-				matTooltipPosition="below" 
+				matTooltipPosition="right" 
 				matTooltipShowDelay="1000"
 			>
 				<ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
@@ -78,7 +78,7 @@
 				(click)="currentItem.inventoryInfo.info.unshift(createInfo())"
 				matTooltip="Add Inventory Info"
 				matTooltipClass="tooltip-primary-solid" 
-				matTooltipPosition="left" 
+				matTooltipPosition="right" 
 				matTooltipShowDelay="1000"
 			>
 				<mat-icon>add_box</mat-icon>
@@ -110,7 +110,15 @@
 						</mat-grid-tile>
 
 						<mat-grid-tile>
-							<button mat-icon-button color="warn" (click)="currentItem.inventoryInfo.info.splice(index, 1)">
+							<button mat-icon-button 
+								color="warn" 
+								class="delete"
+								(click)="deleteItem(index)" 
+								matTooltip="Delete Inventory Info"
+								matTooltipClass="tooltip-primary-solid" 
+								matTooltipPosition="right" 
+								matTooltipShowDelay="1000"
+							>
 								<mat-icon>delete</mat-icon>
 							</button>
 						</mat-grid-tile>
