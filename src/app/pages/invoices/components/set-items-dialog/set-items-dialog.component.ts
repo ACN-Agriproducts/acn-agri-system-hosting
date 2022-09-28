@@ -13,9 +13,9 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  public currentItem: InvoiceItemDialogData;
+  public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
-  public itemList: InvoiceItemDialogData[];
+  public itemList: DialogInvoiceItem[];
   public settingName: boolean = false;
   public settingNew: boolean = true;
 
@@ -48,52 +48,58 @@ export class SetItemsDialogComponent implements OnInit {
       this.snack.open(error, 'error');
     });
 
-    this.currentItem = this.defaultItem();
+    this.currentItem = this.createItem();
   }
 
-  public applyFilter(event: any) {
+  public applyFilter(event: any): void {
     const value = typeof event == "string" ? event.toLowerCase() : event?.name.toLowerCase();
     this.filteredOptions = this.itemList.filter(item => item.name.toLowerCase().includes(value));
   }
 
-  public displayFn(event: any) {
+  public displayFn(event: any): void {
     return event?.name ?? "";
   }
 
-  public displayInvoiceItem(event: any) {
+  public displayInvoiceItem(event: any): void {
     this.currentItem = event.option.value ?? this.currentItem;
   }
 
-  public setNew() {
+  public setNew(): void {
     this.settingNew = true;
     this.settingName = true;
-    this.itemList.push(this.defaultItem());
-    this.currentItem = this.itemList[this.itemList.length - 1];
+
+    const newItem = this.createItem();
+    this.currentItem = newItem;
+    this.itemList.push(newItem);
   }
 
   public reset() {
-    this.currentItem = this.defaultItem();
+    this.currentItem = this.createItem();
     this.filteredOptions = this.itemList;
   }
 
-  public defaultItem():InvoiceItemDialogData {
+  public createItem(): DialogInvoiceItem {
     return {
       affectsInventory: false,
       inventoryInfo: {
-        info: [{
-          plant: "",
-          product: "",
-          tank: "",
-          quantity: null
-        }]
+        info: [this.createInfo()]
       },
       name: "",
       price: null,
     };
   }
+
+  public createInfo() {
+    return {
+      plant: "",
+      product: "",
+      tank: "",
+      quantity: null
+    };
+  }
 }
 
-interface InvoiceItemDialogData {
+interface DialogInvoiceItem {
   affectsInventory: boolean;
   inventoryInfo: {
     info: {
@@ -107,20 +113,20 @@ interface InvoiceItemDialogData {
   price: number;
 }
 
-interface InvoiceItemDialogData2 {
+/* interface DialogInvoiceItem2 {
   affectsInventory: boolean;
-  inventoryInfo: InventoryInfo
+  inventoryInfo: DialogInventoryInfo
   name: string;
   price: number;
 }
 
-interface InventoryInfo {
+interface DialogInventoryInfo {
   info: Info[]
 }
 
-interface Info {
+interface DialogInfo {
   plant: string;
   product: string;
   quantity: number;
   tank: string;
-}
+} */

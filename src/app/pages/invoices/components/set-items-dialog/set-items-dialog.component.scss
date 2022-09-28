@@ -53,28 +53,23 @@ mat-checkbox {
     top: -10px;
 }
 
-.inventory-info {
-    background-color: var(--ion-color-light);
-    border-radius: 5px;
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: 275px;
-
-    transition: height 2s;
-}
 .info-header {
     background-color: var(--ion-color-primary) !important;
     color: var(--ion-color-primary-contrast) !important;
     border-radius: 5px 5px 0 0;
     height: 30px;
     padding: 10px 15px;
-
+    
     h3 {
         font-size: 1em;
     }
 }
-.info-grid {
-    padding: 20px 20px 0 20px;
+.inventory-info {
+    background-color: var(--ion-color-light);
+    border-radius: 5px;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 275px;
 }
 .info-grid ::ng-deep {
     .mat-form-field-appearance-fill .mat-form-field-flex,
@@ -83,6 +78,14 @@ mat-checkbox {
     .mat-form-field-outline-end {
         background-color: white;
     }
+
+    ion-button {
+        margin: 20px;
+        text-transform: none;
+    }
+}
+.info {
+    padding: 20px 20px 0 20px;
 }
 
 mat-dialog-actions {
