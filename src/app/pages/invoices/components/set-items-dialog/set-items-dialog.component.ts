@@ -21,7 +21,9 @@ export class SetItemsDialogComponent implements OnInit {
 
   public currentCompany: string;
   public plantList: string[];
+  public plantsObjList: Plant[];
   public productList: string[];
+  public tankList: string[];
 
   constructor(
     private snack: SnackbarService,
@@ -38,6 +40,7 @@ export class SetItemsDialogComponent implements OnInit {
 
     Plant.getPlantList(this.db, this.currentCompany)
     .then(plantObjList => {
+      this.plantsObjList = plantObjList;
       this.plantList = plantObjList.map(plant => plant.ref.id);
       return Product.getProductList(this.db, this.currentCompany);
     })
@@ -56,7 +59,7 @@ export class SetItemsDialogComponent implements OnInit {
     this.filteredOptions = this.itemList.filter(item => item.name.toLowerCase().includes(value));
   }
 
-  public displayFn(event: any): void {
+  public displayFn(event: any): string {
     return event?.name ?? "";
   }
 
@@ -96,6 +99,11 @@ export class SetItemsDialogComponent implements OnInit {
       tank: "",
       quantity: null
     };
+  }
+
+  public getTankList(index: number): string[] {
+    const plant = this.plantsObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
+    return plant ? plant.inventoryNames : [];
   }
 }
 
