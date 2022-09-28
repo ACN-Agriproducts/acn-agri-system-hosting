@@ -2,7 +2,8 @@
 mat-dialog-content {
     display: flex;
     flex-direction: column;
-    width: 400px;
+    min-width: 425px;
+    width: 30vw;
 }
 
 form {
@@ -88,8 +89,9 @@ mat-checkbox {
 }
 
 mat-grid-tile:has(button) {
-    
-    button {align-self: flex-end;}
+    button {
+        align-self: flex-end;
+    }
 }
 
 mat-dialog-actions {
