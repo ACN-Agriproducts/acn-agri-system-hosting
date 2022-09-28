@@ -28,6 +28,7 @@ export class TicketReportDialogComponent implements OnInit {
   public startId: number;
   public endId: number;
 
+  public ticketList: Ticket[];
   public productTicketLists: any = {};
   public contractList: any = {};
   public transportList: any = {};
@@ -119,6 +120,10 @@ export class TicketReportDialogComponent implements OnInit {
         a.remove();
       })
     }
+    else if(this.reportType == ReportType.YTD) {
+      const workbook = new Excel.Workbook();
+      
+    }
     else {
       const tableCollection = document.getElementsByClassName('ticket-report-table');
       const workBook: WorkBook = utils.book_new();
@@ -139,7 +144,8 @@ export class TicketReportDialogComponent implements OnInit {
     return Ticket.getTickets(this.db, this.currentCompany, this.data.currentPlant, ...this.getFirebaseQueryFn()).then(async result => {
         const tempTicketList = {};
 
-        const sorterTicketList = result.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
+        const sorterTicketList = result.sort((a, b) => a.id - b.id);
+        this.ticketList = sorterTicketList;
 
         sorterTicketList.forEach(ticketSnap => {
           if(ticketSnap.void){
@@ -222,12 +228,18 @@ export class TicketReportDialogComponent implements OnInit {
       constraints.push(where('dateOut', '>=', this.beginDate), where('dateOut', '<=', this.endDate));
     }
 
+    if(this.reportType == ReportType.YTD) {
+      const first = new Date(new Date().getFullYear(), 0, 1);
+      const last = new Date(new Date().getFullYear(), 11, 31);
+      constraints.push(where('dateOut', '>=', first), where('dateOut', '<=', last));
+    }
+
     return constraints;
   }
 
   public validateInputs(): boolean {
     if(!(this.reportType != null && this.reportOutputType != null && this.inTicket != null )) {
-      if(this.reportType != ReportType.ProductBalance && this.inTicket == null) {
+      if(this.reportType != ReportType.ProductBalance && this.reportType != ReportType.YTD && this.inTicket == null) {
         return false;
       }
     }
@@ -247,6 +259,10 @@ export class TicketReportDialogComponent implements OnInit {
     if(this.reportType == ReportType.ProductBalance) {
       return this.beginDate != null && this.endDate !=null && this.reportOutputType == OutputType.excel;
     }
+
+    if(this.reportType == ReportType.YTD) {
+      return this.reportOutputType == OutputType.excel;
+    }
   }
 
   public getReportType(): typeof ReportType {
@@ -262,7 +278,8 @@ enum ReportType {
   DateRange,
   Contract,
   IdRange,
-  ProductBalance
+  ProductBalance,
+  YTD
 }
 
 enum OutputType {
