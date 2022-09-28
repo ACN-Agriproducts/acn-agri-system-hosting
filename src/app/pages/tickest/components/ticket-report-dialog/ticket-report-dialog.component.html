@@ -6,12 +6,13 @@
     <mat-radio-button [value]="getReportType().Contract">Contract</mat-radio-button>
     <mat-radio-button [value]="getReportType().IdRange">Id Range</mat-radio-button>
     <mat-radio-button [value]="getReportType().ProductBalance">Product Balance</mat-radio-button>
+    <mat-radio-button [value]="getReportType().YTD">Year to Date</mat-radio-button>
   </mat-radio-group>
   
   <div>
     <label>Report Type</label>
     <mat-radio-group [(ngModel)]="reportOutputType">
-      <mat-radio-button [value]="getOutputType().pdf" [disabled]="reportType == getReportType().ProductBalance">PDF</mat-radio-button>
+      <mat-radio-button [value]="getOutputType().pdf" [disabled]="reportType == getReportType().ProductBalance || reportType == getReportType().YTD">PDF</mat-radio-button>
       <mat-radio-button [value]="getOutputType().excel">Excel</mat-radio-button>
     </mat-radio-group>
   </div>
