@@ -51,7 +51,7 @@ export class Contract extends FirebaseDocInterface {
     status: status;
     tickets: DocumentReference<Ticket>[];
     transport: string;
-    truckers: DocumentReference<Contact>[];
+    truckers: TruckerInfo[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contract.converter);
@@ -93,7 +93,7 @@ export class Contract extends FirebaseDocInterface {
         this.status = data.status;
         this.tickets = data.tickets;
         this.transport = data.transport;
-        this.truckers = data.truckers;
+        this.truckers = tempTruckerList;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
     }
@@ -164,8 +164,8 @@ export class Contract extends FirebaseDocInterface {
     public getTruckers(): Promise<Contact[]> {
         const truckerList = [];
 
-        this.truckers.forEach((truckerRef) => {
-            truckerList.push(getDoc(truckerRef))
+        this.truckers.forEach((truckerInfo) => {
+            truckerList.push(getDoc(truckerInfo.trucker))
         });
 
         return Promise.all(truckerList).then((result): Contact[] => {
