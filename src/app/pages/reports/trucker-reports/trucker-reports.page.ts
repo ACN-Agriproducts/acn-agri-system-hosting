@@ -109,7 +109,7 @@ export class TruckerReportsPage implements OnInit {
       }
 
       const ticketFreight = this.contractMaps[ticket.in ? 'purchase' : 'sale'].get(ticket.contractID).truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
-      trucker.addTicket(ticket, ticketFreight | this.startFreight);  
+      trucker.addTicket(ticket, ticketFreight ?? this.startFreight);  
     });
 
     tempTransportList.forEach(transport => {
