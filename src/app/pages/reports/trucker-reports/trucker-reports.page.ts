@@ -21,6 +21,14 @@ export class TruckerReportsPage implements OnInit {
   public endDate: Date;
   public startFreight: number = 0;
   public InTicketsOnly: boolean = false;
+  public contractMaps: {
+    purchase: Map<number, Contract>,
+    sale: Map<number, Contract>
+  };
+  public contractSet: { 
+    purchase: Set<number>,
+    sale: Set<number>,
+  };
 
   public transportList: transportGroup[];
   public printableTicketsDone: number = 0;
@@ -43,7 +51,17 @@ export class TruckerReportsPage implements OnInit {
   public async getTickets(): Promise<void> {
     const ticketList: Ticket[] = [];
     const promises: Promise<any>[] = [];
+    const contractPromises: Promise<any>[] = [];
     this.endDate.setHours(23, 59, 59, 999);
+
+    this.contractMaps = {
+      purchase: new Map<number, Contract>(),
+      sale: new Map<number, Contract>()
+    };
+    this.contractSet = { 
+      purchase: new Set<number>(),
+      sale: new Set<number>(),
+    };
 
     this.chosenPlants.forEach(plant => {
       const promise = getDocs(query(plant.getTicketCollectionReference(),
@@ -56,6 +74,14 @@ export class TruckerReportsPage implements OnInit {
             return;
           }
 
+          if(!this.contractSet[ticket.in ? 'purchase' : 'sale'].has(ticket.contractID)) {
+            this.contractSet[ticket.in ? 'purchase' : 'sale'].add(ticket.contractID);
+            const contractPromise = ticket.getContract(this.db).then(contract => {
+              this.contractMaps[ticket.in ? 'purchase' : 'sale'].set(ticket.contractID, contract);
+            });
+            contractPromises.push(contractPromise);
+          }
+
           ticketList.push(ticket);
         });
       });
@@ -64,6 +90,7 @@ export class TruckerReportsPage implements OnInit {
     });
 
     await Promise.all(promises);
+    await Promise.all(contractPromises);
 
     const tempTransportList: transportGroup[] = [];
 
@@ -81,7 +108,8 @@ export class TruckerReportsPage implements OnInit {
         trucker = transport.addDriver(ticket.driver);
       }
 
-      trucker.addTicket(ticket, this.startFreight);  
+      const ticketFreight = this.contractMaps[ticket.in ? 'purchase' : 'sale'].get(ticket.contractID).truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
+      trucker.addTicket(ticket, ticketFreight | this.startFreight);  
     });
 
     tempTransportList.forEach(transport => {
