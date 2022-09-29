@@ -7,7 +7,7 @@
 			<mat-form-field appearance="fill">
 				<mat-label>Name</mat-label>
 
-				<ng-container *ngIf="!settingName else setName">
+				<ng-template [ngIf]="!settingName" [ngIfElse]="setName">
 					<input matInput 
 						(ngModelChange)="applyFilter($event)"
 						[(ngModel)]="currentItem" 
@@ -26,30 +26,32 @@
 
 						<mat-option *ngFor="let option of filteredOptions" [value]="option">{{ option.name }}</mat-option>
 					</mat-autocomplete>
-				</ng-container>
+				</ng-template>
 				<ng-template #setName>
-					<input matInput 
-						(blur)="settingName = false" 
+					<input matInput #name="ngModel" 
+						(blur)="toggleSetName()" 
 						(ngModelChange)="applyFilter($event)" 
 						[(ngModel)]="currentItem.name"
+						required
 					>
 				</ng-template>
 
 				<span matSuffix class="name-icons">
-					<button mat-icon-button *ngIf="currentItem.name !== ''" (click)="reset()">
+					<button mat-icon-button *ngIf="currentItem.name !== '' && !settingName" (click)="reset()">
 						<mat-icon>close</mat-icon>
 					</button>
 					<mat-icon matSuffix>arrow_drop_down</mat-icon>
 				</span>
+				<mat-error>Name is <strong>required</strong></mat-error>
 			</mat-form-field>
 		</mat-grid-tile>
 
 		<mat-grid-tile colspan="2">
 			<ion-button 
-				(click)="settingName = !settingName" 
+				(click)="toggleSetName()" 
 				[color]="settingName ? 'danger': 'primary'" 
-				[disabled]="currentItem == null"
-				matTooltip="Edit Name"
+				[disabled]="currentItem == null || currentItem.name === ''"
+				[matTooltip]="settingName ? 'Stop Editing' : 'Edit Name'"
 				matTooltipClass="tooltip-primary-solid" 
 				matTooltipPosition="right" 
 				matTooltipShowDelay="1000"
@@ -94,7 +96,11 @@
 						<mat-grid-tile colspan="6">
 							<mat-form-field appearance="fill">
 								<mat-label>Product</mat-label>
-								<mat-select [(ngModel)]="currentItem.inventoryInfo.info[index].product" [disableOptionCentering]="true">
+								<mat-select 
+									[(ngModel)]="currentItem.inventoryInfo.info[index].product" 
+									[disableOptionCentering]="true" 
+									required
+								>
 									<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
 								</mat-select>
 								<mat-error>Product is <strong>required</strong></mat-error>
@@ -104,8 +110,9 @@
 						<mat-grid-tile colspan="3">
 							<mat-form-field appearance="fill">
 								<mat-label>Quantity</mat-label>
-								<input matInput [(ngModel)]="currentItem.inventoryInfo.info[index].quantity"/>
+								<input matInput [(ngModel)]="currentItem.inventoryInfo.info[index].quantity" required/>
 								<span matSuffix>lbs</span>
+								<mat-error>Quantity is <strong>required</strong></mat-error>
 							</mat-form-field>
 						</mat-grid-tile>
 
@@ -131,9 +138,11 @@
 								<mat-select #plant 
 									[(ngModel)]="currentItem.inventoryInfo.info[index].plant"
 									[disableOptionCentering]="true" 
+									required
 								>
 									<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
 								</mat-select>
+								<mat-error>Plant is <strong>required</strong></mat-error>
 							</mat-form-field>
 						</mat-grid-tile>
 
@@ -144,9 +153,11 @@
 									[(ngModel)]="currentItem.inventoryInfo.info[index].tank"
 									[disabled]="plant.value == ''" 
 									[disableOptionCentering]="true" 
+									required
 								>
 									<mat-option *ngFor="let tank of getTankList(index)" [value]="tank">{{ tank }}</mat-option>
 								</mat-select>
+								<mat-error>Tank is <strong>required</strong></mat-error>
 							</mat-form-field>
 						</mat-grid-tile>
 					</mat-grid-list>
@@ -158,5 +169,5 @@
 
 <mat-dialog-actions>
 	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
-	<button mat-button color="primary" disabled [mat-dialog-close]="null">Confirm</button>
+	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="true">Confirm</button>
 </mat-dialog-actions>

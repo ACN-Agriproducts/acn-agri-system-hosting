@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -13,6 +13,8 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
+  @ViewChild('name') nameField: ElementRef;
+
   public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
   public itemList: DialogInvoiceItem[];
@@ -67,6 +69,12 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentItem = event.option.value ?? this.currentItem;
   }
 
+  public toggleSetName() {
+    if (this.currentItem.name.trim() === "") return;
+    if (this.settingName === false) this.nameField?.nativeElement.focus()
+    this.settingName = !this.settingName;
+  }
+
   public setNew(): void {
     this.settingNew = true;
     this.settingName = true;
@@ -74,6 +82,18 @@ export class SetItemsDialogComponent implements OnInit {
     const newItem = this.createItem();
     this.currentItem = newItem;
     this.itemList.push(newItem);
+  }
+
+  public checkValidation(): boolean {
+    for (const item of this.itemList ?? []) {
+      console.log(item);
+    }
+
+    return true;
+  }
+
+  public validateItem() {
+
   }
 
   public reset() {
