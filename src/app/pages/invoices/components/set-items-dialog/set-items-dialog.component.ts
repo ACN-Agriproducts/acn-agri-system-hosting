@@ -71,7 +71,7 @@ export class SetItemsDialogComponent implements OnInit {
 
   public toggleSetName() {
     if (this.currentItem.name.trim() === "") return;
-    if (this.settingName === false) this.nameField?.nativeElement.focus()
+    // if (this.settingName === false) this.nameField?.nativeElement.focus()
     this.settingName = !this.settingName;
   }
 
@@ -84,7 +84,7 @@ export class SetItemsDialogComponent implements OnInit {
     this.itemList.push(newItem);
   }
 
-  public checkValidation(): boolean {
+  /* public checkValidation(): boolean {
     for (const item of this.itemList ?? []) {
       console.log(item);
     }
@@ -94,7 +94,7 @@ export class SetItemsDialogComponent implements OnInit {
 
   public validateItem() {
 
-  }
+  } */
 
   public reset() {
     this.currentItem = this.createItem();
@@ -121,7 +121,7 @@ export class SetItemsDialogComponent implements OnInit {
     };
   }
 
-  public deleteItem(index: number): void {
+  public deleteInfo(index: number): void {
     const infoList = this.currentItem.inventoryInfo.info;
     infoList.splice(index, 1);
 

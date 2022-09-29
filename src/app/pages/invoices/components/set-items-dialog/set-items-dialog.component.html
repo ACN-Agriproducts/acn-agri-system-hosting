@@ -30,8 +30,11 @@
 					<span matSuffix class="name-icons">
 						<button 
 							mat-icon-button 
-							*ngIf="currentItem.name.trim() !== '' && !settingName" 
 							(click)="reset()"
+							*ngIf="currentItem.name?.trim() ?? '' !== '' && !settingName" 
+							matTooltipClass="tooltip-primary-solid" 
+							matTooltipPosition="right" 
+							matTooltipShowDelay="1000"
 						>
 							<mat-icon>close</mat-icon>
 						</button>
@@ -59,7 +62,7 @@
 			<ion-button 
 				(click)="settingName = !settingName" 
 				[color]="settingName ? 'danger': 'primary'" 
-				[disabled]="currentItem == null || currentItem.name === ''"
+				[disabled]="currentItem?.name === ''"
 				[matTooltip]="settingName ? 'Stop Editing' : 'Edit Name'"
 				matTooltipClass="tooltip-primary-solid" 
 				matTooltipPosition="right" 
@@ -127,9 +130,9 @@
 
 						<mat-grid-tile>
 							<button mat-icon-button 
-								color="warn" 
 								class="delete"
-								(click)="deleteItem(index)" 
+								color="warn" 
+								(click)="deleteInfo(index)" 
 								matTooltip="Delete Inventory Info"
 								matTooltipClass="tooltip-primary-solid" 
 								matTooltipPosition="right" 
