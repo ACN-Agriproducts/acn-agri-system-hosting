@@ -47,7 +47,7 @@ export class SetContractModalComponent implements OnInit {
       this.dialogRef.close(this.data);
     })
     .catch(error => {
-      this.snack.openSnackbar(error, 'error');
+      this.snack.open(error, 'error');
     });
   }
 

@@ -49,7 +49,8 @@ export class TableComponent implements OnInit, OnDestroy {
     const options = await this.popoverController.create({
       component: OptionsComponent,
       event: ev,
-      componentProps: {invoice: invoice}
+      componentProps: {invoice: invoice},
+      dismissOnSelect: true
     });
     await options.present();
     options.onDidDismiss().then(result => {
