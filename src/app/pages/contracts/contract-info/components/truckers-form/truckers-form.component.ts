@@ -101,7 +101,7 @@ export class TruckersFormComponent implements OnInit {
     this.contract.update({truckers}).then(() => {
       this.truckerForm.markAsPristine();
       this.submitting = false;
-      this.snack.openSnackbar("Truckers saved", "success");
+      this.snack.open("Truckers saved", "success");
     });
   }
 }
