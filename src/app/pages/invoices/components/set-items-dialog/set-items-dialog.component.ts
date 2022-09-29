@@ -75,7 +75,7 @@ export class SetItemsDialogComponent implements OnInit {
     this.settingName = !this.settingName;
   }
 
-  public setNew(): void {
+  public addItem(): void {
     this.settingNew = true;
     this.settingName = true;
 

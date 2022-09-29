@@ -2,53 +2,62 @@
 <h2 mat-dialog-title>Set Invoice Items</h2>
 
 <mat-dialog-content>
-	<mat-grid-list cols="10" rowHeight="70px">
+	<mat-grid-list cols="10" rowHeight="70px" gutterSize="5px">
 		<mat-grid-tile colspan="8">
-			<mat-form-field appearance="fill">
-				<mat-label>Name</mat-label>
-
-				<ng-template [ngIf]="!settingName" [ngIfElse]="setName">
-					<input matInput 
+			<ng-template [ngIf]="!settingName" [ngIfElse]="setName">
+				<mat-form-field appearance="fill">
+					<mat-label>Item</mat-label>
+					<input 
+						matInput
 						(ngModelChange)="applyFilter($event)"
-						[(ngModel)]="currentItem" 
+						[(ngModel)]="currentItem"
 						[matAutocomplete]="auto"
 					>
-
-					<mat-autocomplete #auto="matAutocomplete" 
-						(optionSelected)="displayInvoiceItem($event)" 
+					<mat-autocomplete 
+						#auto="matAutocomplete"
+						(optionSelected)="displayInvoiceItem($event)"
 						[displayWith]="displayFn"
 					>
-						<mat-option (click)="setNew()" [value]="createItem()">
+						<mat-option (click)="addItem()" [value]="createItem()">
 							<span class="add-option">
 								Add Item &nbsp; <mat-icon>add_box</mat-icon>
 							</span>
 						</mat-option>
-
-						<mat-option *ngFor="let option of filteredOptions" [value]="option">{{ option.name }}</mat-option>
+						<mat-option *ngFor="let option of filteredOptions" [value]="option">
+							{{ option.name }}
+						</mat-option>
 					</mat-autocomplete>
-				</ng-template>
-				<ng-template #setName>
-					<input matInput #name="ngModel" 
+					<span matSuffix class="name-icons">
+						<button 
+							mat-icon-button 
+							*ngIf="currentItem.name.trim() !== '' && !settingName" 
+							(click)="reset()"
+						>
+							<mat-icon>close</mat-icon>
+						</button>
+						<mat-icon matSuffix>arrow_drop_down</mat-icon>
+					</span>
+				</mat-form-field>
+			</ng-template>
+
+			<ng-template #setName>
+				<mat-form-field appearance="fill">
+					<mat-label>Name</mat-label>
+					<input 
+						matInput 
+						#name="ngModel" 
 						(blur)="toggleSetName()" 
-						(ngModelChange)="applyFilter($event)" 
 						[(ngModel)]="currentItem.name"
 						required
 					>
-				</ng-template>
-
-				<span matSuffix class="name-icons">
-					<button mat-icon-button *ngIf="currentItem.name !== '' && !settingName" (click)="reset()">
-						<mat-icon>close</mat-icon>
-					</button>
-					<mat-icon matSuffix>arrow_drop_down</mat-icon>
-				</span>
-				<mat-error>Name is <strong>required</strong></mat-error>
-			</mat-form-field>
+					<mat-error>Name is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</ng-template>
 		</mat-grid-tile>
 
 		<mat-grid-tile colspan="2">
 			<ion-button 
-				(click)="toggleSetName()" 
+				(click)="settingName = !settingName" 
 				[color]="settingName ? 'danger': 'primary'" 
 				[disabled]="currentItem == null || currentItem.name === ''"
 				[matTooltip]="settingName ? 'Stop Editing' : 'Edit Name'"
