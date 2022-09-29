@@ -4,6 +4,7 @@ import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGr
 import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
 import {MatDialog} from '@angular/material/dialog';
@@ -13,6 +14,8 @@ import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
 import { Company } from '@shared/classes/company';
 import {map, startWith} from 'rxjs/operators';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Plant } from '@shared/classes/plant';
 
 @Component({
   selector: 'app-new-contract',
@@ -25,6 +28,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   contactList: any[];
   truckerList: any[];
   productsList: Product[];
+  plantsList: Plant[];
   clientsReady: boolean = false;
   productsReady: boolean = false;
   contractForm: UntypedFormGroup;
@@ -38,40 +42,44 @@ export class NewContractPage implements OnInit, OnDestroy {
   constructor(
     private fb: UntypedFormBuilder,
     private db: Firestore,
-    private localStorage: Storage,
     private navController: NavController,
     private dialog: MatDialog,
-    private uniqueId: UniqueContractId
+    private uniqueId: UniqueContractId,
+    private session: SessionInfo
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(val =>{
-      this.currentCompany = val;
+    this.currentCompany = this.session.getCompany();
 
-      var tempSub = docData(Company.getCompanyRef(this.db, this.currentCompany)).subscribe(val => {
-        this.currentCompanyValue = val;
-        this.contactList = val.contactList.sort((a, b) =>{
-            var nameA = a.name.toUpperCase()
-            var nameB = b.name.toUpperCase()
+    Plant.getPlantList(this.db, this.currentCompany).then(list => {
+      this.plantsList = list;
+      if(this.contractForm) {
+        this.contractForm.get('plants').setValue([...list]);
+      }
+    });
 
-            if(nameA < nameB){
-              return -1;
-            }
-            if(nameA > nameB){
-              return 1;
-            }
+    var tempSub = docData(Company.getCompanyRef(this.db, this.currentCompany)).subscribe(val => {
+      this.currentCompanyValue = val;
+      this.contactList = val.contactList.sort((a, b) =>{
+          var nameA = a.name.toUpperCase()
+          var nameB = b.name.toUpperCase()
 
-            return 0;
-          });
-        this.truckerList = this.contactList.filter(c => !c.isClient);
-        this.clientsReady = true;
-      })
-      this.currentSubs.push(tempSub);
+          if(nameA < nameB){
+            return -1;
+          }
+          if(nameA > nameB){
+            return 1;
+          }
 
-      Product.getProductList(this.db, this.currentCompany).then(list => {
-        this.productsList = list
-      });
+          return 0;
+        });
+      this.clientsReady = true;
     })
+    this.currentSubs.push(tempSub);
+
+    Product.getProductList(this.db, this.currentCompany).then(list => {
+      this.productsList = list
+      });
 
     var today = new Date();
 
@@ -94,6 +102,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       deliveryDateStart: [],
       deliveryDateEnd: [],
       useSameClient: [true],
+      plants: [[], Validators.required],
       paymentTerms: this.fb.group({
         before: [false],
         origin: [false],
@@ -190,6 +199,7 @@ export class NewContractPage implements OnInit, OnDestroy {
         origin: formValue.paymentTerms.origin,
         paymentTerms: formValue.paymentTerms.paymentTerms
       },
+      plants: formValue.plants.map(p => p.ref.id),
       pricePerBushel: this.getBushelPrice(),
       product: formValue.product.ref,
       productInfo: {
@@ -273,29 +283,27 @@ export class NewContractPage implements OnInit, OnDestroy {
     return collection(this.currentCompanyValue.ref, contractTypeControl.value);
   }
 
-  private newTruckerGroup(): UntypedFormGroup {
-    return this.fb.group({
-      trucker: [,Validators.required],
-      freight: [,Validators.required]
-    });
+  addPlantChip(plant: Plant): void {
+    const chosenPlants = this.contractForm.get('plants').value as Plant[];
+
+    if(!this.chipIsChosen(plant)) {
+      chosenPlants.push(plant);
+      this.contractForm.get('plants').setValue(chosenPlants);
+    }
   }
 
-  addTruckerGroup(): void {
-    const truckers = this.contractForm.get('truckers') as UntypedFormArray;
-    truckers.push(this.newTruckerGroup());
-    this.filteredTruckerOptions.push(truckers.get([truckers.length-1, 'trucker']).valueChanges.pipe(
-      startWith(''), map(value => this._filter(value || ''))
-    ));
+  removePlantChip(plant: Plant) {
+    const chosenPlants = this.contractForm.get('plants').value as Plant[];
+    const index: number = chosenPlants.indexOf(plant);
+
+    if(index >= 0) {
+      chosenPlants.splice(index, 1);
+      this.contractForm.get('plants').setValue(chosenPlants);
+    }
   }
 
-  removeTruckerGroup(index: number): void {
-    const truckers = this.contractForm.get('truckers') as UntypedFormArray;
-    truckers.removeAt(index);
-    this.filteredTruckerOptions.splice(index, 1);
-  }
-
-  _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
+  chipIsChosen(plant: Plant) {
+    const chosenPlants = this.contractForm.get('plants').value as Plant[];
+    return chosenPlants.findIndex(p => p.ref.id == plant.ref.id) != -1;
   }
 }

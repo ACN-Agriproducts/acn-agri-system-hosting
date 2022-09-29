@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Contract, ProductInfo, DeliveryDates, PaymentTerms } from '@shared/classes/contract';
+import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 
 @Component({
@@ -15,6 +16,7 @@ export class ContractFormComponent implements OnInit {
   public contractForm: UntypedFormGroup;
 
   public productsList: Product[] = [];
+  public plantsList: string[];
   public updateStatus: string = '';
 
   constructor(
@@ -25,7 +27,11 @@ export class ContractFormComponent implements OnInit {
   ngOnInit() {
     Product.getProductList(this.db, this.currentContract.ref.parent.parent.id).then(productList => {
       this.productsList = productList;
-    })
+    });
+
+    Plant.getPlantList(this.db, this.currentContract.ref.parent.parent.id).then(plantList => {
+      this.plantsList = plantList.map(p => p.ref.id);
+    });
 
     this.contractForm = this.fb.group({
       contractType: [{value: this.currentContract.ref.parent.id, disabled: true}, Validators.required],
@@ -41,6 +47,7 @@ export class ContractFormComponent implements OnInit {
       aflatoxin: [{value: this.currentContract.aflatoxin, disabled: this.currentContract.status != 'pending' }, Validators.required],
       deliveryDateStart: [{value: this.currentContract.delivery_dates.begin, disabled: this.currentContract.status != 'pending' }],
       deliveryDateEnd: [{value: this.currentContract.delivery_dates.end, disabled: this.currentContract.status != 'pending' }],
+      plants: [{value: (this.currentContract.plants || []), disabled: this.currentContract.status != 'pending'}],
       paymentTerms: this.fb.group({
         before: [{value: this.currentContract.paymentTerms.before, disabled: this.currentContract.status != 'pending' }],
         origin: [{value: this.currentContract.paymentTerms.origin, disabled: this.currentContract.status != 'pending' }],
@@ -116,5 +123,31 @@ export class ContractFormComponent implements OnInit {
     if(unit == 'MTons'){
       return quantity * 2204.6;
     }
+  }
+
+  addPlantChip(plant: string): void {
+    if(this.currentContract.status != 'pending') return;
+    const chosenPlants = this.contractForm.get('plants').value as string[];
+
+    if(!this.chipIsChosen(plant)) {
+      chosenPlants.push(plant);
+      this.contractForm.get('plants').setValue(chosenPlants);
+    }
+  }
+
+  removePlantChip(plant: string) {
+    if(this.currentContract.status != 'pending') return; 
+    const chosenPlants = this.contractForm.get('plants').value as string[];
+    const index: number = chosenPlants.indexOf(plant);
+
+    if(index >= 0) {
+      chosenPlants.splice(index, 1);
+      this.contractForm.get('plants').setValue(chosenPlants);
+    }
+  }
+
+  chipIsChosen(plant: string) {
+    const chosenPlants = this.contractForm.get('plants').value as string[];
+    return chosenPlants.findIndex(p => p == plant) != -1;
   }
 }
