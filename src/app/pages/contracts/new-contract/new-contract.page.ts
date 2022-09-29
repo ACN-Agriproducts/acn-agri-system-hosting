@@ -304,4 +304,30 @@ export class NewContractPage implements OnInit, OnDestroy {
     const chosenPlants = this.contractForm.get('plants').value as Plant[];
     return chosenPlants.findIndex(p => p.ref.id == plant.ref.id) != -1;
   }
+
+  private newTruckerGroup(): UntypedFormGroup {
+    return this.fb.group({
+      trucker: [,Validators.required],
+      freight: [,Validators.required]
+    });
+  }
+
+  addTruckerGroup(): void {
+    const truckers = this.contractForm.get('truckers') as UntypedFormArray;
+    truckers.push(this.newTruckerGroup());
+    this.filteredTruckerOptions.push(truckers.get([truckers.length-1, 'trucker']).valueChanges.pipe(
+      startWith(''), map(value => this._filter(value || ''))
+    ));
+  }
+
+  removeTruckerGroup(index: number): void {
+    const truckers = this.contractForm.get('truckers') as UntypedFormArray;
+    truckers.removeAt(index);
+    this.filteredTruckerOptions.splice(index, 1);
+  }
+
+  _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
+  }
 }
