@@ -38,8 +38,8 @@
                 <mat-form-field>
                   <mat-label>Contract Type</mat-label>
                   <mat-select formControlName='contractType' (selectionChange)="contractTypeChange()">
-                    <mat-option [value]="'purchaseContracts'">Purchase Contract</mat-option>
-                    <mat-option [value]="'salesContracts'">Sales Contract</mat-option>
+                    <mat-option value="purchaseContracts">Purchase Contract</mat-option>
+                    <mat-option value="salesContracts">Sales Contract</mat-option>
                   </mat-select>
                 </mat-form-field> 
               </ion-col>
@@ -118,6 +118,27 @@
                 <mat-form-field>
                   <mat-label>Aflatoxin</mat-label>
                   <input matInput formControlName='aflatoxin' type="number">
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <mat-form-field>
+                  <mat-label>Delivery Plants</mat-label>
+                  <mat-chip-list multiple formControlName="plants" #chipList>
+                    <mat-chip 
+                      *ngFor="let plant of plantsList"
+                      [value]="plant"
+                      (removed)="removePlantChip(plant)">
+                      {{plant.ref.id | titlecase}}
+                      <button matChipRemove *ngIf="chipIsChosen(plant); else addPlantButton">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                      <ng-template #addPlantButton>
+                        <mat-icon matChipTrailingIcon (click)="addPlantChip(plant)">add</mat-icon>
+                      </ng-template>
+                    </mat-chip>
+                  </mat-chip-list>
                 </mat-form-field>
               </ion-col>
             </ion-row>
