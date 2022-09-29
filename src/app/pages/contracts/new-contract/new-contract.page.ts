@@ -10,7 +10,7 @@ import { SelectClientComponent } from './components/select-client/select-client.
 import { UniqueContractId } from './components/unique-contract-id';
 import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
-import { Company } from '@shared/classes/company';
+import { Company, CompanyContact } from '@shared/classes/company';
 import {map, startWith} from 'rxjs/operators';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Plant } from '@shared/classes/plant';
@@ -23,8 +23,8 @@ import { Plant } from '@shared/classes/plant';
 export class NewContractPage implements OnInit, OnDestroy {
   currentCompany: string;
   currentCompanyValue: Company;
-  contactList: any[];
-  truckerList: any[];
+  contactList: CompanyContact[];
+  truckerList: CompanyContact[];
   productsList: Product[];
   plantsList: Plant[];
   clientsReady: boolean = false;
@@ -32,7 +32,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   contractForm: UntypedFormGroup;
   currentSubs: Subscription[] = [];
   contractWeight: Weight;
-  filteredTruckerOptions: Observable<string[]>[] = [];
+  filteredTruckerOptions: Observable<CompanyContact[]>[] = [];
   
   selectedClient: Contact;
   ticketClient: Contact;
@@ -71,6 +71,7 @@ export class NewContractPage implements OnInit, OnDestroy {
 
           return 0;
         });
+      this.truckerList = this.contactList.filter(c => !c.isClient);
       this.clientsReady = true;
     })
     this.currentSubs.push(tempSub);
@@ -326,7 +327,7 @@ export class NewContractPage implements OnInit, OnDestroy {
     this.filteredTruckerOptions.splice(index, 1);
   }
 
-  _filter(value: string): string[] {
+  _filter(value: string): CompanyContact[] {
     const filterValue = value.toLowerCase();
     return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
   }
