@@ -95,6 +95,27 @@
     </ion-col>
   </ion-row>
   <ion-row>
+    <ion-col>
+      <mat-form-field *ngIf="plantsList">
+        <mat-label>Delivery Plants</mat-label>
+        <mat-chip-list multiple formControlName="plants" #chipList>
+          <mat-chip 
+            *ngFor="let plant of plantsList"
+            [value]="plant"
+            (removed)="removePlantChip(plant)">
+            {{plant | titlecase}}
+            <button matChipRemove *ngIf="chipIsChosen(plant); else addPlantButton">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <ng-template #addPlantButton>
+              <mat-icon matChipTrailingIcon (click)="addPlantChip(plant)">add</mat-icon>
+            </ng-template>
+          </mat-chip>
+        </mat-chip-list>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
     <ion-col size='6'>
       <mat-form-field>
         <mat-label>Delivery Dates Start</mat-label>
