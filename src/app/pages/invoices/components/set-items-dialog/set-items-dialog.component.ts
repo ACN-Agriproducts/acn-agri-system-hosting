@@ -1,6 +1,7 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { InvoiceItem } from '@shared/classes/invoice_item';
@@ -13,8 +14,6 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  @ViewChild('setName') nameField: ElementRef;
-
   public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
   public itemList: DialogInvoiceItem[];
@@ -30,7 +29,8 @@ export class SetItemsDialogComponent implements OnInit {
   constructor(
     private snack: SnackbarService,
     private db: Firestore,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private confirm: ConfirmationDialogService,
   ) { }
 
   ngOnInit() {
@@ -92,6 +92,12 @@ export class SetItemsDialogComponent implements OnInit {
     return typeof this.currentItem === 'object' && name !== '' ? true : false;
   }
 
+  public itemSelected(): boolean {
+    if (typeof this.currentItem === 'string') return false;
+    const name = this.currentItem?.name?.trim() ?? '';
+    return name !== '';
+  }
+
   /* public checkValidation(): boolean {
     for (const item of this.itemList ?? []) {
       console.log(item);
@@ -129,7 +135,8 @@ export class SetItemsDialogComponent implements OnInit {
     this.filteredOptions = this.itemList;
   }
 
-  public deleteItem() {
+  public async deleteItem() {
+    if (!await this.confirm.openDialog("delete this Invoice Item")) return;
     this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
     this.reset();
   }

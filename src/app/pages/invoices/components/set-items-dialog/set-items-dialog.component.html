@@ -27,18 +27,20 @@
 							{{ option.name }}
 						</mat-option>
 					</mat-autocomplete>
-					<button 
-						matPrefix
-						mat-icon-button 
-						(click)="reset()" 
-						*ngIf="!settingName && currentItem.name?.trim() !== ''" 
-						matTooltipClass="tooltip-primary-solid" 
-						matTooltipPosition="right" 
-						matTooltipShowDelay="1000"
-					>
-						<mat-icon>close</mat-icon>
-					</button>
-					<mat-icon matSuffix>arrow_drop_down</mat-icon>
+					<span class="name-icons" matSuffix>
+						<button
+							matSuffix
+							mat-icon-button
+							(click)="reset()"
+							*ngIf="currentItem.name && !settingName"
+							matTooltipClass="tooltip-primary-solid"
+							matTooltipPosition="right"
+							matTooltipShowDelay="1000"
+						>
+							<mat-icon>cancel</mat-icon>
+						</button>
+						<mat-icon matSuffix>arrow_drop_down</mat-icon>
+					</span>
 				</mat-form-field>
 			</ng-template>
 
@@ -48,6 +50,7 @@
 					<input 
 						matInput 
 						#name="ngModel" 
+						(blur)="toggleSetName()"
 						(keyup.enter)="toggleSetName()"
 						[(ngModel)]="currentItem.name"
 						required
@@ -61,7 +64,7 @@
 			<ion-button 
 				(click)="toggleSetName()" 
 				[color]="settingName ? 'danger': 'primary'" 
-				[disabled]="!nameIsEditable()"
+				[disabled]="!itemSelected()"
 				[matTooltip]="settingName ? 'Stop Editing' : 'Edit Name'"
 				matTooltipClass="tooltip-primary-solid" 
 				matTooltipPosition="above" 
@@ -73,7 +76,7 @@
 			<ion-button 
 				(click)="deleteItem()" 
 				color="danger" 
-				[disabled]="currentItem.name === ''"
+				[disabled]="!itemSelected() || settingName"
 				matTooltip="Delete Item"
 				matTooltipClass="tooltip-primary-solid" 
 				matTooltipPosition="above" 
@@ -83,17 +86,19 @@
 			</ion-button>
 		</mat-grid-tile>
 
-		<mat-grid-tile colspan="5">
-			<mat-form-field appearance="fill">
-				<mat-label>Price</mat-label>
-				<span matPrefix>$ &nbsp;</span>
-				<input matInput [(ngModel)]="currentItem.price" type="number">
-			</mat-form-field>
-		</mat-grid-tile>
-
-		<mat-grid-tile colspan="5">
-			<mat-checkbox color="primary" [(ngModel)]="currentItem.affectsInventory">Affects Inventory</mat-checkbox>
-		</mat-grid-tile>
+		<ng-template [ngIf]="itemSelected()">
+			<mat-grid-tile colspan="5">
+				<mat-form-field appearance="fill">
+					<mat-label>Price</mat-label>
+					<span matPrefix>$ &nbsp;</span>
+					<input matInput [(ngModel)]="currentItem.price" type="number">
+				</mat-form-field>
+			</mat-grid-tile>
+			
+			<mat-grid-tile colspan="5">
+				<mat-checkbox color="primary" [(ngModel)]="currentItem.affectsInventory">Affects Inventory</mat-checkbox>
+			</mat-grid-tile>
+		</ng-template>
 	</mat-grid-list>
 
 	<ng-template [ngIf]="currentItem.affectsInventory">
@@ -111,7 +116,7 @@
 		</div>
 
 		<div class="inventory-info">
-			<div *ngFor="let item of currentItem.inventoryInfo.info; let index = index">
+			<ng-container *ngFor="let item of currentItem.inventoryInfo.info; let index = index">
 				<mat-divider *ngIf="index !== 0"></mat-divider>
 
 				<div class="info">
@@ -184,7 +189,7 @@
 						</mat-grid-tile>
 					</mat-grid-list>
 				</div>
-			</div>
+			</ng-container>
 		</div>
 	</ng-template>
 </mat-dialog-content>
