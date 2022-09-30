@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Storage } from '@ionic/storage';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
 import * as Excel from 'exceljs';
 import { Firestore, QueryConstraint, where } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -44,15 +45,30 @@ export class TicketReportDialogComponent implements OnInit {
     }
   };
 
+  private workbookYTD: Excel.Workbook;
+  private workbookPromise: Promise<any>;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private db: Firestore,
-    private localStorage: Storage
+    private storage: Storage,
+    private session: SessionInfo
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(_currentCompany => {
-      this.currentCompany = _currentCompany;
+    this.currentCompany = this.session.getCompany();
+
+    this.workbookPromise = getDownloadURL(ref(this.storage, `companies/${this.currentCompany}/TICKETS-YTD-REPORT.xlsx`)).then(url => {
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = 'arraybuffer';
+      xhr.onload = async (event) => {
+        this.workbookYTD = new Excel.Workbook();
+        await this.workbookYTD.xlsx.load(xhr.response);
+        console.log("book loaded");
+      }
+
+      xhr.open('GET', url);
+      xhr.send();
     });
   }
 
@@ -60,7 +76,7 @@ export class TicketReportDialogComponent implements OnInit {
     await this.getReportTickets();
   }
 
-  public createExcelDoc(): void{
+  public async createExcelDoc(): Promise<void>{
     if(this.reportType == ReportType.ProductBalance) {
       const workbook = new Excel.Workbook();
 
@@ -121,8 +137,60 @@ export class TicketReportDialogComponent implements OnInit {
       })
     }
     else if(this.reportType == ReportType.YTD) {
-      const workbook = new Excel.Workbook();
+      await this.workbookPromise;
+
+      this.workbookYTD.eachSheet((worksheet, sheetID) => {
+        console.log(worksheet.name);
+      })
       
+
+      const inTicketSheet = this.workbookYTD.getWorksheet("IN TICKETS");
+      const outTicketSheet = this.workbookYTD.getWorksheet("OUT TICKETS");
+      const inTicketList = this.ticketList.filter(t => t.in).map(this.ticketYTDFormat);
+      const outTicketList = this.ticketList.filter(t => !t.in).map(this.ticketYTDFormat);
+
+      const map = new Map<number, string>([
+        [1, "in"],
+        [2, "dateOut"],
+        [4, "id"],
+        [5, "original_ticket"],
+        [6, "void"],
+        [7, "contractID"],
+        [8, "productName"],
+        [9, "clientName"],
+        [10, "driver"],
+        [11, "gross"],
+        [12, "tare"],
+        [13, "net"],
+        [14, ""],
+        [15, "dryWeight"],
+        [16, "mTons"],
+        [17, "CCGE"]
+      ]);
+
+      map.forEach((id, col) => {
+        inTicketSheet.getColumn(col).key = id;
+        outTicketSheet.getColumn(col).key = id;
+      });
+
+      console.table(inTicketList);
+      inTicketSheet.insertRows(2, inTicketList, 'o');
+
+      this.workbookYTD.xlsx.writeBuffer().then((data) => {
+        const blob = new Blob([data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+  
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("style", "display: none");
+        a.href = url;
+        a.download = `TICKETS-YTD-REPORT.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      })
     }
     else {
       const tableCollection = document.getElementsByClassName('ticket-report-table');
@@ -271,6 +339,17 @@ export class TicketReportDialogComponent implements OnInit {
 
   public getOutputType(): typeof OutputType{
     return OutputType;
+  }
+
+  public ticketYTDFormat(ticket: Ticket): any {
+    const formattedTicket = ticket.getGenericCopy();
+
+    formattedTicket.in = ticket.in ? "IN" : "OUT";
+    formattedTicket.void = ticket.void ? "VOID" : null;
+    formattedTicket.net = ticket.gross - ticket.tare;
+    formattedTicket.mTons = formattedTicket.net / 2204.62;
+
+    return formattedTicket;
   }
 }
 
