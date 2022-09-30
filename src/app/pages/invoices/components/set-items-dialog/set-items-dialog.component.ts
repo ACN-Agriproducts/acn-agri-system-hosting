@@ -13,7 +13,7 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  @ViewChild('name') nameField: ElementRef;
+  @ViewChild('setName') nameField: ElementRef;
 
   public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
@@ -22,8 +22,8 @@ export class SetItemsDialogComponent implements OnInit {
   public settingNew: boolean = true;
 
   public currentCompany: string;
-  public plantList: string[];
-  public plantsObjList: Plant[];
+  public plantNameList: string[];
+  public plantObjList: Plant[];
   public productList: string[];
   public tankList: string[];
 
@@ -42,8 +42,8 @@ export class SetItemsDialogComponent implements OnInit {
 
     Plant.getPlantList(this.db, this.currentCompany)
     .then(plantObjList => {
-      this.plantsObjList = plantObjList;
-      this.plantList = plantObjList.map(plant => plant.ref.id);
+      this.plantObjList = plantObjList;
+      this.plantNameList = plantObjList.map(plant => plant.ref.id);
       return Product.getProductList(this.db, this.currentCompany);
     })
     .then(productObjList => {
@@ -71,7 +71,6 @@ export class SetItemsDialogComponent implements OnInit {
 
   public toggleSetName() {
     if (this.currentItem.name.trim() === "") return;
-    // if (this.settingName === false) this.nameField?.nativeElement.focus()
     this.settingName = !this.settingName;
   }
 
@@ -82,6 +81,15 @@ export class SetItemsDialogComponent implements OnInit {
     const newItem = this.createItem();
     this.currentItem = newItem;
     this.itemList.push(newItem);
+  }
+
+  public getType(item: any): string {
+    return typeof item;
+  }
+
+  public nameIsEditable(): boolean {
+    const name = this.currentItem?.name?.trim() ?? '';
+    return typeof this.currentItem === 'object' && name !== '' ? true : false;
   }
 
   /* public checkValidation(): boolean {
@@ -129,7 +137,7 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public getTankList(index: number): string[] {
-    const plant = this.plantsObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
+    const plant = this.plantObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
     return plant ? plant.inventoryNames : [];
   }
 }

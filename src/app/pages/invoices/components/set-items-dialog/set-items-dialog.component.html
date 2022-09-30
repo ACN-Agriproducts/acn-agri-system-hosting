@@ -27,19 +27,18 @@
 							{{ option.name }}
 						</mat-option>
 					</mat-autocomplete>
-					<span matSuffix class="name-icons">
-						<button 
-							mat-icon-button 
-							(click)="reset()"
-							*ngIf="currentItem.name?.trim() ?? '' !== '' && !settingName" 
-							matTooltipClass="tooltip-primary-solid" 
-							matTooltipPosition="right" 
-							matTooltipShowDelay="1000"
-						>
-							<mat-icon>close</mat-icon>
-						</button>
-						<mat-icon matSuffix>arrow_drop_down</mat-icon>
-					</span>
+					<button 
+						matPrefix
+						mat-icon-button 
+						(click)="reset()" 
+						*ngIf="!settingName && currentItem.name?.trim() !== ''" 
+						matTooltipClass="tooltip-primary-solid" 
+						matTooltipPosition="right" 
+						matTooltipShowDelay="1000"
+					>
+						<mat-icon>close</mat-icon>
+					</button>
+					<mat-icon matSuffix>arrow_drop_down</mat-icon>
 				</mat-form-field>
 			</ng-template>
 
@@ -49,7 +48,7 @@
 					<input 
 						matInput 
 						#name="ngModel" 
-						(blur)="toggleSetName()" 
+						(keyup.enter)="toggleSetName()"
 						[(ngModel)]="currentItem.name"
 						required
 					>
@@ -60,9 +59,9 @@
 
 		<mat-grid-tile colspan="2">
 			<ion-button 
-				(click)="settingName = !settingName" 
+				(click)="toggleSetName()" 
 				[color]="settingName ? 'danger': 'primary'" 
-				[disabled]="currentItem?.name === ''"
+				[disabled]="!nameIsEditable()"
 				[matTooltip]="settingName ? 'Stop Editing' : 'Edit Name'"
 				matTooltipClass="tooltip-primary-solid" 
 				matTooltipPosition="right" 
@@ -152,7 +151,7 @@
 									[disableOptionCentering]="true" 
 									required
 								>
-									<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
+									<mat-option *ngFor="let plant of plantNameList" [value]="plant">{{ plant }}</mat-option>
 								</mat-select>
 								<mat-error>Plant is <strong>required</strong></mat-error>
 							</mat-form-field>
