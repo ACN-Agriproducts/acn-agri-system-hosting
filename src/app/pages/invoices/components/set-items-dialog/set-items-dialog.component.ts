@@ -103,12 +103,7 @@ export class SetItemsDialogComponent implements OnInit {
   public validateItem() {
 
   } */
-
-  public reset() {
-    this.currentItem = this.createItem();
-    this.filteredOptions = this.itemList;
-  }
-
+  
   public createItem(): DialogInvoiceItem {
     return {
       affectsInventory: false,
@@ -119,7 +114,7 @@ export class SetItemsDialogComponent implements OnInit {
       price: null,
     };
   }
-
+  
   public createInfo() {
     return {
       plant: "",
@@ -129,6 +124,16 @@ export class SetItemsDialogComponent implements OnInit {
     };
   }
 
+  public reset() {
+    this.currentItem = this.createItem();
+    this.filteredOptions = this.itemList;
+  }
+
+  public deleteItem() {
+    this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
+    this.reset();
+  }
+  
   public deleteInfo(index: number): void {
     const infoList = this.currentItem.inventoryInfo.info;
     infoList.splice(index, 1);
