@@ -70,6 +70,16 @@
       </mat-form-field>
     </div>
   </div>
+
+  <div class="YTD-form" *ngIf="reportType == getReportType().YTD">
+    <div>
+      <label>Ticket Types</label>
+      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
+        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
 </div>
 
 <mat-dialog-actions>
