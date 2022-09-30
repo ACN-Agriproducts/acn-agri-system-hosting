@@ -317,7 +317,7 @@ export class TicketReportDialogComponent implements OnInit {
     if(this.reportType == ReportType.YTD) {
       const first = new Date(new Date().getFullYear(), 0, 1);
       const last = new Date(new Date().getFullYear(), 11, 31);
-      constraints.push(where('dateOut', '>=', first), where('dateOut', '<=', last));
+      constraints.push(where('dateOut', '>=', first), where('dateOut', '<=', last), where('in', '==', this.inTicket));
     }
 
     return constraints;
