@@ -163,6 +163,16 @@ export class Ticket extends FirebaseDocInterface{
         return this.ref.parent.withConverter(Ticket.converter);
     }
 
+    public getGenericCopy(): any { 
+        const copy: any = {};
+
+        Object.keys(this).forEach(key => {
+            copy[key] = this[key];
+        });
+
+        return copy;
+    }
+
     public async getPdfLink(storage: Storage): Promise<string> {
         if(!this.pdfLink) return "";
         
