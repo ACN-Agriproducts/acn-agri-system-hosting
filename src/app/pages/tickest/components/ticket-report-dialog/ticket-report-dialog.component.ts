@@ -45,9 +45,6 @@ export class TicketReportDialogComponent implements OnInit {
     }
   };
 
-  private workbookYTD: Excel.Workbook;
-  private workbookPromise: Promise<any>;
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private db: Firestore,
@@ -57,19 +54,6 @@ export class TicketReportDialogComponent implements OnInit {
 
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
-
-    this.workbookPromise = getDownloadURL(ref(this.storage, `companies/${this.currentCompany}/TICKETS-YTD-REPORT.xlsx`)).then(url => {
-      let xhr = new XMLHttpRequest();
-      xhr.responseType = 'arraybuffer';
-      xhr.onload = async (event) => {
-        this.workbookYTD = new Excel.Workbook();
-        await this.workbookYTD.xlsx.load(xhr.response);
-        console.log("book loaded");
-      }
-
-      xhr.open('GET', url);
-      xhr.send();
-    });
   }
 
   async generateReport(): Promise<void> {
@@ -137,46 +121,80 @@ export class TicketReportDialogComponent implements OnInit {
       })
     }
     else if(this.reportType == ReportType.YTD) {
-      await this.workbookPromise;
+      const testWorkbook = new Excel.Workbook();
+      const ticketSheet = testWorkbook.addWorksheet("IN TICKETS");
+      const ticketList = this.ticketList.filter(t => t.in).map(this.ticketYTDFormat);
 
-      this.workbookYTD.eachSheet((worksheet, sheetID) => {
-        console.log(worksheet.name);
-      })
-      
-
-      const inTicketSheet = this.workbookYTD.getWorksheet("IN TICKETS");
-      const outTicketSheet = this.workbookYTD.getWorksheet("OUT TICKETS");
-      const inTicketList = this.ticketList.filter(t => t.in).map(this.ticketYTDFormat);
-      const outTicketList = this.ticketList.filter(t => !t.in).map(this.ticketYTDFormat);
+      const inTicketTable = ticketSheet.addTable({
+        name: 'testTable',
+        ref: 'A1',
+        headerRow: true,
+        totalsRow: true,
+        style: {
+          theme: "TableStyleMedium2",
+          showRowStripes: true,
+        },
+        columns: [
+          {name: "IN", totalsRowLabel: "Totals:", filterButton: true},
+          {name: "Date", filterButton: true},
+          {name: "Ticket", filterButton: true},
+          {name: "OrgTicket", filterButton: true},
+          {name: "void", filterButton: true},
+          {name: "Contract", filterButton: true},
+          {name: "Product", filterButton: true},
+          {name: "Customer_Name", filterButton: true},
+          {name: "Vehicle_Driver", filterButton: true},
+          {name: "WT_GROSS", filterButton: true, totalsRowFunction: "sum"},
+          {name: "WT_TARE", filterButton: true, totalsRowFunction: "sum"},
+          {name: "WT_NET", filterButton: true, totalsRowFunction: "sum"},
+          {name: "Shrink", filterButton: true},
+          {name: "ShrinkWt", filterButton: true, totalsRowFunction: "sum"},
+          {name: "Tons", filterButton: true, totalsRowFunction: "sum"},
+          {name: "CCGE CERTIFICATE", filterButton: true},
+          
+        ],
+        rows: []
+      });
 
       const map = new Map<number, string>([
         [1, "in"],
         [2, "dateOut"],
-        [4, "id"],
-        [5, "original_ticket"],
-        [6, "void"],
-        [7, "contractID"],
-        [8, "productName"],
-        [9, "clientName"],
-        [10, "driver"],
-        [11, "gross"],
-        [12, "tare"],
-        [13, "net"],
-        [14, ""],
-        [15, "dryWeight"],
-        [16, "mTons"],
-        [17, "CCGE"]
+        [3, "id"],
+        [4, "original_ticket"],
+        [5, "void"],
+        [6, "contractID"],
+        [7, "productName"],
+        [8, "clientName"],
+        [9, "driver"],
+        [10, "gross"],
+        [11, "tare"],
+        [12, "net"],
+        [13, ""],
+        [14, "dryWeight"],
+        [15, "mTons"],
+        [16, "CCGE"]
       ]);
 
-      map.forEach((id, col) => {
-        inTicketSheet.getColumn(col).key = id;
-        outTicketSheet.getColumn(col).key = id;
+      // map.forEach((id, col) => {
+      //   inTicketTable.getColumn(col).
+      //   outTicketSheet.getColumn(col).key = id;
+      // });
+      
+      console.log(inTicketTable);
+      ticketList.forEach(ticket => {
+        const row = [];
+        map.forEach((key, col) => {
+          row.push(ticket[key] ?? "");
+        });
+
+        console.log(row);
+        inTicketTable.addRow(row);
       });
+      inTicketTable.commit();
 
-      console.table(inTicketList);
-      inTicketSheet.insertRows(2, inTicketList, 'o');
+      console.table(ticketList);
 
-      this.workbookYTD.xlsx.writeBuffer().then((data) => {
+      testWorkbook.xlsx.writeBuffer().then((data) => {
         const blob = new Blob([data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         });
