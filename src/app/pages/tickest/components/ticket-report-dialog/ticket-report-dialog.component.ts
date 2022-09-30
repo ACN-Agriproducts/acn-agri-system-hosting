@@ -156,23 +156,23 @@ export class TicketReportDialogComponent implements OnInit {
         rows: []
       });
 
-      const map = new Map<number, string>([
-        [1, "in"],
-        [2, "dateOut"],
-        [3, "id"],
-        [4, "original_ticket"],
-        [5, "void"],
-        [6, "contractID"],
-        [7, "productName"],
-        [8, "clientName"],
-        [9, "driver"],
-        [10, "gross"],
-        [11, "tare"],
-        [12, "net"],
-        [13, ""],
-        [14, "dryWeight"],
-        [15, "mTons"],
-        [16, "CCGE"]
+      const map = new Map<number, {key: string, void: string}>([
+        [1, {key: "in", void: "in"}],
+        [2, {key: "dateOut", void: "dateOut"}],
+        [3, {key: "id", void: "id"}],
+        [4, {key: "original_ticket", void: ""}],
+        [5, {key: "void", void: "void"}],
+        [6, {key: "contractID", void: "contractID"}],
+        [7, {key: "productName", void: "productName"}],
+        [8, {key: "clientName", void: "voidReason"}],
+        [9, {key: "driver", void: "driver"}],
+        [10, {key: "gross", void: ""}],
+        [11, {key: "tare", void: ""}],
+        [12, {key: "net", void: ""}],
+        [13, {key: "", void: ""}],
+        [14, {key: "dryWeight", void: ""}],
+        [15, {key: "mTons", void: ""}],
+        [16, {key: "CCGE", void: ""}]
       ]);
 
       // map.forEach((id, col) => {
@@ -183,11 +183,10 @@ export class TicketReportDialogComponent implements OnInit {
       console.log(inTicketTable);
       ticketList.forEach(ticket => {
         const row = [];
-        map.forEach((key, col) => {
-          row.push(ticket[key] ?? "");
+        map.forEach((val, col) => {
+          row.push(ticket[ticket.void ? val.void : val.key] ?? "");
         });
 
-        console.log(row);
         inTicketTable.addRow(row);
       });
       inTicketTable.commit();
@@ -208,7 +207,7 @@ export class TicketReportDialogComponent implements OnInit {
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
-      })
+      });
     }
     else {
       const tableCollection = document.getElementsByClassName('ticket-report-table');
