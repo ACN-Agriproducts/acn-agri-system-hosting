@@ -83,8 +83,11 @@
     printSectionId="printable-report"
     [printStyle]='{"app-printable-ticket, .ticket-report-table" : { "page-break-after": "always" }}'
     >Print</button>
-  <button (click)="createExcelDoc()"
-    mat-button *ngIf="reportGenerated && reportOutputType == 1">Download</button>
+  <button 
+    (click)="createExcelDoc()"
+    mat-button 
+    *ngIf="reportGenerated && reportOutputType == 1">
+    Download</button>
   <mat-spinner [diameter]="20" *ngIf="generatingReport"></mat-spinner>
 </mat-dialog-actions>
 
