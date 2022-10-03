@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
+import { NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -14,6 +15,8 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
+  @ViewChild('itemForm') public itemForm: NgForm;
+
   public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
   public itemList: DialogInvoiceItem[];
@@ -98,9 +101,9 @@ export class SetItemsDialogComponent implements OnInit {
     return name !== '';
   }
 
-  /* public checkValidation(): boolean {
-    for (const item of this.itemList ?? []) {
-      console.log(item);
+  public validate(): boolean {
+    for (const controlName in this.itemForm.controls) {
+      console.log(controlName, this.itemForm.controls[controlName]);
     }
 
     return true;
@@ -108,7 +111,7 @@ export class SetItemsDialogComponent implements OnInit {
 
   public validateItem() {
 
-  } */
+  }
   
   public createItem(): DialogInvoiceItem {
     return {
