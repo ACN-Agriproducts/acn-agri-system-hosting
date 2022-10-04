@@ -101,16 +101,25 @@ export class SetItemsDialogComponent implements OnInit {
     return name !== '';
   }
 
-  public validate(): boolean {
-    for (const controlName in this.itemForm.controls) {
-      console.log(controlName, this.itemForm.controls[controlName]);
-    }
+  public validateAll(): { [key: string]: boolean }[] {
+    const infoValidity = this.currentItem.inventoryInfo.info.map(info => this.validateInfo(info));
 
-    return true;
+    console.log(infoValidity);
+    return infoValidity;
   }
 
-  public validateItem() {
+  public validateInfo(info: {
+    plant: string;
+    product: string;
+    quantity: number;
+    tank: string;
+  }): { [key: string]: boolean } {
+    const valueValidity = {};
 
+    for (const key in info) {
+      valueValidity[key] = info[key] != null && info[key] !== '';
+    }
+    return valueValidity;
   }
   
   public createItem(): DialogInvoiceItem {
