@@ -13,14 +13,15 @@
 							(ngModelChange)="applyFilter($event)"
 							[(ngModel)]="currentItem"
 							[matAutocomplete]="auto"
-							[ngModelOptions]="{ standalone: true }"
+							[ngModelOptions]="{ standalone: true }" 
+							[matAutocompleteDisabled]="itemForm.invalid"
 						>
 						<mat-autocomplete
 							#auto="matAutocomplete"
 							(optionSelected)="displayInvoiceItem($event)"
 							[displayWith]="displayFn"
 						>
-							<mat-option (click)="addItem()" [value]="createItem()">
+							<mat-option (click)="addItem()" [value]="currentItem">
 								<span class="add-option">
 									Add Item &nbsp; <mat-icon>add_box</mat-icon>
 								</span>
@@ -76,7 +77,7 @@
 				<ion-button
 					(click)="deleteItem()"
 					color="danger"
-					[disabled]="!itemSelected() || settingName"
+					[disabled]="!itemSelected()"
 					matTooltip="Delete Item"
 					matTooltipClass="tooltip-primary-solid"
 					matTooltipPosition="above"
@@ -104,8 +105,8 @@
 		<ng-template [ngIf]="currentItem.affectsInventory">
 			<div class="info-header">
 				Inventory Info
-				<button mat-icon-button
-					(click)="currentItem.inventoryInfo.info.unshift(createInfo())"
+				<button mat-icon-button type="button"
+					(click)="addInfo()" 
 					matTooltip="Add Inventory Info"
 					matTooltipClass="tooltip-primary-solid"
 					matTooltipPosition="right"
@@ -115,17 +116,17 @@
 				</button>
 			</div>
 			<div class="inventory-info">
-				<fieldset *ngFor="let item of currentItem.inventoryInfo.info; let index = index" [ngModelGroup]="currentItem.inventoryInfo.info[index]">
-					<mat-divider *ngIf="index !== 0"></mat-divider>
+				<ng-container *ngFor="let item of currentItem.inventoryInfo.info; let index = index; let first = first">
+					<mat-divider *ngIf="!first"></mat-divider>
 					<div class="info">
-						<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px"> 
+						<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
 							<mat-grid-tile colspan="6">
 								<mat-form-field appearance="fill">
 									<mat-label>Product</mat-label>
 									<mat-select
 										[(ngModel)]="item.product"
 										[disableOptionCentering]="true"
-										[name]="'product' + index"
+										name="product_{{ index }}"
 										required
 									>
 										<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
@@ -139,7 +140,7 @@
 									<input 
 										matInput 
 										[(ngModel)]="item.quantity" 
-										[name]="'quantity' + index" 
+										name="quantity_{{ index }}" 
 										type="number"
 										required
 									/>
@@ -148,7 +149,7 @@
 								</mat-form-field>
 							</mat-grid-tile>
 							<mat-grid-tile>
-								<button mat-icon-button
+								<button mat-icon-button type="button"
 									color="warn"
 									(click)="deleteInfo(index)"
 									matTooltip="Delete Inventory Info"
@@ -167,7 +168,7 @@
 									<mat-select #plant
 										[(ngModel)]="item.plant"
 										[disableOptionCentering]="true"
-										[name]="'plant' + index" 
+										name="plant_{{ index }}" 
 										required
 									>
 										<mat-option *ngFor="let plant of plantNameList" [value]="plant">{{ plant }}</mat-option>
@@ -182,7 +183,7 @@
 										[(ngModel)]="item.tank"
 										[disabled]="plant.value == ''"
 										[disableOptionCentering]="true"
-										[name]="'tank' + index" 
+										name="tank_{{ index }}" 
 										required
 									>
 										<mat-option *ngFor="let tank of getTankList(index)" [value]="tank">{{ tank }}</mat-option>
@@ -192,7 +193,7 @@
 							</mat-grid-tile>
 						</mat-grid-list>
 					</div>
-				</fieldset>
+				</ng-container>
 			</div>
 		</ng-template>
 	</form>
@@ -200,6 +201,6 @@
 
 <mat-dialog-actions>
 	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
-	<button mat-button (click)="validateAll()">Validate</button>
-	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="true">Confirm</button>
+	<button mat-button (click)="test()">Test</button>
+	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="itemForm.invalid">Confirm</button>
 </mat-dialog-actions>

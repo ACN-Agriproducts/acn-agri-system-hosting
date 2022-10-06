@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
-import { NgForm } from '@angular/forms';
+import { FormArray, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -17,8 +17,11 @@ import { Product } from '@shared/classes/product';
 export class SetItemsDialogComponent implements OnInit {
   @ViewChild('itemForm') public itemForm: NgForm;
 
+  private infoCount: number = 0;
+  public infoMap: Map<number, DialogInfo> = new Map<number, DialogInfo>();
   public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
+  public infoArray: FormArray;
   public itemList: DialogInvoiceItem[];
   public settingName: boolean = false;
   public settingNew: boolean = true;
@@ -70,24 +73,80 @@ export class SetItemsDialogComponent implements OnInit {
 
   public displayInvoiceItem(event: any): void {
     this.currentItem = event.option.value ?? this.currentItem;
+    this.setMap();
   }
 
-  public toggleSetName() {
+  public toggleSetName(): void {
     if (this.currentItem.name.trim() === "") return;
     this.settingName = !this.settingName;
   }
 
   public addItem(): void {
-    this.settingNew = true;
-    this.settingName = true;
+    if (this.itemForm.control.invalid) {
+      this.itemForm.control.markAllAsTouched();
+      return;
+    }
 
-    const newItem = this.createItem();
-    this.currentItem = newItem;
-    this.itemList.push(newItem);
+    this.settingNew = this.settingName = true;
+    this.currentItem = this.createItem();
+    this.addInfo();
+    this.itemList.push(this.currentItem);
+  }
+  
+  public createItem(): DialogInvoiceItem {
+    return {
+      affectsInventory: false,
+      inventoryInfo: {
+        info: []
+      },
+      name: "",
+      price: null,
+    };
   }
 
-  public getType(item: any): string {
-    return typeof item;
+  public addInfo(): void {
+    this.currentItem.inventoryInfo.info.push(this.createInfo());
+    this.setMap();
+  }
+  
+  public createInfo() {
+    return {
+      plant: "",
+      product: "",
+      tank: "",
+      quantity: null
+    };
+  }
+
+  public reset(): void {
+    if (this.itemForm.control.invalid) {
+      this.itemForm.control.markAllAsTouched();
+      return;
+    }
+
+    this.currentItem = this.createItem();
+    this.filteredOptions = this.itemList;
+  }
+
+  public async deleteItem(): Promise<void> {
+    if (!await this.confirm.openDialog("delete this Invoice Item")) return;
+    this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
+    this.reset();
+  }
+  
+  public deleteInfo(index: number): void {
+    console.log("deleteInfo");
+    const infoList = this.currentItem.inventoryInfo.info;
+    infoList.splice(index, 1);
+    this.setMap();
+
+    if (infoList.length === 0) infoList.push(this.createInfo());
+  }
+
+  public getTankList(index: number): string[] {
+    const plant = this.plantObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
+    return plant ? plant.inventoryNames : [];
+    // return plant?.inventoryNames ?? [];
   }
 
   public nameIsEditable(): boolean {
@@ -101,86 +160,49 @@ export class SetItemsDialogComponent implements OnInit {
     return name !== '';
   }
 
-  public validateAll(): { [key: string]: boolean }[] {
-    const infoValidity = this.currentItem.inventoryInfo.info.map(info => this.validateInfo(info));
-
-    console.log(infoValidity);
-    return infoValidity;
+  public setMap() {
+    this.infoMap.clear();
+    this.currentItem.inventoryInfo.info.forEach((info, index) => {
+      this.infoMap.set(index, info);
+    });
   }
 
-  public validateInfo(info: {
-    plant: string;
-    product: string;
-    quantity: number;
-    tank: string;
-  }): { [key: string]: boolean } {
-    const valueValidity = {};
-
-    for (const key in info) {
-      valueValidity[key] = info[key] != null && info[key] !== '';
-    }
-    return valueValidity;
-  }
-  
-  public createItem(): DialogInvoiceItem {
-    return {
-      affectsInventory: false,
-      inventoryInfo: {
-        info: [this.createInfo()]
-      },
-      name: "",
-      price: null,
-    };
-  }
-  
-  public createInfo() {
-    return {
-      plant: "",
-      product: "",
-      tank: "",
-      quantity: null
-    };
+  public test() {
+    console.log(this.currentItem.inventoryInfo.info);
+    console.log(this.itemForm.controls);
+    console.log(this.infoMap);
   }
 
-  public reset() {
-    this.currentItem = this.createItem();
-    this.filteredOptions = this.itemList;
-  }
+  // public validateAll(): { [key: string]: boolean }[] {
+  //   const infoValidity = this.currentItem.inventoryInfo.info.map(info => this.validateInfo(info));
+  //   return infoValidity;
+  // }
 
-  public async deleteItem() {
-    if (!await this.confirm.openDialog("delete this Invoice Item")) return;
-    this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
-    this.reset();
-  }
-  
-  public deleteInfo(index: number): void {
-    const infoList = this.currentItem.inventoryInfo.info;
-    infoList.splice(index, 1);
+  // public validateInfo(info: {
+  //   plant: string;
+  //   product: string;
+  //   quantity: number;
+  //   tank: string;
+  // }): { [key: string]: boolean } {
+  //   const valueValidity = {};
 
-    if (infoList.length === 0) infoList.push(this.createInfo());
-  }
-
-  public getTankList(index: number): string[] {
-    const plant = this.plantObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
-    return plant ? plant.inventoryNames : [];
-  }
+  //   for (const key in info) {
+  //     valueValidity[key] = info[key] != null && info[key] !== '';
+  //   }
+  //   return valueValidity;
+  // }
 }
 
 interface DialogInvoiceItem {
   affectsInventory: boolean;
   inventoryInfo: {
-    info: {
-      plant: string;
-      product: string;
-      quantity: number;
-      tank: string;
-    }[]
-  };
+    info: DialogInfo[];
+  }
   name: string;
   price: number;
 }
 
-/* interface DialogInvoiceItem2 {
+/* interface DialogInvoiceItem {
   affectsInventory: boolean;
   inventoryInfo: DialogInventoryInfo
   name: string;
@@ -188,12 +210,12 @@ interface DialogInvoiceItem {
 }
 
 interface DialogInventoryInfo {
-  info: Info[]
-}
+  info: DialogInfo[]
+} */
 
 interface DialogInfo {
   plant: string;
   product: string;
   quantity: number;
   tank: string;
-} */
+}
