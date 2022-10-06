@@ -17,8 +17,6 @@ import { Product } from '@shared/classes/product';
 export class SetItemsDialogComponent implements OnInit {
   @ViewChild('itemForm') public itemForm: NgForm;
 
-  private infoCount: number = 0;
-  public infoMap: Map<number, DialogInfo> = new Map<number, DialogInfo>();
   public currentItem: DialogInvoiceItem;
   public filteredOptions: any;
   public infoArray: FormArray;
@@ -73,7 +71,6 @@ export class SetItemsDialogComponent implements OnInit {
 
   public displayInvoiceItem(event: any): void {
     this.currentItem = event.option.value ?? this.currentItem;
-    this.setMap();
   }
 
   public toggleSetName(): void {
@@ -106,7 +103,6 @@ export class SetItemsDialogComponent implements OnInit {
 
   public addInfo(): void {
     this.currentItem.inventoryInfo.info.push(this.createInfo());
-    this.setMap();
   }
   
   public createInfo() {
@@ -135,10 +131,8 @@ export class SetItemsDialogComponent implements OnInit {
   }
   
   public deleteInfo(index: number): void {
-    console.log("deleteInfo");
     const infoList = this.currentItem.inventoryInfo.info;
     infoList.splice(index, 1);
-    this.setMap();
 
     if (infoList.length === 0) infoList.push(this.createInfo());
   }
@@ -160,17 +154,21 @@ export class SetItemsDialogComponent implements OnInit {
     return name !== '';
   }
 
-  public setMap() {
+  /* public setMap() {
     this.infoMap.clear();
     this.currentItem.inventoryInfo.info.forEach((info, index) => {
       this.infoMap.set(index, info);
     });
+  } */
+
+  public checkInvalid() {
+    if (this.itemForm.valid) return;
+    this.itemForm.form.markAllAsTouched();
   }
 
   public test() {
     console.log(this.currentItem.inventoryInfo.info);
     console.log(this.itemForm.controls);
-    console.log(this.infoMap);
   }
 
   // public validateAll(): { [key: string]: boolean }[] {
