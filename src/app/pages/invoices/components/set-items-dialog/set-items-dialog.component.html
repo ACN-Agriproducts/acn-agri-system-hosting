@@ -2,93 +2,73 @@
 <h2 mat-dialog-title>Set Invoice Items</h2>
 
 <mat-dialog-content>
-	<form #itemForm="ngForm">
-		<mat-grid-list cols="10" rowHeight="70px" gutterSize="5px">
-			<mat-grid-tile colspan="7">
-				<ng-template [ngIf]="!settingName" [ngIfElse]="setName">
-					<mat-form-field appearance="fill">
-						<mat-label>Item</mat-label>
-						<input
-							matInput
-							(ngModelChange)="applyFilter($event)"
-							[(ngModel)]="currentItem"
-							[matAutocomplete]="auto"
-							[ngModelOptions]="{ standalone: true }" 
-							[matAutocompleteDisabled]="itemForm.invalid"
-							[readonly]="itemForm.invalid" 
-							(click)="formValid()"
-						>
-						<mat-autocomplete
-							#auto="matAutocomplete"
-							(optionSelected)="displayInvoiceItem($event)"
-							[displayWith]="displayFn"
-						>
-							<mat-option (click)="addItem()" [value]="currentItem">
-								<span class="add-option">
-									Add Item &nbsp; <mat-icon>add_box</mat-icon>
-								</span>
-							</mat-option>
-							<mat-option *ngFor="let option of filteredOptions" [value]="option">
-								{{ option.name }}
-							</mat-option>
-						</mat-autocomplete>
-						<span class="name-icons" matSuffix>
-							<button
-								matSuffix
-								mat-icon-button
-								(click)="reset()"
-								*ngIf="currentItem.name && !settingName"
-								matTooltipClass="tooltip-primary-solid"
-								matTooltipPosition="right"
-								matTooltipShowDelay="1000"
-							>
-								<mat-icon>cancel</mat-icon>
-							</button>
-							<mat-icon matSuffix>arrow_drop_down</mat-icon>
-						</span>
-					</mat-form-field>
-				</ng-template>
-				<ng-template #setName>
+	<mat-form-field appearance="fill">
+		<mat-label>Item</mat-label>
+		<input
+			matInput
+			(ngModelChange)="applyFilter($event)"
+			[matAutocomplete]="auto"
+			[matAutocompleteDisabled]="false"
+		>
+		<mat-autocomplete
+			#auto="matAutocomplete"
+			(optionSelected)="displayInvoiceItem($event)"
+			[displayWith]="displayFn"
+		>
+			<mat-option (click)="addItem()" [value]="currentItem">
+				<span class="add-option">
+					Add Item &nbsp; <mat-icon>add_box</mat-icon>
+				</span>
+			</mat-option>
+			<mat-option *ngFor="let option of filteredOptions" [value]="option">
+				{{ option.name }}
+			</mat-option>
+		</mat-autocomplete>
+		<span class="name-icons" matSuffix>
+			<button
+				matSuffix
+				mat-icon-button
+				(click)="reset()"
+				*ngIf="itemSelected()"
+				matTooltipClass="tooltip-primary-solid"
+				matTooltipPosition="right"
+				matTooltipShowDelay="1000"
+			>
+				<mat-icon>cancel</mat-icon>
+			</button>
+			<mat-icon matSuffix>arrow_drop_down</mat-icon>
+		</span>
+	</mat-form-field>
+
+	<ng-template [ngIf]="itemSelected()">
+		<form #itemForm="ngForm">
+			<mat-grid-list cols="10" rowHeight="70px" gutterSize="5px">
+				<mat-grid-tile colspan="8">
 					<mat-form-field appearance="fill">
 						<mat-label>Name</mat-label>
 						<input
 							matInput
 							#name="ngModel"
-							(blur)="toggleSetName()"
-							(keyup.enter)="toggleSetName()"
 							[(ngModel)]="currentItem.name"
 							name="name"
 							required
 						>
 						<mat-error>Name is <strong>required</strong></mat-error>
 					</mat-form-field>
-				</ng-template>
-			</mat-grid-tile>
-			<mat-grid-tile colspan="3">
-				<ion-button
-					(click)="toggleSetName()"
-					[color]="settingName ? 'danger': 'primary'"
-					[disabled]="!itemSelected()"
-					[matTooltip]="settingName ? 'Stop Editing' : 'Edit Name'"
-					matTooltipClass="tooltip-primary-solid"
-					matTooltipPosition="above"
-					matTooltipShowDelay="1000"
-				>
-					<ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
-				</ion-button>
-				<ion-button
-					(click)="deleteItem()"
-					color="danger"
-					[disabled]="!itemSelected()"
-					matTooltip="Delete Item"
-					matTooltipClass="tooltip-primary-solid"
-					matTooltipPosition="above"
-					matTooltipShowDelay="1000"
-				>
-					<ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-				</ion-button>
-			</mat-grid-tile>
-			<ng-template [ngIf]="itemSelected()">
+				</mat-grid-tile>
+				<mat-grid-tile colspan="2">
+					<ion-button
+						(click)="deleteItem()"
+						color="danger"
+						[disabled]="!itemSelected()"
+						matTooltip="Delete Item"
+						matTooltipClass="tooltip-primary-solid"
+						matTooltipPosition="right"
+						matTooltipShowDelay="1000"
+					>
+						<ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+					</ion-button>
+				</mat-grid-tile>
 				<mat-grid-tile colspan="5">
 					<mat-form-field appearance="fill">
 						<mat-label>Price</mat-label>
@@ -96,113 +76,112 @@
 						<input matInput [(ngModel)]="currentItem.price" type="number" name="price">
 					</mat-form-field>
 				</mat-grid-tile>
-		
 				<mat-grid-tile colspan="5">
 					<mat-checkbox color="primary" [(ngModel)]="currentItem.affectsInventory" name="affectsInventory">
 						Affects Inventory
 					</mat-checkbox>
 				</mat-grid-tile>
+			</mat-grid-list>
+			<ng-template [ngIf]="currentItem.affectsInventory">
+				<div class="info-header">
+					Inventory Info
+					<button mat-icon-button type="button"
+						(click)="addInfo()"
+						matTooltip="Add Inventory Info"
+						matTooltipClass="tooltip-primary-solid"
+						matTooltipPosition="right"
+						matTooltipShowDelay="1000"
+					>
+						<mat-icon>add_box</mat-icon>
+					</button>
+				</div>
+				<div class="inventory-info">
+					<ng-container *ngFor="let item of currentItem.inventoryInfo.info; let index = index; let first = first">
+						<mat-divider *ngIf="!first"></mat-divider>
+						<div class="info">
+							<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
+								<mat-grid-tile colspan="6">
+									<mat-form-field appearance="fill">
+										<mat-label>Product</mat-label>
+										<mat-select
+											[(ngModel)]="item.product"
+											[disableOptionCentering]="true"
+											name="product_{{ index }}"
+											required
+										>
+											<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
+										</mat-select>
+										<mat-error>Product is <strong>required</strong></mat-error>
+									</mat-form-field>
+								</mat-grid-tile>
+								<mat-grid-tile colspan="3">
+									<mat-form-field appearance="fill">
+										<mat-label>Quantity</mat-label>
+										<input
+											matInput
+											[(ngModel)]="item.quantity"
+											name="quantity_{{ index }}"
+											type="number"
+											required
+										/>
+										<span matSuffix>lbs</span>
+										<mat-error>Quantity is <strong>required</strong></mat-error>
+									</mat-form-field>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<button mat-icon-button type="button"
+										color="warn"
+										(click)="deleteInfo(index)"
+										matTooltip="Delete Inventory Info"
+										matTooltipClass="tooltip-primary-solid"
+										matTooltipPosition="right"
+										matTooltipShowDelay="1000"
+									>
+										<mat-icon>delete</mat-icon>
+									</button>
+								</mat-grid-tile>
+							</mat-grid-list>
+							<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
+								<mat-grid-tile colspan="5">
+									<mat-form-field appearance="fill">
+										<mat-label>Plant</mat-label>
+										<mat-select #plant
+											[(ngModel)]="item.plant"
+											[disableOptionCentering]="true"
+											name="plant_{{ index }}"
+											required
+										>
+											<mat-option *ngFor="let plant of plantNameList" [value]="plant">{{ plant }}</mat-option>
+										</mat-select>
+										<mat-error>Plant is <strong>required</strong></mat-error>
+									</mat-form-field>
+								</mat-grid-tile>
+								<mat-grid-tile colspan="4">
+									<mat-form-field appearance="fill">
+										<mat-label>Tank</mat-label>
+										<mat-select
+											[(ngModel)]="item.tank"
+											[disabled]="plant.value == ''"
+											[disableOptionCentering]="true"
+											name="tank_{{ index }}"
+											required
+										>
+											<mat-option *ngFor="let tank of getTankList(index)" [value]="tank">{{ tank }}</mat-option>
+										</mat-select>
+										<mat-error>Tank is <strong>required</strong></mat-error>
+									</mat-form-field>
+								</mat-grid-tile>
+							</mat-grid-list>
+						</div>
+					</ng-container>
+				</div>
 			</ng-template>
-		</mat-grid-list>
-		<ng-template [ngIf]="currentItem.affectsInventory">
-			<div class="info-header">
-				Inventory Info
-				<button mat-icon-button type="button"
-					(click)="addInfo()" 
-					matTooltip="Add Inventory Info"
-					matTooltipClass="tooltip-primary-solid"
-					matTooltipPosition="right"
-					matTooltipShowDelay="1000"
-				>
-					<mat-icon>add_box</mat-icon>
-				</button>
-			</div>
-			<div class="inventory-info">
-				<ng-container *ngFor="let item of currentItem.inventoryInfo.info; let index = index; let first = first">
-					<mat-divider *ngIf="!first"></mat-divider>
-					<div class="info">
-						<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
-							<mat-grid-tile colspan="6">
-								<mat-form-field appearance="fill">
-									<mat-label>Product</mat-label>
-									<mat-select
-										[(ngModel)]="item.product"
-										[disableOptionCentering]="true"
-										name="product_{{ index }}"
-										required
-									>
-										<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
-									</mat-select>
-									<mat-error>Product is <strong>required</strong></mat-error>
-								</mat-form-field>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="3">
-								<mat-form-field appearance="fill">
-									<mat-label>Quantity</mat-label>
-									<input 
-										matInput 
-										[(ngModel)]="item.quantity" 
-										name="quantity_{{ index }}" 
-										type="number"
-										required
-									/>
-									<span matSuffix>lbs</span>
-									<mat-error>Quantity is <strong>required</strong></mat-error>
-								</mat-form-field>
-							</mat-grid-tile>
-							<mat-grid-tile>
-								<button mat-icon-button type="button"
-									color="warn"
-									(click)="deleteInfo(index)"
-									matTooltip="Delete Inventory Info"
-									matTooltipClass="tooltip-primary-solid"
-									matTooltipPosition="right"
-									matTooltipShowDelay="1000"
-								>
-									<mat-icon>delete</mat-icon>
-								</button>
-							</mat-grid-tile>
-						</mat-grid-list>
-						<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
-							<mat-grid-tile colspan="5">
-								<mat-form-field appearance="fill">
-									<mat-label>Plant</mat-label>
-									<mat-select #plant
-										[(ngModel)]="item.plant"
-										[disableOptionCentering]="true"
-										name="plant_{{ index }}" 
-										required
-									>
-										<mat-option *ngFor="let plant of plantNameList" [value]="plant">{{ plant }}</mat-option>
-									</mat-select>
-									<mat-error>Plant is <strong>required</strong></mat-error>
-								</mat-form-field>
-							</mat-grid-tile>
-							<mat-grid-tile colspan="4">
-								<mat-form-field appearance="fill">
-									<mat-label>Tank</mat-label>
-									<mat-select
-										[(ngModel)]="item.tank"
-										[disabled]="plant.value == ''"
-										[disableOptionCentering]="true"
-										name="tank_{{ index }}" 
-										required
-									>
-										<mat-option *ngFor="let tank of getTankList(index)" [value]="tank">{{ tank }}</mat-option>
-									</mat-select>
-									<mat-error>Tank is <strong>required</strong></mat-error>
-								</mat-form-field>
-							</mat-grid-tile>
-						</mat-grid-list>
-					</div>
-				</ng-container>
-			</div>
-		</ng-template>
-	</form>
+		</form>
+	</ng-template>
 </mat-dialog-content>
 
 <mat-dialog-actions>
 	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
 	<button mat-button (click)="test()">Test</button>
-	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="itemForm.invalid">Confirm</button>
+	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="true">Save</button>
 </mat-dialog-actions>
