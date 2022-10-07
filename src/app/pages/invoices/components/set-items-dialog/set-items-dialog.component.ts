@@ -79,10 +79,7 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public addItem(): void {
-    if (this.itemForm.control.invalid) {
-      this.itemForm.control.markAllAsTouched();
-      return;
-    }
+    if (!this.formValid()) return;
 
     this.settingNew = this.settingName = true;
     this.currentItem = this.createItem();
@@ -115,10 +112,7 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public reset(): void {
-    if (this.itemForm.control.invalid) {
-      this.itemForm.control.markAllAsTouched();
-      return;
-    }
+    if (!this.formValid()) return;
 
     this.currentItem = this.createItem();
     this.filteredOptions = this.itemList;
@@ -139,8 +133,8 @@ export class SetItemsDialogComponent implements OnInit {
 
   public getTankList(index: number): string[] {
     const plant = this.plantObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
-    return plant ? plant.inventoryNames : [];
-    // return plant?.inventoryNames ?? [];
+    // return plant ? plant.inventoryNames : [];
+    return plant?.inventoryNames ?? [];
   }
 
   public nameIsEditable(): boolean {
@@ -154,23 +148,22 @@ export class SetItemsDialogComponent implements OnInit {
     return name !== '';
   }
 
-  /* public setMap() {
-    this.infoMap.clear();
-    this.currentItem.inventoryInfo.info.forEach((info, index) => {
-      this.infoMap.set(index, info);
-    });
-  } */
-
-  public checkInvalid() {
-    if (this.itemForm.valid) return;
+  public formValid(): boolean {
+    if (this.itemForm.valid) return true;
     this.itemForm.form.markAllAsTouched();
+    this.snack.open("Please fill in the required * fields", 'error');
+    return false;
   }
 
   public test() {
     console.log(this.currentItem.inventoryInfo.info);
     console.log(this.itemForm.controls);
+    console.log(this.itemForm.valid);
+    console.log(this.itemForm.form.valid);
+    console.log(this.itemForm.control.valid);
   }
 
+  
   // public validateAll(): { [key: string]: boolean }[] {
   //   const infoValidity = this.currentItem.inventoryInfo.info.map(info => this.validateInfo(info));
   //   return infoValidity;

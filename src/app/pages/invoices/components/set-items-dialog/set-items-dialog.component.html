@@ -16,7 +16,7 @@
 							[ngModelOptions]="{ standalone: true }" 
 							[matAutocompleteDisabled]="itemForm.invalid"
 							[readonly]="itemForm.invalid" 
-							(click)="checkInvalid()"
+							(click)="formValid()"
 						>
 						<mat-autocomplete
 							#auto="matAutocomplete"
