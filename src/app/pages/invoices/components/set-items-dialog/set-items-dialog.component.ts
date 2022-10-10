@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { FormArray, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -16,12 +16,12 @@ import { Product } from '@shared/classes/product';
 })
 export class SetItemsDialogComponent implements OnInit {
   @ViewChild('itemForm') public itemForm: NgForm;
+  // @ViewChild('autoInput') public autoInput: ElementRef;
 
   public currentItem: DialogInvoiceItem = null;
   public filteredOptions: any;
   public infoArray: FormArray;
   public itemList: DialogInvoiceItem[];
-  public settingNew: boolean = true;
 
   public currentCompany: string;
   public plantNameList: string[];
@@ -70,17 +70,24 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentItem = event.option.value ?? this.currentItem;
   }
 
-  public reset(): void {
-    if (!this.formValid()) return;
+  public reset(button: boolean): void {
+    if (this.itemSelected() && !this.formValid() && button) {
+      this.itemForm.form.markAllAsTouched();
+      this.snack.open("Please fill in required * fields", 'error');
+      return;
+    }
 
     this.currentItem = null;
     this.filteredOptions = this.itemList;
   }
   
   public addItem(): void {
-    if (!this.formValid()) return;
+    if (this.itemSelected() && !this.formValid()) {
+      this.itemForm.form.markAllAsTouched();
+      this.snack.open("Please fill in required * fields", 'error');
+      return;
+    }
 
-    this.settingNew = true;
     this.currentItem = this.createItem();
     this.addInfo();
     this.itemList.push(this.currentItem);
@@ -100,7 +107,7 @@ export class SetItemsDialogComponent implements OnInit {
   public async deleteItem(): Promise<void> {
     if (!await this.confirm.openDialog("delete this Invoice Item")) return;
     this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
-    this.reset();
+    this.reset(false);
   }
 
   public addInfo(): void {
@@ -120,9 +127,10 @@ export class SetItemsDialogComponent implements OnInit {
     const infoList = this.currentItem.inventoryInfo.info;
     infoList.splice(index, 1);
 
-    if (infoList.length === 0) infoList.push(this.createInfo());
+    if (infoList.length === 0) {
+      infoList.push(this.createInfo());
+    }
   }
-
 
   public getTankList(index: number): string[] {
     const plant = this.plantObjList.find(p => this.currentItem.inventoryInfo.info[index].plant == p.ref.id);
@@ -134,13 +142,12 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public formValid(): boolean {
-    if (this.currentItem == null) return true;
     return (this.itemForm?.valid ?? true) ? true : false;
   }
 
   public test() {
-    console.log(this.currentItem);
-    console.log(this.currentItem?.name ?? "Null Item");
+    console.log("Valid:", this.formValid());
+    console.log("Selected:", this.itemSelected());
   }
 
   
