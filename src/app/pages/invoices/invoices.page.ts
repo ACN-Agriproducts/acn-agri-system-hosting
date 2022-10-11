@@ -119,9 +119,6 @@ export class InvoicesPage implements OnInit {
     const newItemListData = await lastValueFrom(dialogRef.afterClosed());
     if (newItemListData == null) return;
 
-    console.log(this.invoiceItemList);
-    console.log(newItemListData);
-
     const fallback = this.invoiceItemList;
     this.invoiceItemList = newItemListData;
 
