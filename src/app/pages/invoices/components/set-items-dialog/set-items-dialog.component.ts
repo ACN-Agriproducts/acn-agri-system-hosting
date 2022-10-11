@@ -151,10 +151,10 @@ export class SetItemsDialogComponent implements OnInit {
     return;
   } */
 
-  public test() {
+  /* public test() {
     console.log("Valid:", this.formValid());
     console.log("Selected:", this.itemSelected());
-  }
+  } */
 }
 
 export interface DialogInvoiceItem {
