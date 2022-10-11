@@ -10,6 +10,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetItemsDialogComponent } from './components/set-items-dialog/set-items-dialog.component';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { InvoiceItem } from '@shared/classes/invoice_item';
+import { Firestore } from '@angular/fire/firestore';
+import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
@@ -19,16 +22,25 @@ export class InvoicesPage implements OnInit {
   public date: Date;
   public filter: boolean;
   public template: any;
+  public currentCompany: string;
+  public invoiceItemList: InvoiceItem[];
 
   constructor(
     private dialog: MatDialog,
     private popoverController: PopoverController,
     private snack: SnackbarService,
     private toastController: ToastController,
-  ) { }
+    private db: Firestore,
+    private session: SessionInfo,
+    ) { }
 
   ngOnInit() {
     const data = document.getElementById('file-html-invoice');
+    this.currentCompany = this.session.getCompany();
+
+    InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
+      this.invoiceItemList = list;
+    });
   }
 
   public openContextMenu = async (ev) => {
@@ -100,11 +112,29 @@ export class InvoicesPage implements OnInit {
     return await popover.present();
   }
 
-  public setInvoiceItems = () => {
+  public setInvoiceItems = async (): Promise<void> => {
     const dialogRef = this.dialog.open(SetItemsDialogComponent, {
       autoFocus: false
     });
-    
+    const newItemListData = await lastValueFrom(dialogRef.afterClosed());
+    if (newItemListData == null) return;
+
+    console.log(this.invoiceItemList);
+    console.log(newItemListData);
+
+    const fallback = this.invoiceItemList;
+    this.invoiceItemList = newItemListData;
+
+    const complete = this.invoiceItemList.every(item => {
+      item.set().catch(error => {
+        this.snack.open(error, 'error');
+        this.invoiceItemList = fallback;
+        return false;
+      });
+      return true;
+    });
+
+    if (complete) this.snack.open("Item List Successfully Updated", 'success');
   }
 
   chosenYearHandler(event: any) {

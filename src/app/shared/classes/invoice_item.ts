@@ -23,9 +23,9 @@ export class InvoiceItem extends FirebaseDocInterface {
         toFirestore(data: InvoiceItem): DocumentData {
             return {
                 affectsInventory: data.affectsInventory,
-                inventoryInfo: data.inventoryInfo,
+                inventoryInfo: data.inventoryInfo.getRawData(),
                 name: data.name,
-                price: data.price
+                price: data.price ?? null
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): InvoiceItem {
@@ -66,6 +66,12 @@ class inventoryInfo {
             this.info.push(new info(element));
         });
     }
+
+    public getRawData(): any {
+        return {
+            info: this.info.map(element => element.getRawData())
+        }
+    }
 }
 
 class info {
@@ -79,5 +85,9 @@ class info {
         this.product = data.product;
         this.quantity = data.quantity;
         this.tank = data.tank;
+    }
+
+    public getRawData() {
+        return Object.assign({}, this);
     }
 }

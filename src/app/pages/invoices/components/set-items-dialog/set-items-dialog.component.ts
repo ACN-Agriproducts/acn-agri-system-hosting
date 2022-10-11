@@ -1,7 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { DocumentReference, Firestore } from '@angular/fire/firestore';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { FormArray, NgForm } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -145,33 +144,20 @@ export class SetItemsDialogComponent implements OnInit {
     return (this.itemForm?.valid ?? true) ? true : false;
   }
 
+  /* public async save(): Promise<void> {
+    this.itemList.update({
+      
+    })
+    return;
+  } */
+
   public test() {
     console.log("Valid:", this.formValid());
     console.log("Selected:", this.itemSelected());
   }
-
-  
-  // public validateAll(): { [key: string]: boolean }[] {
-  //   const infoValidity = this.currentItem.inventoryInfo.info.map(info => this.validateInfo(info));
-  //   return infoValidity;
-  // }
-
-  // public validateInfo(info: {
-  //   plant: string;
-  //   product: string;
-  //   quantity: number;
-  //   tank: string;
-  // }): { [key: string]: boolean } {
-  //   const valueValidity = {};
-
-  //   for (const key in info) {
-  //     valueValidity[key] = info[key] != null && info[key] !== '';
-  //   }
-  //   return valueValidity;
-  // }
 }
 
-interface DialogInvoiceItem {
+export interface DialogInvoiceItem {
   affectsInventory: boolean;
   inventoryInfo: {
     info: DialogInfo[];
@@ -179,17 +165,6 @@ interface DialogInvoiceItem {
   name: string;
   price: number;
 }
-
-/* interface DialogInvoiceItem {
-  affectsInventory: boolean;
-  inventoryInfo: DialogInventoryInfo
-  name: string;
-  price: number;
-}
-
-interface DialogInventoryInfo {
-  info: DialogInfo[]
-} */
 
 interface DialogInfo {
   plant: string;
