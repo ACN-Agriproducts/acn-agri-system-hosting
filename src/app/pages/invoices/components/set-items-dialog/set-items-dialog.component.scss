@@ -4,6 +4,7 @@ mat-dialog-content {
     flex-direction: column;
     min-width: 425px;
     width: 30vw;
+    max-width: 500px;
 }
 
 form {
@@ -20,6 +21,14 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
 	-moz-appearance: textfield;
+}
+
+mat-form-field:has(mat-autocomplete) {
+    font-weight: 500;
+    font-size: 1.05em;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: #0000000A;
 }
 
 mat-option, .mat-list-item  {
@@ -46,7 +55,6 @@ mat-option, .mat-list-item  {
 
     ion-button {
         height: 45px;
-        width: 52px;
     }
 }
 

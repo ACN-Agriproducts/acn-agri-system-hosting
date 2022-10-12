@@ -15,7 +15,6 @@ import { Product } from '@shared/classes/product';
 })
 export class SetItemsDialogComponent implements OnInit {
   @ViewChild('itemForm') public itemForm: NgForm;
-  // @ViewChild('autoInput') public autoInput: ElementRef;
 
   public currentItem: DialogInvoiceItem = null;
   public filteredOptions: any;
@@ -62,7 +61,7 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public displayFn(event: any): string {
-    return event?.name ?? "";
+    return (event?.name ?? "" as string).toUpperCase();
   }
 
   public displayInvoiceItem(event: any): void {
@@ -143,18 +142,6 @@ export class SetItemsDialogComponent implements OnInit {
   public formValid(): boolean {
     return (this.itemForm?.valid ?? true) ? true : false;
   }
-
-  /* public async save(): Promise<void> {
-    this.itemList.update({
-      
-    })
-    return;
-  } */
-
-  /* public test() {
-    console.log("Valid:", this.formValid());
-    console.log("Selected:", this.itemSelected());
-  } */
 }
 
 export interface DialogInvoiceItem {
