@@ -9,7 +9,7 @@
 <mat-dialog-content>
 	<mat-drawer-container>
 		<mat-drawer #drawer [disableClose]="!itemSelected()" mode="over" opened>
-			<mat-selection-list [multiple]="false" (selectionChange)="displayInvoiceItem($event)" >
+			<mat-selection-list [multiple]="false" (selectionChange)="displayInvoiceItem($event)">
 				<mat-list-option (click)="addItem()" [value]="currentItem">
 					<span class="add-option">
 						Add Item &nbsp; <mat-icon>add_box</mat-icon>

@@ -17,7 +17,7 @@ export class SetItemsDialogComponent implements OnInit {
   @ViewChild('itemForm') public itemForm: NgForm;
 
   public currentItem: DialogInvoiceItem = null;
-  public filteredOptions: any;
+  // public filteredOptions: any;
   public infoArray: FormArray;
   public itemList: DialogInvoiceItem[];
 
@@ -38,7 +38,8 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentCompany = this.session.getCompany();
 
     InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
-      this.filteredOptions = this.itemList = list;
+      // this.filteredOptions = this.itemList = list;
+      this.itemList = list;
     });
 
     Plant.getPlantList(this.db, this.currentCompany)
@@ -55,17 +56,20 @@ export class SetItemsDialogComponent implements OnInit {
     });
   }
 
-  public applyFilter(event: any): void {
-    const value = typeof event == "string" ? event.toLowerCase() : event?.name.toLowerCase();
-    this.filteredOptions = this.itemList.filter(item => item.name.toLowerCase().includes(value));
-  }
+  // public applyFilter(event: any): void {
+  //   const value = typeof event == "string" ? event.toLowerCase() : event?.name.toLowerCase();
+  //   this.filteredOptions = this.itemList.filter(item => item.name.toLowerCase().includes(value));
+  // }
 
-  public displayFn(event: any): string {
-    return (event?.name ?? "" as string).toUpperCase();
-  }
+  // public displayFn(event: any): string {
+  //   return (event?.name ?? "" as string).toUpperCase();
+  // }
 
   public displayInvoiceItem(event: any): void {
-    console.log(event.options[0]._value);
+    if (!this.formValid()) {
+      this.snack.open("Please fill in required * fields", 'error');
+      return;
+    }
     this.currentItem = event.options[0]?._value ?? this.currentItem;
   }
 
@@ -77,7 +81,7 @@ export class SetItemsDialogComponent implements OnInit {
     }
 
     this.currentItem = null;
-    this.filteredOptions = this.itemList;
+    // this.filteredOptions = this.itemList;
   }
   
   public addItem(): void {
@@ -106,7 +110,8 @@ export class SetItemsDialogComponent implements OnInit {
   public async deleteItem(): Promise<void> {
     if (!await this.confirm.openDialog("delete this Invoice Item")) return;
     this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
-    this.reset(false);
+    // this.reset(false);
+    this.currentItem = null;
   }
 
   public addInfo(): void {
