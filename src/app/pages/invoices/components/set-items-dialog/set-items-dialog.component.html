@@ -9,7 +9,7 @@
 <mat-dialog-content>
 	<mat-drawer-container>
 		<mat-drawer #drawer [disableClose]="!itemSelected()" mode="over" opened>
-			<mat-selection-list [multiple]="false" (selectionChange)="displayInvoiceItem($event)">
+			<mat-selection-list #selectList [multiple]="false" (selectionChange)="selectItem($event)">
 				<mat-list-option (click)="addItem()" [value]="currentItem">
 					<span class="add-option">
 						Add Item &nbsp; <mat-icon>add_box</mat-icon>
@@ -19,47 +19,6 @@
 			</mat-selection-list>
 		</mat-drawer>
 		<mat-drawer-content>
-			<!-- <mat-form-field appearance="outline">
-				<mat-label>Item</mat-label>
-				<input
-					matInput
-					#autoInput
-					placeholder="Search or Select Item to View/Edit"
-					(ngModelChange)="applyFilter($event)"
-					[(ngModel)]="currentItem"
-					[matAutocomplete]="auto"
-					[matAutocompleteDisabled]="itemSelected() && !formValid()"
-					[readonly]="itemSelected() && !formValid()"
-				>
-				<mat-autocomplete
-					#auto="matAutocomplete"
-					(optionSelected)="displayInvoiceItem($event)"
-					[displayWith]="displayFn"
-				>
-					<mat-option (click)="addItem()" [value]="currentItem">
-						<span class="add-option">
-							Add Item &nbsp; <mat-icon>add_box</mat-icon>
-						</span>
-					</mat-option>
-					<mat-option *ngFor="let option of filteredOptions" [value]="option">
-						{{ option.name }}
-					</mat-option>
-				</mat-autocomplete>
-				<span class="name-icons" matSuffix>
-					<button
-						matSuffix
-						mat-icon-button
-						(click)="reset(true)"
-						*ngIf="itemSelected()"
-						matTooltipClass="tooltip-primary-solid"
-						matTooltipPosition="right"
-						matTooltipShowDelay="1000"
-					>
-						<mat-icon>cancel</mat-icon>
-					</button>
-					<mat-icon matSuffix>arrow_drop_down</mat-icon>
-				</span>
-			</mat-form-field> -->
 			<ng-template [ngIf]="itemSelected()">
 				<form #itemForm="ngForm">
 					<mat-grid-list cols="10" rowHeight="70px" gutterSize="5px">

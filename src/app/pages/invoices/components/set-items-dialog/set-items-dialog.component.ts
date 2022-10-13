@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { FormArray, NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { MatSelectionList } from '@angular/material/list';
+import { MatDrawer } from '@angular/material/sidenav';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -14,11 +16,11 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./set-items-dialog.component.scss'],
 })
 export class SetItemsDialogComponent implements OnInit {
-  @ViewChild('itemForm') public itemForm: NgForm;
+  @ViewChild('itemForm') private itemForm: NgForm;
+  @ViewChild('drawer') private drawer: MatDrawer;
+  @ViewChild('selectList') private selectList: MatSelectionList;
 
   public currentItem: DialogInvoiceItem = null;
-  // public filteredOptions: any;
-  public infoArray: FormArray;
   public itemList: DialogInvoiceItem[];
 
   public currentCompany: string;
@@ -38,7 +40,6 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentCompany = this.session.getCompany();
 
     InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
-      // this.filteredOptions = this.itemList = list;
       this.itemList = list;
     });
 
@@ -56,44 +57,30 @@ export class SetItemsDialogComponent implements OnInit {
     });
   }
 
-  // public applyFilter(event: any): void {
-  //   const value = typeof event == "string" ? event.toLowerCase() : event?.name.toLowerCase();
-  //   this.filteredOptions = this.itemList.filter(item => item.name.toLowerCase().includes(value));
-  // }
-
-  // public displayFn(event: any): string {
-  //   return (event?.name ?? "" as string).toUpperCase();
-  // }
-
-  public displayInvoiceItem(event: any): void {
+  public selectItem(event: any): void {
     if (!this.formValid()) {
-      this.snack.open("Please fill in required * fields", 'error');
+      this.showInvalid();
       return;
     }
     this.currentItem = event.options[0]?._value ?? this.currentItem;
-  }
-
-  public reset(button: boolean): void {
-    if (this.itemSelected() && !this.formValid() && button) {
-      this.itemForm.form.markAllAsTouched();
-      this.snack.open("Please fill in required * fields", 'error');
-      return;
-    }
-
-    this.currentItem = null;
-    // this.filteredOptions = this.itemList;
+    this.drawer.close();
   }
   
   public addItem(): void {
     if (this.itemSelected() && !this.formValid()) {
-      this.itemForm.form.markAllAsTouched();
-      this.snack.open("Please fill in required * fields", 'error');
+      this.showInvalid();
       return;
     }
 
     this.currentItem = this.createItem();
     this.addInfo();
     this.itemList.push(this.currentItem);
+  }
+
+  public showInvalid() {
+    this.itemForm.form.markAllAsTouched();
+    this.snack.open("Please fill in required * fields", 'error');
+    this.selectList.deselectAll();
   }
   
   public createItem(): DialogInvoiceItem {
@@ -110,8 +97,8 @@ export class SetItemsDialogComponent implements OnInit {
   public async deleteItem(): Promise<void> {
     if (!await this.confirm.openDialog("delete this Invoice Item")) return;
     this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
-    // this.reset(false);
     this.currentItem = null;
+    this.drawer.open();
   }
 
   public addInfo(): void {
