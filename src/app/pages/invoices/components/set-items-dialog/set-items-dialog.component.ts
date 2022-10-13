@@ -65,7 +65,8 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public displayInvoiceItem(event: any): void {
-    this.currentItem = event.option.value ?? this.currentItem;
+    console.log(event.options[0]._value);
+    this.currentItem = event.options[0]?._value ?? this.currentItem;
   }
 
   public reset(button: boolean): void {

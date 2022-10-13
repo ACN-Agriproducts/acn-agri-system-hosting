@@ -5,22 +5,20 @@ mat-dialog-content {
     min-width: 425px;
     width: 30vw;
     max-width: 500px;
+    min-height: 350px;
 }
 
 form {
     width: 100%;
 }
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
+mat-drawer-container {
+    flex: 1 0 auto;
+    background-color: unset;
 
-/* Firefox */
-input[type=number] {
-	-moz-appearance: textfield;
+    mat-select-list {
+        background-color: var(--ion-color-light);
+    };
 }
 
 mat-form-field:has(mat-autocomplete) {
@@ -52,7 +50,7 @@ mat-option, .mat-list-item  {
 ::ng-deep .mat-grid-tile-content:has(ion-button) {
     align-items: flex-start;
     margin-left: 10px;
-
+    
     ion-button {
         height: 45px;
     }
@@ -87,7 +85,7 @@ mat-checkbox {
     .mat-form-field-outline-end {
         background-color: white;
     }
-
+    
     ion-button {
         margin: 20px;
         text-transform: none;
@@ -106,4 +104,16 @@ mat-grid-tile:has(button) {
 mat-dialog-actions {
     display: flex;
     justify-content: space-between;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }
