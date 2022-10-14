@@ -24,7 +24,7 @@ mat-drawer-container {
 mat-option, .mat-list-item  {
     font-size: 1em;
 }
-.add-option {
+#add-option {
     display: flex;
     align-items: center;
     mat-icon {
@@ -48,7 +48,7 @@ mat-checkbox {
     top: -10px;
 }
 
-.info-header {
+#info-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -60,7 +60,7 @@ mat-checkbox {
     padding: 10px 15px;
     margin-top: 5px;
 }
-.inventory-info ::ng-deep {
+#inventory-info ::ng-deep {
     background-color: var(--ion-color-light);
     border-radius: 5px;
     flex-grow: 1;
@@ -81,6 +81,18 @@ mat-checkbox {
 }
 .info {
     padding: 20px 20px 0 20px;
+}
+
+div:has(> mat-icon) {
+    display: flex;
+    justify-content: center;
+
+    mat-icon {
+        height: 225px;
+        width: 225px;
+        font-size: 225px;
+        color: rgba(gray, 10%);
+    }
 }
 
 mat-grid-tile:has(button) {
