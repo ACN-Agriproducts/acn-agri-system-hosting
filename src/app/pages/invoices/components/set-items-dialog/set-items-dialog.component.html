@@ -15,7 +15,10 @@
 						Add Item &nbsp; <mat-icon>add_box</mat-icon>
 					</span>
 				</mat-list-option>
-				<mat-list-option *ngFor="let item of itemList" [value]="item">{{ item.name }}</mat-list-option>
+				<mat-list-option *ngFor="let item of itemList" [value]="item">
+					<ng-template [ngIf]="item.name !== ''" [ngIfElse]="noName">{{ item.name }}</ng-template>
+					<ng-template #noName><ion-text color="danger">---</ion-text></ng-template>
+				</mat-list-option>
 			</mat-selection-list>
 		</mat-drawer>
 		<mat-drawer-content>
