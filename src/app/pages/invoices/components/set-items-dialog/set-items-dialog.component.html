@@ -1,8 +1,9 @@
 
-<h2 mat-dialog-title>
-	<button mat-icon-button (click)="drawer.toggle()" [disabled]="!itemSelected()">
+<h2 mat-dialog-title class="align-text-icon">
+	<button mat-icon-button class="align-icon" (click)="drawer.toggle()" [disabled]="!itemSelected()">
 		<mat-icon>menu</mat-icon>
 	</button>
+	&nbsp;
 	Set Invoice Items
 </h2>
 
@@ -11,8 +12,8 @@
 		<mat-drawer #drawer [disableClose]="!itemSelected()" mode="over" opened>
 			<mat-selection-list #selectList [multiple]="false" (selectionChange)="selectItem($event)">
 				<mat-list-option (click)="addItem()" [value]="currentItem">
-					<span id="add-option">
-						Add Item &nbsp; <mat-icon>add_box</mat-icon>
+					<span class="align-text-icon">
+						Add Item &nbsp; <mat-icon class="align-icon">add_box</mat-icon>
 					</span>
 				</mat-list-option>
 				<mat-list-option *ngFor="let item of itemList" [value]="item">

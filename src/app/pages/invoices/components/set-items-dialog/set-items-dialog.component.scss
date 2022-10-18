@@ -24,10 +24,10 @@ mat-drawer-container {
 mat-option, .mat-list-item  {
     font-size: 1em;
 }
-#add-option {
+.align-text-icon {
     display: flex;
     align-items: center;
-    mat-icon {
+    .align-icon {
         display: flex;
         justify-content: center;
         align-items: center;
