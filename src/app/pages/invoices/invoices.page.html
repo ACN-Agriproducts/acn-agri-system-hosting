@@ -20,6 +20,9 @@
       <ion-button (click)="openOption($event)">
         <ion-text slot="end">New Invoice</ion-text>
       </ion-button>
+      <ion-button (click)="setInvoiceItems()">
+        <ion-text slot="end">Set Items</ion-text>
+      </ion-button>
     </div>
   </div>
   <div class="content-filter magin-inline" *ngIf="filter">

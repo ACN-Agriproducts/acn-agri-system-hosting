@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators, FormArray, ValidationErrors, Valida
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { AlertController, NavController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { WarehouseReceiptGroup } from '@shared/classes/WarehouseReceiptGroup';
