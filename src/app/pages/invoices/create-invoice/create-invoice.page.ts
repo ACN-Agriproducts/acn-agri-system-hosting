@@ -149,7 +149,6 @@ export class CreateInvoicePage implements OnInit {
   addInventoryInfo(index: number): void {
     const infos = this.invoiceForm.get(['items', index, 'inventoryInfo', 'info']) as UntypedFormArray;
     infos.push(this.createInventoryInfo());
-    
   }
 
   deleteInventoryInfo(invIndex: number, infoIndex: number): void {
