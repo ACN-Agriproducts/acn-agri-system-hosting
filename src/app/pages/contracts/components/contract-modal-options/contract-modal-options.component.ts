@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Firestore, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
@@ -26,6 +27,7 @@ export class ContractModalOptionsComponent implements OnInit {
     private dialog: MatDialog,
     private navController: NavController,
     private snack: SnackbarService,
+    private confirm: ConfirmationDialogService,
     ) { }
 
   ngOnInit() {}
@@ -73,8 +75,8 @@ export class ContractModalOptionsComponent implements OnInit {
     });
   }
 
-  public closeContract() {
-    if(this.contract.status != "active") {
+  public async closeContract() {
+    if(this.contract.status != "active" || await this.confirm.openDialog("close this Contract")) {
       return;
     }
 
