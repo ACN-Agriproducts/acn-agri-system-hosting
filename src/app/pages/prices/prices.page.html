@@ -2,7 +2,11 @@
 
 
 <ion-content>
-  <form>
-    
-  </form>
+  <div class="prices-table" *ngFor="let priceType of prices | keyvalue">
+    <div class="prices-table-row" *ngFor="let productType of productTypes">
+      <div class="prices-table-cell" *ngFor="let location of priceType.value | keyvalue">
+        {{ location.value[productType] }}
+      </div>
+    </div>
+  </div>
 </ion-content>
