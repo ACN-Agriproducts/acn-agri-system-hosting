@@ -7,6 +7,7 @@ import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
 import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
+import { CloseContractFieldsDialogComponent } from '../close-contract-fields-dialog/close-contract-fields-dialog.component';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -76,12 +77,32 @@ export class ContractModalOptionsComponent implements OnInit {
   }
 
   public async closeContract() {
-    if(this.contract.status != "active" || await this.confirm.openDialog("close this Contract")) {
+    if(this.contract.status != "active" || !await this.confirm.openDialog("close this contract")) {
       return;
     }
 
+    const requiredFieldData = {
+      marketPrice: this.contract.market_price,
+      price: this.contract.pricePerBushel,
+      quantity: this.contract.quantity
+    };
+
+    let newFieldData;
+    if (Object.entries(requiredFieldData).some(([key, value]) => value ?? 0 === 0)) {
+      const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
+        data: requiredFieldData,
+        autoFocus: false
+      });
+      newFieldData = await lastValueFrom(dialogRef.afterClosed());
+    }
+
+    if (newFieldData == null) return;
+
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
-      status: "closed"
-    })
+      status: "closed",
+      market_price: newFieldData.marketPrice,
+      price: newFieldData.price,
+      quantity: newFieldData.quantity
+    });
   }
 }
