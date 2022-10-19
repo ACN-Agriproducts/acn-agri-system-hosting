@@ -1,0 +1,29 @@
+<h2>Required Fields</h2>
+
+<mat-dialog-content>
+	<form #requiredFieldsForm>
+		<mat-form-field appearance="fill">
+			<mat-label>Quantity</mat-label>
+			<input matInput required type="number" [(ngModel)]="data.quantity" name="quantity">
+			<span matSuffix>lbs</span>
+			<mat-error>Quantity is <strong>required</strong></mat-error>
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+			<mat-label>Price</mat-label>
+			<span matPrefix>$ &nbsp;</span>
+			<input matInput required type="number" [(ngModel)]="data.price" name="price">
+			<mat-error>Price is <strong>required</strong></mat-error>
+		</mat-form-field>
+		<mat-form-field appearance="fill">
+			<mat-label>Market Price</mat-label>
+			<span matPrefix>$ &nbsp;</span>
+			<input matInput required type="number" [(ngModel)]="data.marketPrice" name="marketPrice">
+			<mat-error>Market Price is <strong>required</strong></mat-error>
+		</mat-form-field>
+	</form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
+	<button mat-button color="primary" [mat-dialog-close]="null" [disabled]="true">Confirm</button>
+</mat-dialog-actions>

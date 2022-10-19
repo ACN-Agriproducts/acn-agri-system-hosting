@@ -15,6 +15,7 @@ import { OptionFilterComponent } from './components/option-filter/option-filter.
 import { FilterComponent } from './components/filter/filter.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { SharedModule } from '@shared/shared.module';
+import { CloseContractFieldsDialogComponent } from './components/close-contract-fields-dialog/close-contract-fields-dialog.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { SharedModule } from '@shared/shared.module';
     ShowDetailsComponent,
     OptionFilterComponent,
     FilterComponent,
-    ContractModalOptionsComponent
+    ContractModalOptionsComponent,
+    CloseContractFieldsDialogComponent,
   ]
 })
 export class ContractsPageModule { }
