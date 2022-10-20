@@ -97,17 +97,6 @@ export class ContractModalOptionsComponent implements OnInit {
       if (newFieldData == null) return;
     }
 
-    /* console.log("Before", newFieldData);
-
-    if (newFieldData == null) {
-      newFieldData = {};
-      Object.assign(newFieldData, requiredFieldData);
-      console.log("After", newFieldData);
-    }
-
-    console.log("Closed contract with:", newFieldData);
-    return; */
-
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "closed",
       market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
