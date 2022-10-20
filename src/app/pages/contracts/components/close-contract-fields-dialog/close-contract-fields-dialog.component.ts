@@ -19,7 +19,11 @@ export class CloseContractFieldsDialogComponent implements OnInit {
   ngOnInit() {
     console.log(this.data);
     this.snack.open("Required fields must be filled before closing", 'error');
-    this.requiredFieldsForm?.form.markAllAsTouched();
   }
 
+  public confirm(): any {
+    console.log("Closing from confirm");
+    return null;
+  }
 }
+
