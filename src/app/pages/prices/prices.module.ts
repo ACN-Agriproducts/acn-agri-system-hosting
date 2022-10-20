@@ -9,6 +9,7 @@ import { PricesPageRoutingModule } from './prices-routing.module';
 import { PricesPage } from './prices.page';
 import { CoreModule } from '@core/core.module';
 import { FieldRenameComponent } from './field-rename/field-rename.component';
+import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,10 @@ import { FieldRenameComponent } from './field-rename/field-rename.component';
     PricesPageRoutingModule,
     CoreModule
   ],
-  declarations: [PricesPage, FieldRenameComponent]
+  declarations: [
+    PricesPage, 
+    FieldRenameComponent,
+    NewTableDialogComponent
+  ]
 })
 export class PricesPageModule {}
