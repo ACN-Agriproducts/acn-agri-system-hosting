@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
@@ -13,17 +13,22 @@ export class CloseContractFieldsDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<CloseContractFieldsDialogComponent>,
     private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
     this.snack.open("Required fields must be filled before closing", 'error');
   }
 
-  public confirm(): any {
-    console.log("Closing from confirm");
-    return null;
+  public confirm(): void {
+    if (this.requiredFieldsForm?.valid) {
+      this.dialogRef.close(this.data);
+      return;
+    }
+
+    this.requiredFieldsForm?.form.markAllAsTouched();
+    this.snack.open("Required fields must be filled before closing", "error");
   }
 }
 

@@ -69,7 +69,7 @@ export class ContractModalOptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      this.snack.open("Signed Contract successfully uploaded.", 'success');
+      this.snack.open("Signed Contract Successfully Uploaded", 'success');
     })
     .catch(error => {
       this.snack.open(error, 'error');
@@ -88,21 +88,37 @@ export class ContractModalOptionsComponent implements OnInit {
     };
 
     let newFieldData;
-    if (Object.entries(requiredFieldData).some(([key, value]) => value ?? 0 === 0)) {
+    if (Object.entries(requiredFieldData).some(([key, value]) => (value ?? 0) === 0)) {
       const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
         data: requiredFieldData,
         autoFocus: false
       });
       newFieldData = await lastValueFrom(dialogRef.afterClosed());
+      if (newFieldData == null) return;
     }
 
-    if (newFieldData == null) return;
+    /* console.log("Before", newFieldData);
+
+    if (newFieldData == null) {
+      newFieldData = {};
+      Object.assign(newFieldData, requiredFieldData);
+      console.log("After", newFieldData);
+    }
+
+    console.log("Closed contract with:", newFieldData);
+    return; */
 
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "closed",
-      market_price: newFieldData.marketPrice,
-      price: newFieldData.price,
-      quantity: newFieldData.quantity
+      market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
+      pricePerBushel: newFieldData?.price ?? requiredFieldData.price,
+      quantity: newFieldData?.quantity ?? requiredFieldData.quantity
+    })
+    .then(() => {
+      this.snack.open("Contract Successfully Closed", "success");
+    })
+    .catch(error => {
+      this.snack.open(error, "error");
     });
   }
 }
