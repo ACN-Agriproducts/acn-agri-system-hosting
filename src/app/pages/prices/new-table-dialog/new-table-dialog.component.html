@@ -15,5 +15,11 @@
 </div>
 <div mat-dialog-actions>
   <button mat-flat-button [mat-dialog-close]="null" color="accent">Cancel</button>
-  <button mat-flat-button [mat-dialog-close]="returnData" color="primary">Ok</button>
+  <button 
+    mat-flat-button 
+    [mat-dialog-close]="returnData" 
+    color="primary"
+    [disabled]="!validName()"
+    >Ok
+  </button>
 </div>
