@@ -27,4 +27,8 @@ export class NewTableDialogComponent implements OnInit {
   accept() {
     this.dialogRef.close(this.returnData);
   }
+
+  validName(): boolean {
+    return this.names.every(n => n != this.returnData.name);
+  } 
 }
