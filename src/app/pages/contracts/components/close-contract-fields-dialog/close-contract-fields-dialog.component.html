@@ -43,8 +43,7 @@
 				[(ngModel)]="data.marketPrice" 
 				#marketPrice="ngModel" 
 				name="marketPrice" 
-				type="number" 
-				min="0"
+				type="number"
 			>
 			<mat-error>Market Price is <strong>required</strong></mat-error>
 		</mat-form-field>
@@ -53,5 +52,5 @@
 
 <mat-dialog-actions>
 	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
-	<button mat-button color="primary" [mat-dialog-close]="confirm()">Confirm</button>
+	<button mat-button color="primary" (click)="confirm()">Confirm</button>
 </mat-dialog-actions>
