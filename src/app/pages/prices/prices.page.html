@@ -4,7 +4,7 @@
 <ion-content class="ion-padding">
   <div class="table-space" *ngFor="let priceType of pricesTable | keyvalue">
     <div class="content-subtitle_small-inventory">
-      <button mat-icon-button color="primary">
+      <button mat-icon-button color="primary" (click)="renameTable(priceType.key)">
         <mat-icon>edit</mat-icon>
       </button>
       <h4>
@@ -66,7 +66,7 @@
     <button
       mat-flat-button
       color="primary"
-      (click)="addNewTable('New Table Name')"
+      (click)="addNewTable()"
       >+ Add table
     </button>
 

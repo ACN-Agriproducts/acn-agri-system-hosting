@@ -80,7 +80,8 @@ export class PricesPage implements OnInit {
     const dialogRef = this.dialog.open(FieldRenameComponent, {
       width: "350px",
       data:{
-        name: ""
+        name: "",
+        invalidNames: table.productNames
       }
     });
 
@@ -96,7 +97,8 @@ export class PricesPage implements OnInit {
     const dialogRef = this.dialog.open(FieldRenameComponent, {
       width: "350px",
       data: {
-        name: ""
+        name: "",
+        invalidNames: table.locationNames
       }
     });
 
@@ -140,19 +142,41 @@ export class PricesPage implements OnInit {
     const dialogRef = this.dialog.open(FieldRenameComponent, {
       width: "350px",
       data: {
-        name: namesList[index]
+        name: namesList[index],
+        invalidNames: namesList
       }
     });
 
     const name = await lastValueFrom(dialogRef.afterClosed());
     if(name == null) return;
-    if(namesList.findIndex(n => n == name) != -1) return;
+    if(namesList.some(n => n == name)) return;
     if(name == "") {
       this.deleteRowOrColumn(priceTypeName, type, index);
       return;
     }
 
     namesList[index] = name;
+  }
+
+  async renameTable(tableName: string) {
+    const dialogRef = this.dialog.open(FieldRenameComponent, {
+      width: "350px",
+      data: {
+        name: tableName,
+        invalidNames: Object.keys(this.pricesTable)
+      }
+    });
+
+    const name = await lastValueFrom(dialogRef.afterClosed());
+
+    if(name == null) return;
+    if(Object.keys(this.pricesTable).some(n => n == name)) return;
+
+    if(name != "") {
+      this.pricesTable[name] = this.pricesTable[tableName];
+    }
+
+    delete this.pricesTable[tableName];
   }
 
   deleteRowOrColumn(priceTypeName: string, type: columnOrRow, index: number) {
