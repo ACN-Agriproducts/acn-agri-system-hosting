@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { collection, DocumentSnapshot, Firestore, getDocs, limit, orderBy, provideFirestore, query } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
+import { lastValueFrom } from 'rxjs';
+import { FieldRenameComponent } from './field-rename/field-rename.component';
 
 @Component({
   selector: 'app-prices',
@@ -17,7 +20,8 @@ export class PricesPage implements OnInit {
 
   constructor(
     private db: Firestore,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -69,27 +73,43 @@ export class PricesPage implements OnInit {
     this.pricesTable[type].prices[productIndex][locationIndex] = newPrice;
   }
 
-  addNewRow(type: string): void {
+  async addNewRow(type: string): Promise<void> {
     const table = this.pricesTable[type];
     const locationLength = table.locationNames.length;
+    const dialogRef = this.dialog.open(FieldRenameComponent, {
+      width: "350px",
+      data:{
+        name: ""
+      }
+    });
+
+    const name = await lastValueFrom(dialogRef.afterClosed());
+    if(name == null) return;
 
     table.prices.push(new Array(locationLength).fill(0));
-    table.productNames.push("product");
+    table.productNames.push(name);
   }
 
-  addNewColumn(type: string) {
+  async addNewColumn(type: string) {
     const table = this.pricesTable[type];
-    table.locationNames.push("location");
+    const dialogRef = this.dialog.open(FieldRenameComponent, {
+      width: "350px",
+      data: {
+        name: ""
+      }
+    });
 
+    const name = await lastValueFrom(dialogRef.afterClosed());
+    if(name == null) return;
+
+    table.locationNames.push(name);
     table.prices.forEach(list => {
       list.push(0);
     });
-
-    console.log(this.pricesTable);
   }
   
-  addNewTable(name: string, locationNames: string[] = [], productNames: string[] = []): void {
-    if(this.pricesTable[name] === undefined) {
+  async addNewTable(name: string, locationNames: string[] = [], productNames: string[] = []): Promise<void> {
+    if(this.pricesTable[name] != undefined) {
       return;
     }
 
@@ -98,6 +118,21 @@ export class PricesPage implements OnInit {
       productNames: productNames.map(s => s.slice()),
       prices: (new Array<number[]>(productNames.length)).fill([]).map(() => new Array(locationNames.length)),
     }
+  }
+
+  async renameField(namesList: string[], index: number) {
+    const dialogRef = this.dialog.open(FieldRenameComponent, {
+      width: "350px",
+      data: {
+        name: namesList[index]
+      }
+    });
+
+    const name = await lastValueFrom(dialogRef.afterClosed());
+    if(name == null) return;
+    if(namesList.findIndex(n => n == name) != -1) return;
+
+    namesList[index] = name;
   }
 }
 
