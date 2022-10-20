@@ -1,6 +1,12 @@
 
 mat-dialog-content {
-    width: 300px;
+    min-width: 325px;
+    width: 30vw;
+    max-width: 400px;
+    
+    mat-form-field {
+        padding-bottom: 3px;
+    }
 }
 
 mat-dialog-actions {
