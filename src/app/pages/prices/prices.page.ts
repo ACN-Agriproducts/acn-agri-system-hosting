@@ -32,7 +32,7 @@ export class PricesPage implements OnInit {
         return;
       }
 
-      this.pricesSnapshot = result[0];
+      this.pricesSnapshot = result.docs[0];
       this.getInfoFromSnapshot();
     });
   }
@@ -46,11 +46,12 @@ export class PricesPage implements OnInit {
       const currentPriceTable = {
         locationNames: Object.keys(currentPrice),
         productNames: Object.keys(firstLocation),
-        prices: (new Array<number[]>(Object.keys(firstLocation).length)).fill(Array.from(new Array(Object.keys(currentPrice).length))),
+        prices: (new Array<number[]>(Object.keys(firstLocation).length)).fill([]).map(() => new Array(Object.keys(currentPrice).length)),
       };
 
       this.pricesTable[priceName] = currentPriceTable;
 
+      console.log(this.pricesTable)
       for(let location in currentPrice) {
         const currentLocation = currentPrice[location];
 
@@ -61,18 +62,42 @@ export class PricesPage implements OnInit {
     }
   }
 
-  getPrice(type: string, location: string, product: string): number {
-    const locationIndex = this.pricesTable[type].locationNames.findIndex(t => t == location);
-    const productIndex = this.pricesTable[type].productNames.findIndex(p => p == product);
-
-    return this.pricesTable.prices[locationIndex][productIndex];
-  }
-
   setPrice(type: string, location: string, product: string, newPrice: number): void {
     const locationIndex = this.pricesTable[type].locationNames.findIndex(t => t == location);
     const productIndex = this.pricesTable[type].productNames.findIndex(p => p == product);
 
-    this.pricesTable.prices[locationIndex][productIndex] = newPrice;
+    this.pricesTable[type].prices[productIndex][locationIndex] = newPrice;
+  }
+
+  addNewRow(type: string): void {
+    const table = this.pricesTable[type];
+    const locationLength = table.locationNames.length;
+
+    table.prices.push(new Array(locationLength).fill(0));
+    table.productNames.push("product");
+  }
+
+  addNewColumn(type: string) {
+    const table = this.pricesTable[type];
+    table.locationNames.push("location");
+
+    table.prices.forEach(list => {
+      list.push(0);
+    });
+
+    console.log(this.pricesTable);
+  }
+  
+  addNewTable(name: string, locationNames: string[] = [], productNames: string[] = []): void {
+    if(this.pricesTable[name] === undefined) {
+      return;
+    }
+
+    this.pricesTable[name] = {
+      locationNames: locationNames.map(s => s.slice()),
+      productNames: productNames.map(s => s.slice()),
+      prices: (new Array<number[]>(productNames.length)).fill([]).map(() => new Array(locationNames.length)),
+    }
   }
 }
 
