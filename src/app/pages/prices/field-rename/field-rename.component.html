@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Choose Name</h1> 
+<div mat-dialog-content>
+  <p>Leave blank for delete</p>
+  <mat-form-field>
+    <mat-label>New Name</mat-label>
+    <input matInput [(ngModel)]="name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <!-- <button mat-flat-button [mat-dialog-close]="'DELETE'" color="warn">Delete</button> -->
+  <button mat-flat-button [mat-dialog-close]="null" color="accent">Cancel</button>
+  <button mat-flat-button [mat-dialog-close]="name" color="primary">Ok</button>
+</div>
