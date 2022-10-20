@@ -23,18 +23,21 @@
       <table class="prices-table">
         <tr class="prices-table-row">
           <th class="prices-table-cell prices-table-field-name">
-            Name
+            Productos
           </th>
-          <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first">
+          <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first; let index = index">
             {{location}}
-            <button mat-icon-button color="primary">
+            <button mat-icon-button color="primary" (click)="renameField(priceType.value.locationNames, index)">
               <mat-icon>edit</mat-icon>
             </button>
           </th>
         </tr>
-        <tr class="prices-table-row" *ngFor="let productType of priceType.value.productNames">
+        <tr class="prices-table-row" *ngFor="let productType of priceType.value.productNames; let index = index">
           <td class="prices-table-cell prices-table-field-name">
             {{productType}}
+            <button mat-icon-button color="primary" (click)="renameField(priceType.value.productNames, index)">
+              <mat-icon>edit</mat-icon>
+            </button>
           </td>
           <td class="prices-table-cell" *ngFor="let location of priceType.value.locationNames; let first = first">
             <mat-form-field appearance="outline" [style.width.px]="150">
@@ -49,5 +52,20 @@
         </tr>
       </table>
     </div>
+  </div>
+
+  <div class="action-bar">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="addNewTable('New Table Name')"
+      >+ Add table
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      >Submit
+    </button>
   </div>
 </ion-content>
