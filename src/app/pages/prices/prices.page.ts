@@ -5,6 +5,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
 import { lastValueFrom } from 'rxjs';
 import { FieldRenameComponent } from './field-rename/field-rename.component';
+import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.component';
 
 @Component({
   selector: 'app-prices',
@@ -108,14 +109,26 @@ export class PricesPage implements OnInit {
     });
   }
   
-  async addNewTable(name: string, locationNames: string[] = [], productNames: string[] = []): Promise<void> {
-    if(this.pricesTable[name] != undefined) {
-      return;
+  async addNewTable(): Promise<void> {
+    const dialogRef = this.dialog.open(NewTableDialogComponent, {
+      width: "350px",
+      data: Object.keys(this.pricesTable)
+    })
+
+    const newTableInfo: {name: string; baseTable: string;} = await lastValueFrom(dialogRef.afterClosed());
+
+    if(newTableInfo == null) return;
+    let locationNames: string[] = [];
+    let productNames: string[] = [];
+
+    if(newTableInfo.baseTable != "") {
+      locationNames = this.pricesTable[newTableInfo.baseTable].locationNames;
+      productNames = this.pricesTable[newTableInfo.baseTable].productNames;
     }
 
-    this.pricesTable[name] = {
-      locationNames: locationNames.map(s => s.slice()),
-      productNames: productNames.map(s => s.slice()),
+    this.pricesTable[newTableInfo.name] = {
+      locationNames: Array.from(locationNames),
+      productNames: Array.from(productNames),
       prices: (new Array<number[]>(productNames.length)).fill([]).map(() => new Array(locationNames.length)),
     }
   }
