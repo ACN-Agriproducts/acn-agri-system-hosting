@@ -27,7 +27,7 @@
           </th>
           <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first; let index = index">
             {{location}}
-            <button mat-icon-button color="primary" (click)="renameField(priceType.value.locationNames, index)">
+            <button mat-icon-button color="primary" (click)="renameField(priceType.key, 0, index)">
               <mat-icon>edit</mat-icon>
             </button>
           </th>
@@ -35,7 +35,7 @@
         <tr class="prices-table-row" *ngFor="let productType of priceType.value.productNames; let index = index">
           <td class="prices-table-cell prices-table-field-name">
             {{productType}}
-            <button mat-icon-button color="primary" (click)="renameField(priceType.value.productNames, index)">
+            <button mat-icon-button color="primary" (click)="renameField(priceType.key, 1, index)">
               <mat-icon>edit</mat-icon>
             </button>
           </td>

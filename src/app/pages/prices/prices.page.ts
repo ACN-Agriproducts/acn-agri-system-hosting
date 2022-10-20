@@ -84,7 +84,7 @@ export class PricesPage implements OnInit {
     });
 
     const name = await lastValueFrom(dialogRef.afterClosed());
-    if(name == null) return;
+    if(name == null || name == "") return;
 
     table.prices.push(new Array(locationLength).fill(0));
     table.productNames.push(name);
@@ -100,7 +100,7 @@ export class PricesPage implements OnInit {
     });
 
     const name = await lastValueFrom(dialogRef.afterClosed());
-    if(name == null) return;
+    if(name == null || name == "") return;
 
     table.locationNames.push(name);
     table.prices.forEach(list => {
@@ -120,7 +120,10 @@ export class PricesPage implements OnInit {
     }
   }
 
-  async renameField(namesList: string[], index: number) {
+  async renameField(priceTypeName: string, type: columnOrRow, index: number) {
+    const table = this.pricesTable[priceTypeName];
+    const namesList = type == columnOrRow.column ? table.locationNames : table.productNames;
+
     const dialogRef = this.dialog.open(FieldRenameComponent, {
       width: "350px",
       data: {
@@ -131,8 +134,28 @@ export class PricesPage implements OnInit {
     const name = await lastValueFrom(dialogRef.afterClosed());
     if(name == null) return;
     if(namesList.findIndex(n => n == name) != -1) return;
+    if(name == "") {
+      this.deleteRowOrColumn(priceTypeName, type, index);
+      return;
+    }
 
     namesList[index] = name;
+  }
+
+  deleteRowOrColumn(priceTypeName: string, type: columnOrRow, index: number) {
+    const table = this.pricesTable[priceTypeName];
+    const namesList = type == columnOrRow.column ? table.locationNames : table.productNames;
+    
+    namesList.splice(index, 1);
+
+    if(type == columnOrRow.column) {
+      table.prices.forEach(row => {
+        row.splice(index, 1);
+      });
+    }
+    else { 
+      table.prices.splice(index, 1);
+    }
   }
 }
 
@@ -153,4 +176,8 @@ interface pricesTable {
   locationNames: string[];
   productNames: string[];
   prices: number[][];
+}
+
+enum columnOrRow {
+  column, row
 }
