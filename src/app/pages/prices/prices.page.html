@@ -1,12 +1,44 @@
 <app-header-toolbar titulo="Prices"></app-header-toolbar>
 
 
-<ion-content>
-  <div class="prices-table" *ngFor="let priceType of prices | keyvalue">
-    <div class="prices-table-row" *ngFor="let productType of productTypes">
-      <div class="prices-table-cell" *ngFor="let location of priceType.value | keyvalue">
-        {{ location.value[productType] }}
+<ion-content class="ion-padding">
+  <div class="prices-table" *ngFor="let priceType of pricesTable | keyvalue">
+    <div class="content-subtitle_small-inventory">
+      <h4><span>Products</span></h4>
+    </div>
+
+    <div class="prices-table-row">
+      <div class="prices-table-cell prices-table-header-cell">
+        Name
+      </div>
+      <div class="prices-table-cell prices-table-header-cell" *ngFor="let location of priceType.value.locationNames; let first = first">
+        {{location}}
+      </div>
+      <button 
+        mat-button  
+        class="prices-table-cell prices-table-header-cell" 
+        color="primary" 
+        (click)="addNewColumn(priceType.key)"
+        >+ Add
+      </button>
+      
+    </div>
+
+    <div class="prices-table-row" *ngFor="let productType of priceType.value.productNames">
+      <div class="prices-table-cell prices-table-type">
+        {{productType}}
+      </div>
+      <div class="prices-table-cell" *ngFor="let location of priceType.value.locationNames; let first = first">
+        <mat-form-field appearance="outline" [style.width.px]="150">
+          <input 
+            matInput 
+            [(ngModel)]="priceType.value.prices
+              [priceType.value.productNames.indexOf(productType)]
+              [priceType.value.locationNames.indexOf(location)]
+          ">
+        </mat-form-field>
       </div>
     </div>
+    <button mat-button color="primary" (click)="addNewRow(priceType.key)">+ Add</button>
   </div>
 </ion-content>
