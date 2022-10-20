@@ -4,7 +4,7 @@
 <ion-content class="ion-padding">
   <div class="table-space" *ngFor="let priceType of pricesTable | keyvalue">
     <div class="content-subtitle_small-inventory">
-      <h4><span>Products</span></h4>
+      <h4><span>{{ priceType.key }}</span></h4>
     </div>
     <button
       mat-button
@@ -22,18 +22,18 @@
     <div class="horizontal-scroll">
       <table class="prices-table">
         <tr class="prices-table-row">
-          <th class="prices-table-cell prices-table-header-cell">
+          <th class="prices-table-cell prices-table-field-name">
             Name
           </th>
-          <th class="prices-table-cell prices-table-header-cell" *ngFor="let location of priceType.value.locationNames; let first = first">
+          <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first">
             {{location}}
-            <button mat-icon-button>
+            <button mat-icon-button color="primary">
               <mat-icon>edit</mat-icon>
             </button>
           </th>
         </tr>
         <tr class="prices-table-row" *ngFor="let productType of priceType.value.productNames">
-          <td class="prices-table-cell prices-table-type">
+          <td class="prices-table-cell prices-table-field-name">
             {{productType}}
           </td>
           <td class="prices-table-cell" *ngFor="let location of priceType.value.locationNames; let first = first">

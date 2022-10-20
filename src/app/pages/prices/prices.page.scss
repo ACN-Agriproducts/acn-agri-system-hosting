@@ -2,12 +2,14 @@
     background-color: white;
     border-radius: 5px;
     padding: 1rem;
+
+    > button {
+        margin-right: 1rem;
+    }
 }
 
 .horizontal-scroll {
     overflow-x: scroll;
-
-
 }
 
 .prices-table {
@@ -17,11 +19,18 @@
     }
     
     .prices-table-cell {
-        padding: 0px 4px;
+        min-width: 100px;
+        padding: 0px 5px;
     
         ::ng-deep .mat-form-field-wrapper {
             padding-bottom: 0px;
         }
+    }
+}
+
+.prices-table-field-name {
+    button {
+        right: 0px;
     }
 }
 
