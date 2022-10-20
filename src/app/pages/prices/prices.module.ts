@@ -8,6 +8,7 @@ import { PricesPageRoutingModule } from './prices-routing.module';
 
 import { PricesPage } from './prices.page';
 import { CoreModule } from '@core/core.module';
+import { FieldRenameComponent } from './field-rename/field-rename.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { CoreModule } from '@core/core.module';
     PricesPageRoutingModule,
     CoreModule
   ],
-  declarations: [PricesPage]
+  declarations: [PricesPage, FieldRenameComponent]
 })
 export class PricesPageModule {}
