@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, DocumentSnapshot, Firestore, getDocs, limit, orderBy, provideFirestore, query } from '@angular/fire/firestore';
+import { collection, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, provideFirestore, query, serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
@@ -194,11 +194,37 @@ export class PricesPage implements OnInit {
       table.prices.splice(index, 1);
     }
   }
+
+  getSubmitObject() {
+    const submitDoc: pricesDoc = {
+      prices: {},
+      date: serverTimestamp()
+    };
+
+    for(let typeName in this.pricesTable) {
+      const currentTable = this.pricesTable[typeName];
+      submitDoc.prices[typeName] = {};
+
+      for(let locationIndex = 0; locationIndex < currentTable.locationNames.length; locationIndex++) {
+        const row = submitDoc.prices[typeName][currentTable.locationNames[locationIndex]] = {};
+        for(let productIndex = 0; productIndex < currentTable.productNames.length; productIndex++) {
+          row[currentTable.productNames[productIndex]] = currentTable.prices[productIndex][locationIndex];
+        }
+      }
+    }
+
+    console.log(submitDoc);
+    return submitDoc;
+  }
+
+  submit() {
+    this.getSubmitObject();
+  }
 }
 
 interface pricesDoc {
   prices: prices,
-  date: Date
+  date: Date | FieldValue
 }
 
 interface prices {
