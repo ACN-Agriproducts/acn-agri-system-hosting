@@ -9,7 +9,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class FieldRenameComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<FieldRenameComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {name: string}
+    @Inject(MAT_DIALOG_DATA) public data: {
+      name: string,
+      invalidNames: string[]
+    }
   ) { }
 
   ngOnInit() {}
@@ -18,4 +21,7 @@ export class FieldRenameComponent implements OnInit {
     this.dialogRef.close(this.data.name);
   }
 
+  validName() {
+    return this.data.invalidNames.every(n => this.data.name != n);
+  }
 }

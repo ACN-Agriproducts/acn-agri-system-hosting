@@ -12,6 +12,7 @@
   <button 
     mat-flat-button
     [mat-dialog-close]="data.name" 
+    [disabled]="!validName()"
     color="primary"
     >Ok
   </button>
