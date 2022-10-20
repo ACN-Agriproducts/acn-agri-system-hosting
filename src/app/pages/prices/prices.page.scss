@@ -2,6 +2,7 @@
     background-color: white;
     border-radius: 5px;
     padding: 1rem;
+    margin-bottom: 1rem;
 
     > button {
         margin-right: 1rem;
@@ -77,6 +78,13 @@
     }
 }
 
+.action-bar {
+    display: flex;
+
+    :first-of-type {
+        margin-right: auto;
+    }
+}
 
 /* width */
 ::-webkit-scrollbar {
