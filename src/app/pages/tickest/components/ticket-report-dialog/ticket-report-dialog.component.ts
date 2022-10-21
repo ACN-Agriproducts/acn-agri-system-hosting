@@ -181,13 +181,21 @@ export class TicketReportDialogComponent implements OnInit {
       // });
       
       console.log(inTicketTable);
-      ticketList.forEach(ticket => {
+      ticketList.forEach((ticket, index) => {
         const row = [];
         map.forEach((val, col) => {
           row.push(ticket[ticket.void ? val.void : val.key] ?? "");
         });
 
         inTicketTable.addRow(row);
+
+        if (ticket.void) {
+          ticketSheet.getRow(index + 2).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FADA5E' }
+          };
+        }
       });
       inTicketTable.commit();
 
