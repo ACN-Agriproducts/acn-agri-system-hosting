@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { collection, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, provideFirestore, query, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, provideFirestore, query, serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
@@ -13,8 +13,8 @@ import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.com
   styleUrls: ['./prices.page.scss'],
 })
 export class PricesPage implements OnInit {
-  private collectionRef;
-  private pricesSnapshot: DocumentSnapshot<pricesDoc>;
+  private collectionRef: CollectionReference;
+  private pricesSnapshot: DocumentSnapshot;
   public pricesTable: {
     [type: string]: pricesTable
   };
@@ -29,7 +29,7 @@ export class PricesPage implements OnInit {
     const companyRef = Company.getCompanyRef(this.db, this.session.getCompany());
     this.collectionRef = collection(companyRef, "prices");
 
-    const pricesQuery = query<pricesDoc>(this.collectionRef, orderBy("date", "desc"), limit(1));
+    const pricesQuery = query(this.collectionRef, orderBy("date", "desc"), limit(1));
     this.pricesTable = {};
 
     getDocs(pricesQuery).then(result => {
@@ -43,7 +43,7 @@ export class PricesPage implements OnInit {
   }
 
   getInfoFromSnapshot(): void {
-    const prices = this.pricesSnapshot.data().prices;
+    const prices = this.pricesSnapshot.data().prices as pricesDoc;
 
     for(let priceName in prices) {
       const currentPrice = prices[priceName];
@@ -213,12 +213,11 @@ export class PricesPage implements OnInit {
       }
     }
 
-    console.log(submitDoc);
     return submitDoc;
   }
 
   submit() {
-    this.getSubmitObject();
+    addDoc(this.collectionRef, this.getSubmitObject());
   }
 }
 
