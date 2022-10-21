@@ -18,20 +18,20 @@
       mat-button
       color="primary"
       (click)="addNewColumn(priceType.key)"
-      >+ Add Column
+      >+ Añadir Columna
     </button>
     <button 
       mat-button 
       color="primary" 
       (click)="addNewRow(priceType.key)"
-      >+ Add Row
+      >+ Añadir Fila
     </button>
 
     <div class="horizontal-scroll">
       <table class="prices-table">
         <tr class="prices-table-row">
           <th class="prices-table-cell prices-table-field-name">
-            Productos
+            
           </th>
           <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first; let index = index">
             <button mat-icon-button color="primary" (click)="renameField(priceType.key, 0, index)">
