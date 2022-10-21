@@ -10,6 +10,7 @@ import { PricesPage } from './prices.page';
 import { CoreModule } from '@core/core.module';
 import { FieldRenameComponent } from './field-rename/field-rename.component';
 import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.component';
+import { TableImportDialogComponent } from './table-import-dialog/table-import-dialog.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.com
   declarations: [
     PricesPage, 
     FieldRenameComponent,
-    NewTableDialogComponent
+    NewTableDialogComponent,
+    TableImportDialogComponent
   ]
 })
 export class PricesPageModule {}
