@@ -175,14 +175,9 @@ export class TicketReportDialogComponent implements OnInit {
         [16, {key: "CCGE", void: ""}]
       ]);
 
-      // map.forEach((id, col) => {
-      //   inTicketTable.getColumn(col).
-      //   outTicketSheet.getColumn(col).key = id;
-      // });
-      
-      console.log(inTicketTable);
       ticketList.forEach((ticket, index) => {
         const row = [];
+
         map.forEach((val, col) => {
           row.push(ticket[ticket.void ? val.void : val.key] ?? "");
         });
@@ -193,13 +188,26 @@ export class TicketReportDialogComponent implements OnInit {
           ticketSheet.getRow(index + 2).fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FADA5E' }
+            fgColor: { argb: 'FFD966' }
           };
         }
       });
+      
       inTicketTable.commit();
 
-      console.table(ticketList);
+      ticketSheet.columns.forEach(column => {
+        let maxLength = 0;
+
+        column.eachCell({ includeEmpty: false }, cell => {
+          const cellLength = (cell.value ?? null) instanceof Date 
+            ? cell.value?.toLocaleString().split(' ')[0].length ?? 10 
+            : cell.value?.toLocaleString().length ?? 10;
+            
+          if (maxLength < cellLength) maxLength = cellLength;
+        });
+
+        column.width = maxLength < 10 ? 10 : maxLength > 35 ? 35 : maxLength;
+      });
 
       testWorkbook.xlsx.writeBuffer().then((data) => {
         const blob = new Blob([data], {
