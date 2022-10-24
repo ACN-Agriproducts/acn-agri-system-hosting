@@ -123,7 +123,7 @@ export class TicketReportDialogComponent implements OnInit {
     else if(this.reportType == ReportType.YTD) {
       const testWorkbook = new Excel.Workbook();
       const ticketSheet = testWorkbook.addWorksheet("IN TICKETS");
-      const ticketList = this.ticketList.filter(t => t.in).map(this.ticketYTDFormat);
+      const ticketList = this.ticketList.map(this.ticketYTDFormat);
 
       const inTicketTable = ticketSheet.addTable({
         name: 'testTable',
@@ -192,7 +192,7 @@ export class TicketReportDialogComponent implements OnInit {
           };
         }
       });
-      
+
       inTicketTable.commit();
 
       ticketSheet.columns.forEach(column => {
