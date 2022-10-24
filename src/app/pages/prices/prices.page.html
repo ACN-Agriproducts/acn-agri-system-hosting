@@ -57,6 +57,7 @@
             <mat-form-field appearance="outline" [style.width.px]="150">
               <input
                 matInput
+                type="number"
                 [(ngModel)]="priceType.value.prices
                   [priceType.value.productNames.indexOf(productType)]
                   [priceType.value.locationNames.indexOf(location)]
@@ -73,14 +74,14 @@
       mat-flat-button
       color="primary"
       (click)="addNewTable()"
-      >+ Add table
+      >+ Añadir tabla
     </button>
 
     <button
       mat-flat-button
       color="primary"
       (click)="submit()"
-      >Submit
+      >Enviar
     </button>
   </div>
 </ion-content>
