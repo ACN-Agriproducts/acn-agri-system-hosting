@@ -56,8 +56,11 @@
             max-width: 150px;
             padding-right: 1rem;
         }
+        button {
+            background-color: white;
+        }
         &:before{
-        content: "";
+            content: "";
             width: 98.5%;
             height: 1px;
             z-index: 70;
@@ -67,7 +70,7 @@
             top: 15px;
         }
         &:after{
-        content: "";
+            content: "";
             position: absolute;
             right: 0%;
             top: 11px;

@@ -6,6 +6,7 @@ import { Company } from '@shared/classes/company';
 import { lastValueFrom } from 'rxjs';
 import { FieldRenameComponent } from './field-rename/field-rename.component';
 import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.component';
+import { TableImportDialogComponent } from './table-import-dialog/table-import-dialog.component';
 
 @Component({
   selector: 'app-prices',
@@ -193,6 +194,42 @@ export class PricesPage implements OnInit {
     else { 
       table.prices.splice(index, 1);
     }
+  }
+
+  async importFromExcelTablePaste(priceTypeName: string) {
+    // const tableInput = ` -   	 QUERETARO 	 SALINAS V. 	 SAN LUIS P. 	 GUADALAJARA 	 TORREON 	 SAN JUAN DE LOS LAGOS 	 CELAYA  	 ENCARNACION, JAL 	 CHICAGO 
+    // maiz 	 8,170.27 	 7,641.36 	 8,083.43 	 8,280.79 	 8,036.07 	 8,233.42 	 8,170.27 	 8,170.27 	 7,468.62 
+    // MAIZ OND 	 8,059.75 	 6,688.34 	 7,060.81 	 6,968.16 	 6,993.45 	 6,978.80 	 7,018.27 	 6,915.65 	 -   
+    // sorgo 	 7,615.19 	 7,123.31 	 7,534.44 	 7,717.98 	 7,490.39 	 7,673.93 	 7,615.19 	 7,615.19 	 6,876.52 
+    // `
+
+    const dialogRef = this.dialog.open(TableImportDialogComponent, {
+      width: '350px'
+    });
+
+    const tableInput = await lastValueFrom(dialogRef.afterClosed());
+    
+    // This line should split input into rows and columns, while cleaning any white spaces
+    // from the strings.
+    const rows: string[][] = tableInput.trim().split("\n").map(r => r.split('\t').map(s => s.trim()));
+    const locationNames = rows[0];
+    locationNames.splice(0, 1);
+
+    const productNames: string[] = [];
+    const prices: number[][] = [];
+    console.log(rows);
+    rows.splice(0, 1);
+
+    for(let index = 0; index < rows.length; index++) {
+      productNames.push(rows[index][0]);
+      prices.push(rows[index].splice(1).map(ns => Number.parseFloat(ns.replace(/,/g, ''))));
+    }
+
+    this.pricesTable[priceTypeName] = {
+      locationNames: locationNames,
+      productNames: productNames,
+      prices: prices
+    };
   }
 
   getSubmitObject() {
