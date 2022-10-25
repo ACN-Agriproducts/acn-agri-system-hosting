@@ -1,14 +1,13 @@
-<h1 mat-dialog-title>Choose Name</h1> 
+<h1 mat-dialog-title>E</h1> 
 <div mat-dialog-content>
-  <p>Leave blank for delete</p>
   <mat-form-field>
-    <mat-label>New Name</mat-label>
+    <mat-label>Nombre</mat-label>
     <input matInput [(ngModel)]="returnData.name" (keyup.enter)="accept()">
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Base Table</mat-label>
+    <mat-label>Basarse en tabla</mat-label>
     <mat-select [(ngModel)]="returnData.baseTable">
-      <mat-option value="">None</mat-option>
+      <mat-option value="">Ninguna</mat-option>
       <mat-option *ngFor="let name of names" [value]="name">{{name}}</mat-option>
     </mat-select>
   </mat-form-field>
