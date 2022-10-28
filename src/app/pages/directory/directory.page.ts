@@ -20,11 +20,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
   private currentSub: Subscription;
 
   constructor(
-    private popoverController: PopoverController,
-    private modalController: ModalController,
     private db: Firestore,
+    private localStore: Storage,
+    private modalController: ModalController,
     private navController: NavController,
-    private localStore: Storage
+    private popoverController: PopoverController,
   ) { 
     this.localStore.get('currentCompany').then(val => {
       this.currentCompany = val;
@@ -78,5 +78,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public deleteButton(id: string): void {
     
+  }
+
+  public nav = (route: string): void => {
+    this.navController.navigateForward(route, {
+      replaceUrl: true
+    });
   }
 }

@@ -1,0 +1,49 @@
+
+<app-header-toolbar titulo="Contact"></app-header-toolbar>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+	<ion-grid>
+		<ion-row>
+			<ion-col>
+				<!-- contact info -->
+				<ion-card>
+					<ion-card-header>Information</ion-card-header>
+					<ion-card-content>
+						Info
+					</ion-card-content>
+				</ion-card>
+			</ion-col>
+			<ion-col>
+				<!-- contact analytics (for both clients and truckers) -->
+				<ion-card>
+					<ion-card-header>Analytics</ion-card-header>
+					<ion-card-content>
+						Fields here
+					</ion-card-content>
+				</ion-card>
+			</ion-col>
+		</ion-row>
+		
+		<!--  -->
+		<ion-row>
+			<ion-col>
+				<ion-card>
+					<ng-template [ngIf]="true" [ngIfElse]="truckerTickets">
+						<ion-card-header>Contracts</ion-card-header>
+
+						<ion-card-content>
+
+						</ion-card-content>
+					</ng-template>
+					<ng-template #truckerTickets>
+						<ion-card-header>Tickets</ion-card-header>
+
+						<ion-card-content>
+
+						</ion-card-content>
+					</ng-template>
+				</ion-card>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ion-content>
