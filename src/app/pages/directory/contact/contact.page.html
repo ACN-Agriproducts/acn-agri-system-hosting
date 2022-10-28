@@ -2,48 +2,61 @@
 <app-header-toolbar titulo="Contact"></app-header-toolbar>
 
 <ion-content class="ion-padding" [fullscreen]="true">
-	<ion-grid>
+	<ion-grid *ngIf="ready else loading">
 		<ion-row>
 			<ion-col>
-				<!-- contact info -->
 				<ion-card>
-					<ion-card-header>Information</ion-card-header>
+					<!-- <ion-card-header>Information</ion-card-header> -->
 					<ion-card-content>
-						Info
+						<div>
+							<h1>
+								<b>{{ contact.name }}</b>
+								<span><ion-icon name="create-outline"></ion-icon></span>
+							</h1>
+							<h3>{{ contact.type }}</h3>
+						</div>
+
 					</ion-card-content>
 				</ion-card>
 			</ion-col>
 			<ion-col>
-				<!-- contact analytics (for both clients and truckers) -->
 				<ion-card>
 					<ion-card-header>Analytics</ion-card-header>
 					<ion-card-content>
-						Fields here
+						analytics information
 					</ion-card-content>
 				</ion-card>
 			</ion-col>
 		</ion-row>
 		
-		<!--  -->
 		<ion-row>
 			<ion-col>
 				<ion-card>
-					<ng-template [ngIf]="true" [ngIfElse]="truckerTickets">
+					<ng-template [ngIf]="contact.type.toLowerCase() === 'client'" [ngIfElse]="tickets">
 						<ion-card-header>Contracts</ion-card-header>
 
 						<ion-card-content>
 
 						</ion-card-content>
 					</ng-template>
-					<ng-template #truckerTickets>
+					<ng-template #tickets>
 						<ion-card-header>Tickets</ion-card-header>
 
 						<ion-card-content>
+							<mat-list>
+								<mat-list-item *ngFor="let item of docList">
 
+								</mat-list-item>
+							</mat-list>
 						</ion-card-content>
 					</ng-template>
 				</ion-card>
 			</ion-col>
 		</ion-row>
 	</ion-grid>
+	<ng-template #loading>
+		<div>
+			<mat-spinner></mat-spinner>
+		</div>
+	</ng-template>
 </ion-content>

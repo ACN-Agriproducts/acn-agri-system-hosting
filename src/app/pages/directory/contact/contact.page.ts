@@ -3,6 +3,8 @@ import { Firestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
+import { Contract } from '@shared/classes/contract';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-contact',
@@ -14,6 +16,7 @@ export class ContactPage implements OnInit {
   public currentCompany: string;
   public contact: Contact;
   public ready: boolean = false;
+  public docList: Contract[] | Ticket[];
 
   constructor(
     private db: Firestore,
@@ -28,7 +31,10 @@ export class ContactPage implements OnInit {
     Contact.getDoc(this.db, this.currentCompany, this.id).then(result => {
       this.contact = result;
       this.ready = true;
+      console.log(this.contact);
     });
+
+
   }
 
 }

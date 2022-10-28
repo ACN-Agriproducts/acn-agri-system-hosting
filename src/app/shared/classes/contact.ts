@@ -1,6 +1,8 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc } from "@angular/fire/firestore";
+import { Contract } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Ticket } from "./ticket";
 
 export class Contact extends FirebaseDocInterface {
     caat: string;
@@ -63,5 +65,9 @@ export class Contact extends FirebaseDocInterface {
         return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
         })
+    }
+
+    public static getContactDocs(db: Firestore, company: string, contact: string): Promise<Contract[] | Ticket[]> {
+        return;
     }
 }
