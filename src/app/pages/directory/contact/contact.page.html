@@ -11,7 +11,16 @@
 						<div>
 							<h1>
 								<b>{{ contact.name }}</b>
-								<span><ion-icon name="create-outline"></ion-icon></span>
+								<span>
+									<ion-buttons>
+										<ion-button color="primary" (click)="edit()">
+											<ion-icon name="create-outline"></ion-icon>
+										</ion-button>
+										<ion-button color="danger">
+											
+										</ion-button>
+									</ion-buttons>
+								</span>
 							</h1>
 							<h3>{{ contact.type }}</h3>
 						</div>

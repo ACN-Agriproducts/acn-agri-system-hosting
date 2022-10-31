@@ -33,8 +33,9 @@ export class ContactPage implements OnInit {
       this.ready = true;
       console.log(this.contact);
     });
-
-
   }
 
+  public edit() {
+    // use mat dialog with form fields so that user can edit properties of contact
+  }
 }
