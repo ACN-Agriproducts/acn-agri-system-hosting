@@ -6,25 +6,40 @@
 		<ion-row>
 			<ion-col>
 				<ion-card>
-					<!-- <ion-card-header>Information</ion-card-header> -->
 					<ion-card-content>
 						<div>
-							<h1>
-								<b>{{ contact.name }}</b>
-								<span>
-									<ion-buttons>
-										<ion-button color="primary" (click)="edit()">
-											<ion-icon name="create-outline"></ion-icon>
-										</ion-button>
-										<ion-button color="danger">
-											
-										</ion-button>
-									</ion-buttons>
-								</span>
-							</h1>
-							<h3>{{ contact.type }}</h3>
+							<!-- TBD: ability to upload avatar img -->
+							<ion-avatar slot="start">
+								<img src="../../../assets/avatar.svg">
+							</ion-avatar>
+							<ion-buttons>
+								<ion-button color="primary" (click)="edit()">
+									<ion-icon name="create-outline"></ion-icon>
+								</ion-button>
+								<ion-button color="danger">
+									<ion-icon name="trash-outline"></ion-icon>
+								</ion-button>
+							</ion-buttons>
 						</div>
+						<h1>
+							<b>{{ contact.name }}</b>
+							<h3>{{ contact.type }}</h3>
+						</h1>
 
+						<ion-list lines="none">
+							<ion-item *ngIf="(contact?.phoneNumber ?? '') != ''">
+								<ion-icon name="call-outline" slot="start"></ion-icon>
+								<ion-label>{{ contact.phoneNumber }}</ion-label>
+							</ion-item>
+							<ion-item *ngIf="(contact?.email ?? '') != ''">
+								<ion-icon name="mail-outline" slot="start"></ion-icon>
+								<ion-label>{{ contact.email }}</ion-label>
+							</ion-item>
+							<ion-item *ngIf="(contact?.streetAddress ?? '') != ''">
+								<ion-icon name="location-outline" slot="start"></ion-icon>
+								<ion-label>{{ contact.streetAddress | titlecase }}, {{ contact.state }}, {{ contact.zipCode}}</ion-label>
+							</ion-item>
+						</ion-list>
 					</ion-card-content>
 				</ion-card>
 			</ion-col>
