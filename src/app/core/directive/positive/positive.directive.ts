@@ -11,12 +11,6 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, ValidatorFn } from '@
 })
 export class PositiveDirective {
   validate(control: AbstractControl): ValidationErrors | null {
-    return validateField()(control);
-  }
-}
-
-function validateField(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
     return control.value <= 0 && control.value != null ? { positive: true } : null;
   }
 }
