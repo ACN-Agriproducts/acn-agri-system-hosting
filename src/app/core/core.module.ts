@@ -1,6 +1,7 @@
 import { SearchPipe } from './pipes/Search/search.pipe';
 import { FormatStringPipe } from './pipes/FormatString/formatString.pipe';
 import { FormatPriceLetterPipe } from './pipes/FormatPriceLetter/FormatPriceLetter.pipe';
+import { UsStateAbbreviationPipe } from './pipes/UsStateAbbreviation/us-state-abbreviation.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesCoreModule } from './directive/directives-core.module';
 import { MaterialModule } from './modules/material.module';
@@ -33,7 +34,8 @@ import { IonicStorageModule } from '@ionic/storage';
     MaterialModule,
     DirectivesCoreModule,
     FormatPriceLetterPipe,
-    SearchPipe
+    SearchPipe,
+    UsStateAbbreviationPipe,
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -41,7 +43,8 @@ import { IonicStorageModule } from '@ionic/storage';
   declarations: [
     FormatPriceLetterPipe,
     FormatStringPipe,
-    SearchPipe
+    SearchPipe,
+    UsStateAbbreviationPipe
   ]
 })
 export class CoreModule { }

@@ -37,7 +37,7 @@
 							</ion-item>
 							<ion-item *ngIf="(contact?.streetAddress ?? '') != ''">
 								<ion-icon name="location-outline" slot="start"></ion-icon>
-								<ion-label>{{ contact.streetAddress | titlecase }}, {{ contact.state }}, {{ contact.zipCode}}</ion-label>
+								<ion-label>{{ contact.streetAddress | titlecase }}, {{ contact.state | titlecase | usStateAbbreviation }}, {{ contact.zipCode}}</ion-label>
 							</ion-item>
 						</ion-list>
 					</ion-card-content>
