@@ -1,11 +1,45 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'usStateAbbreviation'
+  name: 'stateAbbreviation'
 })
-export class UsStateAbbreviationPipe implements PipeTransform {
+export class StateAbbreviationPipe implements PipeTransform {
 
   private states = new Map<string, string>([
+    // Mexico
+    // ['Aguascalientes', 'MX-AG'],
+    // ['Baja California', 'MX-BC'],
+    // ['Baja California Sur', 'MX-BS'],
+    // ['Campeche', 'MX-CM'],
+    // ['Chiapas', 'MX-CS'],
+    // ['Chihuahua', 'MX-CH'],
+    // ['Coahuila', 'MX-CO'],
+    // ['Colima', 'MX-CL'],
+    // ['Durango', 'MX-DG'],
+    // ['Guanajuato', 'MX-GT'],
+    // ['Guerrero', 'MX-GR'],
+    // ['Hidalgo', 'MX-HG'],
+    // ['Jalisco', 'MX-JA'],
+    // ['Mexico', 'MX-EM'],
+    // ['Mexico City', 'MX-DF'],
+    // ['Michoacan', 'MX-MI'],
+    // ['Morelos', 'MX-MO'],
+    // ['Nayarit', 'MX-NA'],
+    // ['Nuevo Leon', 'MX-NL'],
+    // ['Oaxaca', 'MX-OA'],
+    // ['Puebla', 'MX-PU'],
+    // ['Queretaro', 'MX-QT'],
+    // ['Quintana Roo', 'MX-QR'],
+    // ['San Luis Potosi', 'MX-SL'],
+    // ['Sinaloa', 'MX-SI'],
+    // ['Sonora', 'MX-SO'],
+    // ['Tabasco', 'MX-TB'],
+    // ['Tamaulipas', 'MX-TM'],
+    // ['Tlaxcala', 'MX-TL'],
+    // ['Veracruz', 'MX-VE'],
+    // ['Yucatan', 'MX-YU'],
+    // ['Zacatecas', 'MX-ZA'],
+    // US
     ['Alabama', 'AL'],
     ['Alaska', 'AK'],
     ['Arizona', 'AZ'],
@@ -55,10 +89,10 @@ export class UsStateAbbreviationPipe implements PipeTransform {
     ['Washington', 'WA'],
     ['West Virginia', 'WV'],
     ['Wisconsin', 'WI'],
-    ['Wyoming', 'WY']
+    ['Wyoming', 'WY'],
   ]);
 
   transform(state: string): string {
-    return this.states.get(state) ?? state;
+    return this.states.get(state.trim()) ?? state.trim();
   }
 }

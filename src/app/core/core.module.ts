@@ -1,7 +1,6 @@
 import { SearchPipe } from './pipes/Search/search.pipe';
 import { FormatStringPipe } from './pipes/FormatString/formatString.pipe';
 import { FormatPriceLetterPipe } from './pipes/FormatPriceLetter/FormatPriceLetter.pipe';
-import { UsStateAbbreviationPipe } from './pipes/UsStateAbbreviation/us-state-abbreviation.pipe';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesCoreModule } from './directive/directives-core.module';
 import { MaterialModule } from './modules/material.module';
@@ -12,6 +11,7 @@ import { ComponentsModule } from './components/components.module';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { IonicStorageModule } from '@ionic/storage';
+import { StateAbbreviationPipe } from './pipes/stateAbbreviation/state-abbreviation.pipe';
 
 @NgModule({
   imports: [
@@ -35,7 +35,7 @@ import { IonicStorageModule } from '@ionic/storage';
     DirectivesCoreModule,
     FormatPriceLetterPipe,
     SearchPipe,
-    UsStateAbbreviationPipe,
+    StateAbbreviationPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -44,7 +44,7 @@ import { IonicStorageModule } from '@ionic/storage';
     FormatPriceLetterPipe,
     FormatStringPipe,
     SearchPipe,
-    UsStateAbbreviationPipe
+    StateAbbreviationPipe
   ]
 })
 export class CoreModule { }
