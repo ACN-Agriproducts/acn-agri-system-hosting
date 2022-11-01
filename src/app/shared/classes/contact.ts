@@ -66,8 +66,4 @@ export class Contact extends FirebaseDocInterface {
             return result.data();
         })
     }
-
-    public static getContactDocs(db: Firestore, company: string, contact: string): Promise<Contract[] | Ticket[]> {
-        return ;
-    }
 }

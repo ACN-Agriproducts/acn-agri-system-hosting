@@ -23,21 +23,30 @@
 						</div>
 						<h1>
 							<b>{{ contact.name }}</b>
-							<h3>{{ contact.type }}</h3>
+							<h3>
+								{{ contact.type }}
+								<span *ngIf="contact?.caat ?? '' != ''"> - {{ contact?.caat }}</span>
+							</h3>
 						</h1>
 
 						<ion-list lines="none">
 							<ion-item *ngIf="(contact?.phoneNumber ?? '') != ''">
-								<ion-icon name="call-outline" slot="start"></ion-icon>
+								<ion-icon name="call-outline" slot="start" size="small"></ion-icon>
 								<ion-label>{{ contact.phoneNumber }}</ion-label>
 							</ion-item>
 							<ion-item *ngIf="(contact?.email ?? '') != ''">
-								<ion-icon name="mail-outline" slot="start"></ion-icon>
-								<ion-label>{{ contact.email }}</ion-label>
+								<ion-icon name="mail-outline" slot="start" size="small"></ion-icon>
+								<ion-label>{{ contact.email | lowercase }}</ion-label>
 							</ion-item>
 							<ion-item *ngIf="(contact?.streetAddress ?? '') != ''">
-								<ion-icon name="location-outline" slot="start"></ion-icon>
-								<ion-label>{{ contact.streetAddress | titlecase }}, {{ contact.state | titlecase | usStateAbbreviation }}, {{ contact.zipCode}}</ion-label>
+								<ion-icon name="location-outline" slot="start" size="small"></ion-icon>
+								<ion-label>
+									{{ contact.streetAddress | titlecase }}
+									<br>
+									<span>{{ contact.city | titlecase }}</span>
+									<span>, {{ contact.state | titlecase | stateAbbreviation }}</span>
+									<span>, {{ contact.zipCode }}</span>
+								</ion-label>
 							</ion-item>
 						</ion-list>
 					</ion-card-content>
@@ -60,18 +69,24 @@
 						<ion-card-header>Contracts</ion-card-header>
 
 						<ion-card-content>
-
+							<div class="table-row">
+								<span>ID</span>
+								<span>Date</span>
+							</div>
+							<div class="table-row" *ngFor="let doc of docList">
+								<span>{{ doc.id }}</span>
+								<span>{{ doc.date | date }}</span>
+							</div>
 						</ion-card-content>
 					</ng-template>
 					<ng-template #tickets>
 						<ion-card-header>Tickets</ion-card-header>
 
 						<ion-card-content>
-							<mat-list>
-								<mat-list-item *ngFor="let item of docList">
-
-								</mat-list-item>
-							</mat-list>
+							<div *ngFor="let doc of docList">
+								<ion-item>{{ doc.id }}</ion-item>
+								<ion-item>{{ doc.date | date }}</ion-item>
+							</div>
 						</ion-card-content>
 					</ng-template>
 				</ion-card>
@@ -84,3 +99,6 @@
 		</div>
 	</ng-template>
 </ion-content>
+
+<template #docTable>
+</template>

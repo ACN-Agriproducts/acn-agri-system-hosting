@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -8,7 +8,7 @@ import { Ticket } from "./ticket";
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
     base: number;
-    buyer_terms: number
+    buyer_terms: number;
     client:  DocumentReference<Contact>;
     clientInfo: {
         caat: string,
@@ -231,6 +231,13 @@ export class Contract extends FirebaseDocInterface {
               }
             });
           })
+    }
+
+    public static async getContracts(db: Firestore, company: string, ...constraints: QueryConstraint[]) {
+        const collectionReference = query(Contract.getCollectionReference(db, company, true), ...constraints);
+
+        const ticketCollectionData = await getDocs(collectionReference);
+        return ticketCollectionData.docs.map(snap => snap.data());
     }
 
     // TODO
