@@ -205,24 +205,38 @@ export class NewUserPage implements OnInit {
         },
       ]
     },
+    // {
+    //   section: 'portfolio',
+    //   module: [
+    //     {
+    //       label: 'Open portfolio section',
+    //       controlName: 'read',
+    //       main: true
+    //     },
+    //     {
+    //       label: 'Edit pyramid', 
+    //       controlName: 'editPyramid',
+    //     },
+    //     {
+    //       label: 'Add record',
+    //       controlName: 'addRecord'
+    //     }
+    //   ]
+    // },
     {
-      section: 'portfolio',
+      section: 'prices',
       module: [
         {
-          label: 'Open portfolio section',
+          label: 'Access prices',
           controlName: 'read',
           main: true
         },
         {
-          label: 'Edit pyramid', 
-          controlName: 'editPyramid',
-        },
-        {
-          label: 'Add record',
-          controlName: 'addRecord'
+          label: 'Edit prices',
+          controlName: 'write',
         }
       ]
-    },
+    }
   ];
 
   public userForm: UntypedFormGroup = this.fb.group({
@@ -283,6 +297,10 @@ export class NewUserPage implements OnInit {
         read: [false],
         editPyramid: [false],
         addRecord: [false]
+      }),
+      prices: this.fb.group({
+        read: [false],
+        write: [false]
       })
 
 
