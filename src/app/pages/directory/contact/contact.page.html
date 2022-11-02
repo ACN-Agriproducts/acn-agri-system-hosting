@@ -62,36 +62,62 @@
 			</ion-col>
 		</ion-row>
 		
-		<ion-row>
-			<ion-col>
-				<ion-card>
+		<ng-template [ngIf]="docList.length > 0">
+			<h4><span>{{ contact.type.toLowerCase() === 'client' ? 'Contracts' : 'Tickets'}}</span></h4>
+			
+			<ion-row>
+				<ion-col>
 					<ng-template [ngIf]="contact.type.toLowerCase() === 'client'" [ngIfElse]="tickets">
-						<ion-card-header>Contracts</ion-card-header>
-
-						<ion-card-content>
+						<ion-card>
 							<div class="table-row">
 								<span>ID</span>
 								<span>Date</span>
+								<span>Status</span>
+								<span>Product</span>
+								<span>Quantity</span>
+								<span>Price</span>
+								<span>Total</span>
+								<span>--</span>
 							</div>
-							<div class="table-row" *ngFor="let doc of docList">
+							<div class="table-row" [class.odd]="odd" *ngFor="let doc of docList; let odd = odd">
 								<span>{{ doc.id }}</span>
 								<span>{{ doc.date | date }}</span>
+								<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
+								<span>{{ doc.product.id }}</span>
+								<span>{{ doc.quantity | number }}</span>
+								<span>{{ doc.pricePerBushel | currency:'$' }}</span>
+								<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
+								<span>--</span>
 							</div>
-						</ion-card-content>
+						</ion-card>
 					</ng-template>
 					<ng-template #tickets>
-						<ion-card-header>Tickets</ion-card-header>
-
-						<ion-card-content>
-							<div *ngFor="let doc of docList">
-								<ion-item>{{ doc.id }}</ion-item>
-								<ion-item>{{ doc.date | date }}</ion-item>
+						<ion-card>
+							<div class="table-row">
+								<span>ID</span>
+								<span>Date</span>
+								<span>Contract</span>
+								<span>Product</span>
+								<span>Gross</span>
+								<span>Tare</span>
+								<span>Net</span>
+								<span>--</span>
 							</div>
-						</ion-card-content>
+							<div class="table-row" *ngFor="let doc of docList; let odd = odd">
+								<span>{{ doc.id }}</span>
+								<span>{{ doc.dateOut | date }}</span>
+								<span>{{ doc.contractID }}</span>
+								<span>{{ doc.productName }}</span>
+								<span>{{ doc.gross }}</span>
+								<span>{{ doc.tare }}</span>
+								<span>{{ doc.getNet() }}</span>
+								<span>--</span>
+							</div>
+						</ion-card>
 					</ng-template>
-				</ion-card>
-			</ion-col>
-		</ion-row>
+				</ion-col>
+			</ion-row>
+		</ng-template>
 	</ion-grid>
 	<ng-template #loading>
 		<div>

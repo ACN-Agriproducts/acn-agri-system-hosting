@@ -43,13 +43,13 @@ export class ContactPage implements OnInit {
 
       if (type === 'client') {
         console.log("Contracts");
-        const query = where("clientName", "==", this.contact.name);
-        this.docList = await Contract.getContracts(this.db, this.currentCompany, query);
+        const query = [where("clientName", "==", this.contact.name), orderBy('date')];
+        this.docList = await Contract.getContracts(this.db, this.currentCompany, ...query);
       }
       else if (type === 'trucker') {
         console.log("Tickets");
-        const query = where("truckerId", "==", this.id);
-        this.docList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, query);
+        const query = [where("truckerId", "==", this.id), orderBy('dateOut')];
+        this.docList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...query);
       }
       console.log(this.docList);
     })
