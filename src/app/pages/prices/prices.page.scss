@@ -1,12 +1,20 @@
-.table-space {
+.table-space, .info-area {
     background-color: white;
     border-radius: 5px;
     padding: 1rem;
     margin-bottom: 1rem;
+}
 
-    > button {
-        margin-right: 1rem;
-    }
+#prices-data {
+    margin-top: 1rem;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 1rem;
+}
+
+.table-space > button {
+    margin-right: 1rem;
 }
 
 .horizontal-scroll {
@@ -30,8 +38,13 @@
 }
 
 .prices-table-field-name {
+    &>div {
+        display: inline-flex;
+        align-items: center;
+        
+    }
+
     button {
-        right: 0px;
     }
 }
 
