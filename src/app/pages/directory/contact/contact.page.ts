@@ -14,11 +14,14 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class ContactPage implements OnInit {
   public contact: Contact;
+  public contactType: string;
   public currentCompany: string;
   public currentPlant: string;
   public docList: Contract[] | Ticket[] = [];
   public id: string;
   public ready: boolean = false;
+  public contractSplitIndex: number;
+  public isToggled: boolean = false;
 
   constructor(
     private db: Firestore,
@@ -33,29 +36,39 @@ export class ContactPage implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
 
     Contact.getDoc(this.db, this.currentCompany, this.id)
-    .then(async result => {
-      this.contact = result;
-      this.ready = true;
+    .then(async contact => {
+      this.contact = contact;
+      this.ready = this.contact != null;
+      if (!this.ready) throw 'Contact could not be loaded';
 
-      console.log(this.contact);
-
-      const type = this.contact.type.toLowerCase();
-
-      if (type === 'client') {
-        console.log("Contracts");
-        const query = [where("clientName", "==", this.contact.name), orderBy('date')];
-        this.docList = await Contract.getContracts(this.db, this.currentCompany, ...query);
+      this.contactType = this.contact.type.toLowerCase();
+      
+      if (this.contactType === 'client') {
+        this.getContracts();
       }
-      else if (type === 'trucker') {
-        console.log("Tickets");
+      else if (this.contactType === 'trucker') {
         const query = [where("truckerId", "==", this.id), orderBy('dateOut')];
         this.docList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...query);
       }
-      console.log(this.docList);
+      else { throw 'Type not found' }
     })
     .catch(error => {
       this.snack.open(error, 'error');
     });
+  }
+
+  public async getContracts(): Promise<void> {
+    const query = [where("clientName", "==", this.contact.name), orderBy('date')];
+
+    // this.docList = await Contract.getContractsOfType(this.db, this.currentCompany, ...query); // old way
+
+    const [purchaseContracts, salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
+    this.contractSplitIndex = purchaseContracts.length;
+    this.docList = purchaseContracts.concat(salesContracts);
+  }
+
+  public splitContracts(array): Contract[] {
+    return !this.isToggled ? array.slice(0, this.contractSplitIndex) : array.slice(this.contractSplitIndex);
   }
 
   public edit() {

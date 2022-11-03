@@ -7,6 +7,11 @@ ion-item {
 	font-size: 1.05em !important;
 }
 
+div:has(ion-toggle) {
+	display: flex;
+	align-items: center;
+}
+
 .table-row {
 	display: grid;
 	grid-template-columns: repeat(8, 1fr);
@@ -64,31 +69,35 @@ ion-item {
 		border-radius: 15px;    
 		border-style: solid;
 		border-width: 0.5px;
-		width: 35%;
-	}
-	.pending {
-		background-color: rgba(var(--ion-color-warning-rgb), 0.15);
-		color: var(--ion-color-warning);
-	}
-	.active {
-		background-color: rgba(var(--ion-color-success-rgb), 0.15);
-		color: var(--ion-color-success);
-	}
-	.closed {
-		background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-		color: var(--ion-color-danger);
-	}
-	.cancelled {
-		background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-		color: var(--ion-color-danger);
-	
-		cursor: initial;
-		&:before {
-			all: initial;
+		width: 30%;
+
+		&.pending {
+			background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+			color: var(--ion-color-warning);
+		}
+		&.active {
+			background-color: rgba(var(--ion-color-success-rgb), 0.15);
+			color: var(--ion-color-success);
+		}
+		&.closed {
+			background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+			color: var(--ion-color-danger);
+		}
+		&.cancelled {
+			background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+			color: var(--ion-color-danger);
+		
+			cursor: initial;
+			&:before {
+				all: initial;
+			}
 		}
 	}
-}
 
+	&.contracts {
+		grid-template-columns: repeat(7, 1fr) !important;
+	}
+}
 
 h4 {
 	font-size: 18px;

@@ -64,6 +64,6 @@ export class Contact extends FirebaseDocInterface {
     public static getDoc(db: Firestore, company: string, contact: string): Promise<Contact> {
         return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
-        })
+        });
     }
 }

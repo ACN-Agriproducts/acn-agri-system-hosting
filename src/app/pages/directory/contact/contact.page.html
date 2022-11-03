@@ -63,13 +63,19 @@
 		</ion-row>
 		
 		<ng-template [ngIf]="docList.length > 0">
-			<h4><span>{{ contact.type.toLowerCase() === 'client' ? 'Contracts' : 'Tickets'}}</span></h4>
+			<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets'}}</span></h4>
 			
+			<div *ngIf="contactType === 'client'">
+				<span>Purchase Contracts</span>
+				<ion-toggle [(ngModel)]="isToggled"></ion-toggle>
+				<span>Sales Contracts</span>
+			</div>
+
 			<ion-row>
 				<ion-col>
-					<ng-template [ngIf]="contact.type.toLowerCase() === 'client'" [ngIfElse]="tickets">
+					<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
 						<ion-card>
-							<div class="table-row">
+							<div class="table-row contracts">
 								<span>ID</span>
 								<span>Date</span>
 								<span>Status</span>
@@ -77,9 +83,10 @@
 								<span>Quantity</span>
 								<span>Price</span>
 								<span>Total</span>
-								<span>--</span>
 							</div>
-							<div class="table-row" [class.odd]="odd" *ngFor="let doc of docList; let odd = odd">
+							<div class="table-row contracts" [class.odd]="odd" 
+								*ngFor="let doc of (!isToggled ? docList.slice(0,contractSplitIndex) : docList.slice(contractSplitIndex)); let odd = odd"
+							>
 								<span>{{ doc.id }}</span>
 								<span>{{ doc.date | date }}</span>
 								<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
@@ -87,7 +94,6 @@
 								<span>{{ doc.quantity | number }}</span>
 								<span>{{ doc.pricePerBushel | currency:'$' }}</span>
 								<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
-								<span>--</span>
 							</div>
 						</ion-card>
 					</ng-template>

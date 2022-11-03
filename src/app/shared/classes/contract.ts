@@ -233,11 +233,21 @@ export class Contract extends FirebaseDocInterface {
           })
     }
 
-    public static async getContracts(db: Firestore, company: string, ...constraints: QueryConstraint[]) {
-        const collectionReference = query(Contract.getCollectionReference(db, company, true), ...constraints);
+    public static async getContracts(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<Contract[][]> {
+        const pContractQuery = query(Contract.getCollectionReference(db, company, true), ...constraints);
+        const sContractQuery = query(Contract.getCollectionReference(db, company, false), ...constraints);
 
-        const ticketCollectionData = await getDocs(collectionReference);
-        return ticketCollectionData.docs.map(snap => snap.data());
+        const pContractCollection = await getDocs(pContractQuery);
+        const sContractCollection = await getDocs(sContractQuery);
+        
+        return [pContractCollection.docs.map(snap => snap.data()), sContractCollection.docs.map(snap => snap.data())];
+    }
+
+    public static async getContractsOfType(db: Firestore, company: string, type: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+        const contractQuery = query(Contract.getCollectionReference(db, company, type), ...constraints);
+        const contractCollection = await getDocs(contractQuery);        
+        
+        return contractCollection.docs.map(snap => snap.data());
     }
 
     // TODO
