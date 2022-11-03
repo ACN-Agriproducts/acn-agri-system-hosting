@@ -19,6 +19,9 @@ export class PricesPage implements OnInit {
   public pricesTable: {
     [type: string]: pricesTable
   };
+  public futurePrice: number;
+  public dollarPrice: number;
+  public validUntil: Date;
 
   constructor(
     private db: Firestore,
@@ -45,6 +48,7 @@ export class PricesPage implements OnInit {
 
   getInfoFromSnapshot(): void {
     const prices = this.pricesSnapshot.data().prices as pricesDoc;
+    console.log(prices);
 
     for(let priceName in prices) {
       const currentPrice = prices[priceName];
@@ -57,7 +61,6 @@ export class PricesPage implements OnInit {
 
       this.pricesTable[priceName] = currentPriceTable;
 
-      console.log(this.pricesTable)
       for(let location in currentPrice) {
         const currentLocation = currentPrice[location];
 
@@ -65,6 +68,8 @@ export class PricesPage implements OnInit {
           this.setPrice(priceName, location, product, currentLocation[product]);
         }
       }
+      
+      console.log(this.pricesTable[priceName]);
     }
   }
 
@@ -197,12 +202,6 @@ export class PricesPage implements OnInit {
   }
 
   async importFromExcelTablePaste(priceTypeName: string) {
-    // const tableInput = ` -   	 QUERETARO 	 SALINAS V. 	 SAN LUIS P. 	 GUADALAJARA 	 TORREON 	 SAN JUAN DE LOS LAGOS 	 CELAYA  	 ENCARNACION, JAL 	 CHICAGO 
-    // maiz 	 8,170.27 	 7,641.36 	 8,083.43 	 8,280.79 	 8,036.07 	 8,233.42 	 8,170.27 	 8,170.27 	 7,468.62 
-    // MAIZ OND 	 8,059.75 	 6,688.34 	 7,060.81 	 6,968.16 	 6,993.45 	 6,978.80 	 7,018.27 	 6,915.65 	 -   
-    // sorgo 	 7,615.19 	 7,123.31 	 7,534.44 	 7,717.98 	 7,490.39 	 7,673.93 	 7,615.19 	 7,615.19 	 6,876.52 
-    // `
-
     const dialogRef = this.dialog.open(TableImportDialogComponent, {
       width: '350px'
     });
@@ -235,7 +234,8 @@ export class PricesPage implements OnInit {
   getSubmitObject() {
     const submitDoc: pricesDoc = {
       prices: {},
-      date: serverTimestamp()
+      date: serverTimestamp(),
+      
     };
 
     for(let typeName in this.pricesTable) {
@@ -259,16 +259,21 @@ export class PricesPage implements OnInit {
 }
 
 interface pricesDoc {
-  prices: prices,
-  date: Date | FieldValue
+  prices: tables;
+  date: Date | FieldValue;
+  //validDate: Date;
+  //dollarPrice: number;
 }
 
-interface prices {
-  [type: string]: { 
-    [location: string]: {
-      [ProductType: string]: number;
+interface tables {
+  //futurePrices: number;
+  //data:{
+    [type: string]: { 
+      [location: string]: {
+        [ProductType: string]: number;
+      }
     }
-  }
+ // }
 }
 
 interface pricesTable {

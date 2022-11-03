@@ -2,6 +2,30 @@
 
 
 <ion-content class="ion-padding">
+  <div class="info-area">
+    <div class="content-subtitle_small-inventory">
+      <h4>
+        <span>
+          INFORMACION DE PRECIOS
+        </span>
+      </h4>
+    </div>
+    <div id="prices-data">
+      <mat-form-field appearance="outline">
+        <mat-label>Precios de Futuros</mat-label>
+        <input matInput  [(ngModel)]="futurePrice" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Precio de Dolar</mat-label>
+        <input matInput  [(ngModel)]="dollarPrice" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha de validez</mat-label>
+        <input matInput >
+      </mat-form-field>
+    </div>
+  </div>
+
   <div class="table-space" *ngFor="let priceType of pricesTable | keyvalue">
     <div class="content-subtitle_small-inventory">
       <button mat-icon-button color="primary" (click)="renameTable(priceType.key)">
@@ -38,18 +62,22 @@
             
           </th>
           <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first; let index = index">
-            <button mat-icon-button color="primary" (click)="renameField(priceType.key, 0, index)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            {{location}}
+            <div>
+              <button mat-icon-button color="primary" (click)="renameField(priceType.key, 0, index)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              {{location}}
+            </div>
           </th>
         </tr>
         <tr class="prices-table-row" *ngFor="let productType of priceType.value.productNames; let index = index">
           <td class="prices-table-cell prices-table-field-name">
-            <button mat-icon-button color="primary" (click)="renameField(priceType.key, 1, index)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            {{productType}}
+            <div>
+              <button mat-icon-button color="primary" (click)="renameField(priceType.key, 1, index)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              {{productType}}
+            </div>
           </td>
           <td class="prices-table-cell" *ngFor="let location of priceType.value.locationNames; let first = first">
             <mat-form-field appearance="outline" [style.width.px]="150">
