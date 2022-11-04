@@ -17,9 +17,8 @@ export class PricesPage implements OnInit {
   private collectionRef: CollectionReference;
   private pricesSnapshot: DocumentSnapshot;
   public pricesTable: {
-    [type: string]: pricesTable
+    [type: string]: pricesTable;
   };
-  public futurePrice: number;
   public dollarPrice: number;
   public validUntil: Date;
 
@@ -47,22 +46,24 @@ export class PricesPage implements OnInit {
   }
 
   getInfoFromSnapshot(): void {
-    const prices = this.pricesSnapshot.data().prices as pricesDoc;
+    console.log(this.pricesSnapshot);
+    const prices = (this.pricesSnapshot.data() as pricesDoc).prices;
     console.log(prices);
 
-    for(let priceName in prices) {
-      const currentPrice = prices[priceName];
-      const firstLocation = currentPrice[Object.keys(currentPrice)[0]]
-      const currentPriceTable = {
-        locationNames: Object.keys(currentPrice),
+    for(let priceTable of prices) {
+      const firstLocation = priceTable.data[Object.keys(priceTable.data)[0]]
+      const currentPriceTable: pricesTable = {
+        futurePrice: priceTable.futurePrice,
+        locationNames: Object.keys(priceTable.data),
         productNames: Object.keys(firstLocation),
-        prices: (new Array<number[]>(Object.keys(firstLocation).length)).fill([]).map(() => new Array(Object.keys(currentPrice).length)),
+        prices: (new Array<number[]>(Object.keys(firstLocation).length)).fill([]).map(() => new Array(Object.keys(priceTable.data).length)),
       };
+      const priceName = priceTable.name;
 
       this.pricesTable[priceName] = currentPriceTable;
 
-      for(let location in currentPrice) {
-        const currentLocation = currentPrice[location];
+      for(let location in priceTable.data) {
+        const currentLocation = priceTable.data[location];
 
         for(let product in currentLocation) {
           this.setPrice(priceName, location, product, currentLocation[product]);
@@ -128,13 +129,16 @@ export class PricesPage implements OnInit {
     if(newTableInfo == null) return;
     let locationNames: string[] = [];
     let productNames: string[] = [];
+    let futurePrice = 0;
 
     if(newTableInfo.baseTable != "") {
       locationNames = this.pricesTable[newTableInfo.baseTable].locationNames;
       productNames = this.pricesTable[newTableInfo.baseTable].productNames;
+      futurePrice = this.pricesTable[newTableInfo.baseTable].futurePrice;
     }
 
     this.pricesTable[newTableInfo.name] = {
+      futurePrice: futurePrice,
       locationNames: Array.from(locationNames),
       productNames: Array.from(productNames),
       prices: (new Array<number[]>(productNames.length)).fill([]).map(() => new Array(locationNames.length)),
@@ -225,6 +229,7 @@ export class PricesPage implements OnInit {
     }
 
     this.pricesTable[priceTypeName] = {
+      futurePrice: 0,
       locationNames: locationNames,
       productNames: productNames,
       prices: prices
@@ -233,17 +238,23 @@ export class PricesPage implements OnInit {
 
   getSubmitObject() {
     const submitDoc: pricesDoc = {
-      prices: {},
+      prices: [],
       date: serverTimestamp(),
-      
+      validDate: this.validUntil,
+      dollarPrice: this.dollarPrice
     };
 
     for(let typeName in this.pricesTable) {
       const currentTable = this.pricesTable[typeName];
-      submitDoc.prices[typeName] = {};
+      const priceTable: priceTable = {
+        name: typeName,
+        futurePrice: currentTable.futurePrice,
+        data: {} 
+      };
+      submitDoc.prices.push(priceTable);
 
       for(let locationIndex = 0; locationIndex < currentTable.locationNames.length; locationIndex++) {
-        const row = submitDoc.prices[typeName][currentTable.locationNames[locationIndex]] = {};
+        const row = priceTable.data[currentTable.locationNames[locationIndex]] = {};
         for(let productIndex = 0; productIndex < currentTable.productNames.length; productIndex++) {
           row[currentTable.productNames[productIndex]] = currentTable.prices[productIndex][locationIndex];
         }
@@ -259,24 +270,24 @@ export class PricesPage implements OnInit {
 }
 
 interface pricesDoc {
-  prices: tables;
+  prices: priceTable[];
   date: Date | FieldValue;
-  //validDate: Date;
-  //dollarPrice: number;
+  validDate: Date;
+  dollarPrice: number;
 }
 
-interface tables {
-  //futurePrices: number;
-  //data:{
-    [type: string]: { 
-      [location: string]: {
-        [ProductType: string]: number;
-      }
-    }
- // }
+interface priceTable {
+  futurePrice: number;
+  name: string;
+  data:{
+    [location: string]: {
+      [ProductType: string]: number;
+    };
+  };
 }
 
 interface pricesTable {
+  futurePrice: number;
   locationNames: string[];
   productNames: string[];
   prices: number[][];
