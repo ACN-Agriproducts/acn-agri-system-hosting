@@ -87,6 +87,7 @@
 							</div>
 							<div class="table-row contracts" [class.odd]="odd" 
 								*ngFor="let doc of (!isToggled ? purchaseContracts : salesContracts); let odd = odd"
+								(click)="openContract(doc.ref.id)"
 							>
 								<span>{{ doc.id }}</span>
 								<span>{{ doc.date | date }}</span>
@@ -100,7 +101,6 @@
 					</ion-col>
 				</ion-row>
 			</ng-template>
-
 			<ng-template #tickets>
 				<ion-row>
 					<ion-col>
@@ -129,59 +129,6 @@
 					</ion-col>
 				</ion-row>
 			</ng-template>
-
-			<!-- <ion-row>
-				<ion-col>
-					<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
-						<ion-card>
-							<div class="table-row contracts">
-								<span>ID</span>
-								<span>Date</span>
-								<span>Status</span>
-								<span>Product</span>
-								<span>Quantity</span>
-								<span>Price</span>
-								<span>Total</span>
-							</div>
-							<div class="table-row contracts" [class.odd]="odd" 
-								*ngFor="let doc of splitContracts(docList, !isToggled); let odd = odd"
-							>
-								<span>{{ doc.id }}</span>
-								<span>{{ doc.date | date }}</span>
-								<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
-								<span>{{ doc.product.id }}</span>
-								<span>{{ doc.quantity | number }}</span>
-								<span>{{ doc.pricePerBushel | currency:'$' }}</span>
-								<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
-							</div>
-						</ion-card>
-					</ng-template>
-					<ng-template #tickets>
-						<ion-card>
-							<div class="table-row">
-								<span>ID</span>
-								<span>Date</span>
-								<span>Contract</span>
-								<span>Product</span>
-								<span>Gross</span>
-								<span>Tare</span>
-								<span>Net</span>
-								<span>--</span>
-							</div>
-							<div class="table-row" *ngFor="let doc of docList; let odd = odd">
-								<span>{{ doc.id }}</span>
-								<span>{{ doc.dateOut | date }}</span>
-								<span>{{ doc.contractID }}</span>
-								<span>{{ doc.productName }}</span>
-								<span>{{ doc.gross }}</span>
-								<span>{{ doc.tare }}</span>
-								<span>{{ doc.getNet() }}</span>
-								<span>--</span>
-							</div>
-						</ion-card>
-					</ng-template>
-				</ion-col>
-			</ion-row> -->
 		</ng-template>
 	</ion-grid>
 	<ng-template #loading>

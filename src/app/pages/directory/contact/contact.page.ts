@@ -3,6 +3,7 @@ import { Firestore, limit, orderBy, query, where } from '@angular/fire/firestore
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { NavController } from '@ionic/angular';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
@@ -35,6 +36,7 @@ export class ContactPage implements OnInit {
     private route: ActivatedRoute,
     private session: SessionInfo,
     private snack: SnackbarService,
+    private navController: NavController,
   ) { }
 
   ngOnInit() {
@@ -73,19 +75,15 @@ export class ContactPage implements OnInit {
     const query = [where("clientName", "==", this.contact.name), orderBy('date')];
     [this.purchaseContracts, this.salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
 
-    // this.contractSplitIndex = purchaseContracts.length;
-    // this.docList = purchaseContracts.concat(salesContracts);
-    // this.docCount = this.docList.length;
-
-    // with ContactDoc type
-    // this.contractSplitIndex = this.docList.push(...purchaseContracts);
-    // this.docList.push(...salesContracts);
-
-    // new method
     this.docCount = this.purchaseContracts.length + this.salesContracts.length;
     if (this.purchaseContracts.length > 0 || this.salesContracts.length > 0) {
       this.isToggled = this.purchaseContracts.length < this.salesContracts.length;
     }
+  }
+
+  public openContract(refId: string): void {
+    const type = !this.isToggled ? 'purchase' : 'sales';
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${type}/${refId}`);
   }
 
   public edit() {

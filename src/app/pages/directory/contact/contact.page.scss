@@ -42,6 +42,7 @@ ion-item {
 	}
 	
 	&:not(:first-of-type) {
+		cursor: pointer;
 		&:before {
 			content: "";
 			position: absolute;
