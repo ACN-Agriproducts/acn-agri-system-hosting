@@ -12,16 +12,12 @@
     </div>
     <div id="prices-data">
       <mat-form-field appearance="outline">
-        <mat-label>Precios de Futuros</mat-label>
-        <input matInput  [(ngModel)]="futurePrice" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
         <mat-label>Precio de Dolar</mat-label>
         <input matInput  [(ngModel)]="dollarPrice" />
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Fecha de validez</mat-label>
-        <input matInput >
+        <input matInput [(ngModel)]="validUntil">
       </mat-form-field>
     </div>
   </div>
