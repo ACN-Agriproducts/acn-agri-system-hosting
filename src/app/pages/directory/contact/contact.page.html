@@ -62,16 +62,75 @@
 			</ion-col>
 		</ion-row>
 		
-		<ng-template [ngIf]="docList.length > 0">
+		<ng-template [ngIf]="docCount > 0">
 			<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets'}}</span></h4>
-			
-			<div *ngIf="contactType === 'client'">
-				<span>Purchase Contracts</span>
-				<ion-toggle [(ngModel)]="isToggled"></ion-toggle>
-				<span>Sales Contracts</span>
-			</div>
 
-			<ion-row>
+			<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
+				<div class="contract-type">
+					<span *ngIf="purchaseContracts.length > 0">Purchase Contracts</span>
+					<ion-toggle [(ngModel)]="isToggled" 
+						*ngIf="purchaseContracts.length > 0 && salesContracts.length > 0"
+					></ion-toggle>
+					<span *ngIf="salesContracts.length > 0">Sales Contracts</span>
+				</div>
+				<ion-row>
+					<ion-col>
+						<ion-card>
+							<div class="table-row contracts">
+								<span>ID</span>
+								<span>Date</span>
+								<span>Status</span>
+								<span>Product</span>
+								<span>Quantity</span>
+								<span>Price</span>
+								<span>Total</span>
+							</div>
+							<div class="table-row contracts" [class.odd]="odd" 
+								*ngFor="let doc of (!isToggled ? purchaseContracts : salesContracts); let odd = odd"
+							>
+								<span>{{ doc.id }}</span>
+								<span>{{ doc.date | date }}</span>
+								<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
+								<span>{{ doc.product.id }}</span>
+								<span>{{ doc.quantity | number }}</span>
+								<span>{{ doc.pricePerBushel | currency:'$' }}</span>
+								<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
+							</div>
+						</ion-card>
+					</ion-col>
+				</ion-row>
+			</ng-template>
+
+			<ng-template #tickets>
+				<ion-row>
+					<ion-col>
+						<ion-card>
+							<div class="table-row">
+								<span>ID</span>
+								<span>Date</span>
+								<span>Contract</span>
+								<span>Product</span>
+								<span>Gross</span>
+								<span>Tare</span>
+								<span>Net</span>
+								<span>--</span>
+							</div>
+							<div class="table-row" *ngFor="let doc of ticketList; let odd = odd">
+								<span>{{ doc.id }}</span>
+								<span>{{ doc.dateOut | date }}</span>
+								<span>{{ doc.contractID }}</span>
+								<span>{{ doc.productName }}</span>
+								<span>{{ doc.gross }}</span>
+								<span>{{ doc.tare }}</span>
+								<span>{{ doc.getNet() }}</span>
+								<span>--</span>
+							</div>
+						</ion-card>
+					</ion-col>
+				</ion-row>
+			</ng-template>
+
+			<!-- <ion-row>
 				<ion-col>
 					<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
 						<ion-card>
@@ -85,7 +144,7 @@
 								<span>Total</span>
 							</div>
 							<div class="table-row contracts" [class.odd]="odd" 
-								*ngFor="let doc of (!isToggled ? docList.slice(0,contractSplitIndex) : docList.slice(contractSplitIndex)); let odd = odd"
+								*ngFor="let doc of splitContracts(docList, !isToggled); let odd = odd"
 							>
 								<span>{{ doc.id }}</span>
 								<span>{{ doc.date | date }}</span>
@@ -122,7 +181,7 @@
 						</ion-card>
 					</ng-template>
 				</ion-col>
-			</ion-row>
+			</ion-row> -->
 		</ng-template>
 	</ion-grid>
 	<ng-template #loading>

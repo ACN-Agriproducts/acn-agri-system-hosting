@@ -7,6 +7,9 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 
+declare type ContactDocs = Contract[] | Ticket[];
+declare type ContactDoc = Contract | Ticket;
+
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.page.html',
@@ -17,11 +20,15 @@ export class ContactPage implements OnInit {
   public contactType: string;
   public currentCompany: string;
   public currentPlant: string;
-  public docList: Contract[] | Ticket[] = [];
   public id: string;
-  public ready: boolean = false;
-  public contractSplitIndex: number;
   public isToggled: boolean = false;
+  public ready: boolean = false;
+  
+  // new method
+  public docCount: number = 0;
+  public ticketList: Ticket[] = [];
+  public purchaseContracts: Contract[] = [];
+  public salesContracts: Contract[] = [];
 
   constructor(
     private db: Firestore,
@@ -47,8 +54,7 @@ export class ContactPage implements OnInit {
         this.getContracts();
       }
       else if (this.contactType === 'trucker') {
-        const query = [where("truckerId", "==", this.id), orderBy('dateOut')];
-        this.docList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...query);
+        this.getTickets();
       }
       else { throw 'Type not found' }
     })
@@ -57,18 +63,29 @@ export class ContactPage implements OnInit {
     });
   }
 
-  public async getContracts(): Promise<void> {
-    const query = [where("clientName", "==", this.contact.name), orderBy('date')];
-
-    // this.docList = await Contract.getContractsOfType(this.db, this.currentCompany, ...query); // old way
-
-    const [purchaseContracts, salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
-    this.contractSplitIndex = purchaseContracts.length;
-    this.docList = purchaseContracts.concat(salesContracts);
+  public async getTickets(): Promise<void> {
+    const query = [where("truckerId", "==", this.id), orderBy('dateOut')];
+    this.ticketList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...query);
+    this.docCount = this.ticketList.length;
   }
 
-  public splitContracts(array): Contract[] {
-    return !this.isToggled ? array.slice(0, this.contractSplitIndex) : array.slice(this.contractSplitIndex);
+  public async getContracts(): Promise<void> {
+    const query = [where("clientName", "==", this.contact.name), orderBy('date')];
+    [this.purchaseContracts, this.salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
+
+    // this.contractSplitIndex = purchaseContracts.length;
+    // this.docList = purchaseContracts.concat(salesContracts);
+    // this.docCount = this.docList.length;
+
+    // with ContactDoc type
+    // this.contractSplitIndex = this.docList.push(...purchaseContracts);
+    // this.docList.push(...salesContracts);
+
+    // new method
+    this.docCount = this.purchaseContracts.length + this.salesContracts.length;
+    if (this.purchaseContracts.length > 0 || this.salesContracts.length > 0) {
+      this.isToggled = this.purchaseContracts.length < this.salesContracts.length;
+    }
   }
 
   public edit() {

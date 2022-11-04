@@ -7,9 +7,17 @@ ion-item {
 	font-size: 1.05em !important;
 }
 
-div:has(ion-toggle) {
+.contract-type {
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	margin: 25px 0 10px 0;
+
+	font-size: 1.1em;
+
+	span {
+		margin: 0 10px;
+	}
 }
 
 .table-row {
@@ -102,7 +110,7 @@ div:has(ion-toggle) {
 h4 {
 	font-size: 18px;
 	color: var(--ion-color-tertiary);
-	margin: 10px;
+	margin: 20px 15px;
 	line-height: 1.4;
 	position: relative;
 	flex-grow: 1;
