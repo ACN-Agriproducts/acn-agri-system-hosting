@@ -46,9 +46,7 @@ export class PricesPage implements OnInit {
   }
 
   getInfoFromSnapshot(): void {
-    console.log(this.pricesSnapshot);
     const prices = (this.pricesSnapshot.data() as pricesDoc).prices;
-    console.log(prices);
 
     for(let priceTable of prices) {
       const firstLocation = priceTable.data[Object.keys(priceTable.data)[0]]
@@ -69,8 +67,6 @@ export class PricesPage implements OnInit {
           this.setPrice(priceName, location, product, currentLocation[product]);
         }
       }
-      
-      console.log(this.pricesTable[priceName]);
     }
   }
 
@@ -220,7 +216,6 @@ export class PricesPage implements OnInit {
 
     const productNames: string[] = [];
     const prices: number[][] = [];
-    console.log(rows);
     rows.splice(0, 1);
 
     for(let index = 0; index < rows.length; index++) {
