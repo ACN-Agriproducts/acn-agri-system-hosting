@@ -13,11 +13,8 @@
     <div id="prices-data">
       <mat-form-field appearance="outline">
         <mat-label>Precio de Dolar</mat-label>
-        <input matInput  [(ngModel)]="dollarPrice" />
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Fecha de validez</mat-label>
-        <input matInput [(ngModel)]="validUntil">
+        <input matInput [(ngModel)]="dollarPrice" type="number" />
+        <span matSuffix class="suffix">MXN</span>
       </mat-form-field>
     </div>
   </div>
