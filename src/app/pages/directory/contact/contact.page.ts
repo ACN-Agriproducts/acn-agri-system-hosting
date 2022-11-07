@@ -8,9 +8,6 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 
-declare type ContactDocs = Contract[] | Ticket[];
-declare type ContactDoc = Contract | Ticket;
-
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.page.html',
@@ -19,18 +16,15 @@ declare type ContactDoc = Contract | Ticket;
 export class ContactPage implements OnInit {
   public contact: Contact;
   public contactType: string;
+  public contractType: string = 'purchase';
   public currentCompany: string;
   public currentPlant: string;
+  public docList: (Contract | Ticket)[] = [];
   public id: string;
   public isToggled: boolean = false;
-  public ready: boolean = false;
-  
-  // new method
-  public ticketList: Ticket[] = [];
   public purchaseContracts: Contract[] = [];
+  public ready: boolean = false;
   public salesContracts: Contract[] = [];
-  public docList: (Contract | Ticket)[] = [];
-  public contractType: string = 'purchase';
 
   constructor(
     private db: Firestore,
