@@ -17,6 +17,7 @@ import * as Excel from 'exceljs';
 import { FormControl } from '@angular/forms';
 import { collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { Product } from '@shared/classes/product';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -54,7 +55,7 @@ export const MY_FORMATS = {
     ]),
   ],
 })
-export class ProductDprTableComponent implements OnInit, OnDestroy {
+export class ProductDprTableComponent implements OnDestroy {
   @ViewChild(MatDatepicker) matDatePicker: MatDatepicker<_moment.Moment>;
 
   @Input() productDoc: Product;
@@ -86,8 +87,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private db: Firestore,
-    private localStorage: IonStorage,
-    private storage: Storage
+    private storage: Storage,
+    private session: SessionInfo
   ) {
     this.year = moment().year();
     this.month = moment().month() + 1;
@@ -95,29 +96,21 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.date.value.month(this.month - 1);
     this.date.value.year(this.year);
 
-    this.localStorage.get("currentCompany").then(company => {
-      this.currentCompany = company;
-      this.localStorage.get("currentPlant").then(currentPlant => {
-        this.currentPlant = currentPlant;
-        this.getDprDoc();
-      });
-      getDownloadURL(ref(this.storage, `companies/${company}/DPR.xlsx`)).then(url => {
-        let xhr = new XMLHttpRequest();
-        xhr.responseType = 'arraybuffer';
-        xhr.onload = async (event) => {
-          this.workbook = new Excel.Workbook();
-          await this.workbook.xlsx.load(xhr.response);
-        }
+    this.currentCompany = this.session.getCompany();
+    this.currentPlant = this.session.getPlant();
 
-        xhr.open('GET', url);
-        xhr.send();
-      });
+    this.getDprDoc();
+    getDownloadURL(ref(this.storage, `companies/${this.currentCompany}/DPR.xlsx`)).then(url => {
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = 'arraybuffer';
+      xhr.onload = async (event) => {
+        this.workbook = new Excel.Workbook();
+        await this.workbook.xlsx.load(xhr.response);
+      }
 
+      xhr.open('GET', url);
+      xhr.send();
     });
-
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -206,6 +199,10 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     this.getDprDoc();
 
     datepicker.close();
+  }
+
+  public async getDprDocs() {
+
   }
 
   public downloadDpr() {
