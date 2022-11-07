@@ -7,17 +7,21 @@ ion-item {
 	font-size: 1.05em !important;
 }
 
-.contract-type {
+ion-segment {
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 25px 0 10px 0;
-
-	font-size: 1.1em;
-
-	span {
-		margin: 0 10px;
-	}
+	justify-content: start;
+	margin: 30px 0 15px 15px;
+	width: 50%;
+}
+ion-segment-button {
+	font-size: 0.85em;
+	min-height: 42px;
+	height: 42px;
+	width: 50%;
+}
+.segment-button-checked {
+	--background: rgba(var(--ion-color-primary-rgb),0.075);
+	background: rgba(var(--ion-color-primary-rgb),0.075);
 }
 
 .table-row {

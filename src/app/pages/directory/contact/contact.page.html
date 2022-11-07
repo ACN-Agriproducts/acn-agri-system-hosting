@@ -62,17 +62,21 @@
 			</ion-col>
 		</ion-row>
 		
-		<ng-template [ngIf]="docCount > 0">
+		<ng-template [ngIf]="docList.length > 0">
 			<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets'}}</span></h4>
 
 			<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
-				<div class="contract-type">
-					<span *ngIf="purchaseContracts.length > 0">Purchase Contracts</span>
-					<ion-toggle [(ngModel)]="isToggled" 
-						*ngIf="purchaseContracts.length > 0 && salesContracts.length > 0"
-					></ion-toggle>
-					<span *ngIf="salesContracts.length > 0">Sales Contracts</span>
-				</div>
+				<ion-segment value="purchase" (ionChange)="changeContracts($event)">
+					<!-- <ion-segment-button value="purchase,sales">
+						<ion-label>All</ion-label>
+					</ion-segment-button> -->
+					<ion-segment-button value="purchase" *ngIf="purchaseContracts.length > 0">
+						<ion-label>Purchase</ion-label>
+					</ion-segment-button>
+					<ion-segment-button value="sales" *ngIf="salesContracts.length > 0">
+						<ion-label>Sales</ion-label>
+					</ion-segment-button>
+				</ion-segment>
 				<ion-row>
 					<ion-col>
 						<ion-card>
@@ -86,7 +90,7 @@
 								<span>Total</span>
 							</div>
 							<div class="table-row contracts" [class.odd]="odd" 
-								*ngFor="let doc of (!isToggled ? purchaseContracts : salesContracts); let odd = odd"
+								*ngFor="let doc of docList; let odd = odd"
 								(click)="openContract(doc.ref.id)"
 							>
 								<span>{{ doc.id }}</span>
@@ -115,7 +119,7 @@
 								<span>Net</span>
 								<span>--</span>
 							</div>
-							<div class="table-row" *ngFor="let doc of ticketList; let odd = odd">
+							<div class="table-row" [class.odd]="odd" *ngFor="let doc of docList; let odd = odd">
 								<span>{{ doc.id }}</span>
 								<span>{{ doc.dateOut | date }}</span>
 								<span>{{ doc.contractID }}</span>

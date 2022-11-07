@@ -26,10 +26,11 @@ export class ContactPage implements OnInit {
   public ready: boolean = false;
   
   // new method
-  public docCount: number = 0;
   public ticketList: Ticket[] = [];
   public purchaseContracts: Contract[] = [];
   public salesContracts: Contract[] = [];
+  public docList: (Contract | Ticket)[] = [];
+  public contractType: string = 'purchase';
 
   constructor(
     private db: Firestore,
@@ -67,23 +68,22 @@ export class ContactPage implements OnInit {
 
   public async getTickets(): Promise<void> {
     const query = [where("truckerId", "==", this.id), orderBy('dateOut')];
-    this.ticketList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...query);
-    this.docCount = this.ticketList.length;
+    this.docList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...query);
   }
 
   public async getContracts(): Promise<void> {
     const query = [where("clientName", "==", this.contact.name), orderBy('date')];
     [this.purchaseContracts, this.salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
-
-    this.docCount = this.purchaseContracts.length + this.salesContracts.length;
-    if (this.purchaseContracts.length > 0 || this.salesContracts.length > 0) {
-      this.isToggled = this.purchaseContracts.length < this.salesContracts.length;
-    }
+    this.docList = this.purchaseContracts;
   }
 
   public openContract(refId: string): void {
-    const type = !this.isToggled ? 'purchase' : 'sales';
-    this.navController.navigateForward(`dashboard/contracts/contract-info/${type}/${refId}`);
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.contractType}/${refId}`);
+  }
+
+  public changeContracts = (event: any): void => {
+    this.contractType = event.detail.value;
+    this.docList = this.contractType === 'purchase' ? this.purchaseContracts : this.salesContracts;
   }
 
   public edit() {
