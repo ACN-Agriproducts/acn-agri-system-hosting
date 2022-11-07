@@ -69,6 +69,13 @@ export class ContactPage implements OnInit {
     const query = [where("clientName", "==", this.contact.name), orderBy('date')];
     [this.purchaseContracts, this.salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
     this.docList = this.purchaseContracts;
+
+    if (this.docList.length === 0) {
+      this.docList = this.salesContracts;
+      this.contractType = 'sales';
+    }
+
+    console.log(this.purchaseContracts, this.salesContracts);
   }
 
   public openContract(refId: string): void {

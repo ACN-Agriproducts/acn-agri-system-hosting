@@ -66,7 +66,7 @@
 			<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
 
 			<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
-				<ion-segment value="purchase" (ionChange)="changeContracts($event)">
+				<ion-segment [value]="contractType" (ionChange)="changeContracts($event)">
 					<!-- <ion-segment-button value="purchase,sales">
 						<ion-label>All</ion-label>
 					</ion-segment-button> -->
@@ -98,7 +98,7 @@
 								<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
 								<span>{{ doc.product.id }}</span>
 								<span>{{ doc.quantity | number }}</span>
-								<span>{{ doc.pricePerBushel | currency:'$' }}</span>
+								<span>{{ doc.pricePerBushel | currency: '$' }}</span>
 								<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
 							</div>
 						</ion-card>
@@ -114,9 +114,9 @@
 								<span>Date</span>
 								<span>Contract</span>
 								<span>Product</span>
-								<span>Gross</span>
-								<span>Tare</span>
-								<span>Net</span>
+								<span>Gross ( lbs. )</span>
+								<span>Tare ( lbs. )</span>
+								<span>Net ( lbs. )</span>
 								<span>--</span>
 							</div>
 							<div class="table-row" [class.odd]="odd" *ngFor="let doc of docList; let odd = odd">
@@ -124,9 +124,9 @@
 								<span>{{ doc.dateOut | date }}</span>
 								<span>{{ doc.contractID }}</span>
 								<span>{{ doc.productName }}</span>
-								<span>{{ doc.gross }}</span>
-								<span>{{ doc.tare }}</span>
-								<span>{{ doc.getNet() }}</span>
+								<span>{{ doc.gross | number }}</span>
+								<span>{{ doc.tare | number }}</span>
+								<span>{{ doc.getNet() | number }}</span>
 								<span>--</span>
 							</div>
 						</ion-card>
