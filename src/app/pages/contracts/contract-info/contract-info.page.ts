@@ -230,9 +230,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   public selectedTickets = (): DiscountedTicket[] => {
-    console.log(this.ticketDiscountList.filter(ticket => ticket.display))
     return this.ticketDiscountList.filter(ticket => ticket.display);
   }
 
-  public selectAllTickets = (): void => this.ticketDiscountList.forEach(ticket => ticket.display = true)
+  public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.display = select);
+
+  public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.display);
 }
