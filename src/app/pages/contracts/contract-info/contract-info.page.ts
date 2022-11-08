@@ -10,6 +10,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+
+declare type DiscountedTicket = {data: Ticket, discounts: any, display: boolean};
 
 @Component({
   selector: 'app-contract-info',
@@ -24,7 +27,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentContract: Contract;
   public ready:boolean = false;
   public ticketList: Ticket[];
-  public ticketDiscountList: {data: Ticket, discounts: any}[];
+  public ticketDiscountList: {data: Ticket, discounts: any, display: boolean}[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
 
@@ -37,7 +40,8 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private localStorage: Storage,
     private db: Firestore,
     private fns: Functions,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private snack: SnackbarService,
     ) { }
 
   ngOnInit() {
@@ -50,12 +54,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
           this.ticketList = tickets;
-          const list:{data: Ticket, discounts: any}[] = [];
+          const list:{data: Ticket, discounts: any, display: boolean}[] = [];
 
           this.ticketList.forEach(t => {
-            list.push({data: t, discounts: {infested: 0, inspection:0}});
+            list.push({data: t, discounts: {infested: 0, inspection:0}, display: false});
           })
           this.ticketDiscountList = list;
+          console.log(this.ticketDiscountList.filter(ticket => ticket.display))
         });
       });
     });
@@ -68,6 +73,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   public onDownloadLiquidation = async () => {
+    if (this.selectedTickets().length === 0) {
+      this.snack.open("No tickets selected", "warn");
+      return;
+    }
+
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet();
 
@@ -116,7 +126,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
 
     // populating worksheet columns
-    this.ticketDiscountList.forEach(ticket => {
+    this.selectedTickets().forEach(ticket => {
       const net = ticket.data.getNet() * (ticket.data.in ? 1 : -1);
 
       const dryWeight = ticket.data.dryWeight;
@@ -211,11 +221,16 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       {
         return {
           data: ticket,
-          discounts: {infested: 0, inspection:0}
+          discounts: {infested: 0, inspection:0},
+          display: false
         }
       }));
     }).catch(error => {
       this.snackBar.open(error, "Dismiss", {duration: 5000});
     });
+  }
+
+  public selectedTickets = (): DiscountedTicket[] => {
+    return this.ticketDiscountList.filter(ticket => ticket.display);
   }
 }

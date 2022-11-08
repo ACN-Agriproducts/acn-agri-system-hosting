@@ -58,8 +58,8 @@
   >Print</button> 
 
   <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
-    *ngIf="ticketDiscountList"
-    [ticketList] = "ticketDiscountList"
-    [contract] = "currentContract"
+    *ngIf="selectedTickets()"
+    [ticketList]="selectedTickets()"
+    [contract]="currentContract"
   ></app-contract-liquidation-long>
 </ion-content>
