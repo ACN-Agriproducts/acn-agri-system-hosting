@@ -60,7 +60,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
             list.push({data: t, discounts: {infested: 0, inspection:0}, display: false});
           })
           this.ticketDiscountList = list;
-          console.log(this.ticketDiscountList.filter(ticket => ticket.display))
         });
       });
     });
@@ -206,7 +205,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     a.remove();
   } 
 
-  reloadContractTickets() {
+  reloadContractTickets = () => {
     httpsCallable(this.fns, 'contracts-updateTickets')({
       company: this.currentCompany,
       contractId: this.id,
@@ -231,6 +230,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   public selectedTickets = (): DiscountedTicket[] => {
+    console.log(this.ticketDiscountList.filter(ticket => ticket.display))
     return this.ticketDiscountList.filter(ticket => ticket.display);
   }
+
+  public selectAllTickets = (): void => this.ticketDiscountList.forEach(ticket => ticket.display = true)
 }
