@@ -12,7 +12,7 @@ import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
-declare type DiscountedTicket = {data: Ticket, discounts: any, display: boolean};
+declare type DiscountedTicket = {data: Ticket, discounts: any, includeInReport: boolean};
 
 @Component({
   selector: 'app-contract-info',
@@ -27,7 +27,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentContract: Contract;
   public ready:boolean = false;
   public ticketList: Ticket[];
-  public ticketDiscountList: {data: Ticket, discounts: any, display: boolean}[];
+  public ticketDiscountList: {data: Ticket, discounts: any, includeInReport: boolean}[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
 
@@ -54,10 +54,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
           this.ticketList = tickets;
-          const list:{data: Ticket, discounts: any, display: boolean}[] = [];
+          const list:{data: Ticket, discounts: any, includeInReport: boolean}[] = [];
 
           this.ticketList.forEach(t => {
-            list.push({data: t, discounts: {infested: 0, inspection:0}, display: false});
+            list.push({data: t, discounts: {infested: 0, inspection:0}, includeInReport: false});
           })
           this.ticketDiscountList = list;
         });
@@ -221,7 +221,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         return {
           data: ticket,
           discounts: {infested: 0, inspection:0},
-          display: false
+          includeInReport: false
         }
       }));
     }).catch(error => {
@@ -230,10 +230,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   public selectedTickets = (): DiscountedTicket[] => {
-    return this.ticketDiscountList.filter(ticket => ticket.display);
+    return this.ticketDiscountList.filter(ticket => ticket.includeInReport);
   }
 
-  public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.display = select);
+  public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
 
-  public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.display);
+  public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.includeInReport);
 }
