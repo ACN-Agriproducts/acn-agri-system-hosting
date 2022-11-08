@@ -50,13 +50,16 @@
 <ion-content class="ion-padding" *ngIf="showLiquidation">
   <button mat-raised-button (click)="reloadContractTickets()">Reload Tickets</button>
   <app-ticket-discount-table [ticketDiscountList]="ticketDiscountList"></app-ticket-discount-table>
-  <button mat-button (click)="selectAllTickets()">Select All</button>
-  <button mat-button (click)="onDownloadLiquidation()">Download</button>
+  <button mat-button (click)="selectAllTickets(!allSelected() ? true : false)">
+    {{ !allSelected() ? 'Select All' : 'Deselect All' }}
+  </button>
+  <button mat-button [disabled]="selectedTickets().length === 0" (click)="onDownloadLiquidation()">Download</button>
   <button mat-button
+    [disabled]="selectedTickets().length === 0"
     ngxPrint
     [useExistingCss]="true"
     printSectionId="ContractLiquidationLong"
-  >Print</button> 
+  >Print</button>
 
   <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
     *ngIf="selectedTickets()"
