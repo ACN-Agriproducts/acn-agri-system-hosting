@@ -11,6 +11,7 @@ export class TicketDiscountTableComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
 
+  }
 }

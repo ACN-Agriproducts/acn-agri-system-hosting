@@ -97,9 +97,9 @@
         <td class='total-row right'>{{moistureAdjustedWeight | number}}</td>
         <td class='total-row right'>{{contract.pricePerBushel / 0.56 | currency}}</td>
         <td class='total-row right'>{{contract.pricePerBushel / 0.56 | currency}}</td>
-        <td class='total-row right'>{{moistureAdjustedWeight / 100 * contract.pricePerBushel / 0.56 | currency}}</td>
-        <td class='total-row right'>{{getTotalInfestedDiscount() | currency}}</td>
-        <td class='total-row right'>{{getTotalInspectionDiscount() | currency}}</td>
-        <td class='total-row right'>{{moistureAdjustedWeight / 100 * contract.pricePerBushel / 0.56 | currency}}</td>
+        <td class='total-row right'>{{totalTotal | currency}}</td>
+        <td class='total-row right'>{{infestedTotal | currency}}</td>
+        <td class='total-row right'>{{inspectionTotal | currency}}</td>
+        <td class='total-row right'>{{netToPayTotal | currency}}</td>
     </tr>
 </table>
