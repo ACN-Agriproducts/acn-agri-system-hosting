@@ -6,13 +6,12 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
-declare type TicketWithDiscount = {data: Ticket, discounts: any, includeInReport: boolean};
+declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
 
 @Component({
   selector: 'app-contract-info',
@@ -25,11 +24,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public type: string;
   public currentCompany: string;
   public currentContract: Contract;
-  public ready:boolean = false;
+  public ready: boolean = false;
   public ticketList: Ticket[];
   public ticketDiscountList: TicketWithDiscount[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
+
+  public ticketTotal: number = 0;
 
   private currentSub: Subscription;
 
@@ -40,7 +41,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private localStorage: Storage,
     private db: Firestore,
     private fns: Functions,
-    private snackBar: MatSnackBar,
     private snack: SnackbarService,
     ) { }
 
@@ -57,7 +57,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
           const list: TicketWithDiscount[] = [];
 
           this.ticketList.forEach(t => {
-            list.push({data: t, discounts: {infested: 0, inspection:0}, includeInReport: false});
+            list.push({
+              data: t, 
+              discounts: { infested: 0, inspection:0 }, 
+              includeInReport: false
+            });
           })
           this.ticketDiscountList = list;
         });
@@ -72,11 +76,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   public onDownloadLiquidation = async () => {
-    if (this.selectedTickets().length === 0) {
-      this.snack.open("No tickets selected", "warn");
-      return;
-    }
-
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet();
 
@@ -210,7 +209,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       company: this.currentCompany,
       contractId: this.id,
       isPurchase: this.type == "purchase"
-    }).then(async result => {
+    }).then(async () => {
       const contract = await Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id);
       const tickets = await contract.getTickets();
       this.ticketList = tickets;
@@ -220,12 +219,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       {
         return {
           data: ticket,
-          discounts: {infested: 0, inspection:0},
+          discounts: { infested: 0, inspection: 0 },
           includeInReport: false
         }
       }));
     }).catch(error => {
-      this.snackBar.open(error, "Dismiss", {duration: 5000});
+      this.snack.open(error, "error");
     });
   }
 
