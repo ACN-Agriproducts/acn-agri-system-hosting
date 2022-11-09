@@ -12,7 +12,7 @@ import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
-declare type DiscountedTicket = {data: Ticket, discounts: any, includeInReport: boolean};
+declare type TicketWithDiscount = {data: Ticket, discounts: any, includeInReport: boolean};
 
 @Component({
   selector: 'app-contract-info',
@@ -27,7 +27,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentContract: Contract;
   public ready:boolean = false;
   public ticketList: Ticket[];
-  public ticketDiscountList: {data: Ticket, discounts: any, includeInReport: boolean}[];
+  public ticketDiscountList: TicketWithDiscount[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
 
@@ -54,7 +54,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
           this.ticketList = tickets;
-          const list:{data: Ticket, discounts: any, includeInReport: boolean}[] = [];
+          const list: TicketWithDiscount[] = [];
 
           this.ticketList.forEach(t => {
             list.push({data: t, discounts: {infested: 0, inspection:0}, includeInReport: false});
@@ -229,7 +229,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
   }
 
-  public selectedTickets = (): DiscountedTicket[] => {
+  public selectedTickets = (): TicketWithDiscount[] => {
     return this.ticketDiscountList.filter(ticket => ticket.includeInReport);
   }
 
