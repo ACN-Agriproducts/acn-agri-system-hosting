@@ -22,16 +22,10 @@ export class ContactPage implements OnInit {
   public contractType: string = 'purchase';
   public currentCompany: string;
   public currentPlant: string;
-  // public docList: (Contract | Ticket)[] = [];
-  public id: string;
-  public isToggled: boolean = false;
-  // public purchaseContracts: Contract[] = [];
-  public ready: boolean = false;
-  // public salesContracts: Contract[] = [];
-  public primaryDocPagination: Pagination<FirebaseDocInterface>;
-  public secondaryDocPagination: Pagination<FirebaseDocInterface>;
   public docPagination: Pagination<FirebaseDocInterface>;
-  public docCount: number = 0;
+  public secDocPagination: Pagination<FirebaseDocInterface>;
+  public id: string;
+  public ready: boolean = false;
 
   private docLimit: number = 20;
   private docStep: number = 20;
@@ -70,59 +64,41 @@ export class ContactPage implements OnInit {
     });
   }
 
-  public async getTickets(): Promise<void> {
+  public getTickets(): void {
     const queryList = [
       where("truckerId", "==", this.id),
       orderBy('dateOut'),
       limit(this.docLimit)
     ];
-    // this.docList = await Ticket.getTickets(this.db, this.currentCompany, this.currentPlant, ...queryList);
 
-    const colQuery = query(
+    this.docPagination = this.setPagination(this.docPagination, query(
       Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant),
       ...queryList
-    );
-
-    this.primaryDocPagination = this.setPagination(this.primaryDocPagination, colQuery);
-    this.docPagination = this.primaryDocPagination;
+    ));
   }
 
-  public async getContracts(): Promise<void> {
+  public getContracts(): void {
     const queryList = [
       where("clientName", "==", this.contact.name),
       orderBy('date'),
       limit(this.docLimit)
     ];
 
-    // [this.purchaseContracts, this.salesContracts] = await Contract.getContracts(this.db, this.currentCompany, ...query);
-    // this.docList = this.purchaseContracts;
-
-    // if (this.docList.length === 0) {
-    //   this.docList = this.salesContracts;
-    //   this.contractType = 'sales';
-    // }
-
-    const primaryColQuery = query(
+    this.docPagination = this.setPagination(this.docPagination, query(
       Contract.getCollectionReference(this.db, this.currentCompany, true),
       ...queryList
-    );
+    ));
 
-    const secondaryColQuery = query(
+    this.secDocPagination = this.setPagination(this.secDocPagination, query(
       Contract.getCollectionReference(this.db, this.currentCompany, false),
       ...queryList
-    );
-
-    this.primaryDocPagination = this.setPagination(this.primaryDocPagination, primaryColQuery);
-    this.secondaryDocPagination = this.setPagination(this.secondaryDocPagination, secondaryColQuery);
-
-    this.docPagination = this.primaryDocPagination;
+    ));
   }
 
-  public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>): Pagination<FirebaseDocInterface> {
-    if (pagination) pagination.end();
+  public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>)
+  : Pagination<FirebaseDocInterface> {
+    if (pagination) this.docPagination.end();
     pagination = new Pagination<FirebaseDocInterface>(colQuery, this.docStep);
-    console.log(pagination.list.length)
-
     return pagination;
   }
 
@@ -132,19 +108,24 @@ export class ContactPage implements OnInit {
 
   public changeContracts = (event: any): void => {
     this.contractType = event.detail.value;
-    // this.docList = this.contractType === 'purchase' ? this.purchaseContracts : this.salesContracts;
-
-    this.docPagination = this.contractType === 'purchase' ? this.primaryDocPagination : this.secondaryDocPagination;
   }
 
   public async infiniteContracts(event: any) {
-    this.docPagination.getNext(snapshot => {
+    const currentPagination = this.contractType === 'purchase' ? this.docPagination : this.secDocPagination;
+    currentPagination?.getNext(snapshot => {
       event.target.complete();
 
       if(snapshot.docs.length < this.docStep) {
         this.infiniteScroll.disabled = true;
       }
     });
+  }
+
+  public docCount(): number {
+    if (this.contactType === 'trucker') {
+      return this.docPagination?.list.length;
+    }
+    return this.docPagination?.list.length + this.secDocPagination?.list.length;
   }
 
   public edit() {
