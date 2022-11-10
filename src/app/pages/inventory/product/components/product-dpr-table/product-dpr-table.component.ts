@@ -228,6 +228,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       }
 
       const tempSummary = [0, 0, 0]
+      const tempLiability = [null, null];
 
       if(data[day] != null){
         if(data[day].inQuantity != null){
@@ -256,6 +257,9 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
         if(data[day].invoices != null){
           tempData.invoices = data[day].invoices;
         }
+
+        tempLiability[0] = data[day].issuedWarehouseReceipt ?? null;
+        tempLiability[1] = data[day].cancelledWarehouseReceipt ?? null;
       }
 
       if(day > 1){
@@ -268,6 +272,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
 
       tableData.push(tempData);
       dprExcelData.summary.push(tempSummary);
+      dprExcelData.liability.push(tempLiability);
     }
 
     return [tableData, dprExcelData];
@@ -304,6 +309,9 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
         sheet.getCell(`B${row+10}`).value = dprExcelData.summary[row][0] / productWeight;
         sheet.getCell(`C${row+10}`).value = dprExcelData.summary[row][1] / productWeight;
         sheet.getCell(`D${row+10}`).value = dprExcelData.summary[row][2] / productWeight;
+
+        sheet.getCell(`G${row+10}`).value = dprExcelData.liability[row][0] / productWeight;
+        sheet.getCell(`H${row+10}`).value = dprExcelData.liability[row][1] / productWeight;
       }
     });
 
