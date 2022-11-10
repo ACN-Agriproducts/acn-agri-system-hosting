@@ -39,7 +39,7 @@ export class Invoice extends FirebaseDocInterface {
                 date: data.date,
                 id: data.id,
                 items: [],
-                pdfReference: data.pdfReference,
+                pdfReference: data.pdfReference ?? null,
                 needsAttention: data.needsAttention,
                 seller: {...data.seller},
                 status: data.status,
