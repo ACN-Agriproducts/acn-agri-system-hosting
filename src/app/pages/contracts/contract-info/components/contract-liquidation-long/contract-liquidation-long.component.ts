@@ -28,26 +28,6 @@ export class ContractLiquidationLongComponent implements OnInit {
     this.getTotals();
   }
 
-  /* public getTotalInfestedDiscount(): number {
-    let total = 0;
-
-    this.ticketList.forEach(ticket => {
-      total += ticket.discounts.infested;
-    });
-
-    return total;
-  }
-
-  public getTotalInspectionDiscount(): number {
-    let total = 0;
-
-    this.ticketList.forEach(ticket => {
-      total += ticket.discounts.inspection;
-    });
-
-    return total;
-  } */
-
   public getDate(): Date {
     return new Date();
   }
@@ -57,17 +37,20 @@ export class ContractLiquidationLongComponent implements OnInit {
   }
 
   public getTotals() {
+    console.log("Calculating Totals")
+    this.gross = this.tare = this.moistureDiscount = this.moistureAdjustedWeight = this.totalTotal = this.infestedTotal = this.inspectionTotal = this.netToPayTotal = 0;
+
+    console.log(this.ticketList)
     this.ticketList.forEach(ticket => {
       this.gross += ticket.data.gross;
       this.tare += ticket.data.tare;
       this.moistureDiscount += ticket.data.dryWeight - (ticket.data.gross - ticket.data.tare);
       this.moistureAdjustedWeight += ticket.data.dryWeight;
 
+      this.totalTotal += this.contract.pricePerBushel * ticket.data.dryWeight / this.contract.productInfo.weight;
       this.infestedTotal += ticket.discounts.infested;
       this.inspectionTotal += ticket.discounts.inspection;
     });
-
-    this.totalTotal = this.moistureAdjustedWeight / 100 * this.contract.pricePerBushel / 0.56;
-    this.netToPayTotal = this.moistureAdjustedWeight / 100 * this.contract.pricePerBushel / 0.56;
+    this.netToPayTotal = this.totalTotal - this.infestedTotal - this.inspectionTotal;
   }
 }
