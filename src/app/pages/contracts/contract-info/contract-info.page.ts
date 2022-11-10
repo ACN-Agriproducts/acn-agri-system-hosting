@@ -233,8 +233,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.includeInReport);
 
   public getTotals = (): LiquidationTotals => {
-    console.log("Calculating Totals")
-
     const totals = new LiquidationTotals();
 
     this.selectedTickets().forEach(ticket => {
@@ -272,6 +270,7 @@ class LiquidationTotals {
   public netToPayTotal: number;
 
   constructor() {
-    this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = this.totalTotal = this.infestedTotal = this.inspectionTotal = this.netToPayTotal = 0;
+    this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = 0;
+    this.totalTotal = this.infestedTotal = this.inspectionTotal = this.netToPayTotal = 0;
   }
 }
