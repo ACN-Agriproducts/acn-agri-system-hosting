@@ -86,20 +86,20 @@
         <td class='total-row center'>TOTALS:</td>
         <td class='total-row'></td>
         <td class='total-row'></td>
-        <td class='total-row right'>{{gross | number}}</td>
-        <td class='total-row right'>{{tare | number}}</td>
-        <td class='total-row right'>{{gross - tare | number}}</td>
+        <td class='total-row right'>{{totals.gross | number}}</td>
+        <td class='total-row right'>{{totals.tare | number}}</td>
+        <td class='total-row right'>{{totals.net | number}}</td>
         <td class='total-row'></td>
-        <td class='total-row right'>{{moistureDiscount}}</td>
-        <td class='total-row right'>{{moistureAdjustedWeight | number}}</td>
+        <td class='total-row right'>{{totals.moistureDiscount}}</td>
+        <td class='total-row right'>{{totals.moistureAdjustedWeight | number}}</td>
         <td class='total-row'></td>
-        <td class='total-row'>-</td>
-        <td class='total-row right'>{{moistureAdjustedWeight | number}}</td>
-        <td class='total-row right'>{{contract.pricePerBushel / 0.56 | currency}}</td>
-        <td class='total-row right'>{{contract.pricePerBushel / 0.56 | currency}}</td>
-        <td class='total-row right'>{{totalTotal | currency}}</td>
-        <td class='total-row right'>{{infestedTotal | currency}}</td>
-        <td class='total-row right'>{{inspectionTotal | currency}}</td>
-        <td class='total-row right'>{{netToPayTotal | currency}}</td>
+        <td class='total-row right'>-</td>
+        <td class='total-row right'>{{totals.moistureAdjustedWeight | number}}</td>
+        <td class='total-row right'></td>
+        <td class='total-row right'></td>
+        <td class='total-row right'>{{totals.totalTotal | currency}}</td>
+        <td class='total-row right'>{{totals.infestedTotal | currency}}</td>
+        <td class='total-row right'>{{totals.inspectionTotal | currency}}</td>
+        <td class='total-row right'>{{totals.netToPayTotal | currency}}</td>
     </tr>
 </table>
