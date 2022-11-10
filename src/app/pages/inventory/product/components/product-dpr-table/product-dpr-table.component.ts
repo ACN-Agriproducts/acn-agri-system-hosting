@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
-import { DocumentData } from '@angular/fire/firestore';
+import { DocumentData, DocumentSnapshot, QuerySnapshot } from '@angular/fire/firestore';
 import { Storage as IonStorage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -55,7 +55,7 @@ export const MY_FORMATS = {
     ]),
   ],
 })
-export class ProductDprTableComponent implements OnDestroy {
+export class ProductDprTableComponent implements OnInit, OnDestroy {
   @ViewChild(MatDatepicker) matDatePicker: MatDatepicker<_moment.Moment>;
 
   @Input() productDoc: Product;
@@ -89,7 +89,9 @@ export class ProductDprTableComponent implements OnDestroy {
     private db: Firestore,
     private storage: Storage,
     private session: SessionInfo
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.year = moment().year();
     this.month = moment().month() + 1;
 
@@ -127,7 +129,6 @@ export class ProductDprTableComponent implements OnDestroy {
       where("year", "==", date.year()),
       where("product", "==", this.productDoc.ref.id)))
       .then(dpr => {
-        
         this.tableData = [];
         this.dprDoc = dpr.docs[0].data();
 
@@ -201,26 +202,124 @@ export class ProductDprTableComponent implements OnDestroy {
     datepicker.close();
   }
 
-  public async getDprDocs() {
+  public getDprDocs(): Promise<QuerySnapshot<DocumentData>> {
+    const date = this.date.value as _moment.Moment;
 
+    return getDocs(query(collection(Plant.getDocReference(this.db, this.currentCompany, this.currentPlant), 'inventory'),
+      where("year", "==", date.year()),
+      where("product", "==", this.productDoc.ref.id)));
+  }
+  
+  public getExcelData(dpr: DocumentSnapshot<any>):
+  [any, {
+    summary: number[][],
+    liability: number[][],
+    openStorageLiability: number[][],
+  }] {
+    const tableData = [];
+    const dprExcelData: {
+      summary: number[][],
+      liability: number[][],
+      openStorageLiability: number[][],
+    } = {
+      summary: [],
+      liability: [],
+      openStorageLiability: [],
+    }
+    const dprDoc = dpr.data();
+
+    const data = dprDoc.tickets as any;
+    for(let day = 1; day <= 31; day++){
+      let tempData = {
+        id: day,
+        inQuantity: 0,
+        outQuantity: 0,
+        adjustment: 0,
+        inTickets: [],
+        outTickets: [],
+        invoices: [],
+        endOfDay: 0
+      }
+
+      const tempSummary = [0, 0, 0]
+
+      if(data[day] != null){
+        if(data[day].inQuantity != null){
+          tempData.inQuantity = data[day].inQuantity;
+          tempSummary[0] += data[day].inQuantity;
+        }
+
+        if(data[day].outQuantity != null){
+          tempData.outQuantity = data[day].outQuantity;
+          tempSummary[1] += data[day].outQuantity;
+        }
+
+        if(data[day].adjustment != null){
+          tempData.adjustment = data[day].adjustment;
+          tempSummary[2] += data[day].adjustment;
+        }
+
+        if(data[day].inTickets != null){
+          tempData.inTickets = data[day].inTickets;
+        }
+
+        if(data[day].outTickets != null){
+          tempData.outTickets = data[day].outTickets;
+        }
+
+        if(data[day].invoices != null){
+          tempData.invoices = data[day].invoices;
+        }
+      }
+
+      if(day > 1){
+        const lastDay = tableData[tableData.length-1]
+        tempData.endOfDay = lastDay.endOfDay + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
+      } 
+      else {
+        tempData.endOfDay = dprDoc.startingInventory + tempData.inQuantity - tempData.outQuantity + tempData.adjustment;
+      }
+
+      tableData.push(tempData);
+      dprExcelData.summary.push(tempSummary);
+    }
+
+    return [tableData, dprExcelData];
   }
 
-  public downloadDpr() {
+  public async downloadDpr() {
     const productWeight = this.productDoc.weight;
-    const sheet = this.workbook.getWorksheet('Sheet1');
-    sheet.getCell("J3").value = this.productDoc.ref.id;
-    sheet.getCell("O3").value = month[this.date.value.month()];
-    sheet.getCell("Q3").value = this.year;
-    sheet.getCell("E8").value = this.dprDoc.startingInventory / productWeight;
-    sheet.getCell("I8").value = this.dprDoc.startingWarehouseReceipt / productWeight;
-    sheet.getCell("L8").value = this.dprDoc.startingOpenStorage / productWeight;
+    //const sheet = this.workbook.getWorksheet('Sheet1');
 
-    for(let row = 0; row < 31; row++) {
-      // Do summary section
-      sheet.getCell(`B${row+10}`).value = this.dprExcelData.summary[row][0] / productWeight;
-      sheet.getCell(`C${row+10}`).value = this.dprExcelData.summary[row][1] / productWeight;
-      sheet.getCell(`D${row+10}`).value = this.dprExcelData.summary[row][2] / productWeight;
-    }
+    const yearSnapshot = await this.getDprDocs();
+
+    yearSnapshot.forEach(docSnap => {
+      const [tableData, dprExcelData] = this.getExcelData(docSnap);
+
+      const data = docSnap.data();
+      const m: month = data.month - 1
+      const monthName = month[m];
+      const sheet = this.workbook.getWorksheet(monthName);
+
+      console.log(`##### ${monthName}" #####`);
+      console.log(tableData);
+      console.log(dprExcelData);
+
+    
+      sheet.getCell("J3").value = this.productDoc.ref.id;
+      sheet.getCell("O3").value = monthName;
+      sheet.getCell("Q3").value = this.year;
+      sheet.getCell("E8").value = data.startingInventory / productWeight;
+      sheet.getCell("I8").value = data.startingWarehouseReceipt / productWeight;
+      sheet.getCell("L8").value = data.startingOpenStorage / productWeight;
+
+      for(let row = 0; row < 31; row++) {
+        // Do summary section
+        sheet.getCell(`B${row+10}`).value = dprExcelData.summary[row][0] / productWeight;
+        sheet.getCell(`C${row+10}`).value = dprExcelData.summary[row][1] / productWeight;
+        sheet.getCell(`D${row+10}`).value = dprExcelData.summary[row][2] / productWeight;
+      }
+    });
 
     this.workbook.xlsx.writeBuffer().then((data) => {
       const blob = new Blob([data], {
