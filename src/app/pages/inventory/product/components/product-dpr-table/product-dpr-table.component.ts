@@ -71,15 +71,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
   public date: FormControl = new FormControl(moment())
   public columnsToDisplay: string[] = ["Day", "inQuantity", "outQuantity", "adjustment", "endOfDay"];
   public tableData: any[] = [];
-  public dprExcelData: {
-    summary: number[][],
-    liability: number[][],
-    openStorageLiability: number[][],
-  } = {
-    summary: [],
-    liability: [],
-    openStorageLiability: [],
-  }
 
   public expandedDay: any;
 
@@ -145,22 +136,18 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
             endOfDay: 0
           }
 
-          const tempSummary = [0, 0, 0]
 
           if(data[day] != null){
             if(data[day].inQuantity != null){
               tempData.inQuantity = data[day].inQuantity;
-              tempSummary[0] += data[day].inQuantity;
             }
 
             if(data[day].outQuantity != null){
               tempData.outQuantity = data[day].outQuantity;
-              tempSummary[1] += data[day].outQuantity;
             }
 
             if(data[day].adjustment != null){
               tempData.adjustment = data[day].adjustment;
-              tempSummary[2] += data[day].adjustment;
             }
 
             if(data[day].inTickets != null){
@@ -185,7 +172,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
           }
 
           this.tableData.push(tempData);
-          this.dprExcelData.summary.push(tempSummary);
         }
 
         this.tableView.renderRows();
@@ -330,7 +316,7 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       const a = document.createElement("a");
       a.setAttribute("style", "display: none");
       a.href = url;
-      a.download = `DPR-${this.year}-${month[this.date.value.month()]}.xlsx`;
+      a.download = `DPR-${this.year}-${this.productDoc.ref.id}.xlsx`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
