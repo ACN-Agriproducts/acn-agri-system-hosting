@@ -30,8 +30,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
 
-  public ticketTotal: number = 0;
-
   private currentSub: Subscription;
 
   @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
@@ -231,8 +229,49 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public selectedTickets = (): TicketWithDiscount[] => {
     return this.ticketDiscountList.filter(ticket => ticket.includeInReport);
   }
-
   public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
-
   public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.includeInReport);
+
+  public getTotals = (): LiquidationTotals => {
+    console.log("Calculating Totals")
+
+    const totals = new LiquidationTotals();
+
+    this.selectedTickets().forEach(ticket => {
+      totals.gross += ticket.data.gross;
+      totals.tare += ticket.data.tare;
+
+      const net = ticket.data.gross - ticket.data.tare;
+      totals.net += net;
+
+      totals.moistureDiscount += ticket.data.dryWeight - net;
+      totals.moistureAdjustedWeight += ticket.data.dryWeight;
+
+      const total = this.currentContract.pricePerBushel * ticket.data.dryWeight / this.currentContract.productInfo.weight;
+      totals.totalTotal += total
+
+      totals.infestedTotal += ticket.discounts.infested;
+      totals.inspectionTotal += ticket.discounts.inspection;
+
+      totals.netToPayTotal = total - ticket.discounts.infested - ticket.discounts.inspectionTotal;
+    });
+    
+    return totals;
+  }
+}
+
+class LiquidationTotals {
+  public gross: number;
+  public tare: number;
+  public net: number;
+  public moistureDiscount: number;
+  public moistureAdjustedWeight: number;
+  public totalTotal: number;
+  public infestedTotal: number;
+  public inspectionTotal: number;
+  public netToPayTotal: number;
+
+  constructor() {
+    this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = this.totalTotal = this.infestedTotal = this.inspectionTotal = this.netToPayTotal = 0;
+  }
 }

@@ -63,7 +63,8 @@
 
   <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
     *ngIf="ticketDiscountList"
-    [ticketList]="ticketDiscountList"
+    [ticketList]="selectedTickets()"
     [contract]="currentContract"
+	[totals]="getTotals()"
   ></app-contract-liquidation-long>
 </ion-content>
