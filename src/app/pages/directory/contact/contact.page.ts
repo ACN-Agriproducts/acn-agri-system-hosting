@@ -19,7 +19,7 @@ export class ContactPage implements OnInit {
 
   public contact: Contact;
   public contactType: string;
-  public contractType: string = 'purchase';
+  public contractType: string;
   public currentCompany: string;
   public currentPlant: string;
   public primaryPagination: Pagination<FirebaseDocInterface>;
