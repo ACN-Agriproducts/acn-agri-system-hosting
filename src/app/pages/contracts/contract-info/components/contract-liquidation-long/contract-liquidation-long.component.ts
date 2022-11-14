@@ -20,7 +20,7 @@ export class ContractLiquidationLongComponent implements OnInit {
     net: number,
     moistureDiscount: number,
     moistureAdjustedWeight: number,
-    totalTotal: number,
+    finalTotal: number,
     infestedTotal: number,
     inspectionTotal: number,
     netToPayTotal: number
