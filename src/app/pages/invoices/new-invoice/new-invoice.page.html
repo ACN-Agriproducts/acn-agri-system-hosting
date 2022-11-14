@@ -33,13 +33,12 @@
       <ion-card class="panel-action">
         <ion-card-content>
           <div class="content-panel-button">
-            <ion-button fill="clear" color="secondary" routerLink="/dashboard/invoices" (click)="selectedTickets.clear()">Cancel
-            </ion-button>
+            <ion-button fill="clear" color="secondary" routerLink="/dashboard/invoices" (click)="selectedTickets.clear()">Cancel</ion-button>
             <div class="panel-list">
               <ion-item color="dark" lines="none">
-                <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ',' }}</ion-label>
+                <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ', ' }}</ion-label>
               </ion-item>
-              <ion-button routerLink="/dashboard/invoices/confirm-invoice">Next</ion-button>
+              <ion-button routerLink="/dashboard/invoices/confirm-invoice" [state]="selectedTickets">Next</ion-button>
             </div>
           </div>
         </ion-card-content>
