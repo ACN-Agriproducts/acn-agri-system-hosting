@@ -65,7 +65,7 @@
 			<ng-template [ngIf]="docCount() > 0">
 				<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
 				<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
-					<ion-segment [value]="initialType()" (ionChange)="changeContracts($event)">
+					<ion-segment [value]="getType()" (ionChange)="changeContracts($event)">
 						<!-- <ion-segment-button value="purchase,sales">
 							<ion-label>All</ion-label>
 						</ion-segment-button> -->

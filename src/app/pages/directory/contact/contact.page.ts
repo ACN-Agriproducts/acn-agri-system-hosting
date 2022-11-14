@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CollectionReference, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -26,7 +26,7 @@ export class ContactPage implements OnInit {
   public secondaryPagination: Pagination<FirebaseDocInterface>;
   public id: string;
   public ready: boolean = false;
-  public stopCounter: number = 0;
+  public initialize: boolean = true;
 
   private docLimit: number = 20;
   private docStep: number = 20;
@@ -129,12 +129,11 @@ export class ContactPage implements OnInit {
     return (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0;
   }
 
-  public initialType(): string {
-    console.log("initialType")
-    if (this.stopCounter > 0) return this.contractType;
-
-    this.contractType = this.docCount(true) > 0 ? 'purchase' : 'sales';
-    this.stopCounter++;
+  public getType(): string {
+    if (this.initialize) {
+      this.contractType = this.docCount(true) > 0 ? 'purchase' : 'sales';
+      this.initialize = false;
+    }
     return this.contractType;
   }
 
