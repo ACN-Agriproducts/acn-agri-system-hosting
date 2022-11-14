@@ -129,7 +129,7 @@ export class ContactPage implements OnInit {
     return (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0;
   }
 
-  public getType(): string {
+  public getContractType(): string {
     if (this.initialize) {
       this.contractType = this.docCount(true) > 0 ? 'purchase' : 'sales';
       this.initialize = false;
