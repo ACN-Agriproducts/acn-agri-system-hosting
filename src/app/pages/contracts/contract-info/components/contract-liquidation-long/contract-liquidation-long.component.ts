@@ -20,10 +20,10 @@ export class ContractLiquidationLongComponent implements OnInit {
     net: number,
     moistureDiscount: number,
     moistureAdjustedWeight: number,
-    finalTotal: number,
-    infestedTotal: number,
-    inspectionTotal: number,
-    netToPayTotal: number
+    totalBeforeDiscounts: number,
+    infested: number,
+    inspection: number,
+    netToPay: number
   };
 
   constructor() { }

@@ -246,12 +246,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       totals.moistureAdjustedWeight += ticket.data.dryWeight;
 
       const total = this.currentContract.pricePerBushel * ticket.data.dryWeight / this.currentContract.productInfo.weight;
-      totals.finalTotal += total
+      totals.totalBeforeDiscounts += total;
 
-      totals.infestedTotal += ticket.discounts.infested;
-      totals.inspectionTotal += ticket.discounts.inspection;
+      totals.infested += ticket.discounts.infested;
+      totals.inspection += ticket.discounts.inspection;
 
-      totals.netToPayTotal += total - ticket.discounts.infested - ticket.discounts.inspection;
+      totals.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
     });
     
     return totals;
@@ -264,13 +264,13 @@ class LiquidationTotals {
   public net: number;
   public moistureDiscount: number;
   public moistureAdjustedWeight: number;
-  public finalTotal: number;
-  public infestedTotal: number;
-  public inspectionTotal: number;
-  public netToPayTotal: number;
+  public totalBeforeDiscounts: number;
+  public infested: number;
+  public inspection: number;
+  public netToPay: number;
 
   constructor() {
     this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = 0;
-    this.finalTotal = this.infestedTotal = this.inspectionTotal = this.netToPayTotal = 0;
+    this.totalBeforeDiscounts = this.infested = this.inspection = this.netToPay = 0;
   }
 }
