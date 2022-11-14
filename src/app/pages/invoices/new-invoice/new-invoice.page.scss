@@ -82,6 +82,9 @@ ion-card.item-card {
   ion-item{
     font-style: italic;
   }
+  ion-label{
+    overflow: visible;
+  }
 }
 .active-card {
   border: 2px solid var(--ion-color-primary) !important;
