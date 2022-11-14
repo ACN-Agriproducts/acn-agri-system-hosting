@@ -22,10 +22,11 @@ export class ContactPage implements OnInit {
   public contractType: string = 'purchase';
   public currentCompany: string;
   public currentPlant: string;
-  public docPagination: Pagination<FirebaseDocInterface>;
-  public secDocPagination: Pagination<FirebaseDocInterface>;
+  public primaryPagination: Pagination<FirebaseDocInterface>;
+  public secondaryPagination: Pagination<FirebaseDocInterface>;
   public id: string;
   public ready: boolean = false;
+  public stopCounter: number = 0;
 
   private docLimit: number = 20;
   private docStep: number = 20;
@@ -71,7 +72,7 @@ export class ContactPage implements OnInit {
       limit(this.docLimit)
     ];
 
-    this.docPagination = this.setPagination(this.docPagination, query(
+    this.primaryPagination = this.setPagination(this.primaryPagination, query(
       Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant),
       ...queryList
     ));
@@ -84,12 +85,12 @@ export class ContactPage implements OnInit {
       limit(this.docLimit)
     ];
 
-    this.docPagination = this.setPagination(this.docPagination, query(
+    this.primaryPagination = this.setPagination(this.primaryPagination, query(
       Contract.getCollectionReference(this.db, this.currentCompany, true),
       ...queryList
     ));
 
-    this.secDocPagination = this.setPagination(this.secDocPagination, query(
+    this.secondaryPagination = this.setPagination(this.secondaryPagination, query(
       Contract.getCollectionReference(this.db, this.currentCompany, false),
       ...queryList
     ));
@@ -97,7 +98,7 @@ export class ContactPage implements OnInit {
 
   public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>)
   : Pagination<FirebaseDocInterface> {
-    if (pagination) this.docPagination.end();
+    if (pagination) pagination.end();
     pagination = new Pagination<FirebaseDocInterface>(colQuery, this.docStep);
     return pagination;
   }
@@ -111,7 +112,7 @@ export class ContactPage implements OnInit {
   }
 
   public async infiniteContracts(event: any) {
-    const currentPagination = this.contractType === 'purchase' ? this.docPagination : this.secDocPagination;
+    const currentPagination = this.contractType === 'purchase' ? this.primaryPagination : this.secondaryPagination;
     currentPagination?.getNext(snapshot => {
       event.target.complete();
 
@@ -121,14 +122,28 @@ export class ContactPage implements OnInit {
     });
   }
 
-  public docCount(): number {
-    if (this.contactType === 'trucker') {
-      return this.docPagination?.list.length;
+  public docCount(isPrimary?: boolean): number {
+    if (isPrimary == null) {
+      return this.docCount(true) + this.docCount(false);
     }
-    return this.docPagination?.list.length + this.secDocPagination?.list.length;
+    return (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0;
+  }
+
+  public initialType(): string {
+    console.log("initialType")
+    if (this.stopCounter > 0) return this.contractType;
+
+    this.contractType = this.docCount(true) > 0 ? 'purchase' : 'sales';
+    this.stopCounter++;
+    return this.contractType;
   }
 
   public edit() {
     // use mat dialog with form fields so that user can edit properties of contact
+  }
+
+  ngOnDestroy(): void {
+    this.primaryPagination?.end();
+    this.secondaryPagination?.end();
   }
 }

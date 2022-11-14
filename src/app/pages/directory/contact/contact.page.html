@@ -65,14 +65,14 @@
 			<ng-template [ngIf]="docCount() > 0">
 				<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
 				<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
-					<ion-segment [value]="contractType" (ionChange)="changeContracts($event)">
+					<ion-segment [value]="initialType()" (ionChange)="changeContracts($event)">
 						<!-- <ion-segment-button value="purchase,sales">
 							<ion-label>All</ion-label>
 						</ion-segment-button> -->
-						<ion-segment-button value="purchase">
+						<ion-segment-button value="purchase" *ngIf="docCount(true) > 0">
 							<ion-label>Purchase Contracts</ion-label>
 						</ion-segment-button>
-						<ion-segment-button value="sales">
+						<ion-segment-button value="sales" *ngIf="docCount(false) > 0">
 							<ion-label>Sales Contracts</ion-label>
 						</ion-segment-button>
 					</ion-segment>
@@ -89,7 +89,7 @@
 									<span>Total</span>
 								</div>
 								<div class="table-row contracts" [class.odd]="odd"
-									*ngFor="let doc of (contractType === 'purchase' ? docPagination : secDocPagination)?.list; let odd = odd"
+									*ngFor="let doc of (contractType === 'purchase' ? primaryPagination : secondaryPagination)?.list; let odd = odd"
 									(click)="openContract(doc.ref.id)"
 								>
 									<span>{{ doc.id }}</span>
@@ -118,7 +118,7 @@
 									<span>Net ( lbs. )</span>
 									<span>--</span>
 								</div>
-								<div class="table-row" [class.odd]="odd" *ngFor="let doc of docPagination?.list; let odd = odd">
+								<div class="table-row" [class.odd]="odd" *ngFor="let doc of primaryPagination?.list; let odd = odd">
 									<span>{{ doc.id }}</span>
 									<span>{{ doc.dateOut | date }}</span>
 									<span>{{ doc.contractID }}</span>
