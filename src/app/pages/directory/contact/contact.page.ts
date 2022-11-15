@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -8,6 +9,8 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { FirebaseDocInterface, Pagination } from '@shared/classes/FirebaseDocInterface';
 import { Ticket } from '@shared/classes/ticket';
+import { lastValueFrom } from 'rxjs';
+import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
 
 @Component({
   selector: 'app-contact',
@@ -37,6 +40,7 @@ export class ContactPage implements OnInit {
     private session: SessionInfo,
     private snack: SnackbarService,
     private navController: NavController,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -139,6 +143,18 @@ export class ContactPage implements OnInit {
 
   public edit() {
     // use mat dialog with form fields so that user can edit properties of contact
+    const dialogRef = this.dialog.open(EditContactDialogComponent, {
+      autoFocus: false,
+      data: 
+    });
+    const newContactData = await lastValueFrom(dialogRef.afterClosed());
+    if (newContactData == null) return;
+
+    this.updateContact(newContactData);
+  }
+
+  public updateContact(newContactData: any) {
+    console.log(newContactData)
   }
 
   ngOnDestroy(): void {
