@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ConfirmInvoicePageRoutingModule } from './confirm-invoice-routing.module';
 
 import { ConfirmInvoicePage } from './confirm-invoice.page';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ConfirmInvoicePage } from './confirm-invoice.page';
     FormsModule,
     IonicModule,
     ConfirmInvoicePageRoutingModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
   declarations: [ConfirmInvoicePage]
 })
