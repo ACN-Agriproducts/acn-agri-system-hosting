@@ -1,3 +1,76 @@
-<p>
-  edit-contact-dialog works!
-</p>
+<h2 mat-dialog-title>Edit Contact</h2>
+
+<mat-dialog-content>
+	<form #contactForm="ngForm">
+		<mat-grid-list cols="9" rowHeight="70px" gutterSize="10px">
+			<mat-grid-tile colspan="5">
+				<mat-form-field appearance="fill">
+					<mat-label>Name</mat-label>
+					<input matInput required [(ngModel)]="data.name" name="name">
+					<mat-error>Name is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="4">
+				<mat-form-field *ngIf="data.type.toLocaleLowerCase() === 'trucker'">
+					<mat-label>CAAT</mat-label>
+					<input matInput required [(ngModel)]="data.caat" name="caat">
+					<mat-error>CAAT is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Phone</mat-label>
+					<input matInput required [(ngModel)]="data.phoneNumber" name="phoneNumber">
+					<mat-error>Phone number is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="6">
+				<mat-form-field appearance="fill">
+					<mat-label>Email</mat-label>
+					<input matInput required [(ngModel)]="data.email" name="email">
+					<mat-error>Email is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="9">
+				<mat-form-field appearance="fill">
+					<mat-label>Street Address</mat-label>
+					<input matInput required [(ngModel)]="data.streetAddress" name="streetAddress">
+					<mat-error>Street Address is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>City</mat-label>
+					<input matInput required [(ngModel)]="data.city" name="city">
+					<mat-error>City is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>State</mat-label>
+					<input matInput required [(ngModel)]="data.state" name="state">
+					<mat-error>State is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Zip</mat-label>
+					<input matInput required [(ngModel)]="data.zipCode" name="zipCode">
+					<mat-error>Zip code is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="action-bar">
+	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
+	<button mat-button color="primary" [mat-dialog-close]="data" [disabled]="contactForm.invalid">Save</button>
+</mat-dialog-actions>

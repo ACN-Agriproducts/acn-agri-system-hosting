@@ -142,9 +142,10 @@ export class ContactPage implements OnInit {
   }
 
   public async edit(): Promise<void> {
+    const contactCopy = { ...this.contact };
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
-      data: this.contact,
+      data: contactCopy,
     });
     const newContactData = await lastValueFrom(dialogRef.afterClosed());
     if (newContactData == null) return;
@@ -152,8 +153,32 @@ export class ContactPage implements OnInit {
     this.updateContact(newContactData);
   }
 
-  public updateContact(newContactData: any): void {
-    console.log(newContactData)
+  public updateContact(data: Contact): void {
+    this.contact.update({
+      name: data.name.toUpperCase(),
+      caat: data.caat,
+      phoneNumber: data.phoneNumber,
+      email: data.email.toUpperCase(),
+      streetAddress: data.streetAddress.toUpperCase(),
+      city: data.city.toUpperCase(),
+      state: data.state.toUpperCase(),
+      zipCode: data.zipCode,
+    })
+    .then(() => {
+      this.contact.name = data.name.toUpperCase();
+      this.contact.caat = data.caat;
+      this.contact.phoneNumber = data.phoneNumber;
+      this.contact.email = data.email.toUpperCase();
+      this.contact.streetAddress = data.streetAddress.toUpperCase();
+      this.contact.city = data.city.toUpperCase();
+      this.contact.state = data.state.toUpperCase();
+      this.contact.zipCode = data.zipCode;
+
+      this.snack.open("Contact successfully updated", "success");
+    })
+    .catch(error => {
+      this.snack.open(error, "error");
+    });
   }
 
   ngOnDestroy(): void {

@@ -17,7 +17,7 @@ export class EditContactDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
+    
   }
 
 }
