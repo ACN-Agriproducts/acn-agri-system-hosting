@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Contact } from '@shared/classes/contact';
 
 @Component({
   selector: 'app-edit-contact-dialog',
@@ -7,8 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditContactDialogComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: Contact,
+    private dialogRef: MatDialogRef<EditContactDialogComponent>,
+    private snack: SnackbarService,
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.data);
+  }
 
 }

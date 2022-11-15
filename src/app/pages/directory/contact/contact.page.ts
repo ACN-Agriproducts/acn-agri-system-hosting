@@ -141,11 +141,10 @@ export class ContactPage implements OnInit {
     return this.contractType;
   }
 
-  public edit() {
-    // use mat dialog with form fields so that user can edit properties of contact
+  public async edit(): Promise<void> {
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
-      data: 
+      data: this.contact,
     });
     const newContactData = await lastValueFrom(dialogRef.afterClosed());
     if (newContactData == null) return;
@@ -153,7 +152,7 @@ export class ContactPage implements OnInit {
     this.updateContact(newContactData);
   }
 
-  public updateContact(newContactData: any) {
+  public updateContact(newContactData: any): void {
     console.log(newContactData)
   }
 
