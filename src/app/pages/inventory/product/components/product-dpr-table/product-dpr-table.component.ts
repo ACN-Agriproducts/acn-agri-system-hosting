@@ -291,11 +291,6 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
       const m: month = data.month - 1
       const monthName = month[m];
       const sheet = this.workbook.getWorksheet(monthName);
-
-      console.log(`##### ${monthName}" #####`);
-      console.log(tableData);
-      console.log(dprExcelData);
-
     
       sheet.getCell("J3").value = this.productDoc.ref.id;
       sheet.getCell("O3").value = monthName;
