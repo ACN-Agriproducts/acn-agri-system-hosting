@@ -94,6 +94,9 @@ export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
       if(snapshot.docs.length < this.contractStep) {
         this.infiniteScroll.disabled = true;
       }
+      else {
+        this.infiniteScroll.disabled = false;
+      }
     });
   }
 
