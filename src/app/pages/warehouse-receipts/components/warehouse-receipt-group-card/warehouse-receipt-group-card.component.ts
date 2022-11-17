@@ -188,10 +188,6 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public paidCount(): number {
-    return this.wrList.filter(wr => wr.isPaid).length;
-  }
-
   public toggleExpandable(event: Event): void {
     const icon = event.target as HTMLElement;
     const card = icon.parentElement.parentElement;
@@ -247,5 +243,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
       this.wrList[index].isPaid = false;
       this.snack.open(error, 'error');
     });
+  }
+
+  public paidCount(): number {
+    return this.wrList.filter(wr => wr.isPaid).length;
   }
 }
