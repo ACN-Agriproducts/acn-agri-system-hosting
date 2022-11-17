@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { serverTimestamp } from '@angular/fire/firestore';
+import { Firestore, runTransaction, serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -27,6 +27,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     private dialog: MatDialog,
     private snack: SnackbarService,
     private confirmation: ConfirmationDialogService,
+    private db: Firestore,
   ) { }
 
   ngOnInit() {
@@ -220,35 +221,32 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const newListData = this.wrGroup.getRawReceiptList();
     newListData[index].isPaid = true;
 
-    this.wrGroup.update({
-      warehouseReceiptList: newListData
-    })
-    .then(() => {
+    runTransaction(this.db, async transaction => {
+      transaction.update(this.wrGroup.ref, {
+        warehouseReceiptList: newListData
+      });
       this.wrList[index].isPaid = true;
+      
+      if (this.hasPaid() === this.wrList.length) {
+        transaction.update(this.wrGroup.ref, {
+          saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
+          status: "CLOSED",
+          closedAt: serverTimestamp()
+        });
+      }
+    }).then(() => {
+      
       this.snack.open(`Warehouse Receipt has been paid.`, 'success');
-      this.checkIfAllPaid();
+
+      if (this.hasPaid() === this.wrList.length) {
+        this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
+        this.wrGroup.closedAt = new Date();
+        this.snack.open(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
+      }
     })
     .catch(error => {
       this.wrList[index].isPaid = false;
       this.snack.open(error, 'error');
     });
-  }
-
-  public checkIfAllPaid(): void {
-    if (this.hasPaid() !== this.wrList.length) return;
-
-    this.wrGroup.update({
-      saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
-      status: "CLOSED",
-      closedAt: serverTimestamp()
-    })
-    .then(() => {
-      this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
-      this.wrGroup.closedAt = new Date();
-      this.snack.open(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
-    })
-    .catch(error => {
-      this.snack.open(error, 'error');
-    })
   }
 }
