@@ -1,0 +1,66 @@
+<h2>Missing Fields</h2>
+
+<mat-dialog-content>
+	<form #requiredFieldsForm="ngForm">
+		<mat-grid-list cols="6" rowHeight="75px">
+			<mat-grid-tile colspan="6">
+				<mat-form-field appearance="fill">
+					<mat-label>Quantity</mat-label>
+					<input
+						matInput
+						required
+						appPositive
+						[(ngModel)]="data.quantity"
+						#quantity="ngModel"
+						name="quantity"
+						type="number"
+						min="0"
+					>
+					<span matSuffix>lbs</span>
+					<mat-error *ngIf="quantity.errors?.required">Quantity is <strong>required</strong></mat-error>
+					<mat-error *ngIf="quantity.errors?.positive">Quantity must be <strong>positive</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+		</mat-grid-list>
+		<mat-grid-list cols="6" rowHeight="75px" gutterSize="15px">
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Price</mat-label>
+					<span matPrefix>$ &nbsp;</span>
+					<input
+						matInput
+						required
+						appPositive
+						[(ngModel)]="data.price"
+						#price="ngModel"
+						name="price"
+						type="number"
+						min="0"
+					>
+					<mat-error *ngIf="price.errors?.required">Price is <strong>required</strong></mat-error>
+					<mat-error *ngIf="price.errors?.positive">Price must be <strong>positive</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Market Price</mat-label>
+					<span matPrefix>$ &nbsp;</span>
+					<input
+						matInput
+						required
+						[(ngModel)]="data.marketPrice"
+						#marketPrice="ngModel"
+						name="marketPrice"
+						type="number"
+					>
+					<mat-error>Market Price is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+		</mat-grid-list>
+	</form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
+	<button mat-button color="primary" (click)="confirm()">Confirm</button>
+</mat-dialog-actions>

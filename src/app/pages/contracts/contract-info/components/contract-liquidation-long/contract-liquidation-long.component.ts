@@ -8,46 +8,32 @@ import { Ticket } from '@shared/classes/ticket';
   styleUrls: ['./contract-liquidation-long.component.scss'],
 })
 export class ContractLiquidationLongComponent implements OnInit {
-  @Input() ticketList: {data: Ticket, discounts: any}[];
   @Input() contract: Contract;
-
-  public gross: number = 0;
-  public tare: number = 0;
-  public moistureDiscount: number = 0;
-  public moistureAdjustedWeight: number = 0;
-  public infestedTotal: number = 0;
-  public inspectionTotal: number = 0;
-  public netToPayTotal: number = 0;
+  @Input() ticketList: { 
+    data: Ticket, 
+    discounts: any, 
+    includeInReport: boolean 
+  }[];
+  @Input() totals: {
+    gross: number,
+    tare: number,
+    net: number,
+    moistureDiscount: number,
+    moistureAdjustedWeight: number,
+    totalBeforeDiscounts: number,
+    infested: number,
+    inspection: number,
+    netToPay: number
+  };
 
   constructor() { }
 
   ngOnInit() {
-    this.ticketList.forEach(ticket => {
-      this.gross += ticket.data.gross;
-      this.tare += ticket.data.tare;
-      this.moistureDiscount += ticket.data.dryWeight - (ticket.data.gross - ticket.data.tare);
-      this.moistureAdjustedWeight += ticket.data.dryWeight;
-    });
+
   }
 
-  public getTotalInfestedDiscount(): number {
-    let total = 0;
+  ngOnDestroy() {
 
-    this.ticketList.forEach(ticket => {
-      total += ticket.discounts.infested;
-    });
-
-    return total;
-  }
-
-  public getTotalInspectionDiscount(): number {
-    let total = 0;
-
-    this.ticketList.forEach(ticket => {
-      total += ticket.discounts.inspection;
-    });
-
-    return total;
   }
 
   public getDate(): Date {

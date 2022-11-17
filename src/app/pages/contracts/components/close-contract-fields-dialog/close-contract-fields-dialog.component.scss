@@ -1,0 +1,25 @@
+
+mat-dialog-content {
+    min-width: 325px;
+    width: 32vw;
+    max-width: 400px;
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+// Number inputs---------------------------------------
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}

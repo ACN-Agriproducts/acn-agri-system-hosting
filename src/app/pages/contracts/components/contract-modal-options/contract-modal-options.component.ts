@@ -1,11 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Firestore, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
 import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
+import { CloseContractFieldsDialogComponent } from '../close-contract-fields-dialog/close-contract-fields-dialog.component';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -26,6 +28,7 @@ export class ContractModalOptionsComponent implements OnInit {
     private dialog: MatDialog,
     private navController: NavController,
     private snack: SnackbarService,
+    private confirm: ConfirmationDialogService,
     ) { }
 
   ngOnInit() {}
@@ -66,20 +69,45 @@ export class ContractModalOptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      this.snack.open("Signed Contract successfully uploaded.", 'success');
+      this.snack.open("Signed Contract Successfully Uploaded", 'success');
     })
     .catch(error => {
       this.snack.open(error, 'error');
     });
   }
 
-  public closeContract() {
-    if(this.contract.status != "active") {
+  public async closeContract() {
+    if(this.contract.status != "active" || !await this.confirm.openDialog("close this contract")) {
       return;
     }
 
+    const requiredFieldData = {
+      marketPrice: this.contract.market_price,
+      price: this.contract.pricePerBushel,
+      quantity: this.contract.quantity
+    };
+
+    let newFieldData;
+    if (Object.entries(requiredFieldData).some(([key, value]) => (value ?? 0) === 0)) {
+      const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
+        data: requiredFieldData,
+        autoFocus: false
+      });
+      newFieldData = await lastValueFrom(dialogRef.afterClosed());
+      if (newFieldData == null) return;
+    }
+
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
-      status: "closed"
+      status: "closed",
+      market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
+      pricePerBushel: newFieldData?.price ?? requiredFieldData.price,
+      quantity: newFieldData?.quantity ?? requiredFieldData.quantity
     })
+    .then(() => {
+      this.snack.open("Contract Successfully Closed", "success");
+    })
+    .catch(error => {
+      this.snack.open(error, "error");
+    });
   }
 }

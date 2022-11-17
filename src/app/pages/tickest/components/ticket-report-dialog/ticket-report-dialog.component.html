@@ -6,12 +6,13 @@
     <mat-radio-button [value]="getReportType().Contract">Contract</mat-radio-button>
     <mat-radio-button [value]="getReportType().IdRange">Id Range</mat-radio-button>
     <mat-radio-button [value]="getReportType().ProductBalance">Product Balance</mat-radio-button>
+    <mat-radio-button [value]="getReportType().YTD">Year to Date</mat-radio-button>
   </mat-radio-group>
   
   <div>
     <label>Report Type</label>
     <mat-radio-group [(ngModel)]="reportOutputType">
-      <mat-radio-button [value]="getOutputType().pdf" [disabled]="reportType == getReportType().ProductBalance">PDF</mat-radio-button>
+      <mat-radio-button [value]="getOutputType().pdf" [disabled]="reportType == getReportType().ProductBalance || reportType == getReportType().YTD">PDF</mat-radio-button>
       <mat-radio-button [value]="getOutputType().excel">Excel</mat-radio-button>
     </mat-radio-group>
   </div>
@@ -69,6 +70,16 @@
       </mat-form-field>
     </div>
   </div>
+
+  <div class="YTD-form" *ngIf="reportType == getReportType().YTD">
+    <div>
+      <label>Ticket Types</label>
+      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
+        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
+      </mat-radio-group>
+    </div>
+  </div>
 </div>
 
 <mat-dialog-actions>
@@ -82,8 +93,11 @@
     printSectionId="printable-report"
     [printStyle]='{"app-printable-ticket, .ticket-report-table" : { "page-break-after": "always" }}'
     >Print</button>
-  <button (click)="createExcelDoc()"
-    mat-button *ngIf="reportGenerated && reportOutputType == 1">Download</button>
+  <button 
+    (click)="createExcelDoc()"
+    mat-button 
+    *ngIf="reportGenerated && reportOutputType == 1">
+    Download</button>
   <mat-spinner [diameter]="20" *ngIf="generatingReport"></mat-spinner>
 </mat-dialog-actions>
 

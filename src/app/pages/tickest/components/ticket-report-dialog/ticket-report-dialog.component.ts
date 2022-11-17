@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Storage } from '@ionic/storage';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
 import * as Excel from 'exceljs';
 import { Firestore, QueryConstraint, where } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -28,6 +29,7 @@ export class TicketReportDialogComponent implements OnInit {
   public startId: number;
   public endId: number;
 
+  public ticketList: Ticket[];
   public productTicketLists: any = {};
   public contractList: any = {};
   public transportList: any = {};
@@ -46,20 +48,19 @@ export class TicketReportDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private db: Firestore,
-    private localStorage: Storage
+    private storage: Storage,
+    private session: SessionInfo
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(_currentCompany => {
-      this.currentCompany = _currentCompany;
-    });
+    this.currentCompany = this.session.getCompany();
   }
 
   async generateReport(): Promise<void> {
     await this.getReportTickets();
   }
 
-  public createExcelDoc(): void{
+  public async createExcelDoc(): Promise<void>{
     if(this.reportType == ReportType.ProductBalance) {
       const workbook = new Excel.Workbook();
 
@@ -119,6 +120,111 @@ export class TicketReportDialogComponent implements OnInit {
         a.remove();
       })
     }
+    else if(this.reportType == ReportType.YTD) {
+      const testWorkbook = new Excel.Workbook();
+      const ticketSheet = testWorkbook.addWorksheet("IN TICKETS");
+      const ticketList = this.ticketList.map(this.ticketYTDFormat);
+
+      const inTicketTable = ticketSheet.addTable({
+        name: 'testTable',
+        ref: 'A1',
+        headerRow: true,
+        totalsRow: true,
+        style: {
+          theme: "TableStyleMedium2",
+          showRowStripes: true,
+        },
+        columns: [
+          {name: "IN", totalsRowLabel: "Totals:", filterButton: true},
+          {name: "Date", filterButton: true},
+          {name: "Ticket", filterButton: true},
+          {name: "OrgTicket", filterButton: true},
+          {name: "void", filterButton: true},
+          {name: "Contract", filterButton: true},
+          {name: "Product", filterButton: true},
+          {name: "Customer_Name", filterButton: true},
+          {name: "Vehicle_Driver", filterButton: true},
+          {name: "WT_GROSS", filterButton: true, totalsRowFunction: "sum"},
+          {name: "WT_TARE", filterButton: true, totalsRowFunction: "sum"},
+          {name: "WT_NET", filterButton: true, totalsRowFunction: "sum"},
+          {name: "Shrink", filterButton: true},
+          {name: "ShrinkWt", filterButton: true, totalsRowFunction: "sum"},
+          {name: "Tons", filterButton: true, totalsRowFunction: "sum"},
+          {name: "CCGE CERTIFICATE", filterButton: true},
+          
+        ],
+        rows: []
+      });
+
+      const map = new Map<number, {key: string, void: string}>([
+        [1, {key: "in", void: "in"}],
+        [2, {key: "dateOut", void: "dateOut"}],
+        [3, {key: "id", void: "id"}],
+        [4, {key: "original_ticket", void: ""}],
+        [5, {key: "void", void: "void"}],
+        [6, {key: "contractID", void: "contractID"}],
+        [7, {key: "productName", void: "productName"}],
+        [8, {key: "clientName", void: "voidReason"}],
+        [9, {key: "driver", void: "driver"}],
+        [10, {key: "gross", void: ""}],
+        [11, {key: "tare", void: ""}],
+        [12, {key: "net", void: ""}],
+        [13, {key: "", void: ""}],
+        [14, {key: "dryWeight", void: ""}],
+        [15, {key: "mTons", void: ""}],
+        [16, {key: "CCGE", void: ""}]
+      ]);
+
+      ticketList.forEach((ticket, index) => {
+        const row = [];
+
+        map.forEach((val, col) => {
+          row.push(ticket[ticket.void ? val.void : val.key] ?? "");
+        });
+
+        inTicketTable.addRow(row);
+
+        if (ticket.void) {
+          ticketSheet.getRow(index + 2).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD966' }
+          };
+        }
+      });
+
+      inTicketTable.commit();
+
+      ticketSheet.columns.forEach(column => {
+        let maxLength = 0;
+
+        column.eachCell({ includeEmpty: false }, cell => {
+          const cellLength = (cell.value ?? null) instanceof Date 
+            ? cell.value?.toLocaleString().split(' ')[0].length ?? 10 
+            : cell.value?.toLocaleString().length ?? 10;
+            
+          if (maxLength < cellLength) maxLength = cellLength;
+        });
+
+        column.width = maxLength < 10 ? 10 : maxLength > 35 ? 35 : maxLength;
+      });
+
+      testWorkbook.xlsx.writeBuffer().then((data) => {
+        const blob = new Blob([data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        });
+  
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("style", "display: none");
+        a.href = url;
+        a.download = `TICKETS-YTD-REPORT.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      });
+    }
     else {
       const tableCollection = document.getElementsByClassName('ticket-report-table');
       const workBook: WorkBook = utils.book_new();
@@ -139,7 +245,8 @@ export class TicketReportDialogComponent implements OnInit {
     return Ticket.getTickets(this.db, this.currentCompany, this.data.currentPlant, ...this.getFirebaseQueryFn()).then(async result => {
         const tempTicketList = {};
 
-        const sorterTicketList = result.sort((a, b) => a.dateOut.getTime() - b.dateOut.getTime());
+        const sorterTicketList = result.sort((a, b) => a.id - b.id);
+        this.ticketList = sorterTicketList;
 
         sorterTicketList.forEach(ticketSnap => {
           if(ticketSnap.void){
@@ -222,12 +329,18 @@ export class TicketReportDialogComponent implements OnInit {
       constraints.push(where('dateOut', '>=', this.beginDate), where('dateOut', '<=', this.endDate));
     }
 
+    if(this.reportType == ReportType.YTD) {
+      const first = new Date(new Date().getFullYear(), 0, 1);
+      const last = new Date(new Date().getFullYear(), 11, 31);
+      constraints.push(where('dateOut', '>=', first), where('dateOut', '<=', last), where('in', '==', this.inTicket));
+    }
+
     return constraints;
   }
 
   public validateInputs(): boolean {
     if(!(this.reportType != null && this.reportOutputType != null && this.inTicket != null )) {
-      if(this.reportType != ReportType.ProductBalance && this.inTicket == null) {
+      if(this.reportType != ReportType.ProductBalance && this.reportType != ReportType.YTD && this.inTicket == null) {
         return false;
       }
     }
@@ -247,6 +360,10 @@ export class TicketReportDialogComponent implements OnInit {
     if(this.reportType == ReportType.ProductBalance) {
       return this.beginDate != null && this.endDate !=null && this.reportOutputType == OutputType.excel;
     }
+
+    if(this.reportType == ReportType.YTD) {
+      return this.reportOutputType == OutputType.excel;
+    }
   }
 
   public getReportType(): typeof ReportType {
@@ -256,13 +373,25 @@ export class TicketReportDialogComponent implements OnInit {
   public getOutputType(): typeof OutputType{
     return OutputType;
   }
+
+  public ticketYTDFormat(ticket: Ticket): any {
+    const formattedTicket = ticket.getGenericCopy();
+
+    formattedTicket.in = ticket.in ? "IN" : "OUT";
+    formattedTicket.void = ticket.void ? "VOID" : null;
+    formattedTicket.net = ticket.gross - ticket.tare;
+    formattedTicket.mTons = formattedTicket.net / 2204.62;
+
+    return formattedTicket;
+  }
 }
 
 enum ReportType {
   DateRange,
   Contract,
   IdRange,
-  ProductBalance
+  ProductBalance,
+  YTD
 }
 
 enum OutputType {

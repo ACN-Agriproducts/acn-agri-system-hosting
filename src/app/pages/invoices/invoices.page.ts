@@ -6,23 +6,41 @@ import { Component, OnInit } from '@angular/core';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { SetItemsDialogComponent } from './components/set-items-dialog/set-items-dialog.component';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { InvoiceItem } from '@shared/classes/invoice_item';
+import { Firestore } from '@angular/fire/firestore';
+import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
   styleUrls: ['./invoices.page.scss'],
 })
 export class InvoicesPage implements OnInit {
-  public template: any;
-  public filter: boolean;
   public date: Date;
+  public filter: boolean;
+  public template: any;
+  public currentCompany: string;
+  public invoiceItemList: InvoiceItem[];
 
   constructor(
+    private dialog: MatDialog,
     private popoverController: PopoverController,
-    private toastController: ToastController
-  ) { }
+    private snack: SnackbarService,
+    private toastController: ToastController,
+    private db: Firestore,
+    private session: SessionInfo,
+    ) { }
 
   ngOnInit() {
     const data = document.getElementById('file-html-invoice');
+    this.currentCompany = this.session.getCompany();
+
+    InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
+      this.invoiceItemList = list;
+    });
   }
 
   public openContextMenu = async (ev) => {
@@ -92,6 +110,28 @@ export class InvoicesPage implements OnInit {
       showBackdrop: false
     });
     return await popover.present();
+  }
+
+  public setInvoiceItems = async (): Promise<void> => {
+    const dialogRef = this.dialog.open(SetItemsDialogComponent, {
+      autoFocus: false
+    });
+    const newItemListData = await lastValueFrom(dialogRef.afterClosed());
+    if (newItemListData == null) return;
+
+    const fallback = this.invoiceItemList;
+    this.invoiceItemList = newItemListData;
+
+    const complete = this.invoiceItemList.every(item => {
+      item.set().catch(error => {
+        this.snack.open(error, 'error');
+        this.invoiceItemList = fallback;
+        return false;
+      });
+      return true;
+    });
+
+    if (complete) this.snack.open("Item List Successfully Updated", 'success');
   }
 
   chosenYearHandler(event: any) {

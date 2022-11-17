@@ -1,5 +1,6 @@
 <ion-card>
   <div class="table-row header">
+    <ion-text>Include</ion-text>
     <ion-text>Date</ion-text>
     <ion-text>ID</ion-text>
     <ion-text>Moisture</ion-text>
@@ -11,6 +12,9 @@
     <ion-text>Inspection Discount</ion-text>
   </div>
   <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
+    <ion-text>
+      <mat-checkbox [(ngModel)]="ticket.includeInReport"></mat-checkbox>
+    </ion-text>
     <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
     <ion-text>{{ticket.data.id}}</ion-text>
     <ion-text>{{ticket.data.moisture}}</ion-text>
@@ -18,13 +22,17 @@
     <ion-text>{{ticket.data.gross}}</ion-text>
     <ion-text>{{ticket.data.tare}}</ion-text>
     <ion-text>{{ticket.data.getNet()}}</ion-text>
-    <mat-form-field>
-      <input matInput [(ngModel)]="ticket.discounts.infested" type="number"/>
-      <span matPrefix>$</span>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput [(ngModel)]="ticket.discounts.inspection" type="number"/>
-      <span matPrefix>$</span>
-    </mat-form-field>
+    <ion-text>
+      <mat-form-field>
+        <input matInput [(ngModel)]="ticket.discounts.infested" type="number"/>
+        <span matPrefix>$ &nbsp;</span>
+      </mat-form-field>
+    </ion-text>
+    <ion-text>
+      <mat-form-field>
+        <input matInput [(ngModel)]="ticket.discounts.inspection" type="number"/>
+        <span matPrefix>$ &nbsp;</span>
+      </mat-form-field>
+    </ion-text>
   </div>
 </ion-card>

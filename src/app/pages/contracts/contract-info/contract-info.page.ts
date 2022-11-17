@@ -6,10 +6,12 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+
+declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
 
 @Component({
   selector: 'app-contract-info',
@@ -22,9 +24,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public type: string;
   public currentCompany: string;
   public currentContract: Contract;
-  public ready:boolean = false;
+  public ready: boolean = false;
   public ticketList: Ticket[];
-  public ticketDiscountList: {data: Ticket, discounts: any}[];
+  public ticketDiscountList: TicketWithDiscount[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
 
@@ -37,7 +39,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private localStorage: Storage,
     private db: Firestore,
     private fns: Functions,
-    private snackBar: MatSnackBar
+    private snack: SnackbarService,
     ) { }
 
   ngOnInit() {
@@ -50,10 +52,14 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         this.ready = true;
         this.currentContract.getTickets().then(tickets => {
           this.ticketList = tickets;
-          const list:{data: Ticket, discounts: any}[] = [];
+          const list: TicketWithDiscount[] = [];
 
           this.ticketList.forEach(t => {
-            list.push({data: t, discounts: {infested: 0, inspection:0}});
+            list.push({
+              data: t, 
+              discounts: { infested: 0, inspection:0 }, 
+              includeInReport: false
+            });
           })
           this.ticketDiscountList = list;
         });
@@ -116,7 +122,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
 
     // populating worksheet columns
-    this.ticketDiscountList.forEach(ticket => {
+    this.selectedTickets().forEach(ticket => {
       const net = ticket.data.getNet() * (ticket.data.in ? 1 : -1);
 
       const dryWeight = ticket.data.dryWeight;
@@ -196,12 +202,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     a.remove();
   } 
 
-  reloadContractTickets() {
+  reloadContractTickets = () => {
     httpsCallable(this.fns, 'contracts-updateTickets')({
       company: this.currentCompany,
       contractId: this.id,
       isPurchase: this.type == "purchase"
-    }).then(async result => {
+    }).then(async () => {
       const contract = await Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id);
       const tickets = await contract.getTickets();
       this.ticketList = tickets;
@@ -211,11 +217,60 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       {
         return {
           data: ticket,
-          discounts: {infested: 0, inspection:0}
+          discounts: { infested: 0, inspection: 0 },
+          includeInReport: false
         }
       }));
     }).catch(error => {
-      this.snackBar.open(error, "Dismiss", {duration: 5000});
+      this.snack.open(error, "error");
     });
+  }
+
+  public selectedTickets = (): TicketWithDiscount[] => {
+    return this.ticketDiscountList.filter(ticket => ticket.includeInReport);
+  }
+  public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
+  public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.includeInReport);
+
+  public getTotals = (): LiquidationTotals => {
+    const totals = new LiquidationTotals();
+
+    this.selectedTickets().forEach(ticket => {
+      totals.gross += ticket.data.gross;
+      totals.tare += ticket.data.tare;
+
+      const net = ticket.data.gross - ticket.data.tare;
+      totals.net += net;
+
+      totals.moistureDiscount += ticket.data.dryWeight - net;
+      totals.moistureAdjustedWeight += ticket.data.dryWeight;
+
+      const total = this.currentContract.pricePerBushel * ticket.data.dryWeight / this.currentContract.productInfo.weight;
+      totals.totalBeforeDiscounts += total;
+
+      totals.infested += ticket.discounts.infested;
+      totals.inspection += ticket.discounts.inspection;
+
+      totals.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
+    });
+    
+    return totals;
+  }
+}
+
+class LiquidationTotals {
+  public gross: number;
+  public tare: number;
+  public net: number;
+  public moistureDiscount: number;
+  public moistureAdjustedWeight: number;
+  public totalBeforeDiscounts: number;
+  public infested: number;
+  public inspection: number;
+  public netToPay: number;
+
+  constructor() {
+    this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = 0;
+    this.totalBeforeDiscounts = this.infested = this.inspection = this.netToPay = 0;
   }
 }
