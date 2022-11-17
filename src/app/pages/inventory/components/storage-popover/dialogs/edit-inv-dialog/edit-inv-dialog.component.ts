@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Product } from '@shared/classes/product';
 
 @Component({
   selector: 'app-edit-inv-dialog',
@@ -13,7 +14,7 @@ export class EditInvDialogComponent implements OnInit {
   }
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
-    productList: any[],
+    productList: Product[],
     currentProduct: string
   }) { }
 
