@@ -90,13 +90,7 @@ export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
   public async infiniteContracts(event) {
     this.contractPagination.getNext(snapshot => {
       event.target.complete();
-
-      if(snapshot.docs.length < this.contractStep) {
-        this.infiniteScroll.disabled = true;
-      }
-      else {
-        this.infiniteScroll.disabled = false;
-      }
+      this.infiniteScroll.disabled = snapshot.docs.length < this.contractStep;
     });
   }
 
