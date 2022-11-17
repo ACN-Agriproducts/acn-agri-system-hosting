@@ -188,7 +188,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     });
   }
 
-  public hasPaid(): number {
+  public paidCount(): number {
     return this.wrList.filter(wr => wr.isPaid).length;
   }
 
@@ -226,8 +226,8 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
         warehouseReceiptList: newListData
       });
       this.wrList[index].isPaid = true;
-      
-      if (this.hasPaid() === this.wrList.length) {
+
+      if (this.paidCount() === this.wrList.length) {
         transaction.update(this.wrGroup.ref, {
           saleContract: { ...this.wrGroup.saleContract, status: "CLOSED", closedAt: serverTimestamp() },
           status: "CLOSED",
@@ -235,10 +235,9 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
         });
       }
     }).then(() => {
-      
       this.snack.open(`Warehouse Receipt has been paid.`, 'success');
 
-      if (this.hasPaid() === this.wrList.length) {
+      if (this.paidCount() === this.wrList.length) {
         this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
         this.wrGroup.closedAt = new Date();
         this.snack.open(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
