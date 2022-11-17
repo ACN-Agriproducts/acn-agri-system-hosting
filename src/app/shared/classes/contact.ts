@@ -5,12 +5,11 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 export class Contact extends FirebaseDocInterface {
     caat: string;
     city: string;
-    email: string;
+    metaContacts: MetaContact[];
     name: string;
-    phoneNumber: string;
     state: string;
     streetAddress: string;
-    type: string;
+    tags: string[];
     zipCode: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
@@ -19,13 +18,15 @@ export class Contact extends FirebaseDocInterface {
 
         this.caat = data.caat;
         this.city = data.city;
-        this.email = data.email;
+        this.metaContacts = [];
         this.name = data.name;
-        this.phoneNumber = data.phoneNumber;
         this.state = data.state;
         this.streetAddress = data.streetAddress;
-        this.type = data.type;
         this.zipCode = data.zipCode;
+
+        data.contacts.forEach(metaContact => {
+            this.metaContacts.push(this.createMetaContact(metaContact));
+        });
     }
 
     public static converter = {
@@ -33,14 +34,12 @@ export class Contact extends FirebaseDocInterface {
             return {
                 caat: data.caat, 
                 city: data.city,
-                email: data.email,
+                metaContacts: data.metaContacts,
                 name: data.name,
-                phoneNumber: data.phoneNumber,
                 state: data.state,
                 streetAddress: data.streetAddress,
-                type: data.type,
                 zipCode: data.zipCode,
-            }
+            };
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contact {
             return new Contact(snapshot);
@@ -62,6 +61,22 @@ export class Contact extends FirebaseDocInterface {
     public static getDoc(db: Firestore, company: string, contact: string): Promise<Contact> {
         return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
-        })
+        });
     }
+
+    public createMetaContact(metaContact: any): MetaContact {
+        return {
+            email: metaContact.email,
+            isPrimary: metaContact.isPrimary,
+            name: metaContact.name,
+            phone: metaContact.phone
+        };
+    }
+}
+
+interface MetaContact {
+    email: string;
+    isPrimary: boolean;
+    name: string;
+    phone: string;
 }
