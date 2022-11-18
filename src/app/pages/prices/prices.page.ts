@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, provideFirestore, query, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Company } from '@shared/classes/company';
 import { lastValueFrom } from 'rxjs';
 import { FieldRenameComponent } from './field-rename/field-rename.component';
@@ -24,7 +25,8 @@ export class PricesPage implements OnInit {
   constructor(
     private db: Firestore,
     private session: SessionInfo,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackbar: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -260,7 +262,10 @@ export class PricesPage implements OnInit {
   }
 
   submit() {
-    addDoc(this.collectionRef, this.getSubmitObject());
+    addDoc(this.collectionRef, this.getSubmitObject()).then(() => {
+      this.snackbar.open("Document saved", "success");
+    });
+    this.snackbar.open("Saving...", "info");
   }
 }
 
