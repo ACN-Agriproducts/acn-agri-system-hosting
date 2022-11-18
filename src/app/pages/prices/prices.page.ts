@@ -264,6 +264,8 @@ export class PricesPage implements OnInit {
   submit() {
     addDoc(this.collectionRef, this.getSubmitObject()).then(() => {
       this.snackbar.open("Document saved", "success");
+    }).catch(error => {
+      this.snackbar.open(`Error: ${error}`, "error");
     });
     this.snackbar.open("Saving...", "info");
   }
