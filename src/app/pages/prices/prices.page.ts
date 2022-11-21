@@ -21,6 +21,7 @@ export class PricesPage implements OnInit {
     [type: string]: pricesTable;
   };
   public dollarPrice: number;
+  public notes: string[];
 
   constructor(
     private db: Firestore,
@@ -50,6 +51,7 @@ export class PricesPage implements OnInit {
     const snapData = this.pricesSnapshot.data() as pricesDoc;
     const prices = snapData.prices;
     this.dollarPrice = snapData.dollarPrice;
+    this.notes = snapData.notes ?? [];
 
     for(let priceTable of prices) {
       const firstLocation = priceTable.data[Object.keys(priceTable.data)[0]]
@@ -234,11 +236,16 @@ export class PricesPage implements OnInit {
     };
   }
 
+  addComment() {
+    this.notes.push("");
+  }
+
   getSubmitObject() {
     const submitDoc: pricesDoc = {
       prices: [],
       date: serverTimestamp(),
-      dollarPrice: this.dollarPrice
+      dollarPrice: this.dollarPrice,
+      notes: this.notes
     };
 
     for(let typeName in this.pricesTable) {
@@ -275,6 +282,7 @@ interface pricesDoc {
   prices: priceTable[];
   date: Date | FieldValue;
   dollarPrice: number;
+  notes: string[];
 }
 
 interface priceTable {

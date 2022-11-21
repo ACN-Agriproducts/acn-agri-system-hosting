@@ -19,6 +19,24 @@
     </div>
   </div>
 
+  <div class="info-area">
+    <div class="content-subtitle_small-inventory">
+      <h4>
+        <span>
+          COMMENTARIOS
+        </span>
+      </h4>
+    </div>
+    <div id="comments-section" formArrayName="notes">
+      <mat-form-field *ngFor="let note of notes; let index = index" appearance="outline"> <!-- -->
+        <textarea matInput [(ngModel)]="notes[index]" [ngModelOptions]="{updateOn: 'blur'}"></textarea>
+      </mat-form-field>
+      <button mat-button color="primary" (click)="addComment()">
+        + Add
+      </button>
+    </div>
+  </div>
+
   <div class="table-space" *ngFor="let priceType of pricesTable | keyvalue">
     <div class="content-subtitle_small-inventory">
       <button mat-icon-button color="primary" (click)="renameTable(priceType.key)">
