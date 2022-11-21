@@ -39,6 +39,7 @@ export class PricesPage implements OnInit {
 
     getDocs(pricesQuery).then(result => {
       if(result.empty) {  
+        this.notes = [];
         return;
       }
 
