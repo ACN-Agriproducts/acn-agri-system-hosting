@@ -42,7 +42,7 @@ export class DisplayContractComponent implements OnInit {
     if(!this.contract.clientInfo) {
       const clientRef = this.contract.client;
       getDoc(clientRef).then(result => {
-        this.contract.clientInfo = result.data()
+        this.contract.clientInfo = Contract.clientInfo(result.data());
 
         if(this.contract.productInfo && this.contract.clientInfo) {
           this.ready = true;

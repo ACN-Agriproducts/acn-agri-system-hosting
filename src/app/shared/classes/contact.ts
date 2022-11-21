@@ -22,9 +22,10 @@ export class Contact extends FirebaseDocInterface {
         this.name = data.name;
         this.state = data.state;
         this.streetAddress = data.streetAddress;
+        this.tags = data.tags;
         this.zipCode = data.zipCode;
 
-        data.contacts.forEach(metaContact => {
+        data.metaContacts.forEach(metaContact => {
             this.metaContacts.push(this.createMetaContact(metaContact));
         });
     }
@@ -38,6 +39,7 @@ export class Contact extends FirebaseDocInterface {
                 name: data.name,
                 state: data.state,
                 streetAddress: data.streetAddress,
+                tags: data.tags,
                 zipCode: data.zipCode,
             };
         },

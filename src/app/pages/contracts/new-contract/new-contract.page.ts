@@ -5,7 +5,7 @@ import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectClientComponent } from './components/select-client/select-client.component';
 import { UniqueContractId } from './components/unique-contract-id';
 import { Contact } from '@shared/classes/contact';
@@ -14,6 +14,8 @@ import { Firestore } from '@angular/fire/firestore';
 import { Company } from '@shared/classes/company';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Plant } from '@shared/classes/plant';
+import { Contract } from '@shared/classes/contract';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-new-contract',
@@ -36,12 +38,13 @@ export class NewContractPage implements OnInit, OnDestroy {
   ticketClient: Contact;
 
   constructor(
-    private fb: UntypedFormBuilder,
     private db: Firestore,
-    private navController: NavController,
     private dialog: MatDialog,
+    private fb: UntypedFormBuilder,
+    private navController: NavController,
+    private session: SessionInfo,
+    private snack: SnackbarService,
     private uniqueId: UniqueContractId,
-    private session: SessionInfo
   ) { }
 
   ngOnInit() {
@@ -154,30 +157,9 @@ export class NewContractPage implements OnInit, OnDestroy {
       base: this.getBushelPrice() - formValue.market_price,
       buyer_terms: "",   //TODO
       client: this.selectedClient.ref,
-      clientInfo: {
-        caat: this.selectedClient.caat,
-        city: this.selectedClient.city,
-        email: this.selectedClient.email,
-        name: this.selectedClient.name,
-        phoneNumber: this.selectedClient.phoneNumber,
-        state: this.selectedClient.state,
-        streetAddress: this.selectedClient.streetAddress,
-        type: this.selectedClient.type,
-        zipCode: this.selectedClient.zipCode
-      },
+      clientInfo: Contract.clientInfo(this.selectedClient),
       clientName: formValue.client,
-      clientTicketInfo: {
-        caat: this.ticketClient.caat,
-        city: this.ticketClient.city,
-        email: this.ticketClient.email,
-        name: this.ticketClient.name,
-        phoneNumber: this.ticketClient.phoneNumber,
-        state: this.ticketClient.state,
-        streetAddress: this.ticketClient.streetAddress,
-        type: this.ticketClient.type,
-        zipCode: this.ticketClient.zipCode,
-        ref: this.ticketClient.ref
-      },
+      clientTicketInfo: Contract.clientInfo(this.ticketClient),
       currentDelivered: 0,
       date: new Date(),
       delivery_dates: {
@@ -214,7 +196,7 @@ export class NewContractPage implements OnInit, OnDestroy {
       .then(() => {
         this.navController.navigateForward('dashboard/contracts');
       }).catch(error => {
-        console.log("Error submitting form: ", error);
+        this.snack.open(error, "error");
       });
   }
 
