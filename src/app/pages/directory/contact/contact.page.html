@@ -1,0 +1,152 @@
+
+<app-header-toolbar titulo="Contact"></app-header-toolbar>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+	<ng-template [ngIf]="ready" [ngIfElse]="loading">
+		<ion-grid>
+			<ion-row>
+				<ion-col>
+					<ion-card>
+						<ion-card-content>
+							<div>
+								<!-- TBD: ability to upload avatar img -->
+								<ion-avatar slot="start">
+									<img src="../../../assets/avatar.svg">
+								</ion-avatar>
+								<ion-buttons>
+									<ion-button color="primary" (click)="edit()">
+										<ion-icon name="create-outline"></ion-icon>
+									</ion-button>
+									<!-- <ion-button color="danger">
+										<ion-icon name="trash-outline"></ion-icon>
+									</ion-button> -->
+								</ion-buttons>
+							</div>
+							<h1>
+								<b>{{ contact.name }}</b>
+								<h3>
+									{{ contact.type }}
+									<span *ngIf="contact?.caat ?? '' != ''"> - {{ contact?.caat }}</span>
+								</h3>
+							</h1>
+							<ion-list lines="none">
+								<ion-item *ngIf="(contact?.phoneNumber ?? '') != ''">
+									<ion-icon name="call-outline" slot="start" size="small"></ion-icon>
+									<ion-label>{{ contact.phoneNumber }}</ion-label>
+								</ion-item>
+								<ion-item *ngIf="(contact?.email ?? '') != ''">
+									<ion-icon name="mail-outline" slot="start" size="small"></ion-icon>
+									<ion-label>{{ contact.email | lowercase }}</ion-label>
+								</ion-item>
+								<ion-item *ngIf="(contact?.streetAddress ?? '') != ''">
+									<ion-icon name="location-outline" slot="start" size="small"></ion-icon>
+									<ion-label>
+										{{ contact.streetAddress | titlecase }}
+										<br>
+										<span>{{ contact.city | titlecase }}</span>
+										<span>, {{ contact.state | titlecase | stateAbbreviation }}</span>
+										<span>, {{ contact.zipCode }}</span>
+									</ion-label>
+								</ion-item>
+							</ion-list>
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+				<ion-col>
+					<ion-card>
+						<ion-card-header>Analytics</ion-card-header>
+						<ion-card-content>
+							analytics information
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ion-row>
+		
+			<ng-template [ngIf]="docCount() > 0">
+				<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
+				<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
+					<ion-segment [value]="getContractType()" (ionChange)="changeContracts($event)">
+						<!-- <ion-segment-button value="purchase,sales">
+							<ion-label>All</ion-label>
+						</ion-segment-button> -->
+						<ion-segment-button value="purchase" *ngIf="docCount(true) > 0">
+							<ion-label>Purchase Contracts</ion-label>
+						</ion-segment-button>
+						<ion-segment-button value="sales" *ngIf="docCount(false) > 0">
+							<ion-label>Sales Contracts</ion-label>
+						</ion-segment-button>
+					</ion-segment>
+					<ion-row>
+						<ion-col>
+							<ion-card>
+								<div class="table-row contracts">
+									<span>ID</span>
+									<span>Date</span>
+									<span>Status</span>
+									<span>Product</span>
+									<span>Quantity</span>
+									<span>Price</span>
+									<span>Total</span>
+								</div>
+								<div class="table-row contracts" [class.odd]="odd"
+									*ngFor="let doc of (contractType === 'purchase' ? primaryPagination : secondaryPagination)?.list; let odd = odd"
+									(click)="openContract(doc.ref.id)"
+								>
+									<span>{{ doc.id }}</span>
+									<span>{{ doc.date | date }}</span>
+									<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
+									<span>{{ doc.product.id }}</span>
+									<span>{{ doc.quantity | number }}</span>
+									<span>{{ doc.pricePerBushel | currency: '$' }}</span>
+									<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
+								</div>
+							</ion-card>
+						</ion-col>
+					</ion-row>
+				</ng-template>
+				<ng-template #tickets>
+					<ion-row>
+						<ion-col>
+							<ion-card>
+								<div class="table-row">
+									<span>ID</span>
+									<span>Date</span>
+									<span>Contract</span>
+									<span>Product</span>
+									<span>Gross ( lbs. )</span>
+									<span>Tare ( lbs. )</span>
+									<span>Net ( lbs. )</span>
+									<span>--</span>
+								</div>
+								<div class="table-row" [class.odd]="odd" *ngFor="let doc of primaryPagination?.list; let odd = odd">
+									<span>{{ doc.id }}</span>
+									<span>{{ doc.dateOut | date }}</span>
+									<span>{{ doc.contractID }}</span>
+									<span>{{ doc.productName }}</span>
+									<span>{{ doc.gross | number }}</span>
+									<span>{{ doc.tare | number }}</span>
+									<span>{{ doc.getNet() | number }}</span>
+									<span>--</span>
+								</div>
+							</ion-card>
+						</ion-col>
+					</ion-row>
+				</ng-template>
+			</ng-template>
+		</ion-grid>
+		<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
+			<ion-infinite-scroll-content
+				loadingSpinner="bubbles"
+				loadingText="Loading more data...">
+			</ion-infinite-scroll-content>
+		</ion-infinite-scroll>
+	</ng-template>
+	<ng-template #loading>
+		<div>
+			<mat-spinner></mat-spinner>
+		</div>
+	</ng-template>
+</ion-content>
+
+<template #docTable>
+</template>

@@ -15,7 +15,7 @@
     <!-- <ion-card-content> -->
     <div class="content-item" (contextmenu)="openOptions($event)"
       *ngFor="let item of contacts; let i = index">
-      <ion-item (click)="openContactModal(i)" button lines="none">
+      <ion-item (click)="nav('dashboard/directory/contact/' + item.ref.id)" button lines="none">
         <ion-avatar slot="start">
           <img src="../../../assets/avatar.svg">
         </ion-avatar>

@@ -1,0 +1,13 @@
+mat-dialog-content {
+	display: flex;
+	flex-direction: column;
+    width: 35vw;
+    min-width: 475px;
+}
+
+.action-bar {
+	display: flex;
+	justify-content: space-between;
+	grid-column-end: span 2;
+	margin-inline: 0.5rem;
+}

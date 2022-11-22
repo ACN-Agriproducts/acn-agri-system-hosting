@@ -1,6 +1,8 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc } from "@angular/fire/firestore";
+import { Contract } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Ticket } from "./ticket";
 
 export class Contact extends FirebaseDocInterface {
     caat: string;

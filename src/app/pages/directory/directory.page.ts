@@ -22,8 +22,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   constructor(
     private popoverController: PopoverController,
-    private modalController: ModalController,
     private db: Firestore,
+    private modalController: ModalController,
     private navController: NavController,
     private session: SessionInfo,
   ) { }
@@ -80,5 +80,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public primaryMetaContact(index: number) {
     return this.contacts[index].metaContacts.find(metaContact => metaContact.isPrimary);
+  }
+
+  public nav = (route: string): void => {
+    this.navController.navigateForward(route, {
+      replaceUrl: false
+    });
   }
 }

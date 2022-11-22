@@ -11,6 +11,7 @@ import { ComponentsModule } from './components/components.module';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { IonicStorageModule } from '@ionic/storage';
+import { StateAbbreviationPipe } from './pipes/stateAbbreviation/state-abbreviation.pipe';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { IonicStorageModule } from '@ionic/storage';
     MaterialModule,
     DirectivesCoreModule,
     FormatPriceLetterPipe,
-    SearchPipe
+    SearchPipe,
+    StateAbbreviationPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -41,7 +43,8 @@ import { IonicStorageModule } from '@ionic/storage';
   declarations: [
     FormatPriceLetterPipe,
     FormatStringPipe,
-    SearchPipe
+    SearchPipe,
+    StateAbbreviationPipe
   ]
 })
 export class CoreModule { }

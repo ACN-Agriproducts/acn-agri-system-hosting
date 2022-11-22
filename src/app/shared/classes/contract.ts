@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -8,7 +8,7 @@ import { Ticket } from "./ticket";
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
     base: number;
-    buyer_terms: number
+    buyer_terms: number;
     client:  DocumentReference<Contact>;
     clientInfo: ContactInfo;
     clientName: string;
@@ -226,6 +226,23 @@ export class Contract extends FirebaseDocInterface {
             zipCode: contact.zipCode,
             ref: contact.ref,
         };
+    }
+    
+    public static async getContracts(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<Contract[][]> {
+        const pContractQuery = query(Contract.getCollectionReference(db, company, true), ...constraints);
+        const sContractQuery = query(Contract.getCollectionReference(db, company, false), ...constraints);
+
+        const pContractCollection = await getDocs(pContractQuery);
+        const sContractCollection = await getDocs(sContractQuery);
+        
+        return [pContractCollection.docs.map(snap => snap.data()), sContractCollection.docs.map(snap => snap.data())];
+    }
+
+    public static async getContractsOfType(db: Firestore, company: string, type: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+        const contractQuery = query(Contract.getCollectionReference(db, company, type), ...constraints);
+        const contractCollection = await getDocs(contractQuery);        
+        
+        return contractCollection.docs.map(snap => snap.data());
     }
 }
 
