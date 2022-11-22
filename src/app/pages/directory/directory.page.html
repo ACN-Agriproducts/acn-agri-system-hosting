@@ -25,18 +25,18 @@
             <span class="label-text">{{item.type}}</span>
           </div>
         </ion-label>
-        <ion-label color="dark" class="ion-hide-lg-down">{{item.phoneNumber}}</ion-label>
+        <ion-label color="dark" class="ion-hide-lg-down">{{ primaryMetaContact(i).phone ?? "" }}</ion-label>
 
-        <ion-label color="dark" class="ion-hide-md-down">{{item.email}}</ion-label>
+        <!-- <ion-label color="dark" class="ion-hide-md-down">{{item.email}}</ion-label> -->
         
         <ion-buttons class="ion-hide-sm-down">
           <ion-button color="primary" slot="end" (click)="$event.stopPropagation(); editButton(item.ref.id)">
             <ion-icon slot="icon-only" name="create-outline"></ion-icon>
           </ion-button>
-          <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); deleteButton(item.ref.id)">
+          <!-- <ion-button color="danger" slot="end" (click)="$event.stopPropagation(); deleteButton(item.ref.id)">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-button>
-          <!-- <ion-button color="medium" slot="end">
+          <ion-button color="medium" slot="end">
               <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
             </ion-button> -->
         </ion-buttons>
@@ -45,5 +45,4 @@
     <!-- </ion-card-content> -->
   </ion-card>
 
-  <ion-input [(ngModel)]="stringTest"></ion-input>
 </ion-content>

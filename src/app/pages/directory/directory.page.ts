@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { collectionData, Firestore, orderBy, query } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 @Component({
   selector: 'app-directory',
@@ -14,25 +15,22 @@ import { Contact } from '@shared/classes/contact';
 })
 export class DirectoryPage implements OnInit, OnDestroy {
 
-  contacts: any[]
-  stringTest: string
-  currentCompany: string
+  public contacts: any[]
+  public stringTest: string
+  public currentCompany: string
   private currentSub: Subscription;
 
   constructor(
+    private popoverController: PopoverController,
     private db: Firestore,
-    private localStore: Storage,
     private modalController: ModalController,
     private navController: NavController,
-    private popoverController: PopoverController,
-  ) { 
-    this.localStore.get('currentCompany').then(val => {
-      this.currentCompany = val;
-      this.updateList();
-    })
-   }
+    private session: SessionInfo,
+  ) { }
 
   ngOnInit() {
+    this.currentCompany = this.session.getCompany();
+    this.updateList();
   }
 
   ngOnDestroy() {
@@ -78,6 +76,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public deleteButton(id: string): void {
     
+  }
+
+  public primaryMetaContact(index: number) {
+    return this.contacts[index].metaContacts.find(metaContact => metaContact.isPrimary);
   }
 
   public nav = (route: string): void => {

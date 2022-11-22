@@ -10,30 +10,9 @@ export class Contract extends FirebaseDocInterface {
     base: number;
     buyer_terms: number;
     client:  DocumentReference<Contact>;
-    clientInfo: {
-        caat: string,
-        city: string,
-        email: string,
-        name: string,
-        phoneNumber: string,
-        state: string,
-        streetAddress: string,
-        type: string,
-        zipCode: string
-    };
+    clientInfo: ContactInfo;
     clientName: string;
-    clientTicketInfo: {
-        caat: string,
-        city: string,
-        email: string,
-        name: string,
-        phoneNumber: string,
-        state: string,
-        streetAddress: string,
-        type: string,
-        zipCode: string,
-        ref: DocumentReference,
-    };
+    clientTicketInfo: ContactInfo;
     currentDelivered: number;
     date: Date;
     delivery_dates: DeliveryDates;
@@ -92,9 +71,9 @@ export class Contract extends FirebaseDocInterface {
         this.quantity = data.quantity;
         this.seller_terms = data.seller_terms;
         this.status = data.status;
-        this.tickets = data.tickets;
+        this.tickets = tempTicketList;
         this.transport = data.transport;
-        this.truckers = data.truckers;
+        this.truckers = tempTruckerList;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
     }
@@ -233,6 +212,22 @@ export class Contract extends FirebaseDocInterface {
           })
     }
 
+    public static clientInfo(contact: Contact) {
+        const primaryContact = contact.metaContacts.find(c => c.isPrimary);
+
+        return {
+            caat: contact.caat,
+            city: contact.city,
+            email: primaryContact.email,
+            name: contact.name,
+            phoneNumber: primaryContact.phone,
+            state: contact.state,
+            streetAddress: contact.streetAddress,
+            zipCode: contact.zipCode,
+            ref: contact.ref,
+        };
+    }
+    
     public static async getContracts(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<Contract[][]> {
         const pContractQuery = query(Contract.getCollectionReference(db, company, true), ...constraints);
         const sContractQuery = query(Contract.getCollectionReference(db, company, false), ...constraints);
@@ -249,11 +244,6 @@ export class Contract extends FirebaseDocInterface {
         
         return contractCollection.docs.map(snap => snap.data());
     }
-
-    // TODO
-    // public static new(): Contract {
-    //     return new Contract()
-    // }
 }
 
 export class DeliveryDates {
@@ -298,3 +288,14 @@ enum status {
     closed = 'closed'
 }
 
+interface ContactInfo {
+    caat: string,
+    city: string,
+    email: string,
+    name: string,
+    phoneNumber: string,
+    state: string,
+    streetAddress: string,
+    zipCode: string,
+    ref: DocumentReference,    
+}
