@@ -25,14 +25,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
     private modalController: ModalController,
     private db: Firestore,
     private navController: NavController,
-    private localStore: Storage,
     private session: SessionInfo,
-  ) { 
-    // this.localStore.get('currentCompany').then(val => {
-    //   this.currentCompany = val;
-    //   this.updateList();
-    // })
-   }
+  ) { }
 
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
