@@ -22,4 +22,7 @@ export class EditContactDialogComponent implements OnInit {
       this.data.tags.includes('trucker') ? "trucker" : "";
   }
 
+  public primaryMetaContact(): any {
+    return this.data.metaContacts.find(metaContact => metaContact.isPrimary);
+  }
 }

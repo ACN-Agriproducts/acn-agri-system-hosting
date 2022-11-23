@@ -9,7 +9,7 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { FirebaseDocInterface, Pagination } from '@shared/classes/FirebaseDocInterface';
 import { Ticket } from '@shared/classes/ticket';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
 
 @Component({
@@ -56,12 +56,12 @@ export class ContactPage implements OnInit {
       
       if (this.contact.tags.includes('client')) {
         this.contactType = 'client';
-        console.log("getting contracts")
+        // console.log("getting contracts")
         this.getContracts();
       }
       else if (this.contact.tags.includes('trucker')) {
         this.contactType = 'trucker';
-        console.log("getting tickets")
+        // console.log("getting tickets")
         this.getTickets();
       }
       else { throw 'Type not found' }
@@ -83,7 +83,7 @@ export class ContactPage implements OnInit {
       ...queryList
     ));
 
-    console.log("finished getting tickets")
+    // console.log("finished getting tickets")
   }
 
   public getContracts(): void {
@@ -103,7 +103,7 @@ export class ContactPage implements OnInit {
       ...queryList
     ));
 
-    console.log("finished getting contracts")
+    // console.log("finished getting contracts")
   }
 
   public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>)
@@ -134,10 +134,8 @@ export class ContactPage implements OnInit {
 
   public docCount(isPrimary?: boolean): number {
     if (isPrimary == null) {
-      console.log("Both", this.docCount(true) + this.docCount(false))
       return this.docCount(true) + this.docCount(false);
     }
-    console.log("One", (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0)
     return (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0;
   }
 
@@ -150,7 +148,12 @@ export class ContactPage implements OnInit {
   }
 
   public async edit(): Promise<void> {
-    const contactCopy = { ...this.contact };
+    const metaContacts = [];
+    this.contact.metaContacts.forEach(metaContact => {
+      metaContacts.push({ ...metaContact });
+    });
+    const contactCopy = { ...this.contact, metaContacts: metaContacts };
+
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
       data: contactCopy,
@@ -163,14 +166,6 @@ export class ContactPage implements OnInit {
 
   public updateContact(data: Contact): void {
     this.contact.update({
-      // caat: data.caat,
-      // city: data.city.toUpperCase(),
-      // email: data.email.toUpperCase(),
-      // name: data.name.toUpperCase(),
-      // phoneNumber: data.phoneNumber,
-      // state: data.state.toUpperCase(),
-      // streetAddress: data.streetAddress.toUpperCase(),
-      // zipCode: data.zipCode,
       caat: data.caat,
       city: data.city.toUpperCase(),
       metaContacts: data.metaContacts,
@@ -181,14 +176,6 @@ export class ContactPage implements OnInit {
       zipCode: data.zipCode,
     })
     .then(() => {
-      // this.contact.name = data.name.toUpperCase();
-      // this.contact.caat = data.caat;
-      // this.contact.phoneNumber = data.phoneNumber;
-      // this.contact.email = data.email.toUpperCase();
-      // this.contact.streetAddress = data.streetAddress.toUpperCase();
-      // this.contact.city = data.city.toUpperCase();
-      // this.contact.state = data.state.toUpperCase();
-      // this.contact.zipCode = data.zipCode;
       this.contact.caat = data.caat;
       this.contact.city = data.city.toUpperCase();
       this.contact.metaContacts = data.metaContacts;

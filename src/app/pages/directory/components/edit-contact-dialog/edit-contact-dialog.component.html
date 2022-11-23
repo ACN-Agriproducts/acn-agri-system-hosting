@@ -22,7 +22,7 @@
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
 					<mat-label>Phone</mat-label>
-					<input matInput [(ngModel)]="data.primaryMetaContact().phone" name="phoneNumber">
+					<input matInput [(ngModel)]="primaryMetaContact().phone" name="phoneNumber">
 					<mat-error>Phone number is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
@@ -30,7 +30,7 @@
 			<mat-grid-tile colspan="6">
 				<mat-form-field appearance="fill">
 					<mat-label>Email</mat-label>
-					<input matInput [(ngModel)]="data.primaryMetaContact().email" name="email">
+					<input matInput [(ngModel)]="primaryMetaContact().email" name="email">
 					<mat-error>Email is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
