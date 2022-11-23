@@ -12,7 +12,7 @@
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="4">
-				<mat-form-field appearance="fill" *ngIf="data.type.toLocaleLowerCase() === 'trucker'">
+				<mat-form-field appearance="fill" *ngIf="contactType === 'trucker'">
 					<mat-label>CAAT</mat-label>
 					<input matInput [(ngModel)]="data.caat" name="caat">
 					<mat-error>CAAT is <strong>required</strong></mat-error>
@@ -22,7 +22,7 @@
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
 					<mat-label>Phone</mat-label>
-					<input matInput [(ngModel)]="data.phoneNumber" name="phoneNumber">
+					<input matInput [(ngModel)]="data.primaryMetaContact().phone" name="phoneNumber">
 					<mat-error>Phone number is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
@@ -30,7 +30,7 @@
 			<mat-grid-tile colspan="6">
 				<mat-form-field appearance="fill">
 					<mat-label>Email</mat-label>
-					<input matInput [(ngModel)]="data.email" name="email">
+					<input matInput [(ngModel)]="data.primaryMetaContact().email" name="email">
 					<mat-error>Email is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>

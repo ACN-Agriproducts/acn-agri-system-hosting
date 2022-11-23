@@ -25,18 +25,18 @@
 							<h1>
 								<b>{{ contact.name }}</b>
 								<h3>
-									{{ contact.type }}
+									{{ contactType | titlecase }}
 									<span *ngIf="contact?.caat ?? '' != ''"> - {{ contact?.caat }}</span>
 								</h3>
 							</h1>
 							<ion-list lines="none">
-								<ion-item *ngIf="(contact?.phoneNumber ?? '') != ''">
+								<ion-item *ngIf="(contact.primaryMetaContact().phone ?? '') != ''">
 									<ion-icon name="call-outline" slot="start" size="small"></ion-icon>
-									<ion-label>{{ contact.phoneNumber }}</ion-label>
+									<ion-label>{{ contact.primaryMetaContact().phone }}</ion-label>
 								</ion-item>
-								<ion-item *ngIf="(contact?.email ?? '') != ''">
+								<ion-item *ngIf="(contact.primaryMetaContact().email ?? '') != ''">
 									<ion-icon name="mail-outline" slot="start" size="small"></ion-icon>
-									<ion-label>{{ contact.email | lowercase }}</ion-label>
+									<ion-label>{{ contact.primaryMetaContact().email | lowercase }}</ion-label>
 								</ion-item>
 								<ion-item *ngIf="(contact?.streetAddress ?? '') != ''">
 									<ion-icon name="location-outline" slot="start" size="small"></ion-icon>

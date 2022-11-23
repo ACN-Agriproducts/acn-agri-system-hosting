@@ -9,6 +9,7 @@ import { Contact } from '@shared/classes/contact';
   styleUrls: ['./edit-contact-dialog.component.scss'],
 })
 export class EditContactDialogComponent implements OnInit {
+  public contactType: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Contact,
@@ -17,7 +18,8 @@ export class EditContactDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+    this.contactType = this.data.tags.includes('client') ? "client" :
+      this.data.tags.includes('trucker') ? "trucker" : "";
   }
 
 }

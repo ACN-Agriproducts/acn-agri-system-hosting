@@ -53,13 +53,15 @@ export class ContactPage implements OnInit {
       this.contact = contact;
       this.ready = this.contact != null;
       if (!this.ready) throw 'Contact could not be loaded';
-
-      this.contactType = this.contact.type.toLowerCase();
       
-      if (this.contactType === 'client') {
+      if (this.contact.tags.includes('client')) {
+        this.contactType = 'client';
+        console.log("getting contracts")
         this.getContracts();
       }
-      else if (this.contactType === 'trucker') {
+      else if (this.contact.tags.includes('trucker')) {
+        this.contactType = 'trucker';
+        console.log("getting tickets")
         this.getTickets();
       }
       else { throw 'Type not found' }
@@ -80,6 +82,8 @@ export class ContactPage implements OnInit {
       Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant),
       ...queryList
     ));
+
+    console.log("finished getting tickets")
   }
 
   public getContracts(): void {
@@ -98,6 +102,8 @@ export class ContactPage implements OnInit {
       Contract.getCollectionReference(this.db, this.currentCompany, false),
       ...queryList
     ));
+
+    console.log("finished getting contracts")
   }
 
   public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>)
@@ -128,8 +134,10 @@ export class ContactPage implements OnInit {
 
   public docCount(isPrimary?: boolean): number {
     if (isPrimary == null) {
+      console.log("Both", this.docCount(true) + this.docCount(false))
       return this.docCount(true) + this.docCount(false);
     }
+    console.log("One", (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0)
     return (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0;
   }
 
@@ -155,23 +163,39 @@ export class ContactPage implements OnInit {
 
   public updateContact(data: Contact): void {
     this.contact.update({
-      name: data.name.toUpperCase(),
+      // caat: data.caat,
+      // city: data.city.toUpperCase(),
+      // email: data.email.toUpperCase(),
+      // name: data.name.toUpperCase(),
+      // phoneNumber: data.phoneNumber,
+      // state: data.state.toUpperCase(),
+      // streetAddress: data.streetAddress.toUpperCase(),
+      // zipCode: data.zipCode,
       caat: data.caat,
-      phoneNumber: data.phoneNumber,
-      email: data.email.toUpperCase(),
-      streetAddress: data.streetAddress.toUpperCase(),
       city: data.city.toUpperCase(),
+      metaContacts: data.metaContacts,
+      name: data.name.toUpperCase(),
       state: data.state.toUpperCase(),
+      streetAddress: data.streetAddress.toUpperCase(),
+      tags: data.tags,
       zipCode: data.zipCode,
     })
     .then(() => {
-      this.contact.name = data.name.toUpperCase();
+      // this.contact.name = data.name.toUpperCase();
+      // this.contact.caat = data.caat;
+      // this.contact.phoneNumber = data.phoneNumber;
+      // this.contact.email = data.email.toUpperCase();
+      // this.contact.streetAddress = data.streetAddress.toUpperCase();
+      // this.contact.city = data.city.toUpperCase();
+      // this.contact.state = data.state.toUpperCase();
+      // this.contact.zipCode = data.zipCode;
       this.contact.caat = data.caat;
-      this.contact.phoneNumber = data.phoneNumber;
-      this.contact.email = data.email.toUpperCase();
-      this.contact.streetAddress = data.streetAddress.toUpperCase();
       this.contact.city = data.city.toUpperCase();
+      this.contact.metaContacts = data.metaContacts;
+      this.contact.name = data.name.toUpperCase();
       this.contact.state = data.state.toUpperCase();
+      this.contact.streetAddress = data.streetAddress.toUpperCase();
+      this.contact.tags = data.tags;
       this.contact.zipCode = data.zipCode;
 
       this.snack.open("Contact successfully updated", "success");
