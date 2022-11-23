@@ -78,10 +78,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
     
   }
 
-  public primaryMetaContact(index: number) {
-    return this.contacts[index].metaContacts.find(metaContact => metaContact.isPrimary);
-  }
-
   public nav = (route: string): void => {
     this.navController.navigateForward(route, {
       replaceUrl: false

@@ -76,6 +76,10 @@ export class Contact extends FirebaseDocInterface {
             phone: metaContact.phone
         };
     }
+
+    public primaryMetaContact(): MetaContact {
+        return this.metaContacts.find(metaContact => metaContact.isPrimary);
+    }
 }
 
 interface MetaContact {
