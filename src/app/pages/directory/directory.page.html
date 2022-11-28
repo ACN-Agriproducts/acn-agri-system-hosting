@@ -22,7 +22,7 @@
         <ion-label>
           <div class="content-label">
             <span>{{item.name}} </span>
-            <span class="label-text">{{item.type}}</span>
+            <span class="label-text">{{item.getType() | titlecase}}</span>
           </div>
         </ion-label>
         <ion-label color="dark" class="ion-hide-lg-down">{{ item.primaryMetaContact().phone ?? "" }}</ion-label>

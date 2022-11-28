@@ -3,7 +3,7 @@
 <mat-dialog-content>
 	<form #contactForm="ngForm">
 		<mat-grid-list cols="9" rowHeight="70px" gutterSize="10px">
-			<mat-grid-tile colspan="5">
+			<mat-grid-tile colspan="6">
 				<mat-form-field appearance="fill">
 					<mat-label>Name</mat-label>
 					<input matInput required [(ngModel)]="data.name" name="name">
@@ -11,27 +11,11 @@
 				</mat-form-field>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="4">
+			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill" *ngIf="contactType === 'trucker'">
 					<mat-label>CAAT</mat-label>
 					<input matInput [(ngModel)]="data.caat" name="caat">
 					<mat-error>CAAT is <strong>required</strong></mat-error>
-				</mat-form-field>
-			</mat-grid-tile>
-
-			<mat-grid-tile colspan="3">
-				<mat-form-field appearance="fill">
-					<mat-label>Phone</mat-label>
-					<input matInput [(ngModel)]="primaryMetaContact().phone" name="phoneNumber">
-					<mat-error>Phone number is <strong>required</strong></mat-error>
-				</mat-form-field>
-			</mat-grid-tile>
-
-			<mat-grid-tile colspan="6">
-				<mat-form-field appearance="fill">
-					<mat-label>Email</mat-label>
-					<input matInput [(ngModel)]="primaryMetaContact().email" name="email">
-					<mat-error>Email is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 
@@ -67,6 +51,40 @@
 				</mat-form-field>
 			</mat-grid-tile>
 		</mat-grid-list>
+
+		<div>
+			<mat-grid-list cols="9" rowHeight="70px">
+				<mat-grid-tile colspan="9">
+					<mat-grid-tile-header>Primary Contact:</mat-grid-tile-header>
+				</mat-grid-tile>
+			</mat-grid-list>
+
+			<mat-grid-list id="primary-metacontact" cols="9" rowHeight="70px" gutterSize="10px">
+				<mat-grid-tile colspan="9">
+					<mat-form-field appearance="fill">
+						<mat-label>Name</mat-label>
+						<input matInput [(ngModel)]="primaryMetaContact().name" name="primaryMetaContactName">
+						<mat-error>Name is <strong>required</strong></mat-error>
+					</mat-form-field>
+				</mat-grid-tile>
+			
+				<mat-grid-tile colspan="3">
+					<mat-form-field appearance="fill">
+						<mat-label>Phone</mat-label>
+						<input matInput [(ngModel)]="primaryMetaContact().phone" name="phoneNumber">
+						<mat-error>Phone number is <strong>required</strong></mat-error>
+					</mat-form-field>
+				</mat-grid-tile>
+
+				<mat-grid-tile colspan="6">
+					<mat-form-field appearance="fill">
+						<mat-label>Email</mat-label>
+						<input matInput [(ngModel)]="primaryMetaContact().email" name="email">
+						<mat-error>Email is <strong>required</strong></mat-error>
+					</mat-form-field>
+				</mat-grid-tile>
+			</mat-grid-list>
+		</div>
 	</form>
 </mat-dialog-content>
 

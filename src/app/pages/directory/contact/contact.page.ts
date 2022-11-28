@@ -53,15 +53,12 @@ export class ContactPage implements OnInit {
       this.contact = contact;
       this.ready = this.contact != null;
       if (!this.ready) throw 'Contact could not be loaded';
-      
-      if (this.contact.tags.includes('client')) {
-        this.contactType = 'client';
-        // console.log("getting contracts")
+
+      this.contactType = this.contact.getType();
+      if (this.contactType === 'client') {
         this.getContracts();
       }
-      else if (this.contact.tags.includes('trucker')) {
-        this.contactType = 'trucker';
-        // console.log("getting tickets")
+      else if (this.contactType === 'trucker') {
         this.getTickets();
       }
       else { throw 'Type not found' }
@@ -82,8 +79,6 @@ export class ContactPage implements OnInit {
       Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant),
       ...queryList
     ));
-
-    // console.log("finished getting tickets")
   }
 
   public getContracts(): void {
@@ -102,8 +97,6 @@ export class ContactPage implements OnInit {
       Contract.getCollectionReference(this.db, this.currentCompany, false),
       ...queryList
     ));
-
-    // console.log("finished getting contracts")
   }
 
   public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>)

@@ -80,6 +80,11 @@ export class Contact extends FirebaseDocInterface {
     public primaryMetaContact(): MetaContact {
         return this.metaContacts.find(metaContact => metaContact.isPrimary);
     }
+
+    public getType(): string | null {
+        return this.tags.includes('client') ? "client" :
+            this.tags.includes('trucker') ? "trucker" : null;
+    }
 }
 
 interface MetaContact {
