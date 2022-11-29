@@ -185,6 +185,10 @@ export class ContactPage implements OnInit {
     });
   }
 
+  public archive(): void {
+
+  }
+
   ngOnDestroy(): void {
     this.primaryPagination?.end();
     this.secondaryPagination?.end();

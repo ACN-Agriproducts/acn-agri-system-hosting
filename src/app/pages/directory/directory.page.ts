@@ -2,11 +2,14 @@ import { ModalController, NavController, PopoverController } from '@ionic/angula
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { Subscription } from 'rxjs';
+import { lastValueFrom, Subscription } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { collectionData, Firestore, orderBy, query } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 
 @Component({
   selector: 'app-directory',
@@ -21,11 +24,13 @@ export class DirectoryPage implements OnInit, OnDestroy {
   private currentSub: Subscription;
 
   constructor(
-    private popoverController: PopoverController,
     private db: Firestore,
+    private dialog: MatDialog,
     private modalController: ModalController,
     private navController: NavController,
+    private popoverController: PopoverController,
     private session: SessionInfo,
+    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
@@ -70,11 +75,52 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.navController.navigateForward('dashboard/directory/new')
   }
 
-  public editButton(id: string) {
-    this.navController.navigateForward(`dashboard/directory/edit-contact/${id}`)
+  public async edit(contact: Contact): Promise<void> {
+    const metaContacts = [];
+    contact.metaContacts.forEach(metaContact => {
+      metaContacts.push({ ...metaContact });
+    });
+    const contactCopy = { ...contact, metaContacts: metaContacts };
+
+    const dialogRef = this.dialog.open(EditContactDialogComponent, {
+      autoFocus: false,
+      data: contactCopy,
+    });
+    const newContactData = await lastValueFrom(dialogRef.afterClosed());
+    if (newContactData == null) return;
+
+    this.updateContact(contact, newContactData);
   }
 
-  public deleteButton(id: string): void {
+  public updateContact(contact: Contact, data: Contact): void {
+    contact.update({
+      caat: data.caat,
+      city: data.city.toUpperCase(),
+      metaContacts: data.metaContacts,
+      name: data.name.toUpperCase(),
+      state: data.state.toUpperCase(),
+      streetAddress: data.streetAddress.toUpperCase(),
+      tags: data.tags,
+      zipCode: data.zipCode,
+    })
+    .then(() => {
+      contact.caat = data.caat;
+      contact.city = data.city.toUpperCase();
+      contact.metaContacts = data.metaContacts;
+      contact.name = data.name.toUpperCase();
+      contact.state = data.state.toUpperCase();
+      contact.streetAddress = data.streetAddress.toUpperCase();
+      contact.tags = data.tags;
+      contact.zipCode = data.zipCode;
+
+      this.snack.open("Contact successfully updated", "success");
+    })
+    .catch(error => {
+      this.snack.open(error, "error");
+    });
+  }
+
+  public archive(id: string): void {
     
   }
 

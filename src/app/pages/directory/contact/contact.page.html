@@ -17,9 +17,9 @@
 									<ion-button color="primary" (click)="edit()">
 										<ion-icon name="create-outline"></ion-icon>
 									</ion-button>
-									<!-- <ion-button color="danger">
-										<ion-icon name="trash-outline"></ion-icon>
-									</ion-button> -->
+									<ion-button color="danger" (click)="archive()">
+										<ion-icon name="archive-outline"></ion-icon>
+									</ion-button>
 								</ion-buttons>
 							</div>
 							<h1>
@@ -76,9 +76,6 @@
 				<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
 				<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
 					<ion-segment [value]="getContractType()" (ionChange)="changeContracts($event)">
-						<!-- <ion-segment-button value="purchase,sales">
-							<ion-label>All</ion-label>
-						</ion-segment-button> -->
 						<ion-segment-button value="purchase" *ngIf="docCount(true) > 0">
 							<ion-label>Purchase Contracts</ion-label>
 						</ion-segment-button>
