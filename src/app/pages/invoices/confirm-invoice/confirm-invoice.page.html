@@ -1,8 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Confirm invoice</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="Confirm Invoice Information"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <div class="content-main">
@@ -92,6 +88,9 @@
               <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
             </ion-button>
             <div class="panel-list">
+              <ion-item color="dark" lines="none">
+                <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ', ' }}</ion-label>
+              </ion-item>
               <ion-button routerLink="/ticket/sksks">Generate</ion-button>
             </div>
           </div>
