@@ -35,11 +35,19 @@ export class ConfirmInvoicePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    const currentNavigation = this.router.getCurrentNavigation();
+    if(currentNavigation == null) {
+      console.log("return")
+      this.router.navigate(["dashboard", "invoices", "new"], {});
+      return;
+    }
+
     Company.getCompany(this.db, this.session.getCompany()).then(company => {
       this.companyDoc = company;
       this.invoice.id = company.nextInvoice;
     });
-    this.selectedTickets = this.router.getCurrentNavigation().extras.state as Set<Ticket>;
+
+    this.selectedTickets = currentNavigation.extras.state as Set<Ticket>;
     this.groups = {};
 
     this.selectedTickets.forEach(ticket => {
