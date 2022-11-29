@@ -9,6 +9,7 @@ import { ConfirmInvoicePageRoutingModule } from './confirm-invoice-routing.modul
 
 import { ConfirmInvoicePage } from './confirm-invoice.page';
 import { SharedModule } from '@shared/shared.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { SharedModule } from '@shared/shared.module';
     IonicModule,
     ConfirmInvoicePageRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    DragDropModule
   ],
   declarations: [ConfirmInvoicePage]
 })

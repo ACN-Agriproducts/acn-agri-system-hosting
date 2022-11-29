@@ -8,6 +8,8 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Firestore } from '@angular/fire/firestore';
 import { Interface } from 'readline';
 import { contactInfo, item } from '@shared/classes/invoice';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-confirm-invoice',
@@ -21,9 +23,11 @@ export class ConfirmInvoicePage implements OnInit {
   public groups: {
     [product: string]: {
       [client: string]: {
-        tickets: Ticket[],
-        price: number,
-        totalWeight: number
+        [group: string]: {
+          tickets: Ticket[],
+          price: number,
+          totalWeight: number
+        }
       }
     }
   }
@@ -51,19 +55,25 @@ export class ConfirmInvoicePage implements OnInit {
     this.groups = {};
 
     this.selectedTickets.forEach(ticket => {
+      const driver = ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
+
       if(!this.groups[ticket.productName]) {
         this.groups[ticket.productName] = {};
       }
 
       if(!this.groups[ticket.productName][ticket.clientName]) {
-        this.groups[ticket.productName][ticket.clientName] = {
+        this.groups[ticket.productName][ticket.clientName] = {};
+      }
+
+      if(!this.groups[ticket.productName][ticket.clientName][driver]) {
+        this.groups[ticket.productName][ticket.clientName][driver] = {
           tickets: [],
           price: 0,
           totalWeight: 0
         };
       }
 
-      const object = this.groups[ticket.productName][ticket.clientName];
+      const object = this.groups[ticket.productName][ticket.clientName][driver];
       object.tickets.push(ticket);
       object.totalWeight += ticket.gross - ticket.tare;
     });
@@ -94,6 +104,26 @@ export class ConfirmInvoicePage implements OnInit {
     }
   }
 
+  getConnectedProductGroupList(product: string, client: string, group: string): string[] {
+    const connectedList: string[] = Object.keys(this.groups[product][client]).map(g => `${product}-${client}-${g}`);
+    const index = connectedList.findIndex(s => s == `${product}-${client}-${group}`);
+    connectedList.splice(index, 1);
+
+    return connectedList;
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+  }
 }
 
 interface invoiceInterface {

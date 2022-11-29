@@ -2,7 +2,7 @@
 
 <ion-content class="ion-padding">
   <div class="content-main">
-    <div class="content-form">
+    <div class="content">
       <form>
         <ion-card>
           <ion-card-header>
@@ -68,6 +68,31 @@
           </ion-card-content>
         </ion-card>
       </form>
+    </div>
+
+    <div class="content">
+      <ion-card *ngFor="let productGroup of groups | keyvalue">
+        <ion-card-header>
+          <ion-card-title>{{productGroup.key}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngFor="let client of productGroup.value | keyvalue">
+            <h3>{{client.key}}</h3>
+            <div *ngFor="let group of client.value | keyvalue">
+              <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
+              <div
+                cdkDropList
+                [id]="productGroup.key + '-' + client.key + '-' + group.key"
+                [cdkDropListData]="group.value.tickets"
+                [cdkDropListConnectedTo]="getConnectedProductGroupList(productGroup.key, client.key, group.key)"
+                class="ticket-list"
+                (cdkDropListDropped)="drop($event)">
+                <div class="ticket-box" *ngFor="let ticket of group.value.tickets" cdkDrag>{{ticket.id}}</div>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
     </div>
 
     <div class="content-panel" *ngIf="false">
