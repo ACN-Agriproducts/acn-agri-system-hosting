@@ -70,3 +70,15 @@
     //   margin-left: 0;
   }
 }
+.panel-list{
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: center;
+  ion-item{
+    font-style: italic;
+  }
+  ion-label{
+    overflow: visible;
+  }
+}
