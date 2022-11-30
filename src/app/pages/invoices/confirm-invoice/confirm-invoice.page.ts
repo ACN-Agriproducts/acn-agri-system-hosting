@@ -1,14 +1,13 @@
-import { NavController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { Router } from '@angular/router';
 import { Ticket } from '@shared/classes/ticket';
 import { Company } from '@shared/classes/company';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Firestore } from '@angular/fire/firestore';
-import { Interface } from 'readline';
 import { contactInfo, item } from '@shared/classes/invoice';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Contract } from '@shared/classes/contract';
+import { Product } from '@shared/classes/product';
 
 
 @Component({
@@ -19,15 +18,14 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 export class ConfirmInvoicePage implements OnInit {
   public companyDoc: Company;
   public selectedTickets: Set<Ticket>;
-  public invoice: invoiceInterface
+  public contracts: Map<number, Promise<Contract>>;
+  public products: Product[];
+  public invoice: invoiceInterface;
+  public invoiceCreated: boolean = false;
   public groups: {
     [product: string]: {
       [client: string]: {
-        [group: string]: {
-          tickets: Ticket[],
-          price: number,
-          totalWeight: number
-        }
+        [group: string]: TicketGroup
       }
     }
   }
@@ -50,11 +48,19 @@ export class ConfirmInvoicePage implements OnInit {
       this.companyDoc = company;
       this.invoice.id = company.nextInvoice;
     });
+    Product.getProductList(this.db, this.session.getCompany()).then(result => {
+      this.products = result;
+    });
 
     this.selectedTickets = currentNavigation.extras.state as Set<Ticket>;
     this.groups = {};
+    this.contracts = new Map();
 
     this.selectedTickets.forEach(ticket => {
+      if(!this.contracts.has(ticket.contractID)) {
+        this.contracts.set(ticket.contractID, ticket.getContract(this.db));
+      }
+
       const driver = ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
 
       if(!this.groups[ticket.productName]) {
@@ -80,25 +86,27 @@ export class ConfirmInvoicePage implements OnInit {
 
     this.invoice = {
       buyer: {
-        city: null,
-        country: null,
-        name: null,
+        city: "Valle Hermoso",
+        country: "Mexico",
+        name: "Agropecuaria la Capilla del Noreste SA de CV",
         phone: null,
-        state: null,
-        street: null,
-        zip: null
+        state: "Tamaulipas",
+        street: "Zaragosa S/N Colonia Centro",
+        zip: null,
+        other: "CP:. 87500\nRFC: ACN 980211QC9"
       },
       date: new Date(),
       id: 0,
       items: [],
       seller: {
-        city: null,
+        city: "Progreso",
         country: null,
-        name: null,
+        name: "ACN Agriproducts, LLC.",
         phone: null,
-        state: null,
-        street: null,
-        zip: null
+        state: "TEXAS",
+        street: "1512 Rancho Toluca Rd",
+        zip: "78579",
+        other: null
       },
       total: 0
     }
@@ -122,7 +130,85 @@ export class ConfirmInvoicePage implements OnInit {
         event.previousIndex,
         event.currentIndex,
       );
+      
+      console.log(event.item.data);
+
+      this.getItemFromListId(event.previousContainer.id).totalWeight -= (event.item.data as Ticket).getNet();
+      this.getItemFromListId(event.container.id).totalWeight += (event.item.data as Ticket).getNet();
     }
+  }
+
+  getItemFromListId(id: string) {
+    const steps = id.split('-');
+    return this.groups[steps[0]][steps[1]][steps[2]];
+  }
+
+  getMetricTonTotal(ticketList: Ticket[]) {
+    let totalKilos = 0;
+    ticketList.forEach(ticket => {
+      totalKilos += Math.round(ticket.getNet() / 2.20462);
+    });
+
+    return totalKilos / 1000;
+  }
+
+  async generateInvoice() {
+    this.invoice.id = this.companyDoc.nextInvoice;
+    
+    for(let product in this.groups) {
+      this.invoice.items.push({
+        affectsInventory: false,
+        details: null,
+        inventoryInfo: [],
+        name: product,
+        price: null,
+        quantity: null,
+        type: "label"
+      });
+      for(let client in this.groups[product]) {
+        for(let group in this.groups[product][client]){
+          const ticketGroup = this.groups[product][client][group];
+          const nextItem: item = {
+            affectsInventory: false,
+            details: this.getItemDetails(ticketGroup),
+            inventoryInfo: [],
+            name: this.getItemName(ticketGroup),
+            price: await this.getItemPrice(ticketGroup),
+            quantity: this.getMetricTonTotal(ticketGroup.tickets),
+            type: null
+          };
+          this.invoice.total += Math.round(nextItem.quantity * nextItem.price * 100) / 100;
+          this.invoice.items.push(nextItem);
+        }
+      }
+    }
+
+    this.invoiceCreated = true;
+  }
+
+  getItemDetails(group: TicketGroup): string {
+    let tickets = "";
+    group.tickets.forEach(ticket => {
+      tickets = tickets.concat(ticket.id.toString());
+    });
+    
+    return `CONTRACT# ${group.tickets[0].contractID}\tTICKETS# ${tickets}`;
+  }
+
+  getItemName(group: TicketGroup): string {
+    let name = "";
+    group.tickets.forEach(ticket => {
+      name = name.concat(`${ticket.plates.toUpperCase()}--${(ticket.getNet()/2204.62).toFixed(3)}\t`)
+    });
+
+    return name;
+  }
+
+  async getItemPrice(group: TicketGroup): Promise<number> {
+    const contract = await this.contracts.get(group.tickets[0].contractID);
+    const product = this.products.find(p => p.getName() == group.tickets[0].productName);
+    const mTonPrice = contract.pricePerBushel / product.weight * 2204.62;
+    return Math.round(mTonPrice * 100) / 100;
   }
 }
 
@@ -133,4 +219,10 @@ interface invoiceInterface {
   items: item[];
   seller: contactInfo;
   total: number;
+}
+
+interface TicketGroup {
+  tickets: Ticket[],
+  price: number,
+  totalWeight: number
 }

@@ -20,7 +20,7 @@ export class NewInvoicePage implements OnInit {
 
   ngOnInit() {
     const today = new Date();
-    const requestDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+    const requestDate = new Date(2022, 10, 1);//new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
     this.selectedTickets = new Set<Ticket>;
 
     const ticketQuery = Ticket.getCollectionReference(

@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+*{
+    white-space: pre-line;
+}
+
 .row-2 {
   display: grid;
   grid-template-columns: auto auto;
@@ -99,6 +103,9 @@ address{
 }
 .font-weight-600 {
     font-weight: 600 !important;
+}
+.font-weight-bold {
+    font-weight: bold;
 }
 .text-4 {
     font-size: 18px !important;

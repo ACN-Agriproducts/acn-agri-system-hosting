@@ -25,6 +25,7 @@
             <span>ZIP {{seller.zip}} </span>
             <span>{{seller.city}}, {{seller.state}}, {{seller.country}} </span>
             <span>{{seller.phone}}</span>
+            <span>{{seller.other}}</span>
           </address>
         </div>
         <div class="col-sm-6 order-right"> <strong>Invoiced To:</strong>
@@ -34,6 +35,7 @@
             <span *ngIf="buyer.zip != null">ZIP {{buyer.zip}} </span>
             <span>{{buyer.city}}, {{buyer.state}}, {{buyer.country}} </span>
             <span *ngIf="buyer.phone != null">{{buyer.phone}}</span>
+            <span>{{buyer.other}}</span>
           </address>
         </div>
       </div>
@@ -62,25 +64,28 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of items">
-                  <td><span class="text-3"><span class="font-weight-500">{{item.name}}</span> </span> <br>
-                  <span ><span *ngIf="item.details != ''">{{item.details}}<br></span></span>
+                  <td [colSpan]="item.type == 'label' ? 4 : 1">
+                    <span class="text-3">
+                      <span [class.font-weight-500]="!item.type" [class.font-weight-bold]="item.type == 'label'">{{item.name}}</span> 
+                    </span> <br>
+                    <span><span *ngIf="item.details != '' && item.details != null">{{item.details}}<br></span></span>
                   </td>
-                  <td class="text-center">{{item.quantity}}</td>
-                  <td class="text-center">${{item.price | number:".2"}}</td>
-                  <td class="text-right">${{(item.quantity * item.price) | number:".2"}}</td>
+                  <td class="text-center" *ngIf="item.type != 'label'">{{item.quantity}}</td>
+                  <td class="text-center" *ngIf="item.type != 'label'">{{item.price | currency}}</td>
+                  <td class="text-right" *ngIf="item.type != 'label'">{{(item.quantity * item.price) | currency}}</td>
                 </tr>
                 <!-- <tr>
                   <td colspan="2" class="bg-light-2 text-right"><strong>Sub Total</strong></td>
                   <td colspan="2" class="bg-light-2 text-right">$46,424.09</td>
                 </tr> -->
                 <!-- <tr>
-                                <td colspan="2" class="bg-light-2 text-right"><strong>Tax Rate:</strong><br>
-                                    <span class="text-1">8% tax rate</span></td>
-                                <td colspan="2" class="bg-light-2 text-right"></td>
-                            </tr> -->
+                  <td colspan="2" class="bg-light-2 text-right"><strong>Tax Rate:</strong><br>
+                    <span class="text-1">8% tax rate</span></td>
+                  <td colspan="2" class="bg-light-2 text-right"></td>
+                </tr> -->
                 <tr>
                   <td colspan="2" class="bg-light-2 text-right"><strong>Total</strong></td>
-                  <td colspan="2" class="bg-light-2 text-right">${{total | number:"0.2"}}</td>
+                  <td colspan="2" class="bg-light-2 text-right">{{total | currency}}</td>
                 </tr>
               </tbody>
             </table>
