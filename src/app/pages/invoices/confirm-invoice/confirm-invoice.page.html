@@ -185,6 +185,19 @@
         [items]="invoice.items"
         [total]="invoice.total"
       ></app-printable-invoice>
+
+      <div>
+        <h1>This is an invoice thingy</h1>
+
+      </div>
+
+      <app-printable-ticket 
+        *ngFor="let docs of printTicketDocs" 
+        [ticket]="docs[0]"
+        [contract]="docs[1]"
+        [transport]="docs[2]"
+        [client]="docs[3]">
+      </app-printable-ticket>
     </div>
 
     <div class="content-action">
@@ -198,7 +211,14 @@
               <ion-item color="dark" lines="none">
                 <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ', ' }}</ion-label>
               </ion-item>
-              <ion-button (click)="generateInvoice()">Generate</ion-button>
+              <ion-button 
+              (click)="generateInvoice()"
+              *ngIf="!invoiceCreated"
+              >Generate</ion-button>
+              <ion-button
+              *ngIf="invoiceCreated"
+              >Print
+              </ion-button>
             </div>
           </div>
         </ion-card-content>

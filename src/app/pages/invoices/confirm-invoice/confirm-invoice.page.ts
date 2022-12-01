@@ -8,6 +8,7 @@ import { contactInfo, item } from '@shared/classes/invoice';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
+import { Contact } from '@shared/classes/contact';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { Product } from '@shared/classes/product';
 export class ConfirmInvoicePage implements OnInit {
   public companyDoc: Company;
   public selectedTickets: Set<Ticket>;
+  public printTicketDocs: [Ticket, Contract, Contact, Contact][];
   public contracts: Map<number, Promise<Contract>>;
   public products: Product[];
   public invoice: invoiceInterface;
@@ -29,6 +31,8 @@ export class ConfirmInvoicePage implements OnInit {
       }
     }
   }
+
+  private generatePromises: Promise<any>[];
 
   constructor(
     private router: Router,
@@ -44,19 +48,26 @@ export class ConfirmInvoicePage implements OnInit {
       return;
     }
 
-    Company.getCompany(this.db, this.session.getCompany()).then(company => {
+    this.generatePromises = [];
+
+    this.generatePromises.push(Company.getCompany(this.db, this.session.getCompany()).then(company => {
       this.companyDoc = company;
       this.invoice.id = company.nextInvoice;
-    });
-    Product.getProductList(this.db, this.session.getCompany()).then(result => {
+    }));
+    this.generatePromises.push(Product.getProductList(this.db, this.session.getCompany()).then(result => {
       this.products = result;
-    });
+    }));
 
     this.selectedTickets = currentNavigation.extras.state as Set<Ticket>;
     this.groups = {};
     this.contracts = new Map();
+    this.printTicketDocs = [];
 
     this.selectedTickets.forEach(ticket => {
+      this.generatePromises.push(ticket.getPrintDocs(this.db).then(docs => {
+        this.printTicketDocs.push(docs);
+      }));
+
       if(!this.contracts.has(ticket.contractID)) {
         this.contracts.set(ticket.contractID, ticket.getContract(this.db));
       }
@@ -153,6 +164,7 @@ export class ConfirmInvoicePage implements OnInit {
   }
 
   async generateInvoice() {
+    await Promise.all(this.generatePromises);
     this.invoice.id = this.companyDoc.nextInvoice;
     
     for(let product in this.groups) {
@@ -188,8 +200,11 @@ export class ConfirmInvoicePage implements OnInit {
 
   getItemDetails(group: TicketGroup): string {
     let tickets = "";
-    group.tickets.forEach(ticket => {
+    group.tickets.forEach((ticket, index) => {
       tickets = tickets.concat(ticket.id.toString());
+      if(index != group.tickets.length - 1) {
+        tickets = tickets.concat(', ');
+      }
     });
     
     return `CONTRACT# ${group.tickets[0].contractID}\tTICKETS# ${tickets}`;
@@ -197,8 +212,11 @@ export class ConfirmInvoicePage implements OnInit {
 
   getItemName(group: TicketGroup): string {
     let name = "";
-    group.tickets.forEach(ticket => {
-      name = name.concat(`${ticket.plates.toUpperCase()}--${(ticket.getNet()/2204.62).toFixed(3)}\t`)
+    group.tickets.forEach((ticket, index) => {
+      name = name.concat(`${ticket.plates.toUpperCase()}--${(ticket.getNet()/2204.62).toFixed(3)}`)
+      if(index != group.tickets.length - 1) {
+        name = name.concat('  ');
+      }
     });
 
     return name;
