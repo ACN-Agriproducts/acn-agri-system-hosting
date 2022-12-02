@@ -21,6 +21,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public stringTest: string
   public currentCompany: string
   private currentSub: Subscription;
+  public filteredContacts: Contact[];
 
   constructor(
     private db: Firestore,
@@ -44,7 +45,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   private updateList = async () => {
-    this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => this.contacts = val);
+    this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => {
+      this.filteredContacts = this.contacts = val;
+    });
   }
 
   public openOptions = async (ev: any) => {
@@ -103,14 +106,15 @@ export class DirectoryPage implements OnInit, OnDestroy {
       zipCode: data.zipCode,
     })
     .then(() => {
-      contact.caat = data.caat;
+      /* contact.caat = data.caat;
       contact.city = data.city.toUpperCase();
       contact.metacontacts = data.metacontacts;
       contact.name = data.name.toUpperCase();
       contact.state = data.state.toUpperCase();
       contact.streetAddress = data.streetAddress.toUpperCase();
       contact.tags = data.tags;
-      contact.zipCode = data.zipCode;
+      contact.zipCode = data.zipCode; */
+      this.updateList();
 
       this.snack.open("Contact successfully updated", "success");
     })
@@ -127,5 +131,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.navController.navigateForward(route, {
       replaceUrl: false
     });
+  }
+
+  public autocompleteSearch(event: any): void {
+    const search = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
+    this.filteredContacts = this.contacts.filter(contact => contact.name.match(search));
   }
 }

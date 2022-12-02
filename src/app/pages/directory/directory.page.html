@@ -2,15 +2,15 @@
 
 <ion-content class="ion-padding">
 	<div class="content-header margin-inline">
-		<ion-searchbar></ion-searchbar>
+		<ion-searchbar clear-icon="close-circle" (ionChange)="autocompleteSearch($event)" debounce="500"></ion-searchbar>
 		<ion-button (click)="openNewContact()">
 			<ion-text slot="end">New Contact</ion-text>
 		</ion-button>
 	</div>
 	<ion-card>
-		<div class="content-subtitle">Contacts ({{ contacts?.length ?? 0 }})</div>
+		<div class="content-subtitle">Contacts ({{ filteredContacts?.length ?? 0 }})</div>
 		<div class="content-item" (contextmenu)="openOptions($event)"
-			*ngFor="let contact of contacts; let i = index">
+			*ngFor="let contact of filteredContacts; let i = index">
 			<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
 				<ion-avatar slot="start">
 					<img src="../../../assets/avatar.svg">
