@@ -16,6 +16,10 @@ ion-row {
 	margin: auto;
 }
 
+ion-button {
+	font-size: larger;
+}
+
 ion-segment {
 	display: flex;
 	justify-content: flex-start;
@@ -238,7 +242,7 @@ ion-item > b {
 			flex-direction: column;
 			align-items: center;
 			color: var(--ion-color-dark);
-			
+
 			h2 {
 				margin: 20px 0 10px 0;
 			}

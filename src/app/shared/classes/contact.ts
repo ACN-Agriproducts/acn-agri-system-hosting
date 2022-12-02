@@ -81,11 +81,6 @@ export class Contact extends FirebaseDocInterface {
         return this.metacontacts.find(metacontact => metacontact.isPrimary);
     }
 
-    // public splitPrimary(): [MetaContact, MetaContact[]] {
-    //     const primaryIndex = this.metacontacts.findIndex(metaContact => metaContact.isPrimary);
-    //     return [this.metacontacts[primaryIndex], this.metacontacts.slice(primaryIndex, primaryIndex + 1)]
-    // }
-
     public getType(): string | null {
         return this.tags.includes('client') ? "client" :
             this.tags.includes('trucker') ? "trucker" : null;
