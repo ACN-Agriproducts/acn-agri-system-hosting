@@ -17,6 +17,7 @@ import { Contact } from '@shared/classes/contact';
   styleUrls: ['./confirm-invoice.page.scss'],
 })
 export class ConfirmInvoicePage implements OnInit {
+  public today: Date = new Date();
   public companyDoc: Company;
   public selectedTickets: Set<Ticket>;
   public printTicketDocs: [Ticket, Contract, Contact, Contact][];
@@ -180,12 +181,13 @@ export class ConfirmInvoicePage implements OnInit {
       for(let client in this.groups[product]) {
         for(let group in this.groups[product][client]){
           const ticketGroup = this.groups[product][client][group];
+          ticketGroup.price = await this.getItemPrice(ticketGroup);
           const nextItem: item = {
             affectsInventory: false,
             details: this.getItemDetails(ticketGroup),
             inventoryInfo: [],
             name: this.getItemName(ticketGroup),
-            price: await this.getItemPrice(ticketGroup),
+            price: ticketGroup.price,
             quantity: this.getMetricTonTotal(ticketGroup.tickets),
             type: null
           };
@@ -227,6 +229,11 @@ export class ConfirmInvoicePage implements OnInit {
     const product = this.products.find(p => p.getName() == group.tickets[0].productName);
     const mTonPrice = contract.pricePerBushel / product.weight * 2204.62;
     return Math.round(mTonPrice * 100) / 100;
+  }
+
+  getTicketTruckerContact(ticket: Ticket): Contact {
+    const list = this.printTicketDocs.find(d => d[0].id == ticket.id);
+    return list?.[2];
   }
 }
 
