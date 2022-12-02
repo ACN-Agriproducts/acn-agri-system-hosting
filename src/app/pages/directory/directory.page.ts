@@ -3,7 +3,6 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { lastValueFrom, Subscription } from 'rxjs';
-import { Storage } from '@ionic/storage';
 import { collectionData, Firestore, orderBy, query } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -77,7 +76,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public async edit(contact: Contact): Promise<void> {
     const metaContacts = [];
-    contact.metaContacts.forEach(metaContact => {
+    contact.metacontacts.forEach(metaContact => {
       metaContacts.push({ ...metaContact });
     });
     const contactCopy = { ...contact, metaContacts: metaContacts };
@@ -96,7 +95,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     contact.update({
       caat: data.caat,
       city: data.city.toUpperCase(),
-      metaContacts: data.metaContacts,
+      metaContacts: data.metacontacts,
       name: data.name.toUpperCase(),
       state: data.state.toUpperCase(),
       streetAddress: data.streetAddress.toUpperCase(),
@@ -106,7 +105,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     .then(() => {
       contact.caat = data.caat;
       contact.city = data.city.toUpperCase();
-      contact.metaContacts = data.metaContacts;
+      contact.metacontacts = data.metacontacts;
       contact.name = data.name.toUpperCase();
       contact.state = data.state.toUpperCase();
       contact.streetAddress = data.streetAddress.toUpperCase();

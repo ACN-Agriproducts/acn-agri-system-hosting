@@ -7,7 +7,7 @@ import { Ticket } from "./ticket";
 export class Contact extends FirebaseDocInterface {
     caat: string;
     city: string;
-    metaContacts: MetaContact[];
+    metacontacts: MetaContact[];
     name: string;
     state: string;
     streetAddress: string;
@@ -20,15 +20,15 @@ export class Contact extends FirebaseDocInterface {
 
         this.caat = data.caat;
         this.city = data.city;
-        this.metaContacts = [];
+        this.metacontacts = [];
         this.name = data.name;
         this.state = data.state;
         this.streetAddress = data.streetAddress;
         this.tags = data.tags;
         this.zipCode = data.zipCode;
 
-        data.metaContacts.forEach(metaContact => {
-            this.metaContacts.push(this.createMetaContact(metaContact));
+        data.metacontacts.forEach(metacontact => {
+            this.metacontacts.push(this.createMetaContact(metacontact));
         });
     }
 
@@ -37,7 +37,7 @@ export class Contact extends FirebaseDocInterface {
             return {
                 caat: data.caat, 
                 city: data.city,
-                metaContacts: data.metaContacts,
+                metacontacts: data.metacontacts,
                 name: data.name,
                 state: data.state,
                 streetAddress: data.streetAddress,
@@ -68,18 +68,23 @@ export class Contact extends FirebaseDocInterface {
         });
     }
 
-    public createMetaContact(metaContact: any): MetaContact {
+    public createMetaContact(metacontact: any): MetaContact {
         return {
-            email: metaContact.email,
-            isPrimary: metaContact.isPrimary,
-            name: metaContact.name,
-            phone: metaContact.phone
+            email: metacontact.email,
+            isPrimary: metacontact.isPrimary,
+            name: metacontact.name,
+            phone: metacontact.phone
         };
     }
 
-    public primaryMetaContact(): MetaContact {
-        return this.metaContacts.find(metaContact => metaContact.isPrimary);
+    public getPrimaryMetaContact(): MetaContact {
+        return this.metacontacts.find(metacontact => metacontact.isPrimary);
     }
+
+    // public splitPrimary(): [MetaContact, MetaContact[]] {
+    //     const primaryIndex = this.metacontacts.findIndex(metaContact => metaContact.isPrimary);
+    //     return [this.metacontacts[primaryIndex], this.metacontacts.slice(primaryIndex, primaryIndex + 1)]
+    // }
 
     public getType(): string | null {
         return this.tags.includes('client') ? "client" :

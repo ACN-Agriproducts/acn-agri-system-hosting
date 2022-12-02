@@ -213,7 +213,7 @@ export class Contract extends FirebaseDocInterface {
     }
 
     public static clientInfo(contact: Contact) {
-        const primaryContact = contact.metaContacts.find(c => c.isPrimary);
+        const primaryContact = contact.metacontacts.find(c => c.isPrimary);
 
         return {
             caat: contact.caat,

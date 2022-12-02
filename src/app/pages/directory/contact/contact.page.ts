@@ -30,6 +30,12 @@ export class ContactPage implements OnInit {
   public id: string;
   public ready: boolean = false;
   public initialize: boolean = true;
+  public primaryContact: {
+    email: string;
+    isPrimary: boolean;
+    name: string;
+    phone: string;
+  };
 
   private docLimit: number = 20;
   private docStep: number = 20;
@@ -54,7 +60,10 @@ export class ContactPage implements OnInit {
       this.ready = this.contact != null;
       if (!this.ready) throw 'Contact could not be loaded';
 
+      this.primaryContact = this.contact.getPrimaryMetaContact();
+      
       this.contactType = this.contact.getType();
+
       if (this.contactType === 'client') {
         this.getContracts();
       }
@@ -140,12 +149,16 @@ export class ContactPage implements OnInit {
     return this.contractType;
   }
 
+  public standardMetacontact(metacontact: any) {
+    return !metacontact.isPrimary;
+  }
+
   public async edit(): Promise<void> {
-    const metaContacts = [];
-    this.contact.metaContacts.forEach(metaContact => {
-      metaContacts.push({ ...metaContact });
+    const metacontacts = [];
+    this.contact.metacontacts.forEach(metaContact => {
+      metacontacts.push({ ...metaContact });
     });
-    const contactCopy = { ...this.contact, metaContacts: metaContacts };
+    const contactCopy = { ...this.contact, metacontacts: metacontacts };
 
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
@@ -161,7 +174,7 @@ export class ContactPage implements OnInit {
     this.contact.update({
       caat: data.caat,
       city: data.city.toUpperCase(),
-      metaContacts: data.metaContacts,
+      metacontacts: data.metacontacts,
       name: data.name.toUpperCase(),
       state: data.state.toUpperCase(),
       streetAddress: data.streetAddress.toUpperCase(),
@@ -171,7 +184,7 @@ export class ContactPage implements OnInit {
     .then(() => {
       this.contact.caat = data.caat;
       this.contact.city = data.city.toUpperCase();
-      this.contact.metaContacts = data.metaContacts;
+      this.contact.metacontacts = data.metacontacts;
       this.contact.name = data.name.toUpperCase();
       this.contact.state = data.state.toUpperCase();
       this.contact.streetAddress = data.streetAddress.toUpperCase();

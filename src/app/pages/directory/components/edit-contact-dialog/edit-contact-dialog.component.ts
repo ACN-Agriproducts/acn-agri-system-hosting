@@ -23,6 +23,6 @@ export class EditContactDialogComponent implements OnInit {
   }
 
   public primaryMetaContact(): any {
-    return this.data.metaContacts.find(metaContact => metaContact.isPrimary);
+    return this.data.metacontacts.find(metacontact => metacontact.isPrimary);
   }
 }

@@ -1,22 +1,32 @@
 
 ion-card-content:has(ion-avatar) {
-	padding: 25px;
+	padding: 30px;
 }
 
 ion-item {
-	font-size: 1.05em !important;
+	font-size: 1em !important;
+}
+
+ion-grid {
+	max-width: 1100px;
+}
+
+ion-row {
+	width: 95%;
+	margin: auto;
 }
 
 ion-segment {
 	display: flex;
 	justify-content: flex-start;
 	margin: 30px 0 15px 15px;
+	min-width: fit-content;
 	width: 40%;
 }
 ion-segment-button {
 	font-size: 0.85em;
-	height: 42px;
 	min-height: 42px;
+	height: 42px;
 	width: 50%;
 	max-width: 250px;
 }
@@ -158,17 +168,88 @@ div:has(mat-spinner) {
 	height: 80vh;
 }
 
-div:has(ion-avatar) {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	
-	ion-avatar {
-		width: 100%;
-		height: 100%;
-		max-width: 150px;
-		max-height: 150px;
-		margin-bottom: 10px;
-		margin: 0 0 15px 20px;
+ion-item > b {
+	font-weight: 500;
+}
+
+#contact {
+	min-width: fit-content;
+
+	h1 > b, h3 {
+		font-size: 1.25em;
 	}
+	h1 {
+		margin: unset;
+	}
+	ion-label {
+		font-size: 1.15em;
+	}
+
+	div:has(ion-avatar) {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		
+		ion-avatar {
+			width: 100%;
+			height: 100%;
+			max-width: 150px;
+			max-height: 150px;
+			margin: 0 0 30px 20px;
+		}
+	}
+}
+
+#primary-metacontact {
+	display: flex;
+	flex-direction: column;
+	min-width: fit-content;
+	max-width: 440px;
+
+	ion-card > ion-card-header > h2 { 
+		margin: unset;
+	}
+	ion-card:has(ion-avatar) { 
+		flex-grow: 1;
+		h2 {
+			margin: 20px 0 10px 0;
+			color: var(--ion-color-dark);
+		}
+		h2 > *, ion-label {
+			font-size: 1.1em;
+		}
+	}
+}
+
+#metacontacts {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(225px, 0.35fr));
+
+	ion-card {
+		ion-card-content {
+			padding: 10px;
+		}
+		ion-avatar {
+			margin: auto;
+			margin-top: 15px;
+		}
+		div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			color: var(--ion-color-dark);
+			
+			h2 {
+				margin: 20px 0 10px 0;
+			}
+			div {
+				margin: 10px 5px;
+				white-space: normal;
+			}
+		}
+	}
+}
+
+i, #metacontacts h2 {
+	color: #737373;
 }
