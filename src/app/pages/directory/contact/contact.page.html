@@ -104,25 +104,7 @@
 			<ion-row>
 				<ion-col>
 					<ion-card>
-						analytics information 1
-						<div>--</div>
-						<div>--</div>
-						<div>--</div>
-						<div>--</div>
-					</ion-card>
-				</ion-col>
-				<ion-col>
-					<ion-card>
-						analytics information 2
-						<div>--</div>
-						<div>--</div>
-						<div>--</div>
-						<div>--</div>
-					</ion-card>
-				</ion-col>
-				<ion-col>
-					<ion-card>
-						analytics information 3
+						analytics information
 						<div>--</div>
 						<div>--</div>
 						<div>--</div>
@@ -133,6 +115,7 @@
 		
 			<ng-template [ngIf]="docCount() > 0">
 				<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
+				
 				<ng-template [ngIf]="contactType === 'client'" [ngIfElse]="tickets">
 					<ion-row>
 						<ion-segment [value]="getContractType()" (ionChange)="changeContracts($event)">

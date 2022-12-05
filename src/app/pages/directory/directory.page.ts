@@ -17,11 +17,11 @@ import { EditContactDialogComponent } from './components/edit-contact-dialog/edi
 })
 export class DirectoryPage implements OnInit, OnDestroy {
 
-  public contacts: any[]
-  public stringTest: string
-  public currentCompany: string
   private currentSub: Subscription;
-  public filteredContacts: Contact[];
+  public contacts: any[]
+  public currentCompany: string
+  public searchQuery: RegExp;
+  public stringTest: string
 
   constructor(
     private db: Firestore,
@@ -46,7 +46,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   private updateList = async () => {
     this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => {
-      this.filteredContacts = this.contacts = val;
+      this.contacts = val;
     });
   }
 
@@ -106,15 +106,14 @@ export class DirectoryPage implements OnInit, OnDestroy {
       zipCode: data.zipCode,
     })
     .then(() => {
-      /* contact.caat = data.caat;
+      contact.caat = data.caat;
       contact.city = data.city.toUpperCase();
       contact.metacontacts = data.metacontacts;
       contact.name = data.name.toUpperCase();
       contact.state = data.state.toUpperCase();
       contact.streetAddress = data.streetAddress.toUpperCase();
       contact.tags = data.tags;
-      contact.zipCode = data.zipCode; */
-      this.updateList();
+      contact.zipCode = data.zipCode;
 
       this.snack.open("Contact successfully updated", "success");
     })
@@ -133,8 +132,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
     });
   }
 
-  public autocompleteSearch(event: any): void {
-    const search = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
-    this.filteredContacts = this.contacts.filter(contact => contact.name.match(search));
+  public search(event: any): void {
+    this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
   }
+
+  public searchResults = (): Contact[] => this.contacts?.filter(contact => contact.name.match(this.searchQuery)) ?? [];
 }

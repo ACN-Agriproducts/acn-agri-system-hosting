@@ -61,7 +61,6 @@ export class ContactPage implements OnInit {
       if (!this.ready) throw 'Contact could not be loaded';
 
       this.primaryContact = this.contact.getPrimaryMetaContact();
-      
       this.contactType = this.contact.getType();
 
       if (this.contactType === 'client') {
@@ -149,7 +148,12 @@ export class ContactPage implements OnInit {
     return this.contractType;
   }
 
-  public standardMetacontact(metacontact: any) {
+  public standardMetacontact(metacontact: {
+    email: string;
+    isPrimary: boolean;
+    name: string;
+    phone: string;
+  }) {
     return !metacontact.isPrimary;
   }
 
