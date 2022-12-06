@@ -18,10 +18,10 @@
 				<ion-label>
 					<div class="content-label">
 						<span>{{ contact.name }} </span>
-						<span class="label-text">{{ contact.getType() | titlecase }}</span>
+						<span class="label-text">{{ contact.getType().join(" / ") | titlecase }}</span>
 					</div>
 				</ion-label>
-				<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact().phone ?? "" }}</ion-label>				
+				<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact().phone ?? "" }}</ion-label>
 				<ion-buttons class="ion-hide-sm-down" slot="end">
 					<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 						<ion-icon name="create-outline"></ion-icon>

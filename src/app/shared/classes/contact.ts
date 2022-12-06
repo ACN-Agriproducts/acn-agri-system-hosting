@@ -81,9 +81,17 @@ export class Contact extends FirebaseDocInterface {
         return this.metacontacts.find(metacontact => metacontact.isPrimary);
     }
 
-    public getType(): string | null {
-        return this.tags.includes('client') ? "client" :
-            this.tags.includes('trucker') ? "trucker" : null;
+    public getType(): string[] | null {
+        const tagsInclude: string[] = [];
+
+        if (this.tags.includes('client')) tagsInclude.push('client');
+        if (this.tags.includes('trucker')) tagsInclude.push('trucker');
+
+        if (tagsInclude.length === 0) {
+            return null;
+        }
+
+        return tagsInclude;
     }
 }
 
