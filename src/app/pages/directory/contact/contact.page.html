@@ -115,7 +115,6 @@
 
 			<ng-template [ngIf]="purchaseContracts || salesContracts || tickets">
 				<h4><span>Documents</span></h4>
-				<!-- <h4><span>{{ purchaseContracts || salesContracts ? "Contracts" : tickets ? "Tickets" : "Documents" }}</span></h4> -->
 
 				<ion-row>
 					<ion-segment [value]="docsType" (ionChange)="changeDocuments($event)">
@@ -168,7 +167,10 @@
 									<span>Net ( lbs. )</span>
 									<span>--</span>
 								</div>
-								<div class="table-row" [class.odd]="odd" *ngFor="let doc of tickets?.list; let odd = odd">
+								<div class="table-row" [class.odd]="odd" 
+									*ngFor="let doc of tickets?.list; let odd = odd"
+									(click)="openTicket(doc.ref.id)"
+								>
 									<span>{{ doc.id }}</span>
 									<span>{{ doc.dateOut | date }}</span>
 									<span>{{ doc.contractID }}</span>
@@ -184,13 +186,13 @@
 				</ion-row>
 			</ng-template>
 		</ion-grid>
-		<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
-			<ion-infinite-scroll-content
-				loadingSpinner="bubbles"
-				loadingText="Loading more data...">
-			</ion-infinite-scroll-content>
-		</ion-infinite-scroll>
 	</ng-template>
+	<ion-infinite-scroll (ionInfinite)="infiniteDocuments($event)">
+		<ion-infinite-scroll-content
+			loadingSpinner="bubbles"
+			loadingText="Loading more data...">
+		</ion-infinite-scroll-content>
+	</ion-infinite-scroll>
 </ion-content>
 
 <!-- templates -->
