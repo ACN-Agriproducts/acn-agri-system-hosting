@@ -119,10 +119,10 @@
 
 				<ion-row>
 					<ion-segment [value]="docsType" (ionChange)="changeDocuments($event)">
-						<ion-segment-button value="purchaseContracts" *ngIf="purchaseContracts">
+						<ion-segment-button value="purchase" *ngIf="purchaseContracts">
 							<ion-label>Purchase Contracts</ion-label>
 						</ion-segment-button>
-						<ion-segment-button value="salesContracts" *ngIf="salesContracts">
+						<ion-segment-button value="sales" *ngIf="salesContracts">
 							<ion-label>Sales Contracts</ion-label>
 						</ion-segment-button>
 						<ion-segment-button value="tickets" *ngIf="tickets">
@@ -134,7 +134,7 @@
 				<ion-row>
 					<ion-col>
 						<ion-card>
-							<ng-template [ngIf]="docsType === 'purchaseContracts' || docsType === 'salesContracts'">
+							<ng-template [ngIf]="docsType === 'purchase' || docsType === 'sales'">
 								<div class="table-row">
 									<span>ID</span>
 									<span>Date</span>

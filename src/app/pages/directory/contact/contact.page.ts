@@ -21,7 +21,6 @@ export class ContactPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public contact: Contact;
-  public contractType: string;
   public currentCompany: string;
   public currentPlant: string;
   public id: string;
@@ -38,7 +37,6 @@ export class ContactPage implements OnInit {
   public tickets: Pagination<FirebaseDocInterface>;
   
   public contactType: null | string[] = [];
-  public initialize: boolean = true;
   public docsType: string;
 
   private docLimit: number = 20;
@@ -141,33 +139,26 @@ export class ContactPage implements OnInit {
   }
 
   public openContract(refId: string): void {
-    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.contractType}/${refId}`);
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.docsType}/${refId}`);
   }
 
+  public 
 
   public changeDocuments(event: any): void {
     this.docsType = event.detail.value;
   }
 
   public getDocsType(): string {
-    return this.purchaseContracts ? "purchaseContracts" :
-      this.salesContracts ? "salesContracts" :
+    return this.purchaseContracts ? "purchase" :
+      this.salesContracts ? "sales" :
       this.tickets ? "tickets" : "";
   }
 
   public getCurrentList(): Pagination<FirebaseDocInterface> {
-    if (this.docsType === "purchaseContracts") return this.purchaseContracts;
-    if (this.docsType === "salesContracts") return this.salesContracts;
+    if (this.docsType === "purchase") return this.purchaseContracts;
+    if (this.docsType === "sales") return this.salesContracts;
     if (this.docsType === "tickets") return this.tickets;
   }
-
-  // public getContractType(): string {
-  //   if (this.initialize) {
-  //     this.contractType = this.docCount(true) > 0 ? 'purchase' : 'sales';
-  //     this.initialize = false;
-  //   }
-  //   return this.contractType;
-  // }
 
   public standardMetacontact(metacontact: {
     email: string;
