@@ -149,10 +149,15 @@
           <ion-card-content>
             <div *ngFor="let client of productGroup.value | keyvalue">
               <h3>{{client.key}}</h3>
-              <div *ngFor="let group of client.value | keyvalue">
+              <div class="group-area" *ngFor="let group of client.value | keyvalue">
                 <div class="list-title">
-                  <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
-                  <span>{{group.value.totalWeight}} lbs | {{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
+                  <span class="list-title-text">
+                    <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
+                    <span>{{group.value.totalWeight}} lbs | {{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
+                  </span>
+                  <button class="list-action-bar" mat-icon-button (click)="deleteGroup(productGroup.key, client.key, group.key)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </div>
                 <div
                   cdkDropList
@@ -184,6 +189,7 @@
         [items]="invoice.items"
         [total]="invoice.total"
       ></app-printable-invoice>
+      <div class="page-break"></div>
 
       <div id="second-print-page" *ngFor="let product of groups | keyvalue">
         <div class="second-print-page-header">
@@ -200,22 +206,25 @@
               </div>
               <div class="right-row">
                 <span>{{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
-                <span>{{getTicketTruckerContact(group.value.tickets[0])?.name}}</span>
-                <span>{{getTicketTruckerContact(group.value.tickets[0])?.caat}}</span>
+                <span>{{group.value.transport.name}}</span>
+                <span>{{group.value.transport.caat}}</span>
               </div>
             </div>
             <mat-divider *ngIf="!last"></mat-divider>
           </div>
         </div>
       </div>
+      <div class="page-break"></div>
 
-      <app-printable-ticket 
-        *ngFor="let docs of printTicketDocs" 
-        [ticket]="docs[0]"
-        [contract]="docs[1]"
-        [transport]="docs[2]"
-        [client]="docs[3]">
-      </app-printable-ticket>
+
+      <ng-container *ngFor="let docs of printTicketDocs">
+        <app-printable-ticket
+          [ticket]="docs[0]"
+          [contract]="docs[1]"
+          [transport]="docs[2]"
+          [client]="docs[3]">
+        </app-printable-ticket>
+      </ng-container>
     </div>
   </div>
 
@@ -231,14 +240,23 @@
               <ion-item color="dark" lines="none">
                 <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ', ' }}</ion-label>
               </ion-item>
-              <ion-button 
-              (click)="generateInvoice()"
-              *ngIf="!invoiceCreated"
-              >Generate</ion-button>
-              <ion-button
-              *ngIf="invoiceCreated"
-              >Print
-              </ion-button>
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="generateInvoice()"
+                *ngIf="!invoiceCreated"
+                >Generate
+              </button>
+              <button
+                (click)="submit()"
+                mat-flat-button
+                color="primary"
+                *ngIf="invoiceCreated"
+                ngxPrint
+                printSectionId="printable-documents"
+                [useExistingCss]="true"
+                >Print
+              </button>
             </div>
           </div>
         </ion-card-content>

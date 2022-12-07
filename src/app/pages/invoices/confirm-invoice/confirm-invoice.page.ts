@@ -5,10 +5,11 @@ import { Company } from '@shared/classes/company';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Firestore } from '@angular/fire/firestore';
 import { contactInfo, item } from '@shared/classes/invoice';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
 import { Contact } from '@shared/classes/contact';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 
 @Component({
@@ -38,7 +39,8 @@ export class ConfirmInvoicePage implements OnInit {
   constructor(
     private router: Router,
     private session: SessionInfo,
-    private db: Firestore
+    private db: Firestore,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -87,9 +89,13 @@ export class ConfirmInvoicePage implements OnInit {
         this.groups[ticket.productName][ticket.clientName][driver] = {
           tickets: [],
           price: 0,
-          totalWeight: 0
+          totalWeight: 0,
         };
       }
+      
+      this.generatePromises.push(ticket.getTransport(this.db).then(result => {
+        this.groups[ticket.productName][ticket.clientName][driver].transport = result;
+      }));
 
       const object = this.groups[ticket.productName][ticket.clientName][driver];
       object.tickets.push(ticket);
@@ -125,7 +131,9 @@ export class ConfirmInvoicePage implements OnInit {
   }
 
   getConnectedProductGroupList(product: string, client: string, group: string): string[] {
-    const connectedList: string[] = Object.keys(this.groups[product][client]).map(g => `${product}-${client}-${g}`);
+    const connectedList: string[] = Object.keys(this.groups[product][client])
+      .filter(f => this.groups[product][client][f].tickets[0]?.truckerId == this.groups[product][client][group].tickets[0]?.truckerId)
+      .map(g => `${product}-${client}-${g}`);
     const index = connectedList.findIndex(s => s == `${product}-${client}-${group}`);
     connectedList.splice(index, 1);
 
@@ -231,9 +239,13 @@ export class ConfirmInvoicePage implements OnInit {
     return Math.round(mTonPrice * 100) / 100;
   }
 
-  getTicketTruckerContact(ticket: Ticket): Contact {
-    const list = this.printTicketDocs.find(d => d[0].id == ticket.id);
-    return list?.[2];
+  deleteGroup(product: string, client: string, group: string) {
+    if (this.groups[product][client][group].tickets.length !== 0) {
+      this.snack.open("Group must be empty to be deleted", "warn");
+      return;
+    }
+
+    delete this.groups[product][client][group];
   }
 }
 
@@ -249,5 +261,6 @@ interface invoiceInterface {
 interface TicketGroup {
   tickets: Ticket[],
   price: number,
-  totalWeight: number
+  totalWeight: number,
+  transport?: Contact,
 }

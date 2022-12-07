@@ -393,7 +393,6 @@ h6 {
     max-width: calc(100% - 100px) !important;
     margin: 0 !important;
     border: none !important;
-    padding: 50px !important;
     height: calc(100vh - 100px) !important;
   }
   .table td,
@@ -436,8 +435,7 @@ h6 {
     /* =================================== */
 .invoice-container {
   margin: 15px auto;
-  padding: 50px;
-  max-width: 850px;
+  //max-width: 850px;
   //min-width: 8.5in;
   background-color: #fff;
   border: 1px solid #ccc;
@@ -446,7 +444,11 @@ h6 {
   -o-border-radius: 6px;
   border-radius: 6px;
 }
-
+@media screen {
+  .invoice-container{
+    padding: 0.5in;
+  }
+}
 @media (max-width: 767px) {
   .invoice-container {
     padding: 35px 20px 70px 20px;
