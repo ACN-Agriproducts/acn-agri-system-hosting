@@ -21,6 +21,7 @@ export class ContactPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   public contact: Contact;
+  public contractType: string;
   public currentCompany: string;
   public currentPlant: string;
   public id: string;
@@ -37,9 +38,8 @@ export class ContactPage implements OnInit {
   public tickets: Pagination<FirebaseDocInterface>;
   
   public contactType: null | string[] = [];
-  public contractType: string;
   public initialize: boolean = true;
-  public docCount: number = 0;
+  public docsType: string;
 
   private docLimit: number = 20;
   private docStep: number = 20;
@@ -64,6 +64,8 @@ export class ContactPage implements OnInit {
       this.ready = this.contact != null;
       if (!this.ready) throw 'Contact could not be loaded';
 
+      console.log(this.contact);
+
       this.primaryContact = this.contact.getPrimaryMetaContact();
       this.contactType = this.contact.getType();
       if (this.contactType == null) { throw 'Type not found' }
@@ -87,11 +89,17 @@ export class ContactPage implements OnInit {
       limit(this.docLimit)
     ];
 
-    this.contractType = 'purchase';
+    if (await Contract.getContractCount(this.db, this.currentCompany, false, ...constraints) > 0) {
+      const contractQuery = query(Contract.getCollectionReference(
+        this.db,
+        this.currentCompany,
+        false
+      ), ...constraints);
+
+      this.salesContracts = this.setPagination(this.salesContracts, contractQuery);
+    }
 
     if (await Contract.getContractCount(this.db, this.currentCompany, true, ...constraints) > 0) {
-      console.log("Purchase contracts not empty")
-
       const contractQuery = query(Contract.getCollectionReference(
         this.db,
         this.currentCompany,
@@ -101,18 +109,8 @@ export class ContactPage implements OnInit {
       this.purchaseContracts = this.setPagination(this.purchaseContracts, contractQuery);
     }
 
-    if (await Contract.getContractCount(this.db, this.currentCompany, false, ...constraints) > 0) {
-      console.log("Sales contracts not empty")
-
-      const contractQuery = query(Contract.getCollectionReference(
-        this.db,
-        this.currentCompany,
-        false
-      ), ...constraints);
-
-      this.salesContracts = this.setPagination(this.salesContracts, contractQuery);
-    }
-    console.log(this.purchaseContracts == null, this.salesContracts == null);
+    console.log(this.purchaseContracts != null, this.salesContracts != null);
+    this.docsType = this.getDocsType();
   }
 
   public async getTickets(): Promise<void> {
@@ -123,8 +121,6 @@ export class ContactPage implements OnInit {
     ];
 
     if (await Ticket.getTicketCount(this.db, this.currentCompany, this.currentPlant, ...constraints) > 0) {
-      console.log("Tickets not empty")
-
       const ticketQuery = query(Ticket.getCollectionReference(
         this.db, 
         this.currentCompany, 
@@ -133,8 +129,8 @@ export class ContactPage implements OnInit {
 
       this.tickets = this.setPagination(this.tickets, ticketQuery);
     }
-
-    console.log(this.tickets == null);
+    console.log(this.tickets != null);
+    this.docsType = this.getDocsType();
   }
 
   public setPagination(pagination: Pagination<FirebaseDocInterface>, colQuery: Query<FirebaseDocInterface>)
@@ -148,16 +144,22 @@ export class ContactPage implements OnInit {
     this.navController.navigateForward(`dashboard/contracts/contract-info/${this.contractType}/${refId}`);
   }
 
-  public changeContracts = (event: any): void => {
-    this.contractType = event.detail.value;
+
+  public changeDocuments(event: any): void {
+    this.docsType = event.detail.value;
   }
 
-  // public docCount(isPrimary?: boolean): number {
-  //   if (isPrimary == null) {
-  //     return this.docCount(true) + this.docCount(false);
-  //   }
-  //   return (isPrimary ? this.primaryPagination : this.secondaryPagination)?.list.length ?? 0;
-  // }
+  public getDocsType(): string {
+    return this.purchaseContracts ? "purchaseContracts" :
+      this.salesContracts ? "salesContracts" :
+      this.tickets ? "tickets" : "";
+  }
+
+  public getCurrentList(): Pagination<FirebaseDocInterface> {
+    if (this.docsType === "purchaseContracts") return this.purchaseContracts;
+    if (this.docsType === "salesContracts") return this.salesContracts;
+    if (this.docsType === "tickets") return this.tickets;
+  }
 
   // public getContractType(): string {
   //   if (this.initialize) {
@@ -225,8 +227,8 @@ export class ContactPage implements OnInit {
 
   }
 
-  public async infiniteContracts(event: any, currentPagination: Pagination<FirebaseDocInterface>) {
-    currentPagination?.getNext(snapshot => {
+  public async infiniteContracts(event: any) {
+    this.getCurrentList()?.getNext(snapshot => {
       event.target.complete();
 
       if (snapshot.docs.length < this.docStep) {
@@ -236,8 +238,8 @@ export class ContactPage implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.purchaseContracts.end();
-    this.salesContracts.end();
-    this.tickets.end();
+    this.purchaseContracts?.end();
+    this.salesContracts?.end();
+    this.tickets?.end();
   }
 }

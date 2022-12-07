@@ -115,37 +115,27 @@
 
 			<ng-template [ngIf]="purchaseContracts || salesContracts || tickets">
 				<h4><span>Documents</span></h4>
+				<!-- <h4><span>{{ purchaseContracts || salesContracts ? "Contracts" : tickets ? "Tickets" : "Documents" }}</span></h4> -->
 
 				<ion-row>
-					<ion-segment [value]="contractType" (ionChange)="changeContracts($event)">
-						<ion-segment-button value="purchase" *ngIf="purchaseContracts ?? false">
+					<ion-segment [value]="docsType" (ionChange)="changeDocuments($event)">
+						<ion-segment-button value="purchaseContracts" *ngIf="purchaseContracts">
 							<ion-label>Purchase Contracts</ion-label>
 						</ion-segment-button>
-						<ion-segment-button value="sales" *ngIf="salesContracts ?? false">
+						<ion-segment-button value="salesContracts" *ngIf="salesContracts">
 							<ion-label>Sales Contracts</ion-label>
+						</ion-segment-button>
+						<ion-segment-button value="tickets" *ngIf="tickets">
+							<ion-label>Tickets</ion-label>
 						</ion-segment-button>
 					</ion-segment>
 				</ion-row>
-			</ng-template>
-		
-			<!-- <ng-template [ngIf]="docCount() > 0">
-				<h4><span>{{ contactType === 'client' ? 'Contracts' : 'Tickets' }}</span></h4>
-				
-				<ng-template [ngIf]="contactType === 'client'">
-					<ion-row>
-						<ion-segment [value]="getContractType()" (ionChange)="changeContracts($event)">
-							<ion-segment-button value="purchase" *ngIf="docCount(true) > 0">
-								<ion-label>Purchase Contracts</ion-label>
-							</ion-segment-button>
-							<ion-segment-button value="sales" *ngIf="docCount(false) > 0">
-								<ion-label>Sales Contracts</ion-label>
-							</ion-segment-button>
-						</ion-segment>
-					</ion-row>
-					<ion-row>
-						<ion-col>
-							<ion-card>
-								<div class="table-row contracts">
+
+				<ion-row>
+					<ion-col>
+						<ion-card>
+							<ng-template [ngIf]="docsType === 'purchaseContracts' || docsType === 'salesContracts'">
+								<div class="table-row">
 									<span>ID</span>
 									<span>Date</span>
 									<span>Status</span>
@@ -154,8 +144,8 @@
 									<span>Price</span>
 									<span>Total</span>
 								</div>
-								<div class="table-row contracts" [class.odd]="odd"
-									*ngFor="let doc of (contractType === 'purchase' ? primaryPagination : secondaryPagination)?.list; let odd = odd"
+								<div class="table-row" [class.odd]="odd"
+									*ngFor="let doc of getCurrentList()?.list; let odd = odd"
 									(click)="openContract(doc.ref.id)"
 								>
 									<span>{{ doc.id }}</span>
@@ -166,14 +156,8 @@
 									<span>{{ doc.pricePerBushel | currency: '$' }}</span>
 									<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
 								</div>
-							</ion-card>
-						</ion-col>
-					</ion-row>
-				</ng-template>
-				<ng-template [ngIf]="contactType === 'trucker'">
-					<ion-row>
-						<ion-col>
-							<ion-card>
+							</ng-template>
+							<ng-template [ngIf]="docsType === 'tickets'">
 								<div class="table-row">
 									<span>ID</span>
 									<span>Date</span>
@@ -184,7 +168,7 @@
 									<span>Net ( lbs. )</span>
 									<span>--</span>
 								</div>
-								<div class="table-row" [class.odd]="odd" *ngFor="let doc of primaryPagination?.list; let odd = odd">
+								<div class="table-row" [class.odd]="odd" *ngFor="let doc of tickets?.list; let odd = odd">
 									<span>{{ doc.id }}</span>
 									<span>{{ doc.dateOut | date }}</span>
 									<span>{{ doc.contractID }}</span>
@@ -194,18 +178,18 @@
 									<span>{{ doc.getNet() | number }}</span>
 									<span>--</span>
 								</div>
-							</ion-card>
-						</ion-col>
-					</ion-row>
-				</ng-template>
-			</ng-template> -->
+							</ng-template>
+						</ion-card>
+					</ion-col>
+				</ion-row>
+			</ng-template>
 		</ion-grid>
-		<!-- <ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
+		<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
 			<ion-infinite-scroll-content
 				loadingSpinner="bubbles"
 				loadingText="Loading more data...">
 			</ion-infinite-scroll-content>
-		</ion-infinite-scroll> -->
+		</ion-infinite-scroll>
 	</ng-template>
 </ion-content>
 
