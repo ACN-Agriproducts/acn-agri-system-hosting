@@ -251,6 +251,13 @@
                 mat-flat-button
                 color="primary"
                 *ngIf="invoiceCreated"
+                >Submit
+              </button>
+              <button
+                hidden
+                #printButton
+                id="print-button"
+                *ngIf="invoiceCreated"
                 ngxPrint
                 printSectionId="printable-documents"
                 [useExistingCss]="true"

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Ticket } from '@shared/classes/ticket';
 import { Company } from '@shared/classes/company';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Firestore } from '@angular/fire/firestore';
-import { contactInfo, item } from '@shared/classes/invoice';
-import { CdkDrag, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { addDoc, Firestore } from '@angular/fire/firestore';
+import { contactInfo, Invoice, item } from '@shared/classes/invoice';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
 import { Contact } from '@shared/classes/contact';
@@ -116,11 +116,12 @@ export class ConfirmInvoicePage implements OnInit {
       date: new Date(),
       id: 0,
       items: [],
+      status: "pending",
       seller: {
         city: "Progreso",
-        country: null,
+        country: "US",
         name: "ACN Agriproducts, LLC.",
-        phone: null,
+        phone: "",
         state: "TEXAS",
         street: "1512 Rancho Toluca Rd",
         zip: "78579",
@@ -247,6 +248,19 @@ export class ConfirmInvoicePage implements OnInit {
 
     delete this.groups[product][client][group];
   }
+
+  submit() {
+    console.log(this.invoice);
+    addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()).withConverter(null), this.invoice)
+    .then((result => {
+      document.getElementById("print-button").click();
+      this.snack.open("Inovice succesfully created", "success");
+      this.router.navigate(["dashboard","invoices"]);
+    }), reason => {
+      this.snack.open("Invoice was not created", "error");
+      console.error(reason);
+    });
+  }
 }
 
 interface invoiceInterface {
@@ -254,6 +268,7 @@ interface invoiceInterface {
   date: Date;
   id: number;
   items: item[];
+  status: string;
   seller: contactInfo;
   total: number;
 }
