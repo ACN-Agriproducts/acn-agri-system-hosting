@@ -110,7 +110,7 @@ export class item {
         this.quantity = data.quantity;
         this.type = data.type;
 
-        data.inventoryInfo.info.forEach(element => {
+        data.inventoryInfo?.info?.forEach(element => {
             this.inventoryInfo.push(new inventoryInfo(element));
         });
     }
