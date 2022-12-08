@@ -20,33 +20,32 @@ import { EditContactDialogComponent } from '../components/edit-contact-dialog/ed
 export class ContactPage implements OnInit {
 	@ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-	public contact: Contact;
-	public currentCompany: string;
-	public currentPlant: string;
-	public id: string;
-	public ready: boolean = false;
+	private docStep: number = 10;
+	
 	public primaryContact: {
 		email: string;
 		isPrimary: boolean;
 		name: string;
 		phone: string;
 	};
-	infiniteScrollState: Map<string, boolean> = new Map(
+	public infiniteScrollState: Map<string, boolean> = new Map(
 		[
 			["purchase", false],
 			["sales", false],
 			["tickets", false]
 		]
 	);
-	
+
+	public contact: Contact;
+	public contactType: null | string[] = [];
+	public currentCompany: string;
+	public currentPlant: string;
+	public docsType: string;
+	public id: string;
 	public purchaseContracts: Pagination<FirebaseDocInterface>;
+	public ready: boolean = false;
 	public salesContracts: Pagination<FirebaseDocInterface>;
 	public tickets: Pagination<FirebaseDocInterface>;
-	
-	public contactType: null | string[] = [];
-	public docsType: string;
-
-	private docStep: number = 10;
 
 	constructor(
 		private db: Firestore,
@@ -73,11 +72,12 @@ export class ContactPage implements OnInit {
 			if (this.contactType == null) { throw 'Type not found' }
 
 			if (this.contactType.includes('client')) {
-				this.getContracts();
+				await this.getContracts();
 			}
 			if (this.contactType.includes('trucker')) {
-				this.getTickets();
+				await this.getTickets();
 			}
+			this.docsType = this.getDocsType();
 		})
 		.catch(error => {
 			this.snack.open(error, 'error');
@@ -109,8 +109,6 @@ export class ContactPage implements OnInit {
 
 			this.purchaseContracts = this.setPagination(this.purchaseContracts, contractQuery);
 		}
-
-		this.docsType = this.getDocsType();
 	}
 
 	public async getTickets(): Promise<void> {
@@ -128,8 +126,6 @@ export class ContactPage implements OnInit {
 
 			this.tickets = this.setPagination(this.tickets, ticketQuery);
 		}
-
-		this.docsType = this.getDocsType();
 	}
 
 	public setPagination(
@@ -167,14 +163,12 @@ export class ContactPage implements OnInit {
 		if (this.docsType === "tickets") return this.tickets;
 	}
 
-	public standardMetacontact(metacontact: {
+	public standardMetacontact = (metacontact: {
 		email: string;
 		isPrimary: boolean;
 		name: string;
 		phone: string;
-	}) {
-		return !metacontact.isPrimary;
-	}
+	}) => !metacontact.isPrimary;
 
 	public async edit(): Promise<void> {
 		const metacontacts = [];

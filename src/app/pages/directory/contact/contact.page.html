@@ -187,7 +187,7 @@
 			</ng-template>
 		</ion-grid>
 	</ng-template>
-	<ion-infinite-scroll (ionInfinite)="infiniteDocuments($event)">
+	<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteDocuments($event)">
 		<ion-infinite-scroll-content
 			loadingSpinner="bubbles"
 			loadingText="Loading more data...">
