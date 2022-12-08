@@ -228,16 +228,10 @@ export class Contract extends FirebaseDocInterface {
         };
     }
 
-    public static async getContractsOfType(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
-        const contractQuery = query(Contract.getCollectionReference(db, company, isPurchaseContract), ...constraints);
-        const contractCollection = await getDocs(contractQuery);        
-        
-        return contractCollection.docs.map(snap => snap.data());
-    }
-
     public static async getContractCount(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<number> {
         const contractCollQuery = query(Contract.getCollectionReference(db, company, isPurchaseContract), ...constraints);
         const contractSnapshot = await getCountFromServer(contractCollQuery);
+        
         return contractSnapshot.data().count;
     }
 }
