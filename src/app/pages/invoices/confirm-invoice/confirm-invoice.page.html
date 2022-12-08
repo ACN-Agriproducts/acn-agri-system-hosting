@@ -189,7 +189,6 @@
         [items]="invoice.items"
         [total]="invoice.total"
       ></app-printable-invoice>
-      <div class="page-break"></div>
 
       <div id="second-print-page" *ngFor="let product of groups | keyvalue">
         <div class="second-print-page-header">
