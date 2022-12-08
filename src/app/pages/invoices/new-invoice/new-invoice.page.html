@@ -6,9 +6,9 @@
       <ion-title class=" title-content">Select tickets</ion-title>
       <ion-searchbar placeholder="Search tickets"></ion-searchbar>
     </div>
-    <div class="content-main" *ngIf="ticketList">
+    <div class="content-main">
       <ion-card (click)="set(ticket)" class="item-card" [class.active-card]="selectedTickets.has(ticket)"
-        *ngFor="let ticket of ticketList; let i = index" >
+        *ngFor="let ticket of ticketsPromise | async; let i = index" >
         <!-- [class.active-card]="item <= 3" -->
         <ion-card-header>
           <ion-card-title color="dark">Ticket {{ticket.id}}</ion-card-title>

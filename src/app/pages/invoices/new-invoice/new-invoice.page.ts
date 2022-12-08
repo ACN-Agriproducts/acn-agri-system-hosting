@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, getDocs, where } from '@angular/fire/firestore';
+import { Firestore, getDocs, QuerySnapshot, where } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Ticket } from '@shared/classes/ticket';
 
@@ -10,7 +10,7 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class NewInvoicePage implements OnInit {
   public product: string;
-  public ticketList: Ticket[];
+  public ticketsPromise: Promise<Ticket[]>;
   public selectedTickets: Set<Ticket>;
 
   constructor(
@@ -23,16 +23,12 @@ export class NewInvoicePage implements OnInit {
     const requestDate = new Date(2022, 10, 1);//new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
     this.selectedTickets = new Set<Ticket>;
 
-    const ticketQuery = Ticket.getCollectionReference(
+    this.ticketsPromise = Ticket.getTickets(
       this.db, 
       this.session.getCompany(), 
       this.session.getPlant(),
       where("in", "==", false),
       where("dateOut", ">=", requestDate));
-      
-    getDocs(ticketQuery).then(result => {
-      this.ticketList = result.docs.map(t => t.data());
-    });
   }
 
   public set(ticket: Ticket) {
