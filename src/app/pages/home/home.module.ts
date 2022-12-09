@@ -18,7 +18,7 @@ import { SharedModule } from '@shared/shared.module';
     IonicModule,
     HomePageRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [HomePage, NeedsAdminAttentionComponent]
 })

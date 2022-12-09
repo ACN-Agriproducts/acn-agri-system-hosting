@@ -3,5 +3,7 @@
 <ion-content class="ion-padding">
     <div class="main-grid">
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
+        <app-test-table></app-test-table>
     </div>
+
 </ion-content>

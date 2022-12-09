@@ -1,0 +1,19 @@
+<app-table [data]="testData">
+	Test Table Works
+	<ng-template #headers>
+		<th>Id</th>
+		<th>Customer</th>
+		<th>Date</th>
+		<th>Status</th>
+		<th>Product</th>
+		<th>Price</th>
+	</ng-template>
+	<ng-template #rows let-row>
+		<td>{{ row.id | number}}</td>
+		<td>{{ row.customer }}</td>
+		<td>{{ row.date | date}}</td>
+		<td>{{ row.status }}</td>
+		<td>{{ row.product }}</td>
+		<td>{{ row.price | currency }}</td>
+	</ng-template>
+</app-table>
