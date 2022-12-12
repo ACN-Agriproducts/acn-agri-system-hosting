@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { CollectionReference } from 'firebase/firestore';
 
 @Component({
   selector: 'app-test-table',
@@ -6,6 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./test-table.component.scss'],
 })
 export class TestTableComponent implements OnInit {
+  @Input() collRef: CollectionReference;
+  @Input() infiniteScroll?: boolean;
+  @Input() snapshot?: boolean;
+  @Input() columns?: string[];
+
+  public ready: boolean = false;
 
   testData = [
     { id: 1, customer: "TONY DANIEL", date: new Date(), status: "active", product: "Yellow Corn", price: 20.34 },
@@ -15,6 +22,17 @@ export class TestTableComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    setTimeout(() => {
+      this.ready = true;
+    }, 2000);
+  }
 
+  public queryFn() {
+    console.log("change query")
+  }
+
+  public action() {
+    console.log("open contract")
+  }
 }

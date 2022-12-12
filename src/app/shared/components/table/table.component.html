@@ -1,22 +1,28 @@
 
-<table>
-	<thead>
-		<tr>
-			<ng-container
-				*ngTemplateOutlet="
-					headers;
-				"
-			></ng-container>
-		</tr>
-	</thead>
-	<tbody>
-		<tr *ngFor="let row of data">
-			<ng-container
-				*ngTemplateOutlet="
-					rows;
-					context: { $implicit: row }
-				"
-			></ng-container>
-		</tr>
-	</tbody>
-</table>
+<div>
+	<table *ngIf="ready; else loading">
+		<thead>
+			<tr>
+				<ng-container
+					*ngTemplateOutlet="
+						headers;
+					"
+				></ng-container>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let row of data" (click)="rowAction()">
+				<ng-container
+					*ngTemplateOutlet="
+						rows;
+						context: { $implicit: row }
+					"
+				></ng-container>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<ng-template #loading>
+	<mat-spinner></mat-spinner>
+</ng-template>

@@ -1,10 +1,16 @@
 
+div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 table {
     width: 100%;
     height: 100%;
 
-    text-align: center; // horizontal
-    align-content: center; // vertical
+    // text-align: center; // horizontal
+    // align-content: center; // vertical
     color: var(--ion-color-dark);
     font-size: 0.9em;
     border-radius: 5px 5px 5px 5px !important;
@@ -49,6 +55,41 @@ table {
 
             &:nth-child(even) {
                 background-color: var(--ion-color-light);
+            }
+
+            ::ng-deep > td > .status {
+                display: inline-block;
+                font-weight: 600;
+                font-size: 0.8em;
+                font-family: 'Verdana', 'Arial', sans-serif;
+                text-transform: capitalize;
+                padding: 0 1rem;
+                border-radius: 15px;    
+                border-style: solid;
+                border-width: 0.5px;
+                width: 30%;
+        
+                &.pending {
+                    background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+                    color: var(--ion-color-warning);
+                }
+                &.active {
+                    background-color: rgba(var(--ion-color-success-rgb), 0.15);
+                    color: var(--ion-color-success);
+                }
+                &.closed {
+                    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+                    color: var(--ion-color-danger);
+                }
+                &.cancelled {
+                    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+                    color: var(--ion-color-danger);
+                
+                    cursor: initial;
+                    &:before {
+                        all: initial;
+                    }
+                }
             }
         }
     }

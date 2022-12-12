@@ -1,5 +1,10 @@
 
-<app-table [data]="testData">
+<app-table 
+	[data]="testData" 
+	[queryFn]="queryFn" 
+	[ready]="ready"
+	[rowAction]="action"
+>
 	<ng-template #headers>
 		<th>ID</th>
 		<th>Customer</th>
@@ -12,7 +17,7 @@
 		<td>{{ row.id | number}}</td>
 		<td>{{ row.customer | titlecase }}</td>
 		<td>{{ row.date | date}}</td>
-		<td>{{ row.status }}</td>
+		<td><span ngClass="status {{ row.status.toLowerCase() }}">{{ row.status }}</span></td>
 		<td>{{ row.product }}</td>
 		<td>{{ row.price | currency }}</td>
 	</ng-template>
