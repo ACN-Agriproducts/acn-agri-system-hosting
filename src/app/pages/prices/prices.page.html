@@ -53,9 +53,17 @@
         </span>
       </h4>
     </div>
+
+    <div>
+      <mat-button-toggle-group [(ngModel)]="priceType.value.type">
+        <mat-button-toggle value="sale">Venta</mat-button-toggle>
+        <mat-button-toggle value="purchase">Compra</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
     
     <mat-form-field appearance="outline" [style.width.px]="150">
       <mat-label>Precio de Futuro</mat-label>
+      <span matPrefix>$</span>
       <input
         matInput
         type="number"
