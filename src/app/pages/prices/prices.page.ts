@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, query, serverTimestamp } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, doc, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, query, serverTimestamp, writeBatch } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -15,8 +15,10 @@ import { TableImportDialogComponent } from './table-import-dialog/table-import-d
   styleUrls: ['./prices.page.scss'],
 })
 export class PricesPage implements OnInit {
-  private collectionRef: CollectionReference;
-  private pricesSnapshot: DocumentSnapshot;
+  private salesCollectionRef: CollectionReference;
+  private purchaseCollectionRef: CollectionReference;
+  private salesPriceSnapshot: DocumentSnapshot;
+  private purchasePriceSnapshot: DocumentSnapshot;
   public pricesTable: {
     [type: string]: pricesTable;
   };
@@ -32,31 +34,62 @@ export class PricesPage implements OnInit {
 
   ngOnInit() {
     const companyRef = Company.getCompanyRef(this.db, this.session.getCompany());
-    this.collectionRef = collection(companyRef, "prices");
+    this.salesCollectionRef = collection(companyRef, "salesPrices");
+    this.purchaseCollectionRef = collection(companyRef, "purchasePrices");
 
-    const pricesQuery = query(this.collectionRef, orderBy("date", "desc"), limit(1));
+    const salesPricesQuery = query(this.salesCollectionRef, orderBy("date", "desc"), limit(1));
+    const purchasePricesQuery = query(this.purchaseCollectionRef, orderBy("date", "desc"), limit(1));
     this.pricesTable = {};
 
-    getDocs(pricesQuery).then(result => {
-      if(result.empty) {  
+    const promises = [getDocs(salesPricesQuery), getDocs(purchasePricesQuery)];
+
+    Promise.all(promises).then(result => {
+      if(result[0].empty && result[1].empty) {
         this.notes = [];
         return;
       }
 
-      this.pricesSnapshot = result.docs[0];
+      this.salesPriceSnapshot = result[0].empty ? null : result[0].docs[0];
+      this.purchasePriceSnapshot = result[1].empty ? null : result[1].docs[0];
+
       this.getInfoFromSnapshot();
     });
   }
 
   getInfoFromSnapshot(): void {
-    const snapData = this.pricesSnapshot.data() as pricesDoc;
-    const prices = snapData.prices;
-    this.dollarPrice = snapData.dollarPrice;
-    this.notes = snapData.notes ?? [];
+    const salesSnapData = this.salesPriceSnapshot?.data() as pricesDoc;
+    const purchaseSnapData = this.purchasePriceSnapshot?.data() as pricesDoc;
+    const salesPrices = salesSnapData.prices;
+    const purchasePrices = purchaseSnapData.prices;
+    this.dollarPrice = salesSnapData.dollarPrice;
+    this.notes = salesSnapData.notes ?? [];
 
-    for(let priceTable of prices) {
+    for(let priceTable of salesPrices) {
       const firstLocation = priceTable.data[Object.keys(priceTable.data)[0]]
       const currentPriceTable: pricesTable = {
+        type: 'sale',
+        futurePrice: priceTable.futurePrice,
+        locationNames: Object.keys(priceTable.data),
+        productNames: Object.keys(firstLocation),
+        prices: (new Array<number[]>(Object.keys(firstLocation).length)).fill([]).map(() => new Array(Object.keys(priceTable.data).length)),
+      };
+      const priceName = priceTable.name;
+
+      this.pricesTable[priceName] = currentPriceTable;
+
+      for(let location in priceTable.data) {
+        const currentLocation = priceTable.data[location];
+
+        for(let product in currentLocation) {
+          this.setPrice(priceName, location, product, currentLocation[product]);
+        }
+      }
+    }
+
+    for(let priceTable of purchasePrices) {
+      const firstLocation = priceTable.data[Object.keys(priceTable.data)[0]]
+      const currentPriceTable: pricesTable = {
+        type: 'purchase',
         futurePrice: priceTable.futurePrice,
         locationNames: Object.keys(priceTable.data),
         productNames: Object.keys(firstLocation),
@@ -140,6 +173,7 @@ export class PricesPage implements OnInit {
     }
 
     this.pricesTable[newTableInfo.name] = {
+      type: "purchase",
       futurePrice: futurePrice,
       locationNames: Array.from(locationNames),
       productNames: Array.from(productNames),
@@ -230,6 +264,7 @@ export class PricesPage implements OnInit {
     }
 
     this.pricesTable[priceTypeName] = {
+      type: this.pricesTable[priceTypeName].type,
       futurePrice: 0,
       locationNames: locationNames,
       productNames: productNames,
@@ -241,8 +276,15 @@ export class PricesPage implements OnInit {
     this.notes.push("");
   }
 
-  getSubmitObject() {
-    const submitDoc: pricesDoc = {
+  getSubmitObjects(): [pricesDoc, pricesDoc] {
+    const salesSubmitDoc: pricesDoc = {
+      prices: [],
+      date: serverTimestamp(),
+      dollarPrice: this.dollarPrice,
+      notes: this.notes
+    };
+
+    const purchaseSubmitDoc: pricesDoc = {
       prices: [],
       date: serverTimestamp(),
       dollarPrice: this.dollarPrice,
@@ -256,21 +298,28 @@ export class PricesPage implements OnInit {
         futurePrice: currentTable.futurePrice,
         data: {} 
       };
-      submitDoc.prices.push(priceTable);
+
+      (this.pricesTable[typeName].type == "sale"? salesSubmitDoc : purchaseSubmitDoc).prices.push(priceTable);
 
       for(let locationIndex = 0; locationIndex < currentTable.locationNames.length; locationIndex++) {
         const row = priceTable.data[currentTable.locationNames[locationIndex]] = {};
         for(let productIndex = 0; productIndex < currentTable.productNames.length; productIndex++) {
           row[currentTable.productNames[productIndex]] = currentTable.prices[productIndex][locationIndex];
         }
-      }
+      } 
     }
 
-    return submitDoc;
+    return [salesSubmitDoc, purchaseSubmitDoc];
   }
 
   submit() {
-    addDoc(this.collectionRef, this.getSubmitObject()).then(() => {
+    const [salesDoc, purchaseDoc] = this.getSubmitObjects();
+    const batch = writeBatch(this.db);
+
+    batch.set(doc(this.salesCollectionRef), salesDoc);
+    batch.set(doc(this.purchaseCollectionRef), purchaseDoc);
+
+    batch.commit().then(() => {
       this.snackbar.open("Document saved", "success");
     }).catch(error => {
       this.snackbar.open(`Error: ${error}`, "error");
@@ -301,6 +350,7 @@ interface pricesTable {
   locationNames: string[];
   productNames: string[];
   prices: number[][];
+  type: "purchase" | "sale"; 
 }
 
 enum columnOrRow {
