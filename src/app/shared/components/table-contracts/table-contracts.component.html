@@ -1,0 +1,80 @@
+
+<app-table 
+	[data]="contracts" 
+	[queryFn]="queryFn" 
+	[ready]="ready"
+	[rowAction]="openContract" 
+	*ngIf="columns?.length > 0 ?? false"
+>
+	<ng-template #headers>
+		<th *ngFor="let column of columns">
+			<ng-container
+				*ngTemplateOutlet="
+					fieldTemplate(column);
+					context: { isHeader: true }
+				"
+			></ng-container>
+		</th>
+	</ng-template>
+	<ng-template #rows let-row>
+		<td *ngFor="let column of columns">
+			<ng-container 
+				*ngTemplateOutlet="
+					fieldTemplate(column);
+					context: { $implicit: row, isHeader: false }
+				"
+			></ng-container>
+		</td>
+	</ng-template>
+</app-table>
+
+
+<ng-template #clientName let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Client' : (row.clientName | titlecase) }}
+</ng-template>
+
+<ng-template #currentDelivered let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Delivered' : row.currentDelivered }}
+</ng-template>
+
+<ng-template #date let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Date' : (row.date | date) }}
+</ng-template>
+
+<ng-template #delivery_dates let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Delivery' : (row.delivery_dates.begin | date) + ' - ' + (row.delivery_dates.end | date) }}
+</ng-template>
+
+<ng-template #grade let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Grade' : row.grade }}
+</ng-template>
+
+<ng-template #id let-row let-isHeader="isHeader">
+	{{ isHeader ? 'ID' : row.id }}
+</ng-template>
+
+<ng-template #loads let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Loads' : row.loads }}
+</ng-template>
+
+<ng-template #pricePerBushel let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Price ( $ / Bu )' : (row.pricePerBushel | currency) }}
+</ng-template>
+
+<ng-template #product let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Product' : (row.productInfo.name | titlecase) }}
+</ng-template>
+
+<ng-template #quantity let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Bushels' : (row.quantity | number) }}
+</ng-template>
+
+<ng-template #status let-row let-isHeader="isHeader">
+	<span class="status {{ isHeader ? '' : (row.status | lowercase) }}">
+		{{ isHeader ? 'Status' : row.status }}
+	</span>
+</ng-template>
+
+<ng-template #transport let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Transport' : row.transport }}
+</ng-template>

@@ -17,7 +17,8 @@ import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { TableComponent } from './components/table/table.component';
-import { TestTableComponent } from './components/test-table/test-table.component';
+import { TableTestingComponent } from './components/table-testing/table-testing.component';
+import { TableContractsComponent } from './components/table-contracts/table-contracts.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { TestTableComponent } from './components/test-table/test-table.component
     SectionTitleComponent,
     HashMapPipe,
     TableComponent,
-    TestTableComponent,
+    TableTestingComponent,
+    TableContractsComponent,
   ],
   declarations: [
     ToolbarComponent,
@@ -54,7 +56,8 @@ import { TestTableComponent } from './components/test-table/test-table.component
     SectionTitleComponent,
     HashMapPipe,
     TableComponent,
-    TestTableComponent,
+    TableTestingComponent,
+    TableContractsComponent,
   ]
 })
 export class SharedModule {}

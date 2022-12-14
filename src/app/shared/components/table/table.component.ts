@@ -1,4 +1,5 @@
 import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-table',
@@ -15,10 +16,16 @@ export class TableComponent implements OnInit {
   @ContentChild('rows') rows!: TemplateRef<any>;
   @ContentChild('status') status: TemplateRef<any>;
 
-  constructor() { }
+  constructor(
+    private navController: NavController
+  ) { }
 
   ngOnInit() {
+    /* Testing */
+
     this.queryFn();
+
+    /* Testing */
   }
 
 }

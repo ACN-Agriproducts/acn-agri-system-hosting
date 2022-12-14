@@ -19,6 +19,21 @@ export class HomePage implements OnInit {
   public permissions: any;
   public currentCompany: string;
 
+  columns = [
+    'clientName',
+    'currentDelivered',
+    'date',
+    'delivery_dates',
+    'grade',
+    'id',
+    'loads',
+    'pricePerBushel',
+    'product',
+    'quantity',
+    'status',
+    'transport',
+  ];
+
   constructor(
     private session: SessionInfo
   ) {

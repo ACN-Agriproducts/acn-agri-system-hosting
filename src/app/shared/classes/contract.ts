@@ -7,15 +7,15 @@ import { Product } from "./product";
 import { Ticket } from "./ticket";
 
 export class Contract extends FirebaseDocInterface {
-    aflatoxin: number;
-    base: number;
+    aflatoxin: number; 
+    base: number; 
     buyer_terms: number
     client:  DocumentReference<Contact>;
     clientInfo: {
         caat: string,
         city: string,
         email: string,
-        name: string,
+        name: string, 
         phoneNumber: string,
         state: string,
         streetAddress: string,
