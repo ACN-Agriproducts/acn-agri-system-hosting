@@ -24,6 +24,31 @@ table {
 		font-size: 1.1em;
 		font-weight: 500;
 		height: 65px;
+
+        ::ng-deep {
+            .sort-button {
+                transition: opacity .3s;
+
+                &:not(.selected):not(:hover) {
+                    opacity: 0;
+                }
+            }
+
+            mat-icon, button {
+                width: 20px;
+                height: 20px;
+                font-size: 20px;
+            }
+
+            mat-icon {
+                transition: transform .6s;
+
+
+                &.flipped {
+                    transform: rotate(180deg);
+                }
+            }
+        }
     }
 
     tbody {

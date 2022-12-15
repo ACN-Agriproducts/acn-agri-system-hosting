@@ -95,9 +95,9 @@ export class TableContractsComponent implements OnInit {
       this.sortFieldName = fieldName;
     }
 
-    this.sortConstraints = [orderBy(fieldName, this.sortDirection)]; 
+    this.sortConstraints = [orderBy(fieldName, this.sortDirection)];
     if (this.steps) this.sortConstraints.push(limit(this.steps));
-    
+
     return this.getContracts();
   }
 

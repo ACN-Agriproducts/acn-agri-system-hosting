@@ -6,15 +6,15 @@
 	*ngIf="columns?.length > 0 ?? false"
 >
 	<ng-template #headers>
-		<th *ngFor="let column of columns">
+		<th *ngFor="let column of columns; let i = index" [id]="column + '-column'" nowrap>
 			<ng-container
 				*ngTemplateOutlet="
 					fieldTemplate(column);
 					context: { isHeader: true }
 				"
 			></ng-container>
-			<button (click)="sort(column)">
-				<mat-icon>sort</mat-icon>
+			<button mat-icon-button class="sort-button" [class.selected]="sortFieldName === column" (click)="sort(column)">
+				<mat-icon [class.flipped]="sortFieldName === column && sortDirection === 'asc'">arrow_downward</mat-icon>
 			</button>
 		</th>
 	</ng-template>
@@ -63,7 +63,6 @@
 
 <ng-template #pricePerBushel let-row let-isHeader="isHeader">
 	{{ isHeader ? 'Price ( $ / Bu )' : (row.pricePerBushel | currency) }}
-	<button *ngIf="isHeader" value="pricePerBushel"></button>
 </ng-template>
 
 <ng-template #product let-row let-isHeader="isHeader">
