@@ -1,7 +1,6 @@
 
 <app-table 
-	[data]="contracts" 
-	[queryFn]="queryFn" 
+	[dataList]="contracts" 
 	[ready]="ready"
 	[rowAction]="openContract" 
 	*ngIf="columns?.length > 0 ?? false"
@@ -14,6 +13,9 @@
 					context: { isHeader: true }
 				"
 			></ng-container>
+			<button (click)="sort(column)">
+				<mat-icon>sort</mat-icon>
+			</button>
 		</th>
 	</ng-template>
 	<ng-template #rows let-row>
@@ -34,15 +36,17 @@
 </ng-template>
 
 <ng-template #currentDelivered let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Delivered' : row.currentDelivered }}
+	{{ isHeader ? 'Delivered' : row.currentDelivered | number }}
 </ng-template>
 
 <ng-template #date let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Date' : (row.date | date) }}
+	{{ isHeader ? 'Date' : ( row.date | date:( formatOptions?.dateFormat || formatOptions?.defaultDateFormat || "mediumDate" ) )}}
 </ng-template>
 
 <ng-template #delivery_dates let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Delivery' : (row.delivery_dates.begin | date) + ' - ' + (row.delivery_dates.end | date) }}
+	{{ isHeader ? 'Delivery' : ( row.delivery_dates.begin | date:( formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate" ))
+	 + ' - ' + 
+	(row.delivery_dates.end | date:( formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate" )) }}
 </ng-template>
 
 <ng-template #grade let-row let-isHeader="isHeader">
@@ -54,11 +58,12 @@
 </ng-template>
 
 <ng-template #loads let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Loads' : row.loads }}
+	{{ isHeader ? 'Loads' : row.loads | number }}
 </ng-template>
 
 <ng-template #pricePerBushel let-row let-isHeader="isHeader">
 	{{ isHeader ? 'Price ( $ / Bu )' : (row.pricePerBushel | currency) }}
+	<button *ngIf="isHeader" value="pricePerBushel"></button>
 </ng-template>
 
 <ng-template #product let-row let-isHeader="isHeader">
@@ -76,5 +81,5 @@
 </ng-template>
 
 <ng-template #transport let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Transport' : row.transport }}
+	{{ isHeader ? 'Transport' : (row.transport | titlecase) }}
 </ng-template>

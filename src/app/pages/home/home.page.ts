@@ -20,12 +20,12 @@ export class HomePage implements OnInit {
   public currentCompany: string;
 
   columns = [
+    'id',
     'clientName',
     'currentDelivered',
     'date',
     'delivery_dates',
     'grade',
-    'id',
     'loads',
     'pricePerBushel',
     'product',

@@ -1,12 +1,12 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, Firestore, orderBy, Query, query, QueryConstraint } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, limit, orderBy, Query, query, QueryConstraint } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 
 /* Testing */
 import { Contract } from '@shared/classes/contract';
-import { getDocs } from 'firebase/firestore';
+import { getDocs, OrderByDirection, QuerySnapshot, startAfter } from 'firebase/firestore';
 /* Testing */
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
@@ -17,11 +17,15 @@ declare type TableType = "" | "infiniteScroll" | "pagination";
   styleUrls: ['./table-contracts.component.scss'],
 })
 export class TableContractsComponent implements OnInit {
-  @Input() collRef!: CollectionReference;
+  @Input() collRef!: CollectionReference<Contract>;
+  private query: CollectionReference<Contract> | Query<Contract>;
+
   @Input() columns!: string[];
 
   @Input() displayFormat?: TableType = "";
+  @Input() formatOptions?: FormatOptions;
   @Input() snapshot?: boolean = false;
+  @Input() steps?: number;
 
   @ViewChild('clientName') clientName: TemplateRef<any>;
   @ViewChild('currentDelivered') currentDelivered: TemplateRef<any>;
@@ -37,9 +41,13 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('transport') transport: TemplateRef<any>;
   
   public ready: boolean = false;
-  public contracts: Contract[] = [];
+  public contracts: Promise<QuerySnapshot<Contract>>[];
   public currentCompany: string;
-  public constraints: QueryConstraint[] = [];
+  public sortConstraints: QueryConstraint[] = [];
+  public queryConstraints: QueryConstraint[] = [];
+
+  public sortFieldName: string;
+  public sortDirection: OrderByDirection;
 
   constructor(
     private db: Firestore,
@@ -58,16 +66,16 @@ export class TableContractsComponent implements OnInit {
     /* Testing */
 
     if (this.collRef == null) {
-      this.snack.open("Collection Reference not found", "error");
+      this.snack.open("Collection Reference is nullish", "error");
       return;
     }
     if (this.columns == null || !(this.columns.length > 0)) {
-      this.snack.open("Columns not found", "error");
+      this.snack.open("Columns are nullish or empty", "error");
       return;
     }
 
-    this.constraints = [orderBy('date')];
-    this.getContracts().then(() => {
+    this.sort('date').then(() => {
+      if (this.contracts == null) throw "Contracts are nullish";
       this.ready = true;
     })
     .catch(error => {
@@ -78,23 +86,50 @@ export class TableContractsComponent implements OnInit {
 
   public fieldTemplate = (field: string): TemplateRef<any> => this[field];
 
-  public queryFn(event: any): void {
-    console.log("change query\n", event)
+  public sort(fieldName: string): Promise<void> {
+    if (this.sortFieldName == fieldName) {
+      this.sortDirection = (this.sortDirection == "asc" ? "desc" : "asc");
+    } 
+    else {
+      this.sortDirection = "desc";
+      this.sortFieldName = fieldName;
+    }
 
+    this.sortConstraints = [orderBy(fieldName, this.sortDirection)]; 
+    if (this.steps) this.sortConstraints.push(limit(this.steps));
+    
+    return this.getContracts();
   }
 
   public openContract(contract: Contract): void {
-    const contractType = contract.ref.parent.id; // salesContracts | purchaseContracts
-    this.navController.navigateForward(`dashboard/contracts/contract-info/${contractType.slice(0, -9)}/${contract.ref.id}`);
+    const contractType = contract.ref.parent.id.slice(0, -9); // salesContracts | purchaseContracts -> sales | purchase
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`);
   }
 
   public async getContracts(): Promise<void> {
-    if (this.collRef == null) {
-      this.snack.open("Collection reference not found", "error");
-      return;
-    }
-
-    const contractsQuery = query(this.collRef, ...this.constraints) as Query<Contract>;
-    this.contracts = (await getDocs(contractsQuery)).docs.map(snap => snap.data());
+    this.query = query(
+      this.collRef, 
+      ...this.queryConstraints, 
+      ...this.sortConstraints
+    );
+    this.contracts = [getDocs(this.query.withConverter(Contract.converter))];
   }
+
+  public async getPage(page: number): Promise<void> {
+    if (page < 1) return;
+
+    const previousQuerySnapshot = await this.contracts[page - 1];
+    const lastSnapshot = previousQuerySnapshot.docs[previousQuerySnapshot.docs.length - 1];
+
+    this.contracts.push(getDocs(query(this.query, startAfter(lastSnapshot))));
+  }
+}
+
+interface FormatOptions {
+  defaultDateFormat: string;
+  dateFormat: string;
+  deliveryDatesFormat: string;
+  defaultUnits: string;
+  deliveredUnits: string;
+  quantityUnits: string; 
 }

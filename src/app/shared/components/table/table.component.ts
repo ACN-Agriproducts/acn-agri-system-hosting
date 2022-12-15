@@ -1,5 +1,8 @@
-import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, ContentChild, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
+import { QuerySnapshot } from 'firebase/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-table',
@@ -7,8 +10,7 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  @Input() data!: any[];
-  @Input() queryFn?: any;
+  @Input() dataList!: (Promise<QuerySnapshot<FirebaseDocInterface>> | Observable<QuerySnapshot<FirebaseDocInterface>>)[];
   @Input() ready?: boolean;
   @Input() rowAction?: any;
 
@@ -21,11 +23,5 @@ export class TableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    /* Testing */
-
-    this.queryFn();
-
-    /* Testing */
   }
-
 }

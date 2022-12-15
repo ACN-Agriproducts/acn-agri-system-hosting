@@ -5,7 +5,8 @@
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
         <div></div>
         <div></div>
-        <app-table-contracts [columns]="columns" displayFormat=""></app-table-contracts>
+        
     </div>
+    <app-table-contracts [columns]="columns" displayFormat=""></app-table-contracts>
 
 </ion-content>
