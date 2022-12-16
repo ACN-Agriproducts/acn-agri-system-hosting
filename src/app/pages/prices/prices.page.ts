@@ -273,6 +273,10 @@ export class PricesPage implements OnInit {
   }
 
   addComment() {
+    if(!this.notes) {
+      this.notes = [];
+    }
+
     this.notes.push("");
   }
 
