@@ -173,7 +173,7 @@ export class PricesPage implements OnInit {
     }
 
     this.pricesTable[newTableInfo.name] = {
-      type: "purchase",
+      type: null,
       futurePrice: futurePrice,
       locationNames: Array.from(locationNames),
       productNames: Array.from(productNames),
@@ -313,6 +313,14 @@ export class PricesPage implements OnInit {
   }
 
   submit() {
+    // Check if all items have a table type
+    for(let x in this.pricesTable) {
+      if(this.pricesTable[x].type === null){
+        this.snackbar.open("Se necesita elejir tipo de tabla para todas las tablas", "error");
+        return;
+      }
+    }
+
     const [salesDoc, purchaseDoc] = this.getSubmitObjects();
     const batch = writeBatch(this.db);
 
