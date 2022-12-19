@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
+import { doc, DocumentReference, Firestore, getDoc } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -332,14 +332,25 @@ export class NewUserPage implements OnInit {
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
-    console.log(this.userId);
 
     if(this.userId !== null) {
-      User.getUser(this.db, this.userId).then(async user => {
-        this.user = user;
-        this.setPermissions(await user.getPermissions(this.session.getCompany()));
+      httpsCallable(this.fns, "users-getUser")({
+        company: this.session.getCompany(),
+        userId: this.userId
+      }).then(user => {
+        this.userForm.get("name").setValue(user.data["name"]);
+        this.userForm.get("email").setValue(user.data["email"]);
+        this.userForm.get("position").setValue(user.data["employment"]);
       }).catch(error => {
-        this.snack.open("Error: Could not retrieve user info", "error");
+        this.snack.open("Error: Could not retrieve user data", "error");
+        console.error(error);
+      });
+
+      const permissionRef = doc(this.db, "users", this.userId, "companies", this.session.getCompany());
+      getDoc(permissionRef).then(permissionsSnapshot => {
+        this.setPermissions(permissionsSnapshot.get("permissions"));
+      }).catch(error => {
+        this.snack.open("Error: Could not retrieve user permissions", "error");
         console.error(error);
       });
     }
@@ -372,13 +383,13 @@ export class NewUserPage implements OnInit {
       if(type === "developer" || type == "owner") continue;
 
       if(type === "admin") { 
-        this.userForm.setControl("admin", permissions.admin);
+        permissionsFormGroup.get("admin").setValue(permissions.admin);
         continue;
       }
 
       const typeFormGroup = permissionsFormGroup.get(type) as FormGroup;
       for(let permission in permissions[type]) {
-        typeFormGroup.setControl(permission, permissions[type][permission]);
+        typeFormGroup.get(permission).setValue(permissions[type][permission]);
       }
     }
   }
