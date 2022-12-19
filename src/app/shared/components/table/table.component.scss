@@ -4,11 +4,19 @@ div {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    // overflow-x: auto;
+    // position: sticky;
+    // top: 0;
+
+    mat-paginator {
+        margin: 15px;
+    }
 }
 
 table {
     width: 100%;
-    height: 100%;
+    // height: min-content;
 
     text-align: center; // horizontal
     align-content: center; // vertical
@@ -17,6 +25,11 @@ table {
     border-radius: 5px 5px 5px 5px !important;
     overflow: hidden;
 
+    // display: block;
+    // margin: 0 auto;
+    // overflow-x: auto;
+    // white-space: nowrap;
+
     thead {
         background-color: var(--ion-color-primary-light);
 		color: var(--ion-color-primary);
@@ -24,30 +37,44 @@ table {
 		font-size: 1.1em;
 		font-weight: 500;
 		height: 65px;
+        // position: sticky;
+        // top: 0px;
 
         ::ng-deep {
-            .sort-button {
-                transition: opacity .3s;
+            *{}
 
-                &:not(.selected):not(:hover) {
-                    opacity: 0;
-                }
-            }
-
-            mat-icon, button {
-                width: 20px;
-                height: 20px;
-                font-size: 20px;
-            }
-
-            mat-icon {
+            th {
+                width: fit-content;
                 transition: transform .6s;
 
+                mat-icon, button {
+                    width: 20px;
+                    height: 20px;
+                    font-size: 20px;
+                }
 
-                &.flipped {
-                    transform: rotate(180deg);
+                mat-icon {
+                    transition: transform .6s;
+    
+                    &.flipped {
+                        transform: rotate(180deg);
+                    }
+                }
+    
+                .sort-button {
+                    transition: opacity .3s, transform .6s;
+    
+                    &:not(.selected):not(:hover) {
+                        opacity: 0;
+                        transform: translate(-10px);
+                    }
+                }
+
+                &:has(.sort-button:not(.selected):not(:hover)) {
+                    transform: translate(10px);
                 }
             }
+
         }
     }
 
@@ -93,7 +120,7 @@ table {
                 border-radius: 15px;    
                 border-style: solid;
                 border-width: 0.5px;
-                width: 30%;
+                
         
                 &.pending {
                     background-color: rgba(var(--ion-color-warning-rgb), 0.15);

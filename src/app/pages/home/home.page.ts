@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Plant } from '@shared/classes/plant';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { ColumnInfo } from '@shared/components/table-contracts/table-contracts.component';
+
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -19,7 +21,7 @@ export class HomePage implements OnInit {
   public permissions: any;
   public currentCompany: string;
 
-  columns = [
+  public columns: (string | ColumnInfo)[] = [
     'id',
     'clientName',
     'currentDelivered',
@@ -42,5 +44,20 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
+
+    // this.columns = [
+    //   { fieldName: 'id', width: '80px' },
+    //   { fieldName: 'clientName', width: '200px'},
+    //   { fieldName: 'currentDelivered', width: '100px' },
+    //   { fieldName: 'date', width: '100px' },
+    //   { fieldName: 'delivery_dates', width: '100px' },
+    //   { fieldName: 'grade', width: '50px' },
+    //   { fieldName: 'loads', width: '50px' },
+    //   { fieldName: 'pricePerBushel', width: '100px' },
+    //   { fieldName: 'product', width: '100px' },
+    //   { fieldName: 'quantity', width: '100px' },
+    //   { fieldName: 'status', width: '100px' },
+    //   { fieldName: 'transport', width: '100px' },
+    // ];
   }
 }

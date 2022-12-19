@@ -3,11 +3,8 @@ import { CollectionReference, Firestore, limit, orderBy, Query, query, QueryCons
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
-
-/* Testing */
-import { Contract } from '@shared/classes/contract';
 import { getDocs, OrderByDirection, QuerySnapshot, startAfter } from 'firebase/firestore';
-/* Testing */
+import { Contract } from '@shared/classes/contract';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -20,7 +17,8 @@ export class TableContractsComponent implements OnInit {
   @Input() collRef!: CollectionReference<Contract>;
   private query: CollectionReference<Contract> | Query<Contract>;
 
-  @Input() columns!: string[];
+  @Input() columns!: (string | ColumnInfo)[];
+  public displayColumns: ColumnInfo[] = [];
 
   @Input() displayFormat?: TableType = "";
   @Input() formatOptions?: FormatOptions;
@@ -65,6 +63,14 @@ export class TableContractsComponent implements OnInit {
 
     /* Testing */
 
+    this.columns.forEach(col => {
+      if (typeof col === 'string') {
+        this.displayColumns.push({ fieldName: col });
+        return;
+      }
+      this.displayColumns.push(col);
+    })
+
     if (this.collRef == null) {
       this.snack.open("Collection Reference is nullish", "error");
       return;
@@ -74,7 +80,7 @@ export class TableContractsComponent implements OnInit {
       return;
     }
 
-    this.sort('date').then(() => {
+    this.sort(this.columns.includes('date') ? 'date' : '').then(() => {
       if (this.contracts == null) throw "Contracts are nullish";
       this.ready = true;
     })
@@ -84,12 +90,15 @@ export class TableContractsComponent implements OnInit {
     });
   }
 
-  public fieldTemplate = (field: string): TemplateRef<any> => this[field];
+  public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
 
-  public sort(fieldName: string): Promise<void> {
+  public sort(column: string | ColumnInfo): Promise<void> {
+    if (!column) return this.getContracts();
+    const fieldName = typeof column === 'string' ? column : column.fieldName;
+
     if (this.sortFieldName == fieldName) {
       this.sortDirection = (this.sortDirection == "asc" ? "desc" : "asc");
-    } 
+    }
     else {
       this.sortDirection = "desc";
       this.sortFieldName = fieldName;
@@ -132,4 +141,9 @@ interface FormatOptions {
   defaultUnits: string;
   deliveredUnits: string;
   quantityUnits: string; 
+}
+
+export interface ColumnInfo {
+  fieldName: string;
+  width?: string;
 }

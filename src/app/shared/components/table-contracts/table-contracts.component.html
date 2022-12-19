@@ -6,20 +6,31 @@
 	*ngIf="columns?.length > 0 ?? false"
 >
 	<ng-template #headers>
-		<th *ngFor="let column of columns; let i = index" [id]="column + '-column'" nowrap>
+		<th *ngFor="let column of displayColumns" 
+			[width]="column.width ?? 'fit-content'"
+			[id]="column + '-column'" 
+			nowrap
+		>
 			<ng-container
 				*ngTemplateOutlet="
 					fieldTemplate(column);
 					context: { isHeader: true }
 				"
 			></ng-container>
-			<button mat-icon-button class="sort-button" [class.selected]="sortFieldName === column" (click)="sort(column)">
-				<mat-icon [class.flipped]="sortFieldName === column && sortDirection === 'asc'">arrow_downward</mat-icon>
+			<button mat-icon-button 
+				disableRipple="true"
+				class="sort-button" 
+				[class.selected]="sortFieldName === column.fieldName" 
+				(click)="sort(column)"
+			>
+				<mat-icon [class.flipped]="sortFieldName === column.fieldName && sortDirection === 'asc'">
+					arrow_downward
+				</mat-icon>
 			</button>
 		</th>
 	</ng-template>
 	<ng-template #rows let-row>
-		<td *ngFor="let column of columns">
+		<td *ngFor="let column of displayColumns">
 			<ng-container 
 				*ngTemplateOutlet="
 					fieldTemplate(column);
@@ -40,13 +51,13 @@
 </ng-template>
 
 <ng-template #date let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Date' : ( row.date | date:( formatOptions?.dateFormat || formatOptions?.defaultDateFormat || "mediumDate" ) )}}
+	{{ isHeader ? 'Date' : (row.date | date:( formatOptions?.dateFormat || formatOptions?.defaultDateFormat || "mediumDate") )}}
 </ng-template>
 
 <ng-template #delivery_dates let-row let-isHeader="isHeader">
 	{{ isHeader ? 'Delivery' : ( row.delivery_dates.begin | date:( formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate" ))
 	 + ' - ' + 
-	(row.delivery_dates.end | date:( formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate" )) }}
+	(row.delivery_dates.end | date:(formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate")) }}
 </ng-template>
 
 <ng-template #grade let-row let-isHeader="isHeader">
@@ -58,7 +69,7 @@
 </ng-template>
 
 <ng-template #loads let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Loads' : row.loads | number }}
+	{{ isHeader ? 'Loads' : (row.loads | number) }}
 </ng-template>
 
 <ng-template #pricePerBushel let-row let-isHeader="isHeader">

@@ -1,7 +1,7 @@
 
 th {
     overflow-wrap: none;
-    min-width: 55px;
+    min-width: 70px;
 }
 
 #id-column {
@@ -17,37 +17,37 @@ th {
 }
 
 #date-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #delivery_dates-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #grade-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #loads-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #pricePerBushel-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #product-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #quantity-column {
-    width: 1fr;
+    max-width: 1fr;
 }
 
 #status-column {
-    width: 70px;
+    max-width: 1fr;
 }
 
 #transport-column {
-    width: 1fr;
+    max-width: 1fr;
 }

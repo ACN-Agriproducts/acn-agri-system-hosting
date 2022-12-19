@@ -1,5 +1,5 @@
 
-<div>
+<!-- <div> -->
 	<table *ngIf="ready; else loading">
 		<thead>
 			<tr>
@@ -26,10 +26,12 @@
 		</tbody>
 	</table>
 
-	<mat-paginator 
-		[pageSizeOptions]="[5, 10, 20, 30, 40]"
-	></mat-paginator>
-</div>
+	<div>
+		<mat-paginator
+			[pageSizeOptions]="[5, 10, 20, 30, 40]"
+		></mat-paginator>
+	</div>
+<!-- </div> -->
 
 <ng-template #loading>
 	<td colspan="100%">
