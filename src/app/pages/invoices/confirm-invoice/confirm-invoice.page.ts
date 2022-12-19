@@ -46,7 +46,6 @@ export class ConfirmInvoicePage implements OnInit {
   ngOnInit() {
     const currentNavigation = this.router.getCurrentNavigation();
     if(currentNavigation == null) {
-      console.log("return")
       this.router.navigate(["dashboard", "invoices", "new"], {});
       return;
     }
