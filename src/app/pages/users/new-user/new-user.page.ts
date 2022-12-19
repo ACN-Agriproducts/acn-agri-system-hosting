@@ -381,7 +381,12 @@ export class NewUserPage implements OnInit {
         updateObject[`permissions.${type}`] = permissions[type];
       }
 
-      updateDoc(this.permissionRef, updateObject);
+      updateDoc(this.permissionRef, updateObject).then(result => {
+        this.navController.navigateForward("dashboard/users");
+      }).catch(error => {
+        this.snack.open("Error submitting user", "error");
+        console.error(error);
+      });
     }
   }
 
