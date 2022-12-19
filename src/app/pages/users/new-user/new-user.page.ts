@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { doc, DocumentReference, Firestore, getDoc } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
