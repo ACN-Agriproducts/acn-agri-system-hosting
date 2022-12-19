@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-new-user',
@@ -303,7 +303,8 @@ export class NewUserPage implements OnInit {
         addRecord: [false]
       }),
       prices: this.fb.group({
-        read: [false],
+        salesPrices: [false],
+        purchasePrices: [false],
         write: [false]
       })
 
@@ -311,25 +312,21 @@ export class NewUserPage implements OnInit {
     })
   })
   public sticker: boolean;
-  private currentCompany: string;
 
 
   constructor(
     private fb: UntypedFormBuilder,
-    private localStorage: Storage,
+    private session: SessionInfo,
     private fns: Functions,
     private navController: NavController
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(val => {
-      this.currentCompany = val;
-    })
   }
 
   public submitForm() {
     let form = this.userForm.getRawValue();
-    form.company = this.currentCompany;
+    form.company = this.session.getCompany();
 
     httpsCallable(this.fns, 'users-createUser')(form).then(
       val => {
