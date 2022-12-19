@@ -227,19 +227,18 @@ export class NewUserPage implements OnInit {
       section: 'prices',
       module: [
         {
+          label: 'Edit prices',
+          controlName: 'write',
+          main: true
+        },
+        {
           label: 'Access purchase prices',
           controlName: 'purchasePrices',
-          main: true
         },
         {
           label: 'Access sales prices',
           controlName: 'salesPrices',
-          main: true
         },
-        {
-          label: 'Edit prices',
-          controlName: 'write',
-        }
       ]
     }
   ];
