@@ -318,7 +318,6 @@ export class NewUserPage implements OnInit {
   public sticker: boolean;
 
   public userId: string;
-  private user: User;
 
   constructor(
     private fb: UntypedFormBuilder,
