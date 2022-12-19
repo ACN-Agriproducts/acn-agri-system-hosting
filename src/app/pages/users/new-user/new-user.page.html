@@ -1,4 +1,4 @@
-<app-header-toolbar titulo="New User"></app-header-toolbar>
+<app-header-toolbar [titulo]="userId? 'User ' + userId : 'New User'"></app-header-toolbar>
 
 
 <ion-content class="ion-padding"  (ionScroll)="logScrolling($event)" [scrollEvents]="true">
