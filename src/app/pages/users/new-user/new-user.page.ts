@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { User } from '@shared/classes/user';
 
@@ -325,7 +326,8 @@ export class NewUserPage implements OnInit {
     private fns: Functions,
     private navController: NavController,
     private route: ActivatedRoute,
-    private db: Firestore
+    private db: Firestore,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -336,6 +338,9 @@ export class NewUserPage implements OnInit {
       User.getUser(this.db, this.userId).then(async user => {
         this.user = user;
         this.setPermissions(await user.getPermissions(this.session.getCompany()));
+      }).catch(error => {
+        this.snack.open("Error: Could not retrieve user info", "error");
+        console.error(error);
       });
     }
   }
@@ -361,6 +366,20 @@ export class NewUserPage implements OnInit {
   }
 
   public setPermissions(permissions: any): void {
-    
+    const permissionsFormGroup = this.userForm.get("permissions") as FormGroup;
+
+    for(let type in permissions) {
+      if(type === "developer" || type == "owner") continue;
+
+      if(type === "admin") { 
+        this.userForm.setControl("admin", permissions.admin);
+        continue;
+      }
+
+      const typeFormGroup = permissionsFormGroup.get(type) as FormGroup;
+      for(let permission in permissions[type]) {
+        typeFormGroup.setControl(permission, permissions[type][permission]);
+      }
+    }
   }
 }
