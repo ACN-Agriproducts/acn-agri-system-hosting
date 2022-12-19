@@ -95,7 +95,7 @@
       </ion-card>
       <div class="content-footer-button">
         <div class="item-button">
-          <ion-button type='submit' [disabled]='userForm.invalid'>Save user</ion-button>
+          <ion-button type='submit' [disabled]='userForm.invalid && !userId'>Save user</ion-button>
         </div>
       </div>
     </form>

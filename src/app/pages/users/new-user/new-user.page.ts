@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { doc, DocumentReference, Firestore, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -318,6 +318,7 @@ export class NewUserPage implements OnInit {
   public sticker: boolean;
 
   public userId: string;
+  public permissionRef: DocumentReference;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -345,8 +346,8 @@ export class NewUserPage implements OnInit {
         console.error(error);
       });
 
-      const permissionRef = doc(this.db, "users", this.userId, "companies", this.session.getCompany());
-      getDoc(permissionRef).then(permissionsSnapshot => {
+      this.permissionRef = doc(this.db, "users", this.userId, "companies", this.session.getCompany());
+      getDoc(this.permissionRef).then(permissionsSnapshot => {
         this.setPermissions(permissionsSnapshot.get("permissions"));
       }).catch(error => {
         this.snack.open("Error: Could not retrieve user permissions", "error");
@@ -356,14 +357,32 @@ export class NewUserPage implements OnInit {
   }
 
   public submitForm() {
-    let form = this.userForm.getRawValue();
-    form.company = this.session.getCompany();
+    if(!this.userId){
+      let form = this.userForm.getRawValue();
+      form.company = this.session.getCompany();
 
-    httpsCallable(this.fns, 'users-createUser')(form).then(
-      val => {
-        this.navController.navigateForward('dashboard/users');
+      httpsCallable(this.fns, 'users-createUser')(form).then(
+        val => {
+          this.navController.navigateForward('dashboard/users');
+        }
+      ).catch(error => {
+        this.snack.open("Error submitting user", "error");
+        console.error(error);
+      });
+    }
+    else {
+      const permissions = this.userForm.get("permissions").getRawValue();
+      
+      //build update object
+      const updateObject = { "permissions.admin": permissions.admin };
+      for(let type in permissions) {
+        if(type === "admin") continue;
+
+        updateObject[`permissions.${type}`] = permissions[type];
       }
-    );
+
+      updateDoc(this.permissionRef, updateObject);
+    }
   }
 
   public logScrolling = (event) => {
