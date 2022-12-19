@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Importar tabla</h1> 
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Tabla</mat-label>
+    <textarea matInput [(ngModel)]="input" (keyup.enter)="accept()"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button [mat-dialog-close]="null" color="accent">Cancelar</button>
+  <button 
+    mat-flat-button
+    [mat-dialog-close]="input" 
+    color="primary"
+    >Ok
+  </button>
+</div>
