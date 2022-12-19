@@ -227,8 +227,13 @@ export class NewUserPage implements OnInit {
       section: 'prices',
       module: [
         {
-          label: 'Access prices',
-          controlName: 'read',
+          label: 'Access purchase prices',
+          controlName: 'purchasePrices',
+          main: true
+        },
+        {
+          label: 'Access sales prices',
+          controlName: 'salesPrices',
           main: true
         },
         {
