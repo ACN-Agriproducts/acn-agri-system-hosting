@@ -75,6 +75,10 @@ const routes: Routes = [
             path: 'warehouse-receipts',
             loadChildren: () => import('./pages/warehouse-receipts/warehouse-receipts.module').then( m => m.WarehouseReceiptsPageModule)
           },
+          {
+            path: 'prices',
+            loadChildren: () => import('./pages/prices/prices.module').then( m => m.PricesPageModule)
+          },
         ]
       },
     ]
@@ -89,9 +93,6 @@ const routes: Routes = [
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
   },
-  
-
-
 ];
 
 @NgModule({

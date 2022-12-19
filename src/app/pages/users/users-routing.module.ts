@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'new-user',
     loadChildren: () => import('./new-user/new-user.module').then( m => m.NewUserPageModule)
+  },
+  {
+    path:":id",
+    loadChildren: () => import('./new-user/new-user.module').then( m => m.NewUserPageModule)
   }
 ];
 

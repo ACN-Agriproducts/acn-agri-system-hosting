@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Elejir Nombre</h1> 
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Nombre</mat-label>
+    <input matInput [(ngModel)]="returnData.name" (keyup.enter)="accept()">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Basarse en tabla</mat-label>
+    <mat-select [(ngModel)]="returnData.baseTable">
+      <mat-option value="">Ninguna</mat-option>
+      <mat-option *ngFor="let name of names" [value]="name">{{name}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button [mat-dialog-close]="null" color="accent">Cancelar</button>
+  <button 
+    mat-flat-button 
+    [mat-dialog-close]="returnData" 
+    color="primary"
+    [disabled]="!validName()"
+    >Ok
+  </button>
+</div>
