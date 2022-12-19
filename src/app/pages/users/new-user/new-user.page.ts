@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { NavController } from '@ionic/angular';
+import { User } from '@shared/classes/user';
 
 @Component({
   selector: 'app-new-user',
@@ -313,15 +316,28 @@ export class NewUserPage implements OnInit {
   })
   public sticker: boolean;
 
+  public userId: string;
+  private user: User;
 
   constructor(
     private fb: UntypedFormBuilder,
     private session: SessionInfo,
     private fns: Functions,
-    private navController: NavController
+    private navController: NavController,
+    private route: ActivatedRoute,
+    private db: Firestore
   ) { }
 
   ngOnInit() {
+    this.userId = this.route.snapshot.paramMap.get('id');
+    console.log(this.userId);
+
+    if(this.userId !== null) {
+      User.getUser(this.db, this.userId).then(async user => {
+        this.user = user;
+        this.setPermissions(await user.getPermissions(this.session.getCompany()));
+      });
+    }
   }
 
   public submitForm() {
@@ -342,5 +358,9 @@ export class NewUserPage implements OnInit {
     } else {
       this.sticker = false;
     }
+  }
+
+  public setPermissions(permissions: any): void {
+    
   }
 }
