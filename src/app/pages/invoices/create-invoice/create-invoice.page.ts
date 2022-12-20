@@ -9,7 +9,7 @@ import { InvoiceItem } from '@shared/classes/invoice_item';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Subscription } from 'rxjs';
-import { PrintableInvoiceComponent } from '../components/printable-invoice/printable-invoice.component';
+import { PrintableInvoiceComponent } from '@shared/printable/printable-invoice/printable-invoice.component';
 
 @Component({
   selector: 'app-create-invoice',

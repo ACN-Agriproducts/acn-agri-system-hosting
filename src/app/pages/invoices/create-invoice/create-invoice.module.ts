@@ -8,8 +8,8 @@ import { CreateInvoicePageRoutingModule } from './create-invoice-routing.module'
 
 import { CreateInvoicePage } from './create-invoice.page';
 import { ComponentsModule } from '@core/components/components.module';
-import { PrintableInvoiceComponent } from '../components/printable-invoice/printable-invoice.component';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -20,11 +20,11 @@ import { CoreModule } from '@core/core.module';
     ComponentsModule,
     ReactiveFormsModule,
     FormsModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ],
   declarations: [
-    CreateInvoicePage,
-    PrintableInvoiceComponent
+    CreateInvoicePage
   ]
 })
 export class CreateInvoicePageModule {}
