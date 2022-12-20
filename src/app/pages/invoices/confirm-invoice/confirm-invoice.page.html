@@ -1,17 +1,13 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Confirm invoice</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header-toolbar titulo="Confirm Invoice Information"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <div class="content-main">
-    <div class="content-form">
-      <form>
-        <ion-card>
+    <div class="form-content">
+      <div class="content">
+        <ion-card *ngIf="invoice">
           <ion-card-header>
             <ion-card-title>
-              Customer data
+              Seller data
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
@@ -20,13 +16,13 @@
                 <ion-col size="6">
                   <mat-form-field appearance="fill">
                     <mat-label>Name</mat-label>
-                    <input matInput>
+                    <input matInput [(ngModel)]="invoice.seller.name">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="6">
                   <mat-form-field appearance="fill">
                     <mat-label>Phone</mat-label>
-                    <input matInput>
+                    <input matInput [(ngModel)]="invoice.seller.phone">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -38,92 +34,201 @@
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col size="6">
+                <ion-col size="12">
                   <mat-form-field appearance="fill">
                     <mat-label>Street</mat-label>
-                    <input matInput>
-                  </mat-form-field>
-                </ion-col>
-                <ion-col size="3">
-                  <mat-form-field appearance="fill">
-                    <mat-label>Exterior</mat-label>
-                    <input matInput>
-                  </mat-form-field>
-                </ion-col>
-                <ion-col size="3">
-                  <mat-form-field appearance="fill">
-                    <mat-label>Interior</mat-label>
-                    <input matInput>
+                    <input matInput [(ngModel)]="invoice.seller.street">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
               <ion-row>
-
               </ion-row>
               <ion-row>
+                <ion-col size="4">
+                  <mat-form-field appearance="fill">
+                    <mat-label>City</mat-label>
+                    <input matInput [(ngModel)]="invoice.seller.city">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Zip</mat-label>
+                    <input matInput [(ngModel)]="invoice.seller.zip">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="5">
+                  <mat-form-field appearance="fill">
+                    <mat-label>State</mat-label>
+                    <input matInput [(ngModel)]="invoice.seller.state">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+          <ion-card-header>
+            <ion-card-title>
+              Customer data
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput [(ngModel)]="invoice.buyer.name">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Phone</mat-label>
+                    <input matInput [(ngModel)]="invoice.buyer.phone">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <ion-card-subtitle>Address</ion-card-subtitle>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Street</mat-label>
+                    <input matInput [(ngModel)]="invoice.buyer.street">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+              </ion-row>
+              <ion-row>
+                <ion-col size="3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>City</mat-label>
+                    <input matInput [(ngModel)]="invoice.buyer.city">
+                  </mat-form-field>
+                </ion-col>
                 <ion-col size="2">
                   <mat-form-field appearance="fill">
                     <mat-label>Zip</mat-label>
-                    <input matInput>
+                    <input matInput [(ngModel)]="invoice.buyer.zip">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="4">
                   <mat-form-field appearance="fill">
-                    <mat-label>Neighborhood</mat-label>
-                    <input matInput>
-                  </mat-form-field>
-                </ion-col>
-                <ion-col size="3">
-                  <mat-form-field appearance="fill">
-                    <mat-label>City</mat-label>
-                    <input matInput>
-                  </mat-form-field>
-                </ion-col>
-                <ion-col size="3">
-                  <mat-form-field appearance="fill">
                     <mat-label>State</mat-label>
-                    <input matInput>
+                    <input matInput [(ngModel)]="invoice.buyer.state">
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Country</mat-label>
+                    <input matInput [(ngModel)]="invoice.buyer.country">
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Other</mat-label>
+                    <textarea matInput [(ngModel)]="invoice.buyer.other"></textarea>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
             </ion-grid>
           </ion-card-content>
         </ion-card>
-      </form>
+      </div>
+      <div class="content">
+        <ion-card *ngFor="let productGroup of groups | keyvalue">
+          <ion-card-header>
+            <ion-card-title>{{productGroup.key}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div *ngFor="let client of productGroup.value | keyvalue">
+              <h3>{{client.key}}</h3>
+              <div class="group-area" *ngFor="let group of client.value | keyvalue">
+                <div class="list-title">
+                  <span class="list-title-text">
+                    <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
+                    <span>{{group.value.totalWeight}} lbs | {{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
+                  </span>
+                  <button class="list-action-bar" mat-icon-button (click)="deleteGroup(productGroup.key, client.key, group.key)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                <div
+                  cdkDropList
+                  [id]="productGroup.key + '-' + client.key + '-' + group.key"
+                  [cdkDropListData]="group.value.tickets"
+                  [cdkDropListConnectedTo]="getConnectedProductGroupList(productGroup.key, client.key, group.key)"
+                  class="ticket-list"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="ticket-box" *ngFor="let ticket of group.value.tickets" cdkDrag [cdkDragData]="ticket">
+                    <span>{{ticket.id}}</span>
+                    <span>{{ticket.driver}}</span>
+                    <span>{{ticket.plates}}</span>
+                    <span>{{ticket.getNet()}} lbs | {{ticket.getNet() / 2204.62 | number:"0.3"}} mTon</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
     </div>
+  
+    <div id="printable-documents" class="content-panel" *ngIf="invoiceCreated">
+      <app-printable-invoice
+        [seller]="invoice.seller"
+        [buyer]="invoice.buyer"
+        [id]="invoice.id"
+        [date]="invoice.date" 
+        [items]="invoice.items"
+        [total]="invoice.total"
+      ></app-printable-invoice>
 
-    <div class="content-panel" *ngIf="false">
-      <div class="content-items-tickets">
-        <ion-card class="item-ticket" lines="none" *ngFor="let item of [1,1,1,1,1,1]">
-          <ion-card-header>
-            <h2>Ticket 1772</h2>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="item-name">{{'Yellow Corn' | uppercase}}</p>
-            <p>754WU9 - 37.948</p>
-            <p>753WU9 - 40.025</p>
-          </ion-card-content>
-        </ion-card>
+      <div id="second-print-page" *ngFor="let product of groups | keyvalue">
+        <div class="second-print-page-header">
+          <span>{{product.key}}</span>
+          <span>{{today | date:'MM-dd-yy'}}</span>
+        </div>
+        <div class="grain-relation-section" *ngFor="let client of product.value | keyvalue">
+          <h1>{{client.key}}</h1>
+          <div *ngFor="let group of client.value | keyvalue; let last = last">
+            <div class="relation-grid">
+              <span>{{group.value.price | currency}}</span>
+              <div class="plates-column">
+                <span *ngFor="let ticket of group.value.tickets">{{ticket.plates}} - {{ticket.getNet() / 2204.62 | number:"0.3"}} mTon</span>
+              </div>
+              <div class="right-row">
+                <span>{{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
+                <span>{{group.value.transport.name}}</span>
+                <span>{{group.value.transport.caat}}</span>
+              </div>
+            </div>
+            <mat-divider *ngIf="!last"></mat-divider>
+          </div>
+        </div>
       </div>
-      <div class="content-items">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Summary</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item lines="none">
-              <ion-text slot="start">Subtotal</ion-text>
-              <ion-text slot="end">$ 2,263.00</ion-text>
-            </ion-item>
-            <ion-item lines="none">
-              <ion-text slot="start">Total</ion-text>
-              <ion-text slot="end">$ 2,263.00</ion-text>
-            </ion-item>
-          </ion-card-content>
-        </ion-card>
-      </div>
+      <div class="page-break"></div>
+
+
+      <ng-container *ngFor="let docs of printTicketDocs">
+        <app-printable-ticket
+          [ticket]="docs[0]"
+          [contract]="docs[1]"
+          [transport]="docs[2]"
+          [client]="docs[3]">
+        </app-printable-ticket>
+      </ng-container>
     </div>
-    <div class="content-action">
+  </div>
+
+  <div class="white-space-114"></div>
+  <div class="content-action">
       <ion-card class="panel-action">
         <ion-card-content>
           <div class="content-panel-button">
@@ -131,11 +236,36 @@
               <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
             </ion-button>
             <div class="panel-list">
-              <ion-button routerLink="/ticket/sksks">Generate</ion-button>
+              <ion-item color="dark" lines="none">
+                <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ', ' }}</ion-label>
+              </ion-item>
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="generateInvoice()"
+                *ngIf="!invoiceCreated"
+                >Generate
+              </button>
+              <button
+                (click)="submit()"
+                mat-flat-button
+                color="primary"
+                *ngIf="invoiceCreated"
+                >Submit
+              </button>
+              <button
+                hidden
+                #printButton
+                id="print-button"
+                *ngIf="invoiceCreated"
+                ngxPrint
+                printSectionId="printable-documents"
+                [useExistingCss]="true"
+                >Print
+              </button>
             </div>
           </div>
         </ion-card-content>
       </ion-card>
-    </div>
   </div>
 </ion-content>

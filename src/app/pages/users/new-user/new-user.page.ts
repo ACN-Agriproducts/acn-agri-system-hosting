@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { doc, DocumentReference, Firestore, getDoc, updateDoc } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { UntypedFormBuilder, FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { User } from '@shared/classes/user';
 
 @Component({
   selector: 'app-new-user',
@@ -205,24 +209,42 @@ export class NewUserPage implements OnInit {
         },
       ]
     },
+    // {
+    //   section: 'portfolio',
+    //   module: [
+    //     {
+    //       label: 'Open portfolio section',
+    //       controlName: 'read',
+    //       main: true
+    //     },
+    //     {
+    //       label: 'Edit pyramid', 
+    //       controlName: 'editPyramid',
+    //     },
+    //     {
+    //       label: 'Add record',
+    //       controlName: 'addRecord'
+    //     }
+    //   ]
+    // },
     {
-      section: 'portfolio',
+      section: 'prices',
       module: [
         {
-          label: 'Open portfolio section',
-          controlName: 'read',
+          label: 'Edit prices',
+          controlName: 'write',
           main: true
         },
         {
-          label: 'Edit pyramid', 
-          controlName: 'editPyramid',
+          label: 'Access purchase prices',
+          controlName: 'purchasePrices',
         },
         {
-          label: 'Add record',
-          controlName: 'addRecord'
-        }
+          label: 'Access sales prices',
+          controlName: 'salesPrices',
+        },
       ]
-    },
+    }
   ];
 
   public userForm: UntypedFormGroup = this.fb.group({
@@ -283,37 +305,89 @@ export class NewUserPage implements OnInit {
         read: [false],
         editPyramid: [false],
         addRecord: [false]
+      }),
+      prices: this.fb.group({
+        salesPrices: [false],
+        purchasePrices: [false],
+        write: [false]
       })
 
 
     })
   })
   public sticker: boolean;
-  private currentCompany: string;
 
+  public userId: string;
+  public permissionRef: DocumentReference;
 
   constructor(
     private fb: UntypedFormBuilder,
-    private localStorage: Storage,
+    private session: SessionInfo,
     private fns: Functions,
-    private navController: NavController
+    private navController: NavController,
+    private route: ActivatedRoute,
+    private db: Firestore,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(val => {
-      this.currentCompany = val;
-    })
+    this.userId = this.route.snapshot.paramMap.get('id');
+
+    if(this.userId !== null) {
+      httpsCallable(this.fns, "users-getUser")({
+        company: this.session.getCompany(),
+        userId: this.userId
+      }).then(user => {
+        this.userForm.get("name").setValue(user.data["name"]);
+        this.userForm.get("email").setValue(user.data["email"]);
+        this.userForm.get("position").setValue(user.data["employment"]);
+      }).catch(error => {
+        this.snack.open("Error: Could not retrieve user data", "error");
+        console.error(error);
+      });
+
+      this.permissionRef = doc(this.db, "users", this.userId, "companies", this.session.getCompany());
+      getDoc(this.permissionRef).then(permissionsSnapshot => {
+        this.setPermissions(permissionsSnapshot.get("permissions"));
+      }).catch(error => {
+        this.snack.open("Error: Could not retrieve user permissions", "error");
+        console.error(error);
+      });
+    }
   }
 
   public submitForm() {
-    let form = this.userForm.getRawValue();
-    form.company = this.currentCompany;
+    if(!this.userId){
+      let form = this.userForm.getRawValue();
+      form.company = this.session.getCompany();
 
-    httpsCallable(this.fns, 'users-createUser')(form).then(
-      val => {
-        this.navController.navigateForward('dashboard/users');
+      httpsCallable(this.fns, 'users-createUser')(form).then(
+        val => {
+          this.navController.navigateForward('dashboard/users');
+        }
+      ).catch(error => {
+        this.snack.open("Error submitting user", "error");
+        console.error(error);
+      });
+    }
+    else {
+      const permissions = this.userForm.get("permissions").getRawValue();
+      
+      //build update object
+      const updateObject = { "permissions.admin": permissions.admin };
+      for(let type in permissions) {
+        if(type === "admin") continue;
+
+        updateObject[`permissions.${type}`] = permissions[type];
       }
-    );
+
+      updateDoc(this.permissionRef, updateObject).then(result => {
+        this.navController.navigateForward("dashboard/users");
+      }).catch(error => {
+        this.snack.open("Error submitting user", "error");
+        console.error(error);
+      });
+    }
   }
 
   public logScrolling = (event) => {
@@ -322,6 +396,24 @@ export class NewUserPage implements OnInit {
       this.sticker = true;
     } else {
       this.sticker = false;
+    }
+  }
+
+  public setPermissions(permissions: any): void {
+    const permissionsFormGroup = this.userForm.get("permissions") as FormGroup;
+
+    for(let type in permissions) {
+      if(type === "developer" || type == "owner") continue;
+
+      if(type === "admin") { 
+        permissionsFormGroup.get("admin").setValue(permissions.admin);
+        continue;
+      }
+
+      const typeFormGroup = permissionsFormGroup.get(type) as FormGroup;
+      for(let permission in permissions[type]) {
+        typeFormGroup.get(permission).setValue(permissions[type][permission]);
+      }
     }
   }
 }

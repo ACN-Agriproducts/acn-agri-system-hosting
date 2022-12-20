@@ -30,9 +30,7 @@
   width: 85%;
   margin: auto;
   display: grid;
-  //   grid-template-columns: 1fr;
-  grid-template-columns: auto auto auto auto;
-  // column-gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
 .subtitle {
   font-size: 16px;
@@ -82,6 +80,9 @@ ion-card.item-card {
   ion-item{
     font-style: italic;
   }
+  ion-label{
+    overflow: visible;
+  }
 }
 .active-card {
   border: 2px solid var(--ion-color-primary) !important;
@@ -101,7 +102,7 @@ ion-card.item-card {
       rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
   }
 }
-.show-buttom{
+.show-button{
   bottom: 0;
   right: 0;
   z-index: 100;

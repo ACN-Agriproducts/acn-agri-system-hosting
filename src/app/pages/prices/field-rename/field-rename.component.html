@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Nombre</h1> 
+<div mat-dialog-content>
+  <p>Dejar vacío para borrar</p>
+  <mat-form-field>
+    <mat-label>Nombre nuevo</mat-label>
+    <input matInput [(ngModel)]="data.name" (keyup.enter)="accept()">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <!-- <button mat-flat-button [mat-dialog-close]="'DELETE'" color="warn">Delete</button> -->
+  <button mat-flat-button [mat-dialog-close]="null" color="accent">Cancelar</button>
+  <button 
+    mat-flat-button
+    [mat-dialog-close]="data.name" 
+    [disabled]="!validName()"
+    color="primary"
+    >Ok
+  </button>
+</div>

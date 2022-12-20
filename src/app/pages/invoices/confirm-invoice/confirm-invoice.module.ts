@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { ConfirmInvoicePageRoutingModule } from './confirm-invoice-routing.module';
 
 import { ConfirmInvoicePage } from './confirm-invoice.page';
+import { SharedModule } from '@shared/shared.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -15,7 +18,10 @@ import { ConfirmInvoicePage } from './confirm-invoice.page';
     FormsModule,
     IonicModule,
     ConfirmInvoicePageRoutingModule,
-    CoreModule
+    CoreModule,
+    SharedModule,
+    DragDropModule,
+    NgxPrintModule
   ],
   declarations: [ConfirmInvoicePage]
 })

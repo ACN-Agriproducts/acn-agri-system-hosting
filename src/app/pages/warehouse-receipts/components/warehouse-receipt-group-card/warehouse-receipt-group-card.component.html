@@ -106,8 +106,8 @@
 					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
 						{{ wrGroup.saleContract?.status ?? "N/A" }}
-						<span *ngIf="hasPaid()">
-							{{ hasPaid() }} / {{ wrList.length }}
+						<span *ngIf="paidCount() > 0">
+							{{ paidCount() }} / {{ wrList.length }}
 						</span>
 					</ion-text>
 

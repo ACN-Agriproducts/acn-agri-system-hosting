@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { contactInfo, item } from '@shared/classes/invoice';
 
 @Component({
   selector: 'app-printable-invoice',
@@ -7,11 +8,11 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PrintableInvoiceComponent implements OnInit {
 
-  @Input() seller: any;
-  @Input() buyer: any;
-  @Input() id: number;
+  @Input() seller: contactInfo;
+  @Input() buyer: contactInfo;
+  @Input() id: number | string;
   @Input() date: Date;
-  @Input() items: any[];
+  @Input() items: item[];
   @Input() total: number;
 
   constructor() { }

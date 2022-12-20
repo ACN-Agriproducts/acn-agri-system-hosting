@@ -99,6 +99,7 @@ export class item {
     public name: string;
     public price: number;
     public quantity: number;
+    public type: string;
 
     constructor(data: any) {
         this.affectsInventory = data.affectsInventory;
@@ -107,8 +108,9 @@ export class item {
         this.name = data.name;
         this.price = data.price;
         this.quantity = data.quantity;
+        this.type = data.type;
 
-        data.inventoryInfo.info.forEach(element => {
+        data.inventoryInfo?.info?.forEach(element => {
             this.inventoryInfo.push(new inventoryInfo(element));
         });
     }
@@ -136,6 +138,7 @@ export class contactInfo {
     public state: string;
     public street: string;
     public zip: string;
+    public other: string;
 
     constructor(data: any) {
         this.city = data.city;
@@ -145,5 +148,6 @@ export class contactInfo {
         this.state = data.state;
         this.street = data.street;
         this.zip = data.zip;
+        this.other = data.other;
     }
 }

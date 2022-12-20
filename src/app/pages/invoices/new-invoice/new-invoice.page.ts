@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Firestore, getDocs, QuerySnapshot, where } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-new-invoice',
@@ -6,38 +9,34 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-invoice.page.scss'],
 })
 export class NewInvoicePage implements OnInit {
-
   public product: string;
-  public list = [];
-  private contador = 1;
-  public arraryForm = [];
-  constructor() { }
+  public ticketsPromise: Promise<Ticket[]>;
+  public selectedTickets: Set<Ticket>;
+
+  constructor(
+    private session: SessionInfo,
+    private db: Firestore
+  ) { }
 
   ngOnInit() {
-    this.add();
-  }
-  public add = () => {
-    this.arraryForm.push(this.contador);
-    this.contador = this.contador + 1;
-  }
-  public remove = () => {
-    this.arraryForm.splice(1, 1);
-    this.contador = this.contador - 1;
+    const today = new Date();
+    const requestDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 14);
+    this.selectedTickets = new Set<Ticket>;
+
+    this.ticketsPromise = Ticket.getTickets(
+      this.db, 
+      this.session.getCompany(), 
+      this.session.getPlant(),
+      where("in", "==", false),
+      where("dateOut", ">=", requestDate));
   }
 
-  public active = (item, index: number) => {
-    this.product = 'yellow corn';
-    const active = document.querySelector('.item-' + item + '.active-card');
-    const element = document.querySelector('.item-' + item);
-    if (active === null) {
-      element.classList.add('active-card');
-      this.list.push('177' + item);
-    } else {
-      console.log(index);
-      element.classList.remove('active-card');
-      this.list.splice(index , 1);
-      console.log(this.list);
+  public set(ticket: Ticket) {
+    if(this.selectedTickets.has(ticket)) {
+      this.selectedTickets.delete(ticket);
     }
-
+    else {
+      this.selectedTickets.add(ticket);
+    }
   }
 }
