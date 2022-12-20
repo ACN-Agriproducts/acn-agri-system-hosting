@@ -138,7 +138,7 @@ export class Ticket extends FirebaseDocInterface{
     }
 
     public getContractType(): string { 
-        return this.in? "purchaseContract" : "salesContract";
+        return this.in? "purchaseContracts" : "salesContracts";
     }
 
     public getContract(db: Firestore): Promise<Contract> {
