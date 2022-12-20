@@ -132,6 +132,10 @@ export class Contract extends FirebaseDocInterface {
         }
     }
 
+    public getContractType(): string { 
+        return this.ref.parent.id;
+    }
+
     public getCollectionReference(): CollectionReference<Contract> {
         return this.ref.parent.withConverter(Contract.converter);
     }

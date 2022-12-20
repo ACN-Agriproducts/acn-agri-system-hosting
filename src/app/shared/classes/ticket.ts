@@ -137,6 +137,10 @@ export class Ticket extends FirebaseDocInterface{
         return this.gross - this.tare;
     }
 
+    public getContractType(): string { 
+        return this.in? "purchaseContract" : "salesContract";
+    }
+
     public getContract(db: Firestore): Promise<Contract> {
         const company = this.ref.parent.parent.parent.parent.id;
 
