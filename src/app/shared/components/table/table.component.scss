@@ -47,34 +47,35 @@ table {
                 width: fit-content;
                 transition: transform .6s;
 
-                mat-icon, button {
-                    width: 20px;
-                    height: 20px;
-                    font-size: 20px;
+                .sort-button {
+                    transition: opacity .3s, transform .6s;
+                    width: unset;
+                    height: 35px;
                 }
 
                 mat-icon {
+                    font-size: 20px;
                     transition: transform .6s;
     
                     &.flipped {
-                        transform: rotate(180deg);
+                        transform: rotate(-180deg);
                     }
                 }
-    
-                .sort-button {
-                    transition: opacity .3s, transform .6s;
-    
-                    &:not(.selected):not(:hover) {
+
+                &:hover.sort-button {
+                    opacity: 1;  
+                }
+
+                &:not(:hover):has(.sort-button:not(.selected)) {
+                    transform: translate(10px);
+
+                    .sort-button:not(.selected) {
                         opacity: 0;
                         transform: translate(-10px);
                     }
                 }
-
-                &:has(.sort-button:not(.selected):not(:hover)) {
-                    transform: translate(10px);
-                }
+    
             }
-
         }
     }
 
