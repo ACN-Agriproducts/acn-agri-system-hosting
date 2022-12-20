@@ -1,37 +1,35 @@
 
-<!-- <div> -->
-	<table *ngIf="ready; else loading">
-		<thead>
-			<tr>
-				<ng-container
-					*ngTemplateOutlet="
-						headers;
-					"
-				></ng-container>
-			</tr>
-		</thead>
-		<tbody>
-			<ng-container *ngFor="let data of dataList">
-				<ng-container *ngIf="data | async as snapshot; else loading">
-					<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
-						<ng-container
-							*ngTemplateOutlet="
-								rows;
-								context: { $implicit: row.data() }
-							"
-						></ng-container>
-					</tr>
-				</ng-container>
+<table *ngIf="ready; else loading">
+	<thead>
+		<tr>
+			<ng-container
+				*ngTemplateOutlet="
+					headers;
+				"
+			></ng-container>
+		</tr>
+	</thead>
+	<tbody>
+		<ng-container *ngFor="let data of dataList">
+			<ng-container *ngIf="data | async as snapshot; else loading">
+				<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+					<ng-container
+						*ngTemplateOutlet="
+							rows;
+							context: { $implicit: row.data() }
+						"
+					></ng-container>
+				</tr>
 			</ng-container>
-		</tbody>
-	</table>
+		</ng-container>
+	</tbody>
+</table>
 
-	<div>
-		<mat-paginator
-			[pageSizeOptions]="[5, 10, 20, 30, 40]"
-		></mat-paginator>
-	</div>
-<!-- </div> -->
+<div>
+	<mat-paginator
+		[pageSizeOptions]="[5, 10, 20, 30, 40]"
+	></mat-paginator>
+</div>
 
 <ng-template #loading>
 	<td colspan="100%">
