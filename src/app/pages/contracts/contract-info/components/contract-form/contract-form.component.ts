@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Contract, ProductInfo, DeliveryDates, PaymentTerms } from '@shared/classes/contract';
+import { Mass } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 
@@ -107,22 +108,17 @@ export class ContractFormComponent implements OnInit {
     return 0;
   }
 
-  private getQuantity(product: Product): number {
-    const quantity = this.contractForm.getRawValue().quantity;
-    const unit = this.contractForm.getRawValue().quantityUnits;
+  private getQuantity(product: Product): Mass {
+    let quantity = this.contractForm.getRawValue().quantity;
+    let unit = this.contractForm.getRawValue().quantityUnits;
 
-    if(unit == 'bushels') {
-      return quantity * product.weight;
+    if(unit == "bushels")  {
+      quantity = quantity * product.weight;
+      unit = "lbs"
     }
-    if(unit == 'lbs'){
-      return quantity;
-    }
-    if(unit == 'CWT'){
-      return quantity * 100;
-    }
-    if(unit == 'MTons'){
-      return quantity * 2204.6;
-    }
+
+    const mass = new Mass(quantity, unit);
+    return mass;
   }
 
   addPlantChip(plant: string): void {

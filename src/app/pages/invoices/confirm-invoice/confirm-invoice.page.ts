@@ -98,7 +98,7 @@ export class ConfirmInvoicePage implements OnInit {
 
       const object = this.groups[ticket.productName][ticket.clientName][driver];
       object.tickets.push(ticket);
-      object.totalWeight += ticket.gross - ticket.tare;
+      object.totalWeight += ticket.getNet().get();
     });
 
     this.invoice = {
@@ -153,8 +153,8 @@ export class ConfirmInvoicePage implements OnInit {
       
       console.log(event.item.data);
 
-      this.getItemFromListId(event.previousContainer.id).totalWeight -= (event.item.data as Ticket).getNet();
-      this.getItemFromListId(event.container.id).totalWeight += (event.item.data as Ticket).getNet();
+      this.getItemFromListId(event.previousContainer.id).totalWeight -= (event.item.data as Ticket).getNet().get();
+      this.getItemFromListId(event.container.id).totalWeight += (event.item.data as Ticket).getNet().get();
     }
   }
 
@@ -166,7 +166,7 @@ export class ConfirmInvoicePage implements OnInit {
   getMetricTonTotal(ticketList: Ticket[]) {
     let totalKilos = 0;
     ticketList.forEach(ticket => {
-      totalKilos += Math.round(ticket.getNet() / 2.20462);
+      totalKilos += Math.round(ticket.getNet().getMassInUnit('kg'));
     });
 
     return totalKilos / 1000;
@@ -223,7 +223,7 @@ export class ConfirmInvoicePage implements OnInit {
   getItemName(group: TicketGroup): string {
     let name = "";
     group.tickets.forEach((ticket, index) => {
-      name = name.concat(`${ticket.plates.toUpperCase()}--${(ticket.getNet()/2204.62).toFixed(3)}`)
+      name = name.concat(`${ticket.plates.toUpperCase()}--${(ticket.getNet().getMassInUnit("mTon")).toFixed(3)}`)
       if(index != group.tickets.length - 1) {
         name = name.concat('  ');
       }

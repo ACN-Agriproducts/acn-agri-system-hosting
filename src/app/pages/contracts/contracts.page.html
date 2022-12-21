@@ -156,14 +156,14 @@
                         <ion-text class="item-text-price" color="dark" 
                             [matTooltip]="getDeliveredTooltip(item)"
                             matTooltipClass="multiline-tooltip">
-                            {{(toUnit(item.currentDelivered, item).get('bu')).toFixed(2)}}
+                            {{item.currentDelivered.getBushelWeight(item.productInfo).toFixed(2)}}
                         </ion-text>
                     </ion-item>
                     <ion-item lines="none">
                         <ion-text class="item-text-price" color="dark"
                             [matTooltip]="getQuantityTooltip(item)"
                             matTooltipClass="multiline-tooltip">
-                            {{(toUnit(item.quantity, item).get('bu')).toFixed(2)}}
+                            {{item.quantity.getBushelWeight(item.productInfo).toFixed(2)}}
                         </ion-text>
                     </ion-item>
                     <ion-item lines="none">
@@ -173,7 +173,7 @@
                     </ion-item>
                     <ion-item lines="none">
                         <ion-text class="item-text-price" color="dark">
-                            {{item.quantity / item.productInfo.weight * item.pricePerBushel | currency:'$'}}
+                            {{item.quantity.getBushelWeight(item.productInfo) * item.pricePerBushel | currency:'$'}}
                         </ion-text>
                     </ion-item>
                     <ion-item lines="none" class="ion-hide-md-down">

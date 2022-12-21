@@ -1,7 +1,14 @@
- <div *ngFor="let ticket of ticketList" class='table-row'>
+<div class='table-row'>
+  <ion-item lines='none'><b>ID</b></ion-item>
+  <ion-item lines='none'><b>Date</b></ion-item>
+  <ion-item lines='none'><b>Gross</b></ion-item>
+  <ion-item lines='none'><b>Tare</b></ion-item>
+  <ion-item lines='none'><b>Net</b></ion-item>
+</div>
+<div *ngFor="let ticket of ticketList" class='table-row'>
   <ion-item lines='none'><b>{{ticket.id}}</b></ion-item>
   <ion-item lines='none'>{{ticket.dateOut | date}}</ion-item>
-  <ion-item lines='none'>{{ticket.gross | number}}</ion-item>
-  <ion-item lines='none'>{{ticket.tare | number}}</ion-item>
-  <ion-item lines='none'>{{ticket.getNet() | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.gross.get() | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.tare.get() | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.getNet().get() | number}}</ion-item>
 </div>

@@ -79,8 +79,8 @@ export class TicketReportDialogComponent implements OnInit {
         const list = this.productTicketLists[product] as Ticket[];
         for(let tIndex = 0; tIndex < list.length; tIndex++){
           const ticket = this.productTicketLists[product][tIndex] as Ticket;
-          const thisRow = workSheet.addRow({...ticket, net: ticket.getNet() * (ticket.in? 1 : -1)});
-          thisRow.getCell('dryWeight').value = ticket.dryWeight * (ticket.in? 1 : -1);
+          const thisRow = workSheet.addRow({...ticket, net: ticket.getNet().get() * (ticket.in? 1 : -1)});
+          thisRow.getCell('dryWeight').value = ticket.dryWeight.get() * (ticket.in? 1 : -1);
 
           if(tIndex == 0) {
             thisRow.getCell('total').value = {
@@ -379,8 +379,8 @@ export class TicketReportDialogComponent implements OnInit {
 
     formattedTicket.in = ticket.in ? "IN" : "OUT";
     formattedTicket.void = ticket.void ? "VOID" : null;
-    formattedTicket.net = ticket.gross - ticket.tare;
-    formattedTicket.mTons = formattedTicket.net / 2204.62;
+    formattedTicket.net = ticket.getNet().get();
+    formattedTicket.mTons = ticket.getNet().getMassInUnit('mTon');
 
     return formattedTicket;
   }
