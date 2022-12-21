@@ -26,6 +26,14 @@ mat-grid-tile mat-figure{
     }
 }
 
+.flex-column {
+    display: flex;
+
+    button {
+        margin-right: 1rem;
+    }
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   display: none;

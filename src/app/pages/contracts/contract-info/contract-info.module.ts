@@ -16,6 +16,7 @@ import { DisplayContractComponent } from './components/display-contract/display-
 import { SharedModule } from '@shared/shared.module';
 import { ContractFormComponent } from './components/contract-form/contract-form.component';
 import { TicketDiscountTableComponent } from './components/ticket-discount-table/ticket-discount-table.component';
+import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import { TicketDiscountTableComponent } from './components/ticket-discount-table
     ContractLiquidationLongComponent,
     DisplayContractComponent,
     ContractFormComponent,
-    TicketDiscountTableComponent
+    TicketDiscountTableComponent,
+    TruckersFormComponent
   ]
 })
 export class ContractInfoPageModule {}

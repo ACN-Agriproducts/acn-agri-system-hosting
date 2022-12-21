@@ -52,22 +52,22 @@ export class Contract extends FirebaseDocInterface {
     status: status;
     tickets: DocumentReference<Ticket>[];
     transport: string;
-    truckers: DocumentReference<Contact>[];
+    truckers: TruckerInfo[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contract.converter);
         const data = snapshot.data();
 
         let tempTicketList: DocumentReference<Ticket>[] = [];
-        let tempTruckerList: DocumentReference<Contact>[] = [];
+        let tempTruckerList: TruckerInfo[] = [];
 
         // TODO Set DocumentReference converters
         data.tickets.forEach((ticket: DocumentReference) => {
             tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
 
-        data.truckers.forEach((trucker: DocumentReference) => {
-            tempTruckerList.push(trucker.withConverter(Contact.converter));
+        data.truckers.forEach((trucker: any) => {
+            tempTruckerList.push(new TruckerInfo(trucker));
         })
         
 
@@ -94,7 +94,7 @@ export class Contract extends FirebaseDocInterface {
         this.status = data.status;
         this.tickets = data.tickets;
         this.transport = data.transport;
-        this.truckers = data.truckers;
+        this.truckers = tempTruckerList;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
     }
@@ -132,6 +132,10 @@ export class Contract extends FirebaseDocInterface {
         }
     }
 
+    public getContractType(): string { 
+        return this.ref.parent.id;
+    }
+
     public getCollectionReference(): CollectionReference<Contract> {
         return this.ref.parent.withConverter(Contract.converter);
     }
@@ -165,8 +169,8 @@ export class Contract extends FirebaseDocInterface {
     public getTruckers(): Promise<Contact[]> {
         const truckerList = [];
 
-        this.truckers.forEach((truckerRef) => {
-            truckerList.push(getDoc(truckerRef))
+        this.truckers.forEach((truckerInfo) => {
+            truckerList.push(getDoc(truckerInfo.trucker))
         });
 
         return Promise.all(truckerList).then((result): Contact[] => {
@@ -232,11 +236,6 @@ export class Contract extends FirebaseDocInterface {
             });
           })
     }
-
-    // TODO
-    // public static new(): Contract {
-    //     return new Contract()
-    // }
 }
 
 export class DeliveryDates {
@@ -272,6 +271,21 @@ export class ProductInfo {
         this.moisture = data.moisture;
         this.name = data.name;
         this.weight = data.weight;
+    }
+}
+
+export class TruckerInfo {
+    trucker: DocumentReference<Contact>;
+    freight: number;
+
+    constructor(data: any) {
+        if(data instanceof DocumentReference){
+            this.trucker = data.withConverter(Contact.converter);
+            return;
+        }
+
+        this.trucker = data.trucker.withConverter(Contact.converter);
+        this.freight = data.freight;
     }
 }
 
