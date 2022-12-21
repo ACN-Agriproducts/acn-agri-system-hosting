@@ -1,3 +1,5 @@
+import { Product } from "./product";
+
 export declare type units = "lbs" | "kg" | "mTon";
 
 const conversions: Map<units, number> = new Map<units, number>([
@@ -23,7 +25,11 @@ export class Mass {
         return this.defaultUnits;
     }
 
-    getMassInUnit(unit: units) {
+    getMassInUnit(unit: units): number {
         return this.amount / conversions.get(this.defaultUnits) * conversions.get(unit);
+    }
+
+    getBushelWeight(product: Product): number {
+        return this.getMassInUnit('lbs') / product.weight;
     }
 }
