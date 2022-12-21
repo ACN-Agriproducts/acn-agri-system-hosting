@@ -11,7 +11,21 @@
 			[id]="column + '-column'" 
 			nowrap
 		>
-			<ng-container
+			<button
+				[class.selected]="sortFieldName === column.fieldName"
+				(click)="sort(column)"
+			>
+				<ng-container
+					*ngTemplateOutlet="
+						fieldTemplate(column);
+						context: { isHeader: true }
+					"
+				></ng-container>
+				<mat-icon [class.flipped]="sortFieldName === column.fieldName && sortDirection === 'asc'">
+					arrow_downward
+				</mat-icon>
+			</button>
+			<!-- <ng-container
 				*ngTemplateOutlet="
 					fieldTemplate(column);
 					context: { isHeader: true }
@@ -25,7 +39,7 @@
 				<mat-icon [class.flipped]="sortFieldName === column.fieldName && sortDirection === 'asc'">
 					arrow_downward
 				</mat-icon>
-			</button>
+			</button> -->
 		</th>
 	</ng-template>
 	<ng-template #rows let-row>

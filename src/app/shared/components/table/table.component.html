@@ -1,29 +1,31 @@
 
-<table *ngIf="ready; else loading">
-	<thead>
-		<tr>
-			<ng-container
-				*ngTemplateOutlet="
-					headers;
-				"
-			></ng-container>
-		</tr>
-	</thead>
-	<tbody>
-		<ng-container *ngFor="let data of dataList">
-			<ng-container *ngIf="data | async as snapshot; else loading">
-				<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
-					<ng-container
-						*ngTemplateOutlet="
-							rows;
-							context: { $implicit: row.data() }
-						"
-					></ng-container>
-				</tr>
+<div>
+	<table *ngIf="ready; else loading">
+		<thead>
+			<tr>
+				<ng-container
+					*ngTemplateOutlet="
+						headers;
+					"
+				></ng-container>
+			</tr>
+		</thead>
+		<tbody>
+			<ng-container *ngFor="let data of dataList">
+				<ng-container *ngIf="data | async as snapshot; else loading">
+					<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+						<ng-container
+							*ngTemplateOutlet="
+								rows;
+								context: { $implicit: row.data() }
+							"
+						></ng-container>
+					</tr>
+				</ng-container>
 			</ng-container>
-		</ng-container>
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
 
 <div>
 	<mat-paginator

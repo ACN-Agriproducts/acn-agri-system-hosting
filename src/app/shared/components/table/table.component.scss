@@ -8,6 +8,7 @@
     overflow-x: auto;
     overflow-y: auto;
     position: relative;
+    height: inherit;
 
     // ---------------------------------------------------
 }
@@ -39,26 +40,16 @@ table {
     font-size: 0.9em;
     border-radius: 5px 5px 5px 5px !important;
 
-
-    // fix sticky header, sticky paginator, and scrollbars
-
-    overflow: hidden;
-    scrollbar-gutter: stable both-edges;
-
-    // ---------------------------------------------------
-
     thead {
         background-color: var(--ion-color-primary-light);
 		color: var(--ion-color-primary);
 		border-bottom: 0.5px solid var(--ion-color-primary);
-		font-size: 1.1em;
-		font-weight: 500;
 		height: 65px;
 
 
         position: sticky;
         top: 0;
-        z-index: 1;
+        z-index: 2;
 
 
         ::ng-deep {
@@ -66,36 +57,58 @@ table {
 
             th {
                 width: fit-content;
-                transition: transform .6s;
-
-                .sort-button {
-                    transition: opacity .3s, transform .6s;
-                    width: unset;
-                    height: 35px;
-                }
-
-                mat-icon {
-                    font-size: 20px;
-                    transition: transform .6s;
-    
-                    &.flipped {
-                        transform: rotate(-180deg);
-                    }
-                }
-
-                &:hover.sort-button {
-                    opacity: 1;  
-                }
-
-                &:not(:hover):has(.sort-button:not(.selected)) {
-                    transform: translate(10px);
-
-                    .sort-button:not(.selected) {
+                
+                button {
+                    background-color: var(--ion-color-primary-light);
+                    color: var(--ion-color-primary);
+                    font-size: 1.1em !important;
+                    font-weight: 600 !important;
+                    
+                    position: relative;
+                    
+                    mat-icon {
+                        font-size: 15px;
+                        height: fit-content;
+                        width: fit-content;
+                        
+                        position: absolute;
+                        bottom: -25px;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        transform-origin: 25% 25%;
+                        transition: transform .6s, opacity .3s;
                         opacity: 0;
-                        transform: translate(-10px);
+        
+                        &.flipped {
+                            transform: rotate(-180deg);
+                        }
+                    }
+
+                    &.selected, &:hover {
+                        mat-icon {
+                            opacity: 1;
+                        }
                     }
                 }
-    
+
+                // .sort-button {
+                //     transition: opacity .3s, transform .6s;
+                //     width: unset;
+                //     height: 35px;
+                // }
+
+                // &:hover.sort-button {
+                //     opacity: 1;  
+                // }
+
+                // &:not(:hover):has(.sort-button:not(.selected)) {
+                //     transform: translate(10px);
+
+                //     .sort-button:not(.selected) {
+                //         opacity: 0;
+                //         transform: translate(-10px);
+                //     }
+                // }
             }
         }
     }
