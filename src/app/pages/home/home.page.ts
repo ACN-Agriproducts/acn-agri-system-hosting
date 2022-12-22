@@ -45,19 +45,19 @@ export class HomePage implements OnInit {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
 
-    // this.columns = [
-    //   { fieldName: 'id', width: '80px' },
-    //   { fieldName: 'clientName', width: '200px'},
-    //   { fieldName: 'currentDelivered', width: '100px' },
-    //   { fieldName: 'date', width: '100px' },
-    //   { fieldName: 'delivery_dates', width: '100px' },
-    //   { fieldName: 'grade', width: '50px' },
-    //   { fieldName: 'loads', width: '50px' },
-    //   { fieldName: 'pricePerBushel', width: '100px' },
-    //   { fieldName: 'product', width: '100px' },
-    //   { fieldName: 'quantity', width: '100px' },
-    //   { fieldName: 'status', width: '100px' },
-    //   { fieldName: 'transport', width: '100px' },
-    // ];
+    this.columns = [
+      { fieldName: 'id', width: '80px' },
+      { fieldName: 'clientName', width: '200px'},
+      { fieldName: 'currentDelivered', width: '100px' },
+      { fieldName: 'date', width: '100px' },
+      { fieldName: 'delivery_dates', width: '100px' },
+      { fieldName: 'grade', width: '50px' },
+      { fieldName: 'loads', width: '50px' },
+      { fieldName: 'pricePerBushel', width: '100px' },
+      { fieldName: 'product', width: '100px' },
+      { fieldName: 'quantity', width: '100px' },
+      { fieldName: 'status', width: '100px' },
+      { fieldName: 'transport', width: '100px' },
+    ];
   }
 }

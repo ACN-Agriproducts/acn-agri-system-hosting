@@ -62,15 +62,7 @@ export class TableContractsComponent implements OnInit {
     this.collRef = Contract.getCollectionReference(this.db, this.currentCompany, true);
 
     /* Testing */
-
-    this.columns.forEach(col => {
-      if (typeof col === 'string') {
-        this.displayColumns.push({ fieldName: col });
-        return;
-      }
-      this.displayColumns.push(col);
-    })
-
+    
     if (this.collRef == null) {
       this.snack.open("Collection Reference is nullish", "error");
       return;
@@ -80,12 +72,23 @@ export class TableContractsComponent implements OnInit {
       return;
     }
 
-    this.sort(this.columns.includes('date') ? 'date' : '').then(() => {
+    this.columns.forEach(col => {
+      if (typeof col === 'string') {
+        this.displayColumns.push({ fieldName: col });
+        return;
+      }
+      this.displayColumns.push(col);
+    });
+
+    console.log(this.displayColumns.some(({ fieldName }) => fieldName === 'date' ))
+
+    this.sort(this.displayColumns.some(col => col.fieldName === 'date') ? 'date' : '').then(() => {
       if (this.contracts == null) throw "Contracts are nullish";
       this.ready = true;
     })
     .catch(error => {
       this.snack.open(error, "error");
+      console.error(error);
       this.ready = false;
     });
   }
@@ -111,7 +114,8 @@ export class TableContractsComponent implements OnInit {
   }
 
   public openContract(contract: Contract): void {
-    const contractType = contract.ref.parent.id.slice(0, -9); // salesContracts | purchaseContracts -> sales | purchase
+    // salesContracts | purchaseContracts -> sales | purchase
+    const contractType = contract.ref.parent.id.slice(0, -9);
     this.navController.navigateForward(`dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`);
   }
 
