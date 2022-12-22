@@ -55,9 +55,9 @@
         <span>{{getProduct()}}</span><br>
         <div class='grid-3'>
           <div class='column-size-2'>
-            <span class='right-justify'>{{getUnits('bushels') | number:'0.5-5'}}</span>
-            <span class='right-justify'>{{getUnits('lbs') | number:'0.5-5'}}</span>
-            <span class='right-justify'>{{getUnits('mtons') | number:'0.5-5'}}</span>
+            <span class='right-justify'>{{(getProductObject()? contractForm?.quantity?.getBushelWeight(getProductObject()) : 0) | number:'0.5'}}</span>
+            <span class='right-justify'>{{contractForm?.quantity?.getMassInUnit('lbs') | number:'0.5-5'}}</span>
+            <span class='right-justify'>{{contractForm?.quantity?.getMassInUnit('mTon') | number:'0.5-5'}}</span>
           </div>
           <div class='column-size-1'>
             <span>BUSHELS</span><br>
