@@ -1,31 +1,32 @@
+
 :host {
+    display: block;
+    height: inherit;
+}
+
+:host:has(mat-paginator) {
+    div:has(table) {
+        height: calc(100% - 86px) !important;
+    }
+}
+
+#table-wrapper {
     display: block;
     margin: 0 auto;
     white-space: nowrap;
-
-    // fix sticky header, sticky paginator, and scrollbars
-
     overflow-x: auto;
     overflow-y: auto;
-    position: relative;
-    height: inherit;
-
-    // ---------------------------------------------------
+    height: 100%;
+    
+    border-radius: 5px 5px 5px 5px !important;
 }
 
-div:has(mat-paginator) {
+#paginator-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    // fix sticky header, sticky paginator, and scrollbars
-
-    position: sticky;
-    bottom: 0;
     width: 100%;
-
-    // ---------------------------------------------------
 
     mat-paginator {
         margin: 15px;
@@ -46,11 +47,9 @@ table {
 		border-bottom: 0.5px solid var(--ion-color-primary);
 		height: 65px;
 
-
         position: sticky;
         top: 0;
-        z-index: 2;
-
+        z-index: 3;
 
         ::ng-deep {
             *{}

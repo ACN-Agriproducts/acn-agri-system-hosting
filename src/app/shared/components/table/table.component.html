@@ -1,5 +1,5 @@
 
-<div>
+<div id="table-wrapper">
 	<table *ngIf="ready; else loading">
 		<thead>
 			<tr>
@@ -27,7 +27,7 @@
 	</table>
 </div>
 
-<div>
+<div id="paginator-wrapper">
 	<mat-paginator
 		[pageSizeOptions]="[5, 10, 20, 30, 40]"
 	></mat-paginator>
