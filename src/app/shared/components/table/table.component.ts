@@ -17,6 +17,7 @@ export class TableComponent implements OnInit {
   @ContentChild('headers') headers!: TemplateRef<any>;
   @ContentChild('rows') rows!: TemplateRef<any>;
   @ContentChild('status') status: TemplateRef<any>;
+  // @ContentChild('colgroups') colgroups!: TemplateRef<any>;
 
   constructor(
     private navController: NavController

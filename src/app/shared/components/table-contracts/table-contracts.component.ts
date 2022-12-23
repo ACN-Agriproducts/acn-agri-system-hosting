@@ -8,6 +8,21 @@ import { Contract } from '@shared/classes/contract';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
+export declare type contractColumns = (
+  "clientName" | 
+  "currentDelivered" | 
+  "date" | 
+  "delivery_dates" | 
+  "grade" | 
+  "id" | 
+  "loads" | 
+  "pricePerBushel" | 
+  "product" | 
+  "quantity" | 
+  "status" | 
+  "transport"
+);
+
 @Component({
   selector: 'app-table-contracts',
   templateUrl: './table-contracts.component.html',
@@ -17,7 +32,7 @@ export class TableContractsComponent implements OnInit {
   @Input() collRef!: CollectionReference<Contract>;
   private query: CollectionReference<Contract> | Query<Contract>;
 
-  @Input() columns!: (string | ColumnInfo)[];
+  @Input() columns!: (contractColumns | ColumnInfo)[];
   public displayColumns: ColumnInfo[] = [];
 
   @Input() displayFormat?: TableType = "";
@@ -46,6 +61,51 @@ export class TableContractsComponent implements OnInit {
 
   public sortFieldName: string;
   public sortDirection: OrderByDirection;
+
+  public defaultWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
+    ["clientName", ""],
+    ["currentDelivered", "1fr"],
+    ["date", "1fr"],
+    ["delivery_dates", "1fr"],
+    ["grade", ""],
+    ["id", ""],
+    ["loads", ""],
+    ["pricePerBushel", ""],
+    ["product", "1fr"],
+    ["quantity", "1fr"],
+    ["status", "1fr"],
+    ["transport", ""],
+  ]);
+
+  public defaultMinWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
+    ["clientName", ""],
+    ["currentDelivered", ""],
+    ["date", ""],
+    ["delivery_dates", ""],
+    ["grade", ""],
+    ["id", ""],
+    ["loads", ""],
+    ["pricePerBushel", ""],
+    ["product", ""],
+    ["quantity", ""],
+    ["status", ""],
+    ["transport", ""],
+  ]);
+
+  public defaultMaxWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
+    ["clientName", ""],
+    ["currentDelivered", ""],
+    ["date", ""],
+    ["delivery_dates", ""],
+    ["grade", ""],
+    ["id", "50px"],
+    ["loads", ""],
+    ["pricePerBushel", ""],
+    ["product", ""],
+    ["quantity", ""],
+    ["status", ""],
+    ["transport", ""],
+  ]);
 
   constructor(
     private db: Firestore,
@@ -79,8 +139,6 @@ export class TableContractsComponent implements OnInit {
       }
       this.displayColumns.push(col);
     });
-
-    console.log(this.displayColumns.some(({ fieldName }) => fieldName === 'date' ))
 
     this.sort(this.displayColumns.some(col => col.fieldName === 'date') ? 'date' : '').then(() => {
       if (this.contracts == null) throw "Contracts are nullish";
@@ -148,6 +206,9 @@ interface FormatOptions {
 }
 
 export interface ColumnInfo {
-  fieldName: string;
+  fieldName: contractColumns;
   width?: string;
+  minWidth?: string;
+  maxWidth?: string;
 }
+

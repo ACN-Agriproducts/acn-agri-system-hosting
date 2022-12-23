@@ -2,10 +2,11 @@
 :host {
     display: inherit;
     height: inherit;
+    width: inherit;
 }
 
 :host:has(mat-paginator) {
-    div:has(table) {
+    #table-wrapper {
         height: calc(100% - 86px) !important;
     }
 }
@@ -16,9 +17,10 @@
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: auto;
+    border-radius: 5px 5px 5px 5px !important;
     height: 100%;
     min-height: 180px;
-    border-radius: 5px 5px 5px 5px !important;
+    width: inherit;
 }
 
 #paginator-wrapper {
@@ -54,9 +56,7 @@ table {
         ::ng-deep {
             *{}
 
-            th {
-                width: fit-content;
-                
+            th {                
                 button {
                     background-color: var(--ion-color-primary-light);
                     color: var(--ion-color-primary);
@@ -178,6 +178,18 @@ table {
                     }
                 }
             }
+        }
+    }
+    
+    ::ng-deep {
+        th, td {
+            padding: 0 .5rem;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            // min-width: 50px;
+            // max-width: 50px; // just set
         }
     }
 }

@@ -5,10 +5,17 @@
 	[rowAction]="openContract" 
 	*ngIf="columns?.length > 0 ?? false"
 >
+	<!-- <ng-template #colgroups>
+		<col 
+			*ngFor="let column of displayColumns"
+			[style.width]="'50px'"
+		>
+	</ng-template> -->
 	<ng-template #headers>
-		<th *ngFor="let column of displayColumns" 
-			[width]="column.width ?? 'fit-content'"
-			[id]="column + '-column'" 
+		<th *ngFor="let column of displayColumns"
+			[style.width]="column.width || defaultWidth.get(column.fieldName) || '1fr'"
+			[style.min-width]="column.minWidth || defaultMinWidth.get(column.fieldName) || '80px'"
+			[style.max-width]="column.maxWidth || defaultMaxWidth.get(column.fieldName) || '250px'"
 			nowrap
 		>
 			<button
@@ -25,25 +32,14 @@
 					arrow_downward
 				</mat-icon>
 			</button>
-			<!-- <ng-container
-				*ngTemplateOutlet="
-					fieldTemplate(column);
-					context: { isHeader: true }
-				"
-			></ng-container>
-			<button mat-icon-button 
-				class="sort-button" 
-				[class.selected]="sortFieldName === column.fieldName" 
-				(click)="sort(column)"
-			>
-				<mat-icon [class.flipped]="sortFieldName === column.fieldName && sortDirection === 'asc'">
-					arrow_downward
-				</mat-icon>
-			</button> -->
 		</th>
 	</ng-template>
 	<ng-template #rows let-row>
-		<td *ngFor="let column of displayColumns">
+		<td *ngFor="let column of displayColumns"
+			[style.width]="column.width || ''"
+			[style.min-width]="column.minWidth || defaultMinWidth.get(column.fieldName) || '80px'"
+			[style.max-width]="column.maxWidth || defaultMaxWidth.get(column.fieldName) || '250px'"
+		>
 			<ng-container 
 				*ngTemplateOutlet="
 					fieldTemplate(column);
