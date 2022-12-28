@@ -91,8 +91,8 @@ export class PricesPage implements OnInit {
       const currentPriceTable: pricesTable = {
         type: 'purchase',
         futurePrice: priceTable.futurePrice,
-        locationNames: Object.keys(priceTable.data),
-        productNames: Object.keys(firstLocation),
+        locationNames: priceTable.columnNames ?? Object.keys(priceTable.data),
+        productNames: priceTable.rowNames ?? Object.keys(firstLocation),
         prices: (new Array<number[]>(Object.keys(firstLocation).length)).fill([]).map(() => new Array(Object.keys(priceTable.data).length)),
       };
       const priceName = priceTable.name;
@@ -300,6 +300,8 @@ export class PricesPage implements OnInit {
       const priceTable: priceTable = {
         name: typeName,
         futurePrice: currentTable.futurePrice,
+        rowNames: currentTable.productNames,
+        columnNames: currentTable.locationNames,
         data: {} 
       };
 
@@ -350,6 +352,8 @@ interface pricesDoc {
 interface priceTable {
   futurePrice: number;
   name: string;
+  columnNames: string[];
+  rowNames: string[];
   data:{
     [location: string]: {
       [ProductType: string]: number;
