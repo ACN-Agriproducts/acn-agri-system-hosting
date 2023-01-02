@@ -79,7 +79,8 @@ export class NewContractPage implements OnInit, OnDestroy {
 
     Product.getProductList(this.db, this.currentCompany).then(list => {
       this.productsList = list
-      });
+      this.contractForm.get("product").setValue(list[0] ?? "");
+    });
 
     this.contractWeight = new Mass(0, this.session.getDefaultUnit());
 
@@ -133,6 +134,10 @@ export class NewContractPage implements OnInit, OnDestroy {
       if(val == 'bushels') {
         this.contractWeight.amount = form.quantity * product.weight;
         this.contractWeight.defaultUnits = 'lbs';
+      }
+      else if(form.quantityUnits == 'bushels') {
+        this.contractWeight.amount = form.quantity;
+        this.contractWeight.defaultUnits = val;
       }
       else {
         this.contractWeight.defaultUnits = val;
