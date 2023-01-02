@@ -29,13 +29,7 @@ export class ContractPrintableComponent implements OnInit {
   }
 
   getProductObject(): Product {
-    console.log(this.productsList?.map(p => p.ref.id));
-    console.log(this.getProduct());
-    console.log(this.productsList?.find(p => p.ref.id ?? p.name == this.getProduct())?.ref.id)
-    return this.productsList?.find(p => {
-      console.log("#" + p.ref.id ?? p.name);
-      return p.ref.id ?? p.name == this.getProduct()
-    });
+    return this.productsList?.find(p => (p.ref.id ?? p.name) == this.getProduct());
   }
 
   getProduct(): string {
