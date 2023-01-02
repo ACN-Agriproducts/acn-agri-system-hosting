@@ -21,7 +21,6 @@ export class DisplayContractComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.weight)
     this.contractForm.quantity = this.weight;
   }
 
