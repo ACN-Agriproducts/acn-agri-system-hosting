@@ -114,7 +114,7 @@ export class NewContractPage implements OnInit, OnDestroy {
     this.contractForm.get('product').valueChanges.subscribe((newProduct: Product) => {
       if(this.contractForm.get('quantityUnits').value == 'bushels') {
         const oldProduct = this.contractForm.value.product as Product;
-        this.contractWeight.amount = this.contractWeight.amount * oldProduct.weight / newProduct.weight;
+        this.contractWeight.amount = this.contractWeight.amount / oldProduct.weight * newProduct.weight;
       }
     });
 
