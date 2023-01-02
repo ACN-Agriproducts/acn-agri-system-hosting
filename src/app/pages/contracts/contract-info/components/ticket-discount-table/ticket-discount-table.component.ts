@@ -7,7 +7,7 @@ import { Ticket } from '@shared/classes/ticket';
   styleUrls: ['./ticket-discount-table.component.scss'],
 })
 export class TicketDiscountTableComponent implements OnInit {
-  @Input() ticketDiscountList: {data: Ticket, discounts: any}[];
+  @Input() ticketDiscountList: { data: Ticket, discounts: any, includeInReport: boolean }[];
 
   constructor() { }
 

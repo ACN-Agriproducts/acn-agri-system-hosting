@@ -49,6 +49,10 @@ export class TruckersFormComponent implements OnInit {
     this.submitting = false;
   }
 
+  getTruckerFormGroup(index: number): FormGroup {
+    return this.truckerForm.get([index]) as FormGroup;
+  }
+
   private newTruckerGroup(): FormGroup {
     return this.fb.group({
       trucker: ['', [Validators.required, this.truckerInListValidator()]],

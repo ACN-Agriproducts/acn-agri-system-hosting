@@ -70,7 +70,7 @@
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture | number:'1.1-1'}}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight.subtract(ticket.data.getNet()).get()}}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight.get() }}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.damage || 0 | number:'1.1-1' }}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ 0 | number:'1.1-1' }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ 0 | number:'1.1-1' }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ contract.pricePerBushel | currency }}</td>
