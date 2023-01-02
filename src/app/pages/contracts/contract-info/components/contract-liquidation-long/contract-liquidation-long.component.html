@@ -66,20 +66,20 @@
         <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.data.contractID }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.gross }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.tare }}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.gross - ticket.data.tare }}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.getNet().get() }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture | number:'1.1-1'}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight - (ticket.data.gross - ticket.data.tare )}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight }}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight.subtract(ticket.data.getNet()).get()}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight.get() }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.damage || 0 | number:'1.1-1' }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ 0 | number:'1.1-1' }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ contract.pricePerBushel | currency }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ contract.pricePerBushel | currency }}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right'>{{ contract.pricePerBushel * ticket.data.dryWeight / contract.productInfo.weight | currency }}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ contract.pricePerBushel * ticket.data.dryWeight.get() / contract.productInfo.weight | currency }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.discounts.infested | currency }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.discounts.inspection | currency }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>
-            {{ contract.pricePerBushel * ticket.data.dryWeight / contract.productInfo.weight - ticket.discounts.infested - ticket.discounts.inspection | currency }}
+            {{ contract.pricePerBushel * ticket.data.dryWeight.get() / contract.productInfo.weight - ticket.discounts.infested - ticket.discounts.inspection | currency }}
         </td>
     </tr>
     <tr>

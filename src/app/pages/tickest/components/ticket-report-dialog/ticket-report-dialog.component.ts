@@ -30,7 +30,7 @@ export class TicketReportDialogComponent implements OnInit {
   public endId: number;
 
   public ticketList: Ticket[];
-  public productTicketLists: any = {};
+  public productTicketLists: {[produt: string]: Ticket[]} = {};
   public contractList: any = {};
   public transportList: any = {};
   public clientList: any = {};
