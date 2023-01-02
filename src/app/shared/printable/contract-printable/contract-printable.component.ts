@@ -29,7 +29,7 @@ export class ContractPrintableComponent implements OnInit {
   }
 
   getProductObject(): Product {
-    return this.productsList?.find(p => (p.ref.id ?? p.name) == this.getProduct());
+    return this.productsList?.find(p => (p.ref?.id ?? p.name) == this.getProduct()) ?? (this.contractForm as Contract).product;
   }
 
   getProduct(): string {
