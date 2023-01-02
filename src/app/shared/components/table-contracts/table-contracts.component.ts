@@ -140,7 +140,7 @@ export class TableContractsComponent implements OnInit {
       this.displayColumns.push(col);
     });
 
-    this.sort(this.displayColumns.some(col => col.fieldName === 'date') ? 'date' : '').then(() => {
+    this.sort(this.displayColumns.find(col => col.fieldName === 'date')).then(() => {
       if (this.contracts == null) throw "Contracts are nullish";
       this.ready = true;
     })
@@ -153,27 +153,30 @@ export class TableContractsComponent implements OnInit {
 
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
 
-  public sort(column: string | ColumnInfo): Promise<void> {
-    if (!column) return this.getContracts();
-    const fieldName = typeof column === 'string' ? column : column.fieldName;
+  // TODO: don't need the string type in this method anymore
+  public sort(column: ColumnInfo): Promise<void> {
+    if (!column) {
+      this.sortConstraints = [limit(this.steps)];
+      return this.getContracts();
+    }
 
-    if (this.sortFieldName == fieldName) {
+    if (this.sortFieldName == column.fieldName) {
       this.sortDirection = (this.sortDirection == "asc" ? "desc" : "asc");
     }
     else {
       this.sortDirection = "desc";
-      this.sortFieldName = fieldName;
+      this.sortFieldName = column.fieldName;
     }
 
-    this.sortConstraints = [orderBy(fieldName, this.sortDirection)];
+    this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
     if (this.steps) this.sortConstraints.push(limit(this.steps));
 
     return this.getContracts();
   }
 
   public openContract(contract: Contract): void {
-    // salesContracts | purchaseContracts -> sales | purchase
     const contractType = contract.ref.parent.id.slice(0, -9);
+    // salesContracts | purchaseContracts -> sales | purchase
     this.navController.navigateForward(`dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`);
   }
 

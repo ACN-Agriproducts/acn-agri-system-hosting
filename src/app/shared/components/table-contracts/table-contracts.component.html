@@ -1,16 +1,10 @@
 
 <app-table 
 	[dataList]="contracts" 
-	[ready]="ready"
 	[rowAction]="openContract" 
-	*ngIf="columns?.length > 0 ?? false"
+	[displayFormat]="displayFormat" 
+	*ngIf="(columns?.length ?? 0) > 0 && ready"
 >
-	<!-- <ng-template #colgroups>
-		<col 
-			*ngFor="let column of displayColumns"
-			[style.width]="'50px'"
-		>
-	</ng-template> -->
 	<ng-template #headers>
 		<th *ngFor="let column of displayColumns"
 			[style.width]="column.width || defaultWidth.get(column.fieldName) || '1fr'"

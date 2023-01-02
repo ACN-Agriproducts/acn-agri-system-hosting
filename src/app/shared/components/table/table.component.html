@@ -1,11 +1,6 @@
 
 <div id="table-wrapper">
-	<table *ngIf="ready; else loading">
-		<!-- <colgroup>
-			<ng-container
-				*ngTemplateOutlet="colgroups"
-			></ng-container>
-		</colgroup> -->
+	<table>
 		<thead>
 			<tr>
 				<ng-container
@@ -16,7 +11,7 @@
 		<tbody>
 			<ng-container *ngFor="let data of dataList">
 				<ng-container *ngIf="data | async as snapshot; else loading">
-					<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+					<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
 						<ng-container
 							*ngTemplateOutlet="
 								rows;
@@ -30,15 +25,27 @@
 	</table>
 </div>
 
-<div id="paginator-wrapper">
-	<mat-paginator
-		[pageSizeOptions]="[5, 10, 20, 30, 40]"
-	></mat-paginator>
+<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteDocs($event)" *ngIf="displayFormat === 'infiniteScroll'">
+	<ion-infinite-scroll-content
+		loadingSpinner="bubbles"
+		loadingText="Loading more data...">
+	</ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
+<div id="paginator-wrapper" *ngIf="displayFormat === 'pagination'">
+	<ng-container *ngFor="let data of dataList">
+		<ng-container *ngIf="data | async as snapshot; else loading">
+			<mat-paginator
+				[pageSizeOptions]="[5, 10, 20, 30, 40]"
+				[length]="snapshot.docs.length"
+			></mat-paginator>
+		</ng-container>
+	</ng-container>
 </div>
 
 <ng-template #loading>
 	<td colspan="100%">
-		<div>
+		<div id="spinner-wrapper">
 			<mat-spinner></mat-spinner>
 		</div>
 	</td>
