@@ -1,6 +1,6 @@
-import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { QuerySnapshot } from '@angular/fire/firestore';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { NavController } from '@ionic/angular';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ export class TableComponent implements OnInit {
   @Input() rowAction?: Function;
   @Input() displayFormat?: string;
 
-  @Output() handlePage: EventEmitter<PageEvent | Event> = new EventEmitter<PageEvent | Event>();
+  @Output() handleChange: EventEmitter<PageEvent | Event> = new EventEmitter<PageEvent | Event>();
 
   @ContentChild('headers') headers!: TemplateRef<any>;
   @ContentChild('rows') rows!: TemplateRef<any>;
@@ -30,7 +30,7 @@ export class TableComponent implements OnInit {
 
   }
 
-  // public passPageEvent(event: PageEvent | Event) {
-  //   this.handlePage.emit(event);
-  // }
+  public handlePage(event: PageEvent) {
+    this.handleChange.emit(event);
+  }
 }

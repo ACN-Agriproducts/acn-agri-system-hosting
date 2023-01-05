@@ -3,7 +3,7 @@ import { CollectionReference, Firestore, getDocs, limit, orderBy, Query, query, 
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
-import { OrderByDirection, QuerySnapshot } from 'firebase/firestore';
+import { getCountFromServer, OrderByDirection, QuerySnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { PageEvent } from '@angular/material/paginator';
 
@@ -145,8 +145,10 @@ export class TableContractsComponent implements OnInit {
     this.changeSort();
     this.changeQuery();
     this.loadContracts()
-    .then(() => {
+    .then(async () => {
       if (this.contracts == null) throw "Contracts are nullish";
+
+      this.contractCount = (await getCountFromServer(this.collRef)).data().count;
       this.ready = true;
     })
     .catch(error => {
@@ -154,37 +156,9 @@ export class TableContractsComponent implements OnInit {
       this.snack.open(error, "error");
       console.error(error);
     });
-
-    // this.sort(this.displayColumns.find(col => col.fieldName === 'date')).then(() => {
-    //   if (this.contracts == null) throw "Contracts are nullish";
-    //   this.ready = true;
-    // })
-    // .catch(error => {
-    //   this.snack.open(error, "error");
-    //   console.error(error);
-    //   this.ready = false;
-    // });
   }
 
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
-
-  public sort(column: ColumnInfo): Promise<void> {
-    if (!column) {
-      this.sortConstraints = [limit(this.steps)];
-      return this.getContracts();
-    }
-
-    if (this.sortFieldName == column.fieldName) {
-      this.sortDirection = (this.sortDirection == "asc" ? "desc" : "asc");
-    }
-    else {
-      this.sortDirection = "desc";
-      this.sortFieldName = column.fieldName;
-    }
-
-    this.sortConstraints = [orderBy(column.fieldName, this.sortDirection), limit(this.steps)];
-    return this.getContracts();
-  }
 
   public openContract(contract: Contract): void {
     const contractType = contract.ref.parent.id.slice(0, -9);
@@ -192,39 +166,7 @@ export class TableContractsComponent implements OnInit {
     this.navController.navigateForward(`dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`);
   }
 
-  public async getContracts(): Promise<void> {
-    this.query = query(
-      this.collRef, 
-      ...this.queryConstraints, 
-      ...this.sortConstraints
-    );
-    this.contracts = [getDocs(this.query.withConverter(Contract.converter))];
-  }
-
-  public async getPage1(page: number | PageEvent): Promise<void> {
-    console.log(page)
-    
-    const pageNumber = (typeof page === 'number') ? page : page.pageIndex;
-    if (pageNumber < 1) return;
-
-    console.log(this.contracts)
-    const previousQuerySnapshot = await this.contracts[pageNumber - 1];
-    const lastSnapshot = previousQuerySnapshot.docs[previousQuerySnapshot.docs.length - 1];
-
-    this.contracts.push(getDocs(query(this.query, startAfter(lastSnapshot))));
-  }
-
-
-
-
-
-
-
-
-
-
-
-  public changeSort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')) {
+  public changeSort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): void {
     if (!column) {
       return;
     }
@@ -240,17 +182,20 @@ export class TableContractsComponent implements OnInit {
     this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
   }
 
-  public changeQuery(event?: PageEvent | Event) {
+  public changeQuery(event?: PageEvent | Event): void {
     if (!event) {
       this.queryConstraints = [limit(this.steps)];
       return;
     }
 
-    console.log(this.contracts);
-
     if (this.displayFormat === 'pagination') {
-      this.queryConstraints = [limit((event as PageEvent).pageSize)];
+      const pageEvent = event as PageEvent;
+      console.log(pageEvent.pageIndex, pageEvent.previousPageIndex);
+
+      this.queryConstraints = [limit(pageEvent.pageSize)];
     }
+
+    // TODO: changing query for infiniteScroll
   }
 
   public async loadContracts(): Promise<void> {
@@ -268,13 +213,13 @@ export class TableContractsComponent implements OnInit {
     }
   }
 
-  public handleSort(column: ColumnInfo) {
+  public handleSort(column: ColumnInfo): void {
     console.log("handle sort", column);
     this.changeSort(column);
     this.loadContracts();
   }
 
-  public handlePage(event: PageEvent | Event) {
+  public handleChange(event: PageEvent | Event): void {
     console.log("handle page", event);
     this.changeQuery(event);
     this.loadContracts();

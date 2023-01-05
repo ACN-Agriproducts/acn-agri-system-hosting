@@ -25,20 +25,23 @@
 	</table>
 </div>
 
-<ion-infinite-scroll threshold="200px" (ionInfinite)="handlePage.emit($event)" *ngIf="displayFormat === 'infiniteScroll'">
+<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
+	threshold="200px" 
+	(ionInfinite)="handleChange.emit($event)" 
+>
 	<ion-infinite-scroll-content
 		loadingSpinner="bubbles"
-		loadingText="Loading more data...">
-	</ion-infinite-scroll-content>
+		loadingText="Loading more data..."
+	></ion-infinite-scroll-content>
 </ion-infinite-scroll>
 
 <div id="paginator-wrapper" *ngIf="displayFormat === 'pagination'">
 	<ng-container *ngFor="let data of dataList">
 		<ng-container *ngIf="data | async as snapshot; else loading">
-			<mat-paginator
+			<mat-paginator #paginator
 				[pageSizeOptions]="[5, 10, 20, 30, 40]" 
 				[pageSize]="snapshot.docs.length" 
-				(page)="handlePage.emit($event)" 
+				(page)="handlePage($event)" 
 				[length]="dataCount"
 			></mat-paginator>
 		</ng-container>

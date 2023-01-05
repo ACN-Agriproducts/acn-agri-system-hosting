@@ -5,7 +5,7 @@
 	[dataCount]="contractCount"
 	[rowAction]="openContract" 
 	[displayFormat]="displayFormat" 
-	(handlePage)="handlePage($event)"
+	(handleChange)="handleChange($event)"
 	*ngIf="(columns?.length ?? 0) > 0 && ready"
 >
 	<ng-template #headers>
