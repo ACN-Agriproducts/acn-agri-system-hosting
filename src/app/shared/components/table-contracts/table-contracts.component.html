@@ -1,8 +1,11 @@
 
+<!-- [handlePage]="displayFormat === 'pagination' ? handlePage : infiniteDocs" -->
 <app-table 
 	[dataList]="contracts" 
+	[dataCount]="contractCount"
 	[rowAction]="openContract" 
 	[displayFormat]="displayFormat" 
+	(handlePage)="handlePage($event)"
 	*ngIf="(columns?.length ?? 0) > 0 && ready"
 >
 	<ng-template #headers>
@@ -14,7 +17,7 @@
 		>
 			<button
 				[class.selected]="sortFieldName === column.fieldName"
-				(click)="sort(column)"
+				(click)="handleSort(column)"
 			>
 				<ng-container
 					*ngTemplateOutlet="

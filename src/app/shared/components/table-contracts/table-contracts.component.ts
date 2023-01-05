@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, Firestore, limit, orderBy, Query, query, QueryConstraint } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
-import { getDocs, OrderByDirection, QuerySnapshot, startAfter } from 'firebase/firestore';
+import { OrderByDirection, QuerySnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
+import { PageEvent } from '@angular/material/paginator';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -54,10 +55,11 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('transport') transport: TemplateRef<any>;
   
   public ready: boolean = false;
-  public contracts: Promise<QuerySnapshot<Contract>>[];
+  public contracts: Promise<QuerySnapshot<Contract>>[] = [];
   public currentCompany: string;
   public sortConstraints: QueryConstraint[] = [];
   public queryConstraints: QueryConstraint[] = [];
+  public contractCount: number = 0;
 
   public sortFieldName: string;
   public sortDirection: OrderByDirection;
@@ -140,20 +142,32 @@ export class TableContractsComponent implements OnInit {
       this.displayColumns.push(col);
     });
 
-    this.sort(this.displayColumns.find(col => col.fieldName === 'date')).then(() => {
+    this.changeSort();
+    this.changeQuery();
+    this.loadContracts()
+    .then(() => {
       if (this.contracts == null) throw "Contracts are nullish";
       this.ready = true;
     })
     .catch(error => {
+      this.ready = false;
       this.snack.open(error, "error");
       console.error(error);
-      this.ready = false;
     });
+
+    // this.sort(this.displayColumns.find(col => col.fieldName === 'date')).then(() => {
+    //   if (this.contracts == null) throw "Contracts are nullish";
+    //   this.ready = true;
+    // })
+    // .catch(error => {
+    //   this.snack.open(error, "error");
+    //   console.error(error);
+    //   this.ready = false;
+    // });
   }
 
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
 
-  // TODO: don't need the string type in this method anymore
   public sort(column: ColumnInfo): Promise<void> {
     if (!column) {
       this.sortConstraints = [limit(this.steps)];
@@ -168,9 +182,7 @@ export class TableContractsComponent implements OnInit {
       this.sortFieldName = column.fieldName;
     }
 
-    this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
-    if (this.steps) this.sortConstraints.push(limit(this.steps));
-
+    this.sortConstraints = [orderBy(column.fieldName, this.sortDirection), limit(this.steps)];
     return this.getContracts();
   }
 
@@ -189,13 +201,92 @@ export class TableContractsComponent implements OnInit {
     this.contracts = [getDocs(this.query.withConverter(Contract.converter))];
   }
 
-  public async getPage(page: number): Promise<void> {
-    if (page < 1) return;
+  public async getPage1(page: number | PageEvent): Promise<void> {
+    console.log(page)
+    
+    const pageNumber = (typeof page === 'number') ? page : page.pageIndex;
+    if (pageNumber < 1) return;
 
-    const previousQuerySnapshot = await this.contracts[page - 1];
+    console.log(this.contracts)
+    const previousQuerySnapshot = await this.contracts[pageNumber - 1];
     const lastSnapshot = previousQuerySnapshot.docs[previousQuerySnapshot.docs.length - 1];
 
     this.contracts.push(getDocs(query(this.query, startAfter(lastSnapshot))));
+  }
+
+
+
+
+
+
+
+
+
+
+
+  public changeSort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')) {
+    if (!column) {
+      return;
+    }
+
+    if (this.sortFieldName == column.fieldName) {
+      this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
+    }
+    else {
+      this.sortDirection = 'desc';
+      this.sortFieldName = column.fieldName;
+    }
+
+    this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
+  }
+
+  public changeQuery(event?: PageEvent | Event) {
+    if (!event) {
+      this.queryConstraints = [limit(this.steps)];
+      return;
+    }
+
+    console.log(this.contracts);
+
+    if (this.displayFormat === 'pagination') {
+      this.queryConstraints = [limit((event as PageEvent).pageSize)];
+    }
+  }
+
+  public async loadContracts(): Promise<void> {
+    this.query = query(
+      this.collRef, 
+      ...this.sortConstraints, 
+      ...this.queryConstraints
+    );
+
+    if (this.displayFormat === 'pagination') {
+      this.contracts = [getDocs(this.query.withConverter(Contract.converter))];
+    }
+    else if (this.displayFormat === 'infiniteScroll') {
+      this.contracts.push(getDocs(this.query.withConverter(Contract.converter)));
+    }
+  }
+
+  public handleSort(column: ColumnInfo) {
+    console.log("handle sort", column);
+    this.changeSort(column);
+    this.loadContracts();
+  }
+
+  public handlePage(event: PageEvent | Event) {
+    console.log("handle page", event);
+    this.changeQuery(event);
+    this.loadContracts();
+  }
+
+  public async infiniteDocs(event: any) {
+    console.log("infinite docs", event);
+
+    // this.dataList.getNext(snapshot => {
+    //   event.target.complete();
+    //   this.infiniteScroll.disabled = snapshot.docs.length < this.contractStep;
+    // });
   }
 }
 

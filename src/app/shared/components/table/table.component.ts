@@ -1,7 +1,8 @@
-import { Component, ContentChild, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { QuerySnapshot } from '@angular/fire/firestore';
+import { PageEvent } from '@angular/material/paginator';
 import { NavController } from '@ionic/angular';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
-import { QuerySnapshot } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -11,8 +12,11 @@ import { Observable } from 'rxjs';
 })
 export class TableComponent implements OnInit {
   @Input() dataList!: (Promise<QuerySnapshot<FirebaseDocInterface>> | Observable<QuerySnapshot<FirebaseDocInterface>>)[];
-  @Input() rowAction?: any;
+  @Input() dataCount!: number;
+  @Input() rowAction?: Function;
   @Input() displayFormat?: string;
+
+  @Output() handlePage: EventEmitter<PageEvent | Event> = new EventEmitter<PageEvent | Event>();
 
   @ContentChild('headers') headers!: TemplateRef<any>;
   @ContentChild('rows') rows!: TemplateRef<any>;
@@ -26,10 +30,7 @@ export class TableComponent implements OnInit {
 
   }
 
-  public async infiniteDocs(event) {
-    // this.dataList.getNext(snapshot => {
-    //   event.target.complete();
-    //   this.infiniteScroll.disabled = snapshot.docs.length < this.contractStep;
-    // });
-  }
+  // public passPageEvent(event: PageEvent | Event) {
+  //   this.handlePage.emit(event);
+  // }
 }
