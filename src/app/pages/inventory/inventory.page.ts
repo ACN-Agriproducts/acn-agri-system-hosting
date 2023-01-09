@@ -8,6 +8,7 @@ import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 @Component({
   selector: 'app-inventory',
@@ -26,35 +27,29 @@ export class InventoryPage implements OnInit, OnDestroy{
 
   constructor(
     private db: Firestore,
-    private store: Storage,
     private navController: NavController,
     private modalController: ModalController,
     private popoverController: PopoverController,
-    private localStorage: Storage,
-    private fns: Functions
-  ) { 
-    this.store.get('currentCompany').then(async val => {
-      this.currentCompany = val;
-      this.currentPlantName = await this.store.get("currentPlant");
-
-      var tempSub;
-      tempSub = Plant.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
-        this.plantList = val;
-      })
-      this.currentSubs.push(tempSub);
-
-      tempSub = Product.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
-        this.productList = val;
-      })
-      this.currentSubs.push(tempSub);
-    })
-  }
+    private fns: Functions,
+    private session: SessionInfo
+  ) {}
 
   ngOnInit() {
-    this.localStorage.get('user').then(data => {
-      this.dataUser = data;
-      this.permissions = data.currentPermissions;
-    });
+    this.dataUser = this.session.getUser();
+    this.permissions = this.session.getPermissions();
+    this.currentCompany = this.session.getCompany();
+    this.currentPlantName = this.session.getPlant();
+
+    var tempSub;
+    tempSub = Plant.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
+      this.plantList = val;
+    })
+    this.currentSubs.push(tempSub);
+
+    tempSub = Product.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
+      this.productList = val;
+    })
+    this.currentSubs.push(tempSub);
   }
 
   ngOnDestroy() {
