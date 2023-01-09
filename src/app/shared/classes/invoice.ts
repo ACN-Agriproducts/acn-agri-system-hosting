@@ -148,6 +148,6 @@ export class contactInfo {
         this.state = data.state;
         this.street = data.street;
         this.zip = data.zip;
-        this.other = data.other;
+        this.other = data.other ?? null;
     }
 }
