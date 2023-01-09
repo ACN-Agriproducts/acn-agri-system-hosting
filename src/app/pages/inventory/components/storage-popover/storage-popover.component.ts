@@ -203,4 +203,31 @@ export class StoragePopoverComponent implements OnInit {
 
     this.popoverController.dismiss();
   }
+
+  public archiveButton(event: any) { 
+    runTransaction(this.plantRef.firestore, async transaction => {
+      const plant = (await transaction.get(this.plantRef)).data();
+      const beforeInv = plant.getRawInventory();
+      const inventory = plant.getRawInventory();
+
+      inventory[this.storageId].archived = true;
+
+      const changes = [{
+        type: 'Inventory archived',
+        tank: inventory[this.storageId].name,
+      }];
+
+      const logRef = doc(collection(this.plantRef, 'storageLogs'));
+      transaction.set(logRef, {
+        before: beforeInv,
+        after: inventory,
+        updatedBy: '',
+        updatedOn: serverTimestamp(),
+        change: changes,
+        updateType: 'Manual'
+      });
+
+      return transaction.update(this.plantRef, {inventory, lastStorageUpdate: logRef});
+    });
+  }
 }
