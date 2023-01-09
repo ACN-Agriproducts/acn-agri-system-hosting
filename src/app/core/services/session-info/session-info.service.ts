@@ -47,6 +47,7 @@ export class SessionInfo {
       return this.company = val;
       
     }).then(async company => {
+      if(!company) return; 
       let unit = await this.localStorage.get('companyUnit');
       if(!unit) {
         unit = (await Company.getCompany(this.db, company)).defaultUnit;
