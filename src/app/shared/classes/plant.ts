@@ -101,13 +101,15 @@ export class Plant extends FirebaseDocInterface {
 }
 
 export class Inventory {
+    archived: boolean;
     current: number;
     max: number;
     name: string;
     product: DocumentReference;
-    type: string
+    type: string;
 
     constructor(inv: any) {
+        this.archived = inv.archived ?? false;
         this.current = inv.current;
         this.max = inv.max;
         this.name = inv.name;
