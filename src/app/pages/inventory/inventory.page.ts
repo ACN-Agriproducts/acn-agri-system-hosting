@@ -106,7 +106,6 @@ export class InventoryPage implements OnInit, OnDestroy{
   }
 
   public onContextMenu(event: MouseEvent) {
-    console.log(this.contextMenu);
     event.preventDefault();
     this.InvMenuTrigger["nativeElement"].style.left =  event.clientX + 'px';
     this.InvMenuTrigger["nativeElement"].style.top = event.clientY + 'px';
