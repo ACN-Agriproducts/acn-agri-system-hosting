@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,7 @@ import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-inventory',
@@ -24,6 +25,9 @@ export class InventoryPage implements OnInit, OnDestroy{
   public currentSubs: Subscription[] = [];
   public dataUser: any;
   public permissions: any;
+
+  @ViewChild('InvMenuTrigger') InvMenuTrigger: HTMLElement;
+  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
 
   constructor(
     private db: Firestore,
@@ -99,6 +103,15 @@ export class InventoryPage implements OnInit, OnDestroy{
 
   public updateProductInv(): void {
     httpsCallable(this.fns, 'helperFunctions-calculateProductValues')({company: this.currentCompany});
+  }
+
+  public onContextMenu(event: MouseEvent) {
+    console.log(this.contextMenu);
+    event.preventDefault();
+    this.InvMenuTrigger["nativeElement"].style.left =  event.clientX + 'px';
+    this.InvMenuTrigger["nativeElement"].style.top = event.clientY + 'px';
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
   }
 
 }
