@@ -30,9 +30,21 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+}
 
-    mat-paginator {
-        margin: 15px;
+#custom-paginator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 350px;
+    font-size: 0.9em;
+    background-color: white;
+    padding: 0 15px;
+    margin: 15px;
+
+    mat-form-field {
+        width: 60px;
+        margin-left: 5px;
     }
 }
 

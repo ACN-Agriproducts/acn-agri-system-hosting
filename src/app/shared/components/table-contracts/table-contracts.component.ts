@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, Firestore, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter } from '@angular/fire/firestore';
+import { CollectionReference, endBefore, Firestore, getDocs, limit, limitToLast, orderBy, Query, query, QueryConstraint, startAfter } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { getCountFromServer, OrderByDirection, QuerySnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { PageEvent } from '@angular/material/paginator';
+import { MatSelectChange } from '@angular/material/select';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -182,20 +183,47 @@ export class TableContractsComponent implements OnInit {
     this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
   }
 
-  public changeQuery(event?: PageEvent | Event): void {
-    if (!event) {
+  public async changeQuery(change?: number | Event): Promise<void> {
+    if (!change) {
       this.queryConstraints = [limit(this.steps)];
       return;
     }
 
-    if (this.displayFormat === 'pagination') {
-      const pageEvent = event as PageEvent;
-      console.log(pageEvent.pageIndex, pageEvent.previousPageIndex);
+    // check what type of event it is
+    if (this.displayFormat === 'pagination' && typeof change === 'number') {      
+      if (change === -1) {
+        console.log("previous page");
 
-      this.queryConstraints = [limit(pageEvent.pageSize)];
+        const currentSnapshot = await this.contracts[0];
+        const firstDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
+
+        // console.log(firstDoc.data())
+
+        this.queryConstraints = [endBefore(firstDoc)];
+      }
+      else if (change === 1) {
+        console.log("next page");
+
+        const currentSnapshot = await this.contracts[0];
+        const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
+
+        // console.log(lastDoc.data());
+        
+        this.queryConstraints = [startAfter(lastDoc)];
+      }
+      else {
+        console.log("change page size");
+
+        this.steps = change;
+      }
+      this.queryConstraints.push(limit(this.steps));
     }
+    else if (this.displayFormat === 'infiniteScroll' && change instanceof Event) {
+      console.log("this is an infiniteScroll event");
 
-    // TODO: changing query for infiniteScroll
+
+      this.infiniteDocs(change);
+    }
   }
 
   public async loadContracts(): Promise<void> {
@@ -207,6 +235,8 @@ export class TableContractsComponent implements OnInit {
 
     if (this.displayFormat === 'pagination') {
       this.contracts = [getDocs(this.query.withConverter(Contract.converter))];
+
+      console.log((await this.contracts[0]).docs.map(doc => doc.data()));
     }
     else if (this.displayFormat === 'infiniteScroll') {
       this.contracts.push(getDocs(this.query.withConverter(Contract.converter)));
@@ -214,19 +244,20 @@ export class TableContractsComponent implements OnInit {
   }
 
   public handleSort(column: ColumnInfo): void {
-    console.log("handle sort", column);
     this.changeSort(column);
     this.loadContracts();
   }
 
-  public handleChange(event: PageEvent | Event): void {
-    console.log("handle page", event);
-    this.changeQuery(event);
+  public async handleChange(event: number | Event): Promise<void> {
+    await this.changeQuery(event);
     this.loadContracts();
   }
 
-  public async infiniteDocs(event: any) {
+  public async infiniteDocs(event: any): Promise<void> {
     console.log("infinite docs", event);
+    event.target.complete();
+
+    // if no more contracts, this.infiniteScroll.disabled = snapshot.docs.length < this.contractStep;
 
     // this.dataList.getNext(snapshot => {
     //   event.target.complete();

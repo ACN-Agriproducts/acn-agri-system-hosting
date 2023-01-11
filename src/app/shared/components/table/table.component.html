@@ -27,7 +27,7 @@
 
 <ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
 	threshold="200px" 
-	(ionInfinite)="handleChange.emit($event)" 
+	(ionInfinite)="emitChange($event)" 
 >
 	<ion-infinite-scroll-content
 		loadingSpinner="bubbles"
@@ -36,16 +36,39 @@
 </ion-infinite-scroll>
 
 <div id="paginator-wrapper" *ngIf="displayFormat === 'pagination'">
-	<ng-container *ngFor="let data of dataList">
+	<!-- PREV STUFF -->
+	<!-- <ng-container *ngFor="let data of dataList">
 		<ng-container *ngIf="data | async as snapshot; else loading">
 			<mat-paginator #paginator
 				[pageSizeOptions]="[5, 10, 20, 30, 40]" 
 				[pageSize]="snapshot.docs.length" 
-				(page)="handlePage($event)" 
+				(page)="emitChange($event)" 
 				[length]="dataCount"
 			></mat-paginator>
 		</ng-container>
-	</ng-container>
+	</ng-container> -->
+
+	<div id="custom-paginator">
+		<div>
+			Items per page:
+			<mat-form-field>
+				<mat-select (selectionChange)="emitChange($event.value)" [value]="steps | async">
+					<mat-option *ngFor="let size of [5, 10, 20, 30, 40]" [value]="size">
+						{{ size }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		1 - 10 of 229
+		<div>
+			<button mat-icon-button (click)="emitChange(-1)" [disabled]="">
+				<mat-icon>keyboard_arrow_left</mat-icon>
+			</button>
+			<button mat-icon-button (click)="emitChange(1)">
+				<mat-icon>keyboard_arrow_right</mat-icon>
+			</button>
+		</div>
+	</div>
 </div>
 
 <ng-template #loading>
