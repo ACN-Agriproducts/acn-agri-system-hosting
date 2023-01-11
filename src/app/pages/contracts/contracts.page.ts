@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 import { Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
-import { WeightUnit } from '@shared/classes/unit';
+import { Mass } from '@shared/classes/mass';
 
 
 @Component({
@@ -178,28 +178,20 @@ export class ContractsPage implements OnInit, AfterViewInit, OnDestroy {
     await popover.present();
   }
 
-  public toUnit(pounds: number, contract: Contract): WeightUnit {
-    const unit =  new WeightUnit(pounds, 'lb');
-    unit.defineBushels(contract.productInfo.weight);
-    return unit;
-  }
-
   public getDeliveredTooltip(contract: Contract): string {
-    const unit =  new WeightUnit(contract.currentDelivered, 'lb');
-    unit.defineBushels(contract.productInfo.weight);
+    const weight = contract.currentDelivered;
 
-    return `${unit.get('lb').toFixed(3)} lbs
-    ${unit.get('bu').toFixed(3)} bu
-    ${unit.get('t').toFixed(3)} mTon`
+    return `${weight.getMassInUnit('lbs').toFixed(3)} lbs
+    ${weight.getBushelWeight(contract.productInfo).toFixed(3)} bu
+    ${weight.getMassInUnit('mTon').toFixed(3)} mTon`
   }
 
   public getQuantityTooltip(contract: Contract): string {
-    const unit =  new WeightUnit(contract.quantity, 'lb');
-    unit.defineBushels(contract.productInfo.weight);
+    const weight = contract.quantity;
 
-    return `${unit.get('lb').toFixed(3)} lbs
-    ${unit.get('bu').toFixed(3)} bu
-    ${unit.get('t').toFixed(3)} mTon`
+    return `${weight.getMassInUnit('lbs').toFixed(3)} lbs
+    ${weight.getBushelWeight(contract.productInfo).toFixed(3)} bu
+    ${weight.getMassInUnit('mTon').toFixed(3)} mTon`
   }
 
   ngOnDestroy(): void {

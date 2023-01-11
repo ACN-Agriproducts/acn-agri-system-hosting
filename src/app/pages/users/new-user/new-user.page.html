@@ -79,7 +79,7 @@
                     <ion-item matTooltipClass="tooltip-white" [matTooltip]="module.label" lines="none"
                       *ngFor="let module of item.module;" [class.main]="module.main">
                       <ion-label>{{module.label}}</ion-label>
-                      <ion-checkbox slot="start" formControlName='{{module.controlName}}'></ion-checkbox>
+                      <ion-checkbox slot="start" [formControlName]="module.controlName"></ion-checkbox>
                       <!-- <ion-icon slot="end" color="dark" [name]="entry.icon"></ion-icon> -->
                     </ion-item>
                   </div>

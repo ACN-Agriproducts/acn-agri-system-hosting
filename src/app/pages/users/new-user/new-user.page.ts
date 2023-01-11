@@ -14,7 +14,15 @@ import { User } from '@shared/classes/user';
   styleUrls: ['./new-user.page.scss'],
 })
 export class NewUserPage implements OnInit {
-  public privilege = [
+  public privilege: {
+    section: string,
+    module: {
+      label: string,
+      controlName: string,
+      main?: boolean,
+      icon?: string
+    }[]
+  }[] = [
     {
       section: 'tickets',
       module: [
