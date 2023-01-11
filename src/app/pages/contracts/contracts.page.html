@@ -12,9 +12,9 @@
         </ion-segment>
     </ion-toolbar>
     <ion-toolbar>
-        <ion-segment class="ion-justify-content-start" value="active,closed,pending,canceled"
+        <ion-segment class="ion-justify-content-start" value="active,closed,pending,cancelled"
             (ionChange)="segmentChanged($event)">
-            <ion-segment-button value="active,closed,pending,canceled">
+            <ion-segment-button value="active,closed,pending,cancelled">
                 <ion-label>All</ion-label>
             </ion-segment-button>
             <ion-segment-button value="active">
@@ -144,7 +144,7 @@
                     <ion-item lines="none">
                         <ion-text class="item-status" [class.pending]="item.status === 'pending'"
                             [class.active]="item.status === 'active'" [class.close]="item.status === 'closed'"
-                            [class.cancel]="item.status === 'canceled'">{{item.status}}
+                            [class.cancel]="item.status === 'cancelled'">{{item.status}}
                         </ion-text>
                     </ion-item>
                     <ion-item lines="none">
