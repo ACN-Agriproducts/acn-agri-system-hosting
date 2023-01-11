@@ -65,7 +65,7 @@ export class SessionInfo {
       this.user = val;
     }));
 
-    promises.push(this.localStorage.get('user').then(val => {
+    promises.push(this.localStorage.get('userUnit').then(val => {
       this.userUnit = val;
     }));
 

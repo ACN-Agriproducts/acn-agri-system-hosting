@@ -294,6 +294,6 @@ enum status {
     pending = 'pending',
     active = 'active',
     closed = 'closed',
-    canceled = 'canceled'
+    cancelled = 'cancelled'
 }
 
