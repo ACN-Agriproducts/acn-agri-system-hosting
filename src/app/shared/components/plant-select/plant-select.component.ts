@@ -10,14 +10,22 @@ import { Plant } from '@shared/classes/plant';
 })
 export class PlantSelectComponent implements OnInit {
   public currentPlant: string;
+  public plantListPromise: Promise<Plant[]>;
+  public isMenuOpen: boolean;
 
   constructor(
-    private session: SessionInfo,
+    public session: SessionInfo,
     private db: Firestore
   ) { }
 
   ngOnInit() {
     this.currentPlant = this.session.getPlant();
-    Plant.getPlantList(this.db, this.session.getCompany());
+    this.plantListPromise = Plant.getPlantList(this.db, this.session.getCompany());
+    this.isMenuOpen = false;
+  }
+
+  setPlant(newPlant: string) {
+    this.session.set('currentPlant', newPlant);
+    this.currentPlant = newPlant;
   }
 }

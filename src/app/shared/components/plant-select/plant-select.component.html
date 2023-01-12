@@ -1,10 +1,23 @@
 <div class="content-actions">
   <ion-buttons class="butons buttons-main">
-    <ion-button slot="start" color="dark">
+    <ion-button 
+      slot="start" 
+      color="dark" 
+      [matMenuTriggerFor]="menu" 
+      (menuOpened)="isMenuOpen = true" 
+      (menuClosed)="isMenuOpen = false">
       <ion-label class="label-branch_office">
         {{currentPlant}}
       </ion-label>
-      <ion-icon slot="end" name="chevron-down"></ion-icon>
+      <ion-icon slot="end" [name]="isMenuOpen? 'chevron-up' : 'chevron-down'"></ion-icon>
     </ion-button>
+    <mat-menu #menu="matMenu">
+      <button 
+        mat-menu-item 
+        *ngFor="let plant of plantListPromise | async"
+        (click)="setPlant(plant.ref.id)">
+        {{plant.ref.id | titlecase}}
+      </button>
+    </mat-menu>
   </ion-buttons>
 </div>
