@@ -75,43 +75,45 @@
       <h4 (contextmenu)="onContextMenu($event)"><span>Tanks</span></h4>
     </div>
     <div class="content-card-inventory" *ngIf="plantList != null">
-      <ion-card class="ion-no-margin " *ngFor="let item of getCurrentPlant()['inventory']; let index = index">
-        <ion-buttons class="content-btn-options">
-          <ion-button (click)="inventoryMenu($event, index)">
-            <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-card-header>
-          <ion-card-subtitle>Max Capacity: {{item.max.get()}} | {{item.max.getMassInUnit('mTon').toFixed(3)}} MT.</ion-card-subtitle>
-          <ion-card-title>{{item.name}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="item-inventory">
-            <div class="item-text-inventory">
-              <p>
-                <span>Product: </span>
-                <b>{{item.product.id}}</b>
-              </p>
+      <ng-container *ngFor="let item of getCurrentPlant()['inventory']; let index = index">
+        <ion-card *ngIf="!item.archived || showArchivedInv" class="ion-no-margin" [color]="item.archived ? 'warning' : ''" >
+          <ion-buttons class="content-btn-options">
+            <ion-button (click)="inventoryMenu($event, index)">
+              <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-card-header>
+            <ion-card-subtitle>Max Capacity: {{item.max.get()}} | {{item.max.getMassInUnit('mTon').toFixed(3)}} MT.</ion-card-subtitle>
+            <ion-card-title>{{item.name}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="item-inventory">
+              <div class="item-text-inventory">
+                <p>
+                  <span>Product: </span>
+                  <b>{{item.product.id}}</b>
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="item-inventory">
-            <div class="item-text-inventory">
-              <p>
-                <span>Current: </span>
-                <b>{{item.current.getMassInUnit('mTon').toFixed(3)}} MT</b>
-              </p>
+            <div class="item-inventory">
+              <div class="item-text-inventory">
+                <p>
+                  <span>Current: </span>
+                  <b>{{item.current.getMassInUnit('mTon').toFixed(3)}} MT</b>
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="content-range-inventory">
-            <ion-progress-bar class="ion-no-padding" [value]="item.current.get() / item.max.get()" pin snaps="true" color="primary"></ion-progress-bar>
-            <div class="item-percentage">
-              <p class="item-text-percentage">
-                <b>{{(item.current.get() / item.max.get() * 100).toFixed(2)}}%</b>
-              </p>
+            <div class="content-range-inventory">
+              <ion-progress-bar class="ion-no-padding" [value]="item.current.get() / item.max.get()" pin snaps="true" color="primary"></ion-progress-bar>
+              <div class="item-percentage">
+                <p class="item-text-percentage">
+                  <b>{{(item.current.get() / item.max.get() * 100).toFixed(2)}}%</b>
+                </p>
+              </div>
             </div>
-          </div>
-        </ion-card-content>
-      </ion-card>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
       <ion-card class="ion-no-margin card-button" [button]="true" (click)="newStorageModal()">
         + Add new...
       </ion-card>

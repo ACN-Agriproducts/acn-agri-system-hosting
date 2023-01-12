@@ -25,6 +25,7 @@ export class InventoryPage implements OnInit, OnDestroy{
   public currentSubs: Subscription[] = [];
   public dataUser: any;
   public permissions: any;
+  public showArchivedInv: boolean = false;
 
   @ViewChild('InvMenuTrigger') InvMenuTrigger: HTMLElement;
   @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
