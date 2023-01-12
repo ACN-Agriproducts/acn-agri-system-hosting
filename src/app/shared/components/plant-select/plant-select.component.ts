@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Plant } from '@shared/classes/plant';
@@ -9,6 +9,8 @@ import { Plant } from '@shared/classes/plant';
   styleUrls: ['./plant-select.component.scss'],
 })
 export class PlantSelectComponent implements OnInit {
+  @Output() plantChangeEvent = new EventEmitter<Plant>();
+
   public currentPlant: string;
   public plantListPromise: Promise<Plant[]>;
   public isMenuOpen: boolean;
@@ -27,5 +29,9 @@ export class PlantSelectComponent implements OnInit {
   setPlant(newPlant: string) {
     this.session.set('currentPlant', newPlant);
     this.currentPlant = newPlant;
+
+    this.plantListPromise.then(list => {
+      this.plantChangeEvent.emit(list.find(p => p.ref.id === newPlant));
+    });
   }
 }
