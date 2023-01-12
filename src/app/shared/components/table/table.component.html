@@ -8,7 +8,7 @@
 				></ng-container>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody *ngIf="displayFormat === 'infiniteScroll' || !displayFormat">
 			<ng-container *ngFor="let data of dataList">
 				<ng-container *ngIf="data | async as snapshot; else loading">
 					<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
@@ -20,6 +20,18 @@
 						></ng-container>
 					</tr>
 				</ng-container>
+			</ng-container>
+		</tbody>
+		<tbody *ngIf="displayFormat === 'pagination'">
+			<ng-container *ngIf="dataList[page] | async as snapshot; else loading">
+				<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+					<ng-container
+						*ngTemplateOutlet="
+							rows;
+							context: { $implicit: row.data() }
+						"
+					></ng-container>
+				</tr>
 			</ng-container>
 		</tbody>
 	</table>
@@ -59,12 +71,12 @@
 				</mat-select>
 			</mat-form-field>
 		</div>
-		1 - 10 of 229
+		{{ 1 + page * (steps | async) }} - {{ (steps | async) + page * (steps | async) }} of {{ dataCount }}
 		<div>
-			<button mat-icon-button (click)="emitChange(-1)" [disabled]="">
+			<button mat-icon-button (click)="emitChange(-1);" [disabled]="page <= 0">
 				<mat-icon>keyboard_arrow_left</mat-icon>
 			</button>
-			<button mat-icon-button (click)="emitChange(1)">
+			<button mat-icon-button (click)="emitChange(1)" [disabled]="page >= roundUp(dataCount / (steps | async))">
 				<mat-icon>keyboard_arrow_right</mat-icon>
 			</button>
 		</div>

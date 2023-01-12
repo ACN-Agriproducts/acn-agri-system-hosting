@@ -23,6 +23,9 @@ export class TableComponent implements OnInit {
   @ContentChild('status') status: TemplateRef<any>;
 
   public steps: Promise<number>;
+  public page: number = 0;
+  public maxPage: number;
+  public ready: boolean = false;
 
   constructor() { }
 
@@ -39,11 +42,12 @@ export class TableComponent implements OnInit {
   }
 
   public emitChange(event: number | Event) {
+    if (event === -1 || event === 1) {
+      this.page += event;
+    }
+    console.log(this.page);
     this.handleChange.emit(event);
   }
 
-  public paginatorCount(): string {
-    
-    return;
-  }
+  public roundUp = (num: number) => Math.ceil(num);
 }
