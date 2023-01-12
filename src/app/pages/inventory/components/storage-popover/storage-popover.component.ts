@@ -86,7 +86,7 @@ export class StoragePopoverComponent implements OnInit {
             transaction.set(logRef, {
               before: beforeInv,
               after: inventory,
-              updatedBy: '',
+              updatedBy: this.session.getUser().uid,
               updatedOn: serverTimestamp(),
               change: changes,
               updateType: 'Manual'
@@ -148,7 +148,7 @@ export class StoragePopoverComponent implements OnInit {
             transaction.set(logRef, {
               before: beforeInv,
               after: inventory,
-              updatedBy: '',
+              updatedBy: this.session.getUser().uid,
               updatedOn: serverTimestamp(),
               change: changes,
               updateType: 'Manual'
@@ -191,7 +191,7 @@ export class StoragePopoverComponent implements OnInit {
             transaction.set(logRef, {
               before: beforeInv,
               after: inventory,
-              updatedBy: '',
+              updatedBy: this.session.getUser().uid,
               updatedOn: serverTimestamp(),
               change: changes,
               updateType: 'Manual'
