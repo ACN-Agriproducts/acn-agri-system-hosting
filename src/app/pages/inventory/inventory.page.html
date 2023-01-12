@@ -3,16 +3,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div id="container">
-    <div class="content-actions">
-      <ion-buttons class="butons buttons-main">
-        <ion-button slot="start" color="dark">
-          <ion-label class="label-branch_office">
-            {{this.currentPlantName}}
-          </ion-label>
-          <ion-icon slot="end" name="chevron-down"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </div>
+    <app-plant-select (plantChangeEvent)="plantChange($event)"></app-plant-select>
     <div class="content-subtitle_small-inventory">
       <ion-button fill="clear" size="small" (click)="updateProductInv()" *ngIf="permissions?.developer">
         <ion-icon name="reload-outline"></ion-icon>

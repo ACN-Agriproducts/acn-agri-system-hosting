@@ -63,6 +63,10 @@ export class InventoryPage implements OnInit, OnDestroy{
     }
   }
 
+  plantChange(newPlant: Plant) {
+    this.currentPlantName = newPlant.ref.id;
+  }
+
   public nav(path:string): void {
     this.navController.navigateForward(path);
   }
