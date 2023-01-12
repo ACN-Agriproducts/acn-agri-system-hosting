@@ -128,6 +128,6 @@
 </ion-content>
 <div style="visibility: hidden; position: fixed" #InvMenuTrigger [matMenuTriggerFor]="contextMenu"></div>
 <mat-menu #contextMenu="matMenu">
-  <button mat-menu-item>See archived</button>
+  <button mat-menu-item (click)="showArchivedInv = !showArchivedInv">{{showArchivedInv? "Hide" : "See"}} Archived</button>
   <button mat-menu-item>See Inventory Logs</button>
 </mat-menu>
