@@ -5,14 +5,14 @@
   <div id="container">
     <app-plant-select (plantChangeEvent)="plantChange($event)"></app-plant-select>
     <div class="content-subtitle_small-inventory">
-      <ion-button fill="clear" size="small" (click)="updateProductInv()" *ngIf="permissions?.developer">
+      <ion-button fill="clear" size="small" (click)="updateProductInv()" *ngIf="session.getPermissions()?.developer">
         <ion-icon name="reload-outline"></ion-icon>
       </ion-button>
       <h4><span>Products</span></h4>
     </div>
     
     <div class="content-card-inventory">
-      <ion-card class="ion-no-margin" *ngFor="let item of productList">
+      <ion-card class="ion-no-margin" *ngFor="let product of products$ | async">
         <!-- <ion-buttons class="content-btn-options">
           <ion-button>
             <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
@@ -20,8 +20,8 @@
         </ion-buttons> -->
         <ion-card-header>
           <!-- <ion-card-subtitle>Max Capacity: 25,000M tons.</ion-card-subtitle> -->
-          <ion-card-title>{{item.ref.id}}</ion-card-title>
-          <button mat-icon-button class='inventory-info-button' (click)="nav('dashboard/inventory/' + item.ref.id)">
+          <ion-card-title>{{product.ref.id}}</ion-card-title>
+          <button mat-icon-button class='inventory-info-button' [routerLink]="['./', product.ref.id]">
             <mat-icon>info</mat-icon>
           </button>
         </ion-card-header>
@@ -30,7 +30,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Total Physical: </span>
-                <b>{{item.physicalInventory.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
+                <b>{{product.physicalInventory.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
               </p>
             </div>
           </div>
@@ -38,7 +38,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Storage: </span>
-                <b>{{item.physicalInventory.subtract(item.ownedPhysical).getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
+                <b>{{product.physicalInventory.subtract(product.ownedPhysical).getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
               </p>
             </div>
           </div>
@@ -46,7 +46,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>Owned Physical: </span>
-                <b> {{item.ownedPhysical.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
+                <b> {{product.ownedPhysical.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
               </p>
             </div>
           </div>
@@ -54,7 +54,7 @@
             <div class="item-text-inventory">
               <p>
                 <span>For Sale: </span>
-                <b>{{item.forSale.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
+                <b>{{product.forSale.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
               </p>
             </div>
           </div>
@@ -65,8 +65,8 @@
     <div class="content-subtitle_small-inventory">
       <h4 (contextmenu)="onContextMenu($event)"><span>Tanks</span></h4>
     </div>
-    <div class="content-card-inventory" *ngIf="plantList != null">
-      <ng-container *ngFor="let item of getCurrentPlant()['inventory']; let index = index">
+    <div class="content-card-inventory">
+      <ng-container *ngFor="let item of (plant$ | async)?.inventory; let index = index">
         <ion-card *ngIf="!item.archived || showArchivedInv" class="ion-no-margin" [color]="item.archived ? 'warning' : ''" >
           <ion-buttons class="content-btn-options">
             <ion-button (click)="inventoryMenu($event, index)">
