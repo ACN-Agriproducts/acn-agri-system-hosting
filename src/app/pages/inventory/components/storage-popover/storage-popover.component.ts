@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { collection, DocumentReference, serverTimestamp } from '@angular/fire/firestore';
 import { runTransaction, doc } from '@angular/fire/firestore'
 import { MatDialog } from '@angular/material/dialog';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { PopoverController } from '@ionic/angular';
 import { Inventory, Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
@@ -23,6 +24,7 @@ export class StoragePopoverComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private popoverController: PopoverController,
+    private session: SessionInfo
     ) { }
 
   ngOnInit() {}
@@ -210,10 +212,10 @@ export class StoragePopoverComponent implements OnInit {
       const beforeInv = plant.getRawInventory();
       const inventory = plant.getRawInventory();
 
-      inventory[this.storageId].archived = true;
+      inventory[this.storageId].archived = !inventory[this.storageId].archived;
 
       const changes = [{
-        type: 'Inventory archived',
+        type: 'Inventory archive status changed',
         tank: inventory[this.storageId].name,
       }];
 
@@ -221,7 +223,7 @@ export class StoragePopoverComponent implements OnInit {
       transaction.set(logRef, {
         before: beforeInv,
         after: inventory,
-        updatedBy: '',
+        updatedBy: this.session.getUser().uid,
         updatedOn: serverTimestamp(),
         change: changes,
         updateType: 'Manual'
