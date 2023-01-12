@@ -344,7 +344,7 @@ class truckerTickets {
 
     this.tickets.forEach(ticket => {
       if(ticket.checked){
-        total += ticket.ticket.getNet();
+        total += ticket.ticket.getNet().get();
       }
     })
 
@@ -400,6 +400,6 @@ class ticketCheck {
   }
 
   public getFreight(): number {
-    return this.freight * this.ticket.getNet() / 100;
+    return this.freight * this.ticket.getNet().get() / 100;
   }
 }

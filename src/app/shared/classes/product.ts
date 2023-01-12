@@ -1,36 +1,38 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, doc, getDoc, collectionData } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Mass } from "./mass";
 
 export class Product extends FirebaseDocInterface {
-    public forSale: number;
+    public forSale: Mass;
     public moisture: number;
-    public owned: number;
-    public ownedPhysical: number;
-    public physicalInventory: number;
+    public owned: Mass;
+    public ownedPhysical: Mass;
+    public physicalInventory: Mass;
     public weight: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Product.converter);
 
         const data = snapshot.data();
+        const unit = FirebaseDocInterface.session.getDefaultUnit();
 
-        this.forSale = data.forSale;
+        this.forSale = new Mass(data.forSale, unit);
         this.moisture = data.moisture;
-        this.owned = data.owned;
-        this.ownedPhysical = data.ownedPhysical;
-        this.physicalInventory = data.physicalInventory;
+        this.owned = new Mass(data.owned, unit);
+        this.ownedPhysical = new Mass(data.ownedPhysical, unit);
+        this.physicalInventory = new Mass(data.physicalInventory, unit);
         this.weight = data.weight;
     }
 
     public static converter = {
         toFirestore(data: Product): DocumentData {
             return {
-                forSale: data.forSale,
+                forSale: data.forSale.get(),
                 moisture: data.moisture,
-                owned: data.owned,
-                ownedPhysical: data.ownedPhysical,
-                physicalInventory: data.physicalInventory,
+                owned: data.owned.get(),
+                ownedPhysical: data.ownedPhysical.get(),
+                physicalInventory: data.physicalInventory.get(),
                 weight: data.weight,
             }
         },

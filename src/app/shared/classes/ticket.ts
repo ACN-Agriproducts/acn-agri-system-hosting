@@ -1,11 +1,14 @@
+import { Injectable } from "@angular/core";
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
 import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Mass } from "./mass";
 import { Plant } from "./plant";
 
+@Injectable()
 export class Ticket extends FirebaseDocInterface{
     public clientName: string;
     public comment: string;
@@ -14,10 +17,10 @@ export class Ticket extends FirebaseDocInterface{
     public dateOut: Date;
     public discount: number;
     public driver: string;
-    public dryWeight: number;
+    public dryWeight: Mass;
     public dryWeightPercent: number;
     public grade: number;
-    public gross: number;
+    public gross: Mass;
     public id: number;
     public imageLinks: string[];
     public in: boolean;
@@ -26,7 +29,7 @@ export class Ticket extends FirebaseDocInterface{
     public needsAttention: boolean;
     public origin: string;
     public original_ticket: string;
-    public original_weight: number;
+    public original_weight: Mass;
     public pdfLink: string;
     public plague: string;
     public plates: string;
@@ -34,7 +37,7 @@ export class Ticket extends FirebaseDocInterface{
     public productName: string;
     public tank: string;
     public tankId: number;
-    public tare: number;
+    public tare: Mass;
     public truckerId: string;
     public vehicleID: string;
     public void: boolean;
@@ -47,6 +50,8 @@ export class Ticket extends FirebaseDocInterface{
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
 
+        const unit = FirebaseDocInterface.session.getDefaultUnit();
+
         const data = snapshot.data();
 
         this.clientName = data.clientName;
@@ -56,10 +61,10 @@ export class Ticket extends FirebaseDocInterface{
         this.dateOut = data.dateOut.toDate();
         this.discount = data.discount;
         this.driver = data.driver;
-        this.dryWeight = data.dryWeight;
+        this.dryWeight = new Mass(data.dryWeight, unit);
         this.dryWeightPercent = data.dryWeightPercent;
         this.grade = data.grade;
-        this.gross = data.gross;
+        this.gross = new Mass(data.gross, unit);
         this.id = data.id;
         this.imageLinks = data.imageLinks;
         this.in = data.in;
@@ -68,7 +73,7 @@ export class Ticket extends FirebaseDocInterface{
         this.needsAttention = data.needsAttention;
         this.origin = data.origin;
         this.original_ticket = data.original_ticket;
-        this.original_weight = data.original_weight;
+        this.original_weight = new Mass(data.original_weight, unit);
         this.pdfLink = data.pdfLink;
         this.plague = data.plague;
         this.plates = data.plates;
@@ -76,7 +81,7 @@ export class Ticket extends FirebaseDocInterface{
         this.productName = data.productName;
         this.tank = data.tank;
         this.tankId = data.tankId;
-        this.tare = data.tare;
+        this.tare = new Mass(data.tare, unit);
         this.truckerId = data.truckerId;
         this.vehicleID = data.vehicleID;
         this.void = data.void;
@@ -97,10 +102,10 @@ export class Ticket extends FirebaseDocInterface{
                 dateOut: data.dateOut,
                 discount: data.discount,
                 driver: data.driver,
-                dryWeight: data.dryWeight,
+                dryWeight: data.dryWeight.get(),
                 dryWeightPercent: data.dryWeightPercent,
                 grade: data.grade,
-                gross: data.gross,
+                gross: data.gross.get(),
                 id: data.id,
                 imageLinks: data.imageLinks,
                 in: data.in,
@@ -109,7 +114,7 @@ export class Ticket extends FirebaseDocInterface{
                 needsAttention: data.needsAttention,
                 origin: data.origin,
                 original_ticket: data.original_ticket,
-                original_weight: data.original_weight,
+                original_weight: data.original_weight.get(),
                 pdfLink: data.pdfLink,
                 plague: data.plague,
                 plates: data.plates,
@@ -117,7 +122,7 @@ export class Ticket extends FirebaseDocInterface{
                 productName: data.productName,
                 tank: data.tank,
                 tankId: data.tankId,
-                tare: data.tare,
+                tare: data.tare.get(),
                 truckerId: data.truckerId,
                 vehicleID: data.vehicleID,
                 void: data.void,
@@ -133,8 +138,8 @@ export class Ticket extends FirebaseDocInterface{
         }
     }
 
-    public getNet(): number{
-        return this.gross - this.tare;
+    public getNet(): Mass{
+        return new Mass(this.gross.get() - this.tare.get(), this.gross.getUnit());
     }
 
     public getContractType(): string { 

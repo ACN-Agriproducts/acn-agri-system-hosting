@@ -123,13 +123,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
     // populating worksheet columns
     this.selectedTickets().forEach(ticket => {
-      const net = ticket.data.getNet() * (ticket.data.in ? 1 : -1);
+      const net = ticket.data.getNet().get() * (ticket.data.in ? 1 : -1);
 
       const dryWeight = ticket.data.dryWeight;
-      const moistureCwt = net - dryWeight;
+      const moistureCwt = net - dryWeight.get();
 
       const undamagedWeight = dryWeight;                // remove later when damage/undamagedWeight is added to tickets (ticket.data.undamagedWeight)
-      const damageCwt = dryWeight - undamagedWeight;
+      const damageCwt = dryWeight.get() - undamagedWeight.get();
       
       worksheet.addRow({
         ...ticket.data,
@@ -141,10 +141,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         undamagedWeight: undamagedWeight,               // change later when damage/undamagedWeight is added to tickets
         pricePerBushel: this.currentContract.pricePerBushel,
         adjustedPrice: this.currentContract.pricePerBushel,
-        total: this.currentContract.pricePerBushel * undamagedWeight / 56,
+        total: this.currentContract.pricePerBushel * undamagedWeight.getBushelWeight(this.currentContract.productInfo),
         infested: ticket.discounts.infested,
         inspection: ticket.discounts.inspection,
-        netToPay: this.currentContract.pricePerBushel / 56 * dryWeight - ticket.discounts.infested - ticket.discounts.inspection
+        netToPay: this.currentContract.pricePerBushel * dryWeight.getBushelWeight(this.currentContract.productInfo) - ticket.discounts.infested - ticket.discounts.inspection
       });
     });
 
@@ -236,16 +236,16 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     const totals = new LiquidationTotals();
 
     this.selectedTickets().forEach(ticket => {
-      totals.gross += ticket.data.gross;
-      totals.tare += ticket.data.tare;
+      totals.gross += ticket.data.gross.get();
+      totals.tare += ticket.data.tare.get();
 
-      const net = ticket.data.gross - ticket.data.tare;
+      const net = ticket.data.gross.get() - ticket.data.tare.get();
       totals.net += net;
 
-      totals.moistureDiscount += ticket.data.dryWeight - net;
-      totals.moistureAdjustedWeight += ticket.data.dryWeight;
+      totals.moistureDiscount += ticket.data.dryWeight.get() - net;
+      totals.moistureAdjustedWeight += ticket.data.dryWeight.get();
 
-      const total = this.currentContract.pricePerBushel * ticket.data.dryWeight / this.currentContract.productInfo.weight;
+      const total = this.currentContract.pricePerBushel * ticket.data.dryWeight.getBushelWeight(this.currentContract.productInfo);
       totals.totalBeforeDiscounts += total;
 
       totals.infested += ticket.discounts.infested;

@@ -14,6 +14,7 @@ import { Company, CompanyContact } from '@shared/classes/company';
 import {map, startWith} from 'rxjs/operators';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Plant } from '@shared/classes/plant';
+import { Mass } from '@shared/classes/mass';
 
 @Component({
   selector: 'app-new-contract',
@@ -31,7 +32,7 @@ export class NewContractPage implements OnInit, OnDestroy {
   productsReady: boolean = false;
   contractForm: UntypedFormGroup;
   currentSubs: Subscription[] = [];
-  contractWeight: Weight;
+  contractWeight: Mass;
   filteredTruckerOptions: Observable<CompanyContact[]>[] = [];
   
   selectedClient: Contact;
@@ -78,11 +79,10 @@ export class NewContractPage implements OnInit, OnDestroy {
 
     Product.getProductList(this.db, this.currentCompany).then(list => {
       this.productsList = list
-      });
+      this.contractForm.get("product").setValue(list[0] ?? "");
+    });
 
-    var today = new Date();
-
-    this.contractWeight = new Weight(0, WeightUnits.Pounds);
+    this.contractWeight = new Mass(0, this.session.getDefaultUnit());
 
     this.uniqueId.setGetterFunction(this.getContractCollection.bind(this));
 
@@ -112,18 +112,36 @@ export class NewContractPage implements OnInit, OnDestroy {
       truckers: this.fb.array([])
     }, { validators: form => Validators.required(form.get('client')) });
 
-    this.contractForm.get('product').valueChanges.subscribe(val => {
-      if(this.contractWeight.unit.name.toLocaleLowerCase() == 'bushels') {
-        this.contractWeight.unit.toPounds = val.weight;
+    this.contractForm.get('product').valueChanges.subscribe((newProduct: Product) => {
+      if(this.contractForm.get('quantityUnits').value == 'bushels') {
+        const oldProduct = this.contractForm.value.product as Product;
+        this.contractWeight.amount = this.contractWeight.amount / oldProduct.weight * newProduct.weight;
       }
     });
 
     this.contractForm.get('quantity').valueChanges.subscribe(val => {
+      if(this.contractForm.get('quantityUnits').value == 'bushels') {
+        const product = this.contractForm.value.product as Product;
+        val = val * product.weight;
+      }
       this.contractWeight.amount = val;
     });
 
     this.contractForm.get('quantityUnits').valueChanges.subscribe(val => {
-      this.contractWeight.unit = WeightUnits.getUnits(val);
+      const form = this.contractForm.value
+      const product = form.product as Product;
+
+      if(val == 'bushels') {
+        this.contractWeight.amount = form.quantity * product.weight;
+        this.contractWeight.defaultUnits = 'lbs';
+      }
+      else if(form.quantityUnits == 'bushels') {
+        this.contractWeight.amount = form.quantity;
+        this.contractWeight.defaultUnits = val;
+      }
+      else {
+        this.contractWeight.defaultUnits = val;
+      }
     });
   }
 
@@ -206,7 +224,7 @@ export class NewContractPage implements OnInit, OnDestroy {
         name: formValue.product.ref.id,
         weight: formValue.product.weight
       },
-      quantity: this.contractWeight.getPounds(),
+      quantity: this.contractWeight.getMassInUnit(this.session.getDefaultUnit()),
       seller_terms: "",     //TODO
       status: "pending",
       tickets: [],
@@ -238,7 +256,7 @@ export class NewContractPage implements OnInit, OnDestroy {
     if(form.priceUnit == 'CWT'){
       return price / 100 * form.product.weight;
     }
-    if(form.priceUnit == 'mtons'){
+    if(form.priceUnit == 'mTon'){
       return price / 2204.6 * form.product.weight;
     }
 

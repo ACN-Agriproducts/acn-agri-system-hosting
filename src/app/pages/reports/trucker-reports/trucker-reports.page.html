@@ -61,7 +61,7 @@
                   <mat-form-field appearance="fill" class="freight-input">
                     <mat-label>Freight</mat-label>
                     <span matPrefix>$</span>
-                    <input matInput type="number" [value]="startFreight" (change)="trucker.changeAllFreight($event.target.valueAsNumber)">
+                    <input matInput type="number" [value]="startFreight" (change)="trucker.changeAllFreight($event.target['valueAsNumber'])">
                   </mat-form-field>
                 </div>
                 <div class="tickets-block">
@@ -114,9 +114,9 @@
                 <td>{{ticket.ticket.dateOut | date: 'shortDate'}}</td>
                 <td>{{ticket.ticket.id}}</td>
                 <td>{{ticket.ticket.contractID}}</td>
-                <td>{{ticket.ticket.getNet()}}</td>
+                <td>{{ticket.ticket.getNet().get()}}</td>
                 <td>{{ticket.freight | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
-                <td>{{ticket.freight * ticket.ticket.getNet() / 100 | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
+                <td>{{ticket.freight * ticket.ticket.getNet().get() / 100 | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
               </tr>
               <tr>
                 <th colspan="3">Totals</th>

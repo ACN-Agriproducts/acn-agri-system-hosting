@@ -15,7 +15,6 @@ export class DisplayContractComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.contract);
     if(this.contract.productInfo && this.contract.clientInfo) {
       this.ready = true;
       this.product = this.contract.productInfo;

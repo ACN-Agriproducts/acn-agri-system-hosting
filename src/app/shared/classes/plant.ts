@@ -2,6 +2,7 @@ import { collection, CollectionReference, doc, DocumentData, DocumentReference, 
 import { Observable } from "rxjs";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Mass } from "./mass";
 import { Ticket } from "./ticket";
 
 
@@ -102,16 +103,16 @@ export class Plant extends FirebaseDocInterface {
 
 export class Inventory {
     archived: boolean;
-    current: number;
-    max: number;
+    current: Mass;
+    max: Mass;
     name: string;
     product: DocumentReference;
     type: string;
 
     constructor(inv: any) {
         this.archived = inv.archived ?? false;
-        this.current = inv.current;
-        this.max = inv.max;
+        this.current = new Mass(inv.current, FirebaseDocInterface.session.getDefaultUnit());
+        this.max = new Mass(inv.max, FirebaseDocInterface.session.getDefaultUnit());
         this.name = inv.name;
         this.product = inv.product;
         this.type = inv.type;
@@ -121,7 +122,12 @@ export class Inventory {
         const data = {};
         
         Object.keys(this).forEach(key => {
-            data[key] = this[key];
+            if(key === "current" || key === "max") {
+                data[key] = this[key].get();
+            }
+            else {
+                data[key] = this[key];
+            }
         });
 
         return data;
