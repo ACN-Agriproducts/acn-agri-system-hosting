@@ -117,27 +117,19 @@ export class TableContractsComponent implements OnInit {
 
   ngOnInit() {    
     /* Testing */
-
     this.collRef = Contract.getCollectionReference(this.db, this.session.getCompany(), true);
-
     /* Testing */
     
-    if (this.collRef == null) {
+    if (!this.collRef) {
       this.snack.open("Collection Reference is nullish", "error");
       return;
     }
-    if (this.columns == null || !(this.columns.length > 0)) {
+    if (!(this.columns?.length ?? 0 > 0)) {
       this.snack.open("Columns are nullish or empty", "error");
       return;
     }
 
-    this.columns.forEach(col => {
-      if (typeof col === 'string') {
-        this.displayColumns.push({ fieldName: col });
-        return;
-      }
-      this.displayColumns.push(col);
-    });
+    this.displayColumns = this.formatColumns();
 
     this.contracts = [];
     this.sortConstraints = this.sort();
@@ -158,6 +150,10 @@ export class TableContractsComponent implements OnInit {
   }
 
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
+
+  public formatColumns(): ColumnInfo[] {
+    return this.columns.map(col => typeof col === 'string' ? { fieldName: col } : col);
+  }
 
   public openContract(contract: Contract): void {
     // salesContracts | purchaseContracts -> sales | purchase

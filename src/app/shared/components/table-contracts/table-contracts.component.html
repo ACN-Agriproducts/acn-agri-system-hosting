@@ -5,7 +5,7 @@
 	[rowAction]="openContract" 
 	[displayFormat]="displayFormat" 
 	(tableChange)="handleChange($event)"
-	*ngIf="(columns?.length ?? 0) > 0 && ready"
+	*ngIf="ready"
 >
 	<ng-template #headers>
 		<th *ngFor="let column of displayColumns"
