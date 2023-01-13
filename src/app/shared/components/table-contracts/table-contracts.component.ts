@@ -168,6 +168,8 @@ export class TableContractsComponent implements OnInit {
   }
 
   public changeSort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): void {
+    this.contracts = [];
+
     if (this.sortFieldName == column.fieldName) {
       this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
     }
