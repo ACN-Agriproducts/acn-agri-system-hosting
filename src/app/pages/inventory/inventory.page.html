@@ -3,7 +3,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div id="container">
-    <app-plant-select (plantChangeEvent)="plantChange($event)"></app-plant-select>
+    <app-plant-select (plantChangeEvent)="getPlantSnapshot()"></app-plant-select>
     <div class="content-subtitle_small-inventory">
       <ion-button fill="clear" size="small" (click)="updateProductInv()" *ngIf="session.getPermissions()?.developer">
         <ion-icon name="reload-outline"></ion-icon>

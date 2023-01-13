@@ -41,10 +41,6 @@ export class InventoryPage implements OnInit {
     this.plant$ = Plant.getPlantSnapshot(this.db, this.session.getCompany(), this.session.getPlant());
   }
 
-  plantChange(newPlant: Plant) {
-    this.getPlantSnapshot();
-  }
-
   public async inventoryMenu(ev: any, storageId: number): Promise<void> {
     const popover = await this.popoverController.create({
       component: StoragePopoverComponent,
