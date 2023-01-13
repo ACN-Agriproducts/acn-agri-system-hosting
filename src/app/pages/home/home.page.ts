@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
     'id',
     'clientName',
     'currentDelivered',
-    'date',
+    // 'date',
     'delivery_dates',
     'grade',
     'loads',

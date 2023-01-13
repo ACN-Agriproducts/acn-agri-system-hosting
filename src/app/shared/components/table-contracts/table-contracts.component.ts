@@ -54,15 +54,14 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('status') status: TemplateRef<any>;
   @ViewChild('transport') transport: TemplateRef<any>;
   
-  public ready: boolean = false;
-  public contracts: Promise<QuerySnapshot<Contract>>[] = [];
-  public currentCompany: string;
-  public sortConstraints: QueryConstraint[] = [];
-  public queryConstraints: QueryConstraint[] = [];
   public contractCount: number = 0;
-
-  public sortFieldName: string;
+  public contracts: Promise<QuerySnapshot<Contract>>[];
+  public ready: boolean = false;
+  
+  public queryConstraints: QueryConstraint[];
+  public sortConstraints: QueryConstraint[];
   public sortDirection: OrderByDirection;
+  public sortFieldName: string;
 
   public defaultWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
     ["clientName", ""],
@@ -116,12 +115,10 @@ export class TableContractsComponent implements OnInit {
     private navController: NavController,
   ) { }
 
-  ngOnInit() {
-    this.currentCompany = this.session.getCompany();
-    
+  ngOnInit() {    
     /* Testing */
 
-    this.collRef = Contract.getCollectionReference(this.db, this.currentCompany, true);
+    this.collRef = Contract.getCollectionReference(this.db, this.session.getCompany(), true);
 
     /* Testing */
     
@@ -142,8 +139,10 @@ export class TableContractsComponent implements OnInit {
       this.displayColumns.push(col);
     });
 
-    this.changeSort();
+    this.contracts = [];
+    this.sortConstraints = this.sort();
     this.queryConstraints = [limit(this.steps)];
+
     this.loadContracts()
     .then(async () => {
       if (this.contracts == null) throw "Contracts are nullish";
@@ -161,12 +160,16 @@ export class TableContractsComponent implements OnInit {
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
 
   public openContract(contract: Contract): void {
-    const contractType = contract.ref.parent.id.slice(0, -9);
     // salesContracts | purchaseContracts -> sales | purchase
-    this.navController.navigateForward(`dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`);
+    const contractType = contract.ref.parent.id.slice(0, -9);
+    this.navController.navigateForward(
+      `dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`
+    );
   }
 
-  public changeSort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): void {
+  public sort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): QueryConstraint[] {
+    if (!column) return [];
+
     this.contracts = [];
     this.queryConstraints = [limit(this.steps)];
 
@@ -178,11 +181,11 @@ export class TableContractsComponent implements OnInit {
       this.sortFieldName = column.fieldName;
     }
 
-    this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
+    return [orderBy(this.sortFieldName, this.sortDirection)];
   }
 
   //change query for pagination event
-  public async paginateQuery(event?: number | MatSelectChange): Promise<QueryConstraint[]> {
+  public async paginateQuery(event: number | MatSelectChange): Promise<QueryConstraint[]> {
     const constraints: QueryConstraint[] = [];
 
     if (event instanceof MatSelectChange) {
@@ -214,13 +217,13 @@ export class TableContractsComponent implements OnInit {
     );
     
     this.contracts.push(getDocs(this.query.withConverter(Contract.converter)));
-    this.contracts.forEach(async promise => {
-      console.log((await promise).docs.map(doc => doc.data()));
-    });
+    // this.contracts.forEach(async promise => {
+    //   console.log((await promise).docs.map(doc => doc.data()));
+    // });
   }
 
   public handleSort(column: ColumnInfo): void {
-    this.changeSort(column);
+    this.sortConstraints = this.sort(column);
     this.loadContracts();
   }
 
