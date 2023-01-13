@@ -23,7 +23,7 @@
 			</ng-container>
 		</tbody>
 		<tbody *ngIf="displayFormat === 'pagination'">
-			<ng-container *ngIf="dataList[page] | async as snapshot; else loading">
+			<ng-container *ngIf="dataList[pageIndex] | async as snapshot; else loading">
 				<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
 					<ng-container
 						*ngTemplateOutlet="
@@ -39,7 +39,7 @@
 
 <ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
 	threshold="200px" 
-	(ionInfinite)="emitChange($event)" 
+	(ionInfinite)="handleScrollChange($event)" 
 >
 	<ion-infinite-scroll-content
 		loadingSpinner="bubbles"
@@ -48,35 +48,29 @@
 </ion-infinite-scroll>
 
 <div id="paginator-wrapper" *ngIf="displayFormat === 'pagination'">
-	<!-- PREV STUFF -->
-	<!-- <ng-container *ngFor="let data of dataList">
-		<ng-container *ngIf="data | async as snapshot; else loading">
-			<mat-paginator #paginator
-				[pageSizeOptions]="[5, 10, 20, 30, 40]" 
-				[pageSize]="snapshot.docs.length" 
-				(page)="emitChange($event)" 
-				[length]="dataCount"
-			></mat-paginator>
-		</ng-container>
-	</ng-container> -->
-
 	<div id="custom-paginator">
 		<div>
 			Items per page:
 			<mat-form-field>
-				<mat-select (selectionChange)="emitChange($event.value)" [value]="steps | async">
+				<mat-select (selectionChange)="handlePageChange($event)" [value]="steps | async">
 					<mat-option *ngFor="let size of [5, 10, 20, 30, 40]" [value]="size">
 						{{ size }}
 					</mat-option>
 				</mat-select>
 			</mat-form-field>
 		</div>
-		{{ 1 + page * (steps | async) }} - {{ (steps | async) + page * (steps | async) }} of {{ dataCount }}
+		{{ pageDetails | async }} of {{ dataCount }}
 		<div>
-			<button mat-icon-button (click)="emitChange(-1);" [disabled]="page <= 0">
+			<button mat-icon-button 
+				(click)="handlePageChange(pageIndex - 1)" 
+				[disabled]="pageIndex <= 0"
+			>
 				<mat-icon>keyboard_arrow_left</mat-icon>
 			</button>
-			<button mat-icon-button (click)="emitChange(1)" [disabled]="page >= roundUp(dataCount / (steps | async))">
+			<button mat-icon-button 
+				(click)="handlePageChange(pageIndex + 1)" 
+				[disabled]="pageIndex >= roundUp(dataCount / (steps | async)) - 1"
+			>
 				<mat-icon>keyboard_arrow_right</mat-icon>
 			</button>
 		</div>

@@ -144,7 +144,7 @@ export class TableContractsComponent implements OnInit {
     });
 
     this.changeSort();
-    this.changeQuery();
+    this.queryConstraints = [limit(this.steps)];
     this.loadContracts()
     .then(async () => {
       if (this.contracts == null) throw "Contracts are nullish";
@@ -168,10 +168,6 @@ export class TableContractsComponent implements OnInit {
   }
 
   public changeSort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): void {
-    if (!column) {
-      return;
-    }
-
     if (this.sortFieldName == column.fieldName) {
       this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
     }
@@ -183,46 +179,33 @@ export class TableContractsComponent implements OnInit {
     this.sortConstraints = [orderBy(column.fieldName, this.sortDirection)];
   }
 
-  public async changeQuery(change?: number | Event): Promise<void> {
-    if (!change) {
-      this.queryConstraints = [limit(this.steps)];
-      return;
-    }
+  public async changeQuery(event: number | MatSelectChange | Event): Promise<void> {
+    this.queryConstraints = [];
 
-    // check what type of event it is
-    if (this.displayFormat === 'pagination' && typeof change === 'number') {      
-      if (change === -1) {
-        console.log("previous page");
+    if (this.displayFormat === 'pagination') {
+      if (typeof event === 'number' && this.contracts[event]) {
+        this.queryConstraints.push(limit(this.steps));
+        return;
+      }
 
-        const currentSnapshot = await this.contracts[0];
+      if (event instanceof MatSelectChange) {
+        this.contracts = [];
+        this.steps = event.value;
+      }
+      else if (typeof event === 'number' && !this.contracts[event]) {
+        const currentSnapshot = await this.contracts[this.contracts.length - 1];
         const firstDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
 
-        // console.log(firstDoc.data())
-
-        this.queryConstraints = [endBefore(firstDoc)];
+        this.queryConstraints.push(startAfter(firstDoc));
       }
-      else if (change === 1) {
-        console.log("next page");
 
-        const currentSnapshot = await this.contracts[0];
-        const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
-
-        // console.log(lastDoc.data());
-        
-        this.queryConstraints = [startAfter(lastDoc)];
-      }
-      else {
-        console.log("change page size");
-
-        this.steps = change;
-      }
       this.queryConstraints.push(limit(this.steps));
+      this.loadContracts();
     }
-    else if (this.displayFormat === 'infiniteScroll' && change instanceof Event) {
-      console.log("this is an infiniteScroll event");
 
-
-      this.infiniteDocs(change);
+    if (event instanceof Event && this.displayFormat === 'infiniteScroll') {
+      console.log("Infinite Scroll")
+      return;
     }
   }
 
@@ -232,15 +215,11 @@ export class TableContractsComponent implements OnInit {
       ...this.sortConstraints, 
       ...this.queryConstraints
     );
-
-    if (this.displayFormat === 'pagination') {
-      this.contracts = [getDocs(this.query.withConverter(Contract.converter))];
-
-      console.log((await this.contracts[0]).docs.map(doc => doc.data()));
-    }
-    else if (this.displayFormat === 'infiniteScroll') {
-      this.contracts.push(getDocs(this.query.withConverter(Contract.converter)));
-    }
+    
+    this.contracts.push(getDocs(this.query.withConverter(Contract.converter)));
+    this.contracts.forEach(async promise => {
+      console.log((await promise).docs.map(doc => doc.data()));
+    });
   }
 
   public handleSort(column: ColumnInfo): void {
@@ -248,9 +227,9 @@ export class TableContractsComponent implements OnInit {
     this.loadContracts();
   }
 
-  public async handleChange(event: number | Event): Promise<void> {
+  public async handleChange(event: number | MatSelectChange | Event): Promise<void> {
     await this.changeQuery(event);
-    this.loadContracts();
+    // this.loadContracts();
   }
 
   public async infiniteDocs(event: any): Promise<void> {

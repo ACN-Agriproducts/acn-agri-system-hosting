@@ -16,38 +16,48 @@ export class TableComponent implements OnInit {
   @Input() rowAction?: Function;
   @Input() displayFormat?: string;
 
-  @Output() handleChange: EventEmitter<number | Event> = new EventEmitter<number | Event>();
+  @Output() tableChange: EventEmitter<number | Event | MatSelectChange> = new EventEmitter<number | Event | MatSelectChange>();
 
   @ContentChild('headers') headers!: TemplateRef<any>;
   @ContentChild('rows') rows!: TemplateRef<any>;
   @ContentChild('status') status: TemplateRef<any>;
 
+  public pageDetails: Promise<string>;
+  public pageIndex: number;
   public steps: Promise<number>;
-  public page: number = 0;
-  public maxPage: number;
-  public ready: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
     this.steps = this.setSteps();
+    this.pageDetails = this.getDetails();
+    this.pageIndex = 0;
   }
 
-  // ngOnChanges() {
-
-  // }
-
+  ngOnChanges() {
+    this.steps = this.setSteps();
+    this.pageDetails = this.getDetails();
+    this.pageIndex = 0;
+  }
+  
+  public handleScrollChange(event: Event) {
+    this.tableChange.emit(event);
+  }
+  
+  public handlePageChange(event: number | MatSelectChange) {
+    if (typeof event === 'number') this.pageIndex = event;
+    this.pageDetails = this.getDetails();
+    this.tableChange.emit(event);
+  }
+  
   public async setSteps(): Promise<number> {
     return (await this.dataList[0] as QuerySnapshot).docs.length;
   }
 
-  public emitChange(event: number | Event) {
-    if (event === -1 || event === 1) {
-      this.page += event;
-    }
-    console.log(this.page);
-    this.handleChange.emit(event);
-  }
-
   public roundUp = (num: number) => Math.ceil(num);
+  
+  public async getDetails(): Promise<string> {
+    const steps = await this.steps ?? 0;
+    return `${this.pageIndex * steps + 1} - ${(this.pageIndex * steps + steps) > this.dataCount ? this.dataCount : this.pageIndex * steps + steps}`;
+  }
 }

@@ -1,11 +1,10 @@
 
-<!-- [handlePage]="displayFormat === 'pagination' ? handlePage : infiniteDocs" -->
 <app-table 
 	[dataList]="contracts" 
 	[dataCount]="contractCount" 
 	[rowAction]="openContract" 
 	[displayFormat]="displayFormat" 
-	(handleChange)="handleChange($event)"
+	(tableChange)="handleChange($event)"
 	*ngIf="(columns?.length ?? 0) > 0 && ready"
 >
 	<ng-template #headers>
