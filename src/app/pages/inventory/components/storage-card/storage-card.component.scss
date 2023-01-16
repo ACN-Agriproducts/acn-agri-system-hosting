@@ -1,0 +1,41 @@
+ion-card {
+    position: relative;
+    .content-btn-options{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+    .content-range-inventory{
+        position: relative;
+        &:before{
+            content:"";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 50;
+        }
+    }
+}
+
+.item-inventory .item-text-inventory {
+    p {
+        margin: 0;
+        display: grid;
+        grid-template-columns: auto auto;
+        column-gap: 5px;
+        justify-content: flex-start;
+        align-items: center;
+    }
+}
+
+.item-percentage{
+    display: grid;
+    width: 100%;
+    justify-content: center;
+    align-content: center;
+    .item-text-percentage{
+        margin: 0;
+    }
+}

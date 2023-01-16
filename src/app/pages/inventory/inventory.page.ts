@@ -27,7 +27,6 @@ export class InventoryPage implements OnInit {
   constructor(
     private db: Firestore,
     private modalController: ModalController,
-    private popoverController: PopoverController,
     private fns: Functions,
     public session: SessionInfo
   ) {}
@@ -39,21 +38,6 @@ export class InventoryPage implements OnInit {
 
   getPlantSnapshot() {
     this.plant$ = Plant.getPlantSnapshot(this.db, this.session.getCompany(), this.session.getPlant());
-  }
-
-  public async inventoryMenu(ev: any, storageId: number): Promise<void> {
-    const popover = await this.popoverController.create({
-      component: StoragePopoverComponent,
-      event: ev,
-      componentProps: {
-        plantRef: (await firstValueFrom(this.plant$)).ref,
-        storageId: storageId,
-        tankList: (await firstValueFrom(this.plant$)).inventory,
-        productList: await firstValueFrom(this.products$)
-      }
-    });
-
-    return popover.present();
   }
 
   public async newStorageModal(): Promise<any> {
