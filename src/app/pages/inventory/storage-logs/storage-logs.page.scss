@@ -15,6 +15,7 @@ div:has(>app-storage-card) {
     display: flex;
     max-width: 100%;
     flex-wrap: wrap;
+    gap: 1rem;
 
     app-storage-card {
         min-width: 300px;
