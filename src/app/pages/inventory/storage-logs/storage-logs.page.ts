@@ -45,6 +45,7 @@ export class StorageLogsPage implements OnInit {
   public storageLogs$: Promise<StorageLogs[]>;
   public lastLogsBefore$: Promise<StorageLogs>;
 
+  public index: number;
   public startDate: Date;
   public endDate: Date;
 
@@ -56,6 +57,7 @@ export class StorageLogsPage implements OnInit {
   ngOnInit() {
     this.startDate = new Date();
     this.endDate = new Date();
+    this.index = 0;
 
     const weekday = this.startDate.getDay();
     this.startDate.setDate(this.startDate.getDate() - weekday);
