@@ -40,7 +40,7 @@
 		</thead>
 		<tbody *ngIf="displayFormat === 'infiniteScroll' || !displayFormat">
 			<ng-container *ngFor="let data of dataList">
-				<ng-container *ngIf="data | async as snapshot; else loading">
+				<ng-container *ngIf="data | async as snapshot">
 					<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
 						<ng-container
 							*ngTemplateOutlet="
@@ -65,17 +65,17 @@
 			</ng-container>
 		</tbody>
 	</table>
+	<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
+		threshold="100px" 
+		(ionInfinite)="handleScrollChange($event)" 
+	>
+		<ion-infinite-scroll-content
+			loadingSpinner="bubbles"
+			loadingText="Loading more data..."
+		></ion-infinite-scroll-content>
+	</ion-infinite-scroll>
 </div>
 
-<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
-	threshold="200px" 
-	(ionInfinite)="handleScrollChange($event)" 
->
-	<ion-infinite-scroll-content
-		loadingSpinner="bubbles"
-		loadingText="Loading more data..."
-	></ion-infinite-scroll-content>
-</ion-infinite-scroll>
 
 <ng-template #loading>
 	<td colspan="100%">

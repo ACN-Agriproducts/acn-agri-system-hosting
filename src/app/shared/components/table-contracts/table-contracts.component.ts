@@ -2,7 +2,7 @@ import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { CollectionReference, Firestore, getDocs, limit, orderBy, Query, query, QueryConstraint, startAfter } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { NavController } from '@ionic/angular';
+import { IonInfiniteScroll, NavController } from '@ionic/angular';
 import { getCountFromServer, OrderByDirection, QuerySnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { MatSelectChange } from '@angular/material/select';
@@ -180,7 +180,6 @@ export class TableContractsComponent implements OnInit {
     return [orderBy(this.sortFieldName, this.sortDirection)];
   }
 
-  //change query for pagination event
   public async paginateQuery(event: number | MatSelectChange): Promise<QueryConstraint[]> {
     const constraints: QueryConstraint[] = [];
 
@@ -189,20 +188,33 @@ export class TableContractsComponent implements OnInit {
       this.steps = event.value;
     }
     else if (typeof event === 'number' && !this.contracts[event]) {
-      const currentSnapshot = await this.contracts[this.contracts.length - 1];
-      const firstDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
-
-      constraints.push(startAfter(firstDoc));
+      constraints.push(await this.nextContractsQuery());
     }
 
     constraints.push(limit(this.steps));
     return constraints;
   }
+
+  public async nextContractsQuery(): Promise<QueryConstraint> {
+    const currentSnapshot = await this.contracts[this.contracts.length - 1];
+    const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
+
+    return lastDoc ? startAfter(lastDoc) : null;
+  }
   
-  // change query for infinite scroll event
-  public scrollQuery(event: Event): QueryConstraint[] {
-    console.log("Infinite Scroll")
-    return [];
+  public async scrollQuery(event: any): Promise<QueryConstraint[]> {
+    const constraints: QueryConstraint[] = [limit(this.steps)];
+
+    const nextConstraint = await this.nextContractsQuery();
+    event.target.complete();
+    
+    if (!nextConstraint) {
+      event.target.disabled = true;
+      return;
+    }
+    
+    constraints.unshift(nextConstraint);
+    return constraints;
   }
 
   public async loadContracts(): Promise<void> {
@@ -211,8 +223,9 @@ export class TableContractsComponent implements OnInit {
       ...this.sortConstraints, 
       ...this.queryConstraints
     );
-    
-    this.contracts.push(getDocs(this.query.withConverter(Contract.converter)));
+
+    const nextContracts = getDocs(this.query.withConverter(Contract.converter));
+    this.contracts.push(nextContracts);
     // this.contracts.forEach(async promise => {
     //   console.log((await promise).docs.map(doc => doc.data()));
     // });
@@ -227,22 +240,12 @@ export class TableContractsComponent implements OnInit {
     if (typeof event === 'number' && this.contracts[event]) return;
 
     this.queryConstraints = event instanceof Event 
-      ? this.scrollQuery(event) 
+      ? await this.scrollQuery(event) 
       : await this.paginateQuery(event);
 
+    if (!this.queryConstraints) return;
+
     this.loadContracts();
-  }
-
-  public async infiniteDocs(event: any): Promise<void> {
-    console.log("infinite docs", event);
-    event.target.complete();
-
-    // if no more contracts, this.infiniteScroll.disabled = snapshot.docs.length < this.contractStep;
-
-    // this.dataList.getNext(snapshot => {
-    //   event.target.complete();
-    //   this.infiniteScroll.disabled = snapshot.docs.length < this.contractStep;
-    // });
   }
 }
 
