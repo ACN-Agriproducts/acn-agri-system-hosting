@@ -8,6 +8,8 @@ import { StorageLogsPageRoutingModule } from './storage-logs-routing.module';
 
 import { StorageLogsPage } from './storage-logs.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
+import { InventoryPageModule } from '../inventory.module';
 
 @NgModule({
   imports: [
@@ -15,7 +17,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     IonicModule,
     StorageLogsPageRoutingModule,
-    CoreModule
+    CoreModule,
+    SharedModule,
   ],
   declarations: [StorageLogsPage]
 })

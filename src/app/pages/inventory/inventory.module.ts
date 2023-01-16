@@ -36,5 +36,8 @@ import { StorageCardComponent } from './components/storage-card/storage-card.com
     ZeroOutTankDialogComponent,
     StorageCardComponent
   ],
+  exports: [
+    StorageCardComponent
+  ]
 })
 export class InventoryPageModule {}
