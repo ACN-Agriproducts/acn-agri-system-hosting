@@ -41,6 +41,8 @@ export class WeekRangeSelectionStrategy<D> implements MatDateRangeSelectionStrat
   ]
 })
 export class StorageLogsPage implements OnInit {
+  public startDate: Date;
+  public endDate: Date;
 
   constructor(
     private session: SessionInfo,
@@ -48,7 +50,17 @@ export class StorageLogsPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.startDate = new Date();
+    this.endDate = new Date();
 
+    const weekday = this.startDate.getDay();
+    this.startDate.setDate(this.startDate.getDate() - weekday);
+    this.endDate.setDate(this.endDate.getDate() + (6 - weekday));
+    this.setDateTimes();
   }
 
+  setDateTimes() {
+    this.startDate.setHours(0,0,0,0);
+    this.endDate.setHours(23, 59, 59, 999);
+  }
 }
