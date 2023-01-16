@@ -1,3 +1,11 @@
 mat-card {
     margin: 1rem;
 }
+
+div:has(app-plant-select) {
+    display: flex;
+
+    mat-form-field {
+        width: 200px;
+    }
+}
