@@ -33,12 +33,14 @@ export class OptionsTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    getDownloadURL(ref(this.storage, this.ticket.pdfLink)).then(val => {
-      this.downloadString = val;
-    });
-
     this.userPermissions = this.session.getPermissions();
     this.userName = this.session.getUser().name;
+
+    if(this.ticket.pdfLink) {
+      getDownloadURL(ref(this.storage, this.ticket.pdfLink)).then(val => {
+        this.downloadString = val;
+      });
+    }
   }
   public openDialog = async () => {
     this.closePanel();
