@@ -60,7 +60,7 @@ export class StorageLogsPage implements OnInit {
     const weekday = this.startDate.getDay();
     this.startDate.setDate(this.startDate.getDate() - weekday);
     this.endDate.setDate(this.endDate.getDate() + (6 - weekday));
-    this.setDateTimes();
+    this.getLogs();
   }
 
   setDateTimes() {
@@ -69,6 +69,8 @@ export class StorageLogsPage implements OnInit {
   }
 
   getLogs() {
+    this.setDateTimes();
+
     this.storageLogs$ = StorageLogs.getStorageLogListDateRange(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate, this.endDate);
     this.lastLogsBefore$ = StorageLogs.getLastStorageLogBeforeDate(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate);
   }
