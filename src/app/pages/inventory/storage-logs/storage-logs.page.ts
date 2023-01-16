@@ -3,6 +3,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { StorageLogs } from '@shared/classes/storageLogs';
 
 @Injectable()
 export class WeekRangeSelectionStrategy<D> implements MatDateRangeSelectionStrategy<D> {
@@ -62,5 +63,9 @@ export class StorageLogsPage implements OnInit {
   setDateTimes() {
     this.startDate.setHours(0,0,0,0);
     this.endDate.setHours(23, 59, 59, 999);
+  }
+
+  getLogs() {
+    StorageLogs.get
   }
 }
