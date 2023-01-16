@@ -4,7 +4,7 @@
     <mat-card>
         <mat-card-content>
             <div>
-                <app-plant-select></app-plant-select>
+                <app-plant-select (plantChangeEvent)="getLogs()"></app-plant-select>
                 <mat-form-field>
                     <mat-label>Choose week</mat-label>
                     <mat-date-range-input [rangePicker]="picker">

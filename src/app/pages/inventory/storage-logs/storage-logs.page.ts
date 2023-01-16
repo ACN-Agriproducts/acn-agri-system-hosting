@@ -42,6 +42,9 @@ export class WeekRangeSelectionStrategy<D> implements MatDateRangeSelectionStrat
   ]
 })
 export class StorageLogsPage implements OnInit {
+  public storageLogs$: Promise<StorageLogs[]>;
+  public lastLogsBefore$: Promise<StorageLogs>;
+
   public startDate: Date;
   public endDate: Date;
 
@@ -66,6 +69,7 @@ export class StorageLogsPage implements OnInit {
   }
 
   getLogs() {
-    StorageLogs.get
+    this.storageLogs$ = StorageLogs.getStorageLogListDateRange(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate, this.endDate);
+    this.lastLogsBefore$ = StorageLogs.getLastStorageLogBeforeDate(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate);
   }
 }
