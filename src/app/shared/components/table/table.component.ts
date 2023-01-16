@@ -29,15 +29,19 @@ export class TableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.steps = this.setSteps();
-    this.pageDetails = this.getDetails();
-    this.pageIndex = 0;
+    if (this.displayFormat === 'pagination') {
+      this.steps = this.setSteps();
+      this.pageDetails = this.getDetails();
+      this.pageIndex = 0;
+    }
   }
 
   ngOnChanges() {
-    this.steps = this.setSteps();
-    this.pageDetails = this.getDetails();
-    this.pageIndex = 0;
+    if (this.displayFormat === 'pagination') {
+      this.steps = this.setSteps();
+      this.pageDetails = this.getDetails();
+      this.pageIndex = 0;
+    }
   }
   
   public handleScrollChange(event: Event) {

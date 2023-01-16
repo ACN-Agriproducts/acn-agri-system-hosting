@@ -38,21 +38,8 @@
 				></ng-container>
 			</tr>
 		</thead>
-		<tbody *ngIf="displayFormat === 'infiniteScroll' || !displayFormat">
-			<ng-container *ngFor="let data of dataList">
-				<ng-container *ngIf="data | async as snapshot">
-					<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
-						<ng-container
-							*ngTemplateOutlet="
-								rows;
-								context: { $implicit: row.data() }
-							"
-						></ng-container>
-					</tr>
-				</ng-container>
-			</ng-container>
-		</tbody>
-		<tbody *ngIf="displayFormat === 'pagination'">
+
+		<tbody *ngIf="displayFormat === 'pagination'; else scroll">
 			<ng-container *ngIf="dataList[pageIndex] | async as snapshot; else loading">
 				<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
 					<ng-container
@@ -64,21 +51,37 @@
 				</tr>
 			</ng-container>
 		</tbody>
+		<ng-template #scroll>
+			<tbody>
+				<ng-container *ngFor="let data of dataList">
+					<ng-container *ngIf="data | async as snapshot; else loading">
+						<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+							<ng-container
+								*ngTemplateOutlet="
+									rows;
+									context: { $implicit: row.data() }
+								"
+							></ng-container>
+						</tr>
+					</ng-container>
+				</ng-container>
+			</tbody>
+		</ng-template>
 	</table>
-	<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
-		threshold="100px" 
-		(ionInfinite)="handleScrollChange($event)" 
-	>
-		<ion-infinite-scroll-content
-			loadingSpinner="bubbles"
-			loadingText="Loading more data..."
-		></ion-infinite-scroll-content>
-	</ion-infinite-scroll>
 </div>
 
+<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
+	(ionInfinite)="handleScrollChange($event)"
+	threshold="100px"
+>
+	<ion-infinite-scroll-content
+		loadingSpinner="null"
+		loadingText=""
+	></ion-infinite-scroll-content>
+</ion-infinite-scroll>
 
 <ng-template #loading>
-	<td colspan="100%">
+	<td *ngIf="!pageIndex" colspan="100%">
 		<div id="spinner-wrapper">
 			<mat-spinner></mat-spinner>
 		</div>
