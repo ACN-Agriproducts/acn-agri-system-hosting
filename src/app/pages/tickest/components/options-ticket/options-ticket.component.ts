@@ -36,9 +36,11 @@ export class OptionsTicketComponent implements OnInit {
     this.userPermissions = this.session.getPermissions();
     this.userName = this.session.getUser().name;
 
-    getDownloadURL(ref(this.storage, this.ticket.pdfLink)).then(val => {
-      this.downloadString = val;
-    });
+    if(this.ticket.pdfLink) {
+      getDownloadURL(ref(this.storage, this.ticket.pdfLink)).then(val => {
+        this.downloadString = val;
+      });
+    }
   }
   public openDialog = async () => {
     this.closePanel();
