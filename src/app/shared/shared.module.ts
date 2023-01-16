@@ -13,6 +13,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
 import { PlantSelectComponent } from './components/plant-select/plant-select.component';
+import { StorageCardComponent } from './components/storage-card/storage-card.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { PlantSelectComponent } from './components/plant-select/plant-select.com
     ScaleToFitDirective,
     PrintableTicketComponent,
     PrintableInvoiceComponent,
-    PlantSelectComponent
+    PlantSelectComponent,
+    StorageCardComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -39,7 +41,8 @@ import { PlantSelectComponent } from './components/plant-select/plant-select.com
     FixTicketStorageComponent,
     UploadDocumentDialogComponent,
     PrintableInvoiceComponent,
-    PlantSelectComponent
+    PlantSelectComponent,
+    StorageCardComponent
   ]
 })
 export class SharedModule {}

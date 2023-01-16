@@ -3,7 +3,7 @@ import { PopoverController } from '@ionic/angular';
 import { Inventory, Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { firstValueFrom } from 'rxjs';
-import { StoragePopoverComponent } from '../storage-popover/storage-popover.component';
+import { StoragePopoverComponent } from '../../../pages/inventory/components/storage-popover/storage-popover.component';
 
 @Component({
   selector: 'app-storage-card',

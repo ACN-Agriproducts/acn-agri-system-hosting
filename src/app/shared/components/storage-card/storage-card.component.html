@@ -1,5 +1,5 @@
 <ion-card class="ion-no-margin" [color]="tank.archived ? 'warning' : ''" >
-  <ion-buttons class="content-btn-options">
+  <ion-buttons class="content-btn-options" *ngIf="plant && products">
     <ion-button (click)="inventoryMenu($event)">
       <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
     </ion-button>
