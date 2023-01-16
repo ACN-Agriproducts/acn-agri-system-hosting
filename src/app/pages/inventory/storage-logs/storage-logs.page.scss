@@ -4,6 +4,7 @@ mat-card {
 
 div:has(app-plant-select) {
     display: flex;
+    gap: 1rem;
 
     mat-form-field {
         width: 200px;
