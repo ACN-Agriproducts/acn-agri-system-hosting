@@ -58,7 +58,7 @@ export class StorageLogs extends FirebaseDocInterface {
         return collection(Plant.getDocReference(db, company, plant), "storageLogs").withConverter(StorageLogs.converter);
     }
 
-    public getStorageLogListDateRange(db: Firestore, company: string, plant: string, startDate: Date, endDate: Date): Promise<StorageLogs[]> {
+    public static getStorageLogListDateRange(db: Firestore, company: string, plant: string, startDate: Date, endDate: Date): Promise<StorageLogs[]> {
         const collectionQuery = query(
             StorageLogs.getCollectionReference(db, company, plant), 
             where("updatedOn", ">=", startDate), 
@@ -70,7 +70,7 @@ export class StorageLogs extends FirebaseDocInterface {
         });
     }
 
-    public getLastStorageLogBeforeDate(db: Firestore, company: string, plant: string, date: Date): Promise<StorageLogs> {
+    public static getLastStorageLogBeforeDate(db: Firestore, company: string, plant: string, date: Date): Promise<StorageLogs> {
         const collectionQuery = query(
             StorageLogs.getCollectionReference(db, company, plant), 
             where("updatedOn", "<", date), 
