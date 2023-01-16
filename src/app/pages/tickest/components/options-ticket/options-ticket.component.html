@@ -21,8 +21,7 @@
     <ion-icon slot="end" name="create-outline"></ion-icon>
   </ion-item>
   <ion-item button lines="none" color="danger" (click)="voidTicket()" 
-    *ngIf="!ticket.void && (userPermissions != null && (userPermissions.admin != null && userPermissions.admin 
-    || userPermissions['tickets']!= null && userPermissions['tickets'].voidTicketRequest))">
+    *ngIf="!ticket.void && userPermissions?.admin || userPermissions?.['tickets']?.voidTicketRequest">
     Void
     <ion-icon slot="end" name="close-outline"></ion-icon>
   </ion-item>
