@@ -29,7 +29,7 @@ export class StorageLogs extends FirebaseDocInterface {
         data.after.forEach(inv => {
             this.after.push(new Inventory(inv));
         });
-        data.change.forEach(inv => {
+        data.change?.forEach(inv => {
             this.change.push(new Change(inv));
         });
     }
