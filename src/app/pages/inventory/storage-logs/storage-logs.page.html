@@ -17,6 +17,15 @@
                 </mat-form-field>
             </div>
             
+            <div >
+                <div>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].before" [tank]="tank"></app-storage-card>
+                </div>
+                <div></div>
+                <div>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].after" [tank]="tank"></app-storage-card>
+                </div>
+            </div>
         </mat-card-content>
     </mat-card>
 </ion-content>

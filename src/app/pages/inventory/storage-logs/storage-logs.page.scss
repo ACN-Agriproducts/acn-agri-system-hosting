@@ -10,3 +10,15 @@ div:has(app-plant-select) {
         width: 200px;
     }
 }
+
+div:has(>app-storage-card) {
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+
+    app-storage-card {
+        min-width: 300px;
+        max-width: 400px;
+        flex: 300px 1 0;
+    }
+}
