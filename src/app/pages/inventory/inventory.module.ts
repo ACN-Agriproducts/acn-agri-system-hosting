@@ -14,6 +14,7 @@ import { MoveInvDialogComponent } from './components/storage-popover/dialogs/mov
 import { EditInvDialogComponent } from './components/storage-popover/dialogs/edit-inv-dialog/edit-inv-dialog.component';
 import { ZeroOutTankDialogComponent } from './components/storage-popover/dialogs/zero-out-tank-dialog/zero-out-tank-dialog.component';
 import { SharedModule } from '@shared/shared.module';
+import { StorageCardComponent } from './components/storage-card/storage-card.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { SharedModule } from '@shared/shared.module';
     MoveInvDialogComponent,
     EditInvDialogComponent,
     ZeroOutTankDialogComponent,
+    StorageCardComponent
   ],
 })
 export class InventoryPageModule {}
