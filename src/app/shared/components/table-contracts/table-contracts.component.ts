@@ -204,10 +204,17 @@ export class TableContractsComponent implements OnInit {
   
   public async scrollQuery(event: any): Promise<QueryConstraint[]> {
     const constraints: QueryConstraint[] = [limit(this.steps)];
-
     const nextConstraint = await this.nextContractsQuery();
+
+    // if (event) {
+    //   event.target.complete();
+    //   if (!nextConstraint) {
+    //     event.target.disabled = true;
+    //     return;
+    //   }
+    // }
+
     event.target.complete();
-    
     if (!nextConstraint) {
       event.target.disabled = true;
       return;
@@ -226,9 +233,6 @@ export class TableContractsComponent implements OnInit {
 
     const nextContracts = getDocs(this.query.withConverter(Contract.converter));
     this.contracts.push(nextContracts);
-    // this.contracts.forEach(async promise => {
-    //   console.log((await promise).docs.map(doc => doc.data()));
-    // });
   }
 
   public handleSort(column: ColumnInfo): void {
@@ -237,6 +241,10 @@ export class TableContractsComponent implements OnInit {
   }
 
   public async handleChange(event: number | MatSelectChange | Event): Promise<void> {
+    // if (!event) {
+    //   this.queryConstraints = await this.scrollQuery();
+    //   this.loadContracts();
+    // }
     if (typeof event === 'number' && this.contracts[event]) return;
 
     this.queryConstraints = event instanceof Event 
@@ -244,7 +252,7 @@ export class TableContractsComponent implements OnInit {
       : await this.paginateQuery(event);
 
     if (!this.queryConstraints) return;
-
+    
     this.loadContracts();
   }
 }

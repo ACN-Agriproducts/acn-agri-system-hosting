@@ -1,7 +1,6 @@
-import { Component, ContentChild, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { QuerySnapshot } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
-import { NavController } from '@ionic/angular';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { Observable } from 'rxjs';
 
@@ -22,6 +21,8 @@ export class TableComponent implements OnInit {
   @ContentChild('rows') rows!: TemplateRef<any>;
   @ContentChild('status') status: TemplateRef<any>;
 
+  // @ViewChild('tableWrap', {static: false}) tableWrap: Element;
+
   public pageDetails: Promise<string>;
   public pageIndex: number;
   public steps: Promise<number>;
@@ -36,6 +37,18 @@ export class TableComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    // if (!this.scrollBarExists()) {
+    //   console.log("scroll bar does not exist")
+    //   this.handleScrollChange();
+    // }
+  }
+  
+  // public scrollBarExists(): boolean {
+  //   console.log(this.tableWrap.scrollHeight > this.tableWrap.clientHeight)
+  //   return this.tableWrap.scrollHeight > this.tableWrap.clientHeight;
+  // }
+
   ngOnChanges() {
     if (this.displayFormat === 'pagination') {
       this.steps = this.setSteps();
@@ -45,6 +58,7 @@ export class TableComponent implements OnInit {
   }
   
   public handleScrollChange(event: Event) {
+    // console.log(event)
     this.tableChange.emit(event);
   }
   
@@ -62,6 +76,7 @@ export class TableComponent implements OnInit {
   
   public async getDetails(): Promise<string> {
     const steps = await this.steps ?? 0;
-    return `${this.pageIndex * steps + 1} - ${(this.pageIndex * steps + steps) > this.dataCount ? this.dataCount : this.pageIndex * steps + steps}`;
+    const range = this.pageIndex * steps;
+    return `${range + 1} - ${range + steps > this.dataCount ? this.dataCount : range + steps}`;
   }
 }

@@ -21,7 +21,7 @@
 			</button>
 			<button mat-icon-button 
 				(click)="handlePageChange(pageIndex + 1)" 
-				[disabled]="pageIndex >= roundUp(dataCount / (steps | async)) - 1"
+				[disabled]="pageIndex >= roundUp(dataCount / (steps | async)) - 1 || !dataList[pageIndex]"
 			>
 				<mat-icon>keyboard_arrow_right</mat-icon>
 			</button>
@@ -29,7 +29,7 @@
 	</div>
 </div>
 
-<div id="table-wrapper">
+<div id="table-wrapper" class="ion-content-scroll-host" #tableWrap>
 	<table>
 		<thead>
 			<tr>

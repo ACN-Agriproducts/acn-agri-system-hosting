@@ -30,6 +30,9 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+
+    // position: sticky;
+    // left: 0;
 }
 
 #custom-paginator {
@@ -62,6 +65,7 @@ table {
     color: var(--ion-color-dark);
     font-size: 0.9em;
     border-radius: 5px 5px 5px 5px !important;
+    position: relative;
 
     thead {
         background-color: var(--ion-color-primary-light);
