@@ -3,6 +3,7 @@ import { QuerySnapshot } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { Observable } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-table',
@@ -27,7 +28,9 @@ export class TableComponent implements OnInit {
   public pageIndex: number;
   public steps: Promise<number>;
 
-  constructor() { }
+  constructor(
+    private navController: NavController // need to call open(Document) from parent table
+  ) { }
 
   ngOnInit() {
     if (this.displayFormat === 'pagination') {

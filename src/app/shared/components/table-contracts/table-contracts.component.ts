@@ -182,8 +182,7 @@ export class TableContractsComponent implements OnInit {
   }
 
   public openContract(contract: Contract): void {
-    // salesContracts | purchaseContracts -> sales | purchase
-    const contractType = contract.ref.parent.id.slice(0, -9);
+    const contractType = contract.ref.parent.id.replace("Contracts", '');
     this.navController.navigateForward(
       `dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`
     );
