@@ -241,6 +241,18 @@ export class PricesPage implements OnInit {
     }
   }
 
+  preventArrayDuplicates(names: string[]) {
+    const namesSet: Set<string> = new Set<string>();
+    names.forEach((name, index) => {
+      while(namesSet.has(name) || name == "") {
+        name = name += " ";
+      }
+
+      namesSet.add(name);
+      names[index] = name;
+    });
+  }
+
   async importFromExcelTablePaste(priceTypeName: string) {
     const dialogRef = this.dialog.open(TableImportDialogComponent, {
       width: '350px'
@@ -253,6 +265,7 @@ export class PricesPage implements OnInit {
     const rows: string[][] = tableInput.trim().split("\n").map(r => r.split('\t').map(s => s.trim()));
     const locationNames = rows[0];
     locationNames.splice(0, 1);
+    this.preventArrayDuplicates(locationNames);
 
     const productNames: string[] = [];
     const prices: (number | string)[][] = [];
@@ -260,6 +273,7 @@ export class PricesPage implements OnInit {
 
     for(let index = 0; index < rows.length; index++) {
       productNames.push(rows[index][0]);
+      this.preventArrayDuplicates(productNames);
       prices.push(rows[index].splice(1).map(ns => {
         const parsedNum = Number.parseFloat(ns.replace(/,/g, ''));
 
