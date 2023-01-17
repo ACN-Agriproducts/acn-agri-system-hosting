@@ -58,7 +58,6 @@ export class TableComponent implements OnInit {
   }
   
   public handleScrollChange(event: Event) {
-    // console.log(event)
     this.tableChange.emit(event);
   }
   

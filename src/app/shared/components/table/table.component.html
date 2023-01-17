@@ -68,17 +68,18 @@
 			</tbody>
 		</ng-template>
 	</table>
+
+	<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
+		(ionInfinite)="handleScrollChange($event)"
+		threshold="100px"
+	>
+		<ion-infinite-scroll-content
+			loadingSpinner="null"
+			loadingText=""
+		></ion-infinite-scroll-content>
+	</ion-infinite-scroll>
 </div>
 
-<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
-	(ionInfinite)="handleScrollChange($event)"
-	threshold="100px"
->
-	<ion-infinite-scroll-content
-		loadingSpinner="null"
-		loadingText=""
-	></ion-infinite-scroll-content>
-</ion-infinite-scroll>
 
 <ng-template #loading>
 	<td colspan="100%">

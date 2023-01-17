@@ -19,9 +19,10 @@
     overflow-y: auto;
     border-radius: 5px 5px 5px 5px !important;
     height: 100%;
+    // max-height: max-content;
     min-height: 180px;
     width: inherit;
-    border: solid 1px white; //
+    border: solid 1px var(--ion-color-primary); //
 }
 
 #paginator-wrapper {

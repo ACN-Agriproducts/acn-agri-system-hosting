@@ -149,18 +149,8 @@ export class TableContractsComponent implements OnInit {
     });
   }
 
-  public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
-
   public formatColumns(): ColumnInfo[] {
     return this.columns.map(col => typeof col === 'string' ? { fieldName: col } : col);
-  }
-
-  public openContract(contract: Contract): void {
-    // salesContracts | purchaseContracts -> sales | purchase
-    const contractType = contract.ref.parent.id.slice(0, -9);
-    this.navController.navigateForward(
-      `dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`
-    );
   }
 
   public sort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): QueryConstraint[] {
@@ -180,28 +170,40 @@ export class TableContractsComponent implements OnInit {
     return [orderBy(this.sortFieldName, this.sortDirection)];
   }
 
-  public async paginateQuery(event: number | MatSelectChange): Promise<QueryConstraint[]> {
-    const constraints: QueryConstraint[] = [];
+  public async loadContracts(): Promise<void> {
+    this.query = query(
+      this.collRef, 
+      ...this.sortConstraints, 
+      ...this.queryConstraints
+    );
 
-    if (event instanceof MatSelectChange) {
-      this.contracts = [];
-      this.steps = event.value;
-    }
-    else if (typeof event === 'number' && !this.contracts[event]) {
-      constraints.push(await this.nextContractsQuery());
-    }
-
-    constraints.push(limit(this.steps));
-    return constraints;
+    const nextContracts = getDocs(this.query.withConverter(Contract.converter));
+    this.contracts.push(nextContracts);
   }
 
-  public async nextContractsQuery(): Promise<QueryConstraint> {
-    const currentSnapshot = await this.contracts[this.contracts.length - 1];
-    const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
-
-    return lastDoc ? startAfter(lastDoc) : null;
+  public openContract(contract: Contract): void {
+    // salesContracts | purchaseContracts -> sales | purchase
+    const contractType = contract.ref.parent.id.slice(0, -9);
+    this.navController.navigateForward(
+      `dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`
+    );
   }
-  
+
+  public async handleChange(event: number | MatSelectChange | Event): Promise<void> {
+    // if (!event) {
+    //   this.queryConstraints = await this.scrollQuery();
+    //   this.loadContracts();
+    // }
+    if (typeof event === 'number' && this.contracts[event]) return;
+
+    this.queryConstraints = event instanceof Event 
+      ? await this.scrollQuery(event) 
+      : await this.paginateQuery(event);
+
+    if (!this.queryConstraints) return;
+    this.loadContracts();
+  }
+
   public async scrollQuery(event: any): Promise<QueryConstraint[]> {
     const constraints: QueryConstraint[] = [limit(this.steps)];
     const nextConstraint = await this.nextContractsQuery();
@@ -224,15 +226,26 @@ export class TableContractsComponent implements OnInit {
     return constraints;
   }
 
-  public async loadContracts(): Promise<void> {
-    this.query = query(
-      this.collRef, 
-      ...this.sortConstraints, 
-      ...this.queryConstraints
-    );
+  public async nextContractsQuery(): Promise<QueryConstraint> {
+    const currentSnapshot = await this.contracts[this.contracts.length - 1];
+    const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
 
-    const nextContracts = getDocs(this.query.withConverter(Contract.converter));
-    this.contracts.push(nextContracts);
+    return lastDoc ? startAfter(lastDoc) : null;
+  }
+
+  public async paginateQuery(event: number | MatSelectChange): Promise<QueryConstraint[]> {
+    const constraints: QueryConstraint[] = [];
+
+    if (event instanceof MatSelectChange) {
+      this.contracts = [];
+      this.steps = event.value;
+    }
+    else if (typeof event === 'number' && !this.contracts[event]) {
+      constraints.push(await this.nextContractsQuery());
+    }
+
+    constraints.push(limit(this.steps));
+    return constraints;
   }
 
   public handleSort(column: ColumnInfo): void {
@@ -240,21 +253,7 @@ export class TableContractsComponent implements OnInit {
     this.loadContracts();
   }
 
-  public async handleChange(event: number | MatSelectChange | Event): Promise<void> {
-    // if (!event) {
-    //   this.queryConstraints = await this.scrollQuery();
-    //   this.loadContracts();
-    // }
-    if (typeof event === 'number' && this.contracts[event]) return;
-
-    this.queryConstraints = event instanceof Event 
-      ? await this.scrollQuery(event) 
-      : await this.paginateQuery(event);
-
-    if (!this.queryConstraints) return;
-    
-    this.loadContracts();
-  }
+  public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
 }
 
 interface FormatOptions {
