@@ -109,7 +109,7 @@ export class PricesPage implements OnInit {
     }
   }
 
-  setPrice(type: string, location: string, product: string, newPrice: number): void {
+  setPrice(type: string, location: string, product: string, newPrice: number | string): void {
     const locationIndex = this.pricesTable[type].locationNames.findIndex(t => t == location);
     const productIndex = this.pricesTable[type].productNames.findIndex(p => p == product);
 
@@ -255,12 +255,19 @@ export class PricesPage implements OnInit {
     locationNames.splice(0, 1);
 
     const productNames: string[] = [];
-    const prices: number[][] = [];
+    const prices: (number | string)[][] = [];
     rows.splice(0, 1);
 
     for(let index = 0; index < rows.length; index++) {
       productNames.push(rows[index][0]);
-      prices.push(rows[index].splice(1).map(ns => Number.parseFloat(ns.replace(/,/g, ''))));
+      prices.push(rows[index].splice(1).map(ns => {
+        const parsedNum = Number.parseFloat(ns.replace(/,/g, ''));
+
+        if(isNaN(parsedNum)) {
+          return ns;
+        }
+        return parsedNum;
+      }));
     }
 
     this.pricesTable[priceTypeName] = {
@@ -356,7 +363,7 @@ interface priceTable {
   rowNames: string[];
   data:{
     [location: string]: {
-      [ProductType: string]: number;
+      [ProductType: string]: (number | string);
     };
   };
 }
@@ -365,7 +372,7 @@ interface pricesTable {
   futurePrice: number;
   locationNames: string[];
   productNames: string[];
-  prices: number[][];
+  prices: (number | string)[][];
   type: "purchase" | "sale"; 
 }
 
