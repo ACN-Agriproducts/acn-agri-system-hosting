@@ -1,4 +1,4 @@
-mat-card {
+.main-content {
     margin: 1rem;
 }
 
@@ -13,12 +13,16 @@ div:has(app-plant-select) {
 
 .change-container {
     display: flex;
+    gap: 1rem;
+
+    >* {
+        display: flex;
+        gap: 1rem;
+    }
 }
 
 div:has(>app-storage-card) {
-    display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
     margin: 1rem 0rem;
 
     app-storage-card {
@@ -27,9 +31,17 @@ div:has(>app-storage-card) {
     }
 }
 
+div:has(>mat-card) {
+    justify-content: center;
+}
+
 @media screen and (max-width: 1299px) {
     .change-container {
         flex-direction: column;
+
+        >* {
+            align-items: center;
+        }
     }
 
     div:has(>app-storage-card) {
@@ -39,6 +51,10 @@ div:has(>app-storage-card) {
             flex: 300px 1 0;
         }
     }
+    
+    #right {
+        display: none;
+    }
 }
 
 @media screen and (min-width: 1300px) {
@@ -47,10 +63,16 @@ div:has(>app-storage-card) {
 
         >* {
             flex: 1px 1 0;
+            flex-direction: column;
+            align-items: center;
+    
+            app-storage-card {
+                width: 100%;
+            }
         }
     }
 
-    div:has(>app-storage-card) {
-        flex-direction: column;
+    #down {
+        display: none;
     }
 }

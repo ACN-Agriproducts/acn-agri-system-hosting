@@ -1,7 +1,7 @@
 <app-header-toolbar titulo="Inventory Logs"></app-header-toolbar>
 
 <ion-content>
-    <mat-card>
+    <mat-card class="main-content">
         <mat-card-content>
             <div>
                 <app-plant-select (plantChangeEvent)="getLogs()"></app-plant-select>
@@ -26,6 +26,8 @@
                         {{changes.tank}}:
                         {{changes.amount.get() + " " + changes.amount.getUnit()}}
                     </mat-card>
+                    <mat-icon id="down">arrow_downward</mat-icon>
+                    <mat-icon id="right">arrow_forward</mat-icon>
                 </div>
                 <div>
                     <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].after" [tank]="tank"></app-storage-card>
