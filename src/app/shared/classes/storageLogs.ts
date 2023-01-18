@@ -1,6 +1,7 @@
 import { collection, Firestore, getDocs, limit, query, CollectionReference, orderBy, QueryDocumentSnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Mass } from "./mass";
 import { Inventory, Plant } from "./plant";
 
 export class StorageLogs extends FirebaseDocInterface {
@@ -86,11 +87,11 @@ export class StorageLogs extends FirebaseDocInterface {
 export class Change {
     type: string;
     tank: string;
-    amount?: number;
+    amount?: Mass;
 
     constructor(data: any) {
         this.type = data.type;
         this.tank = data.tank;
-        this.amount = data.amount ?? null;
+        this.amount = data.amount ? new Mass(data.amount, FirebaseDocInterface.session.getDefaultUnit()) : null;
     }
 }
