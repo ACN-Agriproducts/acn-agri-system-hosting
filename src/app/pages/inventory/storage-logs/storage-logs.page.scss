@@ -11,15 +11,46 @@ div:has(app-plant-select) {
     }
 }
 
+.change-container {
+    display: flex;
+}
+
 div:has(>app-storage-card) {
     display: flex;
-    max-width: 100%;
     flex-wrap: wrap;
     gap: 1rem;
+    margin: 1rem 0rem;
 
     app-storage-card {
         min-width: 300px;
         max-width: 400px;
-        flex: 300px 1 0;
+    }
+}
+
+@media screen and (max-width: 1299px) {
+    .change-container {
+        flex-direction: column;
+    }
+
+    div:has(>app-storage-card) {
+        flex-direction: row;
+
+        app-storage-card {
+            flex: 300px 1 0;
+        }
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    .change-container {
+        flex-direction: row;
+
+        >* {
+            flex: 1px 1 0;
+        }
+    }
+
+    div:has(>app-storage-card) {
+        flex-direction: column;
     }
 }
