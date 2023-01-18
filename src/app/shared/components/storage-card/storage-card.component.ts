@@ -14,6 +14,7 @@ export class StorageCardComponent implements OnInit {
   @Input() tank: Inventory;
   @Input() plant: Plant;
   @Input() products: Product[];
+  @Input() hasDefaultUnits: boolean;
 
   constructor(
     private popoverController: PopoverController

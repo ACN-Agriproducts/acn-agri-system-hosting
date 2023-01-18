@@ -21,7 +21,10 @@
       <div class="item-text-inventory">
         <p>
           <span>Current: </span>
-          <b>{{tank.current.getMassInUnit('mTon').toFixed(3)}} MT</b>
+          <b>
+            {{tank.current.getMassInUnit('mTon').toFixed(3)}} MT
+            <ng-container *ngIf="hasDefaultUnits">{{"| " + tank.current.get().toFixed(0) + " " + tank.current.getUnit()}}</ng-container>
+          </b>
         </p>
       </div>
     </div>
