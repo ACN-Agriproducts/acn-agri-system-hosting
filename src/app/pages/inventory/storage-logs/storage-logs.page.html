@@ -17,11 +17,16 @@
                 </mat-form-field>
             </div>
             
-            <div >
+            <div class="change-container">
                 <div>
-                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].before" [tank]="tank"></app-storage-card>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].before" [tank]="tank" [hasDefaultUnits]="true"></app-storage-card>
                 </div>
-                <div></div>
+                <div>
+                    <mat-card *ngFor="let changes of (storageLogs$ | async)?.[index].change">
+                        {{changes.tank}}:
+                        {{changes.amount.get() + " " + changes.amount.getUnit()}}
+                    </mat-card>
+                </div>
                 <div>
                     <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].after" [tank]="tank"></app-storage-card>
                 </div>
