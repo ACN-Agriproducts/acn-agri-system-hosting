@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, PopoverController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { firstValueFrom, Observable } from 'rxjs';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
-import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
