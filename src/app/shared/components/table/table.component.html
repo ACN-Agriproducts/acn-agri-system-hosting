@@ -80,6 +80,47 @@
 	></ion-infinite-scroll-content>
 </ion-infinite-scroll> -->
 
+<div id="table-wrapper" class="ion-content-scroll-host">
+	<table>
+		<thead>
+			<tr>
+				<ng-container *ngTemplateOutlet="headers"></ng-container>
+			</tr>
+		</thead>
+		<tbody *ngIf="displayFormat === 'pagination'; else scroll">
+			<ng-container *ngIf="dataList[pageIndex] | async as snapshot; else loading">
+				<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+					<ng-container *ngTemplateOutlet="rows; 
+						context: { $implicit: row.data() }"
+					></ng-container>
+				</tr>
+			</ng-container>
+		</tbody>
+		<ng-template #scroll>
+			<tbody>
+				<ng-container *ngFor="let data of dataList">
+					<ng-container *ngIf="data | async as snapshot; else loading">
+						<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+							<ng-container *ngTemplateOutlet="rows; 
+								context: { $implicit: row.data() }"
+							></ng-container>
+						</tr>
+					</ng-container>
+				</ng-container>
+			</tbody>
+		</ng-template>
+	</table>
+</div>
+<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
+	(ionInfinite)="handleScroll($event)"
+	threshold="100px"
+>
+	<ion-infinite-scroll-content
+		loadingSpinner="null"
+		loadingText=""
+	></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+
 
 <ng-template #loading>
 	<td colspan="100%">
@@ -88,28 +129,3 @@
 		</div>
 	</td>
 </ng-template>
-
-<div id="table-wrapper" class="ion-content-scroll-host">
-	<table>
-		<thead>
-			<tr>
-				<ng-container
-					*ngTemplateOutlet="headers"
-				></ng-container>
-			</tr>
-		</thead>
-
-		<tbody>
-			<ng-container *ngIf="data[pageIndex] | async as snapshot; else loading">
-				<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
-					<ng-container
-						*ngTemplateOutlet="
-							rows;
-							context: { $implicit: row.data() }
-						"
-					></ng-container>
-				</tr>
-			</ng-container>
-		</tbody>
-	</table>
-</div>

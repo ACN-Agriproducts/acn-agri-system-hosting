@@ -1,9 +1,9 @@
 import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot } from '@angular/fire/firestore';
+import { CollectionReference, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { Observable } from 'rxjs';
-import { NavController } from '@ionic/angular';
+import { IonInfiniteScroll, NavController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
@@ -27,20 +27,20 @@ export class TableComponent implements OnInit {
 
   // NEW STUFF -----------------------
 
-  @Input() rowAction?: Function;
-  @Input() displayFormat?: string;
-  @Input() collRef!: CollectionReference<FirebaseDocInterface>;
-  @Input() steps: number;
+  @Input() private collRef!: CollectionReference<FirebaseDocInterface>;
+  @Input() public displayFormat!: string;
+  @Input() public rowAction?: Function = () => {};
+  @Input() public steps!: number;
 
-  public data: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
+  public count: number = 0;
+  public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
   public ready: boolean = false;
-  public count: number = 0;
   
-  public queryConstraints: QueryConstraint[];
-  public sortConstraints: QueryConstraint[];
-  public sortDirection: OrderByDirection;
-  public sortFieldName: string;
+  private queryConstraints: QueryConstraint[];
+  private sortConstraints: QueryConstraint[];
 
   // NEW STUFF -----------------------
 
@@ -96,26 +96,26 @@ export class TableComponent implements OnInit {
   ngOnInit() {
     // initialize sort and query constraints
     this.sortConstraints = [];
-    this.queryConstraints = this.steps ? [limit(this.steps)] : [];
+    this.queryConstraints = [limit(this.steps)];
 
-    // initialize data
-    this.data.push(this.loadData());
+    // initialize dataList
+    this.dataList.push(this.loadData());
   }
 
-  // get data for initial and subsequent page/scroll loading
+  // get dataList for initial and subsequent page/scroll loading
   public loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
-    const docQuery = query(
+    const snapQuery = query(
       this.collRef, 
       ...this.sortConstraints, 
       ...this.queryConstraints
     );
+    const nextDocuments = getDocs(snapQuery);
 
-    const nextDocuments = getDocs(docQuery);
     nextDocuments.then(res => {
       console.log(res.docs.map(doc => doc.data()))
       
       if (res.docs.length < this.steps) {
-        console.log("end infiniteScroll");
+        this.infiniteScroll.disabled = true;
       }
     })
     .catch(error => {
@@ -125,6 +125,25 @@ export class TableComponent implements OnInit {
 
     return nextDocuments;
   }
+
+  public async handleScroll(event: Event): Promise<void> {
+    // change the queryConstraints to startafter last document
+    this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
+    // push more dataList into the list
+    this.dataList.push(this.loadData());
+    // complete infiniteScroll
+    this.infiniteScroll.complete();
+  }
+
+  public async getNextQuery(): Promise<QueryConstraint> {
+    const currentSnapshot = await this.dataList[this.dataList.length - 1];
+    const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
+
+    // return lastDoc ? startAfter(lastDoc) : null;
+    return startAfter(lastDoc);
+  }
+
+  
 
   // NEW STUFF -----------------------
 }

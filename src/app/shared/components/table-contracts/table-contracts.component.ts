@@ -31,7 +31,7 @@ export declare type contractColumns = (
 })
 export class TableContractsComponent implements OnInit {
   @Input() collRef!: CollectionReference<Contract>;
-  private query: CollectionReference<Contract> | Query<Contract>;
+  // private query: CollectionReference<Contract> | Query<Contract>;
 
   @Input() columns!: (contractColumns | ColumnInfo)[];
   public displayColumns: ColumnInfo[] = [];
@@ -54,12 +54,12 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('status') status: TemplateRef<any>;
   @ViewChild('transport') transport: TemplateRef<any>;
   
-  public contractCount: number = 0;
-  public contracts: Promise<QuerySnapshot<Contract>>[];
+  // public contractCount: number = 0;
+  // public contracts: Promise<QuerySnapshot<Contract>>[];
   // public ready: boolean = false;
   
-  public queryConstraints: QueryConstraint[];
-  public sortConstraints: QueryConstraint[];
+  // public queryConstraints: QueryConstraint[];
+  // public sortConstraints: QueryConstraint[];
   public sortDirection: OrderByDirection;
   public sortFieldName: string;
 
@@ -128,7 +128,9 @@ export class TableContractsComponent implements OnInit {
       this.snack.open("Columns are nullish or empty", "error");
       return;
     }
-
+    
+    // limit(undefined) = no limit, limit(null) = error
+    this.steps = this.steps ?? undefined;
     this.displayColumns = this.formatColumns();
 
     // this.contracts = [];
