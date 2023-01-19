@@ -1,7 +1,8 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
+import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { StorageLogs } from '@shared/classes/storageLogs';
 
@@ -48,6 +49,9 @@ export class StorageLogsPage implements OnInit {
   public index: number;
   public startDate: Date;
   public endDate: Date;
+  public datesList: Date[];
+
+  @ViewChild("slider") slider: MatSlider;
 
   constructor(
     private session: SessionInfo,
@@ -75,5 +79,25 @@ export class StorageLogsPage implements OnInit {
 
     this.storageLogs$ = StorageLogs.getStorageLogListDateRange(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate, this.endDate);
     this.lastLogsBefore$ = StorageLogs.getLastStorageLogBeforeDate(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate);
+
+    this.storageLogs$.then(result => {
+      this.datesList = result.map(log => log.updatedOn);
+    });
+  }
+
+  formatLabel(value: number): string {
+    const display = this.datesList?.[value].toDateString() ?? "";
+
+    // console.log(display);
+    return "3k";
+  }
+
+  sliderChange(event: MatSliderChange) {
+    console.log(event.value);
+    this.index = event.value;
+  }
+
+  changeIndex(newIndex: number) {
+    this.index = Math.min(Math.max(0, newIndex), this.datesList.length-1);
   }
 }

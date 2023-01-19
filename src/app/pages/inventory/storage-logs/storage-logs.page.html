@@ -17,6 +17,24 @@
                 </mat-form-field>
             </div>
             
+            <div class="pagination-bar">
+                <button 
+                    mat-icon-button 
+                    (click)="changeIndex(index-1)" 
+                    [disabled]="index == 0">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <span>
+                    {{index + 1}} / {{(storageLogs$ | async)?.length}}
+                </span> 
+                <button 
+                    mat-icon-button 
+                    (click)="changeIndex(index+1)" 
+                    [disabled]="((storageLogs$ | async)?.length - 1 ?? 0) == index">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+
             <div class="change-container">
                 <div>
                     <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].before" [tank]="tank" [hasDefaultUnits]="true"></app-storage-card>
@@ -32,6 +50,29 @@
                 <div>
                     <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].after" [tank]="tank"></app-storage-card>
                 </div>
+            </div>
+
+            <div class="pagination-bar">
+                <button 
+                    mat-icon-button 
+                    (click)="changeIndex(index-1)" 
+                    [disabled]="index == 0">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <span>
+                    {{index + 1}} / {{(storageLogs$ | async)?.length}}
+                </span> 
+                <button 
+                    mat-icon-button 
+                    (click)="changeIndex(index+1)" 
+                    [disabled]="((storageLogs$ | async)?.length - 1 ?? 0) == index">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+            <div>
+                <mat-slider [min]="0" [max]="(storageLogs$ | async)?.length - 1 ?? 0" step="1" showTickMarks discrete [displayWith]="formatLabel.bind(this)" #slider (change)="sliderChange($event)">
+                    <input matSliderThumb>
+                </mat-slider>
             </div>
         </mat-card-content>
     </mat-card>

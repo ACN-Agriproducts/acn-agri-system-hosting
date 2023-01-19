@@ -35,6 +35,16 @@ div:has(>mat-card) {
     justify-content: center;
 }
 
+.pagination-bar, div:has(mat-slider) {
+    display: flex;
+    justify-content: space-around;
+}
+
+mat-slider {
+    width: 80%;
+    margin: auto;
+}
+
 @media screen and (max-width: 1299px) {
     .change-container {
         flex-direction: column;
