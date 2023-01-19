@@ -80,6 +80,35 @@
 	></ion-infinite-scroll-content>
 </ion-infinite-scroll> -->
 
+<div id="paginator-wrapper" *ngIf="displayFormat === 'pagination'">
+	<div id="custom-paginator">
+		<div>
+			Items per page:
+			<mat-form-field>
+				<mat-select (selectionChange)="handleSelect($event)" [value]="steps">
+					<mat-option *ngFor="let size of [5, 10, 20, 30, 40]" [value]="size">
+						{{ size }}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		{{ pageDetails }} of {{ count }}
+		<div>
+			<button mat-icon-button 
+				(click)="handlePagination(-1)" 
+				[disabled]="pageIndex <= 0"
+			>
+				<mat-icon>keyboard_arrow_left</mat-icon>
+			</button>
+			<button mat-icon-button 
+				(click)="handlePagination(1)" 
+				[disabled]="pageIndex >= roundUp(count / steps - 1) || !dataList[pageIndex]"
+			>
+				<mat-icon>keyboard_arrow_right</mat-icon>
+			</button>
+		</div>
+	</div>
+</div>
 <div id="table-wrapper" class="ion-content-scroll-host">
 	<table>
 		<thead>
@@ -112,7 +141,7 @@
 	</table>
 </div>
 <ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll'"
-	(ionInfinite)="handleScroll($event)"
+	(ionInfinite)="handleScroll()"
 	threshold="100px"
 >
 	<ion-infinite-scroll-content

@@ -1,5 +1,5 @@
 import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter } from '@angular/fire/firestore';
+import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { Observable } from 'rxjs';
@@ -38,6 +38,7 @@ export class TableComponent implements OnInit {
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
   public ready: boolean = false;
+  public pageDetails: string;
   
   private queryConstraints: QueryConstraint[];
   private sortConstraints: QueryConstraint[];
@@ -79,12 +80,12 @@ export class TableComponent implements OnInit {
   //   return (await this.dataList[0] as QuerySnapshot).docs.length;
   // }
 
-  // public roundUp = (num: number) => Math.ceil(num);
+  public roundUp = (num: number) => Math.ceil(num);
   
   // public async getDetails(): Promise<string> {
   //   const steps = await this.steps ?? 0;
   //   const range = this.pageIndex * steps;
-  //   return `${range + 1} - ${range + steps > this.dataCount ? this.dataCount : range + steps}`;
+  //   return `${range + 1} - ${range + steps > this.count ? this.count : range + steps}`;
   // }
 
 
@@ -100,6 +101,12 @@ export class TableComponent implements OnInit {
 
     // initialize dataList
     this.dataList.push(this.loadData());
+
+    // initialize other stuff
+    getCountFromServer(this.collRef).then(snap => {
+      this.count = snap.data().count;
+      this.pageDetails = this.getDetails();
+    });
   }
 
   // get dataList for initial and subsequent page/scroll loading
@@ -112,9 +119,8 @@ export class TableComponent implements OnInit {
     const nextDocuments = getDocs(snapQuery);
 
     nextDocuments.then(res => {
-      console.log(res.docs.map(doc => doc.data()))
-      
-      if (res.docs.length < this.steps) {
+      // console.log(res.docs.map(doc => doc.data()))
+      if (res.docs.length < this.steps && this.infiniteScroll) {
         this.infiniteScroll.disabled = true;
       }
     })
@@ -126,13 +132,30 @@ export class TableComponent implements OnInit {
     return nextDocuments;
   }
 
-  public async handleScroll(event: Event): Promise<void> {
+  public async handleScroll(): Promise<void> {
     // change the queryConstraints to startafter last document
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
     // push more dataList into the list
     this.dataList.push(this.loadData());
     // complete infiniteScroll
-    this.infiniteScroll.complete();
+    this.infiniteScroll?.complete();
+  }
+
+  public handleSelect(event: MatSelectChange): void {
+    // reset dataList, change steps, adjust query, push new data, and reset pageIndex
+    this.dataList = [];
+    this.steps = event.value;
+    this.queryConstraints = [limit(this.steps)];
+    this.pageIndex = 0;
+    this.dataList.push(this.loadData());
+  }
+
+  public async handlePagination(pageChange: number): Promise<void> {
+    this.pageIndex += pageChange;
+    if (this.dataList[this.pageIndex]) return;
+    
+    this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
+    this.dataList.push(this.loadData());
   }
 
   public async getNextQuery(): Promise<QueryConstraint> {
@@ -143,7 +166,10 @@ export class TableComponent implements OnInit {
     return startAfter(lastDoc);
   }
 
-  
+  public getDetails(): string {
+    const range = this.pageIndex * this.steps;
+    return `${range + 1} - ${range + this.steps > this.count ? this.count : range + this.steps}`;
+  }
 
   // NEW STUFF -----------------------
 }
