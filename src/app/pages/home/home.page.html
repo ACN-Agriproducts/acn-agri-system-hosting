@@ -8,9 +8,10 @@
         
     </div>
     <app-table-contracts 
+        [collRef]=""
         [columns]="columns" 
-        displayFormat="infiniteScroll"
-        [snapshot]="true"
-        [steps]="5"
+        displayFormat="pagination"
+        [snapshot]="false"
+        [steps]="10"
     ></app-table-contracts>
 </ion-content>

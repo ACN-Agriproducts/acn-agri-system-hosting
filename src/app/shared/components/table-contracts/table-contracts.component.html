@@ -1,11 +1,18 @@
 
-<app-table 
+<!-- <app-table 
 	[dataList]="contracts" 
 	[dataCount]="contractCount" 
 	[rowAction]="openContract" 
 	[displayFormat]="displayFormat" 
 	(tableChange)="handleChange($event)"
 	*ngIf="ready"
+> -->
+<app-table 
+	[rowAction]="openContract"
+	[displayFormat]="displayFormat"
+	[collRef]="collRef"
+	[steps]="steps" 
+	
 >
 	<ng-template #headers>
 		<th *ngFor="let column of displayColumns"

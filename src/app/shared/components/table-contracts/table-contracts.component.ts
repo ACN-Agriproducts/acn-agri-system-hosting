@@ -56,7 +56,7 @@ export class TableContractsComponent implements OnInit {
   
   public contractCount: number = 0;
   public contracts: Promise<QuerySnapshot<Contract>>[];
-  public ready: boolean = false;
+  // public ready: boolean = false;
   
   public queryConstraints: QueryConstraint[];
   public sortConstraints: QueryConstraint[];
@@ -131,54 +131,26 @@ export class TableContractsComponent implements OnInit {
 
     this.displayColumns = this.formatColumns();
 
-    this.contracts = [];
-    this.sortConstraints = this.sort();
-    this.queryConstraints = [limit(this.steps)];
+    // this.contracts = [];
+    // this.sortConstraints = this.sort();
+    // this.queryConstraints = [limit(this.steps)];
 
-    this.loadContracts()
-    .then(async () => {
-      if (this.contracts == null) throw "Contracts are nullish";
+    // this.loadContracts()
+    // .then(async () => {
+    //   if (this.contracts == null) throw "Contracts are nullish";
 
-      this.contractCount = (await getCountFromServer(this.collRef)).data().count;
-      this.ready = true;
-    })
-    .catch(error => {
-      this.ready = false;
-      this.snack.open(error, "error");
-      console.error(error);
-    });
+    //   this.contractCount = (await getCountFromServer(this.collRef)).data().count;
+    //   this.ready = true;
+    // })
+    // .catch(error => {
+    //   this.ready = false;
+    //   this.snack.open(error, "error");
+    //   console.error(error);
+    // });
   }
 
   public formatColumns(): ColumnInfo[] {
     return this.columns.map(col => typeof col === 'string' ? { fieldName: col } : col);
-  }
-
-  public sort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): QueryConstraint[] {
-    if (!column) return [];
-
-    this.contracts = [];
-    this.queryConstraints = [limit(this.steps)];
-
-    if (this.sortFieldName == column.fieldName) {
-      this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
-    }
-    else {
-      this.sortDirection = 'desc';
-      this.sortFieldName = column.fieldName;
-    }
-
-    return [orderBy(this.sortFieldName, this.sortDirection)];
-  }
-
-  public async loadContracts(): Promise<void> {
-    this.query = query(
-      this.collRef, 
-      ...this.sortConstraints, 
-      ...this.queryConstraints
-    );
-
-    const nextContracts = getDocs(this.query.withConverter(Contract.converter));
-    this.contracts.push(nextContracts);
   }
 
   public openContract(contract: Contract): void {
@@ -188,71 +160,107 @@ export class TableContractsComponent implements OnInit {
     );
   }
 
-  public async handleChange(event: number | MatSelectChange | Event): Promise<void> {
-    // if (!event) {
-    //   this.queryConstraints = await this.scrollQuery();
-    //   this.loadContracts();
-    // }
-    if (typeof event === 'number' && this.contracts[event]) return;
+  // public sort(column: ColumnInfo = this.displayColumns.find(col => col.fieldName === 'date')): QueryConstraint[] {
+  //   if (!column) return [];
+  //   this.contracts = [];
+  //   this.queryConstraints = [limit(this.steps)];
 
-    this.queryConstraints = event instanceof Event 
-      ? await this.scrollQuery(event) 
-      : await this.paginateQuery(event);
+  //   if (this.sortFieldName == column.fieldName) {
+  //     this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
+  //   }
+  //   else {
+  //     this.sortDirection = 'desc';
+  //     this.sortFieldName = column.fieldName;
+  //   }
+  //   return [orderBy(this.sortFieldName, this.sortDirection)];
+  // }
 
-    if (!this.queryConstraints) return;
-    this.loadContracts();
-  }
+  // public async loadContracts(): Promise<void> {
+  //   this.query = query(
+  //     this.collRef, 
+  //     ...this.sortConstraints, 
+  //     ...this.queryConstraints
+  //   );
 
-  public async scrollQuery(event: any): Promise<QueryConstraint[]> {
-    const constraints: QueryConstraint[] = [limit(this.steps)];
-    const nextConstraint = await this.nextContractsQuery();
+  //   const nextContracts = getDocs(this.query.withConverter(Contract.converter));
+  //   this.contracts.push(nextContracts);
+  // }
 
-    // if (event) {
-    //   event.target.complete();
-    //   if (!nextConstraint) {
-    //     event.target.disabled = true;
-    //     return;
-    //   }
-    // }
+  // public async handleChange(event: number | MatSelectChange | Event): Promise<void> {
+  //   // if (!event) {
+  //   //   this.queryConstraints = await this.scrollQuery();
+  //   //   this.loadContracts();
+  //   // }
+  //   if (typeof event === 'number' && this.contracts[event]) return;
 
-    event.target.complete();
-    if (!nextConstraint) {
-      event.target.disabled = true;
-      return;
-    }
+  //   this.queryConstraints = event instanceof Event 
+  //     ? await this.scrollQuery(event) 
+  //     : await this.paginateQuery(event);
+
+  //   if (!this.queryConstraints) return;
+  //   this.loadContracts();
+  // }
+
+  // public async scrollQuery(event: any): Promise<QueryConstraint[]> {
+  //   const constraints: QueryConstraint[] = [limit(this.steps)];
+  //   const nextConstraint = await this.nextContractsQuery();
+
+  //   // if (event) {
+  //   //   event.target.complete();
+  //   //   if (!nextConstraint) {
+  //   //     event.target.disabled = true;
+  //   //     return;
+  //   //   }
+  //   // }
+
+  //   event.target.complete();
+  //   if (!nextConstraint) {
+  //     event.target.disabled = true;
+  //     return;
+  //   }
     
-    constraints.unshift(nextConstraint);
-    return constraints;
-  }
+  //   constraints.unshift(nextConstraint);
+  //   return constraints;
+  // }
 
-  public async nextContractsQuery(): Promise<QueryConstraint> {
-    const currentSnapshot = await this.contracts[this.contracts.length - 1];
-    const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
+  // public async nextContractsQuery(): Promise<QueryConstraint> {
+  //   const currentSnapshot = await this.contracts[this.contracts.length - 1];
+  //   const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
 
-    return lastDoc ? startAfter(lastDoc) : null;
-  }
+  //   return lastDoc ? startAfter(lastDoc) : null;
+  // }
 
-  public async paginateQuery(event: number | MatSelectChange): Promise<QueryConstraint[]> {
-    const constraints: QueryConstraint[] = [];
+  // public async paginateQuery(event: number | MatSelectChange): Promise<QueryConstraint[]> {
+  //   const constraints: QueryConstraint[] = [];
 
-    if (event instanceof MatSelectChange) {
-      this.contracts = [];
-      this.steps = event.value;
-    }
-    else if (typeof event === 'number' && !this.contracts[event]) {
-      constraints.push(await this.nextContractsQuery());
-    }
+  //   if (event instanceof MatSelectChange) {
+  //     this.contracts = [];
+  //     this.steps = event.value;
+  //   }
+  //   else if (typeof event === 'number' && !this.contracts[event]) {
+  //     constraints.push(await this.nextContractsQuery());
+  //   }
 
-    constraints.push(limit(this.steps));
-    return constraints;
-  }
+  //   constraints.push(limit(this.steps));
+  //   return constraints;
+  // }
 
-  public handleSort(column: ColumnInfo): void {
-    this.sortConstraints = this.sort(column);
-    this.loadContracts();
-  }
+  // public handleSort(column: ColumnInfo): void {
+  //   this.sortConstraints = this.sort(column);
+  //   this.loadContracts();
+  // }
 
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
+
+  // NEW STUFF -------------------------------------------
+
+  // sort and pass the 
+  public handleSort(column: ColumnInfo) {
+    console.log("sort")
+  }
+  
+  // NEW STUFF -------------------------------------------
+
 }
 
 interface FormatOptions {
@@ -270,4 +278,3 @@ export interface ColumnInfo {
   minWidth?: string;
   maxWidth?: string;
 }
-
