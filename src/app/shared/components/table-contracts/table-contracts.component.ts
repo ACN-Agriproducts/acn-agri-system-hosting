@@ -6,6 +6,7 @@ import { IonInfiniteScroll, NavController } from '@ionic/angular';
 import { getCountFromServer, OrderByDirection, QuerySnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { MatSelectChange } from '@angular/material/select';
+import { TableComponent } from '../table/table.component';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -53,6 +54,8 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('quantity') quantity: TemplateRef<any>;
   @ViewChild('status') status: TemplateRef<any>;
   @ViewChild('transport') transport: TemplateRef<any>;
+
+  @ViewChild(TableComponent) table: TableComponent;
   
   // public contractCount: number = 0;
   // public contracts: Promise<QuerySnapshot<Contract>>[];
@@ -149,6 +152,11 @@ export class TableContractsComponent implements OnInit {
     //   this.snack.open(error, "error");
     //   console.error(error);
     // });
+  }
+
+  ngAfterViewInit() {
+    // initial sort
+    this.handleSort(this.displayColumns.find(col => col.fieldName === 'date').fieldName);
   }
 
   public formatColumns(): ColumnInfo[] {
@@ -256,9 +264,19 @@ export class TableContractsComponent implements OnInit {
 
   // NEW STUFF -------------------------------------------
 
-  // sort and pass the 
-  public handleSort(column: ColumnInfo) {
-    console.log("sort")
+  // handle the sort from this contract table (parent)
+  // set sortFieldName and sortDirection
+  // call sort method from configurable table (child)
+  public handleSort(fieldName: string): void {
+    if (this.sortFieldName == fieldName) {
+      this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
+    }
+    else {
+      this.sortDirection = 'desc';
+      this.sortFieldName = fieldName;
+    }
+
+    this.table.sort(fieldName, this.sortDirection);
   }
   
   // NEW STUFF -------------------------------------------

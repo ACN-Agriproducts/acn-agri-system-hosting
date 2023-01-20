@@ -92,7 +92,7 @@
 				</mat-select>
 			</mat-form-field>
 		</div>
-		{{ pageDetails }} of {{ count }}
+		{{ getDetails() }} of {{ count }}
 		<div>
 			<button mat-icon-button 
 				(click)="handlePagination(-1)" 

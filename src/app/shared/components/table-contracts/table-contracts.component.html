@@ -11,7 +11,7 @@
 	[rowAction]="openContract"
 	[displayFormat]="displayFormat"
 	[collRef]="collRef"
-	[steps]="steps" 
+	[steps]="steps"
 	
 >
 	<ng-template #headers>
@@ -23,7 +23,7 @@
 		>
 			<button
 				[class.selected]="sortFieldName === column.fieldName"
-				(click)="handleSort(column)"
+				(click)="handleSort(column.fieldName)"
 			>
 				<ng-container
 					*ngTemplateOutlet="

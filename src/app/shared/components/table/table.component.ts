@@ -1,10 +1,11 @@
 import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter } from '@angular/fire/firestore';
+import { CollectionReference, DocumentData, getCountFromServer, getDocs, limit, OrderByDirection, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, startAfter } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { Observable } from 'rxjs';
 import { IonInfiniteScroll, NavController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { orderBy } from 'firebase/firestore';
 
 @Component({
   selector: 'app-table',
@@ -27,18 +28,17 @@ export class TableComponent implements OnInit {
 
   // NEW STUFF -----------------------
 
-  @Input() private collRef!: CollectionReference<FirebaseDocInterface>;
+  @Input() private collRef!: CollectionReference<FirebaseDocInterface> | Query<DocumentData>;
   @Input() public displayFormat!: string;
   @Input() public rowAction?: Function = () => {};
   @Input() public steps!: number;
 
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll) private infiniteScroll: IonInfiniteScroll;
 
   public count: number = 0;
-  public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
+  public dataList: Promise<QuerySnapshot<FirebaseDocInterface | DocumentData>>[] = [];
   public pageIndex: number = 0;
   public ready: boolean = false;
-  public pageDetails: string;
   
   private queryConstraints: QueryConstraint[];
   private sortConstraints: QueryConstraint[];
@@ -105,12 +105,11 @@ export class TableComponent implements OnInit {
     // initialize other stuff
     getCountFromServer(this.collRef).then(snap => {
       this.count = snap.data().count;
-      this.pageDetails = this.getDetails();
     });
   }
 
   // get dataList for initial and subsequent page/scroll loading
-  public loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
+  public loadData(): Promise<QuerySnapshot<FirebaseDocInterface | DocumentData>> {
     const snapQuery = query(
       this.collRef, 
       ...this.sortConstraints, 
@@ -142,11 +141,13 @@ export class TableComponent implements OnInit {
   }
 
   public handleSelect(event: MatSelectChange): void {
-    // reset dataList, change steps, adjust query, push new data, and reset pageIndex
-    this.dataList = [];
+    // change steps
     this.steps = event.value;
-    this.queryConstraints = [limit(this.steps)];
+    // reset dataList and pageIndex
+    this.dataList = [];
     this.pageIndex = 0;
+    // adjust query for new pageSize, and push new data
+    this.queryConstraints = [limit(this.steps)];
     this.dataList.push(this.loadData());
   }
 
@@ -162,13 +163,30 @@ export class TableComponent implements OnInit {
     const currentSnapshot = await this.dataList[this.dataList.length - 1];
     const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
 
-    // return lastDoc ? startAfter(lastDoc) : null;
     return startAfter(lastDoc);
   }
 
   public getDetails(): string {
-    const range = this.pageIndex * this.steps;
-    return `${range + 1} - ${range + this.steps > this.count ? this.count : range + this.steps}`;
+    const rangeStart = this.pageIndex * this.steps + 1;
+    let rangeEnd = rangeStart + this.steps - 1;
+    rangeEnd = rangeEnd > this.count ? this.count : rangeEnd;
+
+    return `${rangeStart} - ${rangeEnd}`;
+  }
+
+  public sort(fieldName: string, direction: OrderByDirection): void {
+    if (!fieldName) this.sortConstraints = [];
+
+    // reset dataList and pageIndex
+    this.dataList = [];
+    this.pageIndex = 0;
+
+    // set constraints to new values
+    this.sortConstraints = [orderBy(fieldName, direction)];
+    this.queryConstraints = [limit(this.steps)];
+
+    // push new data
+    this.dataList.push(this.loadData());
   }
 
   // NEW STUFF -----------------------
