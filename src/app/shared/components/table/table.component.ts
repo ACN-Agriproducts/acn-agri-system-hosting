@@ -175,14 +175,12 @@ export class TableComponent implements OnInit {
   }
 
   public sort(fieldName: string, direction: OrderByDirection): void {
-    if (!fieldName) this.sortConstraints = [];
-
     // reset dataList and pageIndex
     this.dataList = [];
     this.pageIndex = 0;
 
     // set constraints to new values
-    this.sortConstraints = [orderBy(fieldName, direction)];
+    this.sortConstraints = fieldName ? [orderBy(fieldName, direction)] : [];
     this.queryConstraints = [limit(this.steps)];
 
     // push new data

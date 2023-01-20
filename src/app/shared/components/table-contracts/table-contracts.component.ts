@@ -156,7 +156,7 @@ export class TableContractsComponent implements OnInit {
 
   ngAfterViewInit() {
     // initial sort
-    this.handleSort(this.displayColumns.find(col => col.fieldName === 'date').fieldName);
+    this.handleSort(this.displayColumns.find(col => col.fieldName === 'date')?.fieldName);
   }
 
   public formatColumns(): ColumnInfo[] {
