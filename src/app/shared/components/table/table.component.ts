@@ -26,7 +26,6 @@ export class TableComponent implements OnInit {
   public count: number = 0;
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
-  public ready: boolean = false;
   
   private queryConstraints: QueryConstraint[];
   private sortConstraints: QueryConstraint[];
