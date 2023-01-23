@@ -20,6 +20,7 @@ export class TableComponent implements OnInit {
   @Input() public displayFormat!: string;
   @Input() public rowAction?: Function = () => {};
   @Input() public steps!: number;
+  @Input() public fixedHeight!: boolean;
 
   @ViewChild(IonInfiniteScroll) private infiniteScroll: IonInfiniteScroll;
 
@@ -81,6 +82,7 @@ export class TableComponent implements OnInit {
     this.dataList.push(this.loadData());
     // complete infiniteScroll
     this.infiniteScroll?.complete();
+    console.log('infinite scroll triggereddd')
   }
 
   public handleSelect(event: MatSelectChange): void {

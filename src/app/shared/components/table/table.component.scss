@@ -18,8 +18,7 @@
     overflow-x: auto;
     overflow-y: auto;
     border-radius: 5px 5px 5px 5px !important;
-    height: 100%;
-    // max-height: max-content;
+    height: inherit;
     min-height: 180px;
     width: inherit;
     border: solid 1px var(--ion-color-primary); //

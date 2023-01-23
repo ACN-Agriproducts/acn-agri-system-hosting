@@ -39,6 +39,7 @@ export class TableContractsComponent implements OnInit {
   @Input() formatOptions?: FormatOptions;
   @Input() snapshot?: boolean = false;
   @Input() steps?: number;
+  @Input() fixedHeight?: boolean = false;
 
   @ViewChild('clientName') clientName: TemplateRef<any>;
   @ViewChild('currentDelivered') currentDelivered: TemplateRef<any>;
