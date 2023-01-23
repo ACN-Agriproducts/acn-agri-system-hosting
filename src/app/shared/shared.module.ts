@@ -17,7 +17,6 @@ import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { TableComponent } from './components/table/table.component';
-import { TableTestingComponent } from './components/table-testing/table-testing.component';
 import { TableContractsComponent } from './components/table-contracts/table-contracts.component';
 
 
@@ -40,7 +39,6 @@ import { TableContractsComponent } from './components/table-contracts/table-cont
     SectionTitleComponent,
     HashMapPipe,
     TableComponent,
-    TableTestingComponent,
     TableContractsComponent,
   ],
   declarations: [
@@ -56,7 +54,6 @@ import { TableContractsComponent } from './components/table-contracts/table-cont
     SectionTitleComponent,
     HashMapPipe,
     TableComponent,
-    TableTestingComponent,
     TableContractsComponent,
   ]
 })
