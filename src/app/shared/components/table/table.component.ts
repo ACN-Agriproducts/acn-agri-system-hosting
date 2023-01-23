@@ -26,6 +26,7 @@ export class TableComponent implements OnInit {
   public count: number = 0;
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
+  public defaultSize: number;
   
   private queryConstraints: QueryConstraint[];
   private sortConstraints: QueryConstraint[];
@@ -47,6 +48,7 @@ export class TableComponent implements OnInit {
     getCountFromServer(this.collRef).then(snap => {
       this.count = snap.data().count;
     });
+    this.defaultSize = this.steps;
   }
 
   // get dataList for initial and subsequent page/scroll loading

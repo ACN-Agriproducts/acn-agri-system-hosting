@@ -4,9 +4,13 @@
 		<div>
 			Items per page:
 			<mat-form-field>
-				<mat-select (selectionChange)="handleSelect($event)" [value]="steps">
+				<mat-select (selectionChange)="handleSelect($event)" [value]="steps" #select>
+					<mat-select-trigger>{{ select.value }}</mat-select-trigger>
 					<mat-option *ngFor="let size of [5, 10, 20, 30, 40]" [value]="size">
 						{{ size }}
+					</mat-option>
+					<mat-option *ngIf="defaultSize" [value]="defaultSize">
+						Default: {{ defaultSize }}
 					</mat-option>
 				</mat-select>
 			</mat-form-field>
