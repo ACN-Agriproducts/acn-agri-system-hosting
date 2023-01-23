@@ -86,10 +86,7 @@ export class StorageLogsPage implements OnInit {
   }
 
   formatLabel(value: number): string {
-    const display = this.datesList?.[value].toDateString() ?? "";
-
-    // console.log(display);
-    return "3k";
+    return this.datesList?.[value]?.toDateString() ?? "";
   }
 
   sliderChange(event: MatSliderChange) {
@@ -99,5 +96,8 @@ export class StorageLogsPage implements OnInit {
 
   changeIndex(newIndex: number) {
     this.index = Math.min(Math.max(0, newIndex), this.datesList.length-1);
+    this.storageLogs$.then(result => {
+      console.log(result[newIndex])
+    })
   }
 }

@@ -25,7 +25,8 @@
                     <mat-icon>keyboard_arrow_left</mat-icon>
                 </button>
                 <span>
-                    {{index + 1}} / {{(storageLogs$ | async)?.length}}
+                    <div>{{datesList?.[index] | date}}</div>
+                    <div>{{index + 1}} / {{(storageLogs$ | async)?.length}}</div>
                 </span> 
                 <button 
                     mat-icon-button 
@@ -37,18 +38,19 @@
 
             <div class="change-container">
                 <div>
-                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].before" [tank]="tank" [hasDefaultUnits]="true"></app-storage-card>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index]?.before" [tank]="tank" [hasDefaultUnits]="true"></app-storage-card>
                 </div>
                 <div>
-                    <mat-card *ngFor="let changes of (storageLogs$ | async)?.[index].change">
+                    <mat-card *ngFor="let changes of (storageLogs$ | async)?.[index]?.change">
                         {{changes.tank}}:
-                        {{changes.amount.get() + " " + changes.amount.getUnit()}}
+                        {{changes.amount? changes.amount.get() + " " + changes.amount.getUnit(): ""}}
+                        {{changes.type}}
                     </mat-card>
                     <mat-icon id="down">arrow_downward</mat-icon>
                     <mat-icon id="right">arrow_forward</mat-icon>
                 </div>
                 <div>
-                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index].after" [tank]="tank"></app-storage-card>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index]?.after" [tank]="tank"></app-storage-card>
                 </div>
             </div>
 
@@ -70,8 +72,17 @@
                 </button>
             </div>
             <div>
-                <mat-slider [min]="0" [max]="(storageLogs$ | async)?.length - 1 ?? 0" step="1" showTickMarks discrete [displayWith]="formatLabel.bind(this)" #slider (change)="sliderChange($event)">
-                    <input matSliderThumb>
+                <mat-slider 
+                    [min]="0" 
+                    [max]="(storageLogs$ | async)?.length - 1 ?? 0" 
+                    tickInterval="1" 
+                    step="1" 
+                    showTickMarks 
+                    discrete 
+                    [displayWith]="formatLabel.bind(this)" 
+                    (change)="sliderChange($event)" 
+                    color="primary">
+                    <input matSliderThumb [matTooltip]="'hrlp'">
                 </mat-slider>
             </div>
         </mat-card-content>
