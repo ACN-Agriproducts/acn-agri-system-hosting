@@ -1,13 +1,10 @@
 <ion-header>
     <app-header-toolbar titulo="Contract"></app-header-toolbar>
     <ion-toolbar class="ion-align-items-stretch">
-        <ion-segment class="ion-justify-content-start" value="purchaseContracts"
+        <ion-segment class="ion-justify-content-start" value="0"
             (ionChange)="changedContractType($event)">
-            <ion-segment-button value="purchaseContracts">
-                <ion-label>Purchase Contracts</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="salesContracts">
-                <ion-label>Sales Contracts</ion-label>
+            <ion-segment-button *ngFor="let tab of tabData; let index = index" [value]="index">
+                <ion-label>{{tab.label}}</ion-label>
             </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
@@ -30,6 +27,15 @@
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="">
+    <ng-container *ngTemplateOutlet="tabData?.[tabIndex].type; context: {$implicit: tabData?.[tabIndex]}"></ng-container>
+</ion-content>
+
+<!-- TODO -->
+<ng-template #cards let-tabData>
+    Card Template works!
+</ng-template>
+
+<ng-template #table let-tabData>
     <div class="content">
         <div class="header-filter">
             <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
@@ -38,24 +44,23 @@
                 <ion-text>New</ion-text>
             </ion-button>
             <!-- <ion-button fill="outline" color="primary" (click)="openFilter($event)">
-          <ion-icon name="filter" slot="start"></ion-icon>
-          <ion-text>Filter</ion-text>
-      </ion-button> -->
+            <ion-icon name="filter" slot="start"></ion-icon>
+            <ion-text>Filter</ion-text>
+        </ion-button> -->
         </div>
         <ion-card class="table-header grid-item ion-hide-md-down">
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('id')">
                 <div class="item-text-header item-text-number-header">
                     <ion-text>N°</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'numberContract')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'id' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
-
                 </div>
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('client')">
                 <div class="item-text-header">
                     <ion-text>Customer</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'name')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'client' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
                 </div>
@@ -63,7 +68,7 @@
             <ion-item lines="none" matTooltip="Contract Date">
                 <div class="item-text-header item-icon-hide-hover">
                     <ion-text>Date</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'dateContract', 'date')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'id' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
                 </div>
@@ -71,7 +76,7 @@
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('status')">
                 <div class="item-text-header">
                     <ion-text>State</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'state')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'status' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
                 </div>
@@ -79,7 +84,7 @@
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('product')" matTooltip="Product">
                 <div class="item-text-header">
                     <ion-text>Product</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'product')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'product' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
                 </div>
@@ -87,7 +92,7 @@
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
                 <div class="item-text-header item-icon-hide-hover">
                     <ion-text>Delivered</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'currentDelivered')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
                 </div>
@@ -95,7 +100,7 @@
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
                 <div class="item-text-header item-icon-hide-hover">
                     <ion-text>Bushels</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'volumeBushels')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
                 </div>
@@ -103,7 +108,7 @@
             <ion-item lines="none" matTooltip="Price per Bushel" (click)="sortList('price')">
                 <div class="item-text-header item-icon-hide-hover">
                     <ion-text>Price</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event, 'priceCWT', '$')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'price' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
                 </div>
@@ -111,90 +116,91 @@
             <ion-item lines="none">
                 <div class="item-text-header item-icon-hide-hover">
                     <ion-text>Total</ion-text>
-                    <ion-icon (click)="openOptionsFilter($event,'totalContract', '$')"
+                    <ion-icon
                         [class.active-arrow]="sortField == 'total' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
                 </div>
             </ion-item>
             <!-- <ion-item lines="none">
-          <div class="item-text-header">
-              <ion-text>Manage</ion-text>
-          </div>
-      </ion-item> -->
-        </ion-card>
-        <ion-card class="table-body" *ngIf='contractPagination?.list'>
-            <!-- (contextmenu)="openOptions($event)" -->
-            <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
-            <div *ngFor="let item of contractPagination.list;">
-                <div (contextmenu)="openOptions($event)" class="grid-item item-table">
-                    <ion-item lines="none">
-                        <ion-text color="dark" class="item-text-number">{{item.id}}</ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text color="primary" class="item-text-customer">
-                            {{
-                            item.clientName | titlecase | slice:0:25
-                            }}
-                            <span *ngIf="item.clientName.length>25">...</span>
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text>{{item.date | date}}</ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text class="item-status" [class.pending]="item.status === 'pending'"
-                            [class.active]="item.status === 'active'" [class.close]="item.status === 'closed'"
-                            [class.cancel]="item.status === 'cancelled'">{{item.status}}
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text class="item-text-price" color="dark">
-                            {{item.product.id | titlecase}}
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text class="item-text-price" color="dark" 
-                            [matTooltip]="getDeliveredTooltip(item)"
-                            matTooltipClass="multiline-tooltip">
-                            {{item.currentDelivered.getBushelWeight(item.productInfo).toFixed(2)}}
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text class="item-text-price" color="dark"
-                            [matTooltip]="getQuantityTooltip(item)"
-                            matTooltipClass="multiline-tooltip">
-                            {{item.quantity.getBushelWeight(item.productInfo).toFixed(2)}}
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text class="item-text-price" color="dark">
-                            {{item.pricePerBushel | currency:'$'}}
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                        <ion-text class="item-text-price" color="dark">
-                            {{item.quantity.getBushelWeight(item.productInfo) * item.pricePerBushel | currency:'$'}}
-                        </ion-text>
-                    </ion-item>
-                    <ion-item lines="none" class="ion-hide-md-down">
-                        <div class="content-button">
-                            <ion-buttons>
-                                <ion-button color="medium" slot="end" (click)='openContractOptions($event, item.ref.id, item)'>
-                                    <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
-                                </ion-button>
-                            </ion-buttons>
-                        </div>
-                    </ion-item>
-                </div>
+            <div class="item-text-header">
+                <ion-text>Manage</ion-text>
             </div>
-
-            <!-- </ion-virtual-scroll> -->
+        </ion-item> -->
         </ion-card>
+        <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts">
+            <ion-card class="table-body">
+                <!-- (contextmenu)="openOptions($event)" -->
+                <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
+                <div *ngFor="let contract of (contractsPromise | async)?.['docs']">
+                    <div (contextmenu)="openOptions($event)" class="grid-item item-table">
+                        <ion-item lines="none">
+                            <ion-text color="dark" class="item-text-number">{{contract.data().id}}</ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text color="primary" class="item-text-customer">
+                                {{
+                                contract.data().clientName | titlecase | slice:0:25
+                                }}
+                                <span *ngIf="contract.data().clientName.length>25">...</span>
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text>{{contract.data().date | date}}</ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text class="item-status" [class.pending]="contract.data().status === 'pending'"
+                                [class.active]="contract.data().status === 'active'" [class.close]="contract.data().status === 'closed'"
+                                [class.cancel]="contract.data().status === 'cancelled'">{{contract.data().status}}
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text class="item-text-price" color="dark">
+                                {{contract.data().product.id | titlecase}}
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text class="item-text-price" color="dark"
+                                [matTooltip]="getDeliveredTooltip(contract.data())"
+                                matTooltipClass="multiline-tooltip">
+                                {{contract.data().currentDelivered.getBushelWeight(contract.data().productInfo).toFixed(2)}}
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text class="item-text-price" color="dark"
+                                [matTooltip]="getQuantityTooltip(contract.data())"
+                                matTooltipClass="multiline-tooltip">
+                                {{contract.data().quantity.getBushelWeight(contract.data().productInfo).toFixed(2)}}
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text class="item-text-price" color="dark">
+                                {{contract.data().pricePerBushel | currency:'$'}}
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none">
+                            <ion-text class="item-text-price" color="dark">
+                                {{contract.data().quantity.getBushelWeight(contract.data().productInfo) * contract.data().pricePerBushel | currency:'$'}}
+                            </ion-text>
+                        </ion-item>
+                        <ion-item lines="none" class="ion-hide-md-down">
+                            <div class="content-button">
+                                <ion-buttons>
+                                    <ion-button color="medium" slot="end" (click)='openContractOptions($event, contract.data())'>
+                                        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                                    </ion-button>
+                                </ion-buttons>
+                            </div>
+                        </ion-item>
+                    </div>
+                </div>
+                <!-- </ion-virtual-scroll> -->
+            </ion-card>
+        </ng-container>
     </div>
-    <ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
+    <ion-infinite-scroll #infiniteScroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
         <ion-infinite-scroll-content
             loadingSpinner="bubbles"
             loadingText="Loading more data...">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
-</ion-content>
+</ng-template>
