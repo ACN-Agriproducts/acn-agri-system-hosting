@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Contract } from '@shared/classes/contract';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-delivered-chart-card',
@@ -6,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./delivered-chart-card.component.scss'],
 })
 export class DeliveredChartCardComponent implements OnInit {
+  @Input() contract: Contract;
+  ticketList: Ticket[];
 
   constructor() { }
 
-  ngOnInit() {}
-
+  ngOnInit() {
+    this.contract.getTickets().then(result => {
+      this.ticketList = result;
+    });
+  }
 }
