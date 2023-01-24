@@ -127,10 +127,11 @@
             </div>
         </ion-item> -->
         </ion-card>
-        <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts">
-            <ion-card class="table-body">
-                <!-- (contextmenu)="openOptions($event)" -->
-                <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
+        
+        <ion-card class="table-body">
+            <!-- (contextmenu)="openOptions($event)" -->
+            <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
+            <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
                 <div *ngFor="let contract of (contractsPromise | async)?.['docs']">
                     <div (contextmenu)="openOptions($event)" class="grid-item item-table">
                         <ion-item lines="none">
@@ -193,9 +194,9 @@
                         </ion-item>
                     </div>
                 </div>
-                <!-- </ion-virtual-scroll> -->
-            </ion-card>
-        </ng-container>
+            <!-- </ion-virtual-scroll> -->
+            </ng-container>
+        </ion-card>
     </div>
     <ion-infinite-scroll #infiniteScroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
         <ion-infinite-scroll-content

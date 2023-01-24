@@ -99,6 +99,16 @@ export class ContractsPage implements AfterViewInit {
 
   public segmentChanged(event) {
     this.orderStatus = event.detail.value.split(',');
+    this.tabData.forEach(tab => {
+      if(tab.type != this.table) {
+        return;
+      }
+
+      tab.isInfiniteScrollDisabled = false;
+      tab.data.forEach(data => {
+        data.contracts = [];
+      });
+    });
     this.getContracts();
   };
 
@@ -109,7 +119,7 @@ export class ContractsPage implements AfterViewInit {
 
   public async getContracts() {
     const currentTabData = this.tabData[this.tabIndex];
-    // this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled;
+    if(this.infiniteScroll) this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled;
     
     currentTabData.data.forEach(data => {
       if(data.contracts.length == 0) {
@@ -130,11 +140,13 @@ export class ContractsPage implements AfterViewInit {
     const promises = [];
 
     for(let data of currentTabData.data) {
+      const lastContracts = await data.contracts[data.contracts.length - 1];
+
       const dbQuery = query(
         data.ref,
         where("status", "in", this.orderStatus),
         orderBy(this.sortField, this.assending? 'asc': 'desc'),
-        startAfter((await data.contracts[-1]).docs[-1]),
+        startAfter(lastContracts.docs?.[lastContracts.docs.length - 1]),
         limit(this.contractStep)
       );
       
@@ -146,7 +158,7 @@ export class ContractsPage implements AfterViewInit {
 
     const snapshot = await Promise.all(promises);
     event.target.complete();
-    this.infiniteScroll.disabled = snapshot[0].docs.length < this.contractStep;
+    this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled = snapshot[0].docs.length < this.contractStep;
   }
 
   public openModal = async () => {
