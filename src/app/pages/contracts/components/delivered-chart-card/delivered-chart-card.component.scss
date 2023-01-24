@@ -1,4 +1,15 @@
 mat-card {
     height: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+mat-card-header {
+    flex: auto 0 0;
+}
+
+mat-card-content {
+    flex: auto 1;
+
 }
