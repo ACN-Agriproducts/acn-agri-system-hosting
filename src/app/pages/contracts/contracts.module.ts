@@ -16,6 +16,7 @@ import { FilterComponent } from './components/filter/filter.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { SharedModule } from '@shared/shared.module';
 import { CloseContractFieldsDialogComponent } from './components/close-contract-fields-dialog/close-contract-fields-dialog.component';
+import { DeliveredChartCardComponent } from './components/delivered-chart-card/delivered-chart-card.component';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { CloseContractFieldsDialogComponent } from './components/close-contract-
     FilterComponent,
     ContractModalOptionsComponent,
     CloseContractFieldsDialogComponent,
+    DeliveredChartCardComponent
   ]
 })
 export class ContractsPageModule { }
