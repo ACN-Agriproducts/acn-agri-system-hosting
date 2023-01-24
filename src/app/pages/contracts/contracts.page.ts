@@ -123,14 +123,21 @@ export class ContractsPage implements AfterViewInit {
     
     currentTabData.data.forEach(data => {
       if(data.contracts.length == 0) {
-        const dbQuery = query(
+        let dbQuery = query(
           data.ref,
-          where("status", "in", this.orderStatus),
           orderBy(this.sortField, this.assending? 'asc': 'desc'),
           limit(this.contractStep)
         );
 
-        data.contracts.push(getDocs(dbQuery));
+        if(currentTabData.type == this.table) {
+          dbQuery = query(dbQuery, where("status", "in", this.orderStatus))
+        }
+        else if(currentTabData.type == this.cards) {
+          dbQuery = query(dbQuery, where("status", "==", "active"))
+        }
+
+        const promise = getDocs(dbQuery);
+        data.contracts.push(promise);
       }
     });
   };

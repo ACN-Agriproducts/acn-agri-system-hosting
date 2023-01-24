@@ -32,7 +32,9 @@
 
 <!-- TODO -->
 <ng-template #cards let-tabData>
-    Card Template works!
+    <div *ngFor="let data of tabData.data">
+        <app-delivered-chart-card *ngFor="let contract of (data.contracts[0] | async)?.['docs']" [contract]="contract.data()"></app-delivered-chart-card>
+    </div>
 </ng-template>
 
 <ng-template #table let-tabData>
