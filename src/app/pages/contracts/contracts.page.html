@@ -33,7 +33,7 @@
 <!-- TODO -->
 <ng-template #cards let-tabData>
     <div *ngFor="let data of tabData.data">
-        <app-delivered-chart-card *ngFor="let contract of (data.contracts[0] | async)?.['docs']" [contract]="contract.data()"></app-delivered-chart-card>
+        <app-delivered-chart-card *ngFor="let contract of data.contracts[0] | async" [contract]="contract"></app-delivered-chart-card>
     </div>
 </ng-template>
 
@@ -134,61 +134,61 @@
             <!-- (contextmenu)="openOptions($event)" -->
             <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
             <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
-                <div *ngFor="let contract of (contractsPromise | async)?.['docs']">
+                <div *ngFor="let contract of contractsPromise | async">
                     <div (contextmenu)="openOptions($event)" class="grid-item item-table">
                         <ion-item lines="none">
-                            <ion-text color="dark" class="item-text-number">{{contract.data().id}}</ion-text>
+                            <ion-text color="dark" class="item-text-number">{{contract.id}}</ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text color="primary" class="item-text-customer">
                                 {{
-                                contract.data().clientName | titlecase | slice:0:25
+                                contract.clientName | titlecase | slice:0:25
                                 }}
-                                <span *ngIf="contract.data().clientName.length>25">...</span>
+                                <span *ngIf="contract.clientName.length>25">...</span>
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
-                            <ion-text>{{contract.data().date | date}}</ion-text>
+                            <ion-text>{{contract.date | date}}</ion-text>
                         </ion-item>
                         <ion-item lines="none">
-                            <ion-text class="item-status" [class.pending]="contract.data().status === 'pending'"
-                                [class.active]="contract.data().status === 'active'" [class.close]="contract.data().status === 'closed'"
-                                [class.cancel]="contract.data().status === 'cancelled'">{{contract.data().status}}
+                            <ion-text class="item-status" [class.pending]="contract.status === 'pending'"
+                                [class.active]="contract.status === 'active'" [class.close]="contract.status === 'closed'"
+                                [class.cancel]="contract.status === 'cancelled'">{{contract.status}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.data().product.id | titlecase}}
+                                {{contract.product.id | titlecase}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
-                                [matTooltip]="getDeliveredTooltip(contract.data())"
+                                [matTooltip]="getDeliveredTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.data().currentDelivered.getBushelWeight(contract.data().productInfo).toFixed(2)}}
+                                {{contract.currentDelivered.getBushelWeight(contract.productInfo).toFixed(2)}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
-                                [matTooltip]="getQuantityTooltip(contract.data())"
+                                [matTooltip]="getQuantityTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.data().quantity.getBushelWeight(contract.data().productInfo).toFixed(2)}}
+                                {{contract.quantity.getBushelWeight(contract.productInfo).toFixed(2)}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.data().pricePerBushel | currency:'$'}}
+                                {{contract.pricePerBushel | currency:'$'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.data().quantity.getBushelWeight(contract.data().productInfo) * contract.data().pricePerBushel | currency:'$'}}
+                                {{contract.quantity.getBushelWeight(contract.productInfo) * contract.pricePerBushel | currency:'$'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none" class="ion-hide-md-down">
                             <div class="content-button">
                                 <ion-buttons>
-                                    <ion-button color="medium" slot="end" (click)='openContractOptions($event, contract.data())'>
+                                    <ion-button color="medium" slot="end" (click)='openContractOptions($event, contract)'>
                                         <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
                                     </ion-button>
                                 </ion-buttons>

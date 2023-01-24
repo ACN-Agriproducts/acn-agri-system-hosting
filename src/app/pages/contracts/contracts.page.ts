@@ -6,10 +6,10 @@ import { UntypedFormControl } from '@angular/forms';
 import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
-import { CollectionReference, Firestore, getDocs, limit, orderBy, query, QuerySnapshot, where } from '@angular/fire/firestore';
+import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { startAfter } from 'firebase/firestore';
+import { QueryConstraint, startAfter } from 'firebase/firestore';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class ContractsPage implements AfterViewInit {
     isInfiniteScrollDisabled: boolean;
     data: {
       //ref: CollectionReference<Contract>;
-      getData: (constraints) => Promise<Contract[]>;
+      getData: (constraints: QueryConstraint[]) => Promise<Contract[]>;
       title?: string;
       contracts: Promise<Contract[]>[];
     }[]
@@ -63,7 +63,7 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), true, constraints), 
+          getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), true, ...constraints), 
           contracts: [],
         }
       ]
@@ -73,7 +73,7 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), false, constraints), 
+          getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), false, ...constraints), 
           contracts: [],
         }
       ]
@@ -83,12 +83,12 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active")), 
+          getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active")), 
           title: "Purchase Contracts", 
           contracts: [],
         },
         {
-          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active")), 
+          getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active")), 
           title: "Purchase Contracts", 
           contracts: [],
         }
@@ -126,6 +126,7 @@ export class ContractsPage implements AfterViewInit {
       if(data.contracts.length == 0) {
         data.contracts.push(
           data.getData([
+            where("status", "in", this.orderStatus),
             orderBy(this.sortField, this.assending? 'asc': 'desc'),
             limit(this.contractStep)
           ])
@@ -153,7 +154,7 @@ export class ContractsPage implements AfterViewInit {
 
     const snapshot = await Promise.all(promises);
     event.target.complete();
-    this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled = snapshot[0].docs.length < this.contractStep;
+    this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled = snapshot[0].length < this.contractStep;
   }
 
   public openModal = async () => {
