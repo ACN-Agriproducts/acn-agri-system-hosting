@@ -6,7 +6,6 @@ import { Ticket } from '@shared/classes/ticket';
   selector: 'app-delivered-chart-card',
   templateUrl: './delivered-chart-card.component.html',
   styleUrls: ['./delivered-chart-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeliveredChartCardComponent implements OnInit {
   @Input() contract: Contract;
