@@ -36,9 +36,10 @@ export class ContractsPage implements AfterViewInit {
     type: TemplateRef<any>;
     isInfiniteScrollDisabled: boolean;
     data: {
-      ref: CollectionReference<Contract>;
+      //ref: CollectionReference<Contract>;
+      getData: (constraints) => Promise<Contract[]>;
       title?: string;
-      contracts: Promise<QuerySnapshot<Contract>>[];
+      contracts: Promise<Contract[]>[];
     }[]
   }[];
   public tabIndex: number = 0;
@@ -62,7 +63,7 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          ref: Contract.getCollectionReference(this.db, this.session.getCompany(), true), 
+          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), true, constraints), 
           contracts: [],
         }
       ]
@@ -72,7 +73,7 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          ref: Contract.getCollectionReference(this.db, this.session.getCompany(), false), 
+          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), false, constraints), 
           contracts: [],
         }
       ]
@@ -82,12 +83,12 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          ref: Contract.getCollectionReference(this.db, this.session.getCompany(), true), 
+          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active")), 
           title: "Purchase Contracts", 
           contracts: [],
         },
         {
-          ref: Contract.getCollectionReference(this.db, this.session.getCompany(), false), 
+          getData: (constraints) => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active")), 
           title: "Purchase Contracts", 
           contracts: [],
         }
@@ -123,21 +124,12 @@ export class ContractsPage implements AfterViewInit {
     
     currentTabData.data.forEach(data => {
       if(data.contracts.length == 0) {
-        let dbQuery = query(
-          data.ref,
-          orderBy(this.sortField, this.assending? 'asc': 'desc'),
-          limit(this.contractStep)
+        data.contracts.push(
+          data.getData([
+            orderBy(this.sortField, this.assending? 'asc': 'desc'),
+            limit(this.contractStep)
+          ])
         );
-
-        if(currentTabData.type == this.table) {
-          dbQuery = query(dbQuery, where("status", "in", this.orderStatus))
-        }
-        else if(currentTabData.type == this.cards) {
-          dbQuery = query(dbQuery, where("status", "==", "active"))
-        }
-
-        const promise = getDocs(dbQuery);
-        data.contracts.push(promise);
       }
     });
   };
@@ -148,16 +140,12 @@ export class ContractsPage implements AfterViewInit {
 
     for(let data of currentTabData.data) {
       const lastContracts = await data.contracts[data.contracts.length - 1];
-
-      const dbQuery = query(
-        data.ref,
+      const promise = data.getData([        
         where("status", "in", this.orderStatus),
         orderBy(this.sortField, this.assending? 'asc': 'desc'),
-        startAfter(lastContracts.docs?.[lastContracts.docs.length - 1]),
+        startAfter(lastContracts?.[lastContracts.length - 1].snapshot),
         limit(this.contractStep)
-      );
-      
-      const promise = getDocs(dbQuery);
+      ]);
 
       promises.push(promise);
       data.contracts.push(promise);
