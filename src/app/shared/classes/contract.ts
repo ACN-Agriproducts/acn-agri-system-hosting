@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -236,6 +236,14 @@ export class Contract extends FirebaseDocInterface {
               }
             });
           })
+    }
+
+    public static getContracts(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+        const collectionRef = Contract.getCollectionReference(db, company, isPurchaseContract);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return getDocs(collectionQuery).then(result => {
+            return result.docs.map(snap => snap.data());
+        });
     }
 }
 
