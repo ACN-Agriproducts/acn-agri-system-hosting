@@ -292,3 +292,17 @@ ion-item {
   background-color: rgba(var(--ion-color-warning-rgb), 0.15);
   color: var(--ion-color-warning);
 }
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.card-content-segment {
+  margin: 1rem;
+}
+
+app-delivered-chart-card {
+  height: 250px;
+}

@@ -32,8 +32,10 @@
 
 <!-- TODO -->
 <ng-template #cards let-tabData>
-    <div *ngFor="let data of tabData.data">
-        <app-delivered-chart-card *ngFor="let contract of data.contracts[0] | async" [contract]="contract"></app-delivered-chart-card>
+    <div *ngFor="let data of tabData.data" class="card-content-segment">
+        <div class="card-grid">
+            <app-delivered-chart-card *ngFor="let contract of data.contracts[0] | async" [contract]="contract"></app-delivered-chart-card>
+        </div>
     </div>
 </ng-template>
 
