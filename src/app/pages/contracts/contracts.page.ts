@@ -21,7 +21,7 @@ export class ContractsPage implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild("infiniteScroll") infiniteScroll: IonInfiniteScroll;
   @ViewChild("cards") cards: TemplateRef<any>;
-  @ViewChild("table") table: TemplateRef<any>;
+  @ViewChild("tableTemplate") table: TemplateRef<any>;
 
   public searchIinput = new UntypedFormControl('');
   public ready: boolean = false;

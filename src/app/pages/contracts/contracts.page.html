@@ -8,7 +8,7 @@
             </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
-    <ion-toolbar>
+    <ion-toolbar *ngIf="tabData?.[tabIndex].type == table">
         <ion-segment class="ion-justify-content-start" value="active,closed,pending,cancelled"
             (ionChange)="segmentChanged($event)">
             <ion-segment-button value="active,closed,pending,cancelled">
@@ -39,7 +39,7 @@
     </div>
 </ng-template>
 
-<ng-template #table let-tabData>
+<ng-template #tableTemplate let-tabData>
     <div class="content">
         <div class="header-filter">
             <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
