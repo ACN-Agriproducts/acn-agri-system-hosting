@@ -89,7 +89,7 @@ export class ContractsPage implements AfterViewInit {
         },
         {
           getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active")), 
-          title: "Purchase Contracts", 
+          title: "Sales Contracts", 
           contracts: [],
         }
       ]
