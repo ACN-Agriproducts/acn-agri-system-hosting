@@ -55,7 +55,7 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('status') status: TemplateRef<any>;
   @ViewChild('transport') transport: TemplateRef<any>;
 
-  @ViewChild(TableConfigurableComponent) table: TableConfigurableComponent;
+  @ViewChild(TableConfigurableComponent) public table: TableConfigurableComponent;
 
   public sortDirection: OrderByDirection;
   public sortFieldName: string;
@@ -107,10 +107,10 @@ export class TableContractsComponent implements OnInit {
 
   constructor(
     private db: Firestore,
-    private session: SessionInfo,
-    private snack: SnackbarService,
     private navController: NavController,
     private popoverCtrl: PopoverController,
+    private session: SessionInfo,
+    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {    
@@ -154,19 +154,8 @@ export class TableContractsComponent implements OnInit {
     [this.sortFieldName, this.sortDirection] = this.table.sort(this.sortFieldName, this.sortDirection, fieldName);
   }
 
-  public async openFilterMenu(fieldName: string, event: Event): Promise<void> {
-    // can do from configurable table
-    const popover = await this.popoverCtrl.create({
-      component: FilterPopoverComponent,
-      event,
-      cssClass: 'filter-popover'
-    });
-    await popover.present();
-
-    const { data, role } = await popover.onDidDismiss();
-
-    if (role === 'clear') this.table.clearFilter();
-    else if (role === 'filter') this.table.filter(fieldName, data);
+  public openFilterMenu(fieldName: string, event: Event): void {
+    this.table.openFilterMenu(fieldName, event);
   }
 }
 

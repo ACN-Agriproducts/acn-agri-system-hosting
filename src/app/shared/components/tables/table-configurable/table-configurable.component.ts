@@ -2,9 +2,10 @@ import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Outpu
 import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter, where } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
-import { IonInfiniteScroll, NavController } from '@ionic/angular';
+import { IonInfiniteScroll, NavController, PopoverController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { orderBy } from 'firebase/firestore';
+import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
 
 @Component({
   selector: 'app-configurable-table',
@@ -35,26 +36,23 @@ export class TableConfigurableComponent implements OnInit {
 
   constructor(
     private navController: NavController, // need to call open(Document) from parent table
+    private popoverCtrl: PopoverController,
     private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
-    // initialize sort and query constraints
     this.filterConstraints = [];
     this.sortConstraints = [];
     this.queryConstraints = [limit(this.steps)];
 
-    // initialize dataList
     this.dataList.push(this.loadData());
 
-    // initialize other stuff
     getCountFromServer(this.collRef).then(snap => {
       this.count = snap.data().count;
     });
     this.defaultSize = this.steps;
   }
 
-  // get dataList for initial and subsequent page/scroll loading
   public loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
     const snapQuery = query(
       this.collRef, 
@@ -79,22 +77,19 @@ export class TableConfigurableComponent implements OnInit {
   }
 
   public async handleScroll(): Promise<void> {
-    // change the queryConstraints to startafter last document
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
-    // push more dataList into the list
+
     this.dataList.push(this.loadData());
-    // complete infiniteScroll
     this.infiniteScroll?.complete();
     console.log('infinite scroll triggereddd')
   }
 
   public handleSelect(event: MatSelectChange): void {
-    // change steps
     this.steps = event.value;
-    // reset dataList and pageIndex
+
     this.dataList = [];
     this.pageIndex = 0;
-    // adjust query for new pageSize, and push new data
+
     this.queryConstraints = [limit(this.steps)];
     this.dataList.push(this.loadData());
   }
@@ -146,9 +141,21 @@ export class TableConfigurableComponent implements OnInit {
     return [sortFieldName, sortDirection];
   }
 
-  public clearFilter() {
-    console.log('clear filter')
+  public async openFilterMenu(fieldName: string, event: Event): Promise<void> {
+    const popover = await this.popoverCtrl.create({
+      component: FilterPopoverComponent,
+      event,
+      cssClass: 'filter-popover'
+    });
+    await popover.present();
 
+    const { data, role } = await popover.onDidDismiss();
+
+    if (role === 'clear') this.clearFilter();
+    else if (role === 'filter') this.filter(fieldName, data);
+  }
+
+  public clearFilter(): void {
     this.dataList = [];
     this.pageIndex = 0;
 
@@ -158,7 +165,7 @@ export class TableConfigurableComponent implements OnInit {
     this.dataList.push(this.loadData());
   }
 
-  public filter(fieldName: string, fieldSearch: string | number) {
+  public filter(fieldName: string, fieldSearch: string | number): void {
     if (!isNaN(fieldSearch as any)) fieldSearch = Number(fieldSearch);
 
     this.dataList = [];
