@@ -7,11 +7,11 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { orderBy } from 'firebase/firestore';
 
 @Component({
-  selector: 'app-table',
-  templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
+  selector: 'app-configurable-table',
+  templateUrl: './table-configurable.component.html',
+  styleUrls: ['./table-configurable.component.scss'],
 })
-export class TableComponent implements OnInit {
+export class TableConfigurableComponent implements OnInit {
   @ContentChild('headers') headers!: TemplateRef<any>;
   @ContentChild('rows') rows!: TemplateRef<any>;
   @ContentChild('status') status: TemplateRef<any>;

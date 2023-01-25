@@ -5,7 +5,7 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { OrderByDirection } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
-import { TableComponent } from '../table/table.component';
+import { TableConfigurableComponent } from '../table-configurable/table-configurable.component';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -54,7 +54,7 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('status') status: TemplateRef<any>;
   @ViewChild('transport') transport: TemplateRef<any>;
 
-  @ViewChild(TableComponent) table: TableComponent;
+  @ViewChild(TableConfigurableComponent) table: TableConfigurableComponent;
 
   public sortDirection: OrderByDirection;
   public sortFieldName: string;

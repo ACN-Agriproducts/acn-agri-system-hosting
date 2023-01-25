@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TableComponent } from './table.component';
+import { TableComponent } from './table-configurable.component';
 
 describe('TableComponent', () => {
   let component: TableComponent;
