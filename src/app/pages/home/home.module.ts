@@ -10,6 +10,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { NeedsAdminAttentionComponent } from './components/needs-admin-attention/needs-admin-attention.component';
 import { SharedModule } from '@shared/shared.module';
+import { GrainComparizonComponent } from './grain-comparizon/grain-comparizon.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,10 @@ import { SharedModule } from '@shared/shared.module';
     CoreModule,
     SharedModule
   ],
-  declarations: [HomePage, NeedsAdminAttentionComponent]
+  declarations: [
+    HomePage, 
+    NeedsAdminAttentionComponent,
+    GrainComparizonComponent
+  ]
 })
 export class HomePageModule {}

@@ -2,6 +2,8 @@
 
 <ion-content class="ion-padding">
     <div class="main-grid">
+        <app-grain-comparizon></app-grain-comparizon>
+
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
     </div>
 </ion-content>
