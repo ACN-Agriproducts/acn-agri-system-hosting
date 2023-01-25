@@ -87,8 +87,7 @@ export class TableConfigurableComponent implements OnInit {
   public handleSelect(event: MatSelectChange): void {
     this.steps = event.value;
 
-    this.dataList = [];
-    this.pageIndex = 0;
+    this.resetData();
 
     this.queryConstraints = [limit(this.steps)];
     this.dataList.push(this.loadData());
@@ -126,18 +125,13 @@ export class TableConfigurableComponent implements OnInit {
       sortFieldName = nextFieldName;
     }
 
-    // reset dataList and pageIndex
-    this.dataList = [];
-    this.pageIndex = 0;
+    this.resetData();
 
-    // set constraints to new values
     this.sortConstraints = sortFieldName ? [orderBy(sortFieldName, sortDirection)] : [];
     this.queryConstraints = [limit(this.steps)];
 
-    // push new data
     this.dataList.push(this.loadData());
 
-    // return new sortFieldName and sortDirection
     return [sortFieldName, sortDirection];
   }
 
@@ -156,8 +150,7 @@ export class TableConfigurableComponent implements OnInit {
   }
 
   public clearFilter(): void {
-    this.dataList = [];
-    this.pageIndex = 0;
+    this.resetData();
 
     this.filterConstraints = [];
     this.queryConstraints = [limit(this.steps)];
@@ -168,13 +161,17 @@ export class TableConfigurableComponent implements OnInit {
   public filter(fieldName: string, fieldSearch: string | number): void {
     if (!isNaN(fieldSearch as any)) fieldSearch = Number(fieldSearch);
 
-    this.dataList = [];
-    this.pageIndex = 0;
+    this.resetData();
 
     this.filterConstraints = [where(fieldName, "==", fieldSearch)];
     this.queryConstraints = [limit(this.steps)];
 
     this.dataList.push(this.loadData());
+  }
+
+  public resetData() {
+    this.dataList = [];
+    this.pageIndex = 0;
   }
 
   public roundUp = (num: number) => Math.ceil(num);
