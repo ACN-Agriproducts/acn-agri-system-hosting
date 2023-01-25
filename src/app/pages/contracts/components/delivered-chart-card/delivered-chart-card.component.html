@@ -3,7 +3,7 @@
     <mat-card-title>
       <a [routerLink]="['contract-info', (contract.ref.parent.id == 'purchaseContracts' ? 'purchase': 'sales'), contract.ref.id]">Contract {{contract.id}}</a>
     </mat-card-title>
-    <span>{{contract.quantity.getMassInUnit('mTon')}}</span>
+    <span>{{contract.currentDelivered | massInUnit:'mTon' | number:'0.2-2' }} / {{contract.quantity | massInUnit:'mTon' | number:'0.2-2'}} MTon</span>
   </mat-card-header>
   <mat-card-content>
     <ngx-charts-line-chart

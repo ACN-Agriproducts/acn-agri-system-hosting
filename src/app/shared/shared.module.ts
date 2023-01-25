@@ -13,6 +13,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
+import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
     ScaleToFitDirective,
     PrintableTicketComponent,
     PrintableInvoiceComponent,
-    FilterContractsPipe
+    FilterContractsPipe,
+    MassInUnitPipe
   ],
   declarations: [
     ToolbarComponent,
@@ -39,7 +41,8 @@ import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
     FixTicketStorageComponent,
     UploadDocumentDialogComponent,
     PrintableInvoiceComponent,
-    FilterContractsPipe
+    FilterContractsPipe,
+    MassInUnitPipe
   ]
 })
 export class SharedModule {}
