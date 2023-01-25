@@ -2,10 +2,11 @@ import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { CollectionReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { NavController } from '@ionic/angular';
+import { NavController, PopoverController } from '@ionic/angular';
 import { OrderByDirection } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { TableConfigurableComponent } from '../table-configurable/table-configurable.component';
+import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -109,6 +110,7 @@ export class TableContractsComponent implements OnInit {
     private session: SessionInfo,
     private snack: SnackbarService,
     private navController: NavController,
+    private popoverCtrl: PopoverController,
   ) { }
 
   ngOnInit() {    
@@ -160,7 +162,21 @@ export class TableContractsComponent implements OnInit {
     }
     
     // call sort method from configurable table (child)
-    this.table.sort(fieldName, this.sortDirection);
+    this.table.sort(fieldName, this.sortDirection); // change method to return new sortfieldname and direction
+  }
+
+  public async openFilterMenu(fieldName: string, event: Event): Promise<void> {
+    const popover = await this.popoverCtrl.create({
+      component: FilterPopoverComponent,
+      event,
+      cssClass: 'filter-popover'
+    });
+    await popover.present();
+
+    const { data, role } = await popover.onDidDismiss();
+
+    if (role === 'clear') this.table.clearFilter();
+    else if (role === 'filter') this.table.filter(fieldName, data);
   }
 }
 

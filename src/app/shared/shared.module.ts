@@ -18,6 +18,7 @@ import { SectionTitleComponent } from './components/section-title/section-title.
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { TableConfigurableComponent } from './components/tables/table-configurable/table-configurable.component';
 import { TableContractsComponent } from './components/tables/table-contracts/table-contracts.component';
+import { FilterPopoverComponent } from './components/tables/filter-popover/filter-popover.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { TableContractsComponent } from './components/tables/table-contracts/tab
     HashMapPipe,
     TableConfigurableComponent,
     TableContractsComponent,
+    FilterPopoverComponent,
   ]
 })
 export class SharedModule {}

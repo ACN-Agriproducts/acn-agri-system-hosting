@@ -1,0 +1,17 @@
+
+
+.clear-filter-item > .clear-filter {
+    padding: 0 10px;
+}
+
+.clear-filter {
+    position: relative;
+    font-size: 1.5em;
+
+    .clear-icon {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        font-size: 0.8em;
+    }
+}

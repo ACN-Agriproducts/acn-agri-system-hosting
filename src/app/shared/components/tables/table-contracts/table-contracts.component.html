@@ -15,7 +15,8 @@
 		>
 			<button
 				[class.selected]="sortFieldName === column.fieldName"
-				(click)="handleSort(column.fieldName)"
+				(click)="handleSort(column.fieldName)" 
+				(contextmenu)="openFilterMenu(column.fieldName, $event)" 
 			>
 				<ng-container
 					*ngTemplateOutlet="

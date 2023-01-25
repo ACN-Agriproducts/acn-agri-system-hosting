@@ -1,5 +1,5 @@
 import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter } from '@angular/fire/firestore';
+import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter, where } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { IonInfiniteScroll, NavController } from '@ionic/angular';
@@ -29,6 +29,7 @@ export class TableConfigurableComponent implements OnInit {
   public pageIndex: number = 0;
   public defaultSize: number;
   
+  private filterConstraints: QueryConstraint[];
   private queryConstraints: QueryConstraint[];
   private sortConstraints: QueryConstraint[];
 
@@ -39,6 +40,7 @@ export class TableConfigurableComponent implements OnInit {
 
   ngOnInit() {
     // initialize sort and query constraints
+    this.filterConstraints = [];
     this.sortConstraints = [];
     this.queryConstraints = [limit(this.steps)];
 
@@ -56,6 +58,7 @@ export class TableConfigurableComponent implements OnInit {
   public loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
     const snapQuery = query(
       this.collRef, 
+      ...this.filterConstraints,
       ...this.sortConstraints, 
       ...this.queryConstraints
     );
@@ -129,6 +132,31 @@ export class TableConfigurableComponent implements OnInit {
     this.queryConstraints = [limit(this.steps)];
 
     // push new data
+    this.dataList.push(this.loadData());
+  }
+
+  public clearFilter() {
+    console.log('clear filter')
+
+    this.dataList = [];
+    this.pageIndex = 0;
+
+    this.filterConstraints = [];
+    this.queryConstraints = [limit(this.steps)];
+
+    this.dataList.push(this.loadData());
+  }
+
+  public filter(fieldName: string, fieldSearch: string | number) {
+    console.log(fieldName, fieldSearch);
+    if (!isNaN(fieldSearch as any)) fieldSearch = Number(fieldSearch);
+
+    this.dataList = [];
+    this.pageIndex = 0;
+
+    this.filterConstraints = [where(fieldName, "==", fieldSearch)];
+    this.queryConstraints = [limit(this.steps)];
+
     this.dataList.push(this.loadData());
   }
 

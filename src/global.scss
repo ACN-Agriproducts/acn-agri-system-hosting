@@ -187,3 +187,19 @@ ion-content {
 
 // temporary fix until Angular Team Fixes Bug with matTooltips
 .mat-tooltip-hide { display: none!important; }
+
+.filter-popover {
+  font-size: 14px;
+  
+  ion-item {
+    font-size: 1em !important;
+  }
+
+  ion-searchbar.custom-searchbar {
+    --background: var(--ion-color-light);
+
+    .searchbar-input-container > input {
+      font-size: 1em;
+    }
+  }
+}
