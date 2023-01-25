@@ -113,9 +113,6 @@ export class DeliveredChartCardComponent implements OnInit {
     }
     
     // Assign data to chart
-    if(this.contract.id == 3) {
-      console.table(lineDataReal.series);
-    }
     this.chartData = [LineDataTrend, lineDataReal];
   }
 }
