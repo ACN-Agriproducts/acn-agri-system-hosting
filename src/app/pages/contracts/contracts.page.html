@@ -30,7 +30,6 @@
     <ng-container *ngTemplateOutlet="tabData?.[tabIndex].type; context: {$implicit: tabData?.[tabIndex]}"></ng-container>
 </ion-content>
 
-<!-- TODO -->
 <ng-template #cards let-tabData>
     <div *ngFor="let data of tabData.data" class="card-content-segment">
         <app-section-title [title]="data.title"></app-section-title>
