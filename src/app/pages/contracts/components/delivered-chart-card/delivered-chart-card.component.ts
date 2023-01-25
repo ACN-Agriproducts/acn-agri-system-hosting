@@ -12,6 +12,10 @@ import { FilterContractsPipe } from '@shared/pipes/filter-contracts.pipe';
 export class DeliveredChartCardComponent implements OnInit {
   @Input() contract: Contract;
   public chartData: ChartData[];
+  public refLines: any[];
+  public colorScheme: any = {
+    domain: ["#FFBC04", "#4D8C4A"]
+  };
 
   private ticketList: Ticket[];
   
@@ -27,6 +31,15 @@ export class DeliveredChartCardComponent implements OnInit {
   }
 
   buildTableData() {
+    this.refLines = [{
+      name: "Delivered",
+      value: this.contract.currentDelivered.getMassInUnit('mTon')
+    },
+    {
+      name: "Total",
+      value: this.contract.quantity.getMassInUnit('mTon')
+    }];
+
     const lineDataReal: ChartData = {
       name: "Delivered",
       series: []
@@ -40,6 +53,7 @@ export class DeliveredChartCardComponent implements OnInit {
       name: "Delivered", 
       series: []
     }
+
     const ticketList = this.ticketList.sort((a,b) => a.dateOut.getTime() - b.dateOut.getTime());
 
     // Get data for day changes
@@ -58,7 +72,7 @@ export class DeliveredChartCardComponent implements OnInit {
     const trendLineStartDate = this.contract.delivery_dates.begin;
     const trendLineEndDate = this.contract.delivery_dates.end;
     const ticketLineStart = ticketList[0]?.dateOut ?? new Date();
-    const ticketLineEnd = ticketList[ticketList.length - 1].dateOut ?? new Date();
+    const ticketLineEnd = new Date();
     trendLineStartDate.setHours(0, 0, 0, 0);
     trendLineEndDate.setHours(0, 0, 0, 0);
     ticketLineStart.setHours(0, 0, 0, 0);
@@ -99,6 +113,9 @@ export class DeliveredChartCardComponent implements OnInit {
     }
     
     // Assign data to chart
+    if(this.contract.id == 3) {
+      console.table(lineDataReal.series);
+    }
     this.chartData = [LineDataTrend, lineDataReal];
   }
 }
