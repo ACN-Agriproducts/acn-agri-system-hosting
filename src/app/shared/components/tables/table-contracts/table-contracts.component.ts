@@ -150,22 +150,12 @@ export class TableContractsComponent implements OnInit {
 
   public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
 
-  // handle the sort from this contract table (parent)
   public handleSort(fieldName: string): void {
-    // set sortFieldName and sortDirection
-    if (this.sortFieldName == fieldName) {
-      this.sortDirection = (this.sortDirection == 'asc' ? 'desc' : 'asc');
-    }
-    else {
-      this.sortDirection = 'desc';
-      this.sortFieldName = fieldName;
-    }
-    
-    // call sort method from configurable table (child)
-    this.table.sort(fieldName, this.sortDirection); // change method to return new sortfieldname and direction
+    [this.sortFieldName, this.sortDirection] = this.table.sort(this.sortFieldName, this.sortDirection, fieldName);
   }
 
   public async openFilterMenu(fieldName: string, event: Event): Promise<void> {
+    // can do from configurable table
     const popover = await this.popoverCtrl.create({
       component: FilterPopoverComponent,
       event,

@@ -122,17 +122,28 @@ export class TableConfigurableComponent implements OnInit {
     return `${rangeStart} - ${rangeEnd}`;
   }
 
-  public sort(fieldName: string, direction: OrderByDirection): void {
+  public sort(sortFieldName: string, sortDirection: OrderByDirection, nextFieldName: string): [string, OrderByDirection] {
+    if (nextFieldName == sortFieldName) {
+      sortDirection = (sortDirection == 'asc' ? 'desc' : 'asc');
+    }
+    else {
+      sortDirection = 'desc';
+      sortFieldName = nextFieldName;
+    }
+
     // reset dataList and pageIndex
     this.dataList = [];
     this.pageIndex = 0;
 
     // set constraints to new values
-    this.sortConstraints = fieldName ? [orderBy(fieldName, direction)] : [];
+    this.sortConstraints = sortFieldName ? [orderBy(sortFieldName, sortDirection)] : [];
     this.queryConstraints = [limit(this.steps)];
 
     // push new data
     this.dataList.push(this.loadData());
+
+    // return new sortFieldName and sortDirection
+    return [sortFieldName, sortDirection];
   }
 
   public clearFilter() {
@@ -148,7 +159,6 @@ export class TableConfigurableComponent implements OnInit {
   }
 
   public filter(fieldName: string, fieldSearch: string | number) {
-    console.log(fieldName, fieldSearch);
     if (!isNaN(fieldSearch as any)) fieldSearch = Number(fieldSearch);
 
     this.dataList = [];
