@@ -14,6 +14,7 @@ import { UploadDocumentDialogComponent } from './components/upload-document-dial
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
 import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
+import { SectionTitleComponent } from './components/section-title/section-title.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
     PrintableTicketComponent,
     PrintableInvoiceComponent,
     FilterContractsPipe,
-    MassInUnitPipe
+    MassInUnitPipe,
+    SectionTitleComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -42,7 +44,8 @@ import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
     UploadDocumentDialogComponent,
     PrintableInvoiceComponent,
     FilterContractsPipe,
-    MassInUnitPipe
+    MassInUnitPipe,
+    SectionTitleComponent
   ]
 })
 export class SharedModule {}
