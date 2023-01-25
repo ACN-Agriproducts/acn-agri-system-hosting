@@ -58,7 +58,7 @@ export class DeliveredChartCardComponent implements OnInit {
 
     // Get data for day changes
     ticketList.forEach(ticket => {
-      const name = this.datePipe.transform(ticket.dateOut, 'MMM d');
+      const name = this.datePipe.transform(ticket.dateOut, 'YY MMM d');
 
       let series = ticketData.series.find(s => s.name == name);
       if(!series) {
@@ -86,8 +86,8 @@ export class DeliveredChartCardComponent implements OnInit {
     const steps = this.contract.quantity.getMassInUnit('mTon') / daysBetween;
 
     // Create points for both lines
-    for(let date = new Date(absoluteStartDate), index = 1; date.getTime() <= absoluteEndDate.getTime(); date.setDate(date.getDate() + 1), index++) {
-      const name = this.datePipe.transform(date, 'MMM d');
+    for(let date = new Date(absoluteStartDate.getFullYear(), absoluteStartDate.getMonth(), absoluteStartDate.getDate() - 1), index = 1; date.getTime() <= absoluteEndDate.getTime(); date.setDate(date.getDate() + 1), index++) {
+      const name = this.datePipe.transform(date, 'YY MMM d');
 
       LineDataTrend.series.push({
         name,
@@ -103,7 +103,7 @@ export class DeliveredChartCardComponent implements OnInit {
 
     // Create data for trend line
     for(let date = new Date(trendLineStartDate), index = 1; date.getTime() <= absoluteEndDate.getTime(); date.setDate(date.getDate() + 1), index++) {
-      const day = LineDataTrend.series.find(d => d.name == this.datePipe.transform(date, 'MMM d'));
+      const day = LineDataTrend.series.find(d => d.name == this.datePipe.transform(date, 'YY MMM d'));
       if(!day) {
         console.log(absoluteStartDate, absoluteEndDate, date);
         console.table(LineDataTrend.series)
