@@ -1,4 +1,3 @@
-
 <app-header-toolbar titulo="Contact"></app-header-toolbar>
 
 <ion-content class="ion-padding" [fullscreen]="true">
@@ -147,13 +146,13 @@
 									*ngFor="let doc of getCurrentList()?.list; let odd = odd"
 									(click)="openContract(doc.ref.id)"
 								>
-									<span>{{ doc.id }}</span>
-									<span>{{ doc.date | date }}</span>
-									<span><span class="status" [ngClass]="doc.status.toLocaleLowerCase()">{{ doc.status }}</span></span>
-									<span>{{ doc.product.id }}</span>
-									<span>{{ doc.quantity | number }}</span>
-									<span>{{ doc.pricePerBushel | currency: '$' }}</span>
-									<span>{{ doc.quantity / doc.productInfo.weight * doc.pricePerBushel | currency }}</span>
+									<span>{{ doc["id"] }}</span>
+									<span>{{ doc["date"] | date }}</span>
+									<span><span class="status" [ngClass]="doc['status'].toLocaleLowerCase()">{{ doc["status"] }}</span></span>
+									<span>{{ doc["product"].id }}</span>
+									<span>{{ doc["quantity"] | number }}</span>
+									<span>{{ doc["pricePerBushel"] | currency: '$' }}</span>
+									<span>{{ doc["quantity"] / doc["productInfo"].weight * doc["pricePerBushel"] | currency }}</span>
 								</div>
 							</ng-template>
 							<ng-template [ngIf]="docsType === 'tickets'">
@@ -171,13 +170,13 @@
 									*ngFor="let doc of tickets?.list; let odd = odd"
 									(click)="openTicket(doc.ref.id)"
 								>
-									<span>{{ doc.id }}</span>
-									<span>{{ doc.dateOut | date }}</span>
-									<span>{{ doc.contractID }}</span>
-									<span>{{ doc.productName }}</span>
-									<span>{{ doc.gross | number }}</span>
-									<span>{{ doc.tare | number }}</span>
-									<span>{{ doc.getNet() | number }}</span>
+									<span>{{ doc["id"] }}</span>
+									<span>{{ doc["dateOut"] | date }}</span>
+									<span>{{ doc["contractID"] }}</span>
+									<span>{{ doc["productName"] }}</span>
+									<span>{{ doc["gross"] | number }}</span>
+									<span>{{ doc["tare"] | number }}</span>
+									<span>{{ doc["getNet"]() | number }}</span>
 									<span>--</span>
 								</div>
 							</ng-template>
