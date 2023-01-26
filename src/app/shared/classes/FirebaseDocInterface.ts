@@ -5,9 +5,11 @@ import { DocumentSnapshot, limit, onSnapshot, QuerySnapshot, startAfter } from "
 export abstract class FirebaseDocInterface {
     static session: SessionInfo;
     ref: DocumentReference;
+    snapshot: DocumentSnapshot<any> | QueryDocumentSnapshot<any>;
 
     constructor(snapshot: QueryDocumentSnapshot<any>, converter: any) {
         this.ref = snapshot.ref.withConverter(converter);
+        this.snapshot = snapshot;
     }
 
     public set(): Promise<void> {

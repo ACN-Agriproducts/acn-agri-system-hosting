@@ -14,19 +14,6 @@ export class Contract extends FirebaseDocInterface {
     clientInfo: ContactInfo;
     clientName: string;
     clientTicketInfo: ContactInfo;
-    currentDelivered: number;
-    clientTicketInfo: {
-        caat: string,
-        city: string,
-        email: string,
-        name: string,
-        phoneNumber: string,
-        state: string,
-        streetAddress: string,
-        type: string,
-        zipCode: string,
-        ref: DocumentReference,
-    };
     currentDelivered: Mass;
     date: Date;
     delivery_dates: DeliveryDates;
@@ -251,6 +238,14 @@ export class Contract extends FirebaseDocInterface {
         const contractSnapshot = await getCountFromServer(contractCollQuery);
         
         return contractSnapshot.data().count;
+    }
+
+    public static getContracts(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+        const collectionRef = Contract.getCollectionReference(db, company, isPurchaseContract);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return getDocs(collectionQuery).then(result => {
+            return result.docs.map(snap => snap.data());
+        });
     }
 }
 
