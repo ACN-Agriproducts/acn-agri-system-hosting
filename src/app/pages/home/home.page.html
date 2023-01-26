@@ -3,12 +3,12 @@
 <ion-content class="ion-padding">
     <div class="main-grid">
         <app-grain-comparizon
-            class="grid-row-span-2 grid-column-span-2`"
+            class="grid-row-span-2 grid-col-span-2"
             >
         </app-grain-comparizon>
 
-        <app-needs-admin-attention 
-            class="grid-row-span-2 grid-column-span-2"
+        <app-needs-admin-attention hidden
+            class="grid-row-span-2 grid-col-span-2"
             *ngIf="permissions?.admin && currentCompany" 
             [company]="currentCompany">
         </app-needs-admin-attention>

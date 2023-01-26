@@ -1,3 +1,14 @@
-<p>
-  grain-comparizon works!
-</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Test</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <ngx-charts-bar-vertical-2d
+      [results]="chartData"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [legendTitle]="'Years'">
+    </ngx-charts-bar-vertical-2d>
+  </mat-card-content>
+</mat-card>
