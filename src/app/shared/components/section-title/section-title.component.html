@@ -1,0 +1,15 @@
+<div class="content-subtitle_small-inventory">
+  <button mat-icon-button color="primary" *ngFor="let button of prefixButtons" (click)="button.onClick()">
+    <mat-icon>{{button.icon}}</mat-icon>
+  </button>
+  <h4>
+    <span>
+      {{ title }}
+    </span>
+    <span *ngIf="suffixButtons">
+      <button mat-icon-button color="primary" *ngFor="let button of suffixButtons" (click)="button.onClick()">
+        <mat-icon>{{button.icon}}</mat-icon>
+      </button>
+    </span>
+  </h4>
+</div>
