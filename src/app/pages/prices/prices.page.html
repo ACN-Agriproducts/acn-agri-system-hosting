@@ -1,0 +1,139 @@
+<app-header-toolbar titulo="Prices"></app-header-toolbar>
+
+
+<ion-content class="ion-padding">
+  <div class="info-area">
+    <div class="content-subtitle_small-inventory">
+      <h4>
+        <span>
+          INFORMACION DE PRECIOS
+        </span>
+      </h4>
+    </div>
+    <div id="prices-data">
+      <mat-form-field appearance="outline">
+        <mat-label>Precio de Dolar</mat-label>
+        <input matInput [(ngModel)]="dollarPrice" type="number" />
+        <span matSuffix class="suffix">MXN</span>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="info-area">
+    <div class="content-subtitle_small-inventory">
+      <h4>
+        <span>
+          COMMENTARIOS
+        </span>
+      </h4>
+    </div>
+    <div id="comments-section" formArrayName="notes">
+      <mat-form-field *ngFor="let note of notes; let index = index" appearance="outline"> <!-- -->
+        <textarea matInput [(ngModel)]="notes[index]" [ngModelOptions]="{updateOn: 'blur'}"></textarea>
+      </mat-form-field>
+      <button mat-button color="primary" (click)="addComment()">
+        + Add
+      </button>
+    </div>
+  </div>
+
+  <div class="table-space" *ngFor="let priceType of pricesTable | keyvalue">
+    <div class="content-subtitle_small-inventory">
+      <button mat-icon-button color="primary" (click)="renameTable(priceType.key)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <h4>
+        <span>
+          {{ priceType.key }}
+        </span>
+        <span>
+          <button mat-icon-button color="primary" (click)="importFromExcelTablePaste(priceType.key)">
+            <mat-icon>whatshot</mat-icon>
+          </button>
+        </span>
+      </h4>
+    </div>
+
+    <div>
+      <mat-button-toggle-group [(ngModel)]="priceType.value.type">
+        <mat-button-toggle value="sale">Venta</mat-button-toggle>
+        <mat-button-toggle value="purchase">Compra</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    
+    <mat-form-field appearance="outline" [style.width.px]="150">
+      <mat-label>Precio de Futuro</mat-label>
+      <span matPrefix>$</span>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="priceType.value.futurePrice">
+    </mat-form-field>
+    <button
+      mat-button
+      color="primary"
+      (click)="addNewColumn(priceType.key)"
+      >+ Añadir Columna
+    </button>
+    <button 
+      mat-button 
+      color="primary" 
+      (click)="addNewRow(priceType.key)"
+      >+ Añadir Fila
+    </button>
+
+    <div class="horizontal-scroll">
+      <table class="prices-table">
+        <tr class="prices-table-row">
+          <th class="prices-table-cell prices-table-field-name">
+            
+          </th>
+          <th class="prices-table-cell prices-table-field-name" *ngFor="let location of priceType.value.locationNames; let first = first; let index = index">
+            <div>
+              <button mat-icon-button color="primary" (click)="renameField(priceType.key, 0, index)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              {{location}}
+            </div>
+          </th>
+        </tr>
+        <tr class="prices-table-row" *ngFor="let productType of priceType.value.productNames; let index = index">
+          <td class="prices-table-cell prices-table-field-name">
+            <div>
+              <button mat-icon-button color="primary" (click)="renameField(priceType.key, 1, index)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              {{productType}}
+            </div>
+          </td>
+          <td class="prices-table-cell" *ngFor="let location of priceType.value.locationNames; let first = first">
+            <mat-form-field appearance="outline" [style.width.px]="150">
+              <input
+                matInput
+                [(ngModel)]="priceType.value.prices
+                  [priceType.value.productNames.indexOf(productType)]
+                  [priceType.value.locationNames.indexOf(location)]
+              ">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="addNewTable()"
+      >+ Añadir tabla
+    </button>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="submit()"
+      >Guardar
+    </button>
+  </div>
+</ion-content>

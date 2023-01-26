@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Firestore, getDocs, query, where } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Storage } from '@ionic/storage';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Plant } from '@shared/classes/plant';
@@ -21,6 +21,14 @@ export class TruckerReportsPage implements OnInit {
   public endDate: Date;
   public startFreight: number = 0;
   public InTicketsOnly: boolean = false;
+  public contractMaps: {
+    purchaseContracts: Map<number, Contract>,
+    salesContracts: Map<number, Contract>
+  };
+  public contractSet: { 
+    purchaseContracts: Set<number>,
+    salesContracts: Set<number>,
+  };
 
   public transportList: transportGroup[];
   public printableTicketsDone: number = 0;
@@ -28,24 +36,32 @@ export class TruckerReportsPage implements OnInit {
 
   constructor(
     private db: Firestore,
-    private localStorage: Storage,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private session: SessionInfo
   ) {}
 
   ngOnInit() {
-    this.localStorage.get('currentCompany').then(companyName => {
-      this.currentCompany = companyName;
-      Plant.getPlantList(this.db, companyName).then(result => {
-        this.plantList = result;
-        this.chosenPlants = result;
-      });
+    this.currentCompany = this.session.getCompany();
+    Plant.getPlantList(this.db, this.currentCompany).then(result => {
+      this.plantList = result;
+      this.chosenPlants = result;
     });
   }
 
   public async getTickets(): Promise<void> {
     const ticketList: Ticket[] = [];
     const promises: Promise<any>[] = [];
+    const contractPromises: Promise<any>[] = [];
     this.endDate.setHours(23, 59, 59, 999);
+
+    this.contractMaps = {
+      purchaseContracts: new Map<number, Contract>(),
+      salesContracts: new Map<number, Contract>()
+    };
+    this.contractSet = { 
+      purchaseContracts: new Set<number>(),
+      salesContracts: new Set<number>(),
+    };
 
     this.chosenPlants.forEach(plant => {
       const promise = getDocs(query(plant.getTicketCollectionReference(),
@@ -58,6 +74,14 @@ export class TruckerReportsPage implements OnInit {
             return;
           }
 
+          if(!this.contractSet[ticket.getContractType()].has(ticket.contractID)) {
+            this.contractSet[ticket.getContractType()].add(ticket.contractID);
+            const contractPromise = ticket.getContract(this.db).then(contract => {
+              this.contractMaps[ticket.getContractType()].set(ticket.contractID, contract);
+            });
+            contractPromises.push(contractPromise);
+          }
+
           ticketList.push(ticket);
         });
       });
@@ -66,6 +90,7 @@ export class TruckerReportsPage implements OnInit {
     });
 
     await Promise.all(promises);
+    await Promise.all(contractPromises);
 
     const tempTransportList: transportGroup[] = [];
 
@@ -83,7 +108,8 @@ export class TruckerReportsPage implements OnInit {
         trucker = transport.addDriver(ticket.driver);
       }
 
-      trucker.addTicket(ticket, this.startFreight);  
+      const ticketFreight = this.contractMaps[ticket.getContractType()].get(ticket.contractID).truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
+      trucker.addTicket(ticket, ticketFreight ?? this.startFreight);  
     });
 
     tempTransportList.forEach(transport => {
@@ -318,7 +344,7 @@ class truckerTickets {
 
     this.tickets.forEach(ticket => {
       if(ticket.checked){
-        total += ticket.ticket.getNet();
+        total += ticket.ticket.getNet().get();
       }
     })
 
@@ -374,6 +400,6 @@ class ticketCheck {
   }
 
   public getFreight(): number {
-    return this.freight * this.ticket.getNet() / 100;
+    return this.freight * this.ticket.getNet().get() / 100;
   }
 }

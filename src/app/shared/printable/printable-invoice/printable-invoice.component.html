@@ -1,0 +1,111 @@
+<div class="container-fluid invoice-container" id="file-html-invoice" #file>
+  <!-- Header -->
+  <header>
+    <div class="row-2 align-items-center">
+      <div class=" text-center text-sm-left mb-3 mb-sm-0">
+        <img id="logo"
+          src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789"
+          title="Agropecuaria " alt="Agropecuaria "> </div>
+      <div class=" text-center text-sm-right">
+        <h4 class="mb-0">Invoice</h4>
+        <p class="mb-0">Invoice Number - {{id}}</p>
+      </div>
+    </div>
+    <hr>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="row-flex-2 ">
+      <div class="col-sm-6 text-sm-right order-sm-1"> <strong>Pay To:</strong>
+        <address>
+          <span>{{seller.name}}</span>
+          <span>{{seller.street}}</span>
+          <span>ZIP {{seller.zip}} </span>
+          <span>{{seller.city}}, {{seller.state}}, {{seller.country}} </span>
+          <span>{{seller.phone}}</span>
+          <span>{{seller.other}}</span>
+        </address>
+      </div>
+      <div class="col-sm-6 order-right"> <strong>Invoiced To:</strong>
+        <address>
+          <span>{{buyer.name}}</span>
+          <span *ngIf="buyer.street != null">{{buyer.street}}</span>
+          <span *ngIf="buyer.zip != null">ZIP {{buyer.zip}} </span>
+          <span>{{buyer.city}}, {{buyer.state}}, {{buyer.country}} </span>
+          <span *ngIf="buyer.phone != null">{{buyer.phone}}</span>
+          <span>{{buyer.other}}</span>
+        </address>
+      </div>
+    </div>
+    <br>
+    <div class="row-2">
+      <div class="col-sm-6 mb-3"> 
+        <!-- <strong>Payment Method:</strong><br>
+        <span>Credit</span>  -->
+      </div>
+      <div class="d-grid order-right col-sm-6 mb-3 text-sm-right"> 
+        <strong>Date:</strong>
+        <span>{{date | date:'longDate'}}</span> </div>
+    </div>
+    <div class="card">
+      <div class="card-header"> <span class="font-weight-600 text-4">Summary</span> </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr class="">
+                <td class="border-top-0"><strong>Description</strong></td>
+                <td class="text-center border-top-0"><strong>Quantity</strong></td>
+                <td class="text-center border-top-0"><strong>Price</strong></td>
+                <td class="text-right border-top-0"><strong>Amount</strong></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items">
+                <td [colSpan]="item.type == 'label' ? 4 : 1">
+                  <span class="text-3">
+                    <span [class.font-weight-600]="!item.type" [class.font-weight-bold]="item.type == 'label'">{{item.name}}</span> 
+                  </span> <br>
+                  <span><span *ngIf="item.details != '' && item.details != null">{{item.details}}<br></span></span>
+                </td>
+                <td class="text-center" *ngIf="item.type != 'label'">{{item.quantity}}</td>
+                <td class="text-center" *ngIf="item.type != 'label'">{{item.price | currency}}</td>
+                <td class="text-right" *ngIf="item.type != 'label'">{{(item.quantity * item.price) | currency}}</td>
+              </tr>
+              <!-- <tr>
+                <td colspan="2" class="bg-light-2 text-right"><strong>Sub Total</strong></td>
+                <td colspan="2" class="bg-light-2 text-right">$46,424.09</td>
+              </tr> -->
+              <!-- <tr>
+                <td colspan="2" class="bg-light-2 text-right"><strong>Tax Rate:</strong><br>
+                  <span class="text-1">8% tax rate</span></td>
+                <td colspan="2" class="bg-light-2 text-right"></td>
+              </tr> -->
+              <tr>
+                <td colspan="2" class="bg-light-2 text-right"><strong>Total</strong></td>
+                <td colspan="2" class="bg-light-2 text-right">{{total | currency}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <b><u>Notes</u></b> <br>
+      1/10 N/20 5% int. <br>
+      1% Discount if paid in 10 days <br>
+      20 days no interest <br>
+      5% interest per month after 20 days <br>
+    </div>
+    <br>
+    
+  </main>
+  <!-- Footer -->
+  <footer class="text-center">
+    <h2 class="thanks">
+      Thank you for your business!
+    </h2>
+  </footer>
+</div>

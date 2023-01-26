@@ -46,8 +46,10 @@
   <ion-item lines="none" class="ion-hide-md-down">
     <ion-label>
       <div class="content-label">
-        <span>{{item.status}} </span>
-        <span class="label-text">{{item.employment}}</span>
+        <span></span>
+        <span class="label-text"></span>
+        <!-- <span>{{item.status}} </span>
+        <span class="label-text">{{item.employment}}</span> -->
         <!-- <span class="label-text">{{item.time}}</span> -->
       </div>
     </ion-label>
@@ -62,9 +64,19 @@
   </ion-item>
   <ion-item lines="none" class="ion-hide-sm-down">
     <ion-buttons>
-      <ion-button color="medium" (click)="openOptions($event, item)">
+      <ion-button color="medium" [matMenuTriggerFor]="menu">
         <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
       </ion-button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="item.ref.id">
+          <mat-icon>edit</mat-icon>
+          <span>Edit User</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>delete</mat-icon>
+          <span>Remove</span>
+        </button>
+      </mat-menu>
     </ion-buttons>
   </ion-item>
 </ion-card>

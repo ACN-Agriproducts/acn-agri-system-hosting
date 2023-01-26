@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Contract } from '@shared/classes/contract';
+import { Product } from '@shared/classes/product';
 import { Weight } from '@shared/Weight/weight';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 
@@ -27,22 +28,16 @@ export class ContractPrintableComponent implements OnInit {
     }
   }
 
+  getProductObject(): Product {
+    return this.productsList?.find(p => (p.ref?.id ?? p.name) == this.getProduct()) ?? (this.contractForm as Contract).product;
+  }
+
   getProduct(): string {
     if(this.contractForm.product.ref){
       return this.contractForm.product.ref.id;
     }
 
     return this.contractForm.product.id;
-  }
-
-  getUnits(name: string): number {
-    const weight = new Weight(this.contractForm.quantity, WeightUnits.Pounds);
-
-    if(this.contractForm.product) {
-      const tempProduct = this.productsList.find(p => p.name == this.getProduct() || p.ref.id == this.getProduct());
-      return weight.convertUnit(WeightUnits.getUnits(name, tempProduct.weight)).amount;  
-    }
-    return weight.convertUnit(WeightUnits.getUnits(name)).amount;
   }
 
   isPurchase = () => this.contractForm.contractType == "purchaseContracts";

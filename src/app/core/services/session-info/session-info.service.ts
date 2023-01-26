@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { where } from '@angular/fire/firestore';
+import { Firestore, where } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
+import { Company } from '@shared/classes/company';
+import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
+import { units } from '@shared/classes/mass';
 
 interface User {
   email: string,
@@ -11,7 +14,7 @@ interface User {
   currentPermissions: any
 }
 
-declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user'
+declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit'
 
 @Injectable({
   providedIn: 'root'
@@ -20,23 +23,38 @@ export class SessionInfo {
   private company: string;
   private plant: string;
   private user: User;
+  private companyUnit: units;
+  private userUnit: units;
 
   private keyMap: Map<keyOpts, string>;
 
   constructor(
-    private localStorage: Storage
+    private localStorage: Storage,
+    private db: Firestore
   ) { 
     this.keyMap= new Map<keyOpts, string>();
     this.keyMap.set('currentCompany', 'company');
     this.keyMap.set('currentPlant', 'plant');
     this.keyMap.set('user', 'user');
+    this.keyMap.set('companyUnit', 'companyUnit');
+    this.keyMap.set('userUnit', 'userUnit');
   }
 
   public load(): Promise<void> {
     const promises = [];
 
     promises.push(this.localStorage.get('currentCompany').then(val => {
-      this.company = val;
+      return this.company = val;
+      
+    }).then(async company => {
+      if(!company) return;
+      let unit = await this.localStorage.get('companyUnit');
+      if(!unit) {
+        unit = (await Company.getCompany(this.db, company)).defaultUnit;
+        this.localStorage.set('userUnit', unit);
+      }
+
+      this.companyUnit = unit;
     }));
 
     promises.push(this.localStorage.get('currentPlant').then(val => {
@@ -47,6 +65,11 @@ export class SessionInfo {
       this.user = val;
     }));
 
+    promises.push(this.localStorage.get('userUnit').then(val => {
+      this.userUnit = val;
+    }));
+
+    FirebaseDocInterface.session = this;
     return Promise.all(promises).then(() => {});
   }
 
@@ -75,6 +98,14 @@ export class SessionInfo {
 
   public getPermissions(): any {
     return this.user?.currentPermissions;
+  }
+
+  public getDefaultUnit(): units {
+    return this.companyUnit;
+  }
+
+  public getUserUnits(): units {
+    return this.userUnit;
   }
 
   public clear(): Promise<void> {

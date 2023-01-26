@@ -4,7 +4,7 @@ import { PopoverController, ModalController, NavController } from '@ionic/angula
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { PrintableInvoiceComponent } from '../printable-invoice/printable-invoice.component';
+import { PrintableInvoiceComponent } from '@shared/printable/printable-invoice/printable-invoice.component';
 import { Invoice } from '@shared/classes/invoice';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';

@@ -1,7 +1,9 @@
 import { DocumentReference, QueryDocumentSnapshot, setDoc, updateDoc, deleteDoc, Query, CollectionReference, query, Unsubscribe } from "@angular/fire/firestore";
+import { SessionInfo } from "@core/services/session-info/session-info.service";
 import { DocumentSnapshot, limit, onSnapshot, QuerySnapshot, startAfter } from "firebase/firestore";
 
 export abstract class FirebaseDocInterface {
+    static session: SessionInfo;
     ref: DocumentReference;
 
     constructor(snapshot: QueryDocumentSnapshot<any>, converter: any) {

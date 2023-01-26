@@ -1,4 +1,4 @@
-<app-header-toolbar titulo="New User"></app-header-toolbar>
+<app-header-toolbar [titulo]="userId? 'User ' + userId : 'New User'"></app-header-toolbar>
 
 
 <ion-content class="ion-padding"  (ionScroll)="logScrolling($event)" [scrollEvents]="true">
@@ -14,7 +14,7 @@
               <ion-col size="12" size-sm="12">
                 <mat-form-field appearance="fill">
                   <mat-label>Name</mat-label>
-                  <input matInput formControlName='name'>
+                  <input matInput formControlName='name' [readonly]="userId">
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -22,11 +22,11 @@
               <ion-col size="12" >
                 <mat-form-field appearance="fill">
                   <mat-label>Email</mat-label>
-                  <input matInput formControlName='email'>
+                  <input matInput formControlName='email' [readonly]="userId">
                 </mat-form-field>
               </ion-col>
             </ion-row>
-            <ion-row>
+            <ion-row *ngIf="!userId">
               <ion-col size="12" >
                 <mat-form-field appearance="fill">
                   <mat-label>Password</mat-label>
@@ -38,7 +38,7 @@
               <ion-col size="12" >
                 <mat-form-field appearance="fill">
                   <mat-label>Position</mat-label>
-                  <input matInput formControlName="position">
+                  <input matInput formControlName="position" [readonly]="userId">
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -67,7 +67,7 @@
           </ion-grid>
 
           <ion-grid>
-            <ion-row *ngFor="let item of privilege" formGroupName='{{item.section}}'>
+            <ion-row *ngFor="let item of privilege; let last = last" formGroupName='{{item.section}}'>
               <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
                 <ion-item lines="none" class="ion-no-padding">
                   <ion-label class="label-title">{{item.section | titlecase}}</ion-label>
@@ -79,13 +79,13 @@
                     <ion-item matTooltipClass="tooltip-white" [matTooltip]="module.label" lines="none"
                       *ngFor="let module of item.module;" [class.main]="module.main">
                       <ion-label>{{module.label}}</ion-label>
-                      <ion-checkbox slot="start" formControlName='{{module.controlName}}'></ion-checkbox>
+                      <ion-checkbox slot="start" [formControlName]="module.controlName"></ion-checkbox>
                       <!-- <ion-icon slot="end" color="dark" [name]="entry.icon"></ion-icon> -->
                     </ion-item>
                   </div>
                 </div>
               </ion-col>
-              <ion-col size="12">
+              <ion-col size="12" *ngIf="!last">
                 <mat-divider></mat-divider>
               </ion-col>
             </ion-row>
@@ -95,7 +95,7 @@
       </ion-card>
       <div class="content-footer-button">
         <div class="item-button">
-          <ion-button type='submit' [disabled]='userForm.invalid'>Save user</ion-button>
+          <ion-button type='submit' [disabled]='userForm.invalid && !userId'>Save user</ion-button>
         </div>
       </div>
     </form>

@@ -3,6 +3,7 @@ import { Functions, httpsCallable } from "@angular/fire/functions";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
 import { Observable } from "rxjs";
+import { units } from "./mass";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];
@@ -12,6 +13,7 @@ export class Company extends FirebaseDocInterface {
     nextInvoice: number;
     nextPurchaseContract: number;
     nextSalesContract: number;
+    defaultUnit: units;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
@@ -23,6 +25,7 @@ export class Company extends FirebaseDocInterface {
         this.nextInvoice = data.nextInvoice;
         this.nextPurchaseContract = data.nextPurchaseContract;
         this.nextSalesContract =  data.nextSalesContract;
+        this.defaultUnit = data.defaultUnit;
 
         this.contactList = [];
 
@@ -41,6 +44,7 @@ export class Company extends FirebaseDocInterface {
                 nextInvoice: data.nextInvoice,
                 nextPurchaseContract: data.nextPurchaseContract,
                 nextSalesContract: data.nextSalesContract,
+                defaultUnit: data.defaultUnit,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Company {

@@ -2,6 +2,7 @@ import { collection, CollectionReference, doc, DocumentData, DocumentReference, 
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Mass } from "./mass";
 import { Product } from "./product";
 import { Ticket } from "./ticket";
 
@@ -14,6 +15,19 @@ export class Contract extends FirebaseDocInterface {
     clientName: string;
     clientTicketInfo: ContactInfo;
     currentDelivered: number;
+    clientTicketInfo: {
+        caat: string,
+        city: string,
+        email: string,
+        name: string,
+        phoneNumber: string,
+        state: string,
+        streetAddress: string,
+        type: string,
+        zipCode: string,
+        ref: DocumentReference,
+    };
+    currentDelivered: Mass;
     date: Date;
     delivery_dates: DeliveryDates;
     grade: number;
@@ -26,27 +40,27 @@ export class Contract extends FirebaseDocInterface {
     pricePerBushel: number;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
-    quantity: number;
+    quantity: Mass;
     seller_terms: string;
     status: status;
     tickets: DocumentReference<Ticket>[];
     transport: string;
-    truckers: DocumentReference<Contact>[];
+    truckers: TruckerInfo[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contract.converter);
         const data = snapshot.data();
 
         let tempTicketList: DocumentReference<Ticket>[] = [];
-        let tempTruckerList: DocumentReference<Contact>[] = [];
+        let tempTruckerList: TruckerInfo[] = [];
 
         // TODO Set DocumentReference converters
         data.tickets.forEach((ticket: DocumentReference) => {
             tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
 
-        data.truckers.forEach((trucker: DocumentReference) => {
-            tempTruckerList.push(trucker.withConverter(Contact.converter));
+        data.truckers.forEach((trucker: any) => {
+            tempTruckerList.push(new TruckerInfo(trucker));
         })
         
 
@@ -56,7 +70,7 @@ export class Contract extends FirebaseDocInterface {
         this.clientInfo = data.clientInfo;
         this.clientName = data.clientName;
         this.clientTicketInfo = data.clientTicketInfo;
-        this.currentDelivered = data.currentDelivered;
+        this.currentDelivered = new Mass(data.currentDelivered, FirebaseDocInterface.session.getDefaultUnit());
         this.date = data.date.toDate();
         this.delivery_dates = new DeliveryDates({begin: data.delivery_dates?.begin?.toDate(), end: data.delivery_dates?.end?.toDate()});
         this.grade = data.grade;
@@ -68,7 +82,7 @@ export class Contract extends FirebaseDocInterface {
         this.pricePerBushel = data.pricePerBushel;
         this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
-        this.quantity = data.quantity;
+        this.quantity = new Mass(data.quantity, FirebaseDocInterface.session.getDefaultUnit());
         this.seller_terms = data.seller_terms;
         this.status = data.status;
         this.tickets = tempTicketList;
@@ -86,7 +100,7 @@ export class Contract extends FirebaseDocInterface {
                 client: data.client,
                 clientName: data.clientName,
                 clientTicketInfo: data.clientTicketInfo,
-                currentDelivered: data.currentDelivered,
+                currentDelivered: data.currentDelivered.get(),
                 date: data.date,
                 delivery_dates: data.delivery_dates,
                 grade: data.grade,
@@ -98,7 +112,7 @@ export class Contract extends FirebaseDocInterface {
                 pricePerBushel: data.pricePerBushel,
                 product: data.product,
                 productInfo: data.productInfo,
-                quantity: data.quantity,
+                quantity: data.quantity.get(),
                 seller_terms: data.seller_terms,
                 status: data.status,
                 tickets: data.tickets,
@@ -109,6 +123,10 @@ export class Contract extends FirebaseDocInterface {
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
             return new Contract(snapshot);
         }
+    }
+
+    public getContractType(): string { 
+        return this.ref.parent.id;
     }
 
     public getCollectionReference(): CollectionReference<Contract> {
@@ -144,8 +162,8 @@ export class Contract extends FirebaseDocInterface {
     public getTruckers(): Promise<Contact[]> {
         const truckerList = [];
 
-        this.truckers.forEach((truckerRef) => {
-            truckerList.push(getDoc(truckerRef))
+        this.truckers.forEach((truckerInfo) => {
+            truckerList.push(getDoc(truckerInfo.trucker))
         });
 
         return Promise.all(truckerList).then((result): Contact[] => {
@@ -272,10 +290,26 @@ export class ProductInfo {
     }
 }
 
+export class TruckerInfo {
+    trucker: DocumentReference<Contact>;
+    freight: number;
+
+    constructor(data: any) {
+        if(data instanceof DocumentReference){
+            this.trucker = data.withConverter(Contact.converter);
+            return;
+        }
+
+        this.trucker = data.trucker.withConverter(Contact.converter);
+        this.freight = data.freight;
+    }
+}
+
 enum status {
     pending = 'pending',
     active = 'active',
-    closed = 'closed'
+    closed = 'closed',
+    cancelled = 'cancelled'
 }
 
 interface ContactInfo {

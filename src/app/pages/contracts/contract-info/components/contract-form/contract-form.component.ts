@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Contract, ProductInfo, DeliveryDates, PaymentTerms } from '@shared/classes/contract';
+import { Mass } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 
@@ -37,8 +38,8 @@ export class ContractFormComponent implements OnInit {
       contractType: [{value: this.currentContract.ref.parent.id, disabled: true}, Validators.required],
       id: [{value: this.currentContract.id, disabled: true}, [Validators.required]],
       client: [{value: this.currentContract.clientName, disabled: true}, Validators.required],
-      quantity: [ {value: this.currentContract.quantity, disabled: this.currentContract.status != 'pending'}, Validators.required],
-      quantityUnits: [{value: 'lbs', disabled: this.currentContract.status != 'pending' }, Validators.required],
+      quantity: [ {value: this.currentContract.quantity.get(), disabled: this.currentContract.status != 'pending'}, Validators.required],
+      quantityUnits: [{value: this.currentContract.quantity.getUnit(), disabled: this.currentContract.status != 'pending' }, Validators.required],
       product: [{value: this.currentContract.productInfo.name, disabled: this.currentContract.status != 'pending' }, Validators.required],
       price: [{value: this.currentContract.pricePerBushel, disabled: this.currentContract.status != 'pending' }, Validators.required],
       priceUnit: [{value: 'bushels', disabled: this.currentContract.status != 'pending' }, Validators.required],
@@ -107,22 +108,17 @@ export class ContractFormComponent implements OnInit {
     return 0;
   }
 
-  private getQuantity(product: Product): number {
-    const quantity = this.contractForm.getRawValue().quantity;
-    const unit = this.contractForm.getRawValue().quantityUnits;
+  private getQuantity(product: Product): Mass {
+    let quantity = this.contractForm.getRawValue().quantity;
+    let unit = this.contractForm.getRawValue().quantityUnits;
 
-    if(unit == 'bushels') {
-      return quantity * product.weight;
+    if(unit == "bushels")  {
+      quantity = quantity * product.weight;
+      unit = "lbs"
     }
-    if(unit == 'lbs'){
-      return quantity;
-    }
-    if(unit == 'CWT'){
-      return quantity * 100;
-    }
-    if(unit == 'MTons'){
-      return quantity * 2204.6;
-    }
+
+    const mass = new Mass(quantity, unit);
+    return mass;
   }
 
   addPlantChip(plant: string): void {
