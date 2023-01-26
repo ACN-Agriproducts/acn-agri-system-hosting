@@ -15,7 +15,7 @@
 				</mat-select>
 			</mat-form-field>
 		</div>
-		{{ getDetails() }} of {{ count }}
+		{{ details }} of {{ count }}
 		<div>
 			<button mat-icon-button 
 				(click)="handlePagination(-1)" 
@@ -73,7 +73,7 @@
 		></ion-infinite-scroll-content>
 	</ion-infinite-scroll>
 </div>
-<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll' && !fixedHeight"
+<ion-infinite-scroll #infiniteScroll *ngIf="displayFormat === 'infiniteScroll' && !fixedHeight"
 	(ionInfinite)="handleScroll()"
 	threshold="100px"
 >

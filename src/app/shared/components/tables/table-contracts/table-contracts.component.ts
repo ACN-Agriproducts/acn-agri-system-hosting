@@ -2,11 +2,10 @@ import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import { CollectionReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { NavController, PopoverController } from '@ionic/angular';
-import { OrderByDirection } from 'firebase/firestore';
+import { NavController } from '@ionic/angular';
+import { OrderByDirection, QueryDocumentSnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { TableConfigurableComponent } from '../table-configurable/table-configurable.component';
-import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
 
@@ -55,7 +54,7 @@ export class TableContractsComponent implements OnInit {
   @ViewChild('status') status: TemplateRef<any>;
   @ViewChild('transport') transport: TemplateRef<any>;
 
-  @ViewChild(TableConfigurableComponent) public table: TableConfigurableComponent;
+  @ViewChild('configTable') public table: TableConfigurableComponent;
 
   public sortDirection: OrderByDirection;
   public sortFieldName: string;
@@ -108,7 +107,6 @@ export class TableContractsComponent implements OnInit {
   constructor(
     private db: Firestore,
     private navController: NavController,
-    private popoverCtrl: PopoverController,
     private session: SessionInfo,
     private snack: SnackbarService,
   ) { }
@@ -141,7 +139,7 @@ export class TableContractsComponent implements OnInit {
     return this.columns.map(col => typeof col === 'string' ? { fieldName: col } : col);
   }
 
-  public openContract(contract: Contract): void {
+  public openContract(contract: QueryDocumentSnapshot<Contract>): void {
     const contractType = contract.ref.parent.id.replace("Contracts", '');
     this.navController.navigateForward(
       `dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`

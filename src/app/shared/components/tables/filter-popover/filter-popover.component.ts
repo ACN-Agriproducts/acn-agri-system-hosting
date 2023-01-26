@@ -17,7 +17,6 @@ export class FilterPopoverComponent implements OnInit {
   }
 
   public filter(fieldSearch: any): void {
-    console.log(typeof fieldSearch);
     this.popoverCtrl.dismiss(fieldSearch, 'filter');
   }
 

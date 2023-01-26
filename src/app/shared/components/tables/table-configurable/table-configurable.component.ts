@@ -1,10 +1,10 @@
-import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter, where } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { IonInfiniteScroll, NavController, PopoverController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { orderBy } from 'firebase/firestore';
+import { orderBy, QueryDocumentSnapshot } from 'firebase/firestore';
 import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
 
 @Component({
@@ -19,16 +19,17 @@ export class TableConfigurableComponent implements OnInit {
 
   @Input() private collRef!: CollectionReference<FirebaseDocInterface>;
   @Input() public displayFormat!: string;
-  @Input() public rowAction?: Function = () => {};
+  @Input() public rowAction?: (document: QueryDocumentSnapshot<FirebaseDocInterface>) => void = () => {};
   @Input() public steps!: number;
   @Input() public fixedHeight!: boolean;
 
-  @ViewChild(IonInfiniteScroll) private infiniteScroll: IonInfiniteScroll;
+  @ViewChild('infiniteScroll') private infiniteScroll: IonInfiniteScroll;
 
   public count: number = 0;
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
   public defaultSize: number;
+  public details: string;
   
   private filterConstraints: QueryConstraint[];
   private queryConstraints: QueryConstraint[];
@@ -45,32 +46,38 @@ export class TableConfigurableComponent implements OnInit {
     this.sortConstraints = [];
     this.queryConstraints = [limit(this.steps)];
 
-    this.dataList.push(this.loadData());
-
-    getCountFromServer(this.collRef).then(snap => {
-      this.count = snap.data().count;
-    });
     this.defaultSize = this.steps;
+
+    this.dataList.push(this.loadData());
   }
 
   public loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
-    const snapQuery = query(
-      this.collRef, 
+    const countQuery = query(
+      this.collRef,
       ...this.filterConstraints,
-      ...this.sortConstraints, 
+      ...this.sortConstraints,
+    );
+    const snapQuery = query(
+      countQuery,
       ...this.queryConstraints
     );
     const nextDocuments = getDocs(snapQuery);
 
-    nextDocuments.then(res => {
-      // console.log(res.docs.map(doc => doc.data()))
-      if (res.docs.length < this.steps && this.infiniteScroll) {
+    Promise.all([
+      nextDocuments,
+      this.dataList.length === 0 ? getCountFromServer(countQuery) : null
+    ]).then(([nextDocs, countSnap]) => {
+      if (countSnap) {
+        this.count = countSnap.data().count;
+      }
+      if (this.infiniteScroll && nextDocs.docs.length < this.steps) {
         this.infiniteScroll.disabled = true;
       }
+      this.details = this.getDetails();
     })
     .catch(error => {
       console.error(error);
-      this.snack.open(error, 'error');
+      this.snack.open(error, "error");
     });
 
     return nextDocuments;
@@ -95,6 +102,7 @@ export class TableConfigurableComponent implements OnInit {
 
   public async handlePagination(pageChange: number): Promise<void> {
     this.pageIndex += pageChange;
+    this.details = this.getDetails();
     if (this.dataList[this.pageIndex]) return;
     
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
