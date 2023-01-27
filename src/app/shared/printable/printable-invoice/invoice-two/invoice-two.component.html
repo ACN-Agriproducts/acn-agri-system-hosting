@@ -1,3 +1,31 @@
-<p>
-  invoice-two works!
-</p>
+<div>
+  <div class="header">
+    <div class="company-info">
+      <img src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789"/>
+      <div>{{seller.street}}</div>
+      <div>{{seller.city}}, {{seller.state}} {{seller.zip}}</div>
+    </div>
+    <div class="divider"></div> 
+    <div class="invoice-info">
+      <div><span class="title">Invoice No.</span>{{id}}</div>
+      <div><span class="title">Invoice Date</span>{{date | date:'longDate'}}</div>
+      <div><span class="title">Bill To:</span>{{buyer.name}}</div>
+      <div>
+        <span class="title">Address:</span>
+        <div class="address-box">
+          <div>{{buyer.street}}</div>
+          <div>{{buyer.city ? buyer.city + ',' : ''}} {{buyer.state}} {{buyer.zip}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <span>DESCRIPTION</span>
+    <span>QTY</span>
+    <span>PRICE</span>
+    <span>AMOUNT</span>
+  </div>
+  <div class="footer">
+    
+  </div>
+</div>

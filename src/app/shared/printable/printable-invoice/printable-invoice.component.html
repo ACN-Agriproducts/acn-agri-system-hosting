@@ -1,5 +1,5 @@
 <ng-container 
-  *ngTemplateOutlet="invoiceOne;
+  *ngTemplateOutlet="invoiceTwo;
     context: {$implicit: invoiceData}">
 </ng-container>
 
@@ -13,4 +13,16 @@
     [items]="data.items"
     [total]="data.total">
   </app-invoice-one>
+</ng-template>
+
+<ng-template #invoiceTwo let-data>
+  <app-invoice-two
+    [invoice]="data.invoice"
+    [seller]="data.seller"
+    [buyer]="data.buyer"
+    [id]="data.id"
+    [date]="data.date"
+    [items]="data.items"
+    [total]="data.total">
+  </app-invoice-two>
 </ng-template>
