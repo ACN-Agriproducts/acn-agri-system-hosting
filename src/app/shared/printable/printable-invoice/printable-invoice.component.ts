@@ -1,13 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { contactInfo, item } from '@shared/classes/invoice';
+import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 
 @Component({
   selector: 'app-printable-invoice',
   templateUrl: './printable-invoice.component.html',
-  styleUrls: ['./printable-invoice.component.scss', './file-invoice.component.boostrap.scss'],
+  styleUrls: ['./printable-invoice.component.scss'],
 })
 export class PrintableInvoiceComponent implements OnInit {
 
+  @Input() invoice: Invoice;
   @Input() seller: contactInfo;
   @Input() buyer: contactInfo;
   @Input() id: number | string;
@@ -15,8 +16,25 @@ export class PrintableInvoiceComponent implements OnInit {
   @Input() items: item[];
   @Input() total: number;
 
+  public invoiceData: any;
+
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    const data: any = {};
 
+    if(this.invoice) {
+      data.invoice = this.invoice
+    }
+    else {
+      data.seller = this.seller;
+      data.buyer = this.buyer;
+      data.id = this.id;
+      data.date = this.date;
+      data.items = this.items;
+      data.total = this.total;
+    }
+
+    this.invoiceData = data;
+  }
 }
