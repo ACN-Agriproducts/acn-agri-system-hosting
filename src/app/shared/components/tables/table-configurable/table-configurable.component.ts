@@ -23,13 +23,12 @@ export class TableConfigurableComponent implements OnInit {
   @Input() public rowAction?: (document: QueryDocumentSnapshot<FirebaseDocInterface>) => void = () => {};
   @Input() public steps!: number;
 
-  @ViewChild('infiniteScroll') private infiniteScroll: IonInfiniteScroll;
-
   public count: number = 0;
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
   public defaultSize: number;
   public details: string;
+  public disableInfiniteScroll: boolean = false;
   
   private filterConstraints: QueryConstraint[];
   private queryConstraints: QueryConstraint[];
@@ -48,10 +47,10 @@ export class TableConfigurableComponent implements OnInit {
 
     this.defaultSize = this.steps;
 
-    this.dataList.push(this.loadData());
+    this.loadData();
   }
 
-  public loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
+  public async loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
     const countQuery = query(
       this.collRef,
       ...this.filterConstraints,
@@ -61,31 +60,21 @@ export class TableConfigurableComponent implements OnInit {
       countQuery,
       ...this.queryConstraints
     );
-    const nextDocuments = getDocs(snapQuery);
+    
+    const nextDocsPromise = getDocs(snapQuery);
+    this.dataList.push(nextDocsPromise);
 
-    Promise.all([
-      nextDocuments,
-      this.dataList.length === 0 ? getCountFromServer(countQuery) : null
-    ]).then(([nextDocs, countSnap]) => {
-      if (countSnap) {
-        this.count = countSnap.data().count;
-      }
-      if (this.infiniteScroll && nextDocs.docs.length < this.steps) {
-        this.infiniteScroll.disabled = true;
-      }
-      this.details = this.getDetails();
-    })
-    .catch(error => {
-      console.error(error);
-      this.snack.open(error, "error");
-    });
+    this.count ??= (await getCountFromServer(countQuery)).data().count;
+    this.details = this.getDetails();
 
-    return nextDocuments;
+    return nextDocsPromise;
   }
 
   public async handleScroll(event: any): Promise<void> {
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
-    this.dataList.push(this.loadData());
+    const nextDocs = await this.loadData();
+
+    this.disableInfiniteScroll = nextDocs.docs.length < this.steps;
     event.target.complete();
   }
 
@@ -93,18 +82,19 @@ export class TableConfigurableComponent implements OnInit {
     this.steps = event.value;
 
     this.resetData();
-
     this.queryConstraints = [limit(this.steps)];
-    this.dataList.push(this.loadData());
+
+    this.loadData();
   }
 
   public async handlePagination(pageChange: number): Promise<void> {
     this.pageIndex += pageChange;
     this.details = this.getDetails();
+
     if (this.dataList[this.pageIndex]) return;
-    
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
-    this.dataList.push(this.loadData());
+
+    this.loadData();
   }
 
   public async getNextQuery(): Promise<QueryConstraint> {
@@ -132,11 +122,10 @@ export class TableConfigurableComponent implements OnInit {
     }
 
     this.resetData();
-
     this.sortConstraints = sortFieldName ? [orderBy(sortFieldName, sortDirection)] : [];
     this.queryConstraints = [limit(this.steps)];
 
-    this.dataList.push(this.loadData());
+    this.loadData();
 
     return [sortFieldName, sortDirection];
   }
@@ -157,22 +146,20 @@ export class TableConfigurableComponent implements OnInit {
 
   public clearFilter(): void {
     this.resetData();
-
     this.filterConstraints = [];
     this.queryConstraints = [limit(this.steps)];
 
-    this.dataList.push(this.loadData());
+    this.loadData();
   }
 
   public filter(fieldName: string, fieldSearch: string | number): void {
     if (!isNaN(fieldSearch as any)) fieldSearch = Number(fieldSearch);
 
     this.resetData();
-
     this.filterConstraints = [where(fieldName, "==", fieldSearch)];
     this.queryConstraints = [limit(this.steps)];
 
-    this.dataList.push(this.loadData());
+    this.loadData();
   }
 
   public resetData() {
