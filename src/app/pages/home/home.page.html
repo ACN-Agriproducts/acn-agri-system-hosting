@@ -10,9 +10,11 @@
     <app-table-contracts 
         [collRef]=""
         [columns]="columns" 
-        displayFormat="pagination"
         [snapshot]="false"
-        [steps]="10"
-        [fixedHeight]="false"
+        [steps]="10" 
+        [displayOptions]="{ 
+            tableType: 'infiniteScroll',
+            fixed: false
+        }"
     ></app-table-contracts>
 </ion-content>

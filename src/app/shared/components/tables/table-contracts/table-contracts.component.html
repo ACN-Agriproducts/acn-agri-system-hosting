@@ -2,10 +2,9 @@
 <app-configurable-table 
 	#configTable
 	[rowAction]="openContract"
-	[displayFormat]="displayFormat"
 	[collRef]="collRef"
 	[steps]="steps"
-	[fixedHeight]="fixedHeight"
+	[displayOptions]="displayOptions"
 >
 	<ng-template #headers>
 		<th *ngFor="let column of displayColumns"
@@ -57,13 +56,13 @@
 </ng-template>
 
 <ng-template #date let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Date' : (row.date | date:( formatOptions?.dateFormat || formatOptions?.defaultDateFormat || "mediumDate") )}}
+	{{ isHeader ? 'Date' : (row.date | date:( displayOptions?.dateFormat || displayOptions?.defaultDateFormat || "mediumDate") )}}
 </ng-template>
 
 <ng-template #delivery_dates let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Delivery' : ( row.delivery_dates.begin | date:( formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate" ))
+	{{ isHeader ? 'Delivery' : ( row.delivery_dates.begin | date:( displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate" ))
 	 + ' - ' + 
-	(row.delivery_dates.end | date:(formatOptions?.deliveryDatesFormat || formatOptions?.defaultDateFormat || "shortDate")) }}
+	(row.delivery_dates.end | date:(displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate")) }}
 </ng-template>
 
 <ng-template #grade let-row let-isHeader="isHeader">

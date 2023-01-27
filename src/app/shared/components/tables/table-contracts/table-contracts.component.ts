@@ -35,11 +35,9 @@ export class TableContractsComponent implements OnInit {
   @Input() columns!: (contractColumns | ColumnInfo)[];
   public displayColumns: ColumnInfo[] = [];
 
-  @Input() displayFormat?: TableType = "";
-  @Input() formatOptions?: FormatOptions;
   @Input() snapshot?: boolean = false;
   @Input() steps?: number;
-  @Input() fixedHeight?: boolean = false;
+  @Input() displayOptions?: DisplayOptions = { tableType: "", fixed: false };
 
   @ViewChild('clientName') clientName: TemplateRef<any>;
   @ViewChild('currentDelivered') currentDelivered: TemplateRef<any>;
@@ -111,7 +109,7 @@ export class TableContractsComponent implements OnInit {
     private snack: SnackbarService,
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     /* Testing */
     this.collRef = Contract.getCollectionReference(this.db, this.session.getCompany(), true);
     /* Testing */
@@ -157,13 +155,12 @@ export class TableContractsComponent implements OnInit {
   }
 }
 
-interface FormatOptions {
-  defaultDateFormat: string;
-  dateFormat: string;
-  deliveryDatesFormat: string;
-  defaultUnits: string;
-  deliveredUnits: string;
-  quantityUnits: string; 
+export interface DisplayOptions {
+  tableType: TableType;
+  fixed: boolean;
+  defaultDateFormat?: string;
+  dateFormat?: string;
+  deliveryDatesFormat?: string;
 }
 
 export interface ColumnInfo {

@@ -1,5 +1,5 @@
 
-<div id="paginator-wrapper" *ngIf="displayFormat === 'pagination'">
+<div id="paginator-wrapper" *ngIf="displayOptions.tableType === 'pagination'">
 	<div id="custom-paginator">
 		<div>
 			Items per page:
@@ -40,7 +40,7 @@
 				<ng-container *ngTemplateOutlet="headers"></ng-container>
 			</tr>
 		</thead>
-		<tbody *ngIf="displayFormat === 'pagination'; else scroll">
+		<tbody *ngIf="displayOptions.tableType === 'pagination'; else scroll">
 			<ng-container *ngIf="dataList[pageIndex] | async as snapshot; else loading">
 				<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
 					<ng-container *ngTemplateOutlet="rows; 
@@ -63,8 +63,8 @@
 			</tbody>
 		</ng-template>
 	</table>
-	<ion-infinite-scroll *ngIf="displayFormat === 'infiniteScroll' && fixedHeight"
-		(ionInfinite)="handleScroll()"
+	<ion-infinite-scroll *ngIf="displayOptions.tableType === 'infiniteScroll' && displayOptions.fixed"
+		(ionInfinite)="handleScroll($event)"
 		threshold="100px"
 	>
 		<ion-infinite-scroll-content
@@ -73,8 +73,8 @@
 		></ion-infinite-scroll-content>
 	</ion-infinite-scroll>
 </div>
-<ion-infinite-scroll #infiniteScroll *ngIf="displayFormat === 'infiniteScroll' && !fixedHeight"
-	(ionInfinite)="handleScroll()"
+<ion-infinite-scroll #infiniteScroll *ngIf="displayOptions.tableType === 'infiniteScroll' && !displayOptions.fixed"
+	(ionInfinite)="handleScroll($event)"
 	threshold="100px"
 >
 	<ion-infinite-scroll-content

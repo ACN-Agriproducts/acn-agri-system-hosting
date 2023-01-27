@@ -6,6 +6,7 @@ import { IonInfiniteScroll, NavController, PopoverController } from '@ionic/angu
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { orderBy, QueryDocumentSnapshot } from 'firebase/firestore';
 import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
+import { DisplayOptions } from '../table-contracts/table-contracts.component';
 
 @Component({
   selector: 'app-configurable-table',
@@ -18,10 +19,9 @@ export class TableConfigurableComponent implements OnInit {
   @ContentChild('status') status: TemplateRef<any>;
 
   @Input() private collRef!: CollectionReference<FirebaseDocInterface>;
-  @Input() public displayFormat!: string;
+  @Input() public displayOptions!: DisplayOptions;
   @Input() public rowAction?: (document: QueryDocumentSnapshot<FirebaseDocInterface>) => void = () => {};
   @Input() public steps!: number;
-  @Input() public fixedHeight!: boolean;
 
   @ViewChild('infiniteScroll') private infiniteScroll: IonInfiniteScroll;
 
@@ -83,12 +83,10 @@ export class TableConfigurableComponent implements OnInit {
     return nextDocuments;
   }
 
-  public async handleScroll(): Promise<void> {
+  public async handleScroll(event: any): Promise<void> {
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
-
     this.dataList.push(this.loadData());
-    this.infiniteScroll?.complete();
-    console.log('infinite scroll triggereddd')
+    event.target.complete();
   }
 
   public handleSelect(event: MatSelectChange): void {
