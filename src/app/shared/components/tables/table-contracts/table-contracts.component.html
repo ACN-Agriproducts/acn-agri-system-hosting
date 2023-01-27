@@ -53,7 +53,7 @@
 </ng-template>
 
 <ng-template #currentDelivered let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Delivered' : row.currentDelivered | number }}
+	{{ isHeader ? 'Delivered' : row.currentDelivered | massInUnit | number }}
 </ng-template>
 
 <ng-template #date let-row let-isHeader="isHeader">
@@ -87,7 +87,7 @@
 </ng-template>
 
 <ng-template #quantity let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Bushels' : (row.quantity | number) }}
+	{{ isHeader ? 'Bushels' : (row.quantity | massInUnit | number) }}
 </ng-template>
 
 <ng-template #status let-row let-isHeader="isHeader">
