@@ -5,9 +5,7 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { OrderByDirection, QueryDocumentSnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
-import { TableConfigurableComponent } from '../table-configurable/table-configurable.component';
-
-declare type TableType = "" | "infiniteScroll" | "pagination";
+import { DisplayOptions, TableConfigurableComponent } from '../table-configurable/table-configurable.component';
 
 export declare type contractColumns = (
   "clientName" | 
@@ -153,14 +151,6 @@ export class TableContractsComponent implements OnInit {
   public openFilterMenu(fieldName: string, event: Event): void {
     this.table.openFilterMenu(fieldName, event);
   }
-}
-
-export interface DisplayOptions {
-  tableType: TableType;
-  fixed: boolean;
-  defaultDateFormat?: string;
-  dateFormat?: string;
-  deliveryDatesFormat?: string;
 }
 
 export interface ColumnInfo {

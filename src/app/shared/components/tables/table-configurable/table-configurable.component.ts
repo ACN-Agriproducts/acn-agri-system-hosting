@@ -6,7 +6,8 @@ import { NavController, PopoverController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { orderBy, QueryDocumentSnapshot } from 'firebase/firestore';
 import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
-import { DisplayOptions } from '../table-contracts/table-contracts.component';
+
+declare type TableType = "" | "infiniteScroll" | "pagination";
 
 @Component({
   selector: 'app-configurable-table',
@@ -32,7 +33,7 @@ export class TableConfigurableComponent implements OnInit {
   public defaultSize: number;
   public details: string;
   public disableInfiniteScroll: boolean = false;
-  public tableWrapperHeight: number;
+  public tableWrapperHeight: number = 0;
   
   private filterConstraints: QueryConstraint[];
   private queryConstraints: QueryConstraint[];
@@ -45,6 +46,12 @@ export class TableConfigurableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // following statement needed due to ion infinite scroll bug
+    if (this.displayOptions.tableType === 'infiniteScroll' && this.steps < 10) {
+      console.warn("Minimum steps of 10 necessary for infiniteScroll");
+      this.steps = 10;
+    }
+
     this.filterConstraints = [];
     this.sortConstraints = [];
     this.queryConstraints = [limit(this.steps)];
@@ -53,7 +60,7 @@ export class TableConfigurableComponent implements OnInit {
     
     this.loadData().then(async () => {
       this.tableWrapperHeight ||= this.tableWrapper.nativeElement.scrollHeight;
-      while (this.table.nativeElement.scrollHeight < this.tableWrapperHeight) {
+      while (this.table.nativeElement.scrollHeight < this.tableWrapperHeight - 100) {
         await this.handleScroll();
       }
     });
@@ -177,4 +184,12 @@ export class TableConfigurableComponent implements OnInit {
   }
 
   public roundUp = (num: number) => Math.ceil(num);
+}
+
+export interface DisplayOptions {
+  tableType: TableType;
+  fixed: boolean;
+  defaultDateFormat?: string;
+  dateFormat?: string;
+  deliveryDatesFormat?: string;
 }
