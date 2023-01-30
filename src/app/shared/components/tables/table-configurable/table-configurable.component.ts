@@ -1,8 +1,8 @@
-import { Component, ContentChild, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter, where } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
-import { IonInfiniteScroll, NavController, PopoverController } from '@ionic/angular';
+import { NavController, PopoverController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { orderBy, QueryDocumentSnapshot } from 'firebase/firestore';
 import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
@@ -23,12 +23,16 @@ export class TableConfigurableComponent implements OnInit {
   @Input() public rowAction?: (document: QueryDocumentSnapshot<FirebaseDocInterface>) => void = () => {};
   @Input() public steps!: number;
 
+  @ViewChild('tableWrapper') public tableWrapper: ElementRef<HTMLElement>;
+  @ViewChild('table') public table: ElementRef<HTMLElement>;
+
   public count: number = 0;
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
   public defaultSize: number;
   public details: string;
   public disableInfiniteScroll: boolean = false;
+  public tableWrapperHeight: number;
   
   private filterConstraints: QueryConstraint[];
   private queryConstraints: QueryConstraint[];
@@ -46,8 +50,13 @@ export class TableConfigurableComponent implements OnInit {
     this.queryConstraints = [limit(this.steps)];
 
     this.defaultSize = this.steps;
-
-    this.loadData();
+    
+    this.loadData().then(async () => {
+      this.tableWrapperHeight ||= this.tableWrapper.nativeElement.scrollHeight;
+      while (this.table.nativeElement.scrollHeight < this.tableWrapperHeight) {
+        await this.handleScroll();
+      }
+    });
   }
 
   public async loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
@@ -70,12 +79,12 @@ export class TableConfigurableComponent implements OnInit {
     return nextDocsPromise;
   }
 
-  public async handleScroll(event: any): Promise<void> {
+  public async handleScroll(event?: any): Promise<void> {
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
     const nextDocs = await this.loadData();
 
     this.disableInfiniteScroll = nextDocs.docs.length < this.steps;
-    event.target.complete();
+    event?.target.complete();
   }
 
   public handleSelect(event: MatSelectChange): void {
