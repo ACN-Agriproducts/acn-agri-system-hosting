@@ -121,13 +121,13 @@ export class TableContractsComponent implements OnInit {
       return;
     }
     
-    // limit(undefined) = no limit, limit(null) = error
-    this.steps = this.steps ?? undefined;
+    // limit(null) = error, limit(0) = no data displayed
+    // --> limit(undefined) = no limit
+    this.steps ||= undefined;
     this.displayColumns = this.formatColumns();
   }
 
   ngAfterViewInit() {
-    // initial sort
     this.handleSort(this.displayColumns.find(col => col.fieldName === 'date')?.fieldName);
   }
 

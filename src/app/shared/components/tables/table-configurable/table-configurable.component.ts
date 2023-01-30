@@ -47,7 +47,7 @@ export class TableConfigurableComponent implements OnInit {
 
   ngOnInit() {
     // following statement needed due to ion infinite scroll bug
-    if (this.displayOptions.tableType === 'infiniteScroll' && (this.steps ?? 10) < 10) {
+    if (this.displayOptions.tableType === 'infiniteScroll' && this.steps && this.steps < 10) {
       console.warn("Minimum steps of 10 necessary for infiniteScroll");
       this.steps = 10;
     }
