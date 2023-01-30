@@ -27,13 +27,13 @@ export class TableConfigurableComponent implements OnInit {
   @ViewChild('tableWrapper') public tableWrapper: ElementRef<HTMLElement>;
   @ViewChild('table') public table: ElementRef<HTMLElement>;
 
-  public count: number = 0;
+  public count: number;
   public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
   public pageIndex: number = 0;
   public defaultSize: number;
   public details: string;
   public disableInfiniteScroll: boolean = false;
-  public tableWrapperHeight: number = 0;
+  public tableWrapperHeight: number;
   
   private filterConstraints: QueryConstraint[];
   private queryConstraints: QueryConstraint[];
@@ -47,7 +47,7 @@ export class TableConfigurableComponent implements OnInit {
 
   ngOnInit() {
     // following statement needed due to ion infinite scroll bug
-    if (this.displayOptions.tableType === 'infiniteScroll' && this.steps < 10) {
+    if (this.displayOptions.tableType === 'infiniteScroll' && (this.steps ?? 10) < 10) {
       console.warn("Minimum steps of 10 necessary for infiniteScroll");
       this.steps = 10;
     }
