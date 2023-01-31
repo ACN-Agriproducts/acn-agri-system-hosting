@@ -16,8 +16,21 @@ export class InvoiceTwoComponent implements OnInit {
   @Input() items: item[];
   @Input() total: number;
 
+  public contentRows: Row[];
+
   constructor() { }
 
   ngOnInit() {
+    this.contentRows = Array(23).fill({
+      description: "Test",
+      quantity: 35.154,
+      price: 370
+    })
   }
+}
+
+interface Row {
+  description?: string;
+  quantity?: number;
+  price?: number;
 }
