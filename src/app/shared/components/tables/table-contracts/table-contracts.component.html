@@ -20,7 +20,7 @@
 			>
 				<ng-container
 					*ngTemplateOutlet="
-						fieldTemplate(column);
+						templateRefs.get(column.fieldName);
 						context: { isHeader: true }
 					"
 				></ng-container>
@@ -38,7 +38,7 @@
 		>
 			<ng-container 
 				*ngTemplateOutlet="
-					fieldTemplate(column);
+					templateRefs.get(column.fieldName);
 					context: { $implicit: row, isHeader: false }
 				"
 			></ng-container>

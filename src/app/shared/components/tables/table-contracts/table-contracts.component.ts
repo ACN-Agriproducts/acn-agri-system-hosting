@@ -7,20 +7,37 @@ import { OrderByDirection, QueryDocumentSnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { ColumnInfo, DisplayOptions, TableConfigurableComponent } from '../table-configurable/table-configurable.component';
 
-export declare type contractColumns = (
-  "clientName" | 
-  "currentDelivered" | 
-  "date" | 
-  "delivery_dates" | 
-  "grade" | 
-  "id" | 
-  "loads" | 
-  "pricePerBushel" | 
-  "product" | 
-  "quantity" | 
-  "status" | 
+export const contractColumns = [
+  "clientName",
+  "currentDelivered",
+  "date",
+  "delivery_dates",
+  "grade",
+  "id",
+  "loads",
+  "pricePerBushel",
+  "product",
+  "quantity",
+  "status",
   "transport"
-);
+];
+
+export type contractColumn = typeof contractColumns[number];
+
+// export declare type contractColumn = (
+//   "clientName" | 
+//   "currentDelivered" | 
+//   "date" | 
+//   "delivery_dates" | 
+//   "grade" | 
+//   "id" | 
+//   "loads" | 
+//   "pricePerBushel" | 
+//   "product" | 
+//   "quantity" | 
+//   "status" | 
+//   "transport"
+// );
 
 @Component({
   selector: 'app-table-contracts',
@@ -30,8 +47,9 @@ export declare type contractColumns = (
 export class TableContractsComponent implements OnInit {
   @Input() collRef!: CollectionReference<Contract>;
 
-  @Input() columns!: (contractColumns | ContractInfo)[];
+  @Input() columns!: (contractColumn | ContractInfo)[];
   public displayColumns: ContractInfo[] = [];
+  public templateRefs: Map<contractColumn, TemplateRef<any>> = new Map<contractColumn, TemplateRef<any>>();
 
   @Input() snapshot?: boolean = false;
   @Input() steps?: number;
@@ -55,50 +73,56 @@ export class TableContractsComponent implements OnInit {
   public sortDirection: OrderByDirection;
   public sortFieldName: string;
 
-  public defaultWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
-    ["clientName", ""],
-    ["currentDelivered", "1fr"],
-    ["date", "1fr"],
-    ["delivery_dates", "1fr"],
-    ["grade", ""],
-    ["id", ""],
-    ["loads", ""],
-    ["pricePerBushel", ""],
-    ["product", "1fr"],
-    ["quantity", "1fr"],
-    ["status", "1fr"],
-    ["transport", ""],
-  ]);
+  public defaultWidth: Map<contractColumn, string> = new Map<contractColumn, string>(
+    // [
+    //   ["clientName", ""],
+    //   ["currentDelivered", "1fr"],
+    //   ["date", "1fr"],
+    //   ["delivery_dates", "1fr"],
+    //   ["grade", ""],
+    //   ["id", ""],
+    //   ["loads", ""],
+    //   ["pricePerBushel", ""],
+    //   ["product", "1fr"],
+    //   ["quantity", "1fr"],
+    //   ["status", "1fr"],
+    //   ["transport", ""],
+    // ]
+  );
 
-  public defaultMinWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
-    ["clientName", ""],
-    ["currentDelivered", ""],
-    ["date", ""],
-    ["delivery_dates", ""],
-    ["grade", ""],
-    ["id", ""],
-    ["loads", ""],
-    ["pricePerBushel", ""],
-    ["product", ""],
-    ["quantity", ""],
-    ["status", ""],
-    ["transport", ""],
-  ]);
+  public defaultMinWidth: Map<contractColumn, string> = new Map<contractColumn, string>(
+    // [
+    //   ["clientName", ""],
+    //   ["currentDelivered", ""],
+    //   ["date", ""],
+    //   ["delivery_dates", ""],
+    //   ["grade", ""],
+    //   ["id", ""],
+    //   ["loads", ""],
+    //   ["pricePerBushel", ""],
+    //   ["product", ""],
+    //   ["quantity", ""],
+    //   ["status", ""],
+    //   ["transport", ""],
+    // ]
+  );
 
-  public defaultMaxWidth: Map<contractColumns, string> = new Map<contractColumns, string>([
-    ["clientName", ""],
-    ["currentDelivered", ""],
-    ["date", ""],
-    ["delivery_dates", ""],
-    ["grade", ""],
-    ["id", "50px"],
-    ["loads", ""],
-    ["pricePerBushel", ""],
-    ["product", ""],
-    ["quantity", ""],
-    ["status", ""],
-    ["transport", ""],
-  ]);
+  public defaultMaxWidth: Map<contractColumn, string> = new Map<contractColumn, string>(
+    // [
+    //   ["clientName", ""],
+    //   ["currentDelivered", ""],
+    //   ["date", ""],
+    //   ["delivery_dates", ""],
+    //   ["grade", ""],
+    //   ["id", "50px"],
+    //   ["loads", ""],
+    //   ["pricePerBushel", ""],
+    //   ["product", ""],
+    //   ["quantity", ""],
+    //   ["status", ""],
+    //   ["transport", ""],
+    // ]
+  );
 
   constructor(
     private db: Firestore,
@@ -125,10 +149,21 @@ export class TableContractsComponent implements OnInit {
     // --> limit(undefined) = no limit
     this.steps ||= undefined;
     this.displayColumns = this.formatColumns();
+
+    contractColumns.forEach((column: contractColumn) => {
+      this.templateRefs.set(column, null);
+      this.defaultWidth.set(column, "1fr");
+      this.defaultMinWidth.set(column, "80px");
+      this.defaultMaxWidth.set(column, "250px");
+    });
   }
 
   ngAfterViewInit() {
     this.handleSort(this.displayColumns.find(col => col.fieldName === 'date')?.fieldName);
+
+    contractColumns.forEach((column: contractColumn) => {
+      this.templateRefs.set(column, this[column]);
+    });
   }
 
   public formatColumns(): ContractInfo[] {
@@ -142,8 +177,6 @@ export class TableContractsComponent implements OnInit {
     );
   }
 
-  public fieldTemplate = (column: ContractInfo): TemplateRef<any> => this[column.fieldName];
-
   public handleSort(fieldName: string): void {
     [this.sortFieldName, this.sortDirection] = this.table.sort(this.sortFieldName, this.sortDirection, fieldName);
   }
@@ -154,5 +187,5 @@ export class TableContractsComponent implements OnInit {
 }
 
 export interface ContractInfo extends ColumnInfo {
-  fieldName: contractColumns
+  fieldName: contractColumn
 }

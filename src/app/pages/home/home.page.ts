@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Plant } from '@shared/classes/plant';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { ContractInfo, contractColumns } from '@shared/components/tables/table-contracts/table-contracts.component';
+import { ContractInfo, contractColumn } from '@shared/components/tables/table-contracts/table-contracts.component';
 
 export interface Item {
   createdAt: Date;
@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   public permissions: any;
   public currentCompany: string;
 
-  public columns: (contractColumns | ContractInfo)[] = [
+  public columns: (contractColumn | ContractInfo)[] = [
     'id',
     'clientName',
     'currentDelivered',
