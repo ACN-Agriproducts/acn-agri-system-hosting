@@ -60,7 +60,7 @@ export class TableConfigurableComponent implements OnInit {
     
     this.loadData().then(async () => {
       this.tableWrapperHeight ||= this.tableWrapper.nativeElement.scrollHeight;
-      while (this.table.nativeElement.scrollHeight < this.tableWrapperHeight - 100) {
+      while (this.table.nativeElement.scrollHeight < this.tableWrapperHeight - 200) {
         await this.handleScroll();
       }
     });
@@ -192,4 +192,10 @@ export interface DisplayOptions {
   defaultDateFormat?: string;
   dateFormat?: string;
   deliveryDatesFormat?: string;
+}
+
+export interface ColumnInfo {
+  width?: string;
+  minWidth?: string;
+  maxWidth?: string;
 }

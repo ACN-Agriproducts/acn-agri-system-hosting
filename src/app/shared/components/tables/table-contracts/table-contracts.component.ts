@@ -5,7 +5,7 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { OrderByDirection, QueryDocumentSnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
-import { DisplayOptions, TableConfigurableComponent } from '../table-configurable/table-configurable.component';
+import { ColumnInfo, DisplayOptions, TableConfigurableComponent } from '../table-configurable/table-configurable.component';
 
 export declare type contractColumns = (
   "clientName" | 
@@ -30,8 +30,8 @@ export declare type contractColumns = (
 export class TableContractsComponent implements OnInit {
   @Input() collRef!: CollectionReference<Contract>;
 
-  @Input() columns!: (contractColumns | ColumnInfo)[];
-  public displayColumns: ColumnInfo[] = [];
+  @Input() columns!: (contractColumns | ContractInfo)[];
+  public displayColumns: ContractInfo[] = [];
 
   @Input() snapshot?: boolean = false;
   @Input() steps?: number;
@@ -131,7 +131,7 @@ export class TableContractsComponent implements OnInit {
     this.handleSort(this.displayColumns.find(col => col.fieldName === 'date')?.fieldName);
   }
 
-  public formatColumns(): ColumnInfo[] {
+  public formatColumns(): ContractInfo[] {
     return this.columns.map(col => typeof col === 'string' ? { fieldName: col } : col);
   }
 
@@ -142,7 +142,7 @@ export class TableContractsComponent implements OnInit {
     );
   }
 
-  public fieldTemplate = (column: ColumnInfo): TemplateRef<any> => this[column.fieldName];
+  public fieldTemplate = (column: ContractInfo): TemplateRef<any> => this[column.fieldName];
 
   public handleSort(fieldName: string): void {
     [this.sortFieldName, this.sortDirection] = this.table.sort(this.sortFieldName, this.sortDirection, fieldName);
@@ -153,9 +153,6 @@ export class TableContractsComponent implements OnInit {
   }
 }
 
-export interface ColumnInfo {
-  fieldName: contractColumns;
-  width?: string;
-  minWidth?: string;
-  maxWidth?: string;
+export interface ContractInfo extends ColumnInfo {
+  fieldName: contractColumns
 }

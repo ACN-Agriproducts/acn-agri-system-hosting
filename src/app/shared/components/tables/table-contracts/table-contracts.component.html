@@ -52,15 +52,15 @@
 </ng-template>
 
 <ng-template #currentDelivered let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Delivered' : row.currentDelivered | massInUnit | number }}
+	{{ isHeader ? 'Delivered' : (row.currentDelivered | massInUnit | number) }}
 </ng-template>
 
 <ng-template #date let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Date' : (row.date | date:( displayOptions?.dateFormat || displayOptions?.defaultDateFormat || "mediumDate") )}}
+	{{ isHeader ? 'Date' : (row.date | date:(displayOptions?.dateFormat || displayOptions?.defaultDateFormat || "mediumDate")) }}
 </ng-template>
 
 <ng-template #delivery_dates let-row let-isHeader="isHeader">
-	{{ isHeader ? 'Delivery' : ( row.delivery_dates.begin | date:( displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate" ))
+	{{ isHeader ? 'Delivery' : (row.delivery_dates.begin | date:(displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate"))
 	 + ' - ' + 
 	(row.delivery_dates.end | date:(displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate")) }}
 </ng-template>
