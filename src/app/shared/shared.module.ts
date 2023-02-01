@@ -18,6 +18,7 @@ import { SectionTitleComponent } from './components/section-title/section-title.
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { InvoiceOneComponent } from './printable/printable-invoice/invoice-one/invoice-one.component';
 import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/invoice-two.component';
+import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/i
     SectionTitleComponent,
     HashMapPipe,
     InvoiceOneComponent,
-    InvoiceTwoComponent
+    InvoiceTwoComponent,
+    InvoiceDialogComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -54,7 +56,8 @@ import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/i
     SectionTitleComponent,
     HashMapPipe,
     InvoiceOneComponent,
-    InvoiceTwoComponent
+    InvoiceTwoComponent,
+    InvoiceDialogComponent
   ]
 })
 export class SharedModule {}
