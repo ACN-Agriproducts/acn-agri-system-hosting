@@ -19,6 +19,7 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
 
   public contentRows: Row[];
   public readonly rowLength = 23;
+  public weightTotal: number;
 
   constructor() { }
 
@@ -30,9 +31,11 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
 
   setRows() {
     const newRows: Row[] = Array(this.rowLength).fill({});
+    let weightTotal = 0;
 
     let index = 0;
     this.items.forEach((item) => {
+      weightTotal += newRows[index].quantity;
       newRows[index++] = {
         description: item.name,
         quantity: item.quantity,
@@ -45,6 +48,7 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
       if(item.type) newRows[index++] = {};
     });
 
+    this.weightTotal = weightTotal;
     this.contentRows = newRows;
   }
 }
