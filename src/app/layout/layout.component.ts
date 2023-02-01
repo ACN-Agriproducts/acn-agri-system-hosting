@@ -93,7 +93,7 @@ export class LayoutComponent implements OnInit {
       title: "Precios",
       url: '/dashboard/prices',
       icon: 'pricetag',
-      permission: p => this.hasPermission('prices', p),
+      permission: p => this.hasPermission('prices', p) || p?.prices?.write,
     }
   ];
   public collapse$: Observable<boolean>;
