@@ -1,0 +1,123 @@
+:host {
+    background-color: white;
+    outline: black solid 1px;
+    padding: 0.5in;
+
+    & > div {
+        height: 100%;
+    }
+}
+
+.title {
+    font-weight: bold;
+    margin-right: 1rem;
+}
+
+.header {
+    height: 2in;
+    border-bottom: gray solid 3px;
+    border-top: gray solid 3px;
+    margin-bottom: 2rem;
+
+    display: grid;
+    grid-template-columns: 5.25fr 1.5fr 6.75fr;
+
+    & > * {
+        height: 100%;
+    }
+
+    div:has(>.address-box) {
+        display: flex;
+    }
+
+    .company-info {
+        font-weight: bold;
+        
+
+        img {
+            width: 80%;
+            margin: 1rem auto;
+            display: block;
+        }
+    }
+
+    .divider {
+        background-color: gray;
+    }
+
+    .invoice-info {
+        padding: 1rem;
+        box-sizing: border-box;
+
+        .address-box {
+            display: inline-block;
+            flex: auto 1 0;
+        }
+    }
+}
+
+.content {
+    width: 100%;
+
+    th {
+        background-color: lightgray;
+    }
+
+    &, th, td {
+        border: 1px solid lightgray;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 2px;
+    }
+
+    .currency {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.footer {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .border-top {
+        border-top: 3px solid gray;
+    }
+
+    .border-left {
+        border-left: 3px solid gray;
+    }
+
+    td {
+        padding: 2px;
+    }
+
+    #total-cell {
+        background-color: lightgray;
+    }
+
+    .space {
+        color: transparent;
+    }
+
+    &>div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        height: 5rem;
+        text-align: center;
+    }
+}
+
+.text-end {
+    text-align: end;
+}
+
+.bold {
+    font-weight: bold;
+}

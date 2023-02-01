@@ -4,6 +4,17 @@
   <ion-row>
     <ion-col size-lg='5' size-xs='12'>
       <form [formGroup]="invoiceForm" *ngIf="ready">
+        <ion-card>
+          <ion-card-header>Document Info</ion-card-header>
+          <ion-card-content>
+            <mat-form-field>
+              <mat-label>Printable Document</mat-label>
+              <mat-select formControlName="printableDocumentName">
+                <mat-option *ngFor="let name of documentList" [value]="name">{{name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ion-card-content>
+        </ion-card>
         <ion-card formGroupName="seller">
           <ion-card-header>Seller Info</ion-card-header>
           <ion-card-content>
@@ -235,6 +246,8 @@
         [date]="invoiceForm.getRawValue().date"
         [items]="invoiceForm.getRawValue().items"
         [total]="total"
+        [documentName]="invoiceForm.controls['printableDocumentName'].value"
+        (invoiceDocsList)="getDocumentNameList($event)"
       ></app-printable-invoice>
     </ion-col>
   </ion-row>
