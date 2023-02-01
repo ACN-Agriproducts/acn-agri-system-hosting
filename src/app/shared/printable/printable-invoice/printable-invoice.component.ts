@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 
 @Component({
@@ -6,7 +6,9 @@ import { contactInfo, Invoice, item } from '@shared/classes/invoice';
   templateUrl: './printable-invoice.component.html',
   styleUrls: ['./printable-invoice.component.scss'],
 })
-export class PrintableInvoiceComponent implements OnInit, OnChanges {
+export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChanges {
+
+  @Output() invoiceDocsList = new EventEmitter<string[]>();
 
   @Input() invoice: Invoice;
   @Input() seller: contactInfo;
@@ -16,7 +18,14 @@ export class PrintableInvoiceComponent implements OnInit, OnChanges {
   @Input() items: item[];
   @Input() total: number;
 
+  @Input() documentName: string;
+
   public invoiceData: any;
+
+  @ViewChild("invoiceOne") invoiceOne: TemplateRef<any>;
+  @ViewChild("invoiceTwo") invoiceTwo: TemplateRef<any>;
+
+  public templateMap: Map<string, TemplateRef<any>>;
 
   constructor() { }
 
@@ -26,6 +35,18 @@ export class PrintableInvoiceComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.setData();
+    console.log(this.documentName, this.templateMap, this.templateMap?.[this.documentName]);
+  }
+
+  ngAfterViewInit(): void {
+    this.templateMap = new Map<string, TemplateRef<any>>([
+      ["Document one", this.invoiceOne],
+      ["Document two", this.invoiceTwo]
+    ]);
+
+    this.invoiceDocsList.emit(
+      [...this.templateMap.keys()]
+    );
   }
 
   setData() {
