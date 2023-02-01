@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 
 @Component({
@@ -6,7 +6,7 @@ import { contactInfo, Invoice, item } from '@shared/classes/invoice';
   templateUrl: './printable-invoice.component.html',
   styleUrls: ['./printable-invoice.component.scss'],
 })
-export class PrintableInvoiceComponent implements OnInit {
+export class PrintableInvoiceComponent implements OnInit, OnChanges {
 
   @Input() invoice: Invoice;
   @Input() seller: contactInfo;
@@ -21,6 +21,14 @@ export class PrintableInvoiceComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.setData();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.setData();
+  }
+
+  setData() {
     const data: any = {};
 
     if(this.invoice) {
