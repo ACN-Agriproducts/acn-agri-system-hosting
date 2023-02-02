@@ -55,7 +55,13 @@ export class OptionsComponent implements OnInit {
 
   public openInvoice = async () => {
     this.popoverController.dismiss(null);
-    const dialog = this.dialog.open(InvoiceDialogComponent, {data: this.invoice})
+    const dialog = this.dialog.open(
+      InvoiceDialogComponent, 
+      {
+        data: this.invoice,
+        panelClass: "borderless-dialog"
+      }
+    );
   }
   
   public print = () => {
