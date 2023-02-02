@@ -18,7 +18,7 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
   @Input() total: number;
 
   public contentRows: Row[];
-  public readonly rowLength = 22;
+  public readonly rowLength = 28;
   public weightTotal: number;
 
   constructor() { }
