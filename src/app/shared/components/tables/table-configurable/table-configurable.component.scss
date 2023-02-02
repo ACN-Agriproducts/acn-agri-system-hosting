@@ -11,19 +11,6 @@
     }
 }
 
-#table-wrapper {
-    display: block;
-    margin: 0 auto;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: auto;
-    border-radius: 5px 5px 5px 5px !important;
-    height: inherit;
-    min-height: 400px;
-    width: inherit;
-    border: solid 1px var(--ion-color-primary); //
-}
-
 #paginator-wrapper {
     display: flex;
     flex-direction: column;
@@ -58,159 +45,244 @@
     height: 200px;
 }
 
-table {
-    width: 100%;
-    text-align: center; // horizontal
-    align-content: center; // vertical
-    color: var(--ion-color-dark);
-    font-size: 0.9em;
+#table-wrapper {
+    display: block;
+    margin: 0 auto;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: auto;
     border-radius: 5px 5px 5px 5px !important;
-    position: relative;
+    height: inherit;
+    min-height: 400px;
+    width: inherit;
+}
+
+::ng-deep .header-text {
+    color: var(--ion-color-primary);
+    font-size: 1.1em !important;
+    font-weight: 600 !important;
+}
+
+@media screen and (min-width: 700px) {
+
+    table {
+        width: 100%;
+        text-align: center; // horizontal
+        align-content: center; // vertical
+        color: var(--ion-color-dark);
+        font-size: 0.9em;
+        border-radius: 5px 5px 5px 5px !important;
+        position: relative;
+    }
 
     thead {
         background-color: var(--ion-color-primary-light);
-		color: var(--ion-color-primary);
-		border-bottom: 0.5px solid var(--ion-color-primary);
-		height: 65px;
+        border-bottom: 0.5px solid var(--ion-color-primary);
+        height: 65px;
 
         position: sticky;
         top: 0;
         z-index: 3;
-
-        ::ng-deep {
-            *{}
-
-            th {                
-                button {
-                    background-color: var(--ion-color-primary-light);
-                    color: var(--ion-color-primary);
-                    font-size: 1.1em !important;
-                    font-weight: 600 !important;
-                    
-                    position: relative;
-                    
-                    mat-icon {
-                        font-size: 15px;
-                        height: fit-content;
-                        width: fit-content;
-                        
-                        position: absolute;
-                        bottom: -25px;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        transform-origin: 25% 25%;
-                        transition: transform .6s, opacity .3s;
-                        opacity: 0;
-        
-                        &.flipped {
-                            transform: rotate(-180deg);
-                        }
-                    }
-
-                    &.selected, &:hover {
-                        mat-icon {
-                            opacity: 1;
-                        }
-                    }
-                }
-
-                // .sort-button {
-                //     transition: opacity .3s, transform .6s;
-                //     width: unset;
-                //     height: 35px;
-                // }
-
-                // &:hover.sort-button {
-                //     opacity: 1;  
-                // }
-
-                // &:not(:hover):has(.sort-button:not(.selected)) {
-                //     transform: translate(10px);
-
-                //     .sort-button:not(.selected) {
-                //         opacity: 0;
-                //         transform: translate(-10px);
-                //     }
-                // }
-            }
-        }
-    }
-
-    tbody {
-        background-color: white;
-
-        tr {
-            position: relative;
-            height: 52.5px;
-
-            cursor: pointer;
-            &:after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-                transition: opacity .2s;
-                opacity: 0;
-                z-index: 2;
-            }
-            &:hover:after {
-                opacity: 1;
-            }
-            &:hover {
-                background-color: transparent !important;
-                transition: .2s;
-            }
-
-            &:nth-child(even) {
-                background-color: var(--ion-color-light);
-            }
-
-            ::ng-deep > td > .status {
-                display: inline-block;
-                font-weight: 600;
-                font-size: 0.8em;
-                font-family: 'Verdana', 'Arial', sans-serif;
-                text-transform: capitalize;
-                padding: 0 1rem;
-                border-radius: 15px;    
-                border-style: solid;
-                border-width: 0.5px;
-                
-        
-                &.pending {
-                    background-color: rgba(var(--ion-color-warning-rgb), 0.15);
-                    color: var(--ion-color-warning);
-                }
-                &.active {
-                    background-color: rgba(var(--ion-color-success-rgb), 0.15);
-                    color: var(--ion-color-success);
-                }
-                &.closed {
-                    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-                    color: var(--ion-color-danger);
-                }
-                &.cancelled {
-                    background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-                    color: var(--ion-color-danger);
-                
-                    cursor: initial;
-                    &:before {
-                        all: initial;
-                    }
-                }
-            }
-        }
     }
     
+    tbody {
+        background-color: white;
+    }
+
+    tbody > tr {
+        position: relative;
+        height: 52.5px;
+
+        cursor: pointer;
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(var(--ion-color-primary-rgb), 0.15);
+            transition: opacity .2s;
+            opacity: 0;
+            z-index: 2;
+        }
+        &:hover:after {
+            opacity: 1;
+        }
+        &:hover {
+            background-color: transparent !important;
+            transition: .2s;
+        }
+
+        &:nth-child(even) {
+            background-color: var(--ion-color-light);
+        }
+    }
+
     ::ng-deep {
+        *{}
+
+        .compact-header {
+            display: none;
+        }
+
+        th > button {
+            background-color: transparent;
+            color: var(--ion-color-primary);
+            font-size: 1.1em !important;
+            font-weight: 600 !important;
+            
+            position: relative;
+            
+            .mat-icon {
+                font-size: 1.2em;
+                height: fit-content;
+                width: fit-content;
+                
+                position: absolute;
+                bottom: -200%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                transform-origin: 25% 25%;
+                transition: transform .6s, opacity .3s;
+                opacity: 0;
+
+                &.flipped {
+                    transform: rotate(-180deg);
+                }
+            }
+
+            &.selected, &:hover {
+                mat-icon {
+                    opacity: 1;
+                }
+            }
+        }
+
         th, td {
-            padding: 0 .5rem;
+            padding: 0 0.5rem;
             box-sizing: border-box;
             overflow: hidden;
             text-overflow: ellipsis;
         }
     }
 }
+
+@media screen and (max-width: 700px) {
+    thead {
+        display: none;
+    }
+
+    #table-wrapper, table, tbody {
+        width: 100%;
+    }
+
+    table {
+        color: var(--ion-color-dark);
+        // font-size: calc(0.5em + 1.5vw);
+        font-size: calc(0.9em + 0.5vw);
+        // font-size: calc(11px + 0.5vw);
+    }
+
+    tr {
+        display: flex;
+        margin-bottom: 3em;
+        background-color: transparentize(white, 0.15);
+        box-shadow: 0 0 1em transparentize(black, 0.9);
+        flex-direction: column;
+        border-radius: 5px;
+    }
+
+    ::ng-deep {
+        *{}
+
+        td {
+            display: inline-block;
+            max-width: unset !important;
+
+            .compact-header {
+                display: inline-block;
+                background-color: var(--ion-color-primary-light);
+                padding: 0.15em 1em;
+                width: 8em;
+                text-align: right;
+            }
+
+            .row-data {
+                display: inline-block;
+                padding: 0 5vw;
+            }
+
+            &:first-of-type > .compact-header {
+                border-radius: 5px 0 0 0;
+                padding-top: 2em;
+            }
+            &:last-of-type > .compact-header {
+                border-radius: 0 0 0 5px;
+                padding-bottom: 2em;
+            }
+        }
+
+        td:has(#spinner-wrapper) {
+            width: 100%;
+        }
+    }
+}
+
+::ng-deep .status {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.8em;
+    font-family: 'Verdana', 'Arial', sans-serif;
+    text-transform: capitalize;
+    padding: 0 1rem;
+    border-radius: 15px;    
+    border-style: solid;
+    border-width: 0.5px;
+
+    &.pending {
+        background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+        color: var(--ion-color-warning);
+    }
+    &.active {
+        background-color: rgba(var(--ion-color-success-rgb), 0.15);
+        color: var(--ion-color-success);
+    }
+    &.closed {
+        background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+        color: var(--ion-color-danger);
+    }
+    &.cancelled {
+        background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+        color: var(--ion-color-danger);
+    
+        cursor: initial;
+        &:before {
+            all: initial;
+        }
+    }
+}
+
+// GRAVEYARD ----------------------------------------------------------
+
+// SORT BUTTON CSS FOR TABLE HEADERS ----------------------------------
+// .sort-button {
+//     transition: opacity .3s, transform .6s;
+//     width: unset;
+//     height: 35px;
+// }
+
+// &:hover.sort-button {
+//     opacity: 1;  
+// }
+
+// &:not(:hover):has(.sort-button:not(.selected)) {
+//     transform: translate(10px);
+
+//     .sort-button:not(.selected) {
+//         opacity: 0;
+//         transform: translate(-10px);
+//     }
+// }
+// SORT BUTTON CSS FOR TABLE HEADERS ----------------------------------
+

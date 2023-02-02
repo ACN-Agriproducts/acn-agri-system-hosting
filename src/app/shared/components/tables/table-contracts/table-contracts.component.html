@@ -36,18 +36,30 @@
 			[style.min-width]="column.minWidth || defaultMinWidth.get(column.fieldName) || '80px'"
 			[style.max-width]="column.maxWidth || defaultMaxWidth.get(column.fieldName) || '250px'"
 		>
-			<ng-container 
-				*ngTemplateOutlet="
-					templateRefs.get(column.fieldName);
-					context: { $implicit: row, isHeader: false }
-				"
-			></ng-container>
+			<div class="compact-header header-text">
+				<ng-container
+					*ngTemplateOutlet="
+						templateRefs.get(column.fieldName);
+						context: { isHeader: true }
+					"
+				></ng-container>
+			</div>
+			<div class="row-data">
+				<ng-container
+					*ngTemplateOutlet="
+						templateRefs.get(column.fieldName);
+						context: { $implicit: row, isHeader: false }
+					"
+				></ng-container>
+			</div>
 		</td>
 	</ng-template>
 </app-configurable-table>
 
 
 <ng-template #clientName let-row let-isHeader="isHeader">
+	<!-- <span class="header-text" *ngIf="isHeader; else clientNameData">Client</span>
+	<ng-template #clientNameData>{{ row.clientName | titlecase }}</ng-template> -->
 	{{ isHeader ? 'Client' : (row.clientName | titlecase) }}
 </ng-template>
 
@@ -90,7 +102,7 @@
 </ng-template>
 
 <ng-template #status let-row let-isHeader="isHeader">
-	<span class="status {{ isHeader ? '' : (row.status | lowercase) }}">
+	<span [class.status]="!isHeader" [class]="isHeader ? '' : (row.status | lowercase)">
 		{{ isHeader ? 'Status' : row.status }}
 	</span>
 </ng-template>
