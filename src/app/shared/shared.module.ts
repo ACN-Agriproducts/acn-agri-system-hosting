@@ -20,6 +20,7 @@ import { InvoiceOneComponent } from './printable/printable-invoice/invoice-one/i
 import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/invoice-two.component';
 import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 import { NgxPrintModule } from 'ngx-print';
+import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { NgxPrintModule } from 'ngx-print';
     HashMapPipe,
     InvoiceOneComponent,
     InvoiceTwoComponent,
-    InvoiceDialogComponent
+    InvoiceDialogComponent,
+    DocumentWrapperComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -59,7 +61,8 @@ import { NgxPrintModule } from 'ngx-print';
     HashMapPipe,
     InvoiceOneComponent,
     InvoiceTwoComponent,
-    InvoiceDialogComponent
+    InvoiceDialogComponent,
+    DocumentWrapperComponent
   ]
 })
 export class SharedModule {}
