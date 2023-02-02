@@ -1,9 +1,8 @@
 import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { CollectionReference, Firestore } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, OrderByDirection, QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
-import { OrderByDirection, QueryDocumentSnapshot } from 'firebase/firestore';
 import { Contract } from '@shared/classes/contract';
 import { ColumnInfo, DisplayOptions, TableConfigurableComponent } from '../table-configurable/table-configurable.component';
 
