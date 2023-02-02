@@ -59,7 +59,9 @@ export class OptionsComponent implements OnInit {
       InvoiceDialogComponent, 
       {
         data: this.invoice,
-        panelClass: "borderless-dialog"
+        panelClass: "borderless-dialog",
+        minWidth: "80%",
+        maxWidth: "100%"
       }
     );
   }

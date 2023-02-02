@@ -7,7 +7,11 @@
     <mat-icon>print</mat-icon>
   </button>
 </mat-toolbar>
-<app-printable-invoice
-  id="printable"
-  [invoice]="invoice"  
-></app-printable-invoice>
+<mat-dialog-content>
+  <app-document-wrapper>
+    <app-printable-invoice
+      id="printable"
+      [invoice]="invoice"
+    ></app-printable-invoice>
+  </app-document-wrapper>
+</mat-dialog-content>

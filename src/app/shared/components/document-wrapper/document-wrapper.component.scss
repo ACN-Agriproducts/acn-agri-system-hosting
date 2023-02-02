@@ -1,0 +1,15 @@
+div {
+    display: flex;
+    width: 9.5in;
+    justify-content: center;
+    background-color: gray;
+    box-shadow: 2px 2px rgba($color: #000000, $alpha: 0.2);
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    max-width: 100%;
+
+    &>* {
+        flex: auto 0 0;
+    }
+}
