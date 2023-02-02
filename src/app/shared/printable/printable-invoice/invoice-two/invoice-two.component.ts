@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 
 @Component({
@@ -18,12 +18,14 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
   @Input() total: number;
 
   public contentRows: Row[];
-  public readonly rowLength = 23;
+  public readonly rowLength = 22;
   public weightTotal: number;
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.setRows();
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.setRows()

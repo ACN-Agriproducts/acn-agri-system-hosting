@@ -12,7 +12,7 @@ export class Invoice extends FirebaseDocInterface {
     public status: string;
     public total: number;
 
-    public printableDocName: string;
+    public printableDocumentName: string;
 
     constructor(snapshot:QueryDocumentSnapshot<any>) {
         super(snapshot, Invoice.converter);
@@ -28,7 +28,8 @@ export class Invoice extends FirebaseDocInterface {
         this.seller = new contactInfo(data.seller);
         this.status = data.status;
         this.total = data.total;
-        this.printableDocName = data.printableDocName;
+        this.printableDocumentName = data.printableDocumentName ?? "Document one";
+        console.log(data.printableDocName)
 
         data.items.forEach(element => {
             this.items.push(new item(element));

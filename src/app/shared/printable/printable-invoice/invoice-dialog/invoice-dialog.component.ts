@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Invoice } from '@shared/classes/invoice';
 
 @Component({
   selector: 'app-invoice-dialog',
@@ -7,7 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvoiceDialogComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public dialogRef: MatDialogRef<InvoiceDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public invoice: Invoice
+  ) { }
 
   ngOnInit() {}
 

@@ -21,6 +21,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   @Input() documentName: string;
 
   public invoiceData: any;
+  public docName: string;
 
   @ViewChild("invoiceOne") invoiceOne: TemplateRef<any>;
   @ViewChild("invoiceTwo") invoiceTwo: TemplateRef<any>;
@@ -35,7 +36,6 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
 
   ngOnChanges(changes: SimpleChanges): void {
     this.setData();
-    console.log(this.documentName, this.templateMap, this.templateMap?.[this.documentName]);
   }
 
   ngAfterViewInit(): void {
@@ -47,13 +47,22 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
     this.invoiceDocsList.emit(
       [...this.templateMap.keys()]
     );
+
+    console.log(this.docName, this.templateMap, this.templateMap.get(this.docName));
   }
 
   setData() {
+    console.log("SetData trigger")
     const data: any = {};
 
     if(this.invoice) {
-      data.invoice = this.invoice
+      data.seller = this.invoice.seller;
+      data.buyer = this.invoice.buyer;
+      data.id = this.invoice.id;
+      data.date = this.invoice.date;
+      data.items = this.invoice.items;
+      data.total = this.invoice.total;
+      this.docName = this.invoice.printableDocumentName;
     }
     else {
       data.seller = this.seller;
@@ -62,6 +71,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.date = this.date;
       data.items = this.items;
       data.total = this.total;
+      this.docName = this.documentName;
     }
 
     this.invoiceData = data;
