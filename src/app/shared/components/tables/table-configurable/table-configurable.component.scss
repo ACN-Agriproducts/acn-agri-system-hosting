@@ -17,9 +17,6 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-
-    // position: sticky;
-    // left: 0;
 }
 
 #custom-paginator {
@@ -57,13 +54,7 @@
     width: inherit;
 }
 
-::ng-deep .header-text {
-    color: var(--ion-color-primary);
-    font-size: 1.1em !important;
-    font-weight: 600 !important;
-}
-
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 699px) {
 
     table {
         width: 100%;
@@ -168,27 +159,26 @@
     }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 699px) {
     thead {
         display: none;
     }
 
     #table-wrapper, table, tbody {
         width: 100%;
+        overflow-x: hidden;
     }
 
     table {
         color: var(--ion-color-dark);
-        // font-size: calc(0.5em + 1.5vw);
-        font-size: calc(0.9em + 0.5vw);
-        // font-size: calc(11px + 0.5vw);
+        font-size: clamp(0.9em, 2.5vw, 3vw);
     }
 
     tr {
         display: flex;
         margin-bottom: 3em;
         background-color: transparentize(white, 0.15);
-        box-shadow: 0 0 1em transparentize(black, 0.9);
+        box-shadow: 0 0 1em transparentize(black, 0.8);
         flex-direction: column;
         border-radius: 5px;
     }
@@ -197,29 +187,41 @@
         *{}
 
         td {
-            display: inline-block;
-            max-width: unset !important;
+            display: flex;
+            width: unset !important;
+            max-width: 100% !important;
 
             .compact-header {
                 display: inline-block;
                 background-color: var(--ion-color-primary-light);
                 padding: 0.15em 1em;
-                width: 8em;
                 text-align: right;
+                flex: 0 0 8em;
             }
 
-            .row-data {
+            .compact-data {
                 display: inline-block;
                 padding: 0 5vw;
+                flex: 1 1 auto;
+                box-sizing: border-box;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
             }
 
-            &:first-of-type > .compact-header {
-                border-radius: 5px 0 0 0;
-                padding-top: 2em;
+            &:first-of-type {
+                .compact-header,
+                .compact-data {
+                    border-radius: 5px 0 0 0;
+                    padding-top: 2em;
+                }
             }
-            &:last-of-type > .compact-header {
-                border-radius: 0 0 0 5px;
-                padding-bottom: 2em;
+            &:last-of-type {
+                .compact-header,
+                .compact-data {
+                    border-radius: 0 0 0 5px;
+                    padding-bottom: 2em;
+                }
             }
         }
 
@@ -229,36 +231,44 @@
     }
 }
 
-::ng-deep .status {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 0.8em;
-    font-family: 'Verdana', 'Arial', sans-serif;
-    text-transform: capitalize;
-    padding: 0 1rem;
-    border-radius: 15px;    
-    border-style: solid;
-    border-width: 0.5px;
+::ng-deep {
+    .header-text {
+        color: var(--ion-color-primary);
+        font-size: 1.1em !important;
+        font-weight: 600 !important;
+    }
 
-    &.pending {
-        background-color: rgba(var(--ion-color-warning-rgb), 0.15);
-        color: var(--ion-color-warning);
-    }
-    &.active {
-        background-color: rgba(var(--ion-color-success-rgb), 0.15);
-        color: var(--ion-color-success);
-    }
-    &.closed {
-        background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-        color: var(--ion-color-danger);
-    }
-    &.cancelled {
-        background-color: rgba(var(--ion-color-danger-rgb), 0.15);
-        color: var(--ion-color-danger);
-    
-        cursor: initial;
-        &:before {
-            all: initial;
+    .status {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 0.8em;
+        font-family: 'Verdana', 'Arial', sans-serif;
+        text-transform: capitalize;
+        padding: 0 1rem;
+        border-radius: 15px;    
+        border-style: solid;
+        border-width: 0.5px;
+
+        &.pending {
+            background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+            color: var(--ion-color-warning);
+        }
+        &.active {
+            background-color: rgba(var(--ion-color-success-rgb), 0.15);
+            color: var(--ion-color-success);
+        }
+        &.closed {
+            background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+            color: var(--ion-color-danger);
+        }
+        &.cancelled {
+            background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+            color: var(--ion-color-danger);
+        
+            cursor: initial;
+            &:before {
+                all: initial;
+            }
         }
     }
 }
