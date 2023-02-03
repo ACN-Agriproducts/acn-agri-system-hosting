@@ -53,9 +53,9 @@
   <button mat-button (click)="selectAllTickets(!allSelected() ? true : false)">
     {{ !allSelected() ? 'Select All' : 'Deselect All' }}
   </button>
-  <button mat-button [disabled]="selectedTickets().length === 0" (click)="onDownloadLiquidation()">Download</button>
+  <button mat-button [disabled]="selectedTickets()?.length === 0" (click)="onDownloadLiquidation()">Download</button>
   <button mat-button
-    [disabled]="selectedTickets().length === 0"
+    [disabled]="selectedTickets()?.length === 0"
     ngxPrint
     [useExistingCss]="true"
     printSectionId="ContractLiquidationLong"
