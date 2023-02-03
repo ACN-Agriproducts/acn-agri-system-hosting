@@ -227,10 +227,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   public selectedTickets = (): TicketWithDiscount[] => {
-    return this.ticketDiscountList.filter(ticket => ticket.includeInReport);
+    return this.ticketDiscountList?.filter(ticket => ticket.includeInReport);
   }
   public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
-  public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.includeInReport);
+  public allSelected = (): boolean => this.ticketDiscountList?.every(ticket => ticket.includeInReport);
 
   public getTotals = (): LiquidationTotals => {
     const totals = new LiquidationTotals();
