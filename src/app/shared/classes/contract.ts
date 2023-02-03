@@ -143,9 +143,9 @@ export class Contract extends FirebaseDocInterface {
 
     public getTickets(): Promise<Ticket[]> {
         return Promise.all(
-            this.tickets.map(doc => getDoc(doc))
+            this.tickets.map(doc => getDoc(doc.withConverter(Ticket.converter)))
         ).then(result => {
-            return result.map(snap => snap.data()).sort((a, b) => a.id - b.id);;
+            return result.map(snap => snap.data()).sort((a, b) => a.id - b.id);
         });
     }
 
