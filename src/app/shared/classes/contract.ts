@@ -142,22 +142,10 @@ export class Contract extends FirebaseDocInterface {
     }
 
     public getTickets(): Promise<Ticket[]> {
-        const ticketList = [];
-
-        this.tickets.forEach((ticketRef: DocumentReference<any>) => {
-            ticketList.push(getDoc(ticketRef.withConverter(Ticket.converter)));
-        });
-
-        return Promise.all(ticketList).then(result => {
-            const tickets: Ticket[] = [];
-
-            result.forEach((ticketSnap: DocumentSnapshot<Ticket>) => {
-                tickets.push(ticketSnap.data());
-            });
-
-            tickets.sort((a, b) => a.id - b.id);
-            
-            return tickets;
+        return Promise.all(
+            this.tickets.map(doc => getDoc(doc))
+        ).then(result => {
+            return result.map(snap => snap.data()).sort((a, b) => a.id - b.id);;
         });
     }
 
