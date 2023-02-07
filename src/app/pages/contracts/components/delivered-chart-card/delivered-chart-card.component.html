@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card [ngClass]="notification">
   <mat-card-header>
     <mat-card-title>
       <a [routerLink]="['contract-info', (contract.ref.parent.id == 'purchaseContracts' ? 'purchase': 'sales'), contract.ref.id]">Contract {{contract.id}}</a>

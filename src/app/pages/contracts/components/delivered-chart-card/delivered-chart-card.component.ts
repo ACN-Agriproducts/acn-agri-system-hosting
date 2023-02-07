@@ -13,6 +13,7 @@ export class DeliveredChartCardComponent implements OnInit {
   @Input() contract: Contract;
   public chartData: ChartData[];
   public refLines: any[];
+  public notification: "complete" | "behind" | "late";
   public colorScheme: any = {
     domain: ["#FFBC04", "#4D8C4A"]
   };
@@ -94,11 +95,13 @@ export class DeliveredChartCardComponent implements OnInit {
         value: 0
       });
 
-      const ticketDayChange = ticketData.series.find(t => t.name == name);
-      lineDataReal.series.push({
-        name,
-        value: (ticketDayChange?.value ?? 0) + (lineDataReal.series[lineDataReal.series.length - 1]?.value ?? 0)
-      });
+      if(date.getTime() <= ticketLineEnd.getTime()) {
+        const ticketDayChange = ticketData.series.find(t => t.name == name);
+        lineDataReal.series.push({
+          name,
+          value: (ticketDayChange?.value ?? 0) + (lineDataReal.series[lineDataReal.series.length - 1]?.value ?? 0)
+        });
+      }
     }
 
     // Create data for trend line
@@ -112,6 +115,21 @@ export class DeliveredChartCardComponent implements OnInit {
       day.value = Math.min(trendValue, this.contract.quantity.getMassInUnit('mTon'));
     }
     
+    // Check if card needs notification color.
+    const nameTicketLast = this.datePipe.transform(ticketLineEnd, "YY MMM d");
+    const ticketSeries = lineDataReal.series.find(series => series.name == nameTicketLast);
+    const trendSeries = LineDataTrend.series.find(series => series.name == nameTicketLast);
+
+    if(ticketSeries.value >= trendSeries.value) {
+      this.notification = "complete";
+    }
+    else if(ticketLineEnd.getTime() > this.contract.delivery_dates.end.getTime()) {
+      this.notification = "late";
+    }
+    else if(ticketSeries.value <= trendSeries.value * .85) {
+      this.notification = "behind";
+    }
+
     // Assign data to chart
     this.chartData = [LineDataTrend, lineDataReal];
   }
