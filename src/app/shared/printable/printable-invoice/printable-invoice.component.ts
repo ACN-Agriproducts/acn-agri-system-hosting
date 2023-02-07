@@ -26,7 +26,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   @ViewChild("invoiceOne") invoiceOne: TemplateRef<any>;
   @ViewChild("invoiceTwo") invoiceTwo: TemplateRef<any>;
 
-  public templateMap: Map<string, TemplateRef<any>>;
+  public templateMap: Map<string, TemplateRef<any>> = new Map();
 
   constructor() { }
 
@@ -44,17 +44,23 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       ["Document two", this.invoiceTwo]
     ]);
 
+    // console.log(this.invoiceOne)
+
     this.invoiceDocsList.emit(
       [...this.templateMap.keys()]
     );
 
-    console.log(this.docName, this.templateMap, this.templateMap.get(this.docName));
+    // console.log(this.docName, this.templateMap, this.templateMap.get(this.docName));
+  }
+
+  ngAfterViewChecked() {
+
   }
 
   setData() {
     console.log("SetData trigger")
     const data: any = {};
-
+    
     if(this.invoice) {
       data.seller = this.invoice.seller;
       data.buyer = this.invoice.buyer;

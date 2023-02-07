@@ -45,7 +45,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     InvoiceOneComponent,
     InvoiceTwoComponent,
     InvoiceDialogComponent,
-    DocumentWrapperComponent
+    DocumentWrapperComponent,
   ],
   declarations: [
     ToolbarComponent,
@@ -62,7 +62,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     InvoiceOneComponent,
     InvoiceTwoComponent,
     InvoiceDialogComponent,
-    DocumentWrapperComponent
+    DocumentWrapperComponent,
   ]
 })
 export class SharedModule {}
