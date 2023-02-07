@@ -12,8 +12,9 @@
 .mb-0 {
   margin: 0;
 }
-.container-fluid {
-  width: 100%;
+.invoice-container {
+    margin: 0 !important;
+    border: none !important;
 }
 header {
   h4 {
