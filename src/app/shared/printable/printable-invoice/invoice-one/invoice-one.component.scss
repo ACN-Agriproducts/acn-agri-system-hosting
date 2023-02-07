@@ -566,3 +566,11 @@ h6 {
   font-size: x-small;
   line-height: 100%;
 }
+
+.item-description {
+  max-width: 175px;
+}
+
+.text-wrap {
+  overflow-wrap: break-word;
+}
