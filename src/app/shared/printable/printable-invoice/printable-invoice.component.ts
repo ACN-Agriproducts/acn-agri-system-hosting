@@ -58,7 +58,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   }
 
   setData() {
-    console.log("SetData trigger")
+    // console.log("SetData trigger")
     const data: any = {};
     
     if(this.invoice) {

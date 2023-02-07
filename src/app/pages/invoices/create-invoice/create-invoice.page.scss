@@ -3,3 +3,22 @@
         visibility: hidden
     }
 }
+
+.content-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+form {
+    flex: 1 1 5in;
+    max-width: 8.5in;
+}
+
+app-printable-invoice {
+    margin: 10px;
+    max-height: 11in;
+}
+
+#submit-button {
+    margin: 10px;
+}
