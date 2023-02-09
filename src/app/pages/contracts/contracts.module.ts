@@ -1,6 +1,6 @@
 import { CoreModule } from './../../core/core.module';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -16,6 +16,8 @@ import { FilterComponent } from './components/filter/filter.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { SharedModule } from '@shared/shared.module';
 import { CloseContractFieldsDialogComponent } from './components/close-contract-fields-dialog/close-contract-fields-dialog.component';
+import { DeliveredChartCardComponent } from './components/delivered-chart-card/delivered-chart-card.component';
+import { LineChartModule, NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -25,7 +27,9 @@ import { CloseContractFieldsDialogComponent } from './components/close-contract-
     IonicModule,
     ContractsPageRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    LineChartModule,
+    NgxChartsModule
   ],
   declarations: [
     ContractsPage,
@@ -36,6 +40,8 @@ import { CloseContractFieldsDialogComponent } from './components/close-contract-
     FilterComponent,
     ContractModalOptionsComponent,
     CloseContractFieldsDialogComponent,
-  ]
+    DeliveredChartCardComponent
+  ],
+  providers: [DatePipe]
 })
 export class ContractsPageModule { }

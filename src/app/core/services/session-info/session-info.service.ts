@@ -55,6 +55,8 @@ export class SessionInfo {
       }
 
       this.companyUnit = unit;
+    }).catch(error => {
+      console.error(error);
     }));
 
     promises.push(this.localStorage.get('currentPlant').then(val => {

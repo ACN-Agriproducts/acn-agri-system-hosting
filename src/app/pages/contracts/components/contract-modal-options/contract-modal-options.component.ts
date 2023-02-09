@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Firestore, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { NavController } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
@@ -21,7 +22,7 @@ export class ContractModalOptionsComponent implements OnInit {
   @Input() status: string;
   @Input() userPermissions: any;
   @Input() currentCompany: string;
-  @Input() contract: any;
+  @Input() contract: Contract;
 
   constructor(
     private db: Firestore,
@@ -29,6 +30,7 @@ export class ContractModalOptionsComponent implements OnInit {
     private navController: NavController,
     private snack: SnackbarService,
     private confirm: ConfirmationDialogService,
+    private session: SessionInfo
     ) { }
 
   ngOnInit() {}
@@ -97,16 +99,18 @@ export class ContractModalOptionsComponent implements OnInit {
       if (newFieldData == null) return;
     }
 
+    this.contract.status = Contract.getStatusEnum().closed;
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "closed",
       market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
       pricePerBushel: newFieldData?.price ?? requiredFieldData.price,
-      quantity: newFieldData?.quantity ?? requiredFieldData.quantity
+      quantity: newFieldData?.quantity ?? requiredFieldData.quantity.getMassInUnit(this.session.getDefaultUnit())
     })
     .then(() => {
       this.snack.open("Contract Successfully Closed", "success");
     })
     .catch(error => {
+      this.contract.status = Contract.getStatusEnum().active;
       this.snack.open(error, "error");
     });
   }

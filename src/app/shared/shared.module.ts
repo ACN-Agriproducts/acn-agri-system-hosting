@@ -14,6 +14,9 @@ import { UploadDocumentDialogComponent } from './components/upload-document-dial
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
 import { PlantSelectComponent } from './components/plant-select/plant-select.component';
 import { StorageCardComponent } from './components/storage-card/storage-card.component';
+import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
+import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
+import { SectionTitleComponent } from './components/section-title/section-title.component';
 
 
 @NgModule({
@@ -31,7 +34,10 @@ import { StorageCardComponent } from './components/storage-card/storage-card.com
     PrintableTicketComponent,
     PrintableInvoiceComponent,
     PlantSelectComponent,
-    StorageCardComponent
+    StorageCardComponent,
+    FilterContractsPipe,
+    MassInUnitPipe,
+    SectionTitleComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -42,7 +48,10 @@ import { StorageCardComponent } from './components/storage-card/storage-card.com
     UploadDocumentDialogComponent,
     PrintableInvoiceComponent,
     PlantSelectComponent,
-    StorageCardComponent
+    StorageCardComponent,
+    FilterContractsPipe,
+    MassInUnitPipe,
+    SectionTitleComponent
   ]
 })
 export class SharedModule {}
