@@ -37,13 +37,13 @@
       <td class="text-end">{{row.quantity | number:"0.3-3"}}</td>
       <td>
         <div class="currency">
-          <span>$</span>
+          <span *ngIf="!row.isDetailsRow">$</span>
           <span>{{row.price | number:"0.2-2"}}</span>
         </div>
       </td>
       <td>
         <div class="currency">
-          <span>$</span>
+          <span *ngIf="!row.isDetailsRow">$</span>
           <span>{{row.quantity * row.price | number:"0.2-2"}}</span>
         </div>
       </td>

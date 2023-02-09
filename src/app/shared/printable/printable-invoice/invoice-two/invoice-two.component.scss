@@ -61,6 +61,8 @@
 
 .content {
     width: 100%;
+    table-layout: fixed;
+    overflow-wrap: break-word;
 
     th {
         background-color: lightgray;

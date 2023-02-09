@@ -42,10 +42,11 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
         description: item.name,
         quantity: item.quantity,
         price: item.price,
-        type: item.type
+        type: item.type,
+        isDetailsRow: false,
       };
 
-      if(item.details) newRows[index++] = { description: item.details };
+      if(item.details) newRows[index++] = { description: item.details, isDetailsRow: true };
 
       if(item.type) newRows[index++] = {};
     });
@@ -60,4 +61,5 @@ interface Row {
   quantity?: number;
   price?: number;
   type?: string;
+  isDetailsRow?: boolean
 }

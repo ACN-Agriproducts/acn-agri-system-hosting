@@ -94,6 +94,8 @@ h6 {
 
 .table {
   color: #535b61;
+  table-layout: fixed;
+  overflow-wrap: break-word;
 }
 
 .table-hover tbody tr:hover {
@@ -565,12 +567,4 @@ h6 {
 .notes {
   font-size: x-small;
   line-height: 100%;
-}
-
-.item-description {
-  max-width: 175px;
-}
-
-.text-wrap {
-  overflow-wrap: break-word;
 }

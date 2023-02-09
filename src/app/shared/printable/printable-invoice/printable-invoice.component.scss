@@ -12,6 +12,7 @@
 @media screen {
   :host {
     min-height: 11in;
+    height: min-content;
     width: 8.5in;
     padding: 0.5in;
     background-color: white;
