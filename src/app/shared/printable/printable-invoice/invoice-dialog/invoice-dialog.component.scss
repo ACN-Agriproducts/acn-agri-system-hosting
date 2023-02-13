@@ -1,5 +1,28 @@
 
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 mat-toolbar {
     display: flex;
     justify-content: space-between;
+}
+
+app-document-wrapper {
+    flex: 1 0;
+    
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 40px);
+
+    ::ng-deep {
+        *{}
+
+        > div {
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+    }
 }

@@ -1,18 +1,19 @@
-  <mat-toolbar color="primary">
-    <button 
-    mat-icon-button 
-    ngxPrint
-    [useExistingCss]="true"
-    printSectionId="printable">
-      <mat-icon>print</mat-icon>
-    </button>
-    <button mat-icon-button [mat-dialog-close]>
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
-  <app-document-wrapper>
-    <app-printable-invoice
-      id="printable"
-      [invoice]="invoice"
-    ></app-printable-invoice>
-  </app-document-wrapper>
+<mat-toolbar color="primary">
+  <button 
+  mat-icon-button 
+  ngxPrint
+  [useExistingCss]="true"
+  printSectionId="printable">
+    <mat-icon>print</mat-icon>
+  </button>
+  <button mat-icon-button [mat-dialog-close]>
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<app-document-wrapper>
+  <app-printable-invoice
+    id="printable"
+    [invoice]="invoice"
+  ></app-printable-invoice>
+</app-document-wrapper>
