@@ -182,8 +182,6 @@ export class TableConfigurableComponent implements OnInit {
     this.dataList = [];
     this.pageIndex = 0;
   }
-
-  public roundUp = (num: number) => Math.ceil(num);
 }
 
 export interface DisplayOptions {

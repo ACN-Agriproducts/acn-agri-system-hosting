@@ -25,7 +25,7 @@
 			</button>
 			<button mat-icon-button 
 				(click)="handlePagination(1)" 
-				[disabled]="pageIndex >= roundUp(count / steps - 1) || !dataList[pageIndex]"
+				[disabled]="pageIndex >= ((count / steps - 1) | roundUp) || !dataList[pageIndex]"
 			>
 				<mat-icon>keyboard_arrow_right</mat-icon>
 			</button>

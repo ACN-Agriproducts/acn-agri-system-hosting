@@ -19,6 +19,7 @@ import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { TableConfigurableComponent } from './components/tables/table-configurable/table-configurable.component';
 import { TableContractsComponent } from './components/tables/table-contracts/table-contracts.component';
 import { FilterPopoverComponent } from './components/tables/filter-popover/filter-popover.component';
+import { RoundUpPipe } from './pipes/roundUp/round-up.pipe';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { FilterPopoverComponent } from './components/tables/filter-popover/filte
     TableConfigurableComponent,
     TableContractsComponent,
     FilterPopoverComponent,
+    RoundUpPipe
   ]
 })
 export class SharedModule {}
