@@ -51,6 +51,8 @@ export class StorageLogsPage implements OnInit {
   public endDate: Date;
   public datesList: Date[];
 
+  private lastLogDateStart: Date;
+
   @ViewChild("slider") slider: MatSlider;
 
   constructor(
@@ -76,6 +78,8 @@ export class StorageLogsPage implements OnInit {
 
   getLogs() {
     this.setDateTimes();
+    if(this.startDate.getTime() == this.lastLogDateStart?.getTime()) return;
+    this.lastLogDateStart = new Date(this.startDate);
 
     this.storageLogs$ = StorageLogs.getStorageLogListDateRange(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate, this.endDate);
     this.lastLogsBefore$ = StorageLogs.getLastStorageLogBeforeDate(this.db, this.session.getCompany(), this.session.getPlant(), this.startDate);
