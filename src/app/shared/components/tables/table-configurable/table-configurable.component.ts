@@ -21,14 +21,14 @@ export class TableConfigurableComponent implements OnInit {
 
   @Input() private collRef!: CollectionReference<FirebaseDocInterface>;
   @Input() public displayOptions!: DisplayOptions;
-  @Input() public rowAction?: (document: QueryDocumentSnapshot<FirebaseDocInterface>) => void = () => {};
+  @Input() public rowAction?: (document: FirebaseDocInterface) => void = () => {};
   @Input() public steps!: number;
 
   @ViewChild('tableWrapper') public tableWrapper: ElementRef<HTMLElement>;
   @ViewChild('table') public table: ElementRef<HTMLElement>;
 
   public count: number;
-  public dataList: Promise<QuerySnapshot<FirebaseDocInterface>>[] = [];
+  public dataList: Promise<FirebaseDocInterface[]>[] = [];
   public pageIndex: number = 0;
   public defaultSize: number;
   public details: string;
@@ -66,7 +66,7 @@ export class TableConfigurableComponent implements OnInit {
     });
   }
 
-  public async loadData(): Promise<QuerySnapshot<FirebaseDocInterface>> {
+  public async loadData(): Promise<FirebaseDocInterface[]> {
     const countQuery = query(
       this.collRef,
       ...this.filterConstraints,
@@ -77,7 +77,9 @@ export class TableConfigurableComponent implements OnInit {
       ...this.queryConstraints
     );
     
-    const nextDocsPromise = getDocs(snapQuery);
+    const nextDocsPromise = getDocs(snapQuery).then(res => {
+      return res.docs.map(snap => snap.data());
+    });
     this.dataList.push(nextDocsPromise);
 
     this.count ??= (await getCountFromServer(countQuery)).data().count;
@@ -90,7 +92,7 @@ export class TableConfigurableComponent implements OnInit {
     this.queryConstraints = [await this.getNextQuery(), limit(this.steps)];
     const nextDocs = await this.loadData();
 
-    this.disableInfiniteScroll = nextDocs.docs.length < this.steps;
+    this.disableInfiniteScroll = nextDocs.length < this.steps;
     event?.target.complete();
   }
 
@@ -115,7 +117,7 @@ export class TableConfigurableComponent implements OnInit {
 
   public async getNextQuery(): Promise<QueryConstraint> {
     const currentSnapshot = await this.dataList[this.dataList.length - 1];
-    const lastDoc = currentSnapshot.docs[currentSnapshot.docs.length - 1];
+    const lastDoc = currentSnapshot[currentSnapshot.length - 1].snapshot;
 
     return startAfter(lastDoc);
   }

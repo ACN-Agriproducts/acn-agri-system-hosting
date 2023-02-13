@@ -42,9 +42,9 @@
 		</thead>
 		<tbody *ngIf="displayOptions.tableType === 'pagination'; else scroll">
 			<ng-container *ngIf="dataList[pageIndex] | async as snapshot; else loading">
-				<tr *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+				<tr *ngFor="let row of snapshot" (click)="rowAction(row)">
 					<ng-container *ngTemplateOutlet="rows; 
-						context: { $implicit: row.data() }"
+						context: { $implicit: row }"
 					></ng-container>
 				</tr>
 			</ng-container>
@@ -53,9 +53,9 @@
 			<tbody>
 				<ng-container *ngFor="let data of dataList">
 					<ng-container *ngIf="data | async as snapshot; else loading">
-						<tr #contracts *ngFor="let row of snapshot.docs" (click)="rowAction(row)">
+						<tr #contracts *ngFor="let row of snapshot" (click)="rowAction(row)">
 							<ng-container *ngTemplateOutlet="rows; 
-								context: { $implicit: row.data() }"
+								context: { $implicit: row }"
 							></ng-container>
 						</tr>
 					</ng-container>

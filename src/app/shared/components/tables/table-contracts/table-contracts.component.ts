@@ -169,7 +169,7 @@ export class TableContractsComponent implements OnInit {
     return this.columns.map(col => typeof col === 'string' ? { fieldName: col } : col);
   }
 
-  public openContract(contract: QueryDocumentSnapshot<Contract>): void {
+  public openContract(contract: Contract): void {
     const contractType = contract.ref.parent.id.replace("Contracts", '');
     this.navController.navigateForward(
       `dashboard/contracts/contract-info/${contractType}/${contract.ref.id}`
