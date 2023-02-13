@@ -20,6 +20,7 @@
             <div class="pagination-bar">
                 <button 
                     mat-icon-button 
+                    color="primary"
                     (click)="changeIndex(index-1)" 
                     [disabled]="index == 0">
                     <mat-icon>keyboard_arrow_left</mat-icon>
@@ -30,6 +31,7 @@
                 </span> 
                 <button 
                     mat-icon-button 
+                    color="primary"
                     (click)="changeIndex(index+1)" 
                     [disabled]="((storageLogs$ | async)?.length - 1 ?? 0) == index">
                     <mat-icon>keyboard_arrow_right</mat-icon>
@@ -42,9 +44,9 @@
                 </div>
                 <div>
                     <mat-card *ngFor="let changes of (storageLogs$ | async)?.[index]?.change">
-                        {{changes.tank}}:
-                        {{changes.amount? changes.amount.get() + " " + changes.amount.getUnit(): ""}}
-                        {{changes.type}}
+                        <div>{{changes.tank}}</div>
+                        <div>{{changes.amount? changes.amount.get() + " " + changes.amount.getUnit(): ""}}</div>
+                        <div>{{changes.type}}</div>
                     </mat-card>
                     <mat-icon id="down">arrow_downward</mat-icon>
                     <mat-icon id="right">arrow_forward</mat-icon>
@@ -57,6 +59,7 @@
             <div class="pagination-bar">
                 <button 
                     mat-icon-button 
+                    color="primary"
                     (click)="changeIndex(index-1)" 
                     [disabled]="index == 0">
                     <mat-icon>keyboard_arrow_left</mat-icon>
@@ -66,6 +69,7 @@
                 </span> 
                 <button 
                     mat-icon-button 
+                    color="primary"
                     (click)="changeIndex(index+1)" 
                     [disabled]="((storageLogs$ | async)?.length - 1 ?? 0) == index">
                     <mat-icon>keyboard_arrow_right</mat-icon>
