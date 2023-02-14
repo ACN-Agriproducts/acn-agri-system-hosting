@@ -1,17 +1,29 @@
 
 
 .clear-filter-item > .clear-filter {
-    padding: 0 10px;
+	padding: 0 10px;
 }
 
 .clear-filter {
-    position: relative;
-    font-size: 1.5em;
+	position: relative;
+	font-size: 1.5em;
 
-    .clear-icon {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        font-size: 0.8em;
-    }
+	.clear-icon {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		font-size: 0.8em;
+	}
+}
+
+ion-item {
+	font-size: 1em !important;
+}
+
+ion-searchbar.custom-searchbar {
+	--background: var(--ion-color-light);
+
+	.searchbar-input-container > input {
+	  font-size: 1em;
+	}
 }
