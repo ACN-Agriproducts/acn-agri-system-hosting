@@ -1,10 +1,10 @@
-import { Component, ContentChild, ElementRef, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, Input, OnInit, TemplateRef, ViewChild, EventEmitter } from '@angular/core';
 import { CollectionReference, getCountFromServer, getDocs, limit, OrderByDirection, query, QueryConstraint, QuerySnapshot, startAfter, where } from '@angular/fire/firestore';
 import { MatSelectChange } from '@angular/material/select';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
-import { NavController, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { orderBy, QueryDocumentSnapshot } from 'firebase/firestore';
+import { orderBy } from 'firebase/firestore';
 import { FilterPopoverComponent } from '../filter-popover/filter-popover.component';
 
 declare type TableType = "" | "infiniteScroll" | "pagination";
@@ -40,7 +40,6 @@ export class TableConfigurableComponent implements OnInit {
   private sortConstraints: QueryConstraint[];
 
   constructor(
-    private navController: NavController, // need to call open(Document) from parent table
     private popoverCtrl: PopoverController,
     private snack: SnackbarService,
   ) { }

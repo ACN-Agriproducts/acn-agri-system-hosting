@@ -1,7 +1,7 @@
 
 <app-configurable-table 
 	#configTable
-	[rowAction]="openContract"
+	[rowAction]="openContract.bind(this)"
 	[collRef]="collRef"
 	[steps]="steps"
 	[displayOptions]="displayOptions"
