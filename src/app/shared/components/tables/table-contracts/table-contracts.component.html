@@ -8,9 +8,9 @@
 >
 	<ng-template #headers>
 		<th *ngFor="let column of displayColumns"
-			[style.width]="column.width || defaultWidth.get(column.fieldName) || '1fr'"
-			[style.min-width]="column.minWidth || defaultMinWidth.get(column.fieldName) || '80px'"
-			[style.max-width]="column.maxWidth || defaultMaxWidth.get(column.fieldName) || '250px'"
+			[style.width]="column.width || (defaultWidth | hashmap:column.fieldName) || '1fr'"
+			[style.min-width]="column.minWidth || (defaultMinWidth | hashmap:column.fieldName) || '80px'"
+			[style.max-width]="column.maxWidth || (defaultMaxWidth | hashmap:column.fieldName) || '250px'"
 			nowrap
 		>
 			<button
@@ -20,7 +20,7 @@
 			>
 				<ng-container
 					*ngTemplateOutlet="
-						templateRefs.get(column.fieldName);
+						templateRefs | hashmap:column.fieldName;
 						context: { isHeader: true }
 					"
 				></ng-container>
@@ -33,13 +33,13 @@
 	<ng-template #rows let-row>
 		<td *ngFor="let column of displayColumns"
 			[style.width]="column.width || ''"
-			[style.min-width]="column.minWidth || defaultMinWidth.get(column.fieldName) || '80px'"
-			[style.max-width]="column.maxWidth || defaultMaxWidth.get(column.fieldName) || '250px'"
+			[style.min-width]="column.minWidth || (defaultMinWidth | hashmap:column.fieldName) || '80px'"
+			[style.max-width]="column.maxWidth || (defaultMaxWidth | hashmap:column.fieldName) || '250px'"
 		>
 			<div class="compact-header header-text">
 				<ng-container
 					*ngTemplateOutlet="
-						templateRefs.get(column.fieldName);
+						templateRefs | hashmap:column.fieldName;
 						context: { isHeader: true }
 					"
 				></ng-container>
@@ -47,7 +47,7 @@
 			<div class="compact-data">
 				<ng-container
 					*ngTemplateOutlet="
-						templateRefs.get(column.fieldName);
+						templateRefs | hashmap:column.fieldName;
 						context: { $implicit: row, isHeader: false }
 					"
 				></ng-container>

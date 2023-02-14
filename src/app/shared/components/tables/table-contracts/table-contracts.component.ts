@@ -48,7 +48,7 @@ export class TableContractsComponent implements OnInit {
 
   @Input() columns!: (contractColumn | ContractInfo)[];
   public displayColumns: ContractInfo[] = [];
-  public templateRefs: Map<contractColumn, TemplateRef<any>> = new Map<contractColumn, TemplateRef<any>>();
+  public templateRefs: Map<contractColumn, TemplateRef<any>>;
 
   @Input() snapshot?: boolean = false;
   @Input() steps?: number;
@@ -150,7 +150,6 @@ export class TableContractsComponent implements OnInit {
     this.displayColumns = this.formatColumns();
 
     contractColumns.forEach((column: contractColumn) => {
-      this.templateRefs.set(column, null);
       this.defaultWidth.set(column, "1fr");
       this.defaultMinWidth.set(column, "80px");
       this.defaultMaxWidth.set(column, "250px");
@@ -160,6 +159,7 @@ export class TableContractsComponent implements OnInit {
   ngAfterViewInit() {
     this.handleSort(this.displayColumns.find(col => col.fieldName === 'date')?.fieldName);
 
+    this.templateRefs = new Map<contractColumn, TemplateRef<any>>();
     contractColumns.forEach((column: contractColumn) => {
       this.templateRefs.set(column, this[column]);
     });
