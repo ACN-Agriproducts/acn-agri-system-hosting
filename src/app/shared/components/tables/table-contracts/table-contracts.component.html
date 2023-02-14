@@ -14,6 +14,7 @@
 			nowrap
 		>
 			<button
+				class="header-text"
 				[class.selected]="sortFieldName === column.fieldName"
 				(click)="handleSort(column.fieldName)" 
 				(contextmenu)="openFilterMenu(column.fieldName, $event)" 
