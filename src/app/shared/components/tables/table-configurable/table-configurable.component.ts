@@ -69,11 +69,11 @@ export class TableConfigurableComponent implements OnInit {
     const countQuery = query(
       this.collRef,
       ...this.filterConstraints,
-      ...this.sortConstraints,
     );
     const snapQuery = query(
-      countQuery,
-      ...this.queryConstraints
+        countQuery,
+        ...this.sortConstraints,
+        ...this.queryConstraints
     );
     
     const nextDocsPromise = getDocs(snapQuery).then(res => {
