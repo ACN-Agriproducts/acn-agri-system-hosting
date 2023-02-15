@@ -21,21 +21,6 @@ export class HomePage implements OnInit {
   public permissions: any;
   public currentCompany: string;
 
-  public columns: (contractColumn | ContractInfo)[] = [
-    'id',
-    'clientName',
-    'currentDelivered',
-    'date',
-    'delivery_dates',
-    'grade',
-    'loads',
-    'pricePerBushel',
-    'product',
-    'quantity',
-    'status',
-    'transport',
-  ];
-
   constructor(
     private session: SessionInfo
   ) {
@@ -44,20 +29,5 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
-
-    // this.columns = [
-    //   { fieldName: 'id' },
-    //   { fieldName: 'clientName', width: '200px'},
-    //   { fieldName: 'currentDelivered', width: '100px' },
-    //   { fieldName: 'date', width: '100px' },
-    //   { fieldName: 'delivery_dates', width: '100px' },
-    //   { fieldName: 'grade' },
-    //   { fieldName: 'loads' },
-    //   { fieldName: 'pricePerBushel', width: '100px' },
-    //   { fieldName: 'product', width: '100px' },
-    //   { fieldName: 'quantity', width: '100px' },
-    //   { fieldName: 'status', width: '100px' },
-    //   { fieldName: 'transport', width: '100px' },
-    // ];
   }
 }

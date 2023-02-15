@@ -237,7 +237,7 @@ export class Contract extends FirebaseDocInterface {
             });
           })
     }
-
+    
     public static getContracts(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
         const collectionRef = Contract.getCollectionReference(db, company, isPurchaseContract);
         const collectionQuery = query(collectionRef, ...constraints);
@@ -245,15 +245,6 @@ export class Contract extends FirebaseDocInterface {
             return result.docs.map(snap => snap.data());
         });
     }
-    // public static async getContracts(contractsQuery: Query<Contract>): Promise<Contract[]> {
-    //     const contractCollData = await getDocs(contractsQuery);
-    //     return contractCollData.docs.map(snap => snap.data());
-    // }
-
-    // TODO
-    // public static new(): Contract {
-    //     return new Contract()
-    // }
 }
 
 export class DeliveryDates {

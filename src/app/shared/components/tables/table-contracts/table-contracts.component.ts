@@ -23,21 +23,6 @@ export const contractColumns = [
 
 export type contractColumn = typeof contractColumns[number];
 
-// export declare type contractColumn = (
-//   "clientName" | 
-//   "currentDelivered" | 
-//   "date" | 
-//   "delivery_dates" | 
-//   "grade" | 
-//   "id" | 
-//   "loads" | 
-//   "pricePerBushel" | 
-//   "product" | 
-//   "quantity" | 
-//   "status" | 
-//   "transport"
-// );
-
 @Component({
   selector: 'app-table-contracts',
   templateUrl: './table-contracts.component.html',
@@ -124,17 +109,11 @@ export class TableContractsComponent implements OnInit {
   );
 
   constructor(
-    private db: Firestore,
     private navController: NavController,
-    private session: SessionInfo,
     private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
-    /* Testing */
-    this.collRef = Contract.getCollectionReference(this.db, this.session.getCompany(), true);
-    /* Testing */
-    
     if (!this.collRef) {
       this.snack.open("Collection Reference is nullish", "error");
       return;

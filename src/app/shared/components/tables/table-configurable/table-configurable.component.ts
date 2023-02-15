@@ -41,7 +41,6 @@ export class TableConfigurableComponent implements OnInit {
 
   constructor(
     private popoverCtrl: PopoverController,
-    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {

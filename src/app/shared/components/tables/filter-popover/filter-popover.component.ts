@@ -12,9 +12,7 @@ export class FilterPopoverComponent implements OnInit {
     private popoverCtrl: PopoverController,
   ) { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   public filter(fieldSearch: any): void {
     this.popoverCtrl.dismiss(fieldSearch, 'filter');
