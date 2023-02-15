@@ -81,7 +81,7 @@ export class TableConfigurableComponent implements OnInit {
     });
     this.dataList.push(nextDocsPromise);
 
-    this.count ??= (await getCountFromServer(countQuery)).data().count;
+    this.count = (await getCountFromServer(countQuery)).data().count;
     this.details = this.getDetails();
 
     return nextDocsPromise;
