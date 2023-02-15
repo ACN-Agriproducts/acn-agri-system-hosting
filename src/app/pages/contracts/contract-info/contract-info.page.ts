@@ -11,7 +11,7 @@ import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
-declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
+export declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
 
 @Component({
   selector: 'app-contract-info',
