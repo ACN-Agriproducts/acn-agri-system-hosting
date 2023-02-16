@@ -10,6 +10,7 @@ import { Functions, httpsCallable } from '@angular/fire/functions';
 import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
 export declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
 
@@ -40,6 +41,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private db: Firestore,
     private fns: Functions,
     private snack: SnackbarService,
+    private selectedTicketsPipe: SelectedTicketsPipe,
     ) { }
 
   ngOnInit() {
@@ -122,7 +124,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
 
     // populating worksheet columns
-    this.selectedTickets().forEach(ticket => {
+    this.selectedTicketsPipe.transform(this.ticketDiscountList).forEach(ticket => {
       const net = ticket.data.getNet().get() * (ticket.data.in ? 1 : -1);
 
       const dryWeight = ticket.data.dryWeight;
@@ -226,16 +228,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
   }
 
-  public selectedTickets = (): TicketWithDiscount[] => {
-    return this.ticketDiscountList?.filter(ticket => ticket.includeInReport);
-  }
   public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
   public allSelected = (): boolean => this.ticketDiscountList?.every(ticket => ticket.includeInReport);
 
   public getTotals = (): LiquidationTotals => {
     const totals = new LiquidationTotals();
 
-    this.selectedTickets().forEach(ticket => {
+    this.selectedTicketsPipe.transform(this.ticketDiscountList).forEach(ticket => {
       totals.gross += ticket.data.gross.get();
       totals.tare += ticket.data.tare.get();
 

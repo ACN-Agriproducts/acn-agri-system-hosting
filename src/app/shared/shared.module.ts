@@ -16,6 +16,8 @@ import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
 import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
+import { SelectedTicketsPipe } from './pipes/selectedTickets/selected-tickets.pipe';
+
 
 @NgModule({
   imports: [
@@ -35,6 +37,7 @@ import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
     MassInUnitPipe,
     SectionTitleComponent,
     HashMapPipe,
+    SelectedTicketsPipe,
   ],
   declarations: [
     ToolbarComponent,
@@ -48,6 +51,7 @@ import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
     MassInUnitPipe,
     SectionTitleComponent,
     HashMapPipe,
+    SelectedTicketsPipe,
   ]
 })
 export class SharedModule {}
