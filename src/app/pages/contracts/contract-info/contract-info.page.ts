@@ -30,6 +30,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketDiscountList: TicketWithDiscount[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
+  public totals: LiquidationTotals = new LiquidationTotals();
+  public allSelected: boolean = false;
+  public selectedTickets: TicketWithDiscount[] = [];
 
   private currentSub: Subscription;
 
@@ -228,8 +231,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
   }
 
-  public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
-  public allSelected = (): boolean => this.ticketDiscountList?.every(ticket => ticket.includeInReport);
+  public selectAllTickets = (): void => {
+    this.ticketDiscountList.forEach(ticket => {
+      ticket.includeInReport = !this.allSelected ? true : false;
+    });
+    this.handleSelectChange();
+  }
 
   public getTotals = (): LiquidationTotals => {
     const totals = new LiquidationTotals();
@@ -254,6 +261,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
     
     return totals;
+  }
+
+  public handleSelectChange() {
+    this.allSelected = this.ticketDiscountList?.every(ticket => ticket.includeInReport);
+    this.selectedTickets = this.selectedTicketsPipe.transform(this.ticketDiscountList);
+    this.totals = this.getTotals();
   }
 }
 
