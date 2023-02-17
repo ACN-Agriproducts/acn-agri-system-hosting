@@ -11,6 +11,7 @@ import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 export declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
 
@@ -40,35 +41,31 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   
   constructor(
     private route: ActivatedRoute,
-    private localStorage: Storage,
     private db: Firestore,
     private fns: Functions,
     private snack: SnackbarService,
     private selectedTicketsPipe: SelectedTicketsPipe,
+    private session: SessionInfo,
     ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.type = this.route.snapshot.paramMap.get('type')
-    this.localStorage.get('currentCompany').then(val => {
-      this.currentCompany = val;
-      Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id).then(contract => {
-        this.currentContract = contract;
-        this.ready = true;
-        this.currentContract.getTickets().then(tickets => {
-          this.ticketList = tickets;
-          const list: TicketWithDiscount[] = [];
+    this.type = this.route.snapshot.paramMap.get('type');
+    this.currentCompany = this.session.getCompany();
+    
+    Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
+      const tickets = await contract.getTickets();
+      
+      this.currentContract = contract;
+      this.ticketList = tickets;
 
-          this.ticketList.forEach(t => {
-            list.push({
-              data: t, 
-              discounts: { infested: 0, inspection:0 }, 
-              includeInReport: false
-            });
-          })
-          this.ticketDiscountList = list;
-        });
-      });
+      this.ticketDiscountList = tickets.map(t => ({
+        data: t,
+        discounts: { infested: 0, inspection: 0 },
+        includeInReport: false
+      }));
+      
+      this.ready = true;
     });
   }
 
