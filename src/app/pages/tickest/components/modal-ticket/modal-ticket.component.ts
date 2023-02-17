@@ -1,5 +1,6 @@
 import { ModalController } from '@ionic/angular';
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Storage } from '@angular/fire/storage';
 import { Ticket } from '@shared/classes/ticket';
 import { Contract } from '@shared/classes/contract';
@@ -12,11 +13,11 @@ import { Firestore } from '@angular/fire/firestore';
   styleUrls: ['./modal-ticket.component.scss']
 })
 export class ModalTicketComponent implements OnInit {
-  @Input() ticket: Ticket;
-
   public contract: Contract;
   public transport: Contact;
   public client: Contact;
+
+  public isInit = false;
 
   pdfLink: string;
   imageTicketList: string[] = [];
@@ -29,10 +30,18 @@ export class ModalTicketComponent implements OnInit {
   constructor(
     private modalController: ModalController,
     private storage: Storage,
-    private db: Firestore
+    private db: Firestore,
+    @Inject(MAT_DIALOG_DATA) public ticket: Ticket
   ) { }
 
   ngOnInit(): void {
+    console.log("on init");
+    if(!this.isInit && this.ticket) {
+      this.init();
+    }
+  }
+
+  init(): void {
     this.ticket.getPrintDocs(this.db).then(result => {
       let _;
       [_, this.contract, this.transport, this.client] = result;

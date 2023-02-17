@@ -6,21 +6,21 @@
                 <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
-        <ion-title>Ticket {{ticket.id}}</ion-title>
+        <ion-title>Ticket {{ticket?.id}}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content>
     <div class="mat-typography mat-dialog-content ion-hide-sm-down">
         <div class="content-ticket">
-            <div class="panel-main">
+            <div class="panel-main" *ngIf="ticket && client && contract && transport">
+                {{isInit ? init() : ''}}
                 <button 
                     mat-raised-button
                     ngxPrint
                     [useExistingCss]="true"
                     printSectionId="printableTicket"
-            
                 >Print</button>
-                <app-printable-ticket *ngIf="contract" 
+                <app-printable-ticket  
                     [ticket]="ticket"
                     [client]="client"
                     [contract]="contract"
