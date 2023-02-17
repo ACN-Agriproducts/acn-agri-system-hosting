@@ -127,7 +127,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
 
     // populating worksheet columns
-    this.selectedTicketsPipe.transform(this.ticketDiscountList).forEach(ticket => {
+    this.selectedTickets.forEach(ticket => {
       const net = ticket.data.getNet().get() * (ticket.data.in ? 1 : -1);
 
       const dryWeight = ticket.data.dryWeight;
@@ -241,7 +241,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public getTotals = (): LiquidationTotals => {
     const totals = new LiquidationTotals();
 
-    this.selectedTicketsPipe.transform(this.ticketDiscountList).forEach(ticket => {
+    this.selectedTickets.forEach(ticket => {
       totals.gross += ticket.data.gross.get();
       totals.tare += ticket.data.tare.get();
 
