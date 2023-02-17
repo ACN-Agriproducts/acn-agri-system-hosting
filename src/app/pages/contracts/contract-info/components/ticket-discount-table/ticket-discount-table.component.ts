@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -8,6 +8,8 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class TicketDiscountTableComponent implements OnInit {
   @Input() ticketDiscountList: { data: Ticket, discounts: any, includeInReport: boolean }[];
+
+  @Output("selectChange") selectChange: EventEmitter<any> = new EventEmitter<any>(); 
 
   constructor() { }
 
