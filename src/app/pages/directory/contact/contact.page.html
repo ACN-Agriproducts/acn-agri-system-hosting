@@ -150,9 +150,9 @@
 									<span>{{ doc["date"] | date }}</span>
 									<span><span class="status" [ngClass]="doc['status'].toLocaleLowerCase()">{{ doc["status"] }}</span></span>
 									<span>{{ doc["product"].id }}</span>
-									<span>{{ doc["quantity"] | number }}</span>
+									<span>{{ doc["quantity"] | massInUnit }}</span>
 									<span>{{ doc["pricePerBushel"] | currency: '$' }}</span>
-									<span>{{ doc["quantity"] / doc["productInfo"].weight * doc["pricePerBushel"] | currency }}</span>
+									<span>{{ ((doc["quantity"] | massInUnit) / doc["productInfo"].weight * doc["pricePerBushel"]) | currency }}</span>
 								</div>
 							</ng-template>
 							<ng-template [ngIf]="docsType === 'tickets'">
@@ -174,9 +174,9 @@
 									<span>{{ doc["dateOut"] | date }}</span>
 									<span>{{ doc["contractID"] }}</span>
 									<span>{{ doc["productName"] }}</span>
-									<span>{{ doc["gross"] | number }}</span>
-									<span>{{ doc["tare"] | number }}</span>
-									<span>{{ doc["getNet"]() | number }}</span>
+									<span>{{ doc["gross"] | massInUnit }}</span>
+									<span>{{ doc["tare"] | massInUnit }}</span>
+									<span>{{ doc["getNet"]() | massInUnit }}</span>
 									<span>--</span>
 								</div>
 							</ng-template>

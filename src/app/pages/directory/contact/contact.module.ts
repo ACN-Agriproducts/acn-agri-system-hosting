@@ -8,6 +8,7 @@ import { ContactPageRoutingModule } from './contact-routing.module';
 
 import { ContactPage } from './contact.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { CoreModule } from '@core/core.module';
     ContactPageRoutingModule,
     ReactiveFormsModule,
     CoreModule,
+    SharedModule,
   ],
   declarations: [ContactPage]
 })
