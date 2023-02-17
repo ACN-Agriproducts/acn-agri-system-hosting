@@ -301,6 +301,14 @@ export class PricesPage implements OnInit {
     this.notes.push("");
   }
 
+  futuresFieldChange(event: any) {
+    const futureValue = event.target.valueAsNumber
+    
+    for (let typeName in this.pricesTable) {
+      this.pricesTable[typeName].futurePrice = futureValue;
+    }
+  }
+
   getSubmitObjects(): [pricesDoc, pricesDoc] {
     const salesSubmitDoc: pricesDoc = {
       prices: [],
