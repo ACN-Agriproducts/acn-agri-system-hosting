@@ -17,8 +17,6 @@ export class ModalTicketComponent implements OnInit {
   public transport: Contact;
   public client: Contact;
 
-  public isInit = false;
-
   pdfLink: string;
   imageTicketList: string[] = [];
 
@@ -35,13 +33,6 @@ export class ModalTicketComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log("on init");
-    if(!this.isInit && this.ticket) {
-      this.init();
-    }
-  }
-
-  init(): void {
     this.ticket.getPrintDocs(this.db).then(result => {
       let _;
       [_, this.contract, this.transport, this.client] = result;
