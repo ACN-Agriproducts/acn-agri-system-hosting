@@ -15,7 +15,7 @@ import { PrintableInvoiceComponent } from './printable/printable-invoice/printab
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
 import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
-
+import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 
 @NgModule({
   imports: [
@@ -33,7 +33,8 @@ import { SectionTitleComponent } from './components/section-title/section-title.
     PrintableInvoiceComponent,
     FilterContractsPipe,
     MassInUnitPipe,
-    SectionTitleComponent
+    SectionTitleComponent,
+    HashMapPipe,
   ],
   declarations: [
     ToolbarComponent,
@@ -45,7 +46,8 @@ import { SectionTitleComponent } from './components/section-title/section-title.
     PrintableInvoiceComponent,
     FilterContractsPipe,
     MassInUnitPipe,
-    SectionTitleComponent
+    SectionTitleComponent,
+    HashMapPipe,
   ]
 })
 export class SharedModule {}
