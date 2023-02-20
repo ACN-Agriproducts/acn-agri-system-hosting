@@ -8,6 +8,7 @@ export class Invoice extends FirebaseDocInterface {
     public items: item[];
     public needsAttention: boolean;
     public pdfReference: string;
+    public proofLinks: string[];
     public seller: contactInfo;
     public status: string;
     public total: number;
@@ -23,6 +24,7 @@ export class Invoice extends FirebaseDocInterface {
         this.items = [];
         this.needsAttention = data.needsAttention;
         this.pdfReference = data.pdfReference;
+        this.proofLinks = data.proofLinks;
         this.seller = new contactInfo(data.seller);
         this.status = data.status;
         this.total = data.total;
