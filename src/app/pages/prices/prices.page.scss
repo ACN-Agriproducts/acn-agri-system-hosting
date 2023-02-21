@@ -5,8 +5,14 @@
     margin-bottom: 1rem;
 }
 
-#prices-data {
+.info-area-fields {
     margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+#prices-data {
+    flex: 0 0 auto;
 
     mat-form-field {
         max-width: 200px;
