@@ -4,4 +4,8 @@
     <div class="main-grid">
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
     </div>
+
+    <app-printable-contract>
+        
+    </app-printable-contract>
 </ion-content>
