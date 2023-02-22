@@ -106,12 +106,12 @@
             Please sign and return this confirmation IMMEDIATELY
           </div>
         </div>
-        <div class='column-size-4'>
+        <div class='column-size-3'>
           <ng-container *ngIf="contractForm.paymentTerms.paymentTerms && contractForm.paymentTerms.measurement">
             EVERY {{contractForm.paymentTerms.paymentTerms}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
           </ng-container>
         </div>
-        <div class='column-size-1 right-justify'>
+        <div class='column-size-2'>
           {{getPriceInCWT() | number:'0.5-5'}}<br>
           {{getPriceInMTon() | number:'0.5-5'}}
         </div>
@@ -149,10 +149,9 @@
     DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.
   </div>
 
-  <div class="terms-and-conditions">TERMS AND CONDITIONS</div>
   <div class="terms-and-conditions">
     
-      <p>_______________ (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  ACN AGRIPRODUCTS LLC (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
+      <p><span class="underline-small">{{(this.contractForm.clientInfo || this.contractForm.client)? (this.contractForm.clientInfo || this.contractForm.client).name : ""}}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  ACN AGRIPRODUCTS LLC (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
     
       <p>FAILURE TO ADVISE ACN AGRIPRODUCTS LLC IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.</p>
       
@@ -166,7 +165,7 @@
       
       <p>The Buyer is purchasing the following Goods from the Seller: (Insert description of “Goods”)	</p>
       
-      <p>PRICE: Buyer agrees to pay the purchase price (the "Purchase Price") of ________$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+      <p>PRICE: Buyer agrees to pay the purchase price (the "Purchase Price") of <span>{{getPriceInBushels() | number:"0.5-5"}}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
     
       <p>PAYMENT: The Purchase Price shall be paid only in the following payment methods: <br>
@@ -212,7 +211,7 @@
   <br>
   <div class='signature-area'>
     <div>
-      <span>{{contractForm.client?.name ?? ""}}</span>
+      <span>{{(this.contractForm.clientInfo || this.contractForm.client)? (this.contractForm.clientInfo || this.contractForm.client).name : ""}}</span>
       <div class='underline'>BY:</div>
       <span>Name/Title:</span><br>
       <span>Date:</span><br>

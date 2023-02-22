@@ -33,12 +33,17 @@ h1{
     text-align: right;
 }
 
+
 #extra-info-header {
     border: 2px solid black;
 }
 
 .underline {
     border-bottom: 2px solid black;
+}
+
+.underline-small {
+    border-bottom: 1px solid black;
 }
 
 #total {
@@ -68,6 +73,7 @@ h1{
 .terms-and-conditions {
     font-size: x-small;
     line-height: 125%;
+    margin-top: 1rem;
 }
 
 .grid-12 {
