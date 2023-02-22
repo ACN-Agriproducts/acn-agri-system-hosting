@@ -2,10 +2,10 @@
 
 <ion-content class="ion-padding">
     <div class="main-grid">
-        <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
+        <!-- <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention> -->
     </div>
 
-    <app-printable-contract>
-        
-    </app-printable-contract>
+    <app-printable-contract
+        version="compra_bodegaTerceros"
+    ></app-printable-contract>
 </ion-content>
