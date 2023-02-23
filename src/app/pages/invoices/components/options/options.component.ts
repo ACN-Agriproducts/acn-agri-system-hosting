@@ -74,12 +74,12 @@ export class OptionsComponent implements OnInit {
   }
 
   public async proofPaymentDoc() {
-    const pdfRef = this.invoice.pdfReference ?? 
+    const pdfRef = this.invoice.proofLinks?.[0] ?? 
       `/companies/${this.currentCompany}/invoices/${this.invoice.id}/proofPayment`;
 
     const dialogData: UploadDialogData = {
       docType: "Proof of Payment",
-      hasDoc: this.invoice.pdfReference != null,
+      hasDoc: this.invoice.proofLinks != null,
       pdfRef,
       uploadable: this.invoice.status !== 'closed'
     };
@@ -92,7 +92,8 @@ export class OptionsComponent implements OnInit {
     if (updatePdfRef == null) return;
 
     this.invoice.update({
-      pdfReference: updatePdfRef
+      proofLinks: [updatePdfRef],
+      status: "paid"
     })
     .then(() => {
       this.snack.open("Proof of Payment successfully uploaded.", 'success');

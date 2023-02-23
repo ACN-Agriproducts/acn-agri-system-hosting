@@ -19,6 +19,7 @@ import { OptionsTicketComponent } from './components/options-ticket/options-tick
 import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { NgxPrintModule } from 'ngx-print';
     CoreModule,
     NgxDropzoneModule,
     SharedModule,
-    NgxPrintModule
+    NgxPrintModule,
+    MatDialogModule
   ],
   declarations: [
     TickestPage,
@@ -41,6 +43,10 @@ import { NgxPrintModule } from 'ngx-print';
     ShowDetailsComponent,
     OptionsTicketComponent,
     TicketReportDialogComponent
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
   ]
 })
 export class TickestPageModule { }

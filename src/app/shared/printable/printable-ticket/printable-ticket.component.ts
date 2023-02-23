@@ -30,11 +30,11 @@ export class PrintableTicketComponent implements OnInit {
       {label: 'Load #', value: null},
       {label: 'U.S. Grade', value: this.ticket.grade},
       {label: 'Origin', value: this.ticket.origin},
-      {label: 'DryWeight', value: this.ticket.dryWeight},
+      {label: 'DryWeight', value: this.ticket.dryWeight.get()},
       {label: 'Orig. Ticket #', value: this.ticket.original_ticket},
       {label: 'Discount/100lbs', value: (this.ticket.dryWeight.get() / this.ticket.getNet().get() * 1000) % 1 / 10},
-      {label: 'Orig Weight', value: this.ticket.original_weight},
-      {label: 'DryWeight', value: this.ticket.dryWeight},
+      {label: 'Orig Weight', value: this.ticket.original_weight.get()},
+      {label: 'DryWeight', value: this.ticket.dryWeight.get()},
       {label: 'Tank', value: this.ticket.tank},
     ];
   }
