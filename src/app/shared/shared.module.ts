@@ -18,6 +18,7 @@ import { SectionTitleComponent } from './components/section-title/section-title.
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { PrintableContractComponent } from './printable/printable-contract/printable-contract.component';
 import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
+import { PurchaseDepositComponent } from './printable/printable-contract/components/purchase-deposit/purchase-deposit.component';
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import { TypeTemplateDirective } from './directives/type-template/type-template.
     SectionTitleComponent,
     HashMapPipe,
     PrintableContractComponent,
+    PurchaseDepositComponent,
   ],
   declarations: [
     ToolbarComponent,
@@ -53,6 +55,7 @@ import { TypeTemplateDirective } from './directives/type-template/type-template.
     HashMapPipe,
     PrintableContractComponent,
     TypeTemplateDirective,
+    PurchaseDepositComponent,
   ]
 })
 export class SharedModule {}
