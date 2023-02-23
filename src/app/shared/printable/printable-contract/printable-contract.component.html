@@ -1,5 +1,5 @@
 
-<ng-container *ngTemplateOutlet="template$ | async"></ng-container>
+<ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
 
 <ng-template typeTemplate="compra_aDeposito">
 	<p>COMPRA - A DEPOSITO</p>
@@ -17,14 +17,18 @@
 	<p>COMPRA - PRECIO SIN FIJAR</p>
 </ng-template>
 
-<ng-template typeTemplate="deVenta_bases_precioSinFijar">
-	<p>DE VENTA - PRECIO SIN FIJAR</p>
-</ng-template>
-
 <ng-template typeTemplate="deVenta_precioFijo">
 	<p>DE VENTA - PRECIO FIJO</p>
 </ng-template>
 
+<ng-template typeTemplate="deVenta_precioSinFijar">
+	<p>DE VENTA - PRECIO SIN FIJAR</p>
+</ng-template>
+
 <ng-template typeTemplate="sellContract">
 	<p>SELL CONTRACT</p>
+</ng-template>
+
+<ng-template #none>
+	<p>NONE</p>
 </ng-template>

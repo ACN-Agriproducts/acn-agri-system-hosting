@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
-import { BehaviorSubject, filter, map } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-printable-contract',
@@ -14,8 +14,8 @@ export class PrintableContractComponent implements OnInit {
 
   @ViewChildren(TypeTemplateDirective) private versionTemplates: QueryList<TypeTemplateDirective>;
 
-  version$ = new BehaviorSubject<string>(null);
-  template$ = this.version$.pipe(
+  public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public template$: Observable<TemplateRef<any>> = this.version$.pipe(
     filter(() => !!this.versionTemplates),
     map(version => this.versionTemplates.find(template => template.typeTemplate === version)?.templateRef)
   );

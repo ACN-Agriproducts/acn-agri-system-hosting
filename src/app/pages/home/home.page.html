@@ -5,7 +5,22 @@
         <!-- <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention> -->
     </div>
 
+    <mat-form-field>
+        <mat-select [(ngModel)]="contractType">
+            <mat-option value="compra">CONTRATO COMPRA</mat-option>
+            <mat-option value="deVenta">CONTRATO DE VENTA</mat-option>
+            <mat-option value="sellContract">SELL CONTRACT</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="contractType !== 'sellContract'">
+        <mat-select [(ngModel)]="contractVersion">
+            <mat-option value="_aDeposito">A DEPOSITO</mat-option>
+            <mat-option value="_bodegaTerceros">BODEGA TERCEROS</mat-option>
+            <mat-option value="_precioFijo">PRECIO FIJO</mat-option>
+            <mat-option value="_precioSinFijar">PRECIO SIN FIJAR</mat-option>
+        </mat-select>
+    </mat-form-field>
     <app-printable-contract
-        version="compra_bodegaTerceros"
+        [version]="contractType + contractVersion"
     ></app-printable-contract>
 </ion-content>
