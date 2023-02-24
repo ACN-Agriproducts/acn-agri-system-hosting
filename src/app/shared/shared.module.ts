@@ -17,6 +17,9 @@ import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { PrintableContractComponent } from './printable/printable-contract/printable-contract.component';
+import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
+import { PurchaseDepositComponent } from './printable/printable-contract/purchase-deposit/purchase-deposit.component';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -37,6 +40,8 @@ import { PrintableContractComponent } from './printable/printable-contract/print
     SectionTitleComponent,
     HashMapPipe,
     PrintableContractComponent,
+    PurchaseDepositComponent,
+    NgxPrintModule,
   ],
   declarations: [
     ToolbarComponent,
@@ -51,6 +56,8 @@ import { PrintableContractComponent } from './printable/printable-contract/print
     SectionTitleComponent,
     HashMapPipe,
     PrintableContractComponent,
+    TypeTemplateDirective,
+    PurchaseDepositComponent,
   ]
 })
 export class SharedModule {}
