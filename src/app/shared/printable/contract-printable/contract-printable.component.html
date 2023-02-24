@@ -108,7 +108,7 @@
         </div>
         <div class='column-size-3'>
           <ng-container *ngIf="contractForm.paymentTerms.paymentTerms && contractForm.paymentTerms.measurement">
-            EVERY {{contractForm.paymentTerms.paymentTerms}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}}
+            <!-- EVERY {{contractForm.paymentTerms.paymentTerms}} {{contractForm.paymentTerms.measurement | uppercase}} {{contractForm.paymentTerms.before? "PREPAID": ""}} -->
           </ng-container>
         </div>
         <div class='column-size-2'>
@@ -163,9 +163,9 @@
       
       <p>GOODS: Seller agrees to transfer title and possession to Buyer, and Buyer shall pay and accept Seller's agreed price, for the "Goods" agreed to by the Parties in this Agreement.</p>
       
-      <p>The Buyer is purchasing the following Goods from the Seller: (Insert description of “Goods”)	</p>
+      <p>The Buyer is purchasing the following Goods from the Seller: {{getProduct()}}	</p>
       
-      <p>PRICE: Buyer agrees to pay the purchase price (the "Purchase Price") of <span>{{getPriceInBushels() | number:"0.5-5"}}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+      <p>PRICE: Buyer agrees to pay the purchase price (the "Purchase Price") of <span>{{contractForm.quantity * getPriceInCWT() / 100 | number:'1.2-2'}}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
     
       <p>PAYMENT: The Purchase Price shall be paid only in the following payment methods: <br>
