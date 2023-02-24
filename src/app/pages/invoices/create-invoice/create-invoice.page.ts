@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { addDoc, Firestore } from '@angular/fire/firestore';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControlOptions, UntypedFormControl } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, AbstractControlOptions, UntypedFormControl } from '@angular/forms';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Company } from '@shared/classes/company';
@@ -31,6 +31,7 @@ export class CreateInvoicePage implements OnInit {
   public ready: boolean = false;
   
   invoiceForm: UntypedFormGroup;
+  public documentList: string[];
 
   private currentSubs: Subscription[] = [];
 
@@ -65,6 +66,7 @@ export class CreateInvoicePage implements OnInit {
       }),
       date: [new Date()],
       items: this.fb.array([this.createItem()]),
+      printableDocumentName: [,Validators.required]
     })
 
     this.ready = true;
@@ -287,5 +289,10 @@ export class CreateInvoicePage implements OnInit {
       modal.dismiss();
     }
     window.print();
+  }
+
+  getDocumentNameList(list: string[]) {
+    this.documentList = list;
+    this.invoiceForm.get("printableDocumentName").setValue(list[0]);
   }
 }
