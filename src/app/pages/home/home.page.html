@@ -20,7 +20,18 @@
             <mat-option value="_precioSinFijar">PRECIO SIN FIJAR</mat-option>
         </mat-select>
     </mat-form-field>
+    <button
+        mat-raised-button
+        *ngIf="contractType + contractVersion !== ''"
+        ngxPrint
+        previewOnly="true"
+        printSectionId="printable"
+        [useExistingCss]="true"
+    >
+        PRINT
+    </button>
     <app-printable-contract
+        id="printable"
         [version]="contractType + contractVersion"
     ></app-printable-contract>
 </ion-content>

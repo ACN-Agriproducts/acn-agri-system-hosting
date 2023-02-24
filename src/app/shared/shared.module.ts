@@ -18,7 +18,8 @@ import { SectionTitleComponent } from './components/section-title/section-title.
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { PrintableContractComponent } from './printable/printable-contract/printable-contract.component';
 import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
-import { PurchaseDepositComponent } from './printable/printable-contract/components/purchase-deposit/purchase-deposit.component';
+import { PurchaseDepositComponent } from './printable/printable-contract/purchase-deposit/purchase-deposit.component';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { PurchaseDepositComponent } from './printable/printable-contract/compone
     HashMapPipe,
     PrintableContractComponent,
     PurchaseDepositComponent,
+    NgxPrintModule,
   ],
   declarations: [
     ToolbarComponent,
