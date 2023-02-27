@@ -8,8 +8,12 @@
     color: black !important;
 }
 
+.page-break {
+    page-break-after: always;
+}
+
 .header-section {
-    outline: black solid 1px;
+    border: black solid 1px;
 }
 
 #company-logo {
@@ -32,6 +36,7 @@ h1{
     display: block;
     text-align: right;
 }
+
 
 
 #extra-info-header {
@@ -67,7 +72,6 @@ h1{
 .page-footer {
     text-align: center;
     font-weight: bold;
-    page-break-after: always;
 }
 
 .terms-and-conditions {
@@ -108,4 +112,11 @@ h1{
 
 .column-size-5 {
     grid-column-end: span 5;
+}
+
+@media print {
+    // #first-page {
+    //     position: fixed;
+    //     overflow-y: visible;
+    // }
 }
