@@ -8,8 +8,12 @@
     color: black !important;
 }
 
+.page-break {
+    page-break-after: always;
+}
+
 .header-section {
-    outline: black solid 1px;
+    border: black solid 1px;
 }
 
 #company-logo {
@@ -33,12 +37,18 @@ h1{
     text-align: right;
 }
 
+
+
 #extra-info-header {
     border: 2px solid black;
 }
 
 .underline {
     border-bottom: 2px solid black;
+}
+
+.underline-small {
+    border-bottom: 1px solid black;
 }
 
 #total {
@@ -62,12 +72,12 @@ h1{
 .page-footer {
     text-align: center;
     font-weight: bold;
-    page-break-after: always;
 }
 
 .terms-and-conditions {
     font-size: x-small;
     line-height: 125%;
+    margin-top: 1rem;
 }
 
 .grid-12 {
@@ -104,8 +114,9 @@ h1{
     grid-column-end: span 5;
 }
 
-@media screen {
-    .terms-and-conditions {
-        display: none;
-    }
+@media print {
+    // #first-page {
+    //     position: fixed;
+    //     overflow-y: visible;
+    // }
 }
