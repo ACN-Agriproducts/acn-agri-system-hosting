@@ -56,6 +56,9 @@ export class Contract extends FirebaseDocInterface {
     transport: string;
     truckers: TruckerInfo[];
 
+
+    constructor(snapshot: QueryDocumentSnapshot<any>);
+    constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
