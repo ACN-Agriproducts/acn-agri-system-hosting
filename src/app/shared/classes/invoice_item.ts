@@ -9,9 +9,23 @@ export class InvoiceItem extends FirebaseDocInterface {
     name: string;
     price: number;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+    constructor(snapshot: QueryDocumentSnapshot<any>);
+    constructor(snapshot: DocumentReference<any>);
+    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
+        let snapshot;
+        if (snapshotOrRef instanceof QueryDocumentSnapshot) {
+            snapshot = snapshotOrRef;
+        }
+
         super(snapshot, InvoiceItem.converter);
-        const data = snapshot.data();
+        const data = snapshot?.data();
+
+        if (snapshotOrRef instanceof DocumentReference) {
+            this.ref = snapshotOrRef;
+            return;
+        }
+
+        if (data == undefined) return;
 
         this.affectsInventory = data.affectsInventory;
         this.inventoryInfo = new inventoryInfo(data.inventoryInfo);
@@ -56,25 +70,25 @@ export class InvoiceItem extends FirebaseDocInterface {
     }
 }
 
-class inventoryInfo {
+export class inventoryInfo {
     info: info[];
 
     constructor(data: any) {
         this.info = [];
 
-        data.info.forEach(element => {
+        data.info?.forEach(element => {
             this.info.push(new info(element));
         });
     }
 
     public getRawData(): any {
         return {
-            info: this.info.map(element => element.getRawData())
+            info: this.info?.map(element => element?.getRawData())
         }
     }
 }
 
-class info {
+export class info {
     plant: string;
     product: string;
     quantity: number;
