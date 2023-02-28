@@ -46,6 +46,7 @@ export class Contract extends FirebaseDocInterface {
     plants: string[];
     pdfReference: string;
     pricePerBushel: number;
+    printableFormat: string;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
     quantity: Mass;
@@ -55,14 +56,25 @@ export class Contract extends FirebaseDocInterface {
     transport: string;
     truckers: TruckerInfo[];
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
+        let snapshot;
+        if(snapshotOrRef instanceof QueryDocumentSnapshot) {
+            snapshot = snapshotOrRef
+        }
+        
         super(snapshot, Contract.converter);
-        const data = snapshot.data();
+        const data = snapshot?.data();
+
+        if(snapshotOrRef instanceof DocumentReference) {
+            this.ref = snapshotOrRef;
+            return;
+        }
+
+        if(data == undefined) return;
 
         let tempTicketList: DocumentReference<Ticket>[] = [];
         let tempTruckerList: TruckerInfo[] = [];
 
-        // TODO Set DocumentReference converters
         data.tickets.forEach((ticket: DocumentReference) => {
             tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
@@ -88,6 +100,7 @@ export class Contract extends FirebaseDocInterface {
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
         this.pdfReference = data.pdfReference;
         this.pricePerBushel = data.pricePerBushel;
+        this.printableFormat = data.printableFormat ?? "";
         this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
         this.quantity = new Mass(data.quantity, FirebaseDocInterface.session.getDefaultUnit());
