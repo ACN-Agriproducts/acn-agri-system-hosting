@@ -1,5 +1,6 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, doc, getDoc, collectionData } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
+import { ProductInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
 
@@ -43,6 +44,14 @@ export class Product extends FirebaseDocInterface {
 
     public getName(): string {
         return this.ref.id;
+    }
+
+    public getProductInfo(): ProductInfo {
+        return {
+            moisture: this.moisture,
+            name: this.getName(),
+            weight: this.weight
+        }
     }
 
     public static getCollectionReference(db: Firestore, company: string): CollectionReference<Product> {
