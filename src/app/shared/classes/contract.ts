@@ -6,6 +6,8 @@ import { Mass } from "./mass";
 import { Product } from "./product";
 import { Ticket } from "./ticket";
 
+declare type contractType = string | boolean;
+
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
     base: number;
@@ -55,6 +57,7 @@ export class Contract extends FirebaseDocInterface {
     tickets: DocumentReference<Ticket>[];
     transport: string;
     truckers: TruckerInfo[];
+    type: string;
 
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
@@ -112,6 +115,7 @@ export class Contract extends FirebaseDocInterface {
         this.tickets = data.tickets;
         this.transport = data.transport;
         this.truckers = tempTruckerList;
+        this.type = data.type;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
     }
@@ -201,26 +205,26 @@ export class Contract extends FirebaseDocInterface {
         })
     }
 
-    public static getCollectionReference(db: Firestore, company: string, isPurchaseContract: boolean): CollectionReference<Contract> {
-        return collection(db, `companies/${company}/${isPurchaseContract? 'purchase' : 'sales'}Contracts/`).withConverter(Contract.converter);
+    public static getCollectionReference(db: Firestore, company: string, contractType?: contractType): CollectionReference<Contract> {
+        return collection(db, `companies/${company}/contracts/`).withConverter(Contract.converter);
     }
 
-    public static getDoc(db: Firestore, company: string, isPurchaseContract: boolean, contractId: number): Promise<Contract> {
-        return getDocs(query(Contract.getCollectionReference(db, company, isPurchaseContract), where('id', '==', contractId), limit(1)))
+    public static getDoc(db: Firestore, company: string, contractType: contractType, contractId: number): Promise<Contract> {
+        return getDocs(query(Contract.getCollectionReference(db, company), where('id', '==', contractId), where('type', '==', this.getContractType(contractType)), limit(1)))
             .then(result => {
                 return result.docs[0].data();
             });
     }
 
-    public static getDocById(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): Promise<Contract> {
-        const docRef = doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId)
+    public static getDocById(db: Firestore, company: string, contractType: contractType, contractId: string): Promise<Contract> {
+        const docRef = doc(Contract.getCollectionReference(db, company, contractType), contractId)
         return getDoc(docRef).then(result => {
             return result.data();
         });
     }
 
-    public static getDocRef(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): DocumentReference<Contract> {
-        return doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId);
+    public static getDocRef(db: Firestore, company: string, contractType: contractType, contractId: string): DocumentReference<Contract> {
+        return doc(Contract.getCollectionReference(db, company, contractType), contractId);
     }
 
     public static getStatusEnum(): typeof status {
@@ -254,12 +258,20 @@ export class Contract extends FirebaseDocInterface {
           })
     }
 
-    public static getContracts(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
-        const collectionRef = Contract.getCollectionReference(db, company, isPurchaseContract);
+    public static getContracts(db: Firestore, company: string, contractType: string, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+        const collectionRef = Contract.getCollectionReference(db, company, contractType);
         const collectionQuery = query(collectionRef, ...constraints);
         return getDocs(collectionQuery).then(result => {
             return result.docs.map(snap => snap.data());
         });
+    }
+
+    private static getContractType(contractType: contractType): string {
+        if(typeof contractType == "boolean") {
+            contractType = contractType ? "purchase" : "sales";
+        }
+
+        return contractType;
     }
 }
 
