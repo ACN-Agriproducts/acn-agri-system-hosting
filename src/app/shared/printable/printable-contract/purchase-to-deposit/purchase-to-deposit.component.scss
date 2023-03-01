@@ -125,6 +125,11 @@ $border-black: 1px solid black;
 	}
 	> :last-child {
 		font-size: 8pt;
+		&.periodo-de-entrega {
+			display: flex;
+			white-space: nowrap;
+			gap: 20px;
+		}
 	}
 	&:nth-child(even) {
 		background-color: #F2F2F2;
