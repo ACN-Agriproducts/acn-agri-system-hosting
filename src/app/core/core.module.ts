@@ -11,7 +11,7 @@ import { ComponentsModule } from './components/components.module';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { IonicStorageModule } from '@ionic/storage';
-
+import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
 @NgModule({
   imports: [
     CommonModule,
@@ -33,7 +33,8 @@ import { IonicStorageModule } from '@ionic/storage';
     MaterialModule,
     DirectivesCoreModule,
     FormatPriceLetterPipe,
-    SearchPipe
+    SearchPipe,
+    AsPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -41,7 +42,8 @@ import { IonicStorageModule } from '@ionic/storage';
   declarations: [
     FormatPriceLetterPipe,
     FormatStringPipe,
-    SearchPipe
+    SearchPipe,
+    AsPipe
   ]
 })
 export class CoreModule { }
