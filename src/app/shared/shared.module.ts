@@ -20,6 +20,7 @@ import { PrintableContractComponent } from './printable/printable-contract/print
 import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
 import { PurchaseToDepositComponent } from './printable/printable-contract/purchase-to-deposit/purchase-to-deposit.component';
 import { NgxPrintModule } from 'ngx-print';
+import { ThirdPartyWarehouseComponent } from './printable/printable-contract/third-party-warehouse/third-party-warehouse.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { NgxPrintModule } from 'ngx-print';
     PrintableContractComponent,
     TypeTemplateDirective,
     PurchaseToDepositComponent,
+    ThirdPartyWarehouseComponent,
   ]
 })
 export class SharedModule {}
