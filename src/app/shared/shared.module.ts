@@ -23,6 +23,9 @@ import { NgxPrintModule } from 'ngx-print';
 import { ThirdPartyWarehouseComponent } from './printable/printable-contract/third-party-warehouse/third-party-warehouse.component';
 import { PurchaseFixedPriceComponent } from './printable/printable-contract/purchase-fixed-price/purchase-fixed-price.component';
 import { PurchaseUnfixedPriceComponent } from './printable/printable-contract/purchase-unfixed-price/purchase-unfixed-price.component';
+import { SalesFixedPriceComponent } from './printable/printable-contract/sales-fixed-price/sales-fixed-price.component';
+import { SalesUnfixedPriceComponent } from './printable/printable-contract/sales-unfixed-price/sales-unfixed-price.component';
+import { SellContractComponent } from './printable/printable-contract/sell-contract/sell-contract.component';
 
 @NgModule({
   imports: [
@@ -64,6 +67,9 @@ import { PurchaseUnfixedPriceComponent } from './printable/printable-contract/pu
     ThirdPartyWarehouseComponent,
     PurchaseFixedPriceComponent,
     PurchaseUnfixedPriceComponent,
+    SalesFixedPriceComponent,
+    SalesUnfixedPriceComponent,
+    SellContractComponent,
   ]
 })
 export class SharedModule {}
