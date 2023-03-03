@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { FixedPriceComponent } from './fixed-price.component';
+import { PurchaseFixedPriceComponent } from './purchase-fixed-price.component';
 
-describe('FixedPriceComponent', () => {
-  let component: FixedPriceComponent;
-  let fixture: ComponentFixture<FixedPriceComponent>;
+describe('PurchaseFixedPriceComponent', () => {
+  let component: PurchaseFixedPriceComponent;
+  let fixture: ComponentFixture<PurchaseFixedPriceComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FixedPriceComponent ],
+      declarations: [ PurchaseFixedPriceComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FixedPriceComponent);
+    fixture = TestBed.createComponent(PurchaseFixedPriceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
