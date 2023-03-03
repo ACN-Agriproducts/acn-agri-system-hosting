@@ -46,6 +46,9 @@ $text-highlight: #F2F2F2;
 	padding-inline-start: 20px;
 	ol { padding-inline-start: 10px }
 }
+.list-letter-parenthesis {
+	
+}
 
 .product-info {
 	display: grid;
@@ -136,10 +139,20 @@ $text-highlight: #F2F2F2;
 	}
 	> :last-child {
 		font-size: 8pt;
-		&.periodo-de-entrega {
+		&.period {
 			display: flex;
 			white-space: nowrap;
 			gap: 20px;
+		}
+		&.banks-and-accounts {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			font-size: 7pt;
+
+			> :nth-child(-n + 3),
+			> :nth-child(3n + 4) {
+				font-weight: bold;
+			}
 		}
 	}
 	&:nth-child(even) {
