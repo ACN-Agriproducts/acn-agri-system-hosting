@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'contract-fixed-price',
+  selector: 'contract-purchase-fixed-price',
   templateUrl: './purchase-fixed-price.component.html',
   styleUrls: [
-    '../printable-contract-styles.scss',
-    './purchase-fixed-price.component.scss'
+    './purchase-fixed-price.component.scss',
+    '../printable-contract-styles.scss'
   ],
 })
 export class PurchaseFixedPriceComponent implements OnInit {

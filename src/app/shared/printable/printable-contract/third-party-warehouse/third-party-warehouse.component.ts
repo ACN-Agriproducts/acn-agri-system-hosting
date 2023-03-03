@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
   selector: 'contract-third-party-warehouse',
   templateUrl: './third-party-warehouse.component.html',
   styleUrls: [
-    '../printable-contract-styles.scss', 
-    './third-party-warehouse.component.scss'
+    './third-party-warehouse.component.scss',
+    '../printable-contract-styles.scss'
   ],
 })
 export class ThirdPartyWarehouseComponent implements OnInit {

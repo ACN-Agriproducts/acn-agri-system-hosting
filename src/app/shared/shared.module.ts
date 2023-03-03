@@ -22,6 +22,7 @@ import { PurchaseToDepositComponent } from './printable/printable-contract/purch
 import { NgxPrintModule } from 'ngx-print';
 import { ThirdPartyWarehouseComponent } from './printable/printable-contract/third-party-warehouse/third-party-warehouse.component';
 import { PurchaseFixedPriceComponent } from './printable/printable-contract/purchase-fixed-price/purchase-fixed-price.component';
+import { PurchaseUnfixedPriceComponent } from './printable/printable-contract/purchase-unfixed-price/purchase-unfixed-price.component';
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { PurchaseFixedPriceComponent } from './printable/printable-contract/purc
     PurchaseToDepositComponent,
     ThirdPartyWarehouseComponent,
     PurchaseFixedPriceComponent,
+    PurchaseUnfixedPriceComponent,
   ]
 })
 export class SharedModule {}

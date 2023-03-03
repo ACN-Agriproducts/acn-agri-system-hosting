@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
   selector: 'contract-purchase-to-deposit',
   templateUrl: './purchase-to-deposit.component.html',
   styleUrls: [
-    '../printable-contract-styles.scss',
-    './purchase-to-deposit.component.scss'
+    './purchase-to-deposit.component.scss',
+    '../printable-contract-styles.scss'
   ],
 })
 export class PurchaseToDepositComponent implements OnInit {
