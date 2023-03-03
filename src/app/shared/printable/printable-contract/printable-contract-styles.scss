@@ -30,10 +30,7 @@ $text-highlight: #F2F2F2;
 
 .main {
 	font-size: 10pt;
-
-	p, ol { margin: unset }
-	
-	ol { padding-inline-start: 20px }
+	p, ol { margin: unset }	
 }
 
 .introduction {
@@ -43,6 +40,11 @@ $text-highlight: #F2F2F2;
 .section-header-spaced {
 	letter-spacing: 0.25em;
 	font-weight: bold;
+}
+
+.declarations {
+	padding-inline-start: 20px;
+	ol { padding-inline-start: 10px }
 }
 
 .product-info {
