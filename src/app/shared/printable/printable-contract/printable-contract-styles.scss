@@ -6,6 +6,7 @@
 }
 
 $border-black: 1px solid black;
+$text-highlight: #F2F2F2;
 
 .page-style {
 	break-after: always;
@@ -49,7 +50,7 @@ $border-black: 1px solid black;
 	grid-template-columns: repeat(6, 1fr);
 	font-size: 8pt;
 	margin: 5px 0;
-	background-color: #F2F2F2;
+	background-color: $text-highlight;
 	page-break-inside: avoid;
 }
 .product-info-item {
@@ -59,6 +60,10 @@ $border-black: 1px solid black;
 	&:last-child {
 		border-right: $border-black;
 	}
+}
+
+.text-highlight {
+	background-color: $text-highlight;
 }
 
 .signatures {
@@ -97,8 +102,6 @@ $border-black: 1px solid black;
 	}
 }
 
-.contract-id-emphasis { color: #FF8686 }
-
 .buyer-seller {
 	display: flex;
 	flex-flow: column nowrap;
@@ -109,7 +112,7 @@ $border-black: 1px solid black;
 	font-weight: bold;
 }
 .buyer-seller-name {
-	background-color: #F2F2F2;
+	background-color: $text-highlight;
 	color: #2F5496;
 	font-weight: bold;
 }
@@ -138,7 +141,7 @@ $border-black: 1px solid black;
 		}
 	}
 	&:nth-child(even) {
-		background-color: #F2F2F2;
+		background-color: $text-highlight;
 	}
 }
 
@@ -165,7 +168,8 @@ $border-black: 1px solid black;
 @media print {
 	.product-info,
 	.buyer-seller-name,
-	.contract-info-row {
+	.contract-info-row,
+	.text-highlight {
 		print-color-adjust: exact;
 	}
 }
