@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { doc, Firestore, getDoc, getDocFromServer } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Company } from '@shared/classes/company';
 import { Contract } from '@shared/classes/contract';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
@@ -24,20 +27,21 @@ export class PrintableContractComponent implements OnInit {
     map(version => this.versionTemplates.find(template => template.typeTemplate === (version ?? this.contract.type))?.templateRef)
   );
 
-  constructor() { }
+  constructor(
+    private db: Firestore,
+    private session: SessionInfo
+  ) { }
 
   ngOnInit() {
-    this.contractTypesListEmitter.emit(
-      new Map([ 
-        ["Compra a Deposito", "compra_aDeposito"],
-        ["Compra Bodega Terceros", "compra_bodegaTerceros"],
-        ["Compra Precio Fijo", "compra_precioFijo"],
-        ["Compra Precio sin Fijar", "compra_precioSinFijar"],
-        ["Venta Precio Fijo", "deVenta_precioFijo"],
-        ["Venta Precio Sin Fijar", "deVenta_precioSinFijar"],
-        ["Sales Contract", "sellContract"],
-      ])
+    const settingsRef = doc(
+      Company.getCompanyRef(this.db, this.session.getCompany()),
+      'settings/contracts'
     );
+
+    getDocFromServer(settingsRef).then(snap => {
+      const typesObject = snap.data().contractTypes;
+      this.contractTypesListEmitter.emit(new Map(Object.entries(typesObject)));
+    });
   }
 
   ngAfterViewInit() {
