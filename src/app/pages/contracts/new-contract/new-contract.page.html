@@ -12,7 +12,7 @@
             <ion-col size-xs='8' size-sm='9' size-md='10'>
               <mat-form-field>
                 <mat-label>Client Name</mat-label>
-                <input matInput [(ngModel)]="contract.clientName">
+                <input matInput disabled [(ngModel)]="contract.clientName">
               </mat-form-field>
             </ion-col>
           </ion-row>
@@ -45,7 +45,7 @@
             <ion-col size-xs='4' size-sm='3'>
               <mat-form-field>
                 <mat-label>ID</mat-label>
-                <input matInput [(ngModel)]="contract.id" type="number">
+                <input matInput [(ngModel)]="contract.id" type="number" required>
                 <!-- <mat-spinner matSuffix [diameter]="20" *ngIf="contractForm.get('id').pending"></mat-spinner> -->
               </mat-form-field>
             </ion-col>
