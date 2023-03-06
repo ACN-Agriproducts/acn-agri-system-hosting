@@ -18,6 +18,7 @@ import { SharedModule } from '@shared/shared.module';
 import { CloseContractFieldsDialogComponent } from './components/close-contract-fields-dialog/close-contract-fields-dialog.component';
 import { DeliveredChartCardComponent } from './components/delivered-chart-card/delivered-chart-card.component';
 import { LineChartModule, NgxChartsModule } from '@swimlane/ngx-charts';
+import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
 @NgModule({
   imports: [
@@ -42,6 +43,6 @@ import { LineChartModule, NgxChartsModule } from '@swimlane/ngx-charts';
     CloseContractFieldsDialogComponent,
     DeliveredChartCardComponent
   ],
-  providers: [DatePipe]
+  providers: [DatePipe, SelectedTicketsPipe]
 })
 export class ContractsPageModule { }

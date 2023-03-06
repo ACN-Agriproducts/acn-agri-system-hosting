@@ -25,3 +25,15 @@ a {
         text-decoration: none;
     }
 }
+
+.complete {
+    outline: 2px solid green;
+}
+
+.behind {
+    outline: 2px solid rgb(207, 207, 1);
+}
+
+.late{
+    outline: 2px solid red;
+}

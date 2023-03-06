@@ -13,15 +13,15 @@
   </div>
   <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
     <ion-text>
-      <mat-checkbox [(ngModel)]="ticket.includeInReport"></mat-checkbox>
+      <mat-checkbox [(ngModel)]="ticket.includeInReport" (ngModelChange)="selectChange.emit()"></mat-checkbox>
     </ion-text>
     <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
     <ion-text>{{ticket.data.id}}</ion-text>
     <ion-text>{{ticket.data.moisture}}</ion-text>
     <ion-text>{{ticket.data.weight}}</ion-text>
-    <ion-text>{{ticket.data.gross}}</ion-text>
-    <ion-text>{{ticket.data.tare}}</ion-text>
-    <ion-text>{{ticket.data.getNet()}}</ion-text>
+    <ion-text>{{ticket.data.gross | massInUnit}}</ion-text>
+    <ion-text>{{ticket.data.tare | massInUnit}}</ion-text>
+    <ion-text>{{ticket.data.getNet() | massInUnit}}</ion-text>
     <ion-text>
       <mat-form-field>
         <input matInput [(ngModel)]="ticket.discounts.infested" type="number"/>

@@ -10,8 +10,10 @@ import { Functions, httpsCallable } from '@angular/fire/functions';
 import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
-declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
+export declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
 
 @Component({
   selector: 'app-contract-info',
@@ -29,6 +31,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketDiscountList: TicketWithDiscount[];
   public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
+  public totals: LiquidationTotals = new LiquidationTotals();
+  public allSelected: boolean = false;
+  public selectedTickets: TicketWithDiscount[] = [];
 
   private currentSub: Subscription;
 
@@ -36,34 +41,31 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   
   constructor(
     private route: ActivatedRoute,
-    private localStorage: Storage,
     private db: Firestore,
     private fns: Functions,
     private snack: SnackbarService,
+    private selectedTicketsPipe: SelectedTicketsPipe,
+    private session: SessionInfo,
     ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.type = this.route.snapshot.paramMap.get('type')
-    this.localStorage.get('currentCompany').then(val => {
-      this.currentCompany = val;
-      Contract.getDocById(this.db, this.currentCompany, this.type == "purchase", this.id).then(contract => {
-        this.currentContract = contract;
-        this.ready = true;
-        this.currentContract.getTickets().then(tickets => {
-          this.ticketList = tickets;
-          const list: TicketWithDiscount[] = [];
+    this.type = this.route.snapshot.paramMap.get('type');
+    this.currentCompany = this.session.getCompany();
+    
+    Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
+      const tickets = await contract.getTickets();
+      
+      this.currentContract = contract;
+      this.ticketList = tickets;
 
-          this.ticketList.forEach(t => {
-            list.push({
-              data: t, 
-              discounts: { infested: 0, inspection:0 }, 
-              includeInReport: false
-            });
-          })
-          this.ticketDiscountList = list;
-        });
-      });
+      this.ticketDiscountList = tickets.map(t => ({
+        data: t,
+        discounts: { infested: 0, inspection: 0 },
+        includeInReport: false
+      }));
+      
+      this.ready = true;
     });
   }
 
@@ -122,7 +124,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
 
     // populating worksheet columns
-    this.selectedTickets().forEach(ticket => {
+    this.selectedTickets.forEach(ticket => {
       const net = ticket.data.getNet().get() * (ticket.data.in ? 1 : -1);
 
       const dryWeight = ticket.data.dryWeight;
@@ -226,16 +228,17 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
   }
 
-  public selectedTickets = (): TicketWithDiscount[] => {
-    return this.ticketDiscountList.filter(ticket => ticket.includeInReport);
+  public selectAllTickets = (): void => {
+    this.ticketDiscountList.forEach(ticket => {
+      ticket.includeInReport = !this.allSelected ? true : false;
+    });
+    this.handleSelectChange();
   }
-  public selectAllTickets = (select: boolean): void => this.ticketDiscountList.forEach(ticket => ticket.includeInReport = select);
-  public allSelected = (): boolean => this.ticketDiscountList.every(ticket => ticket.includeInReport);
 
   public getTotals = (): LiquidationTotals => {
     const totals = new LiquidationTotals();
 
-    this.selectedTickets().forEach(ticket => {
+    this.selectedTickets.forEach(ticket => {
       totals.gross += ticket.data.gross.get();
       totals.tare += ticket.data.tare.get();
 
@@ -255,6 +258,12 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
     
     return totals;
+  }
+
+  public handleSelectChange() {
+    this.allSelected = this.ticketDiscountList?.every(ticket => ticket.includeInReport);
+    this.selectedTickets = this.selectedTicketsPipe.transform(this.ticketDiscountList);
+    this.totals = this.getTotals();
   }
 }
 
