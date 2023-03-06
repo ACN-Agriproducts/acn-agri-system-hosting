@@ -5,6 +5,12 @@
 	src: url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.woff") format("woff"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.svg#Arial Nova Cond") format("svg");
 }
 
+@counter-style letter-paren {
+	system: alphabetic;
+	symbols: a b c d e f g h i j k;
+	suffix: ") ";
+  }
+
 $border-black: 1px solid black;
 $text-highlight: #F2F2F2;
 
@@ -47,7 +53,7 @@ $text-highlight: #F2F2F2;
 	ol { padding-inline-start: 10px }
 }
 .list-letter-parenthesis {
-	
+	list-style-type: letter-paren;
 }
 
 .product-info {
@@ -144,14 +150,13 @@ $text-highlight: #F2F2F2;
 			white-space: nowrap;
 			gap: 20px;
 		}
-		&.banks-and-accounts {
-			display: grid;
-			grid-template-columns: 1fr 1fr 1fr;
+		&.banks-and-accounts-grid {
 			font-size: 7pt;
-
-			> :nth-child(-n + 3),
-			> :nth-child(3n + 4) {
-				font-weight: bold;
+			> div {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				&:first-child,
+				> :first-child { font-weight: bold }
 			}
 		}
 	}
@@ -159,6 +164,7 @@ $text-highlight: #F2F2F2;
 		background-color: $text-highlight;
 	}
 }
+
 
 @media screen {
 	:host {
