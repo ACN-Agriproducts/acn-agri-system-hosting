@@ -36,7 +36,7 @@ $text-highlight: #F2F2F2;
 
 .main {
 	font-size: 10pt;
-	p, ol { margin: unset }	
+	ol { margin: unset }
 }
 
 .introduction {
@@ -48,12 +48,17 @@ $text-highlight: #F2F2F2;
 	font-weight: bold;
 }
 
+.header {
+	font-weight: bold;
+}
+
 .declarations {
 	padding-inline-start: 20px;
 	ol { padding-inline-start: 10px }
 }
-.list-letter-parenthesis {
+.letter-parenthesis-list {
 	list-style-type: letter-paren;
+	font-style: italic;
 }
 
 .product-info {
@@ -89,6 +94,23 @@ $text-highlight: #F2F2F2;
 		margin: 0 20px;
 		border-bottom: $border-black;
 	}
+
+	&.sell-contract {
+		margin-top: unset;
+		font-weight: unset;
+		font-size: 9pt;
+		font-family: Calibri;
+
+		.signature-line {
+			height: unset;
+			margin-left: unset;
+			margin-top: 5px;
+		}
+	}
+}
+
+.confirmation {
+	font-family: Arial Narrow;
 }
 
 .anexo-1 {
