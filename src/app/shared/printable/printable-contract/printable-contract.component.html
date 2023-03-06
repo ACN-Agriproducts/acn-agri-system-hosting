@@ -25,8 +25,12 @@
 	<contract-sales-unfixed-price></contract-sales-unfixed-price>
 </ng-template>
 
-<ng-template typeTemplate="sellContract" let-contract>
+<ng-template typeTemplate="sales" let-contract>
 	<sell-contract></sell-contract>
+</ng-template>
+
+<ng-template typeTemplate="purchase" let-contract>
+	<purchase-contract></purchase-contract>
 </ng-template>
 
 <ng-template #none>
