@@ -2,31 +2,31 @@
 <ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
 
 <ng-template typeTemplate="compra_aDeposito">
-	<contract-purchase-deposit></contract-purchase-deposit>
+	<contract-purchase-to-deposit></contract-purchase-to-deposit>
 </ng-template>
 
 <ng-template typeTemplate="compra_bodegaTerceros">
-	<p>COMPRA - BODEGA TERCEROS</p>
+	<contract-third-party-warehouse></contract-third-party-warehouse>
 </ng-template>
 
 <ng-template typeTemplate="compra_precioFijo">
-	<p>COMPRA - PRECIO FIJO</p>
+	<contract-purchase-fixed-price></contract-purchase-fixed-price>
 </ng-template>
 
 <ng-template typeTemplate="compra_precioSinFijar">
-	<p>COMPRA - PRECIO SIN FIJAR</p>
+	<contract-purchase-unfixed-price></contract-purchase-unfixed-price>
 </ng-template>
 
 <ng-template typeTemplate="deVenta_precioFijo">
-	<p>DE VENTA - PRECIO FIJO</p>
+	<contract-sales-fixed-price></contract-sales-fixed-price>
 </ng-template>
 
 <ng-template typeTemplate="deVenta_precioSinFijar">
-	<p>DE VENTA - PRECIO SIN FIJAR</p>
+	<contract-sales-unfixed-price></contract-sales-unfixed-price>
 </ng-template>
 
 <ng-template typeTemplate="sellContract">
-	<p>SELL CONTRACT</p>
+	<sell-contract></sell-contract>
 </ng-template>
 
 <ng-template #none>

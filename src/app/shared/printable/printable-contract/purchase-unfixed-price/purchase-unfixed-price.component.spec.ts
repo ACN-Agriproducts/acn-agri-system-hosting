@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { PurchaseDepositComponent } from './purchase-deposit.component';
+import { PurchaseUnfixedPriceComponent } from './purchase-unfixed-price.component';
 
-describe('PurchaseDepositComponent', () => {
-  let component: PurchaseDepositComponent;
-  let fixture: ComponentFixture<PurchaseDepositComponent>;
+describe('PurchaseUnfixedPriceComponent', () => {
+  let component: PurchaseUnfixedPriceComponent;
+  let fixture: ComponentFixture<PurchaseUnfixedPriceComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PurchaseDepositComponent ],
+      declarations: [ PurchaseUnfixedPriceComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PurchaseDepositComponent);
+    fixture = TestBed.createComponent(PurchaseUnfixedPriceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
