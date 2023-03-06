@@ -44,6 +44,8 @@ export class NewContractPage implements OnInit {
   selectedClient: Contact;
   ticketClient: Contact;
 
+  contractTypeList: Map<string, string>;
+
   constructor(
     private fb: UntypedFormBuilder,
     private db: Firestore,
@@ -324,7 +326,7 @@ export class NewContractPage implements OnInit {
   }
 
   contractTypeChange() {
-
+    console.log(this.contract)
   }
 
   _filter(value: string): CompanyContact[] {

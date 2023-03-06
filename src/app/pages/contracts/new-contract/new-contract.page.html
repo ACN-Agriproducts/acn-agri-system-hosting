@@ -37,8 +37,7 @@
               <mat-form-field>
                 <mat-label>Contract Type</mat-label>
                 <mat-select [(ngModel)]="contract.type" (selectionChange)="contractTypeChange()">
-                  <mat-option value="purchaseContracts">Purchase Contract</mat-option>
-                  <mat-option value="salesContracts">Sales Contract</mat-option>
+                  <mat-option *ngFor="let type of contractTypeList | keyvalue" [value]="type.value">{{type.key}}</mat-option>
                 </mat-select>
               </mat-form-field> 
             </ion-col>
@@ -250,7 +249,12 @@
       </ion-card>
     </ion-col>
     <ion-col size-xl='7' size-xs='12'>
-      <app-display-contract id='printable-doc' [contractForm]="contract" [weight]="this.contractWeight" [productsList]="this.productsList"></app-display-contract>
+      <!-- <app-display-contract id='printable-doc' [contractForm]="contract" [weight]="this.contractWeight" [productsList]="this.productsList"></app-display-contract> -->
+      <app-printable-contract 
+        [contract]="contract" 
+        [version]="contract.type"
+        (contractTypesListEmitter)="contractTypeList = $event">
+      </app-printable-contract>
     </ion-col>
   </ion-row>
 </ion-content>
