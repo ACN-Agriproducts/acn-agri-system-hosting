@@ -325,9 +325,7 @@ export class NewContractPage implements OnInit {
     this.filteredTruckerOptions.splice(index, 1);
   }
 
-  contractTypeChange() {
-    console.log(this.contract)
-  }
+  contractTypeChange() {}
 
   _filter(value: string): CompanyContact[] {
     const filterValue = value.toLowerCase();
