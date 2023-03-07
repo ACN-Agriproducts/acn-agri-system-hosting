@@ -11,11 +11,11 @@
         <span></span><br>
         <div class='party-header'><b>{{contractForm.type == "purchaseContracts" ? "SELLER" : "BUYER"}}</b></div>
         <ng-container *ngIf="contractForm.client">
-          <span><b>{{(this.contractForm.clientInfo || this.contractForm.client)? (this.contractForm.clientInfo || this.contractForm.client).name : ""}}</b></span><br>
-          <span>{{(this.contractForm.clientInfo || this.contractForm.client).streetAddress}}</span><br>
-          <span>{{(this.contractForm.clientInfo || this.contractForm.client).city}}{{(this.contractForm.clientInfo || this.contractForm.client).state && (this.contractForm.clientInfo || this.contractForm.client).city? ",": ""}}
-            {{(this.contractForm.clientInfo || this.contractForm.client).state}}{{(this.contractForm.clientInfo || this.contractForm.client).state && (this.contractForm.clientInfo || this.contractForm.client).zipCode? ",": ""}} {{(this.contractForm.clientInfo || this.contractForm.client).zipCode}}</span><br>
-          <span>{{(this.contractForm.clientInfo || this.contractForm.client).phoneNumber}}</span><br>
+          <span><b>{{this.contractForm?.clientInfo?.name ?? ""}}</b></span><br>
+          <span>{{this.contractForm.clientInfo.streetAddress}}</span><br>
+          <span>{{this.contractForm.clientInfo.city}}{{this.contractForm.clientInfo.state && this.contractForm.clientInfo.city? ",": ""}}
+            {{this.contractForm.clientInfo.state}}{{this.contractForm.clientInfo.state && this.contractForm.clientInfo.zipCode? ",": ""}} {{this.contractForm.clientInfo.zipCode}}</span><br>
+          <span>{{this.contractForm.clientInfo.phoneNumber}}</span><br>
         </ng-container>
       </div>
       <div class='column-size-2'></div>
@@ -98,8 +98,8 @@
       <div class='underline grid-12'>
         <div class='column-size-2'>Priced</div>
         <div class='column-size-3'>
-          <ng-container *ngIf="contractForm.deliveryDateStart && contractForm.deliveryDateEnd || contractForm.delivery_dates">
-            {{contractForm.deliveryDateStart || contractForm.delivery_dates.begin | date:'MM/dd/yy'}} to {{contractForm.deliveryDateEnd || contractForm.delivery_dates.end | date:'MM/dd/yy'}}
+          <ng-container *ngIf="contractForm.delivery_dates?.begin && contractForm.delivery_dates?.end">
+            {{contractForm.delivery_dates.begin | date:'MM/dd/yy'}} to {{contractForm.delivery_dates.end | date:'MM/dd/yy'}}
           </ng-container>
           <br><br>
           <div class='underline'>
@@ -138,7 +138,7 @@
       <div class='column-size-2'>
         <div id='total'>
           <span><b>$</b></span>
-          <span><b>{{contractForm.quantity * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
+          <span><b>{{(contractForm.quantity | massInUnit:'lbs') * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
         </div>
       </div>
     </div>
@@ -151,7 +151,7 @@
 
   <div class="terms-and-conditions">
     
-      <p><span class="underline-small">{{(this.contractForm.clientInfo || this.contractForm.client)? (this.contractForm.clientInfo || this.contractForm.client).name : ""}}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  ACN AGRIPRODUCTS LLC (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
+      <p><span class="underline-small">{{this.contractForm.clientInfo?.name ?? ""}}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  ACN AGRIPRODUCTS LLC (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
     
       <p>FAILURE TO ADVISE ACN AGRIPRODUCTS LLC IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.</p>
       
@@ -165,7 +165,7 @@
       
       <p>The Buyer is purchasing the following Goods from the Seller: {{getProduct()}}	</p>
       
-      <p>PRICE: Buyer agrees to pay the purchase price (the "Purchase Price") of <span>{{contractForm.quantity * getPriceInCWT() / 100 | number:'1.2-2'}}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+      <p>PRICE: Buyer agrees to pay the purchase price (the "Purchase Price") of <span>{{(contractForm.quantity | massInUnit:'lbs') * getPriceInCWT() / 100 | number:'1.2-2'}}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
       <p>PAYMENT: The Purchase Price shall be paid only in the following payment methods: <br>
       •	<br>
@@ -210,7 +210,7 @@
   <br>
   <div class='signature-area'>
     <div>
-      <span>{{(this.contractForm.clientInfo || this.contractForm.client)? (this.contractForm.clientInfo || this.contractForm.client).name : ""}}</span>
+      <span>{{this.contractForm?.clientInfo?.name ?? ""}}</span>
       <div class='underline'>BY:</div>
       <span>Name/Title:</span><br>
       <span>Date:</span><br>
