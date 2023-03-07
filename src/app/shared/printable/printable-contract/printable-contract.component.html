@@ -1,36 +1,38 @@
 
-<ng-container *ngTemplateOutlet="(template$ | async) ?? none; context: contract"></ng-container>
+<ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
 
-<ng-template typeTemplate="compra_aDeposito" let-contract>
+<ng-template typeTemplate="compra_aDeposito">
 	<contract-purchase-to-deposit></contract-purchase-to-deposit>
 </ng-template>
 
-<ng-template typeTemplate="compra_bodegaTerceros" let-contract>
+<ng-template typeTemplate="compra_bodegaTerceros">
 	<contract-third-party-warehouse></contract-third-party-warehouse>
 </ng-template>
 
-<ng-template typeTemplate="compra_precioFijo" let-contract>
+<ng-template typeTemplate="compra_precioFijo">
 	<contract-purchase-fixed-price></contract-purchase-fixed-price>
 </ng-template>
 
-<ng-template typeTemplate="compra_precioSinFijar" let-contract>
+<ng-template typeTemplate="compra_precioSinFijar">
 	<contract-purchase-unfixed-price></contract-purchase-unfixed-price>
 </ng-template>
 
-<ng-template typeTemplate="deVenta_precioFijo" let-contract>
+<ng-template typeTemplate="deVenta_precioFijo">
 	<contract-sales-fixed-price></contract-sales-fixed-price>
 </ng-template>
 
-<ng-template typeTemplate="deVenta_precioSinFijar" let-contract>
+<ng-template typeTemplate="deVenta_precioSinFijar">
 	<contract-sales-unfixed-price></contract-sales-unfixed-price>
 </ng-template>
 
-<ng-template typeTemplate="sales" let-contract>
+<ng-template typeTemplate="sales">
 	<sell-contract></sell-contract>
 </ng-template>
 
-<ng-template typeTemplate="purchase" let-contract>
-	<purchase-contract></purchase-contract>
+<ng-template typeTemplate="purchase">
+	<purchase-contract
+		[contractForm]="contract"
+	></purchase-contract>
 </ng-template>
 
 <ng-template #none>
