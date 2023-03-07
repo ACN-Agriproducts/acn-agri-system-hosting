@@ -44,7 +44,7 @@
             <ion-col size-xs='4' size-sm='3'>
               <mat-form-field>
                 <mat-label>ID</mat-label>
-                <input matInput [(ngModel)]="contract.id" type="number" required>
+                <input matInput [(ngModel)]="contract.id" type="number" required [uniqueId]="contractTypeGetter.bind(this)" [disabled]="!contract.type">
                 <!-- <mat-spinner matSuffix [diameter]="20" *ngIf="contractForm.get('id').pending"></mat-spinner> -->
               </mat-form-field>
             </ion-col>

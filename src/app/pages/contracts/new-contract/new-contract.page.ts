@@ -349,4 +349,8 @@ export class NewContractPage implements OnInit {
     const filterValue = value.toLowerCase();
     return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
   }
+
+  contractTypeGetter(): string {
+    return this.contract.type ?? "";
+  }
 }
