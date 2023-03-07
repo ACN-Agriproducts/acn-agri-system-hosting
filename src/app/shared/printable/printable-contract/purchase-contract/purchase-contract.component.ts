@@ -11,13 +11,11 @@ export class PurchaseContractComponent implements OnInit {
 
   @Input() contractForm: Contract;
   @Input() productsList: any[];
-  public date: Date;
 
   constructor() {}
 
   ngOnInit() {
     console.log(this.contractForm);
-    this.date = this.contractForm.date;
   }
 
   getProductObject(): Product {
