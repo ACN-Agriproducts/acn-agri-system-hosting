@@ -1,16 +1,17 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc } from "@angular/fire/firestore";
+import { Contract } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Ticket } from "./ticket";
 
 export class Contact extends FirebaseDocInterface {
     caat: string;
     city: string;
-    email: string;
+    metacontacts: MetaContact[];
     name: string;
-    phoneNumber: string;
     state: string;
     streetAddress: string;
-    type: string;
+    tags: string[];
     zipCode: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
@@ -19,13 +20,16 @@ export class Contact extends FirebaseDocInterface {
 
         this.caat = data.caat;
         this.city = data.city;
-        this.email = data.email;
+        this.metacontacts = [];
         this.name = data.name;
-        this.phoneNumber = data.phoneNumber;
         this.state = data.state;
         this.streetAddress = data.streetAddress;
-        this.type = data.type;
+        this.tags = data.tags;
         this.zipCode = data.zipCode;
+
+        data.metacontacts.forEach(metacontact => {
+            this.metacontacts.push(this.createMetaContact(metacontact));
+        });
     }
 
     public static converter = {
@@ -33,14 +37,13 @@ export class Contact extends FirebaseDocInterface {
             return {
                 caat: data.caat, 
                 city: data.city,
-                email: data.email,
+                metacontacts: data.metacontacts,
                 name: data.name,
-                phoneNumber: data.phoneNumber,
                 state: data.state,
                 streetAddress: data.streetAddress,
-                type: data.type,
+                tags: data.tags,
                 zipCode: data.zipCode,
-            }
+            };
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contact {
             return new Contact(snapshot);
@@ -62,6 +65,39 @@ export class Contact extends FirebaseDocInterface {
     public static getDoc(db: Firestore, company: string, contact: string): Promise<Contact> {
         return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
-        })
+        });
     }
+
+    public createMetaContact(metacontact: any): MetaContact {
+        return {
+            email: metacontact.email,
+            isPrimary: metacontact.isPrimary,
+            name: metacontact.name,
+            phone: metacontact.phone
+        };
+    }
+
+    public getPrimaryMetaContact(): MetaContact {
+        return this.metacontacts.find(metacontact => metacontact.isPrimary);
+    }
+
+    public getType(): string[] | null {
+        const tagsInclude: string[] = [];
+
+        if (this.tags.includes('client')) tagsInclude.push('client');
+        if (this.tags.includes('trucker')) tagsInclude.push('trucker');
+
+        if (tagsInclude.length === 0) {
+            return null;
+        }
+
+        return tagsInclude;
+    }
+}
+
+interface MetaContact {
+    email: string;
+    isPrimary: boolean;
+    name: string;
+    phone: string;
 }

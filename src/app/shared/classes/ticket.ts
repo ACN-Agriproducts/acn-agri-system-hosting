@@ -1,5 +1,6 @@
+
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer } from "@angular/fire/firestore";
 import { Injectable } from "@angular/core";
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
@@ -226,13 +227,20 @@ export class Ticket extends FirebaseDocInterface{
     public static async getTickets(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<Ticket[]>;
     public static async getTickets(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<Ticket[]> {
         const collectionReference = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
-
         const ticketCollectionData = await getDocs(collectionReference);
+
         return ticketCollectionData.docs.map(snap => snap.data());
     }
 
     public static getTicketSnapshot(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Observable<Ticket[]> {
         const collectionQuery = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
         return collectionData(collectionQuery);
+    }
+
+    public static async getTicketCount(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<number> {
+        const ticketCollQuery = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
+        const ticketSnapshot = await getCountFromServer(ticketCollQuery);
+
+        return ticketSnapshot.data().count;
     }
 }
