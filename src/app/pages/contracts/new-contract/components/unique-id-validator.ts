@@ -18,7 +18,7 @@ export class UniqueIdValidator implements AsyncValidator {
         const colQuery = query(Contract.getCollectionReference(this.db, this.session.getCompany()), where("type", "==", this.getContractType()), where("id", "==", control.value));
         return from(getCountFromServer(colQuery)).pipe(
             map((snap: any) => snap.data().count > 0 ? {idIsTaken: true} : null)
-        )
+        );
     }
 
     setGetterFunction(func: () => string): void {
