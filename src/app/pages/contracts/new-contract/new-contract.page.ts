@@ -17,7 +17,6 @@ import { Plant } from '@shared/classes/plant';
 import { Contract } from '@shared/classes/contract';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Mass } from '@shared/classes/mass';
-import { Contract } from '@shared/classes/contract';
 
 @Component({
   selector: 'app-new-contract',

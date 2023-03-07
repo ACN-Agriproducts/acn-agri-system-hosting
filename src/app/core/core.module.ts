@@ -36,7 +36,7 @@ import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
     DirectivesCoreModule,
     FormatPriceLetterPipe,
     SearchPipe,
-    StateAbbreviationPipe
+    StateAbbreviationPipe,
     AsPipe
     // IonicStorageModule
     // FormsModule,
@@ -46,7 +46,7 @@ import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
     FormatPriceLetterPipe,
     FormatStringPipe,
     SearchPipe,
-    StateAbbreviationPipe
+    StateAbbreviationPipe,
     AsPipe
   ]
 })
