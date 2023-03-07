@@ -5,27 +5,27 @@
     <ion-col size-xl='5' size-xs='12'>
       <ion-card>
         <ion-card-content>
-          <ion-row>
-            <ion-col size-xs='4' size-sm='3' size-md='2'>
+          <ion-row class="client-row">
+            <span>
               <button mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
-            </ion-col>
-            <ion-col size-xs='8' size-sm='9' size-md='10'>
+            </span>
+            <span>
               <mat-form-field>
                 <mat-label>Client Name</mat-label>
                 <input matInput disabled [(ngModel)]="contract.clientName">
               </mat-form-field>
-            </ion-col>
+            </span>
           </ion-row>
-          <ion-row *ngIf="!useSameClient">
-            <ion-col size-xs='4' size-sm='3' size-md='2'>
+          <ion-row *ngIf="!useSameClient" class="client-row">
+            <span>
               <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
-            </ion-col>
-            <ion-col size-xs='8' size-sm='9' size-md='10'>
+            </span>
+            <span>
               <mat-form-field>
                 <mat-label>Ticket Client</mat-label>
-                <input matInput [(ngModel)]="contract.clientTicketInfo.name">
+                <input matInput disabled [(ngModel)]="contract.clientTicketInfo.name">
               </mat-form-field>
-            </ion-col>
+            </span>
           </ion-row>
           <ion-row>
             <ion-col>

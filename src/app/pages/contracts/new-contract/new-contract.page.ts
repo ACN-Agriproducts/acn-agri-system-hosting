@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core
 import { Firestore, addDoc, collection, CollectionReference, doc, docData } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
 import { MatDialog } from '@angular/material/dialog';
@@ -54,7 +54,6 @@ export class NewContractPage implements OnInit {
     private navController: NavController,
     private session: SessionInfo,
     private snack: SnackbarService,
-    private uniqueId: UniqueContractId,
   ) { }
 
   ngOnInit() {
@@ -111,7 +110,17 @@ export class NewContractPage implements OnInit {
       paymentTerms: null, 
       measurement: null
     }
-    this.contract.clientTicketInfo
+    this.contract.clientTicketInfo = {
+      caat: null,
+      city: null,
+      email: null,
+      name: null,
+      phoneNumber: null,
+      state: null,
+      streetAddress: null,
+      zipCode: null,
+      ref: null
+    }
     this.contract.truckers = [];
 
     this.truckerArray = this.fb.array([]);
@@ -265,9 +274,13 @@ export class NewContractPage implements OnInit {
       data: this.contactList
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+
+    lastValueFrom(dialogRef.afterClosed()).then(result => {
+      if(!result) return;
+
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
         this.selectedClient = client;
+        this.contract.clientInfo = Contract.clientInfo(client);
         this.contract.clientName = client.name;
       });
     });
@@ -279,9 +292,10 @@ export class NewContractPage implements OnInit {
       data: this.contactList
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    lastValueFrom(dialogRef.afterClosed()).then(result => {
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
         this.ticketClient = client;
+        this.contract.clientTicketInfo = Contract.clientInfo(client);
         this.contract.clientTicketInfo.name = client.name;
       });
     });

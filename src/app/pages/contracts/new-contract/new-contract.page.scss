@@ -11,6 +11,15 @@ mat-grid-tile mat-figure{
     align-items: flex-start !important;
 }
 
+.client-row {
+    display: flex;
+    gap: 1rem;
+
+    span:has(>mat-form-field) {
+        flex: 1 0 auto;
+    }
+}
+
 .mat-text {
     font-size: x-large;
     vertical-align: middle;
