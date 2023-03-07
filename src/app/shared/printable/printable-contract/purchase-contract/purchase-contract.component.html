@@ -4,18 +4,18 @@
     <h1><b>CONTRACT</b></h1>
     <div class='grid-12'>
       <div class='column-size-4'>
-        <div class='party-header'><b>{{contractForm.type == "purchaseContracts"? "BUYER" : "SELLER"}}</b></div>
+        <div class='party-header'><b>BUYER</b></div>
         <span><b>ACN AGRIPRODUTS LLC</b></span><br>
         <span>1512 RANCHO TOLUCA RD</span><br>
         <span>WESLACO TX. 78596</span><br>
         <span></span><br>
-        <div class='party-header'><b>{{contractForm.type == "purchaseContracts" ? "SELLER" : "BUYER"}}</b></div>
-        <ng-container *ngIf="contractForm.client">
-          <span><b>{{this.contractForm?.clientInfo?.name ?? ""}}</b></span><br>
-          <span>{{this.contractForm.clientInfo.streetAddress}}</span><br>
-          <span>{{this.contractForm.clientInfo.city}}{{this.contractForm.clientInfo.state && this.contractForm.clientInfo.city? ",": ""}}
-            {{this.contractForm.clientInfo.state}}{{this.contractForm.clientInfo.state && this.contractForm.clientInfo.zipCode? ",": ""}} {{this.contractForm.clientInfo.zipCode}}</span><br>
-          <span>{{this.contractForm.clientInfo.phoneNumber}}</span><br>
+        <div class='party-header'><b>SELLER</b></div>
+        <ng-container *ngIf="contractForm.clientInfo">
+          <span><b>{{contractForm.clientInfo?.name ?? ""}}</b></span><br>
+          <span>{{contractForm.clientInfo.streetAddress}}</span><br>
+          <span>{{contractForm.clientInfo.city}}{{contractForm.clientInfo.state && contractForm.clientInfo.city? ",": ""}}
+            {{contractForm.clientInfo.state}}{{contractForm.clientInfo.state && contractForm.clientInfo.zipCode? ",": ""}} {{contractForm.clientInfo.zipCode}}</span><br>
+          <span>{{contractForm.clientInfo.phoneNumber}}</span><br>
         </ng-container>
       </div>
       <div class='column-size-2'></div>
@@ -151,7 +151,7 @@
 
   <div class="terms-and-conditions">
     
-      <p><span class="underline-small">{{this.contractForm.clientInfo?.name ?? ""}}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  ACN AGRIPRODUCTS LLC (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
+      <p><span class="underline-small">{{contractForm.clientInfo?.name ?? ""}}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  ACN AGRIPRODUCTS LLC (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
     
       <p>FAILURE TO ADVISE ACN AGRIPRODUCTS LLC IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.</p>
       
@@ -210,7 +210,7 @@
   <br>
   <div class='signature-area'>
     <div>
-      <span>{{this.contractForm?.clientInfo?.name ?? ""}}</span>
+      <span>{{contractForm?.clientInfo?.name ?? ""}}</span>
       <div class='underline'>BY:</div>
       <span>Name/Title:</span><br>
       <span>Date:</span><br>
