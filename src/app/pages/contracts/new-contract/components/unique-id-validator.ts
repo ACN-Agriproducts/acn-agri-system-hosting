@@ -15,11 +15,9 @@ export class UniqueIdValidator implements AsyncValidator {
     ) {}
 
     validate(control: AbstractControl): Observable<ValidationErrors | null> {
-        const contractType = this.getContractType();
-
-        const colQuery = query(Contract.getCollectionReference(this.db, this.session.getCompany()), where("type", "==", contractType), where("id", "==", control.value));
+        const colQuery = query(Contract.getCollectionReference(this.db, this.session.getCompany()), where("type", "==", this.getContractType()), where("id", "==", control.value));
         return from(getCountFromServer(colQuery)).pipe(
-            map((snap: any) => (snap.data().count as number)>0 ? {idIsTaken: true} : null)
+            map((snap: any) => (snap.data().count as number) > 0 ? {idIsTaken: true} : null)
         )
     }
 

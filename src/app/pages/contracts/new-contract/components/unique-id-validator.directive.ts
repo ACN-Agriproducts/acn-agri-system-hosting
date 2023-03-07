@@ -21,8 +21,6 @@ export class UniqueIdValidatorDirective implements AsyncValidator{
   validate(
     control: AbstractControl
   ): Observable<ValidationErrors | null> {
-    console.log("help3");
-    console.log(this.uniqueId);
     this.validator.setGetterFunction(this.uniqueId);
     return this.validator.validate(control);
   }
