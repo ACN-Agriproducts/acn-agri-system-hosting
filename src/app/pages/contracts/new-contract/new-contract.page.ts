@@ -7,7 +7,6 @@ import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectClientComponent } from './components/select-client/select-client.component';
-import { UniqueContractId } from './components/unique-contract-id';
 import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
 import { Company, CompanyContact } from '@shared/classes/company';
@@ -41,6 +40,7 @@ export class NewContractPage implements OnInit {
   priceUnit: string;
   truckerArray: FormArray;
   formIsValid: boolean = false;
+  idIsValid: boolean = false;
   
   selectedClient: Contact;
   ticketClient: Contact;
@@ -90,6 +90,7 @@ export class NewContractPage implements OnInit {
 
     this.contractWeight = new Mass(0, this.session.getDefaultUnit());
 
+    this.contract.date = new Date();
     this.contract.type = "";
     this.contract.id = null;
     this.contract.clientName = "";
