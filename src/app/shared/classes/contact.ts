@@ -27,7 +27,7 @@ export class Contact extends FirebaseDocInterface {
         this.tags = data.tags;
         this.zipCode = data.zipCode;
 
-        data.metacontacts.forEach(metacontact => {
+        data.metacontacts?.forEach(metacontact => {
             this.metacontacts.push(this.createMetaContact(metacontact));
         });
     }
