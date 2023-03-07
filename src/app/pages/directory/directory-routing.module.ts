@@ -24,7 +24,12 @@ const routes: Routes = [
   {
     path: 'edit-contact/:id',
     loadChildren: () => import('./edit-contact/edit-contact.module').then( m => m.EditContactPageModule)
+  },
+  {
+    path: 'contact/:id',
+    loadChildren: () => import('./contact/contact.module').then( m => m.ContactPageModule)
   }
+
 
 
 ];

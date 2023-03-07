@@ -2,10 +2,13 @@ import { ModalController, NavController, PopoverController } from '@ionic/angula
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { Subscription } from 'rxjs';
-import { Storage } from '@ionic/storage';
+import { lastValueFrom, Subscription } from 'rxjs';
 import { collectionData, Firestore, orderBy, query } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 
 @Component({
   selector: 'app-directory',
@@ -14,25 +17,25 @@ import { Contact } from '@shared/classes/contact';
 })
 export class DirectoryPage implements OnInit, OnDestroy {
 
-  contacts: any[]
-  stringTest: string
-  currentCompany: string
   private currentSub: Subscription;
+  public contacts: any[]
+  public currentCompany: string
+  public searchQuery: RegExp;
+  public stringTest: string
 
   constructor(
-    private popoverController: PopoverController,
-    private modalController: ModalController,
     private db: Firestore,
+    private dialog: MatDialog,
+    private modalController: ModalController,
     private navController: NavController,
-    private localStore: Storage
-  ) { 
-    this.localStore.get('currentCompany').then(val => {
-      this.currentCompany = val;
-      this.updateList();
-    })
-   }
+    private popoverController: PopoverController,
+    private session: SessionInfo,
+    private snack: SnackbarService,
+  ) { }
 
   ngOnInit() {
+    this.currentCompany = this.session.getCompany();
+    this.updateList();
   }
 
   ngOnDestroy() {
@@ -42,7 +45,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   private updateList = async () => {
-    this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => this.contacts = val);
+    this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => {
+      this.contacts = val;
+    });
   }
 
   public openOptions = async (ev: any) => {
@@ -72,11 +77,64 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.navController.navigateForward('dashboard/directory/new')
   }
 
-  public editButton(id: string) {
-    this.navController.navigateForward(`dashboard/directory/edit-contact/${id}`)
+  public async edit(contact: Contact): Promise<void> {
+    const metaContacts = [];
+    contact.metacontacts.forEach(metaContact => {
+      metaContacts.push({ ...metaContact });
+    });
+    const contactCopy = { ...contact, metaContacts: metaContacts };
+
+    const dialogRef = this.dialog.open(EditContactDialogComponent, {
+      autoFocus: false,
+      data: contactCopy,
+    });
+    const newContactData = await lastValueFrom(dialogRef.afterClosed());
+    if (newContactData == null) return;
+
+    this.updateContact(contact, newContactData);
   }
 
-  public deleteButton(id: string): void {
+  public updateContact(contact: Contact, data: Contact): void {
+    contact.update({
+      caat: data.caat,
+      city: data.city.toUpperCase(),
+      metaContacts: data.metacontacts,
+      name: data.name.toUpperCase(),
+      state: data.state.toUpperCase(),
+      streetAddress: data.streetAddress.toUpperCase(),
+      tags: data.tags,
+      zipCode: data.zipCode,
+    })
+    .then(() => {
+      contact.caat = data.caat;
+      contact.city = data.city.toUpperCase();
+      contact.metacontacts = data.metacontacts;
+      contact.name = data.name.toUpperCase();
+      contact.state = data.state.toUpperCase();
+      contact.streetAddress = data.streetAddress.toUpperCase();
+      contact.tags = data.tags;
+      contact.zipCode = data.zipCode;
+
+      this.snack.open("Contact successfully updated", "success");
+    })
+    .catch(error => {
+      this.snack.open(error, "error");
+    });
+  }
+
+  public archive(id: string): void {
     
   }
+
+  public nav = (route: string): void => {
+    this.navController.navigateForward(route, {
+      replaceUrl: false
+    });
+  }
+
+  public search(event: any): void {
+    this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
+  }
+
+  public searchResults = (): Contact[] => this.contacts?.filter(contact => contact.name.match(this.searchQuery)) ?? [];
 }

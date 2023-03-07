@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -11,32 +11,11 @@ declare type contractType = string | boolean;
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
     base: number;
-    buyer_terms: number
+    buyer_terms: number;
     client:  DocumentReference<Contact>;
-    clientInfo: {
-        caat: string,
-        city: string,
-        email: string,
-        name: string,
-        phoneNumber: string,
-        state: string,
-        streetAddress: string,
-        type: string,
-        zipCode: string
-    };
+    clientInfo: ContactInfo;
     clientName: string;
-    clientTicketInfo: {
-        caat: string,
-        city: string,
-        email: string,
-        name: string,
-        phoneNumber: string,
-        state: string,
-        streetAddress: string,
-        type: string,
-        zipCode: string,
-        ref: DocumentReference,
-    };
+    clientTicketInfo: ContactInfo;
     currentDelivered: Mass;
     date: Date;
     delivery_dates: DeliveryDates;
@@ -112,7 +91,7 @@ export class Contract extends FirebaseDocInterface {
         this.quantity = new Mass(data.quantity, FirebaseDocInterface.session.getDefaultUnit());
         this.seller_terms = data.seller_terms;
         this.status = data.status;
-        this.tickets = data.tickets;
+        this.tickets = tempTicketList;
         this.transport = data.transport;
         this.truckers = tempTruckerList;
         this.type = data.type;
@@ -246,6 +225,29 @@ export class Contract extends FirebaseDocInterface {
           })
     }
 
+    public static clientInfo(contact: Contact) {
+        const primaryContact = contact.metacontacts.find(c => c.isPrimary);
+
+        return {
+            caat: contact.caat,
+            city: contact.city,
+            email: primaryContact.email,
+            name: contact.name,
+            phoneNumber: primaryContact.phone,
+            state: contact.state,
+            streetAddress: contact.streetAddress,
+            zipCode: contact.zipCode,
+            ref: contact.ref,
+        };
+    }
+
+    public static async getContractCount(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<number> {
+        const contractCollQuery = query(Contract.getCollectionReference(db, company, isPurchaseContract), ...constraints);
+        const contractSnapshot = await getCountFromServer(contractCollQuery);
+        
+        return contractSnapshot.data().count;
+    }
+
     public static getContracts(db: Firestore, company: string, contractType: contractType, ...constraints: QueryConstraint[]): Promise<Contract[]> {
         const collectionRef = Contract.getCollectionReference(db, company, contractType);
         const collectionQuery = query(collectionRef, where('type', '==', this.getContractType(contractType)), ...constraints);
@@ -321,3 +323,14 @@ enum status {
     cancelled = 'cancelled'
 }
 
+interface ContactInfo {
+    caat: string,
+    city: string,
+    email: string,
+    name: string,
+    phoneNumber: string,
+    state: string,
+    streetAddress: string,
+    zipCode: string,
+    ref: DocumentReference,    
+}

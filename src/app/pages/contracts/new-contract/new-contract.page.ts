@@ -5,7 +5,7 @@ import { NavController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectClientComponent } from './components/select-client/select-client.component';
 import { UniqueContractId } from './components/unique-contract-id';
 import { Contact } from '@shared/classes/contact';
@@ -14,6 +14,8 @@ import { Company, CompanyContact } from '@shared/classes/company';
 import {map, startWith} from 'rxjs/operators';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Plant } from '@shared/classes/plant';
+import { Contract } from '@shared/classes/contract';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Mass } from '@shared/classes/mass';
 import { Contract } from '@shared/classes/contract';
 
@@ -47,11 +49,13 @@ export class NewContractPage implements OnInit {
   contractTypeList: Map<string, string>;
 
   constructor(
-    private fb: UntypedFormBuilder,
     private db: Firestore,
-    private navController: NavController,
     private dialog: MatDialog,
-    private session: SessionInfo
+    private fb: UntypedFormBuilder,
+    private navController: NavController,
+    private session: SessionInfo,
+    private snack: SnackbarService,
+    private uniqueId: UniqueContractId,
   ) { }
 
   ngOnInit() {
@@ -233,7 +237,7 @@ export class NewContractPage implements OnInit {
       .then(() => {
         this.navController.navigateForward('dashboard/contracts');
       }).catch(error => {
-        console.log("Error submitting form: ", error);
+        this.snack.open(error, "error");
       });
   }
 

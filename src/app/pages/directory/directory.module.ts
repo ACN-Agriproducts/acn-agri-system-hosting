@@ -10,6 +10,7 @@ import { DirectoryPageRoutingModule } from './directory-routing.module';
 import { DirectoryPage } from './directory.page';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
+import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
   declarations: [
     DirectoryPage, 
     OptionsDirectoryComponent, 
-    ShowContactModalComponent
+    ShowContactModalComponent,
+    EditContactDialogComponent,
   ]
 })
 export class DirectoryPageModule {}
