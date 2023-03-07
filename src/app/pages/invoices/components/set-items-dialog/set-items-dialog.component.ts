@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { doc, Firestore } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
 import { MatSelectionList } from '@angular/material/list';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { InvoiceItem } from '@shared/classes/invoice_item';
+import { info, inventoryInfo, InvoiceItem } from '@shared/classes/invoice_item';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 
@@ -83,15 +83,15 @@ export class SetItemsDialogComponent implements OnInit {
     this.selectList.deselectAll();
   }
   
-  public createItem(): DialogInvoiceItem {
-    return {
-      affectsInventory: false,
-      inventoryInfo: {
-        info: []
-      },
-      name: "",
-      price: null,
-    };
+  public createItem(): InvoiceItem {
+    const item = new InvoiceItem(doc(InvoiceItem.getCollectionReference(this.db, this.currentCompany)));
+
+    item.affectsInventory = false;
+    item.inventoryInfo = new inventoryInfo([]);
+    item.name = "";
+    item.price = null;
+
+    return item;
   }
 
   public async deleteItem(): Promise<void> {
@@ -105,13 +105,13 @@ export class SetItemsDialogComponent implements OnInit {
     this.currentItem.inventoryInfo.info.push(this.createInfo());
   }
   
-  public createInfo() {
-    return {
+  public createInfo(): info {
+    return new info({
       plant: "",
       product: "",
       tank: "",
       quantity: null
-    };
+    });
   }
 
   public deleteInfo(index: number): void {

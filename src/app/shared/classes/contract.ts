@@ -6,6 +6,8 @@ import { Mass } from "./mass";
 import { Product } from "./product";
 import { Ticket } from "./ticket";
 
+declare type contractType = string | boolean;
+
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
     base: number;
@@ -25,6 +27,7 @@ export class Contract extends FirebaseDocInterface {
     plants: string[];
     pdfReference: string;
     pricePerBushel: number;
+    printableFormat: string;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
     quantity: Mass;
@@ -33,15 +36,30 @@ export class Contract extends FirebaseDocInterface {
     tickets: DocumentReference<Ticket>[];
     transport: string;
     truckers: TruckerInfo[];
+    type: string;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+
+    constructor(snapshot: QueryDocumentSnapshot<any>);
+    constructor(ref: DocumentReference<any>);
+    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
+        let snapshot;
+        if(snapshotOrRef instanceof QueryDocumentSnapshot) {
+            snapshot = snapshotOrRef
+        }
+        
         super(snapshot, Contract.converter);
-        const data = snapshot.data();
+        const data = snapshot?.data();
+
+        if(snapshotOrRef instanceof DocumentReference) {
+            this.ref = snapshotOrRef;
+            return;
+        }
+
+        if(data == undefined) return;
 
         let tempTicketList: DocumentReference<Ticket>[] = [];
         let tempTruckerList: TruckerInfo[] = [];
 
-        // TODO Set DocumentReference converters
         data.tickets.forEach((ticket: DocumentReference) => {
             tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
@@ -67,6 +85,7 @@ export class Contract extends FirebaseDocInterface {
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
         this.pdfReference = data.pdfReference;
         this.pricePerBushel = data.pricePerBushel;
+        this.printableFormat = data.printableFormat ?? "";
         this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
         this.quantity = new Mass(data.quantity, FirebaseDocInterface.session.getDefaultUnit());
@@ -75,6 +94,7 @@ export class Contract extends FirebaseDocInterface {
         this.tickets = tempTicketList;
         this.transport = data.transport;
         this.truckers = tempTruckerList;
+        this.type = data.type;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
     }
@@ -121,22 +141,10 @@ export class Contract extends FirebaseDocInterface {
     }
 
     public getTickets(): Promise<Ticket[]> {
-        const ticketList = [];
-
-        this.tickets.forEach((ticketRef: DocumentReference<any>) => {
-            ticketList.push(getDoc(ticketRef.withConverter(Ticket.converter)));
-        });
-
-        return Promise.all(ticketList).then(result => {
-            const tickets: Ticket[] = [];
-
-            result.forEach((ticketSnap: DocumentSnapshot<Ticket>) => {
-                tickets.push(ticketSnap.data());
-            });
-
-            tickets.sort((a, b) => a.id - b.id);
-            
-            return tickets;
+        return Promise.all(
+            this.tickets.map(doc => getDoc(doc.withConverter(Ticket.converter)))
+        ).then(result => {
+            return result.map(snap => snap.data()).sort((a, b) => a.id - b.id);
         });
     }
 
@@ -164,26 +172,26 @@ export class Contract extends FirebaseDocInterface {
         })
     }
 
-    public static getCollectionReference(db: Firestore, company: string, isPurchaseContract: boolean): CollectionReference<Contract> {
-        return collection(db, `companies/${company}/${isPurchaseContract? 'purchase' : 'sales'}Contracts/`).withConverter(Contract.converter);
+    public static getCollectionReference(db: Firestore, company: string, contractType?: contractType): CollectionReference<Contract> {
+        return collection(db, `companies/${company}/contracts/`).withConverter(Contract.converter);
     }
 
-    public static getDoc(db: Firestore, company: string, isPurchaseContract: boolean, contractId: number): Promise<Contract> {
-        return getDocs(query(Contract.getCollectionReference(db, company, isPurchaseContract), where('id', '==', contractId), limit(1)))
+    public static getDoc(db: Firestore, company: string, contractType: contractType, contractId: number): Promise<Contract> {
+        return getDocs(query(Contract.getCollectionReference(db, company), where('id', '==', contractId), where('type', '==', this.getContractType(contractType)), limit(1)))
             .then(result => {
                 return result.docs[0].data();
             });
     }
 
-    public static getDocById(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): Promise<Contract> {
-        const docRef = doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId)
+    public static getDocById(db: Firestore, company: string, contractType: contractType, contractId: string): Promise<Contract> {
+        const docRef = doc(Contract.getCollectionReference(db, company, contractType), contractId)
         return getDoc(docRef).then(result => {
             return result.data();
         });
     }
 
-    public static getDocRef(db: Firestore, company: string, isPurchaseContract: boolean, contractId: string): DocumentReference<Contract> {
-        return doc(Contract.getCollectionReference(db, company, isPurchaseContract), contractId);
+    public static getDocRef(db: Firestore, company: string, contractType: contractType, contractId: string): DocumentReference<Contract> {
+        return doc(Contract.getCollectionReference(db, company, contractType), contractId);
     }
 
     public static getStatusEnum(): typeof status {
@@ -240,12 +248,20 @@ export class Contract extends FirebaseDocInterface {
         return contractSnapshot.data().count;
     }
 
-    public static getContracts(db: Firestore, company: string, isPurchaseContract: boolean, ...constraints: QueryConstraint[]): Promise<Contract[]> {
-        const collectionRef = Contract.getCollectionReference(db, company, isPurchaseContract);
-        const collectionQuery = query(collectionRef, ...constraints);
+    public static getContracts(db: Firestore, company: string, contractType: contractType, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+        const collectionRef = Contract.getCollectionReference(db, company, contractType);
+        const collectionQuery = query(collectionRef, where('type', '==', this.getContractType(contractType)), ...constraints);
         return getDocs(collectionQuery).then(result => {
             return result.docs.map(snap => snap.data());
         });
+    }
+
+    private static getContractType(contractType: contractType): string {
+        if(typeof contractType == "boolean") {
+            contractType = contractType ? "purchase" : "sales";
+        }
+
+        return contractType;
     }
 }
 

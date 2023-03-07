@@ -19,6 +19,9 @@ export class HomePage implements OnInit {
   public permissions: any;
   public currentCompany: string;
 
+  public contractType: string = "";
+  public contractVersion: string = "";
+
   constructor(
     private session: SessionInfo
   ) {

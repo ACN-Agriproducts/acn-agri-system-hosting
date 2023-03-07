@@ -11,21 +11,15 @@ import { WeightUnits } from '@shared/WeightUnits/weight-units';
 })
 export class ContractPrintableComponent implements OnInit {
 
-  @Input() contractForm: Contract | any;
+  @Input() contractForm: Contract;
   @Input() productsList: any[];
   public date: Date;
 
   constructor() {}
 
   ngOnInit() {
-    if (!(this.contractForm.date instanceof Date)) {
-      this.date = this.contractForm.date.toDate();
-      this.contractForm.delivery_dates.begin = this.contractForm.delivery_dates.begin.toDate();
-      this.contractForm.delivery_dates.end = this.contractForm.delivery_dates.end.toDate();
-    }
-    else {
-      this.date = this.contractForm.date;
-    }
+    console.log(this.contractForm);
+    this.date = this.contractForm.date;
   }
 
   getProductObject(): Product {
@@ -33,47 +27,44 @@ export class ContractPrintableComponent implements OnInit {
   }
 
   getProduct(): string {
-    if(this.contractForm.product.ref){
-      return this.contractForm.product.ref.id;
-    }
-
-    return this.contractForm.product.id;
+    return this.contractForm.product?.id;
   }
 
-  isPurchase = () => this.contractForm.contractType == "purchaseContracts";
+  isPurchase = () => this.contractForm.type == "purchase";
 
   getPriceInBushels(): number {
-    const price = this.contractForm.price;
-    let bushelWeight = 56;
+    const price = this.contractForm.pricePerBushel;
+    return price;
+    // let bushelWeight = 56;
 
-    if(this.productsList) {
-      const product = this.productsList.find(p => p.name == this.getProduct());
+    // if(this.productsList) {
+    //   const product = this.productsList.find(p => p.name == this.getProduct());
 
-      if(product) {
-        bushelWeight = product.weight;
-      }
-    }
+    //   if(product) {
+    //     bushelWeight = product.weight;
+    //   }
+    // }
 
-    if(this.contractForm.pricePerBushel) {
-      return this.contractForm.pricePerBushel;
-    }
+    // if(this.contractForm.pricePerBushel) {
+    //   return this.contractForm.pricePerBushel;
+    // }
 
-    if(this.contractForm.priceUnit == 'bushels'){
-      return price;
-    }
-    if(this.contractForm.priceUnit == 'lbs'){
-      return price * bushelWeight;
-    }
-    if(this.contractForm.priceUnit == 'CWT'){
-      return price / 100 * bushelWeight;
-    }
-    if(this.contractForm.priceUnit == 'mtons'){
-      return price / 2204.6 * bushelWeight;
-    }
+    // if(this.contractForm.priceUnit == 'bushels'){
+    //   return price;
+    // }
+    // if(this.contractForm.priceUnit == 'lbs'){
+    //   return price * bushelWeight;
+    // }
+    // if(this.contractForm.priceUnit == 'CWT'){
+    //   return price / 100 * bushelWeight;
+    // }
+    // if(this.contractForm.priceUnit == 'mtons'){
+    //   return price / 2204.6 * bushelWeight;
+    // }
   }
 
   getPriceInCWT(): number {
-    const price = this.contractForm.price;
+    const price = this.contractForm.pricePerBushel;
     let bushelWeight = 56;
 
     if(this.productsList) {
@@ -84,26 +75,28 @@ export class ContractPrintableComponent implements OnInit {
       }
     }
 
-    if(this.contractForm.pricePerBushel) {
-      return this.contractForm.pricePerBushel / bushelWeight * 100;
-    }
+    return price / bushelWeight * 100;
 
-    if(this.contractForm.priceUnit == 'bushels'){
-      return price / bushelWeight * 100;
-    }
-    if(this.contractForm.priceUnit == 'lbs'){
-      return price * 100;
-    }
-    if(this.contractForm.priceUnit == 'CWT'){
-      return price;
-    }
-    if(this.contractForm.priceUnit == 'mtons'){
-      return price / 2204.6 * 100;
-    }
+    // if(this.contractForm.pricePerBushel) {
+    //   return this.contractForm.pricePerBushel / bushelWeight * 100;
+    // }
+
+    // if(this.contractForm.priceUnit == 'bushels'){
+    //   return price / bushelWeight * 100;
+    // }
+    // if(this.contractForm.priceUnit == 'lbs'){
+    //   return price * 100;
+    // }
+    // if(this.contractForm.priceUnit == 'CWT'){
+    //   return price;
+    // }
+    // if(this.contractForm.priceUnit == 'mtons'){
+    //   return price / 2204.6 * 100;
+    // }
   }
 
   getPriceInMTon(): number {
-    const price = this.contractForm.price;
+    const price = this.contractForm.pricePerBushel;
     let bushelWeight = 56;
 
     if(this.productsList) {
@@ -114,22 +107,24 @@ export class ContractPrintableComponent implements OnInit {
       }
     }
 
-    if(this.contractForm.pricePerBushel) {
-      return this.contractForm.pricePerBushel / bushelWeight * 2204.6;
-    }
+    return price / bushelWeight * 2204.6;
 
-    if(this.contractForm.priceUnit == 'bushels'){
-      return price / bushelWeight * 2204.6;
-    }
-    if(this.contractForm.priceUnit == 'lbs'){
-      return price * 2204.6;
-    }
-    if(this.contractForm.priceUnit == 'CWT'){
-      return price / 100 * 2204.6;
-    }
-    if(this.contractForm.priceUnit == 'mtons'){
-      return price;
-    }
+    // if(this.contractForm.pricePerBushel) {
+    //   return this.contractForm.pricePerBushel / bushelWeight * 2204.6;
+    // }
+
+    // if(this.contractForm.priceUnit == 'bushels'){
+    //   return price / bushelWeight * 2204.6;
+    // }
+    // if(this.contractForm.priceUnit == 'lbs'){
+    //   return price * 2204.6;
+    // }
+    // if(this.contractForm.priceUnit == 'CWT'){
+    //   return price / 100 * 2204.6;
+    // }
+    // if(this.contractForm.priceUnit == 'mtons'){
+    //   return price;
+    // }
   }
 
   getClient(): any {

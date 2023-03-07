@@ -11,6 +11,7 @@ import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/compone
 import { MatDialog } from '@angular/material/dialog';
 import { lastValueFrom } from 'rxjs';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { InvoiceDialogComponent } from '@shared/printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 
 
 @Component({
@@ -53,22 +54,19 @@ export class OptionsComponent implements OnInit {
   }
 
   public openInvoice = async () => {
-      this.popoverController.dismiss(null);
-      const modal = await this.modalController.create({
-        component: PrintableInvoiceComponent,
-        componentProps:{
-          seller: this.invoice.seller,
-          buyer: this.invoice.buyer,
-          id: this.invoice.id,
-          date: this.invoice.date,
-          items: this.invoice.items,
-          total: this.invoice.total
-        },
-        cssClass: 'modal-file-invoice',
-        mode: 'md'
-     });
-     return await modal.present();
+    this.popoverController.dismiss(null);
+    const dialog = this.dialog.open(
+      InvoiceDialogComponent, 
+      {
+        data: this.invoice,
+        panelClass: "borderless-dialog",
+        minWidth: "80%",
+        maxWidth: "100%",
+        height: "75vh"
+      }
+    );
   }
+  
   public print = () => {
     this.openInvoice().then(() => {
       window.print();
@@ -76,12 +74,12 @@ export class OptionsComponent implements OnInit {
   }
 
   public async proofPaymentDoc() {
-    const pdfRef = this.invoice.pdfReference ?? 
+    const pdfRef = this.invoice.proofLinks?.[0] ?? 
       `/companies/${this.currentCompany}/invoices/${this.invoice.id}/proofPayment`;
 
     const dialogData: UploadDialogData = {
       docType: "Proof of Payment",
-      hasDoc: this.invoice.pdfReference != null,
+      hasDoc: this.invoice.proofLinks != null,
       pdfRef,
       uploadable: this.invoice.status !== 'closed'
     };
@@ -94,7 +92,8 @@ export class OptionsComponent implements OnInit {
     if (updatePdfRef == null) return;
 
     this.invoice.update({
-      pdfReference: updatePdfRef
+      proofLinks: [updatePdfRef],
+      status: "paid"
     })
     .then(() => {
       this.snack.open("Proof of Payment successfully uploaded.", 'success');
