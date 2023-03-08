@@ -8,7 +8,7 @@ export abstract class FirebaseDocInterface {
     snapshot: DocumentSnapshot<any> | QueryDocumentSnapshot<any>;
 
     constructor(snapshot: QueryDocumentSnapshot<any>, converter: any) {
-        this.ref = snapshot.ref.withConverter(converter);
+        this.ref = snapshot?.ref.withConverter(converter);
         this.snapshot = snapshot;
     }
 
@@ -120,3 +120,5 @@ export class Pagination<T extends FirebaseDocInterface> {
         this.unsubscribe = [];
     }
 }
+
+export declare type status = "active" | "pending" | "cancelled" | "paid";
