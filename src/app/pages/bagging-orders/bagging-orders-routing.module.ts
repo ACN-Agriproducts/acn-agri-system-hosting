@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: BaggingOrdersPage
+  },  {
+    path: 'set-order',
+    loadChildren: () => import('./set-order/set-order.module').then( m => m.SetOrderPageModule)
   }
+
 ];
 
 @NgModule({

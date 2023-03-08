@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { BaggingOrdersPageRoutingModule } from './bagging-orders-routing.module';
+import { SetOrderPageRoutingModule } from './set-order-routing.module';
 
-import { BaggingOrdersPage } from './bagging-orders.page';
+import { SetOrderPage } from './set-order.page';
 import { CoreModule } from '@core/core.module';
 
 @NgModule({
@@ -15,8 +15,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     IonicModule,
     CoreModule,
-    BaggingOrdersPageRoutingModule
+    SetOrderPageRoutingModule
   ],
-  declarations: [BaggingOrdersPage]
+  declarations: [SetOrderPage]
 })
-export class BaggingOrdersPageModule {}
+export class SetOrderPageModule {}
