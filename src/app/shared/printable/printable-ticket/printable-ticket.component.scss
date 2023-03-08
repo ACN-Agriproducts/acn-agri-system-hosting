@@ -108,6 +108,12 @@
       grid-template-rows: repeat(8, auto);
       gap: 1px 5px;
 
+      .label, .value {
+        overflow: none;
+        text-overflow: clip;
+        white-space: nowrap;
+      }
+
       .label {
         justify-self: right;
       }

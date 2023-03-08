@@ -44,9 +44,17 @@ export class ContractModalOptionsComponent implements OnInit {
       return;
     }
 
+    const oldStatus = this.contract.status;
+    this.contract.status = Contract.getStatusEnum().active;
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "active"
-    })
+    }).then(() => {
+      this.snack.open("Contract status updated", "success");
+    }).catch(error => {
+      console.error(error);
+      this.contract.status = oldStatus;
+      this.snack.open("Error updating status", "error");
+    });
   }
 
   public async signedContract() {
@@ -110,8 +118,9 @@ export class ContractModalOptionsComponent implements OnInit {
       this.snack.open("Contract Successfully Closed", "success");
     })
     .catch(error => {
+      console.error(error);
       this.contract.status = Contract.getStatusEnum().active;
-      this.snack.open(error, "error");
+      this.snack.open("Error updating status", "error");
     });
   }
 }

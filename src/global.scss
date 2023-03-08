@@ -168,6 +168,12 @@ ion-content {
   white-space: pre-line;
 }
 
+.borderless-dialog {
+  mat-dialog-container {
+    padding: 0 !important;
+  }
+}
+
 // ----------------------- Jeddie Entries -----------------------
 
 .snackbar-error {

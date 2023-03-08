@@ -1,0 +1,83 @@
+<div>
+  <div class="header">
+    <div class="company-info">
+      <img src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789"/>
+      <div>{{seller.street}}</div>
+      <div>{{seller.city}}, {{seller.state}} {{seller.zip}}</div>
+    </div>
+    <div class="divider"></div> 
+    <div class="invoice-info">
+      <div><span class="title">Invoice No.</span>{{id}}</div>
+      <div><span class="title">Invoice Date</span>{{date | date:'longDate'}}</div>
+      <div><span class="title">Bill To:</span>{{buyer.name}}</div>
+      <div>
+        <span class="title">Address:</span>
+        <div class="address-box">
+          <div>{{buyer.street}}</div>
+          <div>{{buyer.city ? buyer.city + ',' : ''}} {{buyer.state}} {{buyer.zip}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="content">
+    <colgroup>
+      <col span="1" style="width: 46%;">
+      <col span="1" style="width: 12%;">
+      <col span="1" style="width: 15%;">
+      <col span="1" style="width: 27%;">
+    </colgroup>
+    <tr>
+      <th>DESCRIPTION</th>
+      <th class="center">QTY</th>
+      <th class="center">PRICE</th>
+      <th class="center">AMOUNT</th>
+    </tr>
+    <tr *ngFor="let row of contentRows">
+      <td>{{row.description}}</td>
+      <td class="text-end">{{row.quantity | number:"0.3-3"}}</td>
+      <td>
+        <div class="currency">
+          <span *ngIf="!row.isDetailsRow">$</span>
+          <span>{{row.price | number:"0.2-2"}}</span>
+        </div>
+      </td>
+      <td>
+        <div class="currency">
+          <span *ngIf="!row.isDetailsRow">$</span>
+          <span>{{row.quantity * row.price | number:"0.2-2"}}</span>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <div class="footer">
+    <table>
+      <colgroup>
+        <col span="1" style="width: 46%;">
+        <col span="1" style="width: 27%;">
+        <col span="1" style="width: 27%;">
+      </colgroup>
+      <tr class="border-top">
+        <td class="bold">TAX ID: 27-078284-5</td>
+        <td class="text-end">Subtotal</td>
+        <td class="border-left text-end">{{total | currency}}</td>
+      </tr>
+      <tr>
+        <td class="bold space" colspan="3">PRODUCT: YELLOW CORN</td>
+      </tr>
+      <tr>
+        <td class="bold space" colspan="2">METRIC TONS: {{this.weightTotal | number:"0.3-3"}}</td>
+        <td class="border-top border-left"></td>
+      </tr>
+      <tr>
+        <td class="space">space</td>
+      </tr>
+      <tr class="border-top">
+        <td class="text-end bold" id="total-cell" colspan="2">TOTAL</td>
+        <td class="border-left text-end bold">{{total | currency}}</td>
+      </tr>
+    </table>
+    <div class="bold">
+      Thank you for your preference!
+    </div>
+  </div>
+</div>
