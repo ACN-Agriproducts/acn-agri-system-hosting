@@ -1,4 +1,4 @@
-import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore } from "@angular/fire/firestore";
+import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore, QueryConstraint, query, getDocs } from "@angular/fire/firestore";
 import { FirebaseDocInterface, status } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
 
@@ -57,6 +57,14 @@ export class BaggingOrder extends FirebaseDocInterface {
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): BaggingOrder {
             return new BaggingOrder(snapshot);
         }
+    }
+
+    public static getList(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<BaggingOrder[]> {
+        const collectionRef = BaggingOrder.getCollectionReference(db, company, plant);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return getDocs(collectionQuery).then(result => {
+            return result.docs.map(snap => snap.data());
+        });
     }
 
     public static getCollectionReference(db: Firestore, company: string, plant: string): CollectionReference<BaggingOrder> {
