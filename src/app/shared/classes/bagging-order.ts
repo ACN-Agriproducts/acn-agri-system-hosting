@@ -1,6 +1,6 @@
-import { DocumentReference, QueryDocumentSnapshot } from "@angular/fire/firestore";
-import { DocumentData } from "rxfire/firestore/interfaces";
+import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore } from "@angular/fire/firestore";
 import { FirebaseDocInterface, status } from "./FirebaseDocInterface";
+import { Plant } from "./plant";
 
 export class BaggingOrder extends FirebaseDocInterface {
     date: Date;
@@ -57,5 +57,9 @@ export class BaggingOrder extends FirebaseDocInterface {
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): BaggingOrder {
             return new BaggingOrder(snapshot);
         }
+    }
+
+    public static getCollectionReference(db: Firestore, company: string, plant: string): CollectionReference<BaggingOrder> {
+        return collection(Plant.getDocReference(db, company, plant), "inventoryOrders").withConverter(BaggingOrder.converter);
     }
 }
