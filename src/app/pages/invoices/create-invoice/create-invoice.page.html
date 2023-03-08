@@ -232,7 +232,7 @@
           </ion-item>
         </ion-card-content>
       </ion-card>
-      <button id="submit-button" mat-flat-button color="primary" style="float: right" (click)="submitButton()">Submit</button>
+      <button id="submit-button" mat-flat-button color="primary" style="float: right" (click)="submitButton()" [disabled]="submitting">Submit</button>
     </form>
     
     <app-printable-invoice

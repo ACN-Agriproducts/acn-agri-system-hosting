@@ -29,6 +29,7 @@ export class CreateInvoicePage implements OnInit {
   public allItems: any[];
   public total: number = 0;
   public ready: boolean = false;
+  public submitting: boolean = false;
   
   invoiceForm: UntypedFormGroup;
   public documentList: string[];
@@ -228,7 +229,10 @@ export class CreateInvoicePage implements OnInit {
     return form.items[itemIndex].inventoryInfo.info[infoIndex];
   }
 
-  async submitButton() {    
+  async submitButton() {   
+    if(this.submitting) return;
+    
+    this.submitting = true;
     let doc = this.invoiceForm.getRawValue();
 
     this.total = 0;
@@ -247,6 +251,9 @@ export class CreateInvoicePage implements OnInit {
         {
           text: "cancel",
           role: 'cancel',
+          handler: () => {
+            this.submitting = false;
+          }
         },
         {
           text:"Submit",
