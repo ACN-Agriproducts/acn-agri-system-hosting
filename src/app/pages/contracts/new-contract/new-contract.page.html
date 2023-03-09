@@ -1,8 +1,8 @@
 <app-header-toolbar titulo="New Contract"></app-header-toolbar>
 
 <ion-content>
-  <ion-row>
-    <ion-col size-xl='5' size-xs='12'>
+  <div class="content-flex">
+    <div id="form">
       <ion-card>
         <ion-card-content>
           <ion-row class="client-row">
@@ -39,7 +39,7 @@
                 <mat-select [(ngModel)]="contract.type" (selectionChange)="contractTypeChange()">
                   <mat-option *ngFor="let type of contractTypeList | keyvalue" [value]="type.value">{{type.key}}</mat-option>
                 </mat-select>
-              </mat-form-field> 
+              </mat-form-field>
             </ion-col>
             <ion-col size-xs='4' size-sm='3'>
               <mat-form-field>
@@ -124,7 +124,7 @@
               <mat-form-field>
                 <mat-label>Delivery Plants</mat-label>
                 <mat-chip-list multiple [(ngModel)]="contract.plants" #chipList>
-                  <mat-chip 
+                  <mat-chip
                     *ngFor="let plant of plantsList"
                     [value]="plant.ref.id"
                     (removed)="removePlantChip(plant.ref.id)">
@@ -195,15 +195,15 @@
             </ion-col>
           </ion-row>
           <button mat-raised-button (click)="submitForm()" [disabled]="!formIsValid">Submit</button>
-          <button 
-          mat-button
-          [disabled]="!formIsValid"
-          printSectionId="printable-doc"
-          [useExistingCss]='true'
-          [printStyle]="{'#first-page' : {'font-size': '13px', 'line-height': '150%'}, '.terms-and-conditions' : {'font-size': 'x-small', 'line-height': '125%'} }"
-          ngxPrint>
-          PRINT
-        </button>
+          <button
+            mat-button
+            [disabled]="!formIsValid"
+            printSectionId="printable-doc"
+            [useExistingCss]='true'
+            [printStyle]="{'#first-page' : {'font-size': '13px', 'line-height': '150%'}, '.terms-and-conditions' : {'font-size': 'x-small', 'line-height': '125%'} }"
+            ngxPrint>
+            PRINT
+          </button>
         </ion-card-content>
       </ion-card>
       <ion-card>
@@ -231,7 +231,7 @@
               <mat-form-field>
                 <mat-label>Freight</mat-label>
                 <span matPrefix>$</span>
-                <input  matInput 
+                <input  matInput
                         formControlName="freight"
                         type="number"
                         min="0">
@@ -247,14 +247,16 @@
           </ion-row>
         </ion-card-content>
       </ion-card>
-    </ion-col>
-    <ion-col size-xl='7' size-xs='12'>
-      <!-- <app-display-contract id='printable-doc' [contractForm]="contract" [weight]="this.contractWeight" [productsList]="this.productsList"></app-display-contract> -->
-      <app-printable-contract 
-        [contract]="contract" 
-        [version]="contract.type"
-        (contractTypesListEmitter)="contractTypeList = $event">
-      </app-printable-contract>
-    </ion-col>
-  </ion-row>
+    </div>
+    <!-- <app-display-contract id='printable-doc' [contractForm]="contract" [weight]="this.contractWeight" [productsList]="this.productsList"></app-display-contract> -->
+    <app-printable-contract
+      [contract]="contract"
+      [version]="contract.type"
+<<<<<<< Updated upstream
+=======
+      [scrollable]="true"
+>>>>>>> Stashed changes
+      (contractTypesListEmitter)="contractTypeList = $event">
+    </app-printable-contract>
+  </div>
 </ion-content>

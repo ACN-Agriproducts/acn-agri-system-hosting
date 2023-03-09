@@ -1,24 +1,7 @@
-:host {
-    // display: block;
-    // height: auto;
-    // width: 188.2mm !important;
-}
-
-#first-page {
-    // display: block;
-    background-color: white !important;
-    font-size: 13px !important;
-    line-height: 150% !important;
-    color: black !important;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.page-break {
-    page-break-after: always;
-}
-
 .header-section {
     border: black solid 1px;
+    font-size: 13px !important;
+    line-height: 150% !important;
 }
 
 #company-logo {
@@ -73,19 +56,6 @@ h1{
         flex-grow: 1;
     }
 }
-
-.page-footer {
-    text-align: center;
-    font-weight: bold;
-}
-
-.terms-and-conditions {
-    // font-size: x-small;
-    font-size: 10pt;
-    line-height: 125%;
-    margin-top: 1rem;
-}
-
 .grid-12 {
     display: grid;
 
@@ -118,18 +88,4 @@ h1{
 
 .column-size-5 {
     grid-column-end: span 5;
-}
-
-@media screen {
-    #first-page {
-        width: 8.5in;
-        padding: 0.5in;
-    }
-}
-
-@media print {
-    // #first-page {
-    //     position: fixed;
-    //     overflow-y: visible;
-    // }
 }

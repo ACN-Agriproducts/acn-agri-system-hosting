@@ -30,7 +30,7 @@ import { PurchaseFixedPriceComponent } from './printable/printable-contract/purc
 import { PurchaseUnfixedPriceComponent } from './printable/printable-contract/purchase-unfixed-price/purchase-unfixed-price.component';
 import { SalesFixedPriceComponent } from './printable/printable-contract/sales-fixed-price/sales-fixed-price.component';
 import { SalesUnfixedPriceComponent } from './printable/printable-contract/sales-unfixed-price/sales-unfixed-price.component';
-import { SellContractComponent } from './printable/printable-contract/sell-contract/sell-contract.component';
+import { SalesContractComponent } from './printable/printable-contract/sales-contract/sales-contract.component';
 import { PurchaseContractComponent } from './printable/printable-contract/purchase-contract/purchase-contract.component';
 
 @NgModule({
@@ -86,7 +86,7 @@ import { PurchaseContractComponent } from './printable/printable-contract/purcha
     PurchaseUnfixedPriceComponent,
     SalesFixedPriceComponent,
     SalesUnfixedPriceComponent,
-    SellContractComponent,
+    SalesContractComponent,
     PurchaseContractComponent
   ]
 })

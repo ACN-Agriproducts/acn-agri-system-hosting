@@ -1,4 +1,149 @@
 <div class="page-style main text-align-justify">
+	<div class='header-section' *ngIf="contractForm">
+		<img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
+		<h1><b>CONTRACT</b></h1>
+		<div class='grid-12'>
+			<div class='column-size-4'>
+				<div class='party-header'><b>BUYER</b></div>
+				<ng-container *ngIf="contractForm.clientInfo">
+					<span><b>{{ contractForm.clientInfo?.name ?? "" }}</b></span><br>
+					<span>{{ contractForm.clientInfo.streetAddress }}</span><br>
+					<span>{{ contractForm.clientInfo.city }}{{ contractForm.clientInfo.state && contractForm.clientInfo.city? ",": "" }}
+						{{ contractForm.clientInfo.state }}{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode? ",": "" }} {{ contractForm.clientInfo.zipCode }}</span><br>
+					<span>{{ contractForm.clientInfo.phoneNumber }}</span><br>
+				</ng-container>
+				<div class='party-header'><b>SELLER</b></div>
+				<span><b>ACN AGRIPRODUTS LLC</b></span><br>
+				<span>1512 RANCHO TOLUCA RD</span><br>
+				<span>WESLACO TX. 78596</span><br>
+				<span></span><br>
+			</div>
+			<div class='column-size-2'></div>
+			<div class='column-size-3'>
+				<b>CONTRACT NUMBER</b><br>
+				<b>BASE</b><br>
+				<b>FUTURE PRICE</b><br>
+				<b>PRICED</b><br>
+				<b>CONTRACT DATE</b><br>
+				<b>CUSTOMER NO.</b><br>
+				<b>PAYMENT TERMS</b><br>
+				<b>CHECK</b><br>
+				<b>BROKER</b><br>
+				<b>BROKER NUMBER</b><br>
+				<b>FREIGHT PRICE</b><br>
+			</div>
+			<div class='column-size-3' *ngIf="contractForm.date">
+				<b>{{ contractForm.id || 0}}-{{ contractForm.date.getFullYear() % 100 }}</b><br>
+				{{ contractForm.pricePerBushel - contractForm.market_price | number:"0.5-5" }}<br>
+				{{ contractForm.market_price | number:"0.5-5" }}<br>
+				{{ contractForm.pricePerBushel | number:"0.5-5" }}<br>
+				{{ contractForm.date | date:'MM/dd/YYYY' }}<br>
+				<br>
+				<br>
+				<br>
+			</div>
+		</div>
+	</div>
+
+	<div class='info-chart'>
+		<div class='grid-12'>
+			<div class='column-size-2'>
+				<span><b>COMMODITY:</b></span><br>
+				<span><b>QUANTITY:</b></span>
+			</div>
+			<div class='column-size-3'>
+				<span>{{ getProduct() }}</span><br>
+				<div class='grid-3'>
+					<div class='column-size-2'>
+						<span class='right-justify'>{{ (getProductObject() ? contractForm?.quantity?.getBushelWeight(getProductObject()) : 0) | number:'0.5' }}</span>
+						<span class='right-justify'>{{ contractForm?.quantity?.getMassInUnit('lbs') | number:'0.5-5' }}</span>
+						<span class='right-justify'>{{ contractForm?.quantity?.getMassInUnit('mTon') | number:'0.5-5' }}</span>
+					</div>
+					<div class='column-size-1'>
+						<span>BUSHELS</span><br>
+						<span>LBS</span><br>
+						<span>M. TONS</span>
+					</div>
+				</div>
+			</div>
+			<div class='column-size-1'>
+				<span class='right-justify'><b>MST:</b></span>
+			</div>
+			<div class='column-size-1'>
+				<span>15%</span>
+			</div>
+			<div class='column-size-1'></div>
+			<div class='column-size-2'>
+				<span><b>WEIGHT:</b></span><br>
+				<span><b>GRADES:</b></span><br>
+				<span><b>TRANSPORTATION:</b></span><br>
+				<span><b>REFERENCE:</b></span>
+			</div>
+			<div class='column-size-2'>
+				<span>{{ contractForm.paymentTerms.origin? "ORIGIN" : "DESTINATION" }}</span><br>
+				<span>U.S. {{ contractForm.grade }} OR BETTER</span><br>
+				<span>TRUCK</span><br>
+				<span>{{ contractForm.aflatoxin }} OR LESS</span>
+			</div>
+		</div>
+		<div id='extra-info-header'>
+			<div class='grid-12'>
+				<div class='column-size-1'><b>STATUS</b></div>
+				<div class='column-size-4'><b>DELIVERY DATES</b></div>
+				<div class='column-size-3'><b>SCHEDULE PRICE</b></div>
+				<div class='column-size-4'><b>PRICE</b></div>
+			</div>
+		</div>
+		<div>
+			<div class='underline grid-12'>
+				<div class='column-size-2'>Priced</div>
+				<div class='column-size-3'>
+					<ng-container *ngIf="contractForm.delivery_dates?.begin && contractForm.delivery_dates?.end">
+						{{ contractForm.delivery_dates.begin | date:'MM/dd/yy' }} to {{ contractForm.delivery_dates.end | date:'MM/dd/yy' }}
+					</ng-container>
+					<br><br>
+					<div class='underline'>
+						Please sign and return this confirmation IMMEDIATELY
+					</div>
+				</div>
+				<div class='column-size-3'>
+					<ng-container *ngIf="contractForm.paymentTerms.paymentTerms && contractForm.paymentTerms.measurement">
+						<!-- EVERY {{ contractForm.paymentTerms.paymentTerms}} {{ contractForm.paymentTerms.measurement | uppercase}} {{ contractForm.paymentTerms.before? "PREPAID": ""}} -->
+					</ng-container>
+				</div>
+				<div class='column-size-2'>
+					{{ getPriceInCWT() | number:'0.5-5' }}<br>
+					{{ getPriceInMTon() | number:'0.5-5' }}
+				</div>
+				<div class='column-size-2'>
+					CWT<br>
+					M. TON
+				</div>
+			</div>
+		</div>
+		<div class='grid-12'>
+			<div class='column-size-5'>
+				<br>
+				<div class='box'>
+					Buyer's scale of discounts at time of delivery to apply
+					<br>
+					rules to apply: TGFA
+					<br>
+					Arbitration to apply: TGFA
+				</div>
+			</div>
+			<div class='column-size-1'></div>
+			<div class='column-size-3'><b>TOTAL CONTRACTED</b></div>
+			<div class='column-size-1'></div>
+			<div class='column-size-2'>
+				<div id='total'>
+					<span><b>$</b></span>
+					<span><b>{{ (contractForm.quantity | massInUnit:'lbs') * getPriceInCWT() / 100 | number:'1.2-2' }}</b></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<p class="introduction">
 		SELLER OBJECTS TO THE INCLUSION OF ANY DIFFERENT OR ADDITIONAL TERMS PROPOSED BY BUYER. IF PRICE OF GRAIN IS ON A PREMIUM BASIS, CONTRACT TO BE PRICED OR SPREAD PRIOR TO THE LAST TRADING
 		DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.

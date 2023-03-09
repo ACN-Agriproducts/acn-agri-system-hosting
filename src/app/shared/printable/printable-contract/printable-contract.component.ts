@@ -18,6 +18,7 @@ export class PrintableContractComponent implements OnInit {
     this.version$.next(newVersion);
   }
   @Input() contract: Contract;
+  @Input() scrollable: boolean = false;
 
   @Output() contractTypesListEmitter = new EventEmitter<Map<string, string>>();
 

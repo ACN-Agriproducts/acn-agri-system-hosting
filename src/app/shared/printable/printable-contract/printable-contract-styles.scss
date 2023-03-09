@@ -85,25 +85,25 @@ $text-highlight: #F2F2F2;
 .signatures {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	margin: 20px 0;
+	gap: 7%;
+	margin: 20px;
 	font-weight: bold;
 	page-break-inside: avoid;
 
 	.signature-line {
 		height: 40px;
-		margin: 0 20px;
 		border-bottom: $border-black;
 	}
 
 	&.sell-contract {
-		margin-top: unset;
+		margin: unset;
+		margin-bottom: 20px;
 		font-weight: unset;
 		font-size: 9pt;
 		font-family: Calibri;
 
 		.signature-line {
 			height: unset;
-			margin-left: unset;
 			margin-top: 5px;
 		}
 	}
