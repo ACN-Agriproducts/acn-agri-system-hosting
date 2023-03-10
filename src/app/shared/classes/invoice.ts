@@ -31,7 +31,6 @@ export class Invoice extends FirebaseDocInterface {
         this.status = data.status;
         this.total = data.total;
         this.printableDocumentName = data.printableDocumentName ?? "Document one";
-        console.log(data.printableDocName)
 
         data.items.forEach(element => {
             this.items.push(new item(element));
