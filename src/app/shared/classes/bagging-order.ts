@@ -7,17 +7,18 @@ export class BaggingOrder extends FirebaseDocInterface {
     fulfilledDate: Date;
     status: status;
     docRefs: string[];
-    orderBy: DocumentReference;
-    orderByName: string;
+    orderOwner: DocumentReference;
+    orderOwnerName: string;
     orderInfo: {
         quantity: number;
         itemRef: DocumentReference;
         affectsInventory: boolean;
     }[];
 
+    constructor();
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
-    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
+    constructor(snapshotOrRef?: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
             snapshot = snapshotOrRef
@@ -37,8 +38,8 @@ export class BaggingOrder extends FirebaseDocInterface {
         this.fulfilledDate = data.fulfilledDate;
         this.status = data.status;
         this.docRefs = data.docRefs;
-        this.orderBy = data.orderBy;
-        this.orderByName = data.orderByName;
+        this.orderOwner = data.orderOwner;
+        this.orderOwnerName = data.orderOwnerName;
         this.orderInfo = data.orderInfo;
     }
 
@@ -49,8 +50,8 @@ export class BaggingOrder extends FirebaseDocInterface {
                 fulfilledDate: data.fulfilledDate,
                 status: data.status,
                 docRefs: data.docRefs,
-                orderBy: data.orderBy,
-                orderByName: data.orderByName,
+                orderOwner: data.orderOwner,
+                orderOwnerName: data.orderOwnerName,
                 orderInfo: data.orderInfo
             }
         },
