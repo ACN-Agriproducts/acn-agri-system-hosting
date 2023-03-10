@@ -1,5 +1,34 @@
 <app-header-toolbar titulo="New Bagging Orders"></app-header-toolbar>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+    <mat-card>
+        <mat-card-header>Form</mat-card-header>
+        <mat-card-content>
+            <!-- <mat-form-field>
+                <input matInput [matDatepicker]="picker">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field> -->
+            <mat-form-field>
+                <mat-select>
+                    <mat-option *ngFor="let plant of plants$ | async" [value]="plant">{{plant.ref.id}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select>
+                    <mat-option *ngFor="let invoiceItem of invoiceItems$ | async" [value]="invoiceItem.name">{{invoiceItem.name}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>quantity</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-checkbox>
+                Affects inventory
+            </mat-checkbox>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="submit()">Submit</button>
+        </mat-card-actions>
+    </mat-card>
 </ion-content>
