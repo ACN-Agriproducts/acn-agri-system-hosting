@@ -13,7 +13,6 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
-import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { SelectedTicketsPipe } from './pipes/selectedTickets/selected-tickets.pipe';
@@ -40,7 +39,6 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     PrintableTicketComponent,
     PrintableInvoiceComponent,
     FilterContractsPipe,
-    MassInUnitPipe,
     SectionTitleComponent,
     HashMapPipe,
     SelectedTicketsPipe,
@@ -58,7 +56,6 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     UploadDocumentDialogComponent,
     PrintableInvoiceComponent,
     FilterContractsPipe,
-    MassInUnitPipe,
     SectionTitleComponent,
     HashMapPipe,
     SelectedTicketsPipe,
