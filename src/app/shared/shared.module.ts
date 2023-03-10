@@ -21,6 +21,7 @@ import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/i
 import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
+import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
+    TypeTemplateDirective
   ],
   declarations: [
     ToolbarComponent,
@@ -63,6 +65,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
+    TypeTemplateDirective,
   ]
 })
 export class SharedModule {}
