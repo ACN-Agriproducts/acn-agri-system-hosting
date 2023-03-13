@@ -1,9 +1,9 @@
 <ng-container 
-  *ngTemplateOutlet="templateMap | hashmap:docName;
+  *ngTemplateOutlet="template ?? none;
     context: {$implicit: invoiceData}">
 </ng-container>
 
-<ng-template #invoiceOne let-data>
+<ng-template typeTemplate="Document one" let-data>
   <app-invoice-one
     [invoice]="data.invoice"
     [seller]="data.seller"
@@ -15,7 +15,7 @@
   </app-invoice-one>
 </ng-template>
 
-<ng-template #invoiceTwo let-data>
+<ng-template typeTemplate="Document two" let-data>
   <app-invoice-two
     [invoice]="data.invoice"
     [seller]="data.seller"
@@ -25,4 +25,8 @@
     [items]="data.items"
     [total]="data.total">
   </app-invoice-two>
+</ng-template>
+
+<ng-template #none>
+  None
 </ng-template>
