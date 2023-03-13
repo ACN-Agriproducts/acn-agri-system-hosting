@@ -127,7 +127,7 @@ export class ConfirmInvoicePage implements OnInit {
         other: null
       },
       total: 0,
-      printableDocumentName: "Document two"
+      printableDocumentName: ""
     }
   }
 
@@ -207,6 +207,10 @@ export class ConfirmInvoicePage implements OnInit {
     }
 
     this.invoiceCreated = true;
+
+    setTimeout(() => {
+      this.invoice.printableDocumentName = "Document two";
+    }, 1);
   }
 
   getItemDetails(group: TicketGroup): string {
