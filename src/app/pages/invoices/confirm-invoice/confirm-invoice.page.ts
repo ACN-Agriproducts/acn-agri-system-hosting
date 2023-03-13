@@ -10,6 +10,7 @@ import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
 import { Contact } from '@shared/classes/contact';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Mass } from '@shared/classes/mass';
 
 
 @Component({
@@ -64,6 +65,7 @@ export class ConfirmInvoicePage implements OnInit {
     this.groups = {};
     this.contracts = new Map();
     this.printTicketDocs = [];
+    let totalWeight = new Mass(0, this.session.getDefaultUnit());
 
     this.selectedTickets.forEach(ticket => {
       this.generatePromises.push(ticket.getPrintDocs(this.db).then(docs => {
@@ -98,9 +100,10 @@ export class ConfirmInvoicePage implements OnInit {
 
       const object = this.groups[ticket.productName][ticket.clientName][driver];
       object.tickets.push(ticket);
-      object.totalWeight += ticket.getNet().get();
+      object.totalWeight += ticket.net.get();
+      totalWeight = totalWeight.add(ticket.net);
     });
-
+    
     this.invoice = {
       buyer: {
         city: "Valle Hermoso",
@@ -127,6 +130,11 @@ export class ConfirmInvoicePage implements OnInit {
         other: null
       },
       total: 0,
+      isExportInvoice: true,
+      exportInfo: {
+        product: null,
+        quantity: totalWeight,
+      },
       printableDocumentName: ""
     }
   }
@@ -176,8 +184,10 @@ export class ConfirmInvoicePage implements OnInit {
   async generateInvoice() {
     await Promise.all(this.generatePromises);
     this.invoice.id = this.companyDoc.nextInvoice;
+    const productSet = new Set<string>();
     
     for(let product in this.groups) {
+      productSet.add(product);
       this.invoice.items.push({
         affectsInventory: false,
         details: null,
@@ -204,6 +214,10 @@ export class ConfirmInvoicePage implements OnInit {
           this.invoice.items.push(nextItem);
         }
       }
+    }
+
+    if(productSet.size == 1) {
+      this.invoice.exportInfo.product = productSet.values().next().value;
     }
 
     this.invoiceCreated = true;
@@ -274,6 +288,11 @@ interface invoiceInterface {
   status: string;
   seller: contactInfo;
   total: number;
+  isExportInvoice: boolean;
+  exportInfo: {
+      product: string;
+      quantity: Mass;
+  }
   printableDocumentName: string;
 }
 

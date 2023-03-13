@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChildren } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
+import { Mass } from '@shared/classes/mass';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
@@ -19,6 +20,11 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   @Input() date: Date;
   @Input() items: item[];
   @Input() total: number;
+  @Input() isExportInvoice: boolean;
+  @Input() exportInfo: {
+    product: string;
+    quantity: Mass;
+  };
 
   @Input("documentName") set documentName(newName: string) {
     this.version$.next(newName);
@@ -39,10 +45,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
 
   ngOnInit() {
     this.setData();
-
     this.version$.next(this.version$.getValue());
-    this.template$.subscribe(val => {
-    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -65,6 +68,8 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.date = this.invoice.date;
       data.items = this.invoice.items;
       data.total = this.invoice.total;
+      data.exportInfo = this.invoice.exportInfo;
+      data.isExportInvoice = this.invoice.isExportInvoice
       this.docName = this.invoice.printableDocumentName;
     }
     else {
@@ -74,6 +79,8 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.date = this.date;
       data.items = this.items;
       data.total = this.total;
+      data.exportInfo = this.exportInfo;
+      data.isExportInvoice = this.isExportInvoice
       this.docName = this.documentName;
     }
 
