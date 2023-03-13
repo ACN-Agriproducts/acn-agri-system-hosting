@@ -1,5 +1,5 @@
 <ng-container 
-  *ngTemplateOutlet="template ?? none;
+  *ngTemplateOutlet="(template$ | async) ?? none;
     context: {$implicit: invoiceData}">
 </ng-container>
 

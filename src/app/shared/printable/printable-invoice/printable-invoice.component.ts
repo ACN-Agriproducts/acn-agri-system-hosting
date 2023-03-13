@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChildren } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
@@ -22,6 +22,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
 
   @Input("documentName") set documentName(newName: string) {
     this.version$.next(newName);
+    console.log(this.version$.getValue());
   }
 
   public invoiceData: any;
@@ -30,12 +31,21 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
 
   @ViewChildren(TypeTemplateDirective) private versionTemplates: QueryList<TypeTemplateDirective>;
   public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  public template$: Observable<TemplateRef<any>>;
+  public template$: Observable<TemplateRef<any>> = this.version$.pipe(
+    filter(() => !!this.versionTemplates),
+    map(version => this.versionTemplates.find(template => template.typeTemplate == (version ?? this.invoice.printableDocumentName))?.templateRef)
+  );
 
   constructor() { }
 
   ngOnInit() {
     this.setData();
+
+    this.version$.next(this.version$.getValue());
+    //console.log(template$);
+    this.template$.subscribe(val => {
+      console.log(val);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -46,20 +56,6 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
     this.invoiceDocsList.emit(
       ["Document one", "Document two"]
     );
-
-    this.versionTemplates.forEach(template => console.log(template.typeTemplate));
-
-    this.template$ = this.version$.pipe(
-      filter(() => !!this.versionTemplates),
-      map(version => this.versionTemplates.find(template => template.typeTemplate == (version ?? this.invoice.printableDocumentName))?.templateRef)
-    );
-
-    this.version$.next(this.version$.getValue());
-    this.version$.subscribe(val => console.log(val));
-    this.template$.subscribe(val => {
-      this.template = val
-      console.log(this.template);
-    });
   }
 
   setData() {
@@ -85,9 +81,5 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
     }
 
     this.invoiceData = data;
-  }
-
-  log(...data: any) {
-    console.log(...data);
   }
 }
