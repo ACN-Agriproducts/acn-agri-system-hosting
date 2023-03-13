@@ -170,7 +170,7 @@
                     <span>{{ticket.id}}</span>
                     <span>{{ticket.driver}}</span>
                     <span>{{ticket.plates}}</span>
-                    <span>{{ticket.getNet().getMassInUnit('lbs')}} lbs | {{ticket.getNet().getMassInUnit('mTon') | number:"0.3"}} mTon</span>
+                    <span>{{ticket.net | massInUnit:"lbs"}} lbs | {{ticket.net | massInUnit:'mTon' | number:"0.3"}} mTon</span>
                   </div>
                 </div>
               </div>
@@ -188,6 +188,7 @@
         [date]="invoice.date" 
         [items]="invoice.items"
         [total]="invoice.total"
+        [documentName]="invoice.printableDocumentName"
       ></app-printable-invoice>
 
       <div id="second-print-page" *ngFor="let product of groups | keyvalue">

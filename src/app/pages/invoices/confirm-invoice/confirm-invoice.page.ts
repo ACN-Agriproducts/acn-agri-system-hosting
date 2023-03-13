@@ -126,7 +126,8 @@ export class ConfirmInvoicePage implements OnInit {
         zip: "78579",
         other: null
       },
-      total: 0
+      total: 0,
+      printableDocumentName: "Document two"
     }
   }
 
@@ -249,7 +250,6 @@ export class ConfirmInvoicePage implements OnInit {
   }
 
   submit() {
-    console.log(this.invoice);
     addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()).withConverter(null), this.invoice)
     .then((result => {
       document.getElementById("print-button").click();
@@ -270,6 +270,7 @@ interface invoiceInterface {
   status: string;
   seller: contactInfo;
   total: number;
+  printableDocumentName: string;
 }
 
 interface TicketGroup {

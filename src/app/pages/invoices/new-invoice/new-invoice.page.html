@@ -16,6 +16,7 @@
         <ion-card-content>
           <p class="ion-no-margin">{{ticket.clientName}}</p>
           <p>{{ticket.dateOut | date:"longDate"}}</p>
+          <p>{{ticket.net | massInUnit:"mTon" | number:"0.3"}} mTon</p>
           <p>{{ticket.productName}}</p>
         </ion-card-content>
       </ion-card>
@@ -27,7 +28,7 @@
             <ion-button fill="clear" color="secondary" routerLink="/dashboard/invoices" (click)="selectedTickets.clear()">Cancel</ion-button>
             <div class="panel-list">
               <ion-item color="dark" lines="none">
-                <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ', ' }}</ion-label>
+                <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ", " }}</ion-label>
               </ion-item>
               <ion-button routerLink="/dashboard/invoices/confirm-invoice" [state]="selectedTickets">Next</ion-button>
             </div>
