@@ -22,7 +22,6 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
 
   @Input("documentName") set documentName(newName: string) {
     this.version$.next(newName);
-    console.log(this.version$.getValue());
   }
 
   public invoiceData: any;
@@ -42,9 +41,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
     this.setData();
 
     this.version$.next(this.version$.getValue());
-    //console.log(template$);
     this.template$.subscribe(val => {
-      console.log(val);
     });
   }
 
