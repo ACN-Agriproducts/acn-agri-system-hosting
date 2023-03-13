@@ -3,7 +3,7 @@ import { Product } from "./product";
 
 export declare type units = "lbs" | "kg" | "mTon" | "CWT";
 
-const conversions: Map<units, number> = new Map<units, number>([
+export const conversions: Map<units, number> = new Map<units, number>([
     ["lbs", 2.20462],
     ["kg", 1],
     ["mTon", .001],
