@@ -232,10 +232,19 @@
           </ion-item>
         </ion-card-content>
       </ion-card>
+      <button 
+        hidden
+        #printBtn
+        printSectionId="printableInvoice"
+        [useExistingCss]='true'
+        ngxPrint>
+        PRINT
+      </button>
       <button id="submit-button" mat-flat-button color="primary" style="float: right" (click)="submitButton()" [disabled]="submitting">Submit</button>
     </form>
     
     <app-printable-invoice
+      id="printableInvoice"
       [seller]="invoiceForm.getRawValue().seller"
       [buyer]="invoiceForm.getRawValue().buyer"
       [id]="id"
