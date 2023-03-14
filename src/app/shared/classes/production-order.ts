@@ -3,9 +3,10 @@ import { Company } from "./company";
 import { FirebaseDocInterface, status } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
 
-export class BaggingOrder extends FirebaseDocInterface {
+export class ProductionOrder extends FirebaseDocInterface {
     date: Date;
     fulfilledDate: Date;
+    id: number;
     status: status;
     docRefs: string[];
     orderOwner: DocumentReference;
@@ -15,6 +16,7 @@ export class BaggingOrder extends FirebaseDocInterface {
         itemRef: DocumentReference;
         affectsInventory: boolean;
     }[];
+    plant: DocumentReference<Plant>;
 
     constructor();
     constructor(snapshot: QueryDocumentSnapshot<any>);
@@ -25,7 +27,7 @@ export class BaggingOrder extends FirebaseDocInterface {
             snapshot = snapshotOrRef
         }
         
-        super(snapshot, BaggingOrder.converter);
+        super(snapshot, ProductionOrder.converter);
         const data = snapshot?.data();
 
         if(snapshotOrRef instanceof DocumentReference) {
@@ -45,7 +47,7 @@ export class BaggingOrder extends FirebaseDocInterface {
     }
 
     public static converter = {
-        toFirestore(data: BaggingOrder): DocumentData {
+        toFirestore(data: ProductionOrder): DocumentData {
             return {
                 date: data.date,
                 fulfilledDate: data.fulfilledDate,
@@ -56,20 +58,20 @@ export class BaggingOrder extends FirebaseDocInterface {
                 orderInfo: data.orderInfo
             }
         },
-        fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): BaggingOrder {
-            return new BaggingOrder(snapshot);
+        fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): ProductionOrder {
+            return new ProductionOrder(snapshot);
         }
     }
 
-    public static getList(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<BaggingOrder[]> {
-        const collectionRef = BaggingOrder.getCollectionReference(db, company);
+    public static getList(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<ProductionOrder[]> {
+        const collectionRef = ProductionOrder.getCollectionReference(db, company);
         const collectionQuery = query(collectionRef, ...constraints);
         return getDocs(collectionQuery).then(result => {
             return result.docs.map(snap => snap.data());
         });
     }
 
-    public static getCollectionReference(db: Firestore, company: string): CollectionReference<BaggingOrder> {
-        return collection(Company.getCompanyRef(db, company), "inventoryOrders").withConverter(BaggingOrder.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<ProductionOrder> {
+        return collection(Company.getCompanyRef(db, company), "inventoryOrders").withConverter(ProductionOrder.converter);
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { doc, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { BaggingOrder } from '@shared/classes/bagging-order';
+import { ProductionOrder } from '@shared/classes/production-order';
 import { InvoiceItem } from '@shared/classes/invoice_item';
 import { Plant } from '@shared/classes/plant';
 import { User } from '@shared/classes/user';
@@ -12,7 +12,7 @@ import { User } from '@shared/classes/user';
   styleUrls: ['./set-order.page.scss'],
 })
 export class SetOrderPage implements OnInit {
-  order: BaggingOrder;
+  order: ProductionOrder;
   plant: Plant;
 
   invoiceItems$: Promise<InvoiceItem[]>;
@@ -24,7 +24,7 @@ export class SetOrderPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.order = new BaggingOrder();
+    this.order = new ProductionOrder();
     this.order.orderInfo = [{
       quantity: null,
       itemRef: null,
@@ -40,7 +40,7 @@ export class SetOrderPage implements OnInit {
     this.order.status = "pending";
     this.order.orderOwner = User.getDocumentReference(this.db, this.session.getUser().uid);
     this.order.orderOwnerName = this.session.getUser().name;
-    this.order.ref = doc(BaggingOrder.getCollectionReference(this.db, this.session.getCompany()));
+    this.order.ref = doc(ProductionOrder.getCollectionReference(this.db, this.session.getCompany()));
   }
 
 }

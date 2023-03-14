@@ -80,8 +80,8 @@ const routes: Routes = [
             loadChildren: () => import('./pages/prices/prices.module').then( m => m.PricesPageModule)
           },
           {
-            path: 'bagging-orders',
-            loadChildren: () => import('./pages/bagging-orders/bagging-orders.module').then( m => m.BaggingOrdersPageModule)
+            path: 'production-orders',
+            loadChildren: () => import('./pages/production-orders/production-orders.module').then( m => m.BaggingOrdersPageModule)
           },
         ]
       },
