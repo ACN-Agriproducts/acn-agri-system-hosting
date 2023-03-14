@@ -1,4 +1,5 @@
 import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore, QueryConstraint, query, getDocs } from "@angular/fire/firestore";
+import { Company } from "./company";
 import { FirebaseDocInterface, status } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
 
@@ -61,14 +62,14 @@ export class BaggingOrder extends FirebaseDocInterface {
     }
 
     public static getList(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<BaggingOrder[]> {
-        const collectionRef = BaggingOrder.getCollectionReference(db, company, plant);
+        const collectionRef = BaggingOrder.getCollectionReference(db, company);
         const collectionQuery = query(collectionRef, ...constraints);
         return getDocs(collectionQuery).then(result => {
             return result.docs.map(snap => snap.data());
         });
     }
 
-    public static getCollectionReference(db: Firestore, company: string, plant: string): CollectionReference<BaggingOrder> {
-        return collection(Plant.getDocReference(db, company, plant), "inventoryOrders").withConverter(BaggingOrder.converter);
+    public static getCollectionReference(db: Firestore, company: string): CollectionReference<BaggingOrder> {
+        return collection(Company.getCompanyRef(db, company), "inventoryOrders").withConverter(BaggingOrder.converter);
     }
 }

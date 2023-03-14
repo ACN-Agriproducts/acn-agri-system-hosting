@@ -40,7 +40,7 @@ export class SetOrderPage implements OnInit {
     this.order.status = "pending";
     this.order.orderOwner = User.getDocumentReference(this.db, this.session.getUser().uid);
     this.order.orderOwnerName = this.session.getUser().name;
-    this.order.ref = doc(BaggingOrder.getCollectionReference(this.db, this.session.getCompany(), this.plant.ref.id));
+    this.order.ref = doc(BaggingOrder.getCollectionReference(this.db, this.session.getCompany()));
   }
 
 }
