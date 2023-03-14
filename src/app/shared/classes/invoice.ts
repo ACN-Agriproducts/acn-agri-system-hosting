@@ -60,7 +60,7 @@ export class Invoice extends FirebaseDocInterface {
                 seller: {...data.seller},
                 status: data.status,
                 total: data.total,
-                isExportInvoice: data.isExportInvoice,
+                isExportInvoice: data.isExportInvoice ?? null,
                 exportInfo: data.exportInfo ? {
                     product: data.exportInfo.product,
                     quantity: data.exportInfo.quantity.get()
