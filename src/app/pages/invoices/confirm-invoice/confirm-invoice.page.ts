@@ -89,7 +89,7 @@ export class ConfirmInvoicePage implements OnInit {
       if(!this.groups[ticket.productName][ticket.clientName][driver]) {
         this.groups[ticket.productName][ticket.clientName][driver] = {
           tickets: [],
-          price: 0,
+          price: null,
           totalWeight: 0,
         };
       }
@@ -135,7 +135,7 @@ export class ConfirmInvoicePage implements OnInit {
         product: null,
         quantity: totalWeight,
       },
-      printableDocumentName: ""
+      printableDocumentName: "Document two"
     }
   }
 
@@ -200,7 +200,8 @@ export class ConfirmInvoicePage implements OnInit {
       for(let client in this.groups[product]) {
         for(let group in this.groups[product][client]){
           const ticketGroup = this.groups[product][client][group];
-          ticketGroup.price = await this.getItemPrice(ticketGroup);
+          console.log(ticketGroup.price);
+          ticketGroup.price ??= await this.getItemPrice(ticketGroup);
           const nextItem: item = {
             affectsInventory: false,
             details: this.getItemDetails(ticketGroup),
@@ -268,7 +269,7 @@ export class ConfirmInvoicePage implements OnInit {
   }
 
   submit() {
-    addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()).withConverter(null), this.invoice)
+    addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()), this.invoice)
     .then((result => {
       document.getElementById("print-button").click();
       this.snack.open("Inovice succesfully created", "success");
