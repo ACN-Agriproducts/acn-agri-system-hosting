@@ -38,7 +38,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   public template$: Observable<TemplateRef<any>> = this.version$.pipe(
     filter(() => !!this.versionTemplates),
-    map(version => this.versionTemplates.find(template => template.typeTemplate == (version ?? this.invoice.printableDocumentName))?.templateRef)
+    map(version => this.versionTemplates.find(template => template.typeTemplate == (version ?? this.invoice?.printableDocumentName))?.templateRef)
   );
 
   constructor() { }
@@ -56,6 +56,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
     this.invoiceDocsList.emit(
       ["Document one", "Document two"]
     );
+    this.version$.next(this.version$.getValue());
   }
 
   setData() {
