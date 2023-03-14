@@ -56,10 +56,11 @@ export class Invoice extends FirebaseDocInterface {
                 id: data.id,
                 items: [],
                 pdfReference: data.pdfReference ?? null,
-                needsAttention: data.needsAttention,
+                needsAttention: data.needsAttention ?? null,
                 seller: {...data.seller},
                 status: data.status,
                 total: data.total,
+                printableDocumentName: data.printableDocumentName,
                 isExportInvoice: data.isExportInvoice ?? null,
                 exportInfo: data.exportInfo ? {
                     product: data.exportInfo.product,
