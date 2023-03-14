@@ -61,10 +61,10 @@ export class Invoice extends FirebaseDocInterface {
                 status: data.status,
                 total: data.total,
                 isExportInvoice: data.isExportInvoice,
-                exportInfo: {
+                exportInfo: data.exportInfo ? {
                     product: data.exportInfo.product,
                     quantity: data.exportInfo.quantity.get()
-                }
+                } : null
             }
 
             data.items.forEach(item => {
