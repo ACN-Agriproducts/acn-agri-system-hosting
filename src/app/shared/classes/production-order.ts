@@ -63,7 +63,7 @@ export class ProductionOrder extends FirebaseDocInterface {
         }
     }
 
-    public static getList(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<ProductionOrder[]> {
+    public static getList(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<ProductionOrder[]> {
         const collectionRef = ProductionOrder.getCollectionReference(db, company);
         const collectionQuery = query(collectionRef, ...constraints);
         return getDocs(collectionQuery).then(result => {
