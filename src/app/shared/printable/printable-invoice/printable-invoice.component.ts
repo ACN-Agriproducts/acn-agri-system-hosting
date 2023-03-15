@@ -1,5 +1,8 @@
-import { AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChildren } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
+import { Mass } from '@shared/classes/mass';
+import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
+import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-printable-invoice',
@@ -17,21 +20,32 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   @Input() date: Date;
   @Input() items: item[];
   @Input() total: number;
+  @Input() isExportInvoice: boolean;
+  @Input() exportInfo: {
+    product: string;
+    quantity: Mass;
+  };
 
-  @Input() documentName: string;
+  @Input("documentName") set documentName(newName: string) {
+    this.version$.next(newName);
+  }
 
   public invoiceData: any;
   public docName: string;
+  public template: any;
 
-  @ViewChild("invoiceOne") invoiceOne: TemplateRef<any>;
-  @ViewChild("invoiceTwo") invoiceTwo: TemplateRef<any>;
-
-  public templateMap: Map<string, TemplateRef<any>> = new Map();
+  @ViewChildren(TypeTemplateDirective) private versionTemplates: QueryList<TypeTemplateDirective>;
+  public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public template$: Observable<TemplateRef<any>> = this.version$.pipe(
+    filter(() => !!this.versionTemplates),
+    map(version => this.versionTemplates.find(template => template.typeTemplate == (version ?? this.invoice?.printableDocumentName))?.templateRef)
+  );
 
   constructor() { }
 
   ngOnInit() {
     this.setData();
+    this.version$.next(this.version$.getValue());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -39,26 +53,13 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
   }
 
   ngAfterViewInit(): void {
-    this.templateMap = new Map<string, TemplateRef<any>>([
-      ["Document one", this.invoiceOne],
-      ["Document two", this.invoiceTwo]
-    ]);
-
-    // console.log(this.invoiceOne)
-
     this.invoiceDocsList.emit(
-      [...this.templateMap.keys()]
+      ["Document one", "Document two"]
     );
-
-    // console.log(this.docName, this.templateMap, this.templateMap.get(this.docName));
-  }
-
-  ngAfterViewChecked() {
-
+    this.version$.next(this.version$.getValue());
   }
 
   setData() {
-    // console.log("SetData trigger")
     const data: any = {};
     
     if(this.invoice) {
@@ -68,6 +69,8 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.date = this.invoice.date;
       data.items = this.invoice.items;
       data.total = this.invoice.total;
+      data.exportInfo = this.invoice.exportInfo;
+      data.isExportInvoice = this.invoice.isExportInvoice
       this.docName = this.invoice.printableDocumentName;
     }
     else {
@@ -77,6 +80,8 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.date = this.date;
       data.items = this.items;
       data.total = this.total;
+      data.exportInfo = this.exportInfo;
+      data.isExportInvoice = this.isExportInvoice
       this.docName = this.documentName;
     }
 

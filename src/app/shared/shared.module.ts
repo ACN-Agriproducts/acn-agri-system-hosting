@@ -15,7 +15,6 @@ import { PrintableInvoiceComponent } from './printable/printable-invoice/printab
 import { PlantSelectComponent } from './components/plant-select/plant-select.component';
 import { StorageCardComponent } from './components/storage-card/storage-card.component';
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
-import { MassInUnitPipe } from './pipes/mass-in-unit.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
 import { SelectedTicketsPipe } from './pipes/selectedTickets/selected-tickets.pipe';
@@ -24,6 +23,7 @@ import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/i
 import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
+import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
 
 
 @NgModule({
@@ -44,7 +44,6 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     PlantSelectComponent,
     StorageCardComponent,
     FilterContractsPipe,
-    MassInUnitPipe,
     SectionTitleComponent,
     HashMapPipe,
     SelectedTicketsPipe,
@@ -52,6 +51,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
+    TypeTemplateDirective
   ],
   declarations: [
     ToolbarComponent,
@@ -64,7 +64,6 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     PlantSelectComponent,
     StorageCardComponent,
     FilterContractsPipe,
-    MassInUnitPipe,
     SectionTitleComponent,
     HashMapPipe,
     SelectedTicketsPipe,
@@ -72,6 +71,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
+    TypeTemplateDirective,
   ]
 })
 export class SharedModule {}
