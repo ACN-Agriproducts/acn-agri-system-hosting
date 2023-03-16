@@ -1,5 +1,16 @@
 <app-header-toolbar titulo="Bagging Orders"></app-header-toolbar>
 
-<ion-content>
-
+<ion-content class="ion-padding">
+    <mat-card>
+        <mat-card-content>
+            <div *ngFor="let order of orderList$ | async" class="table-row">
+                <span>id: {{order.id}}</span>
+                <span>status: {{order.status}}</span>
+                <span>info: {{order.orderInfo[0].name}}/{{order.orderInfo[0].quantity}}</span>
+                <button mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </ion-content>

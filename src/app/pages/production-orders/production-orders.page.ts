@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { ProductionOrder } from '@shared/classes/production-order';
 
 @Component({
   selector: 'app-production-orders',
@@ -6,10 +9,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./production-orders.page.scss'],
 })
 export class ProductionOrdersPage implements OnInit {
+  orderList$: Promise<ProductionOrder[]>;
 
-  constructor() { }
+  constructor(
+    private db: Firestore,
+    private session: SessionInfo
+  ) { }
 
   ngOnInit() {
+    this.orderList$ = ProductionOrder.getList(this.db, this.session.getCompany());
   }
 
 }
