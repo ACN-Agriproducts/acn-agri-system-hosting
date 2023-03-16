@@ -10,20 +10,20 @@
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field> -->
             <mat-form-field>
-                <mat-select>
-                    <mat-option *ngFor="let plant of plants$ | async" [value]="plant">{{plant.ref.id}}</mat-option>
+                <mat-select [(ngModel)]="order.plant">
+                    <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">{{plant.ref.id}}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field>
-                <mat-select>
-                    <mat-option *ngFor="let invoiceItem of invoiceItems$ | async" [value]="invoiceItem.name">{{invoiceItem.name}}</mat-option>
+                <mat-select [(ngModel)]="order.orderInfo[0].itemRef">
+                    <mat-option *ngFor="let invoiceItem of invoiceItems$ | async" [value]="invoiceItem.ref">{{invoiceItem.name}}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field>
                 <mat-label>quantity</mat-label>
-                <input matInput>
+                <input matInput [(ngModel)]="order.orderInfo[0].quantity">
             </mat-form-field>
-            <mat-checkbox>
+            <mat-checkbox [(ngModel)]="order.orderInfo[0].affectsInventory">
                 Affects inventory
             </mat-checkbox>
         </mat-card-content>

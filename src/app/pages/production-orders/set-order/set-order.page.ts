@@ -13,7 +13,6 @@ import { User } from '@shared/classes/user';
 })
 export class SetOrderPage implements OnInit {
   order: ProductionOrder;
-  plant: Plant;
 
   invoiceItems$: Promise<InvoiceItem[]>;
   plants$: Promise<Plant[]>
@@ -27,6 +26,7 @@ export class SetOrderPage implements OnInit {
     this.order = new ProductionOrder();
     this.order.orderInfo = [{
       quantity: null,
+      name: null,
       itemRef: null,
       affectsInventory: null
     }];
@@ -35,12 +35,21 @@ export class SetOrderPage implements OnInit {
     this.plants$ = Plant.getPlantList(this.db, this.session.getCompany());
   }
 
-  submit() {
+  async submit() {
+    const itemsList = await this.invoiceItems$;
+    const chosenItem = itemsList.find(item => item.ref == this.order.orderInfo[0].itemRef);
+    this.order.orderInfo[0].name = chosenItem.name;
+
     this.order.date = new Date();
     this.order.status = "pending";
     this.order.orderOwner = User.getDocumentReference(this.db, this.session.getUser().uid);
     this.order.orderOwnerName = this.session.getUser().name;
     this.order.ref = doc(ProductionOrder.getCollectionReference(this.db, this.session.getCompany()));
+    this.order.id = 1;
+    this.order.fulfilledDate = null;
+    this.order.docRefs = [];
+    
+    this.order.set();
   }
 
 }

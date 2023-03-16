@@ -13,6 +13,7 @@ export class ProductionOrder extends FirebaseDocInterface {
     orderOwnerName: string;
     orderInfo: {
         quantity: number;
+        name: string;
         itemRef: DocumentReference;
         affectsInventory: boolean;
     }[];
@@ -51,11 +52,13 @@ export class ProductionOrder extends FirebaseDocInterface {
             return {
                 date: data.date,
                 fulfilledDate: data.fulfilledDate,
+                id: data.id,
                 status: data.status,
                 docRefs: data.docRefs,
                 orderOwner: data.orderOwner,
                 orderOwnerName: data.orderOwnerName,
-                orderInfo: data.orderInfo
+                orderInfo: data.orderInfo,
+                plant: data.plant,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): ProductionOrder {
@@ -72,6 +75,6 @@ export class ProductionOrder extends FirebaseDocInterface {
     }
 
     public static getCollectionReference(db: Firestore, company: string): CollectionReference<ProductionOrder> {
-        return collection(Company.getCompanyRef(db, company), "inventoryOrders").withConverter(ProductionOrder.converter);
+        return collection(Company.getCompanyRef(db, company), "productionOrders").withConverter(ProductionOrder.converter);
     }
 }
