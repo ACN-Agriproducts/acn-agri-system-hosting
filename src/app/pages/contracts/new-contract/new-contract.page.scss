@@ -57,3 +57,10 @@ input::-webkit-inner-spin-button {
         max-width: 8.5in;
     }
 }
+
+app-printable-contract {
+    overflow-y: auto;
+    max-height: 90vh;
+    max-width: min-content;
+    margin: 10px;
+}
