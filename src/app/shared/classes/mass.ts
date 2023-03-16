@@ -1,19 +1,19 @@
 import { ProductInfo } from "./contract";
 import { Product } from "./product";
 
-export declare type units = "lbs" | "kg" | "mTon" | "CWT";
-
-export const conversions: Map<units, number> = new Map<units, number>([
-    ["lbs", 2.20462],
-    ["kg", 1],
-    ["mTon", .001],
-    ["CWT", .00220462]
-]);
+export declare type units = "lbs" | "kg" | "mTon" | "CWT" | "bu";
 
 export class Mass {
     defaultUnits: units;
     amount: number;
 
+    readonly conversions: Map<units, number> = new Map<units, number>([
+        ["lbs", 2.20462],
+        ["kg", 1],
+        ["mTon", .001],
+        ["CWT", .0220462]
+    ]);
+    
     constructor(_amount: number, unit: units) {
         this.amount = _amount;
         this.defaultUnits = unit;
@@ -28,11 +28,12 @@ export class Mass {
     }
 
     getMassInUnit(unit: units): number {
-        return this.amount / conversions.get(this.defaultUnits) * conversions.get(unit);
+        const unitConversion = this.conversions.get(unit) / this.conversions.get(this.defaultUnits);
+        return this.amount * unitConversion;
     }
 
     getBushelWeight(product: Product | ProductInfo): number {
-        return this.getMassInUnit('lbs') / product.weight;
+        return this.getMassInUnit('lbs') / product?.weight;
     }
 
     add(addend: Mass): Mass {
@@ -43,5 +44,9 @@ export class Mass {
     subtract(subtrahend: Mass): Mass {
         const amount = this.get() - subtrahend.getMassInUnit(this.defaultUnits);
         return new Mass(amount, this.defaultUnits);
+    }
+
+    defineBushels(product: Product | ProductInfo): void {
+        this.conversions.set("bu", this.conversions.get("lbs") / product?.weight);
     }
 }

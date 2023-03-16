@@ -3,6 +3,7 @@ import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
+import { Price } from "./price";
 import { Product } from "./product";
 import { Ticket } from "./ticket";
 
@@ -27,6 +28,7 @@ export class Contract extends FirebaseDocInterface {
     plants: string[];
     pdfReference: string;
     pricePerBushel: number;
+    price: Price;
     printableFormat: string;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
@@ -84,7 +86,7 @@ export class Contract extends FirebaseDocInterface {
         this.market_price = data.market_price;
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
         this.pdfReference = data.pdfReference;
-        this.pricePerBushel = data.pricePerBushel;
+        this.price = new Price(data.price, data.priceUnit);
         this.printableFormat = data.printableFormat ?? "";
         this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
@@ -97,6 +99,7 @@ export class Contract extends FirebaseDocInterface {
         this.type = data.type;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
+        this.pricePerBushel = data.pricePerBushel ?? this.price.getPricePerUnit("bu", this.quantity);
     }
 
     public static converter = {
@@ -117,6 +120,8 @@ export class Contract extends FirebaseDocInterface {
                 paymentTerms: data.paymentTerms,
                 pdfReference: data.pdfReference,
                 pricePerBushel: data.pricePerBushel,
+                price: data.price.amount,
+                priceUnit: data.price.unit,
                 product: data.product,
                 productInfo: data.productInfo,
                 quantity: data.quantity.get(),

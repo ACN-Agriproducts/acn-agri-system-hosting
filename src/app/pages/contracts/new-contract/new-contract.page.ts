@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { Firestore, addDoc, collection, CollectionReference, doc, docData } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, CollectionReference, doc, docData, DocumentReference } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Observable, Subscription, lastValueFrom } from 'rxjs';
@@ -15,7 +15,8 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Plant } from '@shared/classes/plant';
 import { Contract } from '@shared/classes/contract';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Mass } from '@shared/classes/mass';
+import { Mass, units } from '@shared/classes/mass';
+import { Price } from '@shared/classes/price';
 
 @Component({
   selector: 'app-new-contract',
@@ -31,13 +32,11 @@ export class NewContractPage implements OnInit {
   truckerList: CompanyContact[];
   productsList: Product[];
   plantsList: Plant[];
-  contractWeight: Mass;
   filteredTruckerOptions: Observable<CompanyContact[]>[] = [];
   contract: Contract;
+  chosenProduct: Product;
 
   useSameClient: boolean = true;
-  price: number;
-  priceUnit: string;
   truckerArray: FormArray;
   formIsValid: boolean = false;
   idIsValid: boolean = false;
@@ -84,27 +83,23 @@ export class NewContractPage implements OnInit {
 
     Product.getProductList(this.db, this.session.getCompany()).then(list => {
       this.productsList = list;
-      this.contract.productInfo = list[0].getProductInfo();
-      this.contract.product = list[0].ref.withConverter(Product.converter);
     });
 
-    this.contractWeight = new Mass(0, this.session.getDefaultUnit());
-
-    this.contract.date = new Date();
-    this.contract.type = "";
-    this.contract.id = null;
+    this.contract.aflatoxin = 20;
+    this.contract.client = null;
+    this.contract.client = null;
     this.contract.clientName = "";
-    this.contract.client = null;
-    this.contract.client = null;
-    this.contract.quantity = new Mass(0, this.session.getDefaultUnit());
-    this.contract.market_price
-    this.contract.grade
-    this.contract.aflatoxin
+    this.contract.date = new Date();
+    this.contract.grade = 2;
+    this.contract.id = null;
+    this.contract.quantity = new Mass(null, this.session.getDefaultUnit());
+    this.contract.type = "";
+    this.contract.price = new Price(null, "bu");
+
     this.contract.delivery_dates = {
       begin: null,
       end: null
     }
-    this.contract.plants
     this.contract.paymentTerms = {
       before: false,
       origin: false,
@@ -122,41 +117,9 @@ export class NewContractPage implements OnInit {
       zipCode: null,
       ref: null
     }
+    
     this.contract.truckers = [];
-
     this.truckerArray = this.fb.array([]);
-
-    // this.contractForm.get('product').valueChanges.subscribe((newProduct: Product) => {
-    //   if(this.contractForm.get('quantityUnits').value == 'bushels') {
-    //     const oldProduct = this.contractForm.value.product as Product;
-    //     this.contractWeight.amount = this.contractWeight.amount / oldProduct.weight * newProduct.weight;
-    //   }
-    // });
-
-    // this.contractForm.get('quantity').valueChanges.subscribe(val => {
-    //   if(this.contractForm.get('quantityUnits').value == 'bushels') {
-    //     const product = this.contractForm.value.product as Product;
-    //     val = val * product.weight;
-    //   }
-    //   this.contractWeight.amount = val;
-    // });
-
-    // this.contractForm.get('quantityUnits').valueChanges.subscribe(val => {
-    //   const form = this.contractForm.value
-    //   const product = form.product as Product;
-
-    //   if(val == 'bushels') {
-    //     this.contractWeight.amount = form.quantity * product.weight;
-    //     this.contractWeight.defaultUnits = 'lbs';
-    //   }
-    //   else if(form.quantityUnits == 'bushels') {
-    //     this.contractWeight.amount = form.quantity;
-    //     this.contractWeight.defaultUnits = val;
-    //   }
-    //   else {
-    //     this.contractWeight.defaultUnits = val;
-    //   }
-    // });
   }
 
   compareWithProduct(p1, p2){
@@ -167,80 +130,7 @@ export class NewContractPage implements OnInit {
     return c1 && c2? c1.id === c2.id: c1 === c2;
   }
 
-  // public getForm() {
-  //   let form = this.contractForm.getRawValue();
-  //   form.client = this.selectedClient;
-  //   return form;
-  // }
-
   public submitForm() {
-    // const formValue = this.contractForm.getRawValue();
-    // if(formValue.useSameClient) {
-    //   this.ticketClient = this.selectedClient;
-    // }
-
-    // var submit = {
-    //   aflatoxin: formValue.aflatoxin,
-    //   base: this.getBushelPrice() - formValue.market_price,
-    //   client: this.selectedClient.ref,
-    //   clientInfo: {
-    //     caat: this.selectedClient.caat,
-    //     city: this.selectedClient.city,
-    //     email: this.selectedClient.email,
-    //     name: this.selectedClient.name,
-    //     phoneNumber: this.selectedClient.phoneNumber,
-    //     state: this.selectedClient.state,
-    //     streetAddress: this.selectedClient.streetAddress,
-    //     type: this.selectedClient.type,
-    //     zipCode: this.selectedClient.zipCode
-    //   },
-    //   clientName: formValue.client,
-    //   clientTicketInfo: {
-    //     caat: this.ticketClient.caat,
-    //     city: this.ticketClient.city,
-    //     email: this.ticketClient.email,
-    //     name: this.ticketClient.name,
-    //     phoneNumber: this.ticketClient.phoneNumber,
-    //     state: this.ticketClient.state,
-    //     streetAddress: this.ticketClient.streetAddress,
-    //     type: this.ticketClient.type,
-    //     zipCode: this.ticketClient.zipCode,
-    //     ref: this.ticketClient.ref
-    //   },
-    //   currentDelivered: 0,
-    //   date: new Date(),
-    //   delivery_dates: {
-    //     begin: new Date(formValue.deliveryDateStart),
-    //     end: new Date(formValue.deliveryDateEnd),
-    //   },
-    //   grade: formValue.grade,
-    //   id: formValue.id,
-    //   loads: 0,
-    //   market_price: formValue.market_price,
-    //   paymentTerms: {
-    //     before: formValue.paymentTerms.before,
-    //     measurement: formValue.paymentTerms.measurement,
-    //     origin: formValue.paymentTerms.origin,
-    //     paymentTerms: formValue.paymentTerms.paymentTerms
-    //   },
-    //   plants: formValue.plants.map(p => p.ref.id),
-    //   pricePerBushel: this.getBushelPrice(),
-    //   product: formValue.product.ref,
-    //   productInfo: {
-    //     moisture: formValue.product.moisture,
-    //     name: formValue.product.ref.id,
-    //     weight: formValue.product.weight
-    //   },
-    //   quantity: this.contractWeight.getMassInUnit(this.session.getDefaultUnit()),
-    //   status: "pending",
-    //   tickets: [],
-    //   transport: 'truck',
-    //   truckers: formValue.truckers.map(t => {
-    //     t.trucker = Contact.getDocReference(this.db, this.currentCompany, this.truckerList.find(trucker => trucker.name == t.trucker).id);
-    //     return t;
-    //   })
-    // };
-    
     this.contract.ref = doc(Contract.getCollectionReference(this.db, this.session.getCompany(), this.contract.type)).withConverter(Contract.converter);
     this.contract.set()  
       .then(() => {
@@ -248,25 +138,6 @@ export class NewContractPage implements OnInit {
       }).catch(error => {
         this.snack.open(error, "error");
       });
-  }
-
-  private getBushelPrice(): number{
-    const product = this.productsList.find(p => p.ref.id == this.contract.product.id);
-
-    if(this.priceUnit == 'bushels'){
-      return this.price;
-    }
-    if(this.priceUnit == 'lbs'){
-      return this.price * product.weight;
-    }
-    if(this.priceUnit == 'CWT'){
-      return this.price / 100 * product.weight;
-    }
-    if(this.priceUnit == 'mTon'){
-      return this.price / 2204.6 * product.weight;
-    }
-
-    return 0;
   }
 
   openClientSelect() {
@@ -353,4 +224,20 @@ export class NewContractPage implements OnInit {
   contractTypeGetter(): string {
     return this.contract.type ?? "";
   }
+
+  public selectProduct(): void {
+    this.contract.product = this.chosenProduct.ref.withConverter(Product.converter);
+    this.contract.productInfo = this.chosenProduct.getProductInfo();
+    this.contract.quantity.defineBushels(this.chosenProduct);
+  }
+
+  public recalculateMass(event: number | units) {
+    const params: [number, units] = typeof event === "number" ? 
+      [event, this.contract.quantity.defaultUnits] :
+      [this.contract.quantity.amount, event];
+
+    this.contract.quantity = new Mass(...params);
+    this.contract.quantity.defineBushels(this.contract.productInfo);
+  }
+
 }

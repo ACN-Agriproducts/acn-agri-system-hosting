@@ -1,29 +1,59 @@
-import { conversions, units } from "./mass";
+import { Mass, units } from "./mass";
+
+// export class Price {
+//     private _amount: number;
+//     private _unit: units;
+
+//     constructor(priceAmount: number, priceUnit: units) {
+//         this._amount = priceAmount;
+//         this._unit = priceUnit;
+//     }
+
+    // /**
+    //  * 
+    //  * @param priceUnit unit of measurement the price will be based on
+    //  * @param mass provide if the desired unit to convert the price to is bushels
+    //  * @returns price per unit ($/unit)
+    //  */
+    // public getPricePerUnit(priceUnit: units, mass: Mass): number {
+    //     const unitConversion = mass.conversions.get(priceUnit) / mass.conversions.get(this.unit);
+    //     return this.amount / unitConversion;
+    // }
+
+//     public set amount(newAmount: number) {
+//         this._amount = newAmount;
+//     }
+
+//     public get unit(): units {
+//         return this._unit;
+//     }
+
+//     public set unit(newUnit: units) {
+//         this._unit = newUnit;
+//     }
+
+// }
 
 export class Price {
-    private _amount: number;
-    private _unit: units;
+    public amount: number;
+    public unit: units;
 
-    constructor(amount: number, unit: units) {
-        this._amount = amount;
-        this._unit = unit;
+    constructor(priceAmount: number, priceUnit: units) {
+        this.amount = priceAmount;
+        this.unit = priceUnit;
     }
 
-    public getPriceInUnit(priceUnit: units): number {
-        if (!this.unit) return;
-        return this._amount / conversions.get(this._unit) * conversions.get(priceUnit);
-    }
-
-    public set amount(newAmount: number) {
-        this._amount = newAmount;
-    }
-
-    public get unit(): units {
-        return this._unit;
-    }
-
-    public set unit(newUnit: units) {
-        this._unit = newUnit;
+    /**
+     * 
+     * @param priceUnit unit of measurement the price will be based on
+     * @param mass provide if the desired unit to convert the price to is bushels
+     * @returns price per unit ($/unit)
+     */
+    public getPricePerUnit(priceUnit: units, mass: Mass): number {
+        const unitConversion = mass.conversions.get(priceUnit) / mass.conversions.get(this.unit);
+        return this.amount / unitConversion;
     }
 
 }
+
+
