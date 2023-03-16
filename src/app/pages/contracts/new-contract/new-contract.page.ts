@@ -1,10 +1,8 @@
-import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { Firestore, addDoc, collection, CollectionReference, doc, docData, DocumentReference } from '@angular/fire/firestore';
-import { FormArray, FormControl, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { Firestore, doc } from '@angular/fire/firestore';
+import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
-import { Observable, Subscription, lastValueFrom } from 'rxjs';
-import { WeightUnits } from '@shared/WeightUnits/weight-units';
-import { Weight } from '@shared/Weight/weight';
+import { Observable, lastValueFrom } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectClientComponent } from './components/select-client/select-client.component';
 import { Contact } from '@shared/classes/contact';
