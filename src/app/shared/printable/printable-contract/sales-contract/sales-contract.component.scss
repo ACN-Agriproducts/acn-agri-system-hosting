@@ -1,7 +1,11 @@
-.header-section {
-    border: black solid 1px;
+
+.header-section, .info-chart {
     font-size: 13px !important;
     line-height: 150% !important;
+}
+
+.header-section {
+    border: black solid 1px;
 }
 
 #company-logo {

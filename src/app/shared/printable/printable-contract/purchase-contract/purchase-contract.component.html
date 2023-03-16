@@ -152,7 +152,7 @@
 
   <div class="terms-and-conditions">
     
-      <p><span class="underline-small">{{ contractForm.clientInfo?.name ?? "" }}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  <b>ACN AGRIPRODUCTS LLC</b> (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
+      <p><span class="underline-small">{{ contractForm.clientInfo?.name ?? "_______________" }}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO  <b>ACN AGRIPRODUCTS LLC</b> (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.</p>
     
       <p>FAILURE TO ADVISE <b>ACN AGRIPRODUCTS LLC</b> IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.</p>
       
@@ -166,7 +166,7 @@
       
       <p>The Buyer is purchasing the following Goods from the Seller: {{ contractForm.product?.id }}	</p>
       
-      <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span>{{ (contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2' }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+      <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <u>{{ ((contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2') ?? "________" }}</u>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
       <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods: <br>
       •	<br>

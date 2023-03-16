@@ -16,9 +16,6 @@ export class SalesContractComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    console.log(this.contractForm)
-    console.log(this.contractForm.product.id)
-  }
+  ngOnInit() { }
 
 }
