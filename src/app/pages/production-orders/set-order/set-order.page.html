@@ -1,50 +1,85 @@
 <app-header-toolbar titulo="New Bagging Orders"></app-header-toolbar>
 
 <ion-content class="ion-padding">
-    <div class="form-column">
-        <mat-card>
-            <mat-card-header>
-                <mat-card-subtitle>Info</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <mat-form-field>
-                    <mat-label>Plant</mat-label>
-                    <mat-select [(ngModel)]="order.plant" appearance="fill">
-                        <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">{{plant.ref.id | titlecase}}</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-card-content>
-            <mat-card-actions>
-                <button mat-button (click)="addItem()">+ Add Item</button>
-            </mat-card-actions>
-        </mat-card>
-        <mat-card *ngFor="let item of order.orderInfo; let index = index" class="item-card">
-            <mat-card-header>
-                <mat-card-subtitle>Item {{index + 1}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <div class="form-row">
-                    <mat-form-field>
-                        <mat-label>Item</mat-label>
-                        <mat-select [(ngModel)]="item.itemRef" appearance="fill" (ngModelChange)="itemSelected(item)">
-                            <mat-option *ngFor="let invoiceItem of invoiceItems$ | async" [value]="invoiceItem.ref">{{invoiceItem.name}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field>
-                        <mat-label>quantity</mat-label>
-                        <input matInput [(ngModel)]="item.quantity" appearance="fill" type="number">
-                    </mat-form-field>
-                    <button mat-icon-button (click)="deleteItem(index)">
-                        <mat-icon color="warn">delete</mat-icon>
-                    </button>
-                </div>
-                <mat-checkbox [(ngModel)]="item.affectsInventory">
-                    Affects inventory
-                </mat-checkbox>
-            </mat-card-content>
-        </mat-card>
-        <div class="form-action-bar">
-            <button mat-flat-button color="primary" (click)="submit()">Submit</button>
-        </div>
-    </div>
+	<div class="content-column">
+		<div class="form-column">
+			<mat-card>
+				<mat-card-header>
+					<mat-card-subtitle>Info</mat-card-subtitle>
+				</mat-card-header>
+				<mat-card-content>
+					<div class="form-row">
+						<mat-form-field>
+							<mat-label>Plant</mat-label>
+							<mat-select [(ngModel)]="order.plant" appearance="fill" (ngModelChange)="plantChange()">
+								<mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">{{plant.ref.id |
+									titlecase}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</mat-card-content>
+				<mat-card-actions>
+					<button mat-button (click)="addItem()">+ Add Item</button>
+				</mat-card-actions>
+			</mat-card>
+			<mat-card *ngFor="let item of order.orderInfo; let index = index" class="item-card">
+				<mat-card-subtitle>Item {{index + 1}}</mat-card-subtitle>
+				<mat-card-content>
+					<div class="form-row">
+						<mat-form-field>
+							<mat-label>Item</mat-label>
+							<mat-select [(ngModel)]="item.itemRef" appearance="fill" (ngModelChange)="itemSelected(item)">
+								<mat-option *ngFor="let invoiceItem of invoiceItems$ | async"
+									[value]="invoiceItem.ref">{{invoiceItem.name}}</mat-option>
+							</mat-select>
+						</mat-form-field>
+						<mat-form-field class="quantity-field">
+							<mat-label>Quantity</mat-label>
+							<input matInput [(ngModel)]="item.quantity" appearance="fill" type="number">
+						</mat-form-field>
+						<button mat-icon-button (click)="deleteItem(index)">
+							<mat-icon color="warn">delete</mat-icon>
+						</button>
+					</div>
+					<div class="item-action-bar">
+						<mat-checkbox [(ngModel)]="item.affectsInventory" (ngModelChange)="affectsInventoryChange(item)">
+							Affects inventory
+						</mat-checkbox>
+						<button mat-mini-fab *ngIf="item.affectsInventory" (click)="addItemInfo(item)" color="primary">
+							<mat-icon>add</mat-icon>
+						</button>
+					</div>
+					<ng-container *ngIf="item.affectsInventory">
+						<hr class="solid">
+						<mat-card-subtitle>Inventory info</mat-card-subtitle>
+						<div class="form-row" *ngFor="let info of item.inventoryInfo; let index = index">
+							<button mat-icon-button (click)="deleteItemInfo(item, index)">
+								<mat-icon color="warn">delete</mat-icon>
+							</button>
+							<mat-form-field>
+								<mat-label>Product</mat-label>
+								<mat-select [(ngModel)]="info.product">
+									<mat-option *ngFor="let product of productsList$ | async" [value]="product.ref.id">{{product.ref.id}}</mat-option>
+								</mat-select>
+							</mat-form-field>
+							<mat-form-field class="quantity-field">
+								<mat-label>Quantity</mat-label>
+								<input matInput [(ngModel)]="info.quantity">
+								<span matSuffix>lbs</span>
+							</mat-form-field>
+							<mat-form-field>
+								<mat-label>Storage</mat-label>
+								<mat-select [disabled]="!plant" [(ngModel)]="info.tank">
+									<mat-option *ngFor="let storage of plant?.inventoryNames" [value]="storage">{{storage}}</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</ng-container>
+				</mat-card-content>
+			</mat-card>
+			<div class="form-action-bar">
+				<button mat-flat-button color="primary" (click)="submit()">Submit</button>
+			</div>
+		</div>
+	</div>
 </ion-content>
