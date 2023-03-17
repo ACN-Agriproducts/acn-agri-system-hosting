@@ -1,34 +1,50 @@
 <app-header-toolbar titulo="New Bagging Orders"></app-header-toolbar>
 
 <ion-content class="ion-padding">
-    <mat-card>
-        <mat-card-header>Form</mat-card-header>
-        <mat-card-content>
-            <!-- <mat-form-field>
-                <input matInput [matDatepicker]="picker">
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field> -->
-            <mat-form-field>
-                <mat-select [(ngModel)]="order.plant">
-                    <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">{{plant.ref.id}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-select [(ngModel)]="order.orderInfo[0].itemRef">
-                    <mat-option *ngFor="let invoiceItem of invoiceItems$ | async" [value]="invoiceItem.ref">{{invoiceItem.name}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-                <mat-label>quantity</mat-label>
-                <input matInput [(ngModel)]="order.orderInfo[0].quantity">
-            </mat-form-field>
-            <mat-checkbox [(ngModel)]="order.orderInfo[0].affectsInventory">
-                Affects inventory
-            </mat-checkbox>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-button (click)="submit()">Submit</button>
-        </mat-card-actions>
-    </mat-card>
+    <div class="form-column">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-subtitle>Info</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-form-field>
+                    <mat-label>Plant</mat-label>
+                    <mat-select [(ngModel)]="order.plant" appearance="fill">
+                        <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">{{plant.ref.id | titlecase}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-button (click)="addItem()">+ Add Item</button>
+            </mat-card-actions>
+        </mat-card>
+        <mat-card *ngFor="let item of order.orderInfo; let index = index" class="item-card">
+            <mat-card-header>
+                <mat-card-subtitle>Item {{index + 1}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="form-row">
+                    <mat-form-field>
+                        <mat-label>Item</mat-label>
+                        <mat-select [(ngModel)]="item.itemRef" appearance="fill" (ngModelChange)="itemSelected(item)">
+                            <mat-option *ngFor="let invoiceItem of invoiceItems$ | async" [value]="invoiceItem.ref">{{invoiceItem.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>quantity</mat-label>
+                        <input matInput [(ngModel)]="item.quantity" appearance="fill" type="number">
+                    </mat-form-field>
+                    <button mat-icon-button (click)="deleteItem(index)">
+                        <mat-icon color="warn">delete</mat-icon>
+                    </button>
+                </div>
+                <mat-checkbox [(ngModel)]="item.affectsInventory">
+                    Affects inventory
+                </mat-checkbox>
+            </mat-card-content>
+        </mat-card>
+        <div class="form-action-bar">
+            <button mat-flat-button color="primary" (click)="submit()">Submit</button>
+        </div>
+    </div>
 </ion-content>
