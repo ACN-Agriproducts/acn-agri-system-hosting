@@ -10,6 +10,12 @@
 				<mat-card-content>
 					<div class="form-row">
 						<mat-form-field>
+							<mat-label>Date</mat-label>
+							<input matInput [(ngModel)]="order.date" disabled [matDatepicker]="picker">
+							<mat-hint>MM/DD/YYYY</mat-hint>
+							<mat-datepicker #picker></mat-datepicker>
+						</mat-form-field>
+						<mat-form-field>
 							<mat-label>Plant</mat-label>
 							<mat-select [(ngModel)]="order.plant" appearance="fill" (ngModelChange)="plantChange()">
 								<mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">{{plant.ref.id |

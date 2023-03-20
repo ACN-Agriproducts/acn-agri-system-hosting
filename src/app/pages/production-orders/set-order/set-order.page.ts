@@ -31,6 +31,7 @@ export class SetOrderPage implements OnInit {
 
   ngOnInit() {
     this.order = new ProductionOrder();
+    this.order.date = new Date();
     this.order.orderInfo = [];
     this.addItem();
 
@@ -79,7 +80,6 @@ export class SetOrderPage implements OnInit {
   }
 
   async submit() {
-    this.order.date = new Date();
     this.order.status = "pending";
     this.order.orderOwner = User.getDocumentReference(this.db, this.session.getUser().uid);
     this.order.orderOwnerName = this.session.getUser().name;
