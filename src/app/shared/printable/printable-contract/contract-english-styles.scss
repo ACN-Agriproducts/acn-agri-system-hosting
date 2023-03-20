@@ -29,14 +29,6 @@ h1{
     text-align: right;
 }
 
-.info-chart {
-	margin-bottom: 20px;
-}
-
-.terms-and-conditions {
-	text-align: justify;
-}
-
 #extra-info-header {
     border: 2px solid black;
 }
@@ -54,16 +46,42 @@ h1{
     border: 2px solid black;
 }
 
+.info-chart {
+	margin-bottom: 20px;
+}
+
+.terms-and-conditions {
+	text-align: justify;
+}
+
+.page-footer {
+    text-align: center;
+    font-weight: bold;
+}
+
+.signatures {
+    margin: unset;
+    margin-bottom: 20px;
+    font-weight: unset;
+    font-size: 9pt;
+    font-family: Calibri;
+    text-align: left;
+
+    .signature-line {
+        height: unset;
+        margin-top: 5px;
+    }
+}
+
+
+
 .grid-12 {
     display: grid;
-
     grid-template-columns: repeat(12, 1fr);
     gap: 5px;
 }
-
 .grid-3 {
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
 }
@@ -71,19 +89,15 @@ h1{
 .column-size-1 {
     grid-column-end: span 1;
 }
-
 .column-size-2 {
     grid-column-end: span 2;
 }
-
 .column-size-3 {
     grid-column-end: span 3;
 }
-
 .column-size-4 {
     grid-column-end: span 4;
 }
-
 .column-size-5 {
     grid-column-end: span 5;
 }

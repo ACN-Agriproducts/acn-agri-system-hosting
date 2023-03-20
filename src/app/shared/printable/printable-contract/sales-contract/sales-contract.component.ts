@@ -6,8 +6,8 @@ import { Contract } from '@shared/classes/contract';
   templateUrl: './sales-contract.component.html',
   styleUrls: [
     './sales-contract.component.scss',
-    '../printable-contract-styles.scss',
-    '../printable-contract-english.scss'
+    '../contract-styles.scss',
+    '../contract-english-styles.scss'
   ],
 })
 export class SalesContractComponent implements OnInit {

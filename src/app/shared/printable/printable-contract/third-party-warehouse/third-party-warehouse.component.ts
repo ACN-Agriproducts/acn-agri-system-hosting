@@ -6,7 +6,7 @@ import { Contract } from '@shared/classes/contract';
   templateUrl: './third-party-warehouse.component.html',
   styleUrls: [
     './third-party-warehouse.component.scss',
-    '../printable-contract-styles.scss'
+    '../contract-styles.scss'
   ],
 })
 export class ThirdPartyWarehouseComponent implements OnInit {
