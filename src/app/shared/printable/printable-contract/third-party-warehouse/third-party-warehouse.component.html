@@ -55,7 +55,7 @@
     </ol>
     <div class="text-align-center section-header-spaced">CLAUSULAS</div>
     <div class="text-align-justify">
-        <b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por <u>{{ (contractForm.quantity | massInUnit:"mTon" | number:".3") || "XXXX" }}</u> toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
+        <b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por <u>{{ contractForm.quantity | massInUnit:"mTon" | number:".3" }}</u> toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
 		<br>
 		<b>SEGUNDA. &#8211; CALIDAD.</b> - “EL VENDEDOR” acepta proporcionar a “EL COMPRADOR” las facilidades necesarias para realizar inspecciones de la calidad del “EL PRODUCTO” dentro de sus instalaciones.
 		<br>
@@ -129,12 +129,16 @@
     </p>
     <p class="text-align-center page-title">“ANEXO 1”</p>
     <div class="party-info">
-        <!-- CONTINUE FROM HERE -->
-        <span class="party-role">VENDEDOR:</span> 
+        <span class="party-role">VENDEDOR:</span>
         <span class="party-name">{{ contractForm.clientInfo?.name ?? "--"}}</span>
-        <span>CARR.  A VICTORIA</span>
-        <span>SAN FERNANDO, TAMAULIPAS, MX        C.P. 87600</span>
-        <span>R.F.C.: CAA861206992</span>
+        <ng-container *ngIf="contractForm.clientInfo">
+            <span>{{ contractForm.clientInfo?.streetAddress }}</span>
+            <span>
+                {{ contractForm.clientInfo.city }}{{ contractForm.clientInfo.state && contractForm.clientInfo.city ? ",": "" }}
+                {{ contractForm.clientInfo.state }}{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode ? ",": "" }} {{ contractForm.clientInfo.zipCode }}
+            </span>
+        </ng-container>
+        <span>R.F.C.: {{ "" }}</span>
         <span class="party-role">COMPRADOR:</span>
         <span class="party-name">AGROPECUARIA LA CAPILLA DEL NORESTE, S.A. DE C.V.</span>
         <span>ZARAGOZA ENTRE PRIMERA Y SEGUNDA S/N</span>
@@ -144,7 +148,7 @@
     <div class="contract-info">
         <div class="contract-info-row">
             <div>FECHA:</div>
-            <div>05 DE ENERO DE 2023</div>
+            <div>{{ "--" }}</div>
         </div>
         <div class="contract-info-row">
             <div>PRODUCTO:</div>
@@ -156,19 +160,21 @@
         </div>
         <div class="contract-info-row">
             <div>PRECIO:</div>
-            <div>$5,550.00 (CINCO MIL QUINIENTOS CINCUENTA PESOS 00/100 MN)</div>
+            <div>
+                $ {{ ((contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2') ?? "--" }}
+            </div>
         </div>
         <div class="contract-info-row">
             <div>CANTIDAD:</div>
-            <div>5000 (CINCOMIL) TONELADAS MÉTRICAS +- 5%</div>
+            <div>{{ contractForm.quantity | massInUnit:"mTon" | number:".3" }} +- 5%</div>
         </div>
         <div class="contract-info-row">
             <div>UNIDAD DE MEDIDA:</div>
-            <div>TONELADA MÉTRICA</div>
+            <div>{{ "--" }}</div>
         </div>
         <div class="contract-info-row">
             <div>CALIDAD GARANTIZADA:</div>
-			<div>Grado: U.S. 2 OFICIAL</div>
+			<div>Grado: U.S. {{ contractForm.grade }} OFICIAL</div>
         </div>
         <div class="contract-info-row">
             <div>HUMEDAD MÁXIMA:</div>
@@ -176,15 +182,15 @@
         </div>
         <div class="contract-info-row">
             <div>FORMA DE ENTREGA:</div>
-			<div>CAMIÓN POR CUENTA DEL COMPRADOR</div>
+			<div>CAMIÓN POR CUENTA DEL {{ "--" }}</div>
         </div>
         <div class="contract-info-row">
             <div>SEGURO DE TRÁNSITO:</div>
-            <div>COMPRADOR</div>
+            <div>{{ "--" }}</div>
         </div>
         <div class="contract-info-row">
             <div>LUGAR DE ENTREGA: </div>
-            <div>BODEGA</div>
+            <div>{{ "--" }}</div>
         </div>
         <div class="contract-info-row">
             <div>PESOS:</div>
@@ -196,7 +202,9 @@
         </div>
         <div class="contract-info-row">
             <div>PERIODO DE ENTREGA:</div>
-			<div class="period">02-DEC-21<b>AL</b>08-DEC-21</div>
+			<div class="period">
+                {{ (contractForm.delivery_dates?.begin | date:"dd-MMM-yy") ?? "--" }}<b>AL</b>{{ (contractForm.delivery_dates?.end | date:"dd-MMM-yy") ?? "--" }}
+            </div>
         </div>
 		<div class="contract-info-row">
             <div>ALMACENAJE Y FUMIGACIÓN:</div>
