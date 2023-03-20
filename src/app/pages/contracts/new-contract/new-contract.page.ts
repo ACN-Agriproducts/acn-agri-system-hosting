@@ -226,15 +226,20 @@ export class NewContractPage implements OnInit {
   public selectProduct(): void {
     this.contract.product = this.chosenProduct.ref.withConverter(Product.converter);
     this.contract.productInfo = this.chosenProduct.getProductInfo();
-    this.contract.quantity.defineBushels(this.chosenProduct);
+    this.recalculateMass();
   }
 
-  public recalculateMass(event: number | units) {
-    const params: [number, units] = typeof event === "number" ? 
-      [event, this.contract.quantity.defaultUnits] :
-      [this.contract.quantity.amount, event];
+  public recalculateMass(event?: number | units): void {
+    if (!event) {
+      this.contract.quantity = new Mass(this.contract.quantity.amount, this.contract.quantity.defaultUnits);
+    }
+    else if (typeof event === "number") {
+      this.contract.quantity = new Mass(event, this.contract.quantity.defaultUnits);
+    }
+    else if (typeof event) {
+      this.contract.quantity = new Mass(this.contract.quantity.amount, event);
+    }
 
-    this.contract.quantity = new Mass(...params);
     this.contract.quantity.defineBushels(this.contract.productInfo);
   }
 

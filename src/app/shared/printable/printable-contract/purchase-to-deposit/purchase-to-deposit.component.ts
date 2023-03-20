@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Contract } from '@shared/classes/contract';
 
 @Component({
   selector: 'contract-purchase-to-deposit',
@@ -9,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class PurchaseToDepositComponent implements OnInit {
+  @Input() contractForm: Contract;
 
   constructor() { }
 

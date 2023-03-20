@@ -1,22 +1,22 @@
-<div class="page-style main text-align-justify">
+<div class="page-style main">
   <div class='header-section' *ngIf="contractForm">
     <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
     <h1><b>CONTRACT</b></h1>
     <div class='grid-12'>
-      <div class='column-size-4'>
+      <div class='column-size-4 party-info'>
         <div class='party-header'><b>BUYER</b></div>
         <ng-container *ngIf="contractForm.clientInfo">
-          <span><b>{{ contractForm.clientInfo?.name ?? "" }}</b></span><br>
-          <span>{{ contractForm.clientInfo.streetAddress }}</span><br>
-          <span>{{ contractForm.clientInfo.city }}{{ contractForm.clientInfo.state && contractForm.clientInfo.city? ",": "" }}
-            {{ contractForm.clientInfo.state }}{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode? ",": "" }} {{ contractForm.clientInfo.zipCode }}</span><br>
-            <span>{{ contractForm.clientInfo.phoneNumber }}</span><br>
+          <span><b>{{ contractForm.clientInfo.name }}</b></span>
+          <span>{{ contractForm.clientInfo.streetAddress }}</span>
+          <span>{{ contractForm.clientInfo.city }}{{ contractForm.clientInfo.state && contractForm.clientInfo.city ? ",": "" }}
+            {{ contractForm.clientInfo.state }}{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode ? ",": "" }} {{ contractForm.clientInfo.zipCode }}</span>
+            <span>{{ contractForm.clientInfo.phoneNumber }}</span>
         </ng-container>
-        <span></span><br>
+        <br>
         <div class='party-header'><b>SELLER</b></div>
-        <span><b>ACN AGRIPRODUTS LLC</b></span><br>
-        <span>1512 RANCHO TOLUCA RD</span><br>
-        <span>WESLACO TX. 78596</span><br>
+        <span><b>ACN AGRIPRODUTS LLC</b></span>
+        <span>1512 RANCHO TOLUCA RD</span>
+        <span>WESLACO TX. 78596</span>
       </div>
       <div class='column-size-2'></div>
       <div class='column-size-3'>
@@ -52,7 +52,7 @@
         <span><b>COMMODITY:</b></span><br>
         <span><b>QUANTITY:</b></span>
       </div>
-      <div class='column-size-3'>
+      <div class='column-size-3 text-align-right'>
         <span>{{ contractForm.product?.id }}</span><br>
         <div class='grid-3'>
           <div class='column-size-2'>
@@ -70,7 +70,7 @@
       <div class='column-size-1'>
         <span class='right-justify'><b>MST:</b></span>
       </div>
-      <div class='column-size-1'>
+      <div class='column-size-1 text-align-right'>
         <span>15%</span>
       </div>
       <div class='column-size-1'></div>
@@ -80,14 +80,14 @@
         <span><b>TRANSPORTATION:</b></span><br>
         <span><b>REFERENCE:</b></span>
       </div>
-      <div class='column-size-2'>
+      <div class='column-size-2 text-align-right'>
         <span>{{ contractForm.paymentTerms.origin ? "ORIGIN" : "DESTINATION" }}</span><br>
         <span>U.S. {{ contractForm.grade }} OR BETTER</span><br>
         <span>TRUCK</span><br>
         <span>{{ contractForm.aflatoxin }} OR LESS</span>
       </div>
     </div>
-    <div id='extra-info-header'>
+    <div id='extra-info-header' class="text-align-center">
       <div class='grid-12'>
         <div class='column-size-1'><b>STATUS</b></div>
         <div class='column-size-4'><b>DELIVERY DATES</b></div>
@@ -112,11 +112,11 @@
             <!-- EVERY {{ contractForm.paymentTerms.paymentTerms }} {{ contractForm.paymentTerms.measurement | uppercase }} {{ contractForm.paymentTerms.before? "PREPAID": "" }} -->
           </ng-container>
         </div>
-        <div class='column-size-2'>
+        <div class='column-size-2 text-align-right'>
           {{ contractForm.price.getPricePerUnit("CWT", contractForm.quantity) | number:'0.5-5' }}<br>
           {{ contractForm.price.getPricePerUnit("mTon", contractForm.quantity) | number:'0.5-5' }}
         </div>
-        <div class='column-size-2'>
+        <div class='column-size-2 text-align-right'>
           CWT<br>
           M. TON
         </div>
@@ -145,12 +145,16 @@
     </div>
   </div>
 
+  <div class="terms-and-conditions">
     <p class="introduction">
-        SELLER OBJECTS TO THE INCLUSION OF ANY DIFFERENT OR ADDITIONAL TERMS PROPOSED BY BUYER. IF PRICE OF GRAIN IS ON A PREMIUM BASIS, CONTRACT TO BE PRICED OR SPREAD PRIOR TO THE LAST TRADING
-        DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.
-        <br>
-        <u>{{ contractForm.clientInfo?.name ?? "_______________" }}</u> (“BUYER”) AGREES TO AND CONFIRMS THE BUY OF THE FOLLOWING DESCRIBED GOODS TO <b>ACN AGRIPRODUCTS LLC</b> (“SELLER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.
-        FAILURE TO ADVISE <b>ACN AGRIPRODUCTS LLC</b> IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.
+      SELLER OBJECTS TO THE INCLUSION OF ANY DIFFERENT OR ADDITIONAL TERMS PROPOSED BY BUYER. IF PRICE OF GRAIN IS ON A PREMIUM BASIS, CONTRACT TO BE PRICED OR SPREAD PRIOR TO THE LAST TRADING
+      DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.
+      <br>
+      <br>
+      <span class="fill-line">{{ contractForm.clientInfo?.name }}</span> (“BUYER”) AGREES TO AND CONFIRMS THE BUY OF THE FOLLOWING DESCRIBED GOODS TO <b>ACN AGRIPRODUCTS LLC</b> (“SELLER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.
+      <br>
+      <br>
+      FAILURE TO ADVISE <b>ACN AGRIPRODUCTS LLC</b> IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.
     </p>
     
     <p class="header">TERMS AND CONDITIONS</p>
@@ -163,7 +167,7 @@
     <br>
     The Buyer is purchasing the following Goods from the Seller: {{ contractForm.product?.id }}</p>
     
-    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <u>{{ ((contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2') ?? "________" }}</u>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ ((contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2') }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
     <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods:
     <br>
@@ -173,7 +177,7 @@
     <br>
     The Buyer must pay the Purchase Price immediately after receipt of the Goods unless the Parties have agreed on something different in writing.</p>
     
-    <p>In case of late payment, the seller can terminate the agreement for default by the buyer and charge the following late fee: _______$.</p>
+    <p>In case of late payment, the seller can terminate the agreement for default by the buyer and charge the following late fee: <span class="fill-line">{{ "" }}</span>$.</p>
     
     <p><b>QUALITY:</b> Seller warrants that the Goods sold meets conform to the description (grades and quality) on the face of this Contract, are free from defects, are free from liens and encumbrances, are suited for their intended use and are merchantable.</p>
     
@@ -189,7 +193,7 @@
     
     <p><b>SHIPMENTS:</b> If shipping instructions are not set forth herein, Seller will make delivery in a timely manner in accordance with Buyer’s instructions.</p>
     
-    <p><b>NON-DELIVERY:</b> If Buyer (1) fails to comply with receiving instructions within the time specified, (i) fails to receive any shipments therefore, () refuses to execute any receive as required hereunder, (iv) is otherwise in breach of Contract, Seller may treat such default as a total breach of this Contract, or a partial breach of this Contract (e. a breach only as to the individual shipment or installment).</p>
+    <p><b>NON-DELIVERY:</b> If Buyer (i) fails to comply with receiving instructions within the time specified, (ii) fails to receive any shipments therefore, (iii) refuses to execute any receive as required hereunder, (iv) is otherwise in breach of Contract, Seller may treat such default as a total breach of this Contract, or a partial breach of this Contract (e. a breach only as to the individual shipment or installment).</p>
     
     <p><b>FORCE MAJEURE:</b> Seller shall not be liable for delay in Seller’s performance or failure when such delay or failure in due to unforeseen causes beyond its control and without its fault or negligence, including but not limited to acts of God, acts of public enemy, governmental action, fires floods, earthquakes, epidemics, quarantine restriction, labor difficulties, freight embargoes, transportation shortages or unusually severe weather buyer shall not be required to pay for or to accept Seller’s application of on title to any Goods for so long as Seller is delayed in performance as a result of one or more of the events described in the preceding sentence.</p>
     
@@ -204,26 +208,22 @@
     <p><b>MODIFICATIONS:</b> It is agreed that the terms herein set forth and the trading rules set from hereto (to the extent that they are not in conflict with the terms stated in the preceding contract Special instructions) constitute the entire contract between the parties, and there shall be no modifications or alterations except with the consent of both parties in writing.</p>
     
     <p>This Contract shall be governed by the laws of the State of Texas.</p>
-
     <b class="confirmation">CONFIRMATION</b>
-    <div class="signatures sell-contract">
-        <div>
-            <b>SELLER: ACN AGRIPRODUCTS LLC</b>
-            <br>
-            <div class="signature-line">BY:</div>
-            <b>Ruben D. Puga/General Manager</b>
-            <br>
-            Date:
-        </div>
-        <div>
-            <b>BUYER: {{ contractForm.clientInfo?.name ?? "" }}</b>
-            <br>
-            <div class="signature-line">BY:</div>
-            Name/title:
-            <br>
-            Date:
-        </div>
+    <div class="signatures contract-english">
+      <div class="party-signature">
+        <b>SELLER: ACN AGRIPRODUCTS LLC</b>
+        <div class="signature-line">BY:</div>
+        <span>Name/title: <b>Ruben D. Puga/General Manager</b></span>
+        <span>Date:</span>
+      </div>
+      <div class="party-signature">
+        <b>BUYER: {{ contractForm.clientInfo?.name ?? "" }}</b>
+        <div class="signature-line">BY:</div>
+        <span>Name/title:</span>
+        <span>Date:</span>
+      </div>
     </div>
     
-    <p><b>PLEASE SIGN ONE COPY AND RETURN TO ABOVE ADDRESS</b></p>
+    <p class="page-footer">PLEASE SIGN ONE COPY AND RETURN TO ABOVE ADDRESS</p>
+  </div>
 </div>

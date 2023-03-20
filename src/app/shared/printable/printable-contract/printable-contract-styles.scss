@@ -11,7 +11,7 @@
 	suffix: ") ";
   }
 
-$border-black: 1px solid black;
+$border-black: 1pt solid black;
 $text-highlight: #F2F2F2;
 
 .page-style {
@@ -41,6 +41,13 @@ $text-highlight: #F2F2F2;
 
 .introduction {
 	font-size: 9pt;
+	text-transform: uppercase;
+}
+
+.fill-line {
+	display: inline-flex;
+	border-bottom: 1pt solid black;
+	min-width: 4em;
 }
 
 .section-header-spaced {
@@ -89,18 +96,25 @@ $text-highlight: #F2F2F2;
 	margin: 20px;
 	font-weight: bold;
 	page-break-inside: avoid;
+	text-align: center;
+
+	.party-signature {
+		display: flex;
+		flex-direction: column;
+	}
 
 	.signature-line {
 		height: 40px;
 		border-bottom: $border-black;
 	}
 
-	&.sell-contract {
+	&.contract-english {
 		margin: unset;
 		margin-bottom: 20px;
 		font-weight: unset;
 		font-size: 9pt;
 		font-family: Calibri;
+		text-align: left;
 
 		.signature-line {
 			height: unset;
@@ -115,6 +129,7 @@ $text-highlight: #F2F2F2;
 
 .anexo-1 {
 	font-size: 8pt;
+	text-transform: uppercase;
 
 	.page-header {
 		font-size: 10pt;
@@ -125,6 +140,7 @@ $text-highlight: #F2F2F2;
 			font-family: "Calibri";
 		}
 		.contract-id {
+			text-transform: none;
 			font-family: "Calibri Math";
 			.emphasis { color: rgb(225, 0, 0) }
 		}
@@ -135,16 +151,16 @@ $text-highlight: #F2F2F2;
 	}
 }
 
-.buyer-seller {
+.party-info {
 	display: flex;
 	flex-flow: column nowrap;
 	margin-bottom: 20px;
 }
-.buyer-seller-title {
+.party-role {
 	font-size: 9pt;
 	font-weight: bold;
 }
-.buyer-seller-name {
+.party-name {
 	background-color: $text-highlight;
 	color: #2F5496;
 	font-weight: bold;

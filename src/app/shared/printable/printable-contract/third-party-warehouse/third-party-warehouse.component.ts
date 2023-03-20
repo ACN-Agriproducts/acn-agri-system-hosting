@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Contract } from '@shared/classes/contract';
 
 @Component({
   selector: 'contract-third-party-warehouse',
@@ -9,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class ThirdPartyWarehouseComponent implements OnInit {
+  @Input() contractForm: Contract;
 
   constructor() { }
 
   ngOnInit() {}
+
+  ngOnChanges() {
+    console.log(this.contractForm)
+  }
 
 }
