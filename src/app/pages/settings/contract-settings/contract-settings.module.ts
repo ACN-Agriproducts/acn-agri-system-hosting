@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ContractSettingsPageRoutingModule } from './contract-settings-routing.module';
 
 import { ContractSettingsPage } from './contract-settings.page';
+import { CoreModule } from '@core/core.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ContractSettingsPageRoutingModule
+    ContractSettingsPageRoutingModule,
+    CoreModule
   ],
   declarations: [ContractSettingsPage]
 })
