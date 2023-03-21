@@ -1,4 +1,5 @@
-import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData } from "@angular/fire/firestore";
+import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc } from "@angular/fire/firestore";
+import { Company } from "./company";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class ContractSettings extends FirebaseDocInterface {
@@ -52,7 +53,15 @@ export class ContractSettings extends FirebaseDocInterface {
         }
     }
 
-    //public get(db: Firestore, )
+    public static getRef(db: Firestore, company: string): DocumentReference<ContractSettings> {
+        return doc(Company.getCompanyRef(db, company), "settings/contracts").withConverter(ContractSettings.converter);
+    }
+
+    public static getDocument(db: Firestore, company: string): Promise<ContractSettings> {
+        return getDoc(ContractSettings.getRef(db, company)).then(result => {
+            return result.data();
+        });
+    }
 }
 
 interface FormField {
