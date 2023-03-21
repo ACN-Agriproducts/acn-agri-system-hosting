@@ -5,23 +5,30 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Ticket } from "./ticket";
 
 export class Contact extends FirebaseDocInterface {
-    caat: string;
-    city: string;
-    metacontacts: MetaContact[];
-    name: string;
-    state: string;
-    streetAddress: string;
-    tags: string[];
-    zipCode: string;
+    private _curp: string;
+    public caat: string;
+    public city: string;
+    public metacontacts: MetaContact[];
+    public name: string;
+    public publicDeedDate: Date;
+    public publicDeedId: string;
+    public state: string;
+    public streetAddress: string;
+    public tags: string[];
+    public zipCode: string;
+
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contact.converter);
         const data = snapshot.data();
 
+        this._curp = data._curp;
         this.caat = data.caat;
         this.city = data.city;
         this.metacontacts = [];
         this.name = data.name;
+        this.publicDeedDate = data.publicDeedDate;
+        this.publicDeedId = data.publicDeedId;
         this.state = data.state;
         this.streetAddress = data.streetAddress;
         this.tags = data.tags;
@@ -35,10 +42,13 @@ export class Contact extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: Contact): DocumentData {
             return {
-                caat: data.caat, 
+                _curp: data._curp,
+                caat: data.caat,
                 city: data.city,
                 metacontacts: data.metacontacts,
                 name: data.name,
+                publicDeedDate: data.publicDeedDate,
+                publicDeedId: data.publicDeedId,
                 state: data.state,
                 streetAddress: data.streetAddress,
                 tags: data.tags,
@@ -92,6 +102,18 @@ export class Contact extends FirebaseDocInterface {
         }
 
         return tagsInclude;
+    }
+
+    public set curp(newCurp: string) {
+        if (newCurp.length !== 18) {
+            console.warn("CURP must be 18 digits");
+            return;
+        }
+        this._curp = newCurp;
+    }
+
+    public get curp(): string {
+        return this._curp;
     }
 }
 

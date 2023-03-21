@@ -25,10 +25,10 @@ export class Contract extends FirebaseDocInterface {
     loads: number;
     market_price: number;
     paymentTerms: PaymentTerms;
-    plants: string[];
     pdfReference: string;
-    pricePerBushel: number;
+    plants: string[];
     price: Price;
+    pricePerBushel: number;
     printableFormat: string;
     product: DocumentReference<Product>;
     productInfo: ProductInfo;
@@ -284,7 +284,7 @@ export class PaymentTerms {
     before: boolean;
     measurement: string;
     origin: boolean;
-    paymentTerms: number
+    paymentTerms: number;
 
     constructor(data: any) {
         this.before = data.before;
@@ -295,6 +295,10 @@ export class PaymentTerms {
 }
 
 export class ProductInfo {
+    brokenGrain: number;
+    damagedGrain: number;
+    foreignMatter: number;
+    impurities: number;
     moisture: number;
     name: string;
     weight: number;

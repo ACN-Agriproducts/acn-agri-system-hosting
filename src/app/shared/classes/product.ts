@@ -5,7 +5,11 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
 
 export class Product extends FirebaseDocInterface {
+    public brokenGrain: number;
+    public damagedGrain: number;
+    public foreignMatter: number;
     public forSale: Mass;
+    public impurities: number;
     public moisture: number;
     public owned: Mass;
     public ownedPhysical: Mass;
@@ -18,7 +22,11 @@ export class Product extends FirebaseDocInterface {
         const data = snapshot.data();
         const unit = FirebaseDocInterface.session.getDefaultUnit();
 
+        this.brokenGrain = data.brokenGrain;
+        this.damagedGrain = data.damagedGrain;
+        this.foreignMatter = data.foreignMatter;
         this.forSale = new Mass(data.forSale, unit);
+        this.impurities = data.impurities
         this.moisture = data.moisture;
         this.owned = new Mass(data.owned, unit);
         this.ownedPhysical = new Mass(data.ownedPhysical, unit);
@@ -29,12 +37,16 @@ export class Product extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: Product): DocumentData {
             return {
+                brokenGrain: data.brokenGrain,
+                damagedGrain: data.damagedGrain,
+                foreignMatter: data.foreignMatter,
                 forSale: data.forSale.get(),
+                impurities: data.impurities,
                 moisture: data.moisture,
                 owned: data.owned.get(),
                 ownedPhysical: data.ownedPhysical.get(),
                 physicalInventory: data.physicalInventory.get(),
-                weight: data.weight,
+                weight: data.weight
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Product {
@@ -48,9 +60,13 @@ export class Product extends FirebaseDocInterface {
 
     public getProductInfo(): ProductInfo {
         return {
+            brokenGrain: null,
+            damagedGrain: null,
+            foreignMatter: null,
+            impurities: null,
             moisture: this.moisture,
             name: this.getName(),
-            weight: this.weight
+            weight: this.weight,
         }
     }
 
