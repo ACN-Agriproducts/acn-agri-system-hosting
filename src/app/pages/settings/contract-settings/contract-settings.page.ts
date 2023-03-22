@@ -21,8 +21,6 @@ export class ContractSettingsPage implements OnInit {
   ngOnInit() {
     ContractSettings.getDocument(this.db, this.session.getCompany()).then(result => {
       this.settings = this.generateIfEmpty(result);
-
-      console.log(this.settings);
     });
   }
 
@@ -69,13 +67,11 @@ export class ContractSettingsPage implements OnInit {
   }
 
   removeGroup(contractName: string, groupName: string) {
-    console.log(contractName, groupName, this.settings.fieldGroupOrder[contractName].findIndex(n => n == groupName) );
     delete this.settings.formData[contractName][groupName];
     this.settings.fieldGroupOrder[contractName].splice(
       this.settings.fieldGroupOrder[contractName].findIndex(n => n == groupName),
       1
     )
-    console.log(this.settings);
   }
 
   removeField(contractName: string, groupName: string, fieldIndex: number) {
