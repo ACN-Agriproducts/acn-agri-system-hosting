@@ -21,3 +21,19 @@
     </mat-select>
   </mat-form-field>
 </ng-template>
+
+<ng-template typeTemplate="nested-primitive" let-data>
+  <mat-form-field [ngClass]="[data.class, data.width ? 'span-' + data.width : '']">
+    <mat-label>{{data.label}}</mat-label>
+    <input 
+      matInput 
+      *ngIf="data.type != 'select'" 
+      [(ngModel)]="contract[data.fieldName][data.nestedField]" 
+      [type]="data.primitiveType">
+    <mat-select *ngIf="data.type == 'select'" [(ngModel)]="contract[data.fieldName][data.nestedField]">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
