@@ -19,6 +19,7 @@ import { CloseContractFieldsDialogComponent } from './components/close-contract-
 import { DeliveredChartCardComponent } from './components/delivered-chart-card/delivered-chart-card.component';
 import { LineChartModule, NgxChartsModule } from '@swimlane/ngx-charts';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
+import { ContractFormComponent } from './components/contract-form/contract-form.component';
 
 @NgModule({
   imports: [
@@ -41,8 +42,10 @@ import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tick
     FilterComponent,
     ContractModalOptionsComponent,
     CloseContractFieldsDialogComponent,
-    DeliveredChartCardComponent
+    DeliveredChartCardComponent,
+    ContractFormComponent
   ],
+  exports: [ContractFormComponent],
   providers: [DatePipe, SelectedTicketsPipe]
 })
 export class ContractsPageModule { }
