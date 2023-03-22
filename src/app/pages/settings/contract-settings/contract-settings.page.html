@@ -10,42 +10,43 @@
       <mat-card-header>
         <mat-card-title>
           {{fieldGroupName}}
+          <button mat-button (click)="addField(contractName.value, fieldGroupName)">Add Group</button>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <ng-container *ngFor="let item of settings.formData[contractName.value][fieldGroupName]">
-          <mat-form-field>
-            <label>Label</label>
+          <mat-form-field appearance="fill">
+            <mat-label>Label</mat-label>
             <input matInput [(ngModel)]="item.label">
           </mat-form-field>
-          <mat-form-field>
-            <label>Field Name</label>
+          <mat-form-field appearance="fill">
+            <mat-label>Field Name</mat-label>
             <input matInput [(ngModel)]="item.fieldName">
           </mat-form-field>
-          <mat-form-field>
-            <label>Type</label>
+          <mat-form-field appearance="fill">
+            <mat-label>Type</mat-label>
             <input matInput [(ngModel)]="item.type">
           </mat-form-field>
-          <mat-form-field>
-            <label>Width</label>
+          <mat-form-field appearance="fill">
+            <mat-label>Width</mat-label>
             <input matInput [(ngModel)]="item.width">
           </mat-form-field>
-          <mat-form-field>
-            <label>Class</label>
+          <mat-form-field appearance="fill">
+            <mat-label>Class</mat-label>
             <input matInput [(ngModel)]="item.class">
           </mat-form-field>
-          <mat-form-field>
-            <label>primitiveType</label>
+          <mat-form-field appearance="fill">
+            <mat-label>primitiveType</mat-label>
             <input matInput [(ngModel)]="item.primitiveType">
           </mat-form-field>
           <mat-card-subtitle>Select Options</mat-card-subtitle>
           <div class="select-option-row" *ngFor="let option of item.selectOptions">
-            <mat-form-field>
-              <label>Label</label>
+            <mat-form-field appearance="fill">
+              <mat-label>Label</mat-label>
               <input matInput [(ngModel)]="option.label">
             </mat-form-field>
-            <mat-form-field>
-              <label>Value</label>
+            <mat-form-field appearance="fill">
+              <mat-label>Value</mat-label>
               <input matInput [(ngModel)]="option.value">
             </mat-form-field>
           </div>

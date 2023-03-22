@@ -48,6 +48,18 @@ export class ContractSettingsPage implements OnInit {
       this.settings.fieldGroupOrder[contractName].push(result);
     });
   }
+
+  addField(contractName: string, groupName: string) {
+    this.settings.formData[contractName][groupName].push({
+      label: null,
+      fieldName: null,
+      type: null,
+      width: null,
+      class: null,
+      primitiveType: null,
+      selectOptions: null
+    })
+  }
 }
 
 @Component({
