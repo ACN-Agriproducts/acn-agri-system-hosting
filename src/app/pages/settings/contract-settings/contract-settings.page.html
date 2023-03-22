@@ -16,8 +16,8 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="group-section" *ngFor="let item of settings.formData[contractName.value][fieldGroupName]; let index = index">
-          <button mat-flat-button color="warn" class="delete-field-button" (click)="removeField(contractName.value, fieldGroupName, index)">Delete</button>
+        <div class="group-section" *ngFor="let item of settings.formData[contractName.value][fieldGroupName]; let fieldIndex = index">
+          <button mat-flat-button color="warn" class="delete-field-button" (click)="removeField(contractName.value, fieldGroupName, fieldIndex)">Delete</button>
           <mat-form-field appearance="fill">
             <mat-label>Label</mat-label>
             <input matInput [(ngModel)]="item.label">
@@ -42,16 +42,24 @@
             <mat-label>Primitive Type</mat-label>
             <input matInput [(ngModel)]="item.primitiveType">
           </mat-form-field>
-          <mat-card-subtitle>Select Options</mat-card-subtitle>
-          <div class="select-option-row" *ngFor="let option of item.selectOptions">
-            <mat-form-field appearance="fill">
-              <mat-label>Label</mat-label>
-              <input matInput [(ngModel)]="option.label">
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-              <mat-label>Value</mat-label>
-              <input matInput [(ngModel)]="option.value">
-            </mat-form-field>
+          <div *ngIf="item.primitiveType == 'select'" class="select-area">
+            <mat-card-subtitle>
+              Select Options
+              <button mat-button (click)="addSelectOption(contractName.value, fieldGroupName, fieldIndex)">Add select option</button>
+            </mat-card-subtitle>
+            <div class="select-option-row" *ngFor="let option of item.selectOptions; let optionIndex = index">
+              <button mat-icon-button (click)="removeSelectOption(contractName.value, fieldGroupName, fieldIndex, optionIndex)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <mat-form-field appearance="fill">
+                <mat-label>Label</mat-label>
+                <input matInput [(ngModel)]="option.label">
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Value</mat-label>
+                <input matInput [(ngModel)]="option.value">
+              </mat-form-field>
+            </div>
           </div>
         </div>
       </mat-card-content>

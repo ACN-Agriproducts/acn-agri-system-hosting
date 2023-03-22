@@ -57,8 +57,15 @@ export class ContractSettingsPage implements OnInit {
       width: null,
       class: null,
       primitiveType: null,
-      selectOptions: null
+      selectOptions: []
     })
+  }
+
+  addSelectOption(contractName: string, groupName: string, fieldIndex: number) {
+    this.settings.formData[contractName][groupName][fieldIndex].selectOptions.push({
+      value: null,
+      label: null
+    });
   }
 
   removeGroup(contractName: string, groupName: string) {
@@ -73,6 +80,10 @@ export class ContractSettingsPage implements OnInit {
 
   removeField(contractName: string, groupName: string, fieldIndex: number) {
     this.settings.formData[contractName][groupName].splice(fieldIndex, 1);
+  }
+
+  removeSelectOption(contractName: string, groupName: string, fieldIndex: number, optionIndex: number) {
+    this.settings.formData[contractName][groupName][fieldIndex].selectOptions.splice(optionIndex, 1);
   }
 
   submit() {
