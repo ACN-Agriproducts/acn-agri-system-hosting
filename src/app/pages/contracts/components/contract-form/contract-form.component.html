@@ -1,3 +1,23 @@
-<p>
-  contract-form works!
-</p>
+<ng-container *ngIf="contract?.printableFormat">
+  <mat-card *ngFor="let formData of settings.formData[contract.printableFormat] | keyvalue">
+    <mat-card-header>
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+</ng-container>
+
+<ng-template typeTemplate="primitive" let-data>
+  <mat-form-field [ngClass]="[data.class, data.width ? 'span-' + data.width : '']">
+    <mat-label>{{data.label}}</mat-label>
+    <input 
+      matInput 
+      *ngIf="data.type != 'select'" 
+      [(ngModel)]="contract[data.fieldName]" 
+      [type]="data.primitiveType">
+    <mat-select *ngIf="data.type == 'select'" [(ngModel)]="contract[data.fieldName]">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
