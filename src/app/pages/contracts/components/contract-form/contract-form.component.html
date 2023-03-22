@@ -1,7 +1,12 @@
 <ng-container *ngIf="contract?.printableFormat">
-  <mat-card *ngFor="let formData of settings.formData[contract.printableFormat] | keyvalue">
+  <mat-card *ngFor="let fieldGroup of settings.formData[contract.printableFormat] | keyvalue">
     <mat-card-header>
       <mat-card-subtitle></mat-card-subtitle>
+      <mat-card-content>
+        <ng-container *ngFor="let field of fieldGroup.value">
+          <ng-container *ngTemplateOutlet="versionTemplates | listFind:'typeTemplate':field.type ?? none"></ng-container>
+        </ng-container>
+      </mat-card-content>
     </mat-card-header>
   </mat-card>
 </ng-container>
@@ -36,4 +41,8 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+</ng-template>
+
+<ng-template #none>
+	<p>NONE</p>
 </ng-template>
