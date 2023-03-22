@@ -1,6 +1,7 @@
 <app-header-toolbar titulo="Contract Settings"></app-header-toolbar>
 
 <ion-content class="ion-padding">
+  <button mat-flat-button color="primary" (click)="submit()">Submit</button>
   <div *ngFor="let contractName of settings?.contractTypes | keyvalue">
     <h1>
       {{contractName.key}}
@@ -9,12 +10,14 @@
     <mat-card *ngFor="let fieldGroupName of settings.fieldGroupOrder[contractName.value]">
       <mat-card-header>
         <mat-card-title>
+          <button mat-flat-button color="warn" (click)="removeGroup(contractName.value, fieldGroupName)">Delete Group</button>
           {{fieldGroupName}}
-          <button mat-button (click)="addField(contractName.value, fieldGroupName)">Add Group</button>
+          <button mat-button (click)="addField(contractName.value, fieldGroupName)">Add Field</button>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <ng-container *ngFor="let item of settings.formData[contractName.value][fieldGroupName]">
+        <div class="group-section" *ngFor="let item of settings.formData[contractName.value][fieldGroupName]; let index = index">
+          <button mat-flat-button color="warn" class="delete-field-button" (click)="removeField(contractName.value, fieldGroupName, index)">Delete</button>
           <mat-form-field appearance="fill">
             <mat-label>Label</mat-label>
             <input matInput [(ngModel)]="item.label">
@@ -36,7 +39,7 @@
             <input matInput [(ngModel)]="item.class">
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>primitiveType</mat-label>
+            <mat-label>Primitive Type</mat-label>
             <input matInput [(ngModel)]="item.primitiveType">
           </mat-form-field>
           <mat-card-subtitle>Select Options</mat-card-subtitle>
@@ -50,8 +53,7 @@
               <input matInput [(ngModel)]="option.value">
             </mat-form-field>
           </div>
-          <hr>
-        </ng-container>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

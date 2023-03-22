@@ -1,3 +1,15 @@
 .select-option-row {
     display: flex;
 }
+
+.group-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: .7rem;
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
+}
+
+.delete-field-button {
+    grid-column-end: span 3;
+}

@@ -60,6 +60,24 @@ export class ContractSettingsPage implements OnInit {
       selectOptions: null
     })
   }
+
+  removeGroup(contractName: string, groupName: string) {
+    console.log(contractName, groupName, this.settings.fieldGroupOrder[contractName].findIndex(n => n == groupName) );
+    delete this.settings.formData[contractName][groupName];
+    this.settings.fieldGroupOrder[contractName].splice(
+      this.settings.fieldGroupOrder[contractName].findIndex(n => n == groupName),
+      1
+    )
+    console.log(this.settings);
+  }
+
+  removeField(contractName: string, groupName: string, fieldIndex: number) {
+    this.settings.formData[contractName][groupName].splice(fieldIndex, 1);
+  }
+
+  submit() {
+    this.settings.set();
+  }
 }
 
 @Component({
