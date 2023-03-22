@@ -10,7 +10,7 @@ export class ContractSettings extends FirebaseDocInterface {
     formData: {
         [contractName: string]: {
             [groupName: string]: FormField[];
-        }[];
+        };
     }
 
     fieldGroupOrder: {
@@ -65,13 +65,13 @@ export class ContractSettings extends FirebaseDocInterface {
 }
 
 interface FormField {
-    type: "primitive" | "template";
-    primitiveType?: "number" | "text" | "textarea" | "select";
-    selectOptions?: SelectOption[];
     label: string;
     fieldName: string;
+    type: string;
     width: number;
     class: string;
+    primitiveType?: "number" | "text" | "textarea" | "select";
+    selectOptions?: SelectOption[];
 }
 
 interface SelectOption {
