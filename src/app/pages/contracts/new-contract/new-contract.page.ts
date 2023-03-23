@@ -6,7 +6,6 @@ import { Observable, Subscription, lastValueFrom } from 'rxjs';
 import { WeightUnits } from '@shared/WeightUnits/weight-units';
 import { Weight } from '@shared/Weight/weight';
 import { MatDialog } from '@angular/material/dialog';
-import { SelectClientComponent } from './components/select-client/select-client.component';
 import { Contact } from '@shared/classes/contact';
 import { Product } from '@shared/classes/product';
 import { Company, CompanyContact } from '@shared/classes/company';
@@ -270,36 +269,36 @@ export class NewContractPage implements OnInit {
   }
 
   openClientSelect() {
-    const dialogRef = this.dialog.open(SelectClientComponent, {
-      width: '600px',
-      data: this.contactList
-    });
+    // const dialogRef = this.dialog.open(SelectClientComponent, {
+    //   width: '600px',
+    //   data: this.contactList
+    // });
 
 
-    lastValueFrom(dialogRef.afterClosed()).then(result => {
-      if(!result) return;
+    // lastValueFrom(dialogRef.afterClosed()).then(result => {
+    //   if(!result) return;
 
-      Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
-        this.selectedClient = client;
-        this.contract.clientInfo = Contract.clientInfo(client);
-        this.contract.clientName = client.name;
-      });
-    });
+    //   Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
+    //     this.selectedClient = client;
+    //     this.contract.clientInfo = Contract.clientInfo(client);
+    //     this.contract.clientName = client.name;
+    //   });
+    // });
   }
 
   openTicketClientSelect() { 
-    const dialogRef = this.dialog.open(SelectClientComponent, {
-      width: '600px',
-      data: this.contactList
-    });
+    // const dialogRef = this.dialog.open(SelectClientComponent, {
+    //   width: '600px',
+    //   data: this.contactList
+    // });
 
-    lastValueFrom(dialogRef.afterClosed()).then(result => {
-      Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
-        this.ticketClient = client;
-        this.contract.clientTicketInfo = Contract.clientInfo(client);
-        this.contract.clientTicketInfo.name = client.name;
-      });
-    });
+    // lastValueFrom(dialogRef.afterClosed()).then(result => {
+    //   Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
+    //     this.ticketClient = client;
+    //     this.contract.clientTicketInfo = Contract.clientInfo(client);
+    //     this.contract.clientTicketInfo.name = client.name;
+    //   });
+    // });
   }
 
   addPlantChip(plant: string): void {
