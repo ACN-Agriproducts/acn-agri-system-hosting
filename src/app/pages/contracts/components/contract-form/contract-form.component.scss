@@ -9,3 +9,12 @@
 .span-3 {
     grid-column-end: span 3;    
 }
+
+.flex-field {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.field-width-200 {
+    width: 200px;
+}

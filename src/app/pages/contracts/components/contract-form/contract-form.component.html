@@ -43,6 +43,26 @@
   </mat-form-field>
 </ng-template>
 
+<ng-template typeTemplate="client-select" let data>
+  <div class="flex-field">
+    <button mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
+    <mat-form-field>
+      <mat-label>Client Name</mat-label>
+      <input matInput disabled [(ngModel)]="contract.clientName">
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template typeTemplate="ticket-client-select" let data>
+  <div class="flex-field">
+    <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
+    <mat-form-field>
+      <mat-label>Ticket Client Name</mat-label>
+      <input matInput disabled [(ngModel)]="contract.clientName">
+    </mat-form-field>
+  </div>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>
