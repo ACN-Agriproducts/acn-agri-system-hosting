@@ -64,7 +64,7 @@ export class ContractSettings extends FirebaseDocInterface {
     }
 }
 
-interface FormField {
+export interface FormField {
     label: string;
     fieldName: string;
     nestedField?: string;

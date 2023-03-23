@@ -21,6 +21,7 @@ import { LineChartModule, NgxChartsModule } from '@swimlane/ngx-charts';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 import { ContractFormComponent } from './components/contract-form/contract-form.component';
 import { SelectClientComponent } from './components/select-client/select-client.component';
+import { GetFieldClassPipe } from './pipes/get-field-class.pipe';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { SelectClientComponent } from './components/select-client/select-client.
     CloseContractFieldsDialogComponent,
     DeliveredChartCardComponent,
     ContractFormComponent,
-    SelectClientComponent
+    SelectClientComponent,
+    GetFieldClassPipe
   ],
   exports: [ContractFormComponent],
   providers: [DatePipe, SelectedTicketsPipe]

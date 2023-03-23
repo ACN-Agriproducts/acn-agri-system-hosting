@@ -6,6 +6,7 @@ import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { Mass } from '@shared/classes/mass';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
 import { lastValueFrom } from 'rxjs';
 import { SelectClientComponent } from '../select-client/select-client.component';
@@ -21,7 +22,7 @@ export class ContractFormComponent implements OnInit {
   public contactList: CompanyContact[];
   public truckerList: CompanyContact[];
 
-  @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TemplateRef<any>>;
+  @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TypeTemplateDirective>;
 
   constructor(
     private db: Firestore,
@@ -31,6 +32,7 @@ export class ContractFormComponent implements OnInit {
 
   ngOnInit() {
     this.settings$ = ContractSettings.getDocument(this.db, this.session.getCompany());
+    this.contract.quantity ??= new Mass(null, null);
 
     Company.getCompany(this.db, this.session.getCompany()).then(val => {
       this.contactList = val.contactList.sort((a, b) =>{
@@ -81,5 +83,18 @@ export class ContractFormComponent implements OnInit {
         this.contract.clientTicketInfo.name = client.name;
       });
     });
+  }
+
+  docTypeChange() {
+    console.log("Doc type change", this.versionTemplates);
+    this.settings$.then(result => {
+      console.log(result.formData[this.contract.type]);
+    })
+
+    this.contract.printableFormat = this.contract.type;
+  }
+  
+  log(...data: any) : void {
+    console.log(...data);
   }
 }

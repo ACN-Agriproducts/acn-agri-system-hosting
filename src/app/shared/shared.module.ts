@@ -59,6 +59,7 @@ import { PurchaseContractComponent } from './printable/printable-contract/purcha
     DocumentWrapperComponent,
     PrintableContractComponent,
     PurchaseToDepositComponent,
+    TypeTemplateDirective,
     NgxPrintModule,
   ],
   declarations: [
