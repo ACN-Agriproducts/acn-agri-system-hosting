@@ -67,8 +67,8 @@
   </mat-form-field>
 </ng-template>
 
-<ng-template typeTemplate="client-select" let data>
-  <div class="flex-field">
+<ng-template typeTemplate="client-select" let-data>
+  <div class="flex-field" [ngClass]="data | getFieldClass">
     <button mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
     <mat-form-field>
       <mat-label>Client Name</mat-label>
@@ -77,7 +77,7 @@
   </div>
 </ng-template>
 
-<ng-template typeTemplate="ticket-client-select" let data>
+<ng-template typeTemplate="ticket-client-select" let-data>
   <div class="flex-field">
     <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
     <mat-form-field>

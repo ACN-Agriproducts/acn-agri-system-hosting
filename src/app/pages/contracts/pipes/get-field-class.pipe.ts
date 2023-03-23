@@ -8,8 +8,8 @@ export class GetFieldClassPipe implements PipeTransform {
 
   transform(field: FormField): string[] {
     const classes: string[] = [];
-    if(field.class) classes.push(field.class);
-    if(field.width) classes.push(`span-${field.width}`);
+    if(field?.class) classes.push(field?.class);
+    if(field?.width) classes.push(`span-${field?.width}`);
 
     return classes;
   }
