@@ -17,7 +17,7 @@ import { SelectClientComponent } from '../select-client/select-client.component'
 })
 export class ContractFormComponent implements OnInit {
   @Input() contract: Contract;
-  public settings: ContractSettings;
+  public settings$: Promise<ContractSettings>;
   public contactList: CompanyContact[];
   public truckerList: CompanyContact[];
 
@@ -30,9 +30,7 @@ export class ContractFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    ContractSettings.getDocument(this.db, this.session.getCompany()).then(result => {
-      this.settings = result;
-    });
+    this.settings$ = ContractSettings.getDocument(this.db, this.session.getCompany());
 
     Company.getCompany(this.db, this.session.getCompany()).then(val => {
       this.contactList = val.contactList.sort((a, b) =>{
