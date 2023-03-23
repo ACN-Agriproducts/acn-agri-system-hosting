@@ -42,6 +42,10 @@
             <mat-label>Primitive Type</mat-label>
             <input matInput [(ngModel)]="item.primitiveType">
           </mat-form-field>
+          <mat-form-field appearance="fill" *ngIf="item.type == 'nested-primitive'">
+            <mat-label>Nested Field Name</mat-label>
+            <input matInput [(ngModel)]="item.nestedField">
+          </mat-form-field>
           <div *ngIf="item.primitiveType == 'select'" class="select-area">
             <mat-card-subtitle>
               Select Options
