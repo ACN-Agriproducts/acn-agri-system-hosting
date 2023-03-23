@@ -1,3 +1,8 @@
+mat-card-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .span-1 {
     grid-column-end: span 1;
 }
@@ -8,6 +13,10 @@
 
 .span-3 {
     grid-column-end: span 3;    
+}
+
+.span-4 {
+    grid-column-end: span 4;    
 }
 
 .flex-field {
