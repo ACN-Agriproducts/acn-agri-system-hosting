@@ -4,7 +4,7 @@
       <mat-card-subtitle></mat-card-subtitle>
       <mat-card-content>
         <ng-container *ngFor="let field of fieldGroup.value">
-          <ng-container *ngTemplateOutlet="versionTemplates | listFind:'typeTemplate':field.type ?? none"></ng-container>
+          <ng-container *ngTemplateOutlet="versionTemplates | listFind:'typeTemplate':field.type ?? error"></ng-container>
         </ng-container>
       </mat-card-content>
     </mat-card-header>
@@ -43,6 +43,6 @@
   </mat-form-field>
 </ng-template>
 
-<ng-template #none>
-	<p>NONE</p>
+<ng-template #error>
+	<p>ERROR</p>
 </ng-template>
