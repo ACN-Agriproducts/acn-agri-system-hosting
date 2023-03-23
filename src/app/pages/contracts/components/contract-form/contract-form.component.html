@@ -6,20 +6,20 @@
     <mat-form-field class="span-4">
       <mat-label>Date</mat-label>
       <input matInput [matDatepicker]="contractDatepicker">
-      <mat-datepicker-toggle matIconSuffix [for]="contractDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker-toggle matSuffix [for]="contractDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #contractDatepicker></mat-datepicker>
     </mat-form-field>
+    <mat-form-field class="span-3">
+      <mat-label>Contract Type</mat-label>
+      <mat-select [(ngModel)]="contract.type">
+        <mat-option *ngFor="let type of (settings$ | async)?.contractTypes | keyvalue" [value]="type.value">{{type.key}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>ID</mat-label>
+      <input matInput [(ngModel)]="contract.id" type="number" required [disabled]="!contract.type">
+    </mat-form-field>
   </mat-card-content>
-  <mat-form-field class="span-3">
-    <mat-label>Contract Type</mat-label>
-    <mat-select [(ngModel)]="contract.type">
-      <mat-option *ngFor="let type of (settings$ | async)?.contractTypes | keyvalue" [value]="type.value">{{type.key}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>ID</mat-label>
-    <input matInput [(ngModel)]="contract.id" type="number" required [disabled]="!contract.type">
-  </mat-form-field>
 </mat-card>
 
 <ng-container *ngIf="contract?.printableFormat">
