@@ -78,13 +78,28 @@
 </ng-template>
 
 <ng-template typeTemplate="ticket-client-select" let-data>
-  <div class="flex-field">
+  <div class="flex-field" [ngClass]="data | getFieldClass">
     <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
     <mat-form-field>
       <mat-label>Ticket Client Name</mat-label>
       <input matInput disabled [(ngModel)]="contract.clientName">
     </mat-form-field>
   </div>
+</ng-template>
+
+<ng-template typeTemplate="primitive-prototype" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" class="test">
+    <mat-label>{{data.label}}</mat-label>
+    <input 
+      matInput 
+      *ngIf="data.primitiveType != 'select'" 
+      [type]="data.primitiveType">
+    <mat-select *ngIf="data.primitiveType == 'select'">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </ng-template>
 
 <ng-template #error>
