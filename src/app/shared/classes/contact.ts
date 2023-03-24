@@ -12,11 +12,11 @@ export class Contact extends FirebaseDocInterface {
     public name: string;
     public publicDeedDate: Date;
     public publicDeedId: string;
+    public rfc: string;
     public state: string;
     public streetAddress: string;
     public tags: string[];
     public zipCode: string;
-
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contact.converter);
@@ -29,6 +29,7 @@ export class Contact extends FirebaseDocInterface {
         this.name = data.name;
         this.publicDeedDate = data.publicDeedDate;
         this.publicDeedId = data.publicDeedId;
+        this.rfc = data.rfc;
         this.state = data.state;
         this.streetAddress = data.streetAddress;
         this.tags = data.tags;
@@ -49,6 +50,7 @@ export class Contact extends FirebaseDocInterface {
                 name: data.name,
                 publicDeedDate: data.publicDeedDate,
                 publicDeedId: data.publicDeedId,
+                rfc: data.rfc,
                 state: data.state,
                 streetAddress: data.streetAddress,
                 tags: data.tags,
