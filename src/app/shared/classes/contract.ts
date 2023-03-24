@@ -66,8 +66,7 @@ export class Contract extends FirebaseDocInterface {
                 ref: null
             };
 
-            this.clientTicketInfo = 
-            {
+            this.clientTicketInfo = {
                 caat: null,
                 city: null,
                 email: null,
@@ -79,6 +78,7 @@ export class Contract extends FirebaseDocInterface {
                 ref: null
             };
 
+            this.delivery_dates = new DeliveryDates({});
             this.productInfo = new ProductInfo({});
 
             return;
