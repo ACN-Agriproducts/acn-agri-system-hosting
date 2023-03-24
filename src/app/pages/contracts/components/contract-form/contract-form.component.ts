@@ -86,11 +86,6 @@ export class ContractFormComponent implements OnInit {
   }
 
   docTypeChange() {
-    console.log("Doc type change", this.versionTemplates);
-    this.settings$.then(result => {
-      console.log(result.formData[this.contract.type]);
-    })
-
     this.contract.printableFormat = this.contract.type;
   }
   
