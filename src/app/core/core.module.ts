@@ -14,6 +14,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { StateAbbreviationPipe } from './pipes/stateAbbreviation/state-abbreviation.pipe';
 import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
 import { ListFindPipe } from './pipes/list-find/list-find.pipe';
+import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { ListFindPipe } from './pipes/list-find/list-find.pipe';
     SearchPipe,
     StateAbbreviationPipe,
     AsPipe,
-    ListFindPipe
+    ListFindPipe,
+    MassInUnitPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -50,7 +52,8 @@ import { ListFindPipe } from './pipes/list-find/list-find.pipe';
     SearchPipe,
     StateAbbreviationPipe,
     AsPipe,
-    ListFindPipe
+    ListFindPipe,
+    MassInUnitPipe
   ]
 })
 export class CoreModule { }
