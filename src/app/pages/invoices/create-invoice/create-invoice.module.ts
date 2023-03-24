@@ -10,6 +10,7 @@ import { CreateInvoicePage } from './create-invoice.page';
 import { ComponentsModule } from '@core/components/components.module';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { SharedModule } from '@shared/shared.module';
     ReactiveFormsModule,
     FormsModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    NgxPrintModule
   ],
   declarations: [
     CreateInvoicePage

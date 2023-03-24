@@ -1,5 +1,6 @@
 import { AfterContentInit, ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
+import { Mass } from '@shared/classes/mass';
 
 @Component({
   selector: 'app-invoice-two',
@@ -16,6 +17,11 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
   @Input() date: Date;
   @Input() items: item[];
   @Input() total: number;
+  @Input() isExportInvoice: boolean;
+  @Input() exportInfo: {
+    product: string;
+    quantity: Mass;
+  };
 
   public contentRows: Row[];
   public readonly rowLength = 28;

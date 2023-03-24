@@ -28,6 +28,7 @@ export class Ticket extends FirebaseDocInterface{
     public lot: string;
     public moisture: number;
     public needsAttention: boolean;
+    public net: Mass;
     public origin: string;
     public original_ticket: string;
     public original_weight: Mass;
@@ -91,6 +92,8 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
+
+        this.net = this.gross.subtract(this.tare);
     }
 
     public static converter = {

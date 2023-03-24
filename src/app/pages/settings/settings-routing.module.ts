@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: SettingsPage
+  },  {
+    path: 'contract-settings',
+    loadChildren: () => import('./contract-settings/contract-settings.module').then( m => m.ContractSettingsPageModule)
   }
+
 ];
 
 @NgModule({

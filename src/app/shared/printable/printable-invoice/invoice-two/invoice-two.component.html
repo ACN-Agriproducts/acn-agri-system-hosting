@@ -15,6 +15,7 @@
         <div class="address-box">
           <div>{{buyer.street}}</div>
           <div>{{buyer.city ? buyer.city + ',' : ''}} {{buyer.state}} {{buyer.zip}}</div>
+          <div>{{buyer.other}}</div>
         </div>
       </div>
     </div>
@@ -37,14 +38,14 @@
       <td class="text-end">{{row.quantity | number:"0.3-3"}}</td>
       <td>
         <div class="currency">
-          <span *ngIf="!row.isDetailsRow">$</span>
-          <span>{{row.price | number:"0.2-2"}}</span>
+          <span>$</span>
+          <span>{{row.price | number:"0.2-2" ?? '-'}}</span>
         </div>
       </td>
       <td>
         <div class="currency">
-          <span *ngIf="!row.isDetailsRow">$</span>
-          <span>{{row.quantity * row.price | number:"0.2-2"}}</span>
+          <span>$</span>
+          <span>{{(row.quantity && row.price) ? (row.quantity * row.price | number:"0.2-2") : "-"}}</span>
         </div>
       </td>
     </tr>
@@ -62,10 +63,10 @@
         <td class="border-left text-end">{{total | currency}}</td>
       </tr>
       <tr>
-        <td class="bold space" colspan="3">PRODUCT: YELLOW CORN</td>
+        <td class="bold" [class.space]="!isExportInvoice" colspan="3">PRODUCT: YELLOW CORN</td>
       </tr>
       <tr>
-        <td class="bold space" colspan="2">METRIC TONS: {{this.weightTotal | number:"0.3-3"}}</td>
+        <td class="bold" [class.space]="!isExportInvoice" colspan="2">METRIC TONS: {{ exportInfo ? (exportInfo.quantity | massInUnit:'mTon' | number:"0.3-3") : "null"}}</td>
         <td class="border-top border-left"></td>
       </tr>
       <tr>

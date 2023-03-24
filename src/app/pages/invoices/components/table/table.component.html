@@ -47,7 +47,7 @@
             <ion-text>{{invoice.date | date}}</ion-text>
         </ion-item>
         <ion-item lines="none">
-            <ion-text>{{invoice.status}}</ion-text>
+            <ion-text class="status" [class]="invoice.status">{{invoice.status}}</ion-text>
         </ion-item>
         <ion-item lines="none">
             <ion-text class="item-text-price" color="dark">

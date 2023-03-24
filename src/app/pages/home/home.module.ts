@@ -10,6 +10,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { HomePage } from './home.page';
 import { NeedsAdminAttentionComponent } from './components/needs-admin-attention/needs-admin-attention.component';
 import { SharedModule } from '@shared/shared.module';
+import { ContractsPageModule } from '@pages/contracts/contracts.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { SharedModule } from '@shared/shared.module';
     IonicModule,
     HomePageRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    ContractsPageModule
   ],
   declarations: [HomePage, NeedsAdminAttentionComponent]
 })
