@@ -39,4 +39,8 @@ export class HomePage implements OnInit {
       doc(Contract.getCollectionReference(this.db, this.session.getCompany()))
     );
   }
+
+  focusEventHandler(fieldName: string) {
+    console.log(fieldName);
+  }
 }

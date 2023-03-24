@@ -5,7 +5,7 @@
         <!-- <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention> -->
     </div>
 
-    <app-contract-form [contract]="contract"></app-contract-form>
+    <app-contract-form [contract]="contract" (selectedFieldEvent)="focusEventHandler($event)"></app-contract-form>
 
     <mat-form-field>
         <mat-select [(ngModel)]="contractType">

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -18,6 +18,8 @@ import { SelectClientComponent } from '../select-client/select-client.component'
 })
 export class ContractFormComponent implements OnInit {
   @Input() contract: Contract;
+  @Output() selectedFieldEvent = new EventEmitter<string>();
+
   public settings$: Promise<ContractSettings>;
   public contactList: CompanyContact[];
   public truckerList: CompanyContact[];
@@ -57,9 +59,10 @@ export class ContractFormComponent implements OnInit {
       width: '600px',
       data: this.contactList
     });
-
+    this.selectedFieldEvent.emit('client');
 
     lastValueFrom(dialogRef.afterClosed()).then(result => {
+      this.selectedFieldEvent.emit(null);
       if(!result) return;
 
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
@@ -75,8 +78,13 @@ export class ContractFormComponent implements OnInit {
       width: '600px',
       data: this.contactList
     });
+    this.selectedFieldEvent.emit('ticketClientInfo');
+
 
     lastValueFrom(dialogRef.afterClosed()).then(result => {
+      this.selectedFieldEvent.emit(null);
+      if(!result) return;
+
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
         //this.ticketClient = client;
         this.contract.clientTicketInfo = Contract.clientInfo(client);
