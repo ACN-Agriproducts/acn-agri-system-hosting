@@ -23,12 +23,12 @@
 </mat-card>
 
 <ng-container *ngIf="contract?.printableFormat">
-  <mat-card *ngFor="let fieldGroup of (settings$ | async)?.formData[contract.printableFormat] | keyvalue">
+  <mat-card *ngFor="let fieldGroupName of (settings$ | async)?.fieldGroupOrder[contract.printableFormat]">
     <mat-card-header>
-      <mat-card-subtitle>{{fieldGroup.key}}</mat-card-subtitle>
+      <mat-card-subtitle>{{fieldGroupName}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-      <ng-container *ngFor="let field of fieldGroup.value">
+      <ng-container *ngFor="let field of (settings$ | async)?.formData[contract.printableFormat][fieldGroupName]">
         <ng-container *ngTemplateOutlet="(versionTemplates | listFind:'typeTemplate':field.type).templateRef ?? error; context: { $implicit: field }"></ng-container>
       </ng-container>
     </mat-card-content>
@@ -36,38 +36,63 @@
 </ng-container>
 
 <ng-template typeTemplate="primitive" let-data>
-  <mat-form-field [ngClass]="data | getFieldClass">
+  <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
     <mat-label>{{data.label}}</mat-label>
     <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
     <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
-    <input 
-      matInput 
-      *ngIf="data.primitiveType != 'select'" 
-      [(ngModel)]="contract[data.fieldName]" 
-      [type]="data.primitiveType">
-    <mat-select *ngIf="data.primitiveType == 'select'" [(ngModel)]="contract[data.fieldName]">
+    
+    <mat-select *ngSwitchCase="'select'" [(ngModel)]="contract[data.fieldName]">
       <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
         {{option.label}}
       </mat-option>
     </mat-select>
+
+    <input *ngSwitchCase="'date'" matInput [matDatepicker]="picker" [(ngModel)]="contract[data.fieldName]">
+    <mat-datepicker-toggle *ngSwitchCase="'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [hidden]="data.primitiveType != 'date'" #picker></mat-datepicker>
+
+    <textarea
+      matInput
+      [(ngModel)]="contract[data.fieldName]"
+      *ngSwitchCase="'textarea'"
+    ></textarea>
+
+    <input 
+      matInput 
+      *ngSwitchDefault 
+      [(ngModel)]="contract[data.fieldName]"
+      [type]="data.primitiveType">
   </mat-form-field>
 </ng-template>
 
 <ng-template typeTemplate="nested-primitive" let-data>
-  <mat-form-field [ngClass]="data | getFieldClass">
+  <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
     <mat-label>{{data.label}}</mat-label>
     <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
     <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
-    <input 
-      matInput 
-      *ngIf="data.primitiveType != 'select'" 
-      [(ngModel)]="contract[data.fieldName][data.nestedField]" 
-      [type]="data.primitiveType">
-    <mat-select *ngIf="data.primitiveType == 'select'" [(ngModel)]="contract[data.fieldName][data.nestedField]">
+    
+    <mat-select *ngSwitchCase="'select'" [(ngModel)]="contract[data.fieldName][data.nestedField]">
+      <mat-option>Test</mat-option>
       <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
         {{option.label}}
       </mat-option>
     </mat-select>
+
+    <input *ngSwitchCase="'date'" matInput [matDatepicker]="picker" [(ngModel)]="contract[data.fieldName][data.nestedField]">
+    <mat-datepicker-toggle *ngSwitchCase="'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [hidden]="data.primitiveType != 'date'" #picker></mat-datepicker>
+
+    <textarea
+      matInput
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      *ngSwitchCase="'textarea'"
+    ></textarea>
+
+    <input 
+      matInput 
+      *ngSwitchDefault 
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      [type]="data.primitiveType">
   </mat-form-field>
 </ng-template>
 
@@ -92,19 +117,31 @@
 </ng-template>
 
 <ng-template typeTemplate="primitive-prototype" let-data>
-  <mat-form-field [ngClass]="data | getFieldClass" class="test">
+  <mat-form-field [ngClass]="data | getFieldClass" class="test" [ngSwitch]="data.primitiveType">
     <mat-label>{{data.label}}</mat-label>
     <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
     <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
-    <input 
-      matInput 
-      *ngIf="data.primitiveType != 'select'" 
-      [type]="data.primitiveType">
-    <mat-select *ngIf="data.primitiveType == 'select'">
+    
+    <mat-select *ngSwitchCase="'select'">
+      <mat-option>Test</mat-option>
       <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
         {{option.label}}
       </mat-option>
     </mat-select>
+
+    <input *ngSwitchCase="'date'" matInput [matDatepicker]="picker">
+    <mat-datepicker-toggle *ngSwitchCase="'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [hidden]="data.primitiveType != 'date'" #picker></mat-datepicker>
+
+    <textarea
+      matInput
+      *ngSwitchCase="'textarea'"
+    ></textarea>
+
+    <input 
+      matInput 
+      *ngSwitchDefault 
+      [type]="data.primitiveType">
   </mat-form-field>
 </ng-template>
 
