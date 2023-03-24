@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { ContractSettings } from '@shared/classes/contract-settings';
 
 @Component({
@@ -15,7 +16,8 @@ export class ContractSettingsPage implements OnInit {
   constructor(
     private db: Firestore,
     private session: SessionInfo,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -55,7 +57,9 @@ export class ContractSettingsPage implements OnInit {
       width: null,
       class: null,
       primitiveType: null,
-      selectOptions: []
+      selectOptions: [],
+      prefix: null,
+      suffix: null
     })
   }
 
@@ -83,7 +87,12 @@ export class ContractSettingsPage implements OnInit {
   }
 
   submit() {
-    this.settings.set();
+    this.settings.set().then(() => {
+      this.snack.open("Settings submitted", "success");
+    }).catch(error => {
+      this.snack.open("Error", "error");
+      console.error(error);
+    });
   }
 }
 

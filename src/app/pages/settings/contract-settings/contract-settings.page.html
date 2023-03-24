@@ -23,28 +23,36 @@
             <input matInput [(ngModel)]="item.label">
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Field Name</mat-label>
-            <input matInput [(ngModel)]="item.fieldName">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
             <mat-label>Type</mat-label>
             <input matInput [(ngModel)]="item.type">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Width</mat-label>
-            <input matInput [(ngModel)]="item.width">
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Class</mat-label>
             <input matInput [(ngModel)]="item.class">
           </mat-form-field>
           <mat-form-field appearance="fill">
-            <mat-label>Primitive Type</mat-label>
-            <input matInput [(ngModel)]="item.primitiveType">
+            <mat-label>Field Name</mat-label>
+            <input matInput [(ngModel)]="item.fieldName">
           </mat-form-field>
           <mat-form-field appearance="fill" *ngIf="item.type == 'nested-primitive'">
             <mat-label>Nested Field Name</mat-label>
             <input matInput [(ngModel)]="item.nestedField">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Primitive Type</mat-label>
+            <input matInput [(ngModel)]="item.primitiveType">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Width</mat-label>
+            <input matInput [(ngModel)]="item.width">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Prefix</mat-label>
+            <input matInput [(ngModel)]="item.prefix">
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Suffix</mat-label>
+            <input matInput [(ngModel)]="item.suffix">
           </mat-form-field>
           <div *ngIf="item.primitiveType == 'select'" class="select-area">
             <mat-card-subtitle>

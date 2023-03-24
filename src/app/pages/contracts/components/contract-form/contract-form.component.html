@@ -38,6 +38,8 @@
 <ng-template typeTemplate="primitive" let-data>
   <mat-form-field [ngClass]="data | getFieldClass">
     <mat-label>{{data.label}}</mat-label>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
     <input 
       matInput 
       *ngIf="data.primitiveType != 'select'" 
@@ -54,6 +56,8 @@
 <ng-template typeTemplate="nested-primitive" let-data>
   <mat-form-field [ngClass]="data | getFieldClass">
     <mat-label>{{data.label}}</mat-label>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
     <input 
       matInput 
       *ngIf="data.primitiveType != 'select'" 
@@ -90,6 +94,8 @@
 <ng-template typeTemplate="primitive-prototype" let-data>
   <mat-form-field [ngClass]="data | getFieldClass" class="test">
     <mat-label>{{data.label}}</mat-label>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
     <input 
       matInput 
       *ngIf="data.primitiveType != 'select'" 

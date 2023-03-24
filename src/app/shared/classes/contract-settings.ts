@@ -73,6 +73,8 @@ export interface FormField {
     class: string;
     primitiveType?: "number" | "text" | "textarea" | "select";
     selectOptions?: SelectOption[];
+    suffix: string;
+    prefix: string;
 }
 
 interface SelectOption {
