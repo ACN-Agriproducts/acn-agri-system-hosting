@@ -7,7 +7,7 @@ import { TypeTemplateDirective } from '@shared/directives/type-template/type-tem
 export class ListFindPipe implements PipeTransform {
 
   transform(list: QueryList<TypeTemplateDirective>, fieldName: string, value: any): TemplateRef<any> {
-    return list.find(t => t[fieldName] == value).templateRef;
+    return list.find(t => t[fieldName] == value)?.templateRef;
   }
 
 }
