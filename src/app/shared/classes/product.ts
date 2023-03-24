@@ -60,10 +60,10 @@ export class Product extends FirebaseDocInterface {
 
     public getProductInfo(): ProductInfo {
         return {
-            brokenGrain: null,
-            damagedGrain: null,
-            foreignMatter: null,
-            impurities: null,
+            brokenGrain: this.brokenGrain,
+            damagedGrain: this.damagedGrain,
+            foreignMatter: this.foreignMatter,
+            impurities: this.impurities,
             moisture: this.moisture,
             name: this.getName(),
             weight: this.weight,

@@ -2,12 +2,13 @@ import { collection, CollectionReference, doc, DocumentData, DocumentReference, 
 import { Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Mass } from "./mass";
+import { Mass, units } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
 import { Ticket } from "./ticket";
 
 declare type contractType = string | boolean;
+declare type FutureMonth = "MAR CH" | "MAY CK" | "JUL CN" | "SEP CU" | "DEC CZ";
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
@@ -35,11 +36,30 @@ export class Contract extends FirebaseDocInterface {
     quantity: Mass;
     seller_terms: string;
     status: status;
+    tags: string[];
     tickets: DocumentReference<Ticket>[];
     transport: string;
     truckers: TruckerInfo[];
     type: string;
 
+    // NEW
+    bankInfo: BankInfo[];
+    cargoDelays: string;
+    contractOwner: string;
+    currency: string;
+    deliveryPlants: any[];
+    deliveryType: string;
+    formOfPayment: string = "TRANSFERENCIA ELECTRÓNICA DE FONDOS";
+    futurePriceInfo: FuturePriceInfo;
+    guarantee: number;
+    loadConditions: string;
+    loadType: string;
+    paymentDelays: { x: number, y: number };
+    paymentWithdrawal: string;
+    prepaid: number;
+    shrinkage: string;
+    storageAndFumigation: string;
+    transportInsurance: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -115,16 +135,36 @@ export class Contract extends FirebaseDocInterface {
         this.printableFormat = data.printableFormat ?? "";
         this.product = data.product.withConverter(Product.converter);
         this.productInfo = new ProductInfo(data.productInfo);
-        this.quantity = new Mass(data.quantity, FirebaseDocInterface.session.getDefaultUnit());
+        this.quantity = new Mass(data.quantity, data.quantity.defaultUnits || FirebaseDocInterface.session.getDefaultUnit());
         this.seller_terms = data.seller_terms;
         this.status = data.status;
+        this.tags = data.tags;
         this.tickets = tempTicketList;
         this.transport = data.transport;
         this.truckers = tempTruckerList;
         this.type = data.type;
-
+        
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
-        this.pricePerBushel = data.pricePerBushel ?? this.price.getPricePerUnit("bu", this.quantity);
+        this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
+
+        // NEW
+        this.bankInfo = data.bankInfo;
+        this.cargoDelays = data.cargoDelays;
+        this.contractOwner = data.contractOwner;
+        this.currency = data.currency;
+        this.deliveryPlants = data.deliveryPlants;
+        this.deliveryType = data.deliveryType;
+        this.formOfPayment = data.formOfPayment;
+        this.futurePriceInfo = data.futurePriceInfo;
+        this.guarantee = data.guarantee;
+        this.loadConditions = data.loadConditions;
+        this.loadType = data.loadType;
+        this.paymentDelays = data.paymentDelays;
+        this.paymentWithdrawal = data.paymentWithdrawal;
+        this.prepaid = data.prepaid;
+        this.shrinkage = data.shrinkage;
+        this.storageAndFumigation = data.storageAndFumigation;
+        this.transportInsurance = data.transportInsurance;
     }
 
     public static converter = {
@@ -150,11 +190,32 @@ export class Contract extends FirebaseDocInterface {
                 product: data.product,
                 productInfo: data.productInfo,
                 quantity: data.quantity.get(),
+                quantityUnits: data.quantity.defaultUnits,
                 seller_terms: data.seller_terms,
                 status: data.status,
+                tags: data.tags,
                 tickets: data.tickets,
                 transport: data.transport,
                 truckers: data.truckers,
+
+                // NEW
+                bankInfo: data.bankInfo,
+                cargoDelays: data.cargoDelays,
+                contractOwner: data.contractOwner,
+                currency: data.currency,
+                deliveryPlants: data.deliveryPlants,
+                deliveryType: data.deliveryType,
+                formOfPayment: data.formOfPayment,
+                futurePriceInfo: data.futurePriceInfo,
+                guarantee: data.guarantee,
+                loadConditions: data.loadConditions,
+                loadType: data.loadType,
+                paymentDelays: data.paymentDelays,
+                paymentWithdrawal: data.paymentWithdrawal,
+                prepaid: data.prepaid,
+                shrinkage: data.shrinkage,
+                storageAndFumigation: data.storageAndFumigation,
+                transportInsurance: data.transportInsurance,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -358,13 +419,28 @@ enum status {
 }
 
 interface ContactInfo {
-    caat: string,
-    city: string,
-    email: string,
-    name: string,
-    phoneNumber: string,
-    state: string,
-    streetAddress: string,
-    zipCode: string,
-    ref: DocumentReference,    
+    caat: string;
+    city: string;
+    email: string;
+    name: string;
+    phoneNumber: string;
+    state: string;
+    streetAddress: string;
+    zipCode: string;
+    ref: DocumentReference;
+}
+
+interface FuturePriceInfo {
+    base: Price;
+    exchangeRate: string | number;
+    expirationMonth: FutureMonth;
+    future: FutureMonth;
+    marketOptions: string;
+    priceSetPeriod: { begin: Date, end: Date };
+}
+
+interface BankInfo {
+    bank: string;
+    account: string;
+    interBank: string;
 }

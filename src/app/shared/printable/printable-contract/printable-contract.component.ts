@@ -46,6 +46,7 @@ export class PrintableContractComponent implements OnInit {
 
   ngAfterViewInit() {
     this.version$.next(this.version$.getValue());
+    console.log(this.contract)
   }
 
 }

@@ -82,41 +82,7 @@ export class NewContractPage implements OnInit {
       this.productsList = list;
     });
 
-    this.contract.aflatoxin = 20;
-    this.contract.client = null;
-    this.contract.client = null;
-    this.contract.clientName = "";
-    this.contract.date = new Date();
-    this.contract.grade = 2;
-    this.contract.id = null;
-    this.contract.quantity = new Mass(null, this.session.getDefaultUnit());
-    this.contract.type = "";
-    this.contract.price = new Price(null, "bu");
-
-    this.contract.delivery_dates = {
-      begin: null,
-      end: null
-    }
-    this.contract.paymentTerms = {
-      before: false,
-      origin: false,
-      paymentTerms: null, 
-      measurement: null
-    }
-    this.contract.clientTicketInfo = {
-      caat: null,
-      city: null,
-      email: null,
-      name: null,
-      phoneNumber: null,
-      state: null,
-      streetAddress: null,
-      zipCode: null,
-      ref: null
-    }
-    
-    this.contract.truckers = [];
-    this.truckerArray = this.fb.array([]);
+    this.contractInit();
   }
 
   compareWithProduct(p1, p2){
@@ -235,11 +201,64 @@ export class NewContractPage implements OnInit {
     else if (typeof event === "number") {
       this.contract.quantity = new Mass(event, this.contract.quantity.defaultUnits);
     }
-    else if (typeof event) {
+    else if (typeof event === "string") {
       this.contract.quantity = new Mass(this.contract.quantity.amount, event);
     }
 
     this.contract.quantity.defineBushels(this.contract.productInfo);
+  }
+
+  public contractInit() {
+    this.contract.aflatoxin = 20;
+    this.contract.clientTicketInfo = {
+      caat: null,
+      city: null,
+      email: null,
+      name: null,
+      phoneNumber: null,
+      state: null,
+      streetAddress: null,
+      zipCode: null,
+      ref: null
+    };
+    this.contract.date = new Date();
+    this.contract.delivery_dates = {
+      begin: null,
+      end: null
+    };
+    this.contract.grade = 2;
+    this.contract.id = null;
+    this.contract.paymentTerms = {
+      before: false,
+      origin: false,
+      paymentTerms: null, 
+      measurement: null
+    };
+    this.contract.price = new Price(null, "bu");
+    this.contract.quantity = new Mass(null, this.session.getDefaultUnit());
+    this.contract.truckers = [];
+    this.contract.type = "";
+
+    // NEW
+    // this.contract.bankInfo
+    // this.contract.cargoDelays
+    // this.contract.contractOwner
+    // this.contract.currency
+    // this.contract.deliveryPlants
+    // this.contract.deliveryType
+    // this.contract.formOfPayment
+    // this.contract.futurePriceInfo
+    // this.contract.guarantee
+    // this.contract.loadConditions
+    // this.contract.loadType
+    // this.contract.paymentDelays
+    // this.contract.paymentWithdrawal
+    // this.contract.prepaid
+    // this.contract.shrinkage
+    // this.contract.storageAndFumigation
+    // this.contract.transportInsurance
+
+    this.truckerArray = this.fb.array([]);
   }
 
 }

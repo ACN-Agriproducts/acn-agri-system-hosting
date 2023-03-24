@@ -46,7 +46,7 @@ export class Price {
     /**
      * 
      * @param priceUnit unit of measurement the price will be based on
-     * @param mass provide if the desired unit to convert the price to is bushels
+     * @param mass must provide if the desired unit to convert the price to is bushels
      * @returns price per unit ($/unit)
      */
     public getPricePerUnit(priceUnit: units, mass: Mass): number {
