@@ -1,0 +1,92 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-subtitle>Contract Info</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-form-field class="span-4">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="contractDatepicker">
+      <mat-datepicker-toggle matSuffix [for]="contractDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #contractDatepicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="span-3">
+      <mat-label>Contract Type</mat-label>
+      <mat-select [(ngModel)]="contract.type" (ngModelChange)="docTypeChange()">
+        <mat-option *ngFor="let type of (settings$ | async)?.contractTypes | keyvalue" [value]="type.value">{{type.key}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>ID</mat-label>
+      <input matInput [(ngModel)]="contract.id" type="number" required [disabled]="!contract.type">
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+<ng-container *ngIf="contract?.printableFormat">
+  <mat-card *ngFor="let fieldGroup of (settings$ | async)?.formData[contract.printableFormat] | keyvalue">
+    <mat-card-header>
+      <mat-card-subtitle>{{fieldGroup.key}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngFor="let field of fieldGroup.value">
+        <ng-container *ngTemplateOutlet="versionTemplates | listFind:'typeTemplate':field.type ?? error; context: { $implicit: field }"></ng-container>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+
+<ng-template typeTemplate="primitive" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass">
+    <mat-label>{{data.label}}</mat-label>
+    <input 
+      matInput 
+      *ngIf="data.primitiveType != 'select'" 
+      [(ngModel)]="contract[data.fieldName]" 
+      [type]="data.primitiveType">
+    <mat-select *ngIf="data.primitiveType == 'select'" [(ngModel)]="contract[data.fieldName]">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="nested-primitive" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass">
+    <mat-label>{{data.label}}</mat-label>
+    <input 
+      matInput 
+      *ngIf="data.primitiveType != 'select'" 
+      [(ngModel)]="contract[data.fieldName][data.nestedField]" 
+      [type]="data.primitiveType">
+    <mat-select *ngIf="data.primitiveType == 'select'" [(ngModel)]="contract[data.fieldName][data.nestedField]">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="client-select" let-data>
+  <div class="flex-field" [ngClass]="data | getFieldClass">
+    <button mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
+    <mat-form-field>
+      <mat-label>Client Name</mat-label>
+      <input matInput disabled [(ngModel)]="contract.clientName">
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template typeTemplate="ticket-client-select" let-data>
+  <div class="flex-field">
+    <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
+    <mat-form-field>
+      <mat-label>Ticket Client Name</mat-label>
+      <input matInput disabled [(ngModel)]="contract.clientName">
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template #error>
+	<p>ERROR</p>
+</ng-template>

@@ -1,0 +1,38 @@
+mat-card { 
+    margin-bottom: 1.2rem;
+}
+
+mat-card-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.span-1 {
+    grid-column-end: span 1;
+}
+
+.span-2 {
+    grid-column-end: span 2;
+}
+
+.span-3 {
+    grid-column-end: span 3;    
+}
+
+.span-4 {
+    grid-column-end: span 4;    
+}
+
+.flex-field {
+    display: flex;
+    gap: 1rem;
+}
+
+.field-width-200 {
+    width: 200px;
+}
+
+.test {
+    background-color: yellow;
+}
