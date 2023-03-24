@@ -54,10 +54,35 @@ export class Contract extends FirebaseDocInterface {
 
         if(snapshotOrRef instanceof DocumentReference) {
             this.ref = snapshotOrRef;
+            this.clientInfo = {
+                caat: null,
+                city: null,
+                email: null,
+                name: null,
+                phoneNumber: null,
+                state: null,
+                streetAddress: null,
+                zipCode: null,
+                ref: null
+            };
+
+            this.clientTicketInfo = 
+            {
+                caat: null,
+                city: null,
+                email: null,
+                name: null,
+                phoneNumber: null,
+                state: null,
+                streetAddress: null,
+                zipCode: null,
+                ref: null
+            };
+
+            this.productInfo = new ProductInfo({});
+
             return;
         }
-
-        if(data == undefined) return;
 
         let tempTicketList: DocumentReference<Ticket>[] = [];
         let tempTruckerList: TruckerInfo[] = [];
