@@ -24,6 +24,8 @@ import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-di
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
 import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
+import { PrintableProductionOrderComponent } from './printable/printable-production-order/printable-production-order.component';
+import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
 
 
 @NgModule({
@@ -51,7 +53,7 @@ import { TypeTemplateDirective } from './directives/type-template/type-template.
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
-    TypeTemplateDirective
+    TypeTemplateDirective,
   ],
   declarations: [
     ToolbarComponent,
@@ -72,6 +74,8 @@ import { TypeTemplateDirective } from './directives/type-template/type-template.
     InvoiceDialogComponent,
     DocumentWrapperComponent,
     TypeTemplateDirective,
+    PrintableProductionOrderComponent,
+    ProductionOrderDefaultComponent,
   ]
 })
 export class SharedModule {}
