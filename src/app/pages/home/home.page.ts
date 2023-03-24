@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { Plant } from '@shared/classes/plant';
-import { DocumentReference, Firestore } from '@angular/fire/firestore';
+import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Contract } from '@shared/classes/contract';
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -22,13 +23,20 @@ export class HomePage implements OnInit {
   public contractType: string = '';
   public contractTypeList: Map<string, string>;
 
+  public contract: Contract;
+
   constructor(
-    private session: SessionInfo
+    private session: SessionInfo,
+    private db: Firestore
   ) {
   }
 
   ngOnInit() {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
+
+    this.contract = new Contract(
+      doc(Contract.getCollectionReference(this.db, this.session.getCompany()))
+    );
   }
 }
