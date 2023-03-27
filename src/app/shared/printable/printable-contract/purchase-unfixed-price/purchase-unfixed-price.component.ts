@@ -11,6 +11,7 @@ import { Contract } from '@shared/classes/contract';
 })
 export class PurchaseUnfixedPriceComponent implements OnInit {
   @Input() contractForm: Contract;
+  @Input() focusedField: string;
 
   constructor() { }
 

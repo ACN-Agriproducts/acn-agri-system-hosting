@@ -18,6 +18,7 @@ export class PrintableContractComponent implements OnInit {
     this.version$.next(newVersion);
   }
   @Input() contract: Contract;
+  @Input() focusedField: string;
 
   @Output() contractTypesListEmitter = new EventEmitter<Map<string, string>>();
 
