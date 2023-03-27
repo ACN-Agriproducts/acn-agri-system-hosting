@@ -48,7 +48,7 @@
     </mat-card-header>
     <mat-card-content>
       <ng-container *ngFor="let field of (settings$ | async)?.formData[contract.printableFormat][fieldGroupName]">
-        <ng-container *ngTemplateOutlet="(versionTemplates | listFind:'typeTemplate':field.type).templateRef ?? error; context: { $implicit: field }"></ng-container>
+        <ng-container *ngTemplateOutlet="(versionTemplates | listFind:'typeTemplate':field.type)?.templateRef ?? error; context: { $implicit: field }"></ng-container>
       </ng-container>
     </mat-card-content>
   </mat-card>
