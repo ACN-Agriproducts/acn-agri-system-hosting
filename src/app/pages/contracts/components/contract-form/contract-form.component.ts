@@ -7,6 +7,8 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { Mass } from '@shared/classes/mass';
+import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
 import { lastValueFrom } from 'rxjs';
 import { SelectClientComponent } from '../select-client/select-client.component';
@@ -23,6 +25,8 @@ export class ContractFormComponent implements OnInit {
   public settings$: Promise<ContractSettings>;
   public contactList: CompanyContact[];
   public truckerList: CompanyContact[];
+  public products$: Promise<Product[]>;
+  public plants$: Promise<Plant[]>;
 
   @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TypeTemplateDirective>;
 
@@ -52,6 +56,9 @@ export class ContractFormComponent implements OnInit {
         });
       this.truckerList = this.contactList.filter(c => !c.isClient);
     });
+
+    this.products$ = Product.getProductList(this.db, this.session.getCompany());
+    this.plants$ = Plant.getPlantList(this.db, this.session.getCompany());
   }
 
   openClientSelect() {
@@ -95,6 +102,12 @@ export class ContractFormComponent implements OnInit {
 
   docTypeChange() {
     this.contract.printableFormat = this.contract.type;
+  }
+
+  async productChange() {
+    //(await this.products$).find(p => p.ref == this.contract.ref)
+    console.log((await this.products$).find(p => p.ref == this.contract.ref));
+    
   }
   
   log(...data: any) : void {

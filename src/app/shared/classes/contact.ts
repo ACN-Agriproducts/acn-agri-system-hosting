@@ -17,6 +17,8 @@ export class Contact extends FirebaseDocInterface {
     public streetAddress: string;
     public tags: string[];
     public zipCode: string;
+    public notarialAct: string;
+    public notarialActDate: Date;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Contact.converter);
@@ -34,6 +36,8 @@ export class Contact extends FirebaseDocInterface {
         this.streetAddress = data.streetAddress;
         this.tags = data.tags;
         this.zipCode = data.zipCode;
+        this.notarialAct = data.notarialAct;
+        this.notarialActDate = data.notarialActDate;
 
         data.metacontacts?.forEach(metacontact => {
             this.metacontacts.push(this.createMetaContact(metacontact));
@@ -55,6 +59,8 @@ export class Contact extends FirebaseDocInterface {
                 streetAddress: data.streetAddress,
                 tags: data.tags,
                 zipCode: data.zipCode,
+                notarialAct: data.notarialAct,
+                notarialActDate: data.notarialActDate,
             };
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contact {

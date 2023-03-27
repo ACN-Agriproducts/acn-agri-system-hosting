@@ -192,6 +192,19 @@
   </mat-form-field>
 </ng-template>
 
+<ng-template typeTemplate="product-select" let-data>
+ <mat-form-field [ngClass]="data | getFieldClass">
+  <mat-label>{{data.label}}</mat-label>
+  <mat-select [(ngModel)]="contract.product" (ngModelChange)="productChange()">
+    <mat-option 
+      *ngFor="let product of products$ | async" 
+      [value]="product.ref"
+      >{{product.ref.id}}
+    </mat-option>
+  </mat-select>
+ </mat-form-field>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>

@@ -83,7 +83,12 @@ export class Contract extends FirebaseDocInterface {
                 state: null,
                 streetAddress: null,
                 zipCode: null,
-                ref: null
+                ref: null,
+                clientRep: null,
+                rfc: null,
+                curp: null,
+                notarialAct: null,
+                notarialActDate: null
             };
 
             this.clientTicketInfo = {
@@ -95,11 +100,18 @@ export class Contract extends FirebaseDocInterface {
                 state: null,
                 streetAddress: null,
                 zipCode: null,
-                ref: null
+                ref: null,
+                clientRep: null,
+                rfc: null,
+                curp: null,
+                notarialAct: null,
+                notarialActDate: null
             };
 
             this.delivery_dates = new DeliveryDates({});
             this.productInfo = new ProductInfo({});
+            this.paymentTerms = new PaymentTerms({});
+            this.paymentTerms.origin = null;
 
             return;
         }
@@ -329,6 +341,11 @@ export class Contract extends FirebaseDocInterface {
             streetAddress: contact.streetAddress,
             zipCode: contact.zipCode,
             ref: contact.ref,
+            clientRep: primaryContact.name,
+            rfc: contact.rfc,
+            curp: contact.curp,
+            notarialAct: contact.notarialAct,
+            notarialActDate: contact.notarialActDate
         };
     }
 
@@ -369,13 +386,14 @@ export class DeliveryDates {
 export class PaymentTerms {
     before: boolean;
     measurement: string;
-    origin: boolean;
+    origin: string;
     paymentTerms: number;
 
     constructor(data: any) {
         this.before = data.before;
         this.measurement = data.measurement;
-        this.origin = data.measurement;
+        this.origin = typeof data.origin == "string" ? data.origin:
+            data.origin ? "own-scale" : "client-scale";
         this.paymentTerms = data.paymentTerms;
     }
 }
@@ -428,6 +446,11 @@ interface ContactInfo {
     streetAddress: string;
     zipCode: string;
     ref: DocumentReference;
+    clientRep: string;
+    rfc: string;
+    curp: string;
+    notarialAct: string;
+    notarialActDate: Date;
 }
 
 interface FuturePriceInfo {

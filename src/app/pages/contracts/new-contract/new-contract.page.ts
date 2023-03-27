@@ -219,7 +219,12 @@ export class NewContractPage implements OnInit {
       state: null,
       streetAddress: null,
       zipCode: null,
-      ref: null
+      ref: null,
+      clientRep: null,
+      rfc: null,
+      curp: null,
+      notarialAct: null,
+      notarialActDate: null,
     };
     this.contract.date = new Date();
     this.contract.delivery_dates = {
@@ -230,7 +235,7 @@ export class NewContractPage implements OnInit {
     this.contract.id = null;
     this.contract.paymentTerms = {
       before: false,
-      origin: false,
+      origin: null,
       paymentTerms: null, 
       measurement: null
     };
