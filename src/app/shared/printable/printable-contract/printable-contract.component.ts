@@ -3,7 +3,7 @@ import { doc, Firestore, getDoc, getDocFromServer } from '@angular/fire/firestor
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
 import { Contract } from '@shared/classes/contract';
-import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
+import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 @Component({

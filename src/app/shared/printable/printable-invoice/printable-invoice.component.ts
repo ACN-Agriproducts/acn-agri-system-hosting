@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChildren } from '@angular/core';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 import { Mass } from '@shared/classes/mass';
-import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
+import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 @Component({

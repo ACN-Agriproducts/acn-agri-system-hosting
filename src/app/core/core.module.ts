@@ -15,6 +15,7 @@ import { StateAbbreviationPipe } from './pipes/stateAbbreviation/state-abbreviat
 import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
 import { ListFindPipe } from './pipes/list-find/list-find.pipe';
 import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
+import { TypeTemplateDirective } from './directive/type-template/type-template.directive';
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
     StateAbbreviationPipe,
     AsPipe,
     ListFindPipe,
-    MassInUnitPipe
+    MassInUnitPipe,
+    TypeTemplateDirective
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -53,7 +55,8 @@ import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
     StateAbbreviationPipe,
     AsPipe,
     ListFindPipe,
-    MassInUnitPipe
+    MassInUnitPipe,
+    TypeTemplateDirective
   ]
 })
 export class CoreModule { }

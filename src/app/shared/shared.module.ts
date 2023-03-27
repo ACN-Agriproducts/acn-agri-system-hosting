@@ -22,7 +22,6 @@ import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-di
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
 import { PrintableContractComponent } from './printable/printable-contract/printable-contract.component';
-import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
 import { PurchaseToDepositComponent } from './printable/printable-contract/purchase-to-deposit/purchase-to-deposit.component';
 import { ThirdPartyWarehouseComponent } from './printable/printable-contract/third-party-warehouse/third-party-warehouse.component';
 import { PurchaseFixedPriceComponent } from './printable/printable-contract/purchase-fixed-price/purchase-fixed-price.component';
@@ -57,7 +56,6 @@ import { PurchaseContractComponent } from './printable/printable-contract/purcha
     DocumentWrapperComponent,
     PrintableContractComponent,
     PurchaseToDepositComponent,
-    TypeTemplateDirective,
     NgxPrintModule,
   ],
   declarations: [
@@ -77,7 +75,6 @@ import { PurchaseContractComponent } from './printable/printable-contract/purcha
     InvoiceDialogComponent,
     DocumentWrapperComponent,
     PrintableContractComponent,
-    TypeTemplateDirective,
     PurchaseToDepositComponent,
     ThirdPartyWarehouseComponent,
     PurchaseFixedPriceComponent,

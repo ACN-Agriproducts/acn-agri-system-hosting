@@ -9,7 +9,7 @@ import { ContractSettings } from '@shared/classes/contract-settings';
 import { Mass } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
-import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
+import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { lastValueFrom } from 'rxjs';
 import { SelectClientComponent } from '../select-client/select-client.component';
 
