@@ -5,11 +5,13 @@ import { SelectClientComponent } from './select-client/select-client.component';
 import { CoreModule } from '@core/core.module';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { GetFieldClassPipe } from './pipes/get-field-class.pipe';
 
 @NgModule({
   declarations: [
     ContractFormComponent,
-    SelectClientComponent
+    SelectClientComponent,
+    GetFieldClassPipe
   ],
   imports: [
     CommonModule,
