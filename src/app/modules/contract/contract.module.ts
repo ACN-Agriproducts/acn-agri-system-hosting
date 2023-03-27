@@ -1,0 +1,25 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ContractFormComponent } from './contract-form/contract-form.component';
+import { SelectClientComponent } from './select-client/select-client.component';
+import { CoreModule } from '@core/core.module';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    ContractFormComponent,
+    SelectClientComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    FormsModule,
+    CoreModule,
+  ],
+  exports: [
+    ContractFormComponent
+  ]
+})
+export class ContractModule { }

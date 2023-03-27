@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, doc } from '@angular/fire/firestore';
+import { Firestore, doc, collection } from '@angular/fire/firestore';
 import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Observable, lastValueFrom } from 'rxjs';
@@ -21,31 +21,11 @@ import { Price } from '@shared/classes/price';
   styleUrls: ['./new-contract.page.scss'],
 })
 export class NewContractPage implements OnInit {
-  formControl = FormControl
-  formGroup = FormGroup
-
-  currentCompanyValue: Company;
-  contactList: CompanyContact[];
-  truckerList: CompanyContact[];
-  productsList: Product[];
-  plantsList: Plant[];
-  filteredTruckerOptions: Observable<CompanyContact[]>[] = [];
-  contract: Contract;
-  chosenProduct: Product;
-
-  useSameClient: boolean = true;
-  truckerArray: FormArray;
-  formIsValid: boolean = false;
-  idIsValid: boolean = false;
-  
-  selectedClient: Contact;
-  ticketClient: Contact;
-
-  contractTypeList: Map<string, string>;
+  public contract: Contract;
+  public focusedFieldName: string;
 
   constructor(
     private db: Firestore,
-    private dialog: MatDialog,
     private fb: UntypedFormBuilder,
     private navController: NavController,
     private session: SessionInfo,
@@ -53,36 +33,13 @@ export class NewContractPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.contract = new Contract(doc(Contract.getCollectionReference(this.db, this.session.getCompany(), "")))
+    this.contract = new Contract(
+      doc(Contract.getCollectionReference(this.db, this.session.getCompany()))
+    )
+  }
 
-    Plant.getPlantList(this.db, this.session.getCompany()).then(list => {
-      this.plantsList = list;
-      this.contract.plants = [...list.map(p => p.snapshot.id)];
-    });
-
-    Company.getCompany(this.db, this.session.getCompany()).then(val => {
-      this.currentCompanyValue = val;
-      this.contactList = val.contactList.sort((a, b) =>{
-          var nameA = a.name.toUpperCase()
-          var nameB = b.name.toUpperCase()
-
-          if(nameA < nameB){
-            return -1;
-          }
-          if(nameA > nameB){
-            return 1;
-          }
-
-          return 0;
-        });
-      this.truckerList = this.contactList.filter(c => !c.isClient);
-    });
-
-    Product.getProductList(this.db, this.session.getCompany()).then(list => {
-      this.productsList = list;
-    });
-
-    this.contractInit();
+  focus(event: any) {
+    console.log(this.contract);
   }
 
   compareWithProduct(p1, p2){
@@ -103,167 +60,75 @@ export class NewContractPage implements OnInit {
       });
   }
 
-  openClientSelect() {
-    // const dialogRef = this.dialog.open(SelectClientComponent, {
-    //   width: '600px',
-    //   data: this.contactList
-    // });
+  // addPlantChip(plant: string): void {
+  //   const chosenPlants = this.contract.plants;
 
+  //   if(!this.chipIsChosen(plant)) {
+  //     chosenPlants.push(plant);
+  //   }
+  // }
 
-    // lastValueFrom(dialogRef.afterClosed()).then(result => {
-    //   if(!result) return;
+  // removePlantChip(plant: string) {
+  //   const chosenPlants = this.contract.plants as string[];
+  //   const index: number = chosenPlants.indexOf(plant);
 
-    //   Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
-    //     this.selectedClient = client;
-    //     this.contract.clientInfo = Contract.clientInfo(client);
-    //     this.contract.clientName = client.name;
-    //   });
-    // });
-  }
+  //   if(index >= 0) {
+  //     chosenPlants.splice(index, 1);
+  //   }
+  // }
 
-  openTicketClientSelect() { 
-    // const dialogRef = this.dialog.open(SelectClientComponent, {
-    //   width: '600px',
-    //   data: this.contactList
-    // });
+  // chipIsChosen(plant: string) {
+  //   const chosenPlants = this.contract.plants as string[];
+  //   return chosenPlants.findIndex(p => p == plant) != -1;
+  // }
 
-    // lastValueFrom(dialogRef.afterClosed()).then(result => {
-    //   Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
-    //     this.ticketClient = client;
-    //     this.contract.clientTicketInfo = Contract.clientInfo(client);
-    //     this.contract.clientTicketInfo.name = client.name;
-    //   });
-    // });
-  }
+  // private newTruckerGroup(): UntypedFormGroup {
+  //   return this.fb.group({
+  //     trucker: [,Validators.required],
+  //     freight: [,Validators.required]
+  //   });
+  // }
 
-  addPlantChip(plant: string): void {
-    const chosenPlants = this.contract.plants;
+  // addTruckerGroup(): void {
+  //   this.truckerArray.push(this.newTruckerGroup());
+  //   this.filteredTruckerOptions.push(this.truckerArray.get([this.truckerArray.length-1, 'trucker']).valueChanges.pipe(
+  //     startWith(''), map(value => this._filter(value || ''))
+  //   ));
+  // }
 
-    if(!this.chipIsChosen(plant)) {
-      chosenPlants.push(plant);
-    }
-  }
+  // removeTruckerGroup(index: number): void {
+  //   this.truckerArray.removeAt(index);
+  //   this.filteredTruckerOptions.splice(index, 1);
+  // }
 
-  removePlantChip(plant: string) {
-    const chosenPlants = this.contract.plants as string[];
-    const index: number = chosenPlants.indexOf(plant);
+  // contractTypeChange() {}
 
-    if(index >= 0) {
-      chosenPlants.splice(index, 1);
-    }
-  }
+  // _filter(value: string): CompanyContact[] {
+  //   const filterValue = value.toLowerCase();
+  //   return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
+  // }
 
-  chipIsChosen(plant: string) {
-    const chosenPlants = this.contract.plants as string[];
-    return chosenPlants.findIndex(p => p == plant) != -1;
-  }
+  // contractTypeGetter(): string {
+  //   return this.contract.type ?? "";
+  // }
 
-  private newTruckerGroup(): UntypedFormGroup {
-    return this.fb.group({
-      trucker: [,Validators.required],
-      freight: [,Validators.required]
-    });
-  }
+  // public selectProduct(): void {
+  //   this.contract.product = this.chosenProduct.ref.withConverter(Product.converter);
+  //   this.contract.productInfo = this.chosenProduct.getProductInfo();
+  //   this.recalculateMass();
+  // }
 
-  addTruckerGroup(): void {
-    this.truckerArray.push(this.newTruckerGroup());
-    this.filteredTruckerOptions.push(this.truckerArray.get([this.truckerArray.length-1, 'trucker']).valueChanges.pipe(
-      startWith(''), map(value => this._filter(value || ''))
-    ));
-  }
+  // public recalculateMass(event?: number | units): void {
+  //   if (!event) {
+  //     this.contract.quantity = new Mass(this.contract.quantity.amount, this.contract.quantity.defaultUnits);
+  //   }
+  //   else if (typeof event === "number") {
+  //     this.contract.quantity = new Mass(event, this.contract.quantity.defaultUnits);
+  //   }
+  //   else if (typeof event === "string") {
+  //     this.contract.quantity = new Mass(this.contract.quantity.amount, event);
+  //   }
 
-  removeTruckerGroup(index: number): void {
-    this.truckerArray.removeAt(index);
-    this.filteredTruckerOptions.splice(index, 1);
-  }
-
-  contractTypeChange() {}
-
-  _filter(value: string): CompanyContact[] {
-    const filterValue = value.toLowerCase();
-    return this.truckerList.filter(trucker => (trucker.name as string).toLowerCase().includes(filterValue));
-  }
-
-  contractTypeGetter(): string {
-    return this.contract.type ?? "";
-  }
-
-  public selectProduct(): void {
-    this.contract.product = this.chosenProduct.ref.withConverter(Product.converter);
-    this.contract.productInfo = this.chosenProduct.getProductInfo();
-    this.recalculateMass();
-  }
-
-  public recalculateMass(event?: number | units): void {
-    if (!event) {
-      this.contract.quantity = new Mass(this.contract.quantity.amount, this.contract.quantity.defaultUnits);
-    }
-    else if (typeof event === "number") {
-      this.contract.quantity = new Mass(event, this.contract.quantity.defaultUnits);
-    }
-    else if (typeof event === "string") {
-      this.contract.quantity = new Mass(this.contract.quantity.amount, event);
-    }
-
-    this.contract.quantity.defineBushels(this.contract.productInfo);
-  }
-
-  public contractInit() {
-    this.contract.aflatoxin = 20;
-    this.contract.clientTicketInfo = {
-      caat: null,
-      city: null,
-      email: null,
-      name: null,
-      phoneNumber: null,
-      state: null,
-      streetAddress: null,
-      zipCode: null,
-      ref: null,
-      clientRep: null,
-      rfc: null,
-      curp: null,
-      notarialAct: null,
-      notarialActDate: null,
-    };
-    this.contract.date = new Date();
-    this.contract.delivery_dates = {
-      begin: null,
-      end: null
-    };
-    this.contract.grade = 2;
-    this.contract.id = null;
-    this.contract.paymentTerms = {
-      before: false,
-      origin: null,
-      paymentTerms: null, 
-      measurement: null
-    };
-    this.contract.price = new Price(null, "bu");
-    this.contract.quantity = new Mass(null, this.session.getDefaultUnit());
-    this.contract.truckers = [];
-    this.contract.type = "";
-
-    // NEW
-    // this.contract.bankInfo
-    // this.contract.cargoDelays
-    // this.contract.contractOwner
-    // this.contract.currency
-    // this.contract.deliveryPlants
-    // this.contract.deliveryType
-    // this.contract.formOfPayment
-    // this.contract.futurePriceInfo
-    // this.contract.guarantee
-    // this.contract.loadConditions
-    // this.contract.loadType
-    // this.contract.paymentDelays
-    // this.contract.paymentWithdrawal
-    // this.contract.prepaid
-    // this.contract.shrinkage
-    // this.contract.storageAndFumigation
-    // this.contract.transportInsurance
-
-    this.truckerArray = this.fb.array([]);
-  }
-
+  //   this.contract.quantity.defineBushels(this.contract.productInfo);
+  // }
 }
