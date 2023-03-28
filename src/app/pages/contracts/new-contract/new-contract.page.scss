@@ -1,3 +1,7 @@
+ion-content {
+    height: 100%;
+}
+
 ion-label{
     max-width: 20% !important;
 }
@@ -48,19 +52,43 @@ input::-webkit-inner-spin-button {
   display: none;
 }
 
-.content-flex {
-    display: flex;
-    flex-flow: row wrap;
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    height: 100%;
+    overflow-y: auto;
+    justify-items: center;
 
-    #form {
-        flex: 1 1 5in;
-        max-width: 8.5in;
+    & > * {
+        overflow-y: scroll;
+        max-height: 100%;
     }
 }
 
+
 app-printable-contract {
-    overflow-y: auto;
-    max-height: 11in;
+    // overflow-y: auto;
+    // max-height: 11in;
     max-width: min-content;
+    min-width: min-content;
     margin: 10px;
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
