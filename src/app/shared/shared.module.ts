@@ -30,6 +30,7 @@ import { SalesFixedPriceComponent } from './printable/printable-contract/sales-f
 import { SalesUnfixedPriceComponent } from './printable/printable-contract/sales-unfixed-price/sales-unfixed-price.component';
 import { SalesContractComponent } from './printable/printable-contract/sales-contract/sales-contract.component';
 import { PurchaseContractComponent } from './printable/printable-contract/purchase-contract/purchase-contract.component';
+import { TranslatePipe } from './pipes/translate/translate.pipe';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { PurchaseContractComponent } from './printable/printable-contract/purcha
     SalesFixedPriceComponent,
     SalesUnfixedPriceComponent,
     SalesContractComponent,
-    PurchaseContractComponent
+    PurchaseContractComponent,
+    TranslatePipe
   ]
 })
 export class SharedModule {}
