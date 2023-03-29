@@ -2,6 +2,13 @@ import { ProductInfo } from "./contract";
 import { Product } from "./product";
 
 export declare type units = "lbs" | "kg" | "mTon" | "CWT" | "bu";
+const unitNameMap: Map<units, string> = new Map<units, string>([
+    ["lbs", "pounds"],
+    ["kg", "kilograms"],
+    ["mTon", "metric tons"],
+    ["CWT", "hundedweight"],
+    ["bu", "bushels"],
+]);
 
 export class Mass {
     defaultUnits: units;
@@ -48,5 +55,9 @@ export class Mass {
 
     defineBushels(product: Product | ProductInfo): void {
         this.conversions.set("bu", this.conversions.get("lbs") / product?.weight);
+    }
+
+    static getUnitFullName(unit: units): string {
+        return unitNameMap.get(unit);
     }
 }
