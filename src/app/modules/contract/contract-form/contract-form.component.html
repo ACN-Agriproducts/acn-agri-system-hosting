@@ -91,6 +91,14 @@
 
     <input 
       matInput 
+      *ngSwitchCase="'number'"
+      [(ngModel)]="contract[data.fieldName]"
+      type="number"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)">
+
+    <input 
+      matInput 
       *ngSwitchDefault 
       [(ngModel)]="contract[data.fieldName]"
       [type]="data.primitiveType"
@@ -133,6 +141,14 @@
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
       (focusout)="selectedFieldEvent.emit(null)"
     ></textarea>
+
+    <input 
+      matInput 
+      *ngSwitchCase="'number'"
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      type="number"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)">
 
     <input 
       matInput 
@@ -199,7 +215,11 @@
 <ng-template typeTemplate="product-select" let-data>
  <mat-form-field [ngClass]="data | getFieldClass">
   <mat-label>{{data.label}}</mat-label>
-  <mat-select [(ngModel)]="contract.product" (ngModelChange)="productChange()">
+  <mat-select 
+    [(ngModel)]="contract.product" 
+    (ngModelChange)="productChange()"
+    (focus)="selectedFieldEvent.emit('product')"
+    (focusout)="selectedFieldEvent.emit(null)">
     <mat-option 
       *ngFor="let product of products$ | async" 
       [value]="product.ref"
@@ -224,7 +244,12 @@
 <ng-template typeTemplate="plant-select" let-data>
   <mat-form-field [ngClass]="data | getFieldClass">
     <mat-label>{{data.label}}</mat-label>
-    <mat-select multiple [(ngModel)]="contract.plants" (ngModelChange)="plantSelectChange()">
+    <mat-select 
+      multiple 
+      [(ngModel)]="contract.plants" 
+      (ngModelChange)="plantSelectChange()"
+      (focus)="selectedFieldEvent.emit('plants')"
+      (focusout)="selectedFieldEvent.emit(null)">
       <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id">{{plant.ref.id | titlecase}}</mat-option>
       <mat-option *ngIf="data.suffix" value="third-party">{{data.suffix}}</mat-option>
     </mat-select>
