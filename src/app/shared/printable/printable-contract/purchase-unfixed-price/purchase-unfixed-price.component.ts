@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Contract } from '@shared/classes/contract';
-import { Mass, units } from '@shared/classes/mass';
+import { Utils } from '../acnutils.class';
 
 @Component({
   selector: 'contract-purchase-unfixed-price',
@@ -14,11 +14,9 @@ export class PurchaseUnfixedPriceComponent implements OnInit {
   @Input() contractForm: Contract;
   @Input() focusedField: string;
 
+  utils = Utils;
+
   constructor() { }
 
   ngOnInit() {}
-
-  getUnitName(unit: units): string {
-    return Mass.getUnitFullName(unit);
-  }
 }

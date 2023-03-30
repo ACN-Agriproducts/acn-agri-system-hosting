@@ -186,11 +186,15 @@
         </div>
         <div class="contract-info-row">
             <div>CANTIDAD:</div>
-            <div>5000 (CINCOMIL) TONELADAS MÉTRICAS +- 5%</div>
+            <div>
+                <span [class.focused]="focusedField == 'quantiy.amount'">{{contractForm?.quantity?.amount}}</span> (CINCOMIL) 
+                <span [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
+                +- 5%
+            </div>
         </div>
         <div class="contract-info-row">
             <div>UNIDAD DE MEDIDA:</div>
-            <div [class.focused]="focusedField == 'quantiy.defaultUnits'">{{getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</div>
+            <div [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</div>
         </div>
         <div class="contract-info-row">
             <div>CALIDAD GARANTIZADA:</div>
@@ -206,7 +210,7 @@
         </div>
         <div class="contract-info-row">
             <div>SEGURO DE TRÁNSITO:</div>
-            <div>VENDEDOR</div>
+            <div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.transportInsurance}}</div>
         </div>
         <div class="contract-info-row">
             <div>LUGAR DE ENTREGA: </div>
@@ -222,15 +226,15 @@
         </div>
         <div class="contract-info-row">
             <div>MERMAS:</div>
-			<div>NO APLICA</div>
+			<div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.shrinkage}}</div>
         </div>
         <div class="contract-info-row">
             <div>PERIODO DE ENTREGA:</div>
-			<div class="period">02-DEC-21<b>AL</b>08-DEC-21</div>
+			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY' | uppercase}}</div>
         </div>
 		<div class="contract-info-row">
             <div>ALMACENAJE Y FUMIGACIÓN:</div>
-			<div>NO APLICA</div>
+			<div [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin || "NO APLICA"}}</div>
         </div>
         <div class="contract-info-row">
             <div>TÉRMINOS DE PAGO:</div>
