@@ -218,6 +218,16 @@
   </mat-form-field>
 </ng-template>
 
+<ng-template typeTemplate="plant-select" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass">
+    <mat-label>{{data.label}}</mat-label>
+    <mat-select multiple [(ngModel)]="contract.plants" (ngModelChange)="plantSelectChange()">
+      <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id">{{plant.ref.id | titlecase}}</mat-option>
+      <mat-option *ngIf="data.suffix" value="third-party">{{data.suffix}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>

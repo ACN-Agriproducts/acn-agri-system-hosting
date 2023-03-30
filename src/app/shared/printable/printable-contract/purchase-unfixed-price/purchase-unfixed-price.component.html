@@ -215,9 +215,9 @@
         <div class="contract-info-row">
             <div>LUGAR DE ENTREGA: </div>
             <div>
-				EXW BODEGA SAN FERNANDO, TAMAULIPAS
-				<br>
-				CARRETERA CD. VICTORIA-MATAMOROS
+                <ng-container *ngFor="let address of contractForm.deliveryPlants">
+                    <span>{{address}}</span><br>
+                </ng-container>
 			</div>
         </div>
         <div class="contract-info-row">
