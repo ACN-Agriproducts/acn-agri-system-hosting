@@ -206,6 +206,18 @@
  </mat-form-field>
 </ng-template>
 
+<ng-template typeTemplate="delivery-dates" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass">
+    <mat-label>{{data.label}}</mat-label>
+    <mat-date-range-input [rangePicker]="deliveryDatesPicker">
+      <input matStartDate [(ngModel)]="contract.delivery_dates.begin">
+      <input matEndDate [(ngModel)]="contract.delivery_dates.end">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="deliveryDatesPicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #deliveryDatesPicker></mat-date-range-picker>
+  </mat-form-field>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>

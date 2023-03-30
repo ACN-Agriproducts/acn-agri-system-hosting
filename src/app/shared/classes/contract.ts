@@ -47,7 +47,7 @@ export class Contract extends FirebaseDocInterface {
     cargoDelays: string;
     contractOwner: string;
     currency: string;
-    deliveryPlants: any[];
+    deliveryPlants: string[];
     deliveryType: string;
     formOfPayment: string = "TRANSFERENCIA ELECTRÓNICA DE FONDOS";
     futurePriceInfo: FuturePriceInfo;
