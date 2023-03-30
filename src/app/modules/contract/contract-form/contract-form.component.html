@@ -228,6 +228,13 @@
   </mat-form-field>
 </ng-template>
 
+<ng-template typeTemplate="third-party-plant" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" *ngIf="contract?.plants?.includes('third-party')">
+    <mat-label>{{data.label}}</mat-label>
+    <textarea matInput [(ngModel)]="contract.deliveryPlants[contract.deliveryPlants.length - 1]"></textarea>
+  </mat-form-field>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>

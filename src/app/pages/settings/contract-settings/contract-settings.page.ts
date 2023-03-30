@@ -12,6 +12,17 @@ import { ContractSettings } from '@shared/classes/contract-settings';
 })
 export class ContractSettingsPage implements OnInit {
   public settings: ContractSettings;
+  public typesList: string[] = [
+    "primitive",
+    "nested-primitive",
+    "client-select",
+    "ticket-client-select",
+    "primitive-prototype",
+    "product-select",
+    "delivery-dates",
+    "plant-select",
+    "third-party-plant"
+  ]
 
   constructor(
     private db: Firestore,

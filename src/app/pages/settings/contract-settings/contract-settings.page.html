@@ -24,7 +24,9 @@
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Type</mat-label>
-            <input matInput [(ngModel)]="item.type">
+            <mat-select [(ngModel)]="item.type">
+              <mat-option *ngFor="let type of typesList" [value]="type">{{type}}</mat-option>
+            </mat-select>
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Class</mat-label>

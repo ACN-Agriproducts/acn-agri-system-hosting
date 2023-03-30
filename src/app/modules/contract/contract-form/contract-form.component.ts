@@ -121,7 +121,7 @@ export class ContractFormComponent implements OnInit {
       this.contract.deliveryPlants.push(plantObject.address);
     });
 
-    if(this.contract.plants.includes("third-party")) this.contract.plants.push("");
+    if(this.contract.plants.includes("third-party")) this.contract.deliveryPlants.push("");
   }
   
   log(...data: any) : void {
