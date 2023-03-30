@@ -28,6 +28,8 @@ export class ContractFormComponent implements OnInit {
   public products$: Promise<Product[]>;
   public plants$: Promise<Plant[]>;
 
+  public useSameClientForTicket = true;
+
   @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TypeTemplateDirective>;
 
   constructor(
