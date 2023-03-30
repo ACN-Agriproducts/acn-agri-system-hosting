@@ -189,7 +189,7 @@
             <div>
                 <span [class.focused]="focusedField == 'quantiy.amount'">{{contractForm?.quantity?.amount}}</span> (CINCOMIL) 
                 <span [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
-                +- 5%
+                +- <span [class.focused]="focusedField == 'quantityErrorPercentage'">{{contractForm?.quantityErrorPercentage || 'X'}}</span>%
             </div>
         </div>
         <div class="contract-info-row">

@@ -60,6 +60,7 @@ export class Contract extends FirebaseDocInterface {
     shrinkage: string;
     storageAndFumigation: string;
     transportInsurance: string;
+    quantityErrorPercentage: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -177,6 +178,7 @@ export class Contract extends FirebaseDocInterface {
         this.shrinkage = data.shrinkage;
         this.storageAndFumigation = data.storageAndFumigation;
         this.transportInsurance = data.transportInsurance;
+        this.quantityErrorPercentage = data.quantityErrorPercentage;
     }
 
     public static converter = {
@@ -228,6 +230,7 @@ export class Contract extends FirebaseDocInterface {
                 shrinkage: data.shrinkage,
                 storageAndFumigation: data.storageAndFumigation,
                 transportInsurance: data.transportInsurance,
+                quantityErrorPercentage: data.quantityErrorPercentage,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
