@@ -478,7 +478,8 @@ interface FuturePriceInfo {
     expirationMonth: Date;
     future: FutureMonth;
     marketOptions: string;
-    priceSetPeriod: { begin: Date, end: Date };
+    priceSetPeriodBegin: Date;
+    priceSetPeriodEnd: Date;
 }
 
 interface BankInfo {

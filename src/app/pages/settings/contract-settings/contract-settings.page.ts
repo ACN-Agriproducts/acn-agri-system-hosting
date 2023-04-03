@@ -19,7 +19,7 @@ export class ContractSettingsPage implements OnInit {
     "ticket-client-select",
     "primitive-prototype",
     "product-select",
-    "delivery-dates",
+    "date-range",
     "plant-select",
     "third-party-plant"
   ]
