@@ -187,7 +187,7 @@
         <div class="contract-info-row">
             <div>CANTIDAD:</div>
             <div>
-                <span [class.focused]="focusedField == 'quantiy.amount'">{{contractForm?.quantity?.amount}}</span> ({{utils.nameNumberSpanish(contractForm?.quantity?.amount)}}) 
+                <span [class.focused]="focusedField == 'quantiy.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
                 <span [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
                 +- <span [class.focused]="focusedField == 'quantityErrorPercentage'">{{contractForm?.quantityErrorPercentage || 'X'}}</span>%
             </div>

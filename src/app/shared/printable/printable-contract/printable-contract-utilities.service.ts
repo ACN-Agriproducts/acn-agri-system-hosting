@@ -21,12 +21,6 @@ export class PrintableContractUtilitiesService {
     return Mass.getUnitFullName(unit);
   }
 
-  nameNumberSpanish(num: number): string {
-    console.log(num, typeof num);
-    if(typeof num != "number") return "";
-    return numeroALetras(num);
-  }
-
   async selectFieldDisplay(contractType: string, fieldName: string, value: string): Promise<string> {
     const contractGroups = (await this.contractSettings$).formData[contractType];
     let field: FormField;
@@ -41,10 +35,7 @@ export class PrintableContractUtilitiesService {
 
       if(field) break;
     }
-
-    console.log(field);
-    console.log(field.selectOptions?.find(option => option.value == value)?.label ?? "ERROR");
-    return field.selectOptions?.find(option => option.value == value)?.label ?? "ERROR";
+    return field.selectOptions?.find(option => option.value == value)?.label ?? "";
   }
 }
 
@@ -56,6 +47,16 @@ export class SelectFieldDisplayPipe implements PipeTransform {
 
   transform(value: string, contractType: string, fieldName: string): Promise<string> {
     return this.utils.selectFieldDisplay(contractType, fieldName, value);
+  }
+}
+
+@Pipe({
+  name: 'numberNameSpanish'
+})
+export class NumberNameSpanishPipe implements PipeTransform {
+  transform(num: number): string {
+    if(typeof num != "number") return "";
+    return numeroALetras(num);
   }
 }
 
