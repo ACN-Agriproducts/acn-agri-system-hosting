@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { ContractSettings, FormField } from '@shared/classes/contract-settings';
@@ -8,15 +8,13 @@ import { Mass, units } from '@shared/classes/mass';
   providedIn: 'root'
 })
 export class PrintableContractUtilitiesService {
-  private contractSettings: ContractSettings
+  private contractSettings$: Promise<ContractSettings>
 
   constructor(
     private db: Firestore,
     private session: SessionInfo
   ) {
-    ContractSettings.getDocument(this.db, this.session.getCompany()).then(result => {
-      this.contractSettings = result;
-    });
+    this.contractSettings$ = ContractSettings.getDocument(this.db, this.session.getCompany());
   }
 
   getUnitName(unit: units): string {
@@ -29,8 +27,8 @@ export class PrintableContractUtilitiesService {
     return numeroALetras(num);
   }
 
-  selectFieldDisplay(contractType: string, fieldName: string, value: string) {
-    const contractGroups = this.contractSettings.formData[contractType];
+  async selectFieldDisplay(contractType: string, fieldName: string, value: string): Promise<string> {
+    const contractGroups = (await this.contractSettings$).formData[contractType];
     let field: FormField;
 
     for(let groupName in contractGroups) {
@@ -44,7 +42,20 @@ export class PrintableContractUtilitiesService {
       if(field) break;
     }
 
-    field.selectOptions.find(option => option.value == value).label ?? "ERROR";
+    console.log(field);
+    console.log(field.selectOptions?.find(option => option.value == value)?.label ?? "ERROR");
+    return field.selectOptions?.find(option => option.value == value)?.label ?? "ERROR";
+  }
+}
+
+@Pipe({
+  name: 'selectFieldDisplay'
+})
+export class SelectFieldDisplayPipe implements PipeTransform {
+  constructor(private utils: PrintableContractUtilitiesService) {}
+
+  transform(value: string, contractType: string, fieldName: string): Promise<string> {
+    return this.utils.selectFieldDisplay(contractType, fieldName, value);
   }
 }
 
@@ -171,6 +182,3 @@ const Millones = (num: number) => {
   if (strMillones == '') return strMiles
   return strMillones + ' ' + strMiles
 } //Millones()
-
-console.log(numeroALetras(651.413))
-// Expected: SEISCIENTOS CINCUENTA Y UNO PUNTO CUARENTA Y UNO

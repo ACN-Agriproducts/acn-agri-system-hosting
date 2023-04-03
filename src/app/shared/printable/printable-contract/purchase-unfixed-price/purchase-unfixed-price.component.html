@@ -162,7 +162,7 @@
         </div>
         <div class="contract-info-row">
             <div>TIPO DE CARGA:</div>
-            <div [class.focused]="focusedField == 'loadType'">{{contractForm?.loadType}}</div>
+            <div [class.focused]="focusedField == 'loadType'">{{contractForm?.loadType | selectFieldDisplay:contractType:'loadType' | async}}</div>
         </div>
         <div class="contract-info-row">
             <div>BASE:</div>

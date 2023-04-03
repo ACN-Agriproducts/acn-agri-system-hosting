@@ -13,6 +13,7 @@ import { PrintableContractUtilitiesService } from '../printable-contract-utiliti
 export class PurchaseUnfixedPriceComponent implements OnInit {
   @Input() contractForm: Contract;
   @Input() focusedField: string;
+  readonly contractType: string = 'compra_precioSinFijar';
 
   constructor(public utils: PrintableContractUtilitiesService) { }
 
