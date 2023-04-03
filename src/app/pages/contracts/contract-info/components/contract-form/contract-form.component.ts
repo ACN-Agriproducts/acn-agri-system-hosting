@@ -64,7 +64,7 @@ export class ContractFormComponent implements OnInit {
 
     this.currentContract.quantity = this.getQuantity(product);
     this.currentContract.product = product.ref.withConverter(Product.converter);
-    this.currentContract.productInfo = new ProductInfo({moisture: product.moisture, name: product.ref.id, weight: product.weight});
+    // this.currentContract.productInfo = new ProductInfo({moisture: product.moisture, name: product.ref.id, weight: product.weight});
     this.currentContract.pricePerBushel = this.getBushelPrice(product);
     this.currentContract.market_price = formData.market_price;
     this.currentContract.grade = formData.grade; 

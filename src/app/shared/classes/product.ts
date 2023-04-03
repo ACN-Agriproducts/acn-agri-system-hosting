@@ -15,6 +15,7 @@ export class Product extends FirebaseDocInterface {
     public ownedPhysical: Mass;
     public physicalInventory: Mass;
     public weight: number;
+    public marketCode: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Product.converter);
@@ -32,6 +33,7 @@ export class Product extends FirebaseDocInterface {
         this.ownedPhysical = new Mass(data.ownedPhysical, unit);
         this.physicalInventory = new Mass(data.physicalInventory, unit);
         this.weight = data.weight;
+        this.marketCode = data.marketCode;
     }
 
     public static converter = {
@@ -46,7 +48,8 @@ export class Product extends FirebaseDocInterface {
                 owned: data.owned.get(),
                 ownedPhysical: data.ownedPhysical.get(),
                 physicalInventory: data.physicalInventory.get(),
-                weight: data.weight
+                weight: data.weight,
+                marketCode: data.marketCode
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Product {
@@ -67,7 +70,8 @@ export class Product extends FirebaseDocInterface {
             moisture: this.moisture,
             name: this.getName(),
             weight: this.weight,
-        }
+            marketCode: this.marketCode
+        };
     }
 
     public static getCollectionReference(db: Firestore, company: string): CollectionReference<Product> {

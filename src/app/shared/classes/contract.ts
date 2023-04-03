@@ -109,8 +109,18 @@ export class Contract extends FirebaseDocInterface {
                 notarialActDate: null
             };
 
+            this.productInfo = {
+                brokenGrain: null,
+                damagedGrain: null,
+                foreignMatter: null,
+                impurities: null,
+                moisture: null,
+                name: null,
+                weight: null,
+                marketCode: null,
+            };
+
             this.delivery_dates = new DeliveryDates({});
-            this.productInfo = new ProductInfo({});
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
 
@@ -147,7 +157,7 @@ export class Contract extends FirebaseDocInterface {
         this.price = new Price(data.price, data.priceUnit);
         this.printableFormat = data.printableFormat ?? "";
         this.product = data.product.withConverter(Product.converter);
-        this.productInfo = new ProductInfo(data.productInfo);
+        this.productInfo = data.productInfo;
         this.quantity = new Mass(data.quantity, data.quantity.defaultUnits || FirebaseDocInterface.session.getDefaultUnit());
         this.seller_terms = data.seller_terms;
         this.status = data.status;
@@ -278,6 +288,17 @@ export class Contract extends FirebaseDocInterface {
         })
     }
 
+    public getTradeCode(): string {
+        if(!(this?.productInfo?.marketCode || this?.futurePriceInfo?.expirationMonth)) return '';
+
+        const marketMonthCodes: Map<number, string> = new Map<number, string>([
+            [0,'F'], [1,'G'], [2,'H'], [3,'J'], [4,'K'], [5,'M'],
+            [6,'N'], [7,'Q'], [8,'U'], [9,'V'], [10,'X'], [11,'Z'],
+        ])
+
+        return `${this.productInfo.marketCode}${marketMonthCodes.get(this.futurePriceInfo.expirationMonth.getMonth())}${this.futurePriceInfo.expirationMonth.getFullYear() % 10}`
+    }
+
     public static getCollectionReference(db: Firestore, company: string, contractType?: contractType): CollectionReference<Contract> {
         return collection(db, `companies/${company}/contracts/`).withConverter(Contract.converter);
     }
@@ -401,7 +422,7 @@ export class PaymentTerms {
     }
 }
 
-export class ProductInfo {
+export interface ProductInfo {
     brokenGrain: number;
     damagedGrain: number;
     foreignMatter: number;
@@ -409,12 +430,7 @@ export class ProductInfo {
     moisture: number;
     name: string;
     weight: number;
-
-    constructor(data: any) {
-        this.moisture = data.moisture;
-        this.name = data.name;
-        this.weight = data.weight;
-    }
+    marketCode: string;
 }
 
 export class TruckerInfo {
@@ -459,7 +475,7 @@ interface ContactInfo {
 interface FuturePriceInfo {
     base: Price;
     exchangeRate: string | number;
-    expirationMonth: FutureMonth;
+    expirationMonth: Date;
     future: FutureMonth;
     marketOptions: string;
     priceSetPeriod: { begin: Date, end: Date };
@@ -470,3 +486,4 @@ interface BankInfo {
     account: string;
     interBank: string;
 }
+
