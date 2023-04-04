@@ -49,7 +49,7 @@ export class Contract extends FirebaseDocInterface {
     currency: string;
     deliveryPlants: string[];
     deliveryType: string;
-    formOfPayment: string = "TRANSFERENCIA ELECTRÓNICA DE FONDOS";
+    formOfPayment: string;
     futurePriceInfo: FuturePriceInfo;
     guarantee: number;
     loadConditions: string;
@@ -119,6 +119,16 @@ export class Contract extends FirebaseDocInterface {
                 weight: null,
                 marketCode: null,
             };
+
+            this.futurePriceInfo = {
+                base: null,
+                exchangeRate: null,
+                expirationMonth: null,
+                future: null,
+                marketOptions: null,
+                priceSetPeriodBegin: null,
+                priceSetPeriodEnd: null,
+            }
 
             this.delivery_dates = new DeliveryDates({});
             this.paymentTerms = new PaymentTerms({});

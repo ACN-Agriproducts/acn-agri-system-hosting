@@ -3,7 +3,7 @@
     <mat-card-subtitle>Contract Info</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <mat-form-field class="span-4">
+    <mat-form-field class="span-4" appFutureDateFormat>
       <mat-label>Date</mat-label>
       <input 
         matInput 
@@ -260,6 +260,18 @@
   <mat-form-field [ngClass]="data | getFieldClass" *ngIf="contract?.plants?.includes('third-party')">
     <mat-label>{{data.label}}</mat-label>
     <textarea matInput [(ngModel)]="contract.deliveryPlants[contract.deliveryPlants.length - 1]"></textarea>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="future-month-picker" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" appFutureDateFormat>
+      <mat-label>{{data.label}}</mat-label>
+      <input matInput [matDatepicker]="futurePicker" [(ngModel)]="contract.futurePriceInfo.expirationMonth">
+      <mat-datepicker-toggle matSuffix [for]="futurePicker"></mat-datepicker-toggle>
+      <mat-datepicker #futurePicker
+        startView="year"
+        (monthSelected)="setMonthAndYear($event, futurePicker)">
+      </mat-datepicker>
   </mat-form-field>
 </ng-template>
 

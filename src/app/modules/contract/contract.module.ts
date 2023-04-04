@@ -6,12 +6,14 @@ import { CoreModule } from '@core/core.module';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { GetFieldClassPipe } from './pipes/get-field-class.pipe';
+import { FutureDateFormatDirective } from './directives/future-date-format.directive';
 
 @NgModule({
   declarations: [
     ContractFormComponent,
     SelectClientComponent,
-    GetFieldClassPipe
+    GetFieldClassPipe,
+    FutureDateFormatDirective
   ],
   imports: [
     CommonModule,

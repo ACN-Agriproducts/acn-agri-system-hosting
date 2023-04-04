@@ -242,11 +242,11 @@
         </div>
         <div class="contract-info-row">
             <div>ANTICIPOS:</div>
-			<div>NO APLICA</div>
+			<div>{{contractForm?.prepaid ? contractForm.prepaid + "% DEL VALOR TOTAL DEL CONTRATO" : "NO APLICA" }}</div>
         </div>
         <div class="contract-info-row">
             <div>FORMA DE PAGO:</div>
-			<div>TRANSFERENCIA ELECTRÓNICA DE FONDOS</div>
+			<div>{{contractForm?.formOfPayment | selectFieldDisplay:contractType:'formOfPayment' | async}}</div>
         </div>
         <div class="contract-info-row">
             <div>BANCOS Y CUENTAS DE PAGO:</div>
