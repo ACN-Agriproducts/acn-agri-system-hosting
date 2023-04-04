@@ -54,6 +54,8 @@ import { ProductionOrderDefaultComponent } from './printable/printable-productio
     InvoiceDialogComponent,
     DocumentWrapperComponent,
     TypeTemplateDirective,
+    PrintableProductionOrderComponent,
+    ProductionOrderDefaultComponent,
   ],
   declarations: [
     ToolbarComponent,

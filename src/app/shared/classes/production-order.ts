@@ -13,6 +13,7 @@ export class ProductionOrder extends FirebaseDocInterface {
     orderOwnerName: string;
     orderInfo: orderItem[];
     plant: DocumentReference<Plant>;
+    type: string;
 
     constructor();
     constructor(snapshot: QueryDocumentSnapshot<any>);

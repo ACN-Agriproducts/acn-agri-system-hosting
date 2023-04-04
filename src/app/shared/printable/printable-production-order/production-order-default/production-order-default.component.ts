@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ProductionOrder } from '@shared/classes/production-order';
 
 @Component({
   selector: 'app-production-order-default',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./production-order-default.component.scss'],
 })
 export class ProductionOrderDefaultComponent implements OnInit {
+  @Input() order: ProductionOrder;
 
   constructor() { }
 

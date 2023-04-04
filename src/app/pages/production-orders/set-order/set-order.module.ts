@@ -8,6 +8,7 @@ import { SetOrderPageRoutingModule } from './set-order-routing.module';
 
 import { SetOrderPage } from './set-order.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     IonicModule,
     CoreModule,
-    SetOrderPageRoutingModule
+    SetOrderPageRoutingModule,
+    SharedModule,
   ],
   declarations: [SetOrderPage]
 })

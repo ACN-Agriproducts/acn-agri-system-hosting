@@ -1,3 +1,46 @@
-<p>
-  production-order-default works!
-</p>
+<div class="page main">
+	<div class="order-heading">
+		<img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
+		<div>
+			No. <span class="fill-line order-id">{{ order?.id }}</span>
+		</div>
+	</div>
+	<p class="order-title">Production Order</p>
+	<div class="order-info grid">
+		<div class="header">
+			<span>Pay To:</span>
+			<span>Invoice To:</span>
+			<span class="address">Address:</span>
+		</div>
+		<div>
+			<span>ACN Agriproducts, LLC</span>
+			<span>Deer Corn Almacen</span>
+			<span class="address">1512 Rancho Toluca, Weslaco, TX  78596</span>
+		</div>
+		<div>
+			<span class="header">Date:</span>
+			<span class="date">24/02/2023</span>
+		</div>
+	</div>
+	<div class="order-items grid">
+		<div class="header row">
+			<span>Qty</span>
+			<span>Unit</span>
+			<span>Description</span>
+		</div>
+		<div class="body row">
+			<span>info</span>
+			<span>info</span>
+			<span>info</span>
+		</div>
+		<div class="body row" *ngFor="let orderItem of order?.orderInfo">
+			<span>{{ orderItem?.quantity }}</span>
+			<span>unit</span>
+			<span>
+				<div *ngFor="let info of orderItem?.inventoryInfo">
+					<span>{{ info.quantity }}</span>
+				</div>
+			</span>
+		</div>
+	</div>
+</div>
