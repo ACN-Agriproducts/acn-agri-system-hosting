@@ -38,27 +38,27 @@ export class NewContractPage implements OnInit {
     )
   }
 
-  focus(event: any) {
-    console.log(this.contract);
-  }
+  // focus(event: any) {
+  //   console.log(this.contract);
+  // }
 
-  compareWithProduct(p1, p2){
-    return p1 && p2? p1.name === p2.name: p1 === p2;
-  }
+  // compareWithProduct(p1, p2){
+  //   return p1 && p2? p1.name === p2.name: p1 === p2;
+  // }
 
-  compareWithClient(c1, c2) {
-    return c1 && c2? c1.id === c2.id: c1 === c2;
-  }
+  // compareWithClient(c1, c2) {
+  //   return c1 && c2? c1.id === c2.id: c1 === c2;
+  // }
 
-  public submitForm() {
-    this.contract.ref = doc(Contract.getCollectionReference(this.db, this.session.getCompany(), this.contract.type)).withConverter(Contract.converter);
-    this.contract.set()  
-      .then(() => {
-        this.navController.navigateForward('dashboard/contracts');
-      }).catch(error => {
-        this.snack.open(error, "error");
-      });
-  }
+  // public submitForm() {
+  //   this.contract.ref = doc(Contract.getCollectionReference(this.db, this.session.getCompany(), this.contract.type)).withConverter(Contract.converter);
+  //   this.contract.set()  
+  //     .then(() => {
+  //       this.navController.navigateForward('dashboard/contracts');
+  //     }).catch(error => {
+  //       this.snack.open(error, "error");
+  //     });
+  // }
 
   // addPlantChip(plant: string): void {
   //   const chosenPlants = this.contract.plants;
