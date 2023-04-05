@@ -50,6 +50,7 @@ export class Contract extends FirebaseDocInterface {
     deliveryPlants: string[];
     deliveryType: string;
     formOfPayment: string;
+    termsOfPayment: string;
     futurePriceInfo: FuturePriceInfo;
     guarantee: number;
     loadConditions: string;
@@ -199,6 +200,7 @@ export class Contract extends FirebaseDocInterface {
         this.storageAndFumigation = data.storageAndFumigation;
         this.transportInsurance = data.transportInsurance;
         this.quantityErrorPercentage = data.quantityErrorPercentage;
+        this.termsOfPayment = data.termsOfPayment;
     }
 
     public static converter = {
@@ -251,6 +253,7 @@ export class Contract extends FirebaseDocInterface {
                 storageAndFumigation: data.storageAndFumigation,
                 transportInsurance: data.transportInsurance,
                 quantityErrorPercentage: data.quantityErrorPercentage,
+                termsOfPayment: data.termsOfPayment,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
