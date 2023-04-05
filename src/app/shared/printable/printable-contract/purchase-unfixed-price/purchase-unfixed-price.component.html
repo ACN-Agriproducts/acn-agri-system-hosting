@@ -206,11 +206,11 @@
         </div>
         <div class="contract-info-row">
             <div>FORMA DE ENTREGA:</div>
-			<div [class.focused]="focusedField == 'deliveryType'">{{contractForm?.deliveryType}}</div>
+			<div [class.focused]="focusedField == 'deliveryType'">{{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}</div>
         </div>
         <div class="contract-info-row">
             <div>SEGURO DE TRÁNSITO:</div>
-            <div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.transportInsurance}}</div>
+            <div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.transportInsurance | selectFieldDisplay:contractType:'transportInsurance' | async}}</div>
         </div>
         <div class="contract-info-row">
             <div>LUGAR DE ENTREGA: </div>
@@ -226,15 +226,15 @@
         </div>
         <div class="contract-info-row">
             <div>MERMAS:</div>
-			<div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.shrinkage}}</div>
+			<div [class.focused]="focusedField == 'shrinkage'">{{contractForm?.shrinkage | selectFieldDisplay:contractType:'shrinkage' | async}}</div>
         </div>
         <div class="contract-info-row">
             <div>PERIODO DE ENTREGA:</div>
-			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY' | uppercase}}</div>
+			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY' | uppercase}}</div>
         </div>
 		<div class="contract-info-row">
             <div>ALMACENAJE Y FUMIGACIÓN:</div>
-			<div [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin || "NO APLICA"}}</div>
+			<div [class.focused]="focusedField == 'storageAndFumigation'">{{contractForm?.storageAndFumigation || "NO APLICA"}}</div>
         </div>
         <div class="contract-info-row">
             <div>TÉRMINOS DE PAGO:</div>

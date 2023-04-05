@@ -35,7 +35,7 @@ export class PrintableContractUtilitiesService {
 
       if(field) break;
     }
-    return field.selectOptions?.find(option => option.value == value)?.label ?? "";
+    return field?.selectOptions?.find(option => option.value == value)?.label ?? value;
   }
 }
 
