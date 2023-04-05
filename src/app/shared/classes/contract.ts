@@ -62,6 +62,7 @@ export class Contract extends FirebaseDocInterface {
     storageAndFumigation: string;
     transportInsurance: string;
     quantityErrorPercentage: number;
+    futurePriceBase: Price;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -122,7 +123,6 @@ export class Contract extends FirebaseDocInterface {
             };
 
             this.futurePriceInfo = {
-                base: null,
                 exchangeRate: null,
                 expirationMonth: null,
                 future: null,
@@ -134,6 +134,7 @@ export class Contract extends FirebaseDocInterface {
             this.delivery_dates = new DeliveryDates({});
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
+            this.futurePriceBase = new Price(null, 'bu');
 
             return;
         }
@@ -201,6 +202,7 @@ export class Contract extends FirebaseDocInterface {
         this.transportInsurance = data.transportInsurance;
         this.quantityErrorPercentage = data.quantityErrorPercentage;
         this.termsOfPayment = data.termsOfPayment;
+        this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
     }
 
     public static converter = {
@@ -254,6 +256,8 @@ export class Contract extends FirebaseDocInterface {
                 transportInsurance: data.transportInsurance,
                 quantityErrorPercentage: data.quantityErrorPercentage,
                 termsOfPayment: data.termsOfPayment,
+                futurePriceBase: data.futurePriceBase.amount,
+                futurePriceBaseUnit: data.futurePriceBase.unit,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -486,7 +490,6 @@ interface ContactInfo {
 }
 
 interface FuturePriceInfo {
-    base: Price;
     exchangeRate: string | number;
     expirationMonth: Date;
     future: FutureMonth;
