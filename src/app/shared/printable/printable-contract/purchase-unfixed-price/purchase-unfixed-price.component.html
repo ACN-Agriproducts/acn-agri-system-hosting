@@ -55,7 +55,7 @@
     </ol>
     <div class="text-align-center section-header-spaced">CLAUSULAS</div>
     <div class="text-align-justify">
-		<b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por <span [class.focused]="focusedField == 'quantity.amount' || focusedField == 'quantity.defaultUnits'">{{(contractForm?.quantity | massInUnit:'mTon') || 'XXXX'}}</span> toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
+		<b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por <span [class.focused]="focusedField == 'quantity.amount' || focusedField == 'quantity.defaultUnits'">{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.defaultUnits:contractForm.quantity.amount || 'XXXX'}}</span> toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
 		<br>
 		<b>SEGUNDA. &#8211; CALIDAD.</b> - Las muestras serán tomadas en el momento y lugar de descarga, mismas que serán identificadas y resguardadas. En caso de tener alguna diferencia respecto a la calidad del “PRODUCTO” las “PARTES” acuerdan sujetarse a un análisis de un tercero para definir dicha calidad, sometiéndose a los resultados. "El VENDEDOR” se compromete a entregar el “PRODUCTO” al “COMPRADOR” dentro de los parámetros y especificaciones convenidos que se muestran a continuación:
         <div class="product-info">
@@ -166,7 +166,7 @@
         </div>
         <div class="contract-info-row">
             <div>BASE:</div>
-            <div [class.focused]="focusedField == 'futurePriceInfo.base'">{{contractForm?.futurePriceInfo?.base?.amount >= 0 ? "+" : ""}}{{contractForm?.futurePriceInfo?.base?.amount}} USD / BU</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.base'">{{contractForm?.futurePriceBase?.amount >= 0 ? "+" : ""}}{{contractForm?.futurePriceBase?.amount}} USD / BU</div>
         </div>
 		<div class="contract-info-row">
             <div>FUTURO:</div>
