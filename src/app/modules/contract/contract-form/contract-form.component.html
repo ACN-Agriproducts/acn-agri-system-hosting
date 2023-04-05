@@ -118,7 +118,6 @@
       [(ngModel)]="contract[data.fieldName][data.nestedField]"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
       (focusout)="selectedFieldEvent.emit(null)">
-      <mat-option>Test</mat-option>
       <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
         {{option.label}}
       </mat-option>
@@ -190,7 +189,6 @@
     <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
     
     <mat-select *ngSwitchCase="'select'">
-      <mat-option>Test</mat-option>
       <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
         {{option.label}}
       </mat-option>
