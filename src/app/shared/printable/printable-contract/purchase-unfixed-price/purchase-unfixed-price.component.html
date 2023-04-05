@@ -11,7 +11,7 @@
             PERSONAS MORALES
             <ol type="1">
                 <li>
-                    Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u>XXXXXXXXXXXXXXXXX</u>, como se acredita con la Escritura Pública número <u><span [class.focused]="focusedField == 'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [class.focused]="focusedField == 'clientInfo.notarialActDate'">{{contractForm?.clientInfo?.notarialActDate || 'XXXXXXXX'}}</span></u>, y que el señor <span [class.focused]="focusedField == 'clientInfo.clientRep'"><u>{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</u></span>, en su carácter de <u>Apoderado Legal</u>, está facultado para celebrar este contrato.
+                    Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, como se acredita con la Escritura Pública número <u><span [class.focused]="focusedField == 'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [class.focused]="focusedField == 'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>, y que el señor <span [class.focused]="focusedField == 'clientInfo.clientRep'"><u>{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</u></span>, en su carácter de <u>Apoderado Legal</u>, está facultado para celebrar este contrato.
                 </li>
                 <li>
                     Que su Registro Federal de Contribuyentes es: <u><span [class.focused]="focusedField == 'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
@@ -76,7 +76,7 @@
         <br>
         Si “EL VENDEDOR” tiene la opción de rolar la base notificando con anticipación a “EL VENDEDOR”.
         <br>
-        <b>SEXTA. &#8211; COBERTURA.</b> - “EL VENDEDOR” deberá adquirir una cobertura tipo <u>____________</u> para garantizar el precio del contrato.
+        <b>SEXTA. &#8211; COBERTURA.</b> - “EL VENDEDOR” deberá adquirir una cobertura tipo <u><span [class.focused]="focusedField == 'futurePriceInfo.marketOptions'">{{contractForm?.futurePriceInfo?.marketOptions | selectFieldDisplay:contractType:'marketOptions' | async}}</span></u> para garantizar el precio del contrato.
         <br>
         <span class="text-highlight">
             <b>SÉPTIMA. &#8211; GARANTÍAS.</b> - “EL VENDEDOR” entregará a “EL COMPRADOR” una garantía de cumplimiento del “CONTRATO DE COMPRAVENTA” será equivalente a un 20% del importe total del contrato; asimismo, se constituirá por alguno de los siguientes instrumentos o su combinación: (1) Fianza otorgada por institución autorizada en los términos de la Ley Federal de Instituciones de Fianzas (2) Retención del importe de la garantía, que se descontará en los pagos de las primeras facturas del producto que “EL VENDEDOR” presente a cobro, hasta cubrir dicho importe de acuerdo con lo que se estipule en el contrato. (3) Cheque certificado o cheque de caja para su depósito, cuyo importe permanecerá en poder de “EL COMPRADOR” hasta el cabal cumplimiento de las obligaciones contractuales, o bien depósito en efectivo a favor “EL COMPRADOR”.
@@ -174,11 +174,11 @@
         </div>
 		<div class="contract-info-row">
             <div>MES DE VENCIMIENTO:</div>
-            <div>{{this.contractForm?.futurePriceInfo?.expirationMonth | date:'MMMM':undefined:'es-MX'}} {{ this.contractForm?.futurePriceInfo?.expirationMonth && this.contractForm?.productInfo ? this.contractForm.getTradeCode() : ""}}</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.expirationMonth'">{{this.contractForm?.futurePriceInfo?.expirationMonth | date:'MMMM':undefined:'es-MX'}} {{ this.contractForm?.futurePriceInfo?.expirationMonth && this.contractForm?.productInfo ? this.contractForm.getTradeCode() : ""}}</div>
         </div>
 		<div class="contract-info-row">
             <div>COBERTURA / OPCIÓN:</div>
-            <div>{{contractForm?.futurePriceInfo?.marketOptions | selectFieldDisplay:contractType:'marketOptions' | async}}</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.marketOptions'">{{contractForm?.futurePriceInfo?.marketOptions | selectFieldDisplay:contractType:'marketOptions' | async}}</div>
         </div>
 		<div class="contract-info-row">
             <div>CESIÓN DE DERECHOS:</div>
@@ -215,14 +215,14 @@
         <div class="contract-info-row">
             <div>LUGAR DE ENTREGA: </div>
             <div [class.focused]="focusedField == 'plants'">
-                <ng-container *ngFor="let address of contractForm.deliveryPlants">
-                    <span>{{address}}</span><br>
+                <ng-container *ngFor="let address of contractForm.deliveryPlants; let last = last">
+                    <span>{{address}}</span><ng-container *ngIf="!last">,</ng-container><br>
                 </ng-container>
 			</div>
         </div>
         <div class="contract-info-row">
             <div>PESOS:</div>
-			<div>EL DE DESCARGA EN BODEGA</div>
+			<div [class.focused]="focusedField == 'paymentTerms.origin'">{{contractForm?.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async}}</div>
         </div>
         <div class="contract-info-row">
             <div>MERMAS:</div>
@@ -262,7 +262,7 @@
         <div class="party-signature">
             POR “EL VENDEDOR”:
             <div class="signature-line"></div>
-            <span>{{ "(REPRESENTATIVE HERE)" }}</span>
+            <span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep}}</span>
             <span>{{ contractForm.clientInfo?.name }}</span>
         </div>
         <div class="party-signature">
