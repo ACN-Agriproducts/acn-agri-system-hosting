@@ -51,3 +51,9 @@ mat-card-content {
 .ticket-client-checkbox {
     margin-bottom: 1rem;
 }
+
+.action-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, ContentChild, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -22,6 +22,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 export class ContractFormComponent implements OnInit {
   @Input() contract: Contract;
   @Output() selectedFieldEvent = new EventEmitter<string>();
+  @ContentChild('actionBar') actionBar: TemplateRef<any>;
 
   public settings$: Promise<ContractSettings>;
   public contactList: CompanyContact[];

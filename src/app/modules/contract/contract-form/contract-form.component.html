@@ -55,6 +55,13 @@
   </mat-card>
 </ng-container>
 
+<div class="action-bar">
+  <ng-container *ngTemplateOutlet="actionBar || none"></ng-container>
+  <button mat-raised-button>Submit</button>
+</div>
+
+<ng-template #none></ng-template>
+
 <ng-template typeTemplate="primitive" let-data>
   <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
     <mat-label>{{data.label}}</mat-label>

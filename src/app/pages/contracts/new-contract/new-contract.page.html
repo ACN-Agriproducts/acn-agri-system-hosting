@@ -2,12 +2,23 @@
 
 <ion-content class="ion-padding">
   <div class="content-grid">
-    <app-contract-form id="form"
-      [contract]="contract"
-      (selectedFieldEvent)="focusedFieldName = $event"
-    ></app-contract-form>
+    <div>
+      <app-contract-form id="form"
+        [contract]="contract"
+        (selectedFieldEvent)="focusedFieldName = $event">
+    
+      <ng-template #actionBar>
+        <button mat-raised-button
+          ngxPrint
+          [useExistingCss]="true"
+          printSectionId="printable-document"
+        >Print</button>
+      </ng-template>
+    </app-contract-form>
+    </div>
     <!-- <app-display-contract id='printable-doc' [contractForm]="contract" [weight]="this.contractWeight" [productsList]="this.productsList"></app-display-contract> -->
     <app-printable-contract
+      id="printable-document"
       [contract]="contract"
       [version]="contract.type"
       [focusedField]="focusedFieldName">

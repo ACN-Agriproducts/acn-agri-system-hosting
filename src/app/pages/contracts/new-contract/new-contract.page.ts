@@ -1,19 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, doc, collection } from '@angular/fire/firestore';
-import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { NavController } from '@ionic/angular';
-import { Observable, lastValueFrom } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
-import { Contact } from '@shared/classes/contact';
-import { Product } from '@shared/classes/product';
-import { Company, CompanyContact } from '@shared/classes/company';
-import {map, startWith} from 'rxjs/operators';
+import { Firestore, doc } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Plant } from '@shared/classes/plant';
 import { Contract } from '@shared/classes/contract';
-import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Mass, units } from '@shared/classes/mass';
-import { Price } from '@shared/classes/price';
 
 @Component({
   selector: 'app-new-contract',
@@ -26,10 +14,7 @@ export class NewContractPage implements OnInit {
 
   constructor(
     private db: Firestore,
-    private fb: UntypedFormBuilder,
-    private navController: NavController,
     private session: SessionInfo,
-    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
