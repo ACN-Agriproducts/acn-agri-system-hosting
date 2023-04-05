@@ -27,7 +27,7 @@ export class PrintableContractUtilitiesService {
 
     for(let groupName in contractGroups) {
       for(let fieldInfo of contractGroups[groupName]) {
-        if(fieldInfo.fieldName == fieldName) {
+        if(fieldInfo.fieldName == fieldName || fieldInfo.nestedField == fieldName) {
           field = fieldInfo;
           break;
         }

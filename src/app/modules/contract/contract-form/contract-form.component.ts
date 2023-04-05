@@ -108,8 +108,8 @@ export class ContractFormComponent implements OnInit {
   }
 
   async productChange() {
-    //(await this.products$).find(p => p.ref == this.contract.ref)
-    console.log((await this.products$).find(p => p.ref == this.contract.ref));
+    const product = (await this.products$).find(p => p.ref.id == this.contract.product.id);
+    this.contract.productInfo = product.getProductInfo();
     
   }
 
