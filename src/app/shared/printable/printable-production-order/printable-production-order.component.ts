@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ProductionOrder } from '@shared/classes/production-order';
 import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
-import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-printable-production-order',
@@ -20,11 +19,12 @@ export class PrintableProductionOrderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    
   }
 
   getTemplate<T>(list: Iterable<T>, fieldName: string, value: any): T {
-    console.log(list, fieldName, value)
-    for (const t of list) {
+    if (list == null) return;
+    for (var t of list) {
       if (t[fieldName] == value) return t;
     }
   }

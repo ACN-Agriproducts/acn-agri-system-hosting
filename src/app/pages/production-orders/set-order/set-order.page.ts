@@ -33,6 +33,7 @@ export class SetOrderPage implements OnInit {
     this.order = new ProductionOrder();
     this.order.date = new Date();
     this.order.orderInfo = [];
+    this.order.type = 'default';
     this.addItem();
 
     this.invoiceItems$ = InvoiceItem.getList(this.db, this.session.getCompany());
@@ -54,8 +55,14 @@ export class SetOrderPage implements OnInit {
   }
 
   async itemSelected(item: orderItem): Promise<void> {
-    const newItem = (await this.invoiceItems$).find(item => item.ref == this.order.orderInfo[0].itemRef);
+    const newItem = (await this.invoiceItems$).find(invoiceItem => invoiceItem.ref == item.itemRef);
+
     item.name = newItem.name;
+    item.inventoryInfo = [];
+
+    newItem.inventoryInfo.info.forEach(inventoryInfoItem => {
+      item.inventoryInfo.push(inventoryInfoItem);
+    });
   }
 
   deleteItem(index: number): void {

@@ -6,41 +6,37 @@
 		</div>
 	</div>
 	<p class="order-title">Production Order</p>
-	<div class="order-info grid">
-		<div class="header">
-			<span>Pay To:</span>
-			<span>Invoice To:</span>
-			<span class="address">Address:</span>
-		</div>
-		<div>
-			<span>ACN Agriproducts, LLC</span>
-			<span>Deer Corn Almacen</span>
-			<span class="address">1512 Rancho Toluca, Weslaco, TX  78596</span>
-		</div>
-		<div>
-			<span class="header">Date:</span>
-			<span class="date">24/02/2023</span>
-		</div>
-	</div>
-	<div class="order-items grid">
-		<div class="header row">
-			<span>Qty</span>
-			<span>Unit</span>
-			<span>Description</span>
-		</div>
-		<div class="body row">
-			<span>info</span>
-			<span>info</span>
-			<span>info</span>
-		</div>
-		<div class="body row" *ngFor="let orderItem of order?.orderInfo">
-			<span>{{ orderItem?.quantity }}</span>
-			<span>unit</span>
-			<span>
+	<ol class="grid order-info">
+		<li class="row">
+			<div class="cell header pay-to">Pay To:</div>
+			<div class="cell pay-to">ACN Agriproducts, LLC</div>
+			<div class="cell header date">Date:</div>
+			<div class="cell header invoice-to">Invoice To:</div>
+			<div class="cell invoice-to">Deer Corn Almacen</div>
+			<div class="cell date">{{ order.date | date:'dd/MM/yyyy' }}</div>
+			<div class="cell header address">Address:</div>
+			<div class="cell address">1512 Rancho Toluca, Weslaco, TX  78596</div>
+		</li>
+	</ol>
+	<ol class="grid order-items">
+		<li class="row header">
+			<div class="cell">Qty</div>
+			<div class="cell">Unit</div>
+			<div class="cell">Storage</div>
+			<div class="cell">Description</div>
+		</li>
+		<li class="row body" *ngFor="let orderItem of order?.orderInfo">
+			<div class="cell">{{ orderItem?.quantity }}</div>
+			<div class="cell">Sacks</div>
+			<div class="cell tank">
+				<div *ngFor="let info of orderItem?.inventoryInfo">{{ info.tank ?? "--" }}</div>
+			</div>
+			<div class="cell description">
 				<div *ngFor="let info of orderItem?.inventoryInfo">
-					<span>{{ info.quantity }}</span>
+					<span>{{ info.product ?? "--" }}</span>
+					<span *ngIf="info.quantity">&nbsp; {{ info.quantity }} lbs</span>
 				</div>
-			</span>
-		</div>
-	</div>
+			</div>
+		</li>
+	</ol>
 </div>
