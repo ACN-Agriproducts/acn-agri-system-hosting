@@ -250,7 +250,20 @@
         </div>
         <div class="contract-info-row">
             <div>BANCOS Y CUENTAS DE PAGO:</div>
-			<div>--</div>
+			<div class="banks-and-accounts-grid" [class.focused]="focusedField == 'bankInfo'">
+                <div>
+					<span>BANCO</span>
+					<span>CUENTA</span>
+					<span>CLABE INTERBANCARIA</span>
+				</div>
+                <div *ngFor="let bankInfo of contractForm.bankInfo">
+                    <span>{{bankInfo.bank | uppercase}}</span>
+                    <span>{{bankInfo.account}}</span>
+                    <span>{{bankInfo.interBank}}</span>
+                </div>
+                <div *ngIf="contractForm.bankInfo.length == 0">--</div>
+                
+            </div>
         </div>
         <div class="contract-info-row">
             <div>EJECUTIVO DE CONTRATO:</div>

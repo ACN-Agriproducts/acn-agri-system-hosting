@@ -140,6 +140,8 @@ export class Contract extends FirebaseDocInterface {
                 phone: null,
             }
 
+            this.bankInfo = [];
+
             this.delivery_dates = new DeliveryDates({});
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
@@ -509,7 +511,7 @@ interface FuturePriceInfo {
     priceSetPeriodEnd: Date;
 }
 
-interface BankInfo {
+export interface BankInfo {
     bank: string;
     account: string;
     interBank: string;

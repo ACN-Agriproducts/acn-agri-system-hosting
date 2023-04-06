@@ -104,8 +104,17 @@ export class ContractFormComponent implements OnInit {
     });
   }
 
-  docTypeChange() {
+  async docTypeChange() {
+    const settings = await this.settings$;
     this.contract.printableFormat = this.contract.type;
+    this.contract.tags = settings.contractTags[this.contract.type];
+
+    if(this.contract.tags.includes('sale')) {
+      this.contract.bankInfo = settings.defaultBankInfo;
+    }
+    else {
+      this.contract.bankInfo = [];
+    }
   }
 
   async productChange() {
@@ -133,6 +142,10 @@ export class ContractFormComponent implements OnInit {
     date.setMonth(monthAndYear.getMonth());
     date.setFullYear(monthAndYear.getFullYear());
     datepicker.close();
+  }
+
+  submit(): void {
+    console.log(this.contract);
   }
 
   log(...data: any) : void {

@@ -57,7 +57,7 @@
 
 <div class="action-bar">
   <ng-container *ngTemplateOutlet="actionBar || none"></ng-container>
-  <button mat-raised-button>Submit</button>
+  <button mat-raised-button color="primary" (click)="submit()">Submit</button>
 </div>
 
 <ng-template #none></ng-template>

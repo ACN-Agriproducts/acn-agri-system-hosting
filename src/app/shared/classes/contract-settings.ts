@@ -1,5 +1,6 @@
 import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc } from "@angular/fire/firestore";
 import { Company } from "./company";
+import { BankInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class ContractSettings extends FirebaseDocInterface {
@@ -14,6 +15,11 @@ export class ContractSettings extends FirebaseDocInterface {
     }
 
     fieldGroupOrder: {
+        [contractName: string]: string[];
+    }
+
+    defaultBankInfo: BankInfo[];
+    contractTags: {
         [contractName: string]: string[];
     }
 
@@ -38,6 +44,8 @@ export class ContractSettings extends FirebaseDocInterface {
         this.contractTypes = data.contractTypes;
         this.formData = data.formData;
         this.fieldGroupOrder = data.fieldGroupOrder;
+        this.defaultBankInfo = data.defaultBankInfo;
+        this.contractTags = data.contractTags;
     }
 
     public static converter = {
@@ -45,7 +53,9 @@ export class ContractSettings extends FirebaseDocInterface {
             return {
                 contractTypes: data.contractTypes,
                 formData: data.formData,
-                fieldGroupOrder: data.fieldGroupOrder 
+                fieldGroupOrder: data.fieldGroupOrder,
+                defaultBankInfo: data.defaultBankInfo,
+                contractTags: data.contractTags,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): ContractSettings {
