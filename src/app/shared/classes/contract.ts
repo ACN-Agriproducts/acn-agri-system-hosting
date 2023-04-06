@@ -63,6 +63,10 @@ export class Contract extends FirebaseDocInterface {
     transportInsurance: string;
     quantityErrorPercentage: number;
     futurePriceBase: Price;
+    companyInfo: {
+        email: string;
+        phone: string;
+    }
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -129,6 +133,11 @@ export class Contract extends FirebaseDocInterface {
                 marketOptions: null,
                 priceSetPeriodBegin: null,
                 priceSetPeriodEnd: null,
+            }
+
+            this.companyInfo = {
+                email: null,
+                phone: null,
             }
 
             this.delivery_dates = new DeliveryDates({});
@@ -203,6 +212,7 @@ export class Contract extends FirebaseDocInterface {
         this.quantityErrorPercentage = data.quantityErrorPercentage;
         this.termsOfPayment = data.termsOfPayment;
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
+        this.companyInfo = data.companyInfo;
     }
 
     public static converter = {
@@ -258,6 +268,7 @@ export class Contract extends FirebaseDocInterface {
                 termsOfPayment: data.termsOfPayment,
                 futurePriceBase: data.futurePriceBase.amount,
                 futurePriceBaseUnit: data.futurePriceBase.unit,
+                companyInfo: data.companyInfo,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {

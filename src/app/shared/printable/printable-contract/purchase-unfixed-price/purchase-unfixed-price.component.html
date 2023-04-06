@@ -37,7 +37,7 @@
                     Que la Clave Única de Registro de Población (CURP) del apoderado legal es:
                 </li>
                 <li>
-                    Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª  y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u>XXXXX</u> y teléfono <u>XXXXXX</u>.
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª  y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [class.focused]="focusedField == 'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
                 </li>
             </ol>
         </li>
