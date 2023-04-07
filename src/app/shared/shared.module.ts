@@ -26,6 +26,7 @@ import { DocumentWrapperComponent } from './components/document-wrapper/document
 import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
 import { PrintableProductionOrderComponent } from './printable/printable-production-order/printable-production-order.component';
 import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
+import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { ProductionOrderDefaultComponent } from './printable/printable-productio
     TypeTemplateDirective,
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
+    LocalInventoryPipe,
   ],
   declarations: [
     ToolbarComponent,
@@ -78,6 +80,7 @@ import { ProductionOrderDefaultComponent } from './printable/printable-productio
     TypeTemplateDirective,
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
+    LocalInventoryPipe,
   ]
 })
 export class SharedModule {}

@@ -76,7 +76,7 @@
 							<mat-form-field>
 								<mat-label>Storage</mat-label>
 								<mat-select [disabled]="!plant" [(ngModel)]="info.tank">
-									<mat-option *ngFor="let storage of plant?.inventoryNames" [value]="storage">{{storage}}</mat-option>
+									<mat-option *ngFor="let storage of plant?.inventory | localInventory" [value]="storage.name">{{storage.name}}</mat-option>
 								</mat-select>
 							</mat-form-field>
 						</div>
