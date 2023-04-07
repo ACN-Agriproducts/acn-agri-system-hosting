@@ -41,6 +41,7 @@ export class ProductionOrder extends FirebaseDocInterface {
         this.orderOwner = data.orderOwner;
         this.orderOwnerName = data.orderOwnerName;
         this.orderInfo = [];
+        this.type = data.type;
 
         data.orderInfo.forEach(element => {
             this.orderInfo.push(element);
@@ -60,6 +61,7 @@ export class ProductionOrder extends FirebaseDocInterface {
                 orderOwnerName: data.orderOwnerName,
                 orderInfo: [],
                 plant: data.plant,
+                type: data.type,
             }
 
             data.orderInfo.forEach((item, index) => {
@@ -72,6 +74,7 @@ export class ProductionOrder extends FirebaseDocInterface {
                 });
 
                 item.inventoryInfo.forEach(info => {
+                    console.log(doc.orderInfo[index].inventoryInfo)
                     doc.orderInfo[index].inventoryInfo.info.push({...info});
                 });
             });

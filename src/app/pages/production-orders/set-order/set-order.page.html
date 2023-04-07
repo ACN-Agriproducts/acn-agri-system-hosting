@@ -85,8 +85,14 @@
 			</mat-card>
 			<div class="form-action-bar">
 				<button mat-flat-button color="primary" (click)="submit()">Submit</button>
+				<!-- <button 
+					mat-button
+					printSectionId="order-printable" 
+					[useExistingCss]="true"
+					ngxPrint
+				>Print</button> -->
 			</div>
 		</div>
-		<app-printable-production-order [order]="order"></app-printable-production-order>
+		<app-printable-production-order id="order-printable" [order]="order"></app-printable-production-order>
 	</div>
 </ion-content>

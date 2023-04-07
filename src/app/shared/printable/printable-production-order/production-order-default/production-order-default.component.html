@@ -7,36 +7,34 @@
 	</div>
 	<p class="order-title">Production Order</p>
 	<ol class="grid order-info">
-		<li class="row">
-			<div class="cell header pay-to">Pay To:</div>
-			<div class="cell pay-to">ACN Agriproducts, LLC</div>
-			<div class="cell header date">Date:</div>
-			<div class="cell header invoice-to">Invoice To:</div>
-			<div class="cell invoice-to">Deer Corn Almacen</div>
-			<div class="cell date">{{ order.date | date:'dd/MM/yyyy' }}</div>
-			<div class="cell header address">Address:</div>
-			<div class="cell address">1512 Rancho Toluca, Weslaco, TX  78596</div>
-		</li>
+		<div class="cell header pay-to">Pay To:</div>
+		<div class="cell pay-to">ACN Agriproducts, LLC</div>
+		<div class="cell header date">Date:</div>
+		<div class="cell header invoice-to">Invoice To:</div>
+		<div class="cell invoice-to">{{ order?.plant?.id }}</div>
+		<div class="cell date">{{ order?.date | date:'dd/MM/yyyy' }}</div>
+		<div class="cell header address">Address:</div>
+		<div class="cell address">1512 Rancho Toluca, Weslaco, TX  78596</div>
 	</ol>
 	<ol class="grid order-items">
-		<li class="row header">
-			<div class="cell">Qty</div>
-			<div class="cell">Unit</div>
-			<div class="cell">Storage</div>
-			<div class="cell">Description</div>
-		</li>
-		<li class="row body" *ngFor="let orderItem of order?.orderInfo">
-			<div class="cell">{{ orderItem?.quantity }}</div>
-			<div class="cell">Sacks</div>
-			<div class="cell tank">
-				<div *ngFor="let info of orderItem?.inventoryInfo">{{ info.tank ?? "--" }}</div>
-			</div>
-			<div class="cell description">
+		<div class="cell header">Qty</div>
+		<div class="cell header">Unit</div>
+		<div class="cell header">Name</div>
+		<div class="cell header">Description</div>
+		<div class="cell header">Storage</div>
+		<ng-container *ngFor="let orderItem of order?.orderInfo">
+			<div class="cell body">{{ orderItem?.quantity }}</div>
+			<div class="cell body">{{ orderItem.name ? "Sacks" : "" }}</div>
+			<div class="cell body name">{{ orderItem.name }}</div>
+			<div class="cell body description">
 				<div *ngFor="let info of orderItem?.inventoryInfo">
 					<span>{{ info.product ?? "--" }}</span>
 					<span *ngIf="info.quantity">&nbsp; {{ info.quantity }} lbs</span>
 				</div>
 			</div>
-		</li>
+			<div class="cell body storage">
+				<div *ngFor="let info of orderItem?.inventoryInfo">{{ info.tank ?? "--" }}</div>
+			</div>
+		</ng-container>
 	</ol>
 </div>

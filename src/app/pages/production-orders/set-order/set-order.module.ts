@@ -9,6 +9,7 @@ import { SetOrderPageRoutingModule } from './set-order-routing.module';
 import { SetOrderPage } from './set-order.page';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { SharedModule } from '@shared/shared.module';
     CoreModule,
     SetOrderPageRoutingModule,
     SharedModule,
+    NgxPrintModule,
   ],
   declarations: [SetOrderPage]
 })
