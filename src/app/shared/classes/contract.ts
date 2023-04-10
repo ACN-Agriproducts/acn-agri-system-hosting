@@ -146,6 +146,7 @@ export class Contract extends FirebaseDocInterface {
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
             this.futurePriceBase = new Price(null, 'bu');
+            this.date = new Date();
 
             return;
         }
@@ -160,7 +161,12 @@ export class Contract extends FirebaseDocInterface {
         data.truckers.forEach((trucker: any) => {
             tempTruckerList.push(new TruckerInfo(trucker));
         })
-        
+
+        if(data.futurePriceInfo){
+            data.futurePriceInfo.expirationMonth = data.futurePriceInfo?.expirationMonth.toDate();
+            data.futurePriceInfo.priceSetPeriodBegin = data.futurePriceInfo?.priceSetPeriodBegin.toDate();
+            data.futurePriceInfo.priceSetPeriodEnd = data.futurePriceInfo?.priceSetPeriodEnd.toDate();
+        }
 
         this.aflatoxin = data.aflatoxin;
         this.base = data.base;
