@@ -138,9 +138,8 @@ export class ContractFormComponent implements OnInit {
   }
 
   setMonthAndYear(monthAndYear: Date, datepicker: MatDatepicker<Date>) {
-    const date = this.contract.futurePriceInfo.expirationMonth ??= new Date();
-    date.setMonth(monthAndYear.getMonth());
-    date.setFullYear(monthAndYear.getFullYear());
+    this.contract.futurePriceInfo.expirationMonth ??= new Date();
+    this.contract.futurePriceInfo.expirationMonth = monthAndYear;
     datepicker.close();
   }
 

@@ -230,7 +230,7 @@
         </div>
         <div class="contract-info-row">
             <div>PERIODO DE ENTREGA:</div>
-			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY' | uppercase}}</div>
+			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}</div>
         </div>
 		<div class="contract-info-row">
             <div>ALMACENAJE Y FUMIGACIÓN:</div>
