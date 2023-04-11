@@ -80,6 +80,7 @@ export class ContractFormComponent implements OnInit {
         //this.selectedClient = client;
         this.contract.clientInfo = Contract.clientInfo(client);
         this.contract.clientName = client.name;
+        this.contract.client = this.contract.clientInfo.ref.withConverter(Contact.converter);
       });
     });
   }
