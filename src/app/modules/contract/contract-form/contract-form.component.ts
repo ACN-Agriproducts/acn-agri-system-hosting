@@ -77,7 +77,6 @@ export class ContractFormComponent implements OnInit {
       if(!result) return;
 
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
-        //this.selectedClient = client;
         this.contract.clientInfo = Contract.clientInfo(client);
         this.contract.clientName = client.name;
         this.contract.client = this.contract.clientInfo.ref.withConverter(Contact.converter);
