@@ -1,16 +1,51 @@
 <app-header-toolbar titulo="Bagging Orders"></app-header-toolbar>
 
 <ion-content class="ion-padding">
-    <mat-card>
-        <mat-card-content>
-            <div *ngFor="let order of orderList$ | async" class="table-row">
-                <span>id: {{order.id}}</span>
-                <span>status: {{order.status}}</span>
-                <span>info: {{order.orderInfo[0].name}}/{{order.orderInfo[0].quantity}}</span>
-                <button mat-icon-button>
-                    <mat-icon>more_vert</mat-icon>
-                </button>
-            </div>
-        </mat-card-content>
-    </mat-card>
+    <div class="center-content">
+        <div class="action-bar">
+            <button
+            mat-flat-button
+            class="new-button"
+            color="primary"
+            routerLink="/dashboard/production-orders/set-order">
+                New Order
+            </button>
+        </div>
+        <ol class="order-collection">
+            <li class="row header">
+                <div class="cell id">ID</div>
+                <div class="cell-group status-date">
+                    <div class="cell status">Status</div>
+                    <div class="cell date">Date</div>
+                </div>
+                <div class="cell info-quantities">Quantity</div>
+                <div class="cell info-names">Info</div>
+                <div class="cell storage">Storage</div>
+                <div class="cell options"></div>
+            </li>
+            <li class="row body" *ngFor="let order of orderList$ | async">
+                <div class="cell id" data-name="ID">{{ order.id }}</div>
+                <div class="cell-group status-date">
+                    <div class="cell status" data-name="Status">{{ order.status }}</div>
+                    <div class="cell date" data-name="Date">{{ order.date | date }}</div>
+                </div>
+                <div class="cell info-quantities" data-name="Quantity">
+                    <div>
+                        <div class="info-item" *ngFor="let item of order.orderInfo">{{ item.quantity }}</div>
+                    </div>
+                </div>
+                <div class="cell info-names" data-name="Info">
+                    <div>
+                        <div class="info-item" *ngFor="let item of order.orderInfo">{{ item.name }}</div>
+                    </div>
+                </div>
+                <div class="cell storage" data-name="Storage">{{ order.plant.id | titlecase }}</div>
+                <div class="cell options">
+                    <button mat-icon-button>
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+            </li>
+        </ol>
+    </div>
 </ion-content>

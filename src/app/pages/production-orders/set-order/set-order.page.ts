@@ -91,7 +91,6 @@ export class SetOrderPage implements OnInit {
     this.order.orderOwner = User.getDocumentReference(this.db, this.session.getUser().uid);
     this.order.orderOwnerName = this.session.getUser().name;
     this.order.ref = doc(ProductionOrder.getCollectionReference(this.db, this.session.getCompany()));
-    this.order.id = 1; //TODO
     this.order.fulfilledDate = null;
     this.order.docRefs = [];
 

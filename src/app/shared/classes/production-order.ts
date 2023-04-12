@@ -34,13 +34,15 @@ export class ProductionOrder extends FirebaseDocInterface {
 
         if(data == undefined) return;
 
-        this.date = data.date;
+        this.date = data.date.toDate();
         this.fulfilledDate = data.fulfilledDate;
+        this.id = data.id;
         this.status = data.status;
         this.docRefs = data.docRefs;
         this.orderOwner = data.orderOwner;
         this.orderOwnerName = data.orderOwnerName;
         this.orderInfo = [];
+        this.plant = data.plant;
         this.type = data.type;
 
         data.orderInfo.forEach(element => {
@@ -74,8 +76,7 @@ export class ProductionOrder extends FirebaseDocInterface {
                 });
 
                 item.inventoryInfo.forEach(info => {
-                    console.log(doc.orderInfo[index].inventoryInfo)
-                    doc.orderInfo[index].inventoryInfo.info.push({...info});
+                    doc.orderInfo[index].inventoryInfo.push({...info});
                 });
             });
 
