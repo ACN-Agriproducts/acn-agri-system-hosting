@@ -147,6 +147,9 @@ export class Contract extends FirebaseDocInterface {
             this.paymentTerms.origin = null;
             this.futurePriceBase = new Price(null, 'bu');
             this.date = new Date();
+            this.currentDelivered = new Mass(0, FirebaseDocInterface.session.getDefaultUnit());
+            this.loads = 0;
+            this.status = status.pending;
 
             return;
         }

@@ -13,6 +13,8 @@ import { TypeTemplateDirective } from '@core/directive/type-template/type-templa
 import { lastValueFrom } from 'rxjs';
 import { SelectClientComponent } from '../select-client/select-client.component';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contract-form',
@@ -38,6 +40,8 @@ export class ContractFormComponent implements OnInit {
     private db: Firestore,
     private session: SessionInfo,
     private dialog: MatDialog,
+    private snack: SnackbarService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -134,7 +138,7 @@ export class ContractFormComponent implements OnInit {
       this.contract.deliveryPlants.push(plantObject.address);
     });
 
-    if(this.contract.plants.includes("third-party")) this.contract.deliveryPlants.push("");
+    if(this.contract.plants.includes('third-party')) this.contract.deliveryPlants.push('');
   }
 
   setMonthAndYear(monthAndYear: Date, datepicker: MatDatepicker<Date>) {
@@ -144,10 +148,12 @@ export class ContractFormComponent implements OnInit {
   }
 
   submit(): void {
-    console.log(this.contract);
-  }
-
-  log(...data: any) : void {
-    console.log(...data);
+    this.contract.set().then(() => {
+      this.snack.open('Contract submitted successfully', 'success');
+      this.router.navigate(['dashboard/contracts']);
+    }).catch(error => {
+      this.snack.open('Error submitting contract', 'error');
+      console.error(error);
+    });
   }
 }
