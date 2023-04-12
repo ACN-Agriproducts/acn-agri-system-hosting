@@ -71,7 +71,8 @@ export class ContractSettingsPage implements OnInit {
       primitiveType: null,
       selectOptions: [],
       prefix: null,
-      suffix: null
+      suffix: null,
+      required: null,
     })
   }
 

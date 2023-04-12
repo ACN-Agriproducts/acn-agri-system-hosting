@@ -85,6 +85,7 @@ export interface FormField {
     selectOptions?: SelectOption[];
     suffix: string;
     prefix: string;
+    required: boolean;
 }
 
 interface SelectOption {

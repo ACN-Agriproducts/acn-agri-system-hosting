@@ -56,6 +56,12 @@
             <mat-label>Suffix</mat-label>
             <input matInput [(ngModel)]="item.suffix">
           </mat-form-field>
+          <section>
+            <mat-checkbox
+                [(ngModel)]="item.required">
+              Required
+            </mat-checkbox>
+          </section>
           <div *ngIf="item.primitiveType == 'select'" class="select-area">
             <mat-card-subtitle>
               Select Options
