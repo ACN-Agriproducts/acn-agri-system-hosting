@@ -342,6 +342,10 @@ export class Contract extends FirebaseDocInterface {
         return collection(db, `companies/${company}/contracts/`).withConverter(Contract.converter);
     }
 
+    public static getCollectionQuery(db: Firestore, company: string, contractType: contractType): Query<Contract> {
+        return query(Contract.getCollectionReference(db, company, contractType), where('type', '==', contractType));
+    }
+
     public static getDoc(db: Firestore, company: string, contractType: contractType, contractId: number): Promise<Contract> {
         return getDocs(query(Contract.getCollectionReference(db, company), where('id', '==', contractId), where('type', '==', this.getContractType(contractType)), limit(1)))
             .then(result => {

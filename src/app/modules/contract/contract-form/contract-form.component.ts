@@ -1,5 +1,5 @@
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, getDocsFromServer, limit, query } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company, CompanyContact } from '@shared/classes/company';
@@ -15,6 +15,7 @@ import { SelectClientComponent } from '../select-client/select-client.component'
 import { MatDatepicker } from '@angular/material/datepicker';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
+import { orderBy } from 'firebase/firestore';
 
 @Component({
   selector: 'app-contract-form',
@@ -119,6 +120,18 @@ export class ContractFormComponent implements OnInit {
     else {
       this.contract.bankInfo = [];
     }
+
+    getDocsFromServer(query(
+      Contract.getCollectionQuery(this.db, this.session.getCompany(), this.contract.type),
+      orderBy('id', 'desc'), limit(1)
+    )).then(result => {
+      if (result.empty) {
+        this.contract.id = 1;
+        return;
+      }
+
+      this.contract.id = result.docs[0].data().id + 1;
+    });  
   }
 
   async productChange() {
