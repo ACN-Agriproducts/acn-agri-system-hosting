@@ -271,7 +271,12 @@
 <ng-template typeTemplate="future-month-picker" let-data>
   <mat-form-field [ngClass]="data | getFieldClass" appFutureDateFormat>
       <mat-label>{{data.label}}</mat-label>
-      <input matInput [matDatepicker]="futurePicker" [(ngModel)]="contract.futurePriceInfo.expirationMonth">
+      <input 
+        matInput 
+        [matDatepicker]="futurePicker" 
+        [(ngModel)]="contract.futurePriceInfo.expirationMonth"
+        [matDatepickerFilter]="futurePickerFilter"
+        [min]="today">
       <mat-datepicker-toggle matSuffix [for]="futurePicker"></mat-datepicker-toggle>
       <mat-datepicker #futurePicker
         startView="year"

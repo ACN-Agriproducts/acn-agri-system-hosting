@@ -32,6 +32,7 @@ export class ContractFormComponent implements OnInit {
   public truckerList: CompanyContact[];
   public products$: Promise<Product[]>;
   public plants$: Promise<Plant[]>;
+  public today = new Date();
 
   public useSameClientForTicket = true;
 
@@ -158,6 +159,12 @@ export class ContractFormComponent implements OnInit {
     this.contract.futurePriceInfo.expirationMonth ??= new Date();
     this.contract.futurePriceInfo.expirationMonth = monthAndYear;
     datepicker.close();
+  }
+
+  futurePickerFilter(d: Date | null): boolean {
+    const monthChoices = [2, 4, 6, 8, 11]
+    const day = (d || new Date()).getMonth();
+    return monthChoices.includes(day);
   }
 
   submit(): void {
