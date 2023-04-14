@@ -33,6 +33,10 @@ export class ContractFormComponent implements OnInit {
   public products$: Promise<Product[]>;
   public plants$: Promise<Plant[]>;
   public today = new Date();
+  public futureOptions: {
+    label: string;
+    value: Date;
+  }[] = [];
 
   public useSameClientForTicket = true;
 
@@ -69,6 +73,31 @@ export class ContractFormComponent implements OnInit {
 
     this.products$ = Product.getProductList(this.db, this.session.getCompany());
     this.plants$ = Plant.getPlantList(this.db, this.session.getCompany());
+
+    // Generate future list
+    const monthsList = ['MAR', 'MAY', 'JUL', 'SEP', 'DEC'];
+    const monthToNum = {
+      MAR: 2,
+      MAY: 4,
+      JUL: 6,
+      SEP: 8,
+      DEC: 11
+    }
+    const yearList = [this.today.getFullYear(), this.today.getFullYear() + 1];
+    const tempFutureOptions: {
+      label: string;
+      value: Date;
+    }[] = [];
+    for(let year of yearList) {
+      for(let month of monthsList) {
+        tempFutureOptions.push({
+          label: `${month} ${year}`,
+          value: new Date(year, monthToNum[month], 14)
+        });
+      }
+    }
+
+    this.futureOptions = tempFutureOptions;
   }
 
   openClientSelect() {
