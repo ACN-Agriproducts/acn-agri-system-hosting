@@ -1,4 +1,4 @@
-import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore, QueryConstraint, query, getDocs } from "@angular/fire/firestore";
+import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore, QueryConstraint, query, getDocs, getDoc, where, limit, orderBy } from "@angular/fire/firestore";
 import { Company } from "./company";
 import { FirebaseDocInterface, status } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
@@ -97,6 +97,12 @@ export class ProductionOrder extends FirebaseDocInterface {
 
     public static getCollectionReference(db: Firestore, company: string): CollectionReference<ProductionOrder> {
         return collection(Company.getCompanyRef(db, company), "productionOrders").withConverter(ProductionOrder.converter);
+    }
+
+    public static getOrder(db: Firestore, company: string, id: number): Promise<ProductionOrder> {
+        return this.getList(db, company, where('id', '==', id)).then(result => {
+            return result[0];
+        });
     }
 }
 

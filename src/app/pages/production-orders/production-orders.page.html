@@ -28,7 +28,8 @@
                         <div class="cell info" data-name="Information">
                             <div class="info-container">
                                 <div class="info-item" *ngFor="let item of order.orderInfo">
-                                    ( {{ item.quantity}} ) <ion-text color="tertiary">{{ item.name }}</ion-text>
+                                    <span class="item-quantity">( {{ item.quantity}} )</span>
+                                    <ion-text class="item-name" color="tertiary">{{ item.name }}</ion-text>
                                 </div>
                             </div>
                         </div>
