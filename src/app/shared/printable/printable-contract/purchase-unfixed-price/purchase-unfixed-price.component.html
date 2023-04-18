@@ -20,7 +20,7 @@
                     Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [class.focused]="focusedField == 'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
                 </li>
                 <li>
-                    Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u>XXXXXXXXXXXXXXXXX</u>, correo electrónico <u><span [class.focused]="focusedField == 'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [class.focused]="focusedField == 'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [class.focused]="focusedField == 'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
                 </li>
             </ol>
         </li>
@@ -132,7 +132,7 @@
             <span class="contract-version">CONTRATO DE COMPRA BASES</span>
         </b>
         <br>
-        <span class="contract-id">Número de contrato <span class="emphasis">2022355X</span></span>
+        <span class="contract-id">Número de contrato <span class="emphasis"><span [class.focused]="focusedField == 'id'">{{contractForm.id ?? " "}}</span></span></span>
     </p>
     <p class="text-align-center page-title">“ANEXO 1”</p>
     <div class="party-info">
@@ -170,7 +170,7 @@
         </div>
 		<div class="contract-info-row">
             <div>FUTURO:</div>
-            <div>A DEFINIR</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.future'">{{this.contractForm?.futurePriceInfo?.future || 'A DEFINIR'}}</div>
         </div>
 		<div class="contract-info-row">
             <div>MES DE VENCIMIENTO:</div>
@@ -187,8 +187,8 @@
         <div class="contract-info-row">
             <div>CANTIDAD:</div>
             <div>
-                <span [class.focused]="focusedField == 'quantiy.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
-                <span [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
+                <span [class.focused]="focusedField == 'quantity.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
+                <span [class.focused]="focusedField == 'quantity.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
                 +- <span [class.focused]="focusedField == 'quantityErrorPercentage'">{{contractForm?.quantityErrorPercentage || 'X'}}</span>%
             </div>
         </div>

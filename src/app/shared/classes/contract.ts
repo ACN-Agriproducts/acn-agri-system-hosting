@@ -518,7 +518,7 @@ interface ContactInfo {
 interface FuturePriceInfo {
     exchangeRate: string | number;
     expirationMonth: Date;
-    future: FutureMonth;
+    future: number;
     marketOptions: string;
     priceSetPeriodBegin: Date;
     priceSetPeriodEnd: Date;
