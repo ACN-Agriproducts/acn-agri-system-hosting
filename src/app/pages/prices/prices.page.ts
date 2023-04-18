@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { addDoc, collection, CollectionReference, doc, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, query, serverTimestamp, writeBatch } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,7 +30,8 @@ export class PricesPage implements OnInit {
     private db: Firestore,
     private session: SessionInfo,
     private dialog: MatDialog,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -368,6 +370,16 @@ export class PricesPage implements OnInit {
       this.snackbar.open(`Error: ${error}`, "error");
     });
     this.snackbar.open("Saving...", "info");
+  }
+
+  sendNotification() {
+    addDoc(collection(this.db, "mail"), {
+      to: 'ruben.puga@acnagri.com',
+      message: {
+        subject: `Notificacion de nueva table de precios ${this.datePipe.transform(new Date(), 'yyyy-MM-dd')}`,
+        html: 'Una nueva table de precios ha sido subida a la aplicación de precios.'
+      }
+    });
   }
 }
 
