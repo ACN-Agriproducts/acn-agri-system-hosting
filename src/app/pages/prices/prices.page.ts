@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, CollectionReference, doc, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, orderBy, query, serverTimestamp, writeBatch } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, doc, DocumentReference, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, writeBatch } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -31,7 +32,8 @@ export class PricesPage implements OnInit {
     private session: SessionInfo,
     private dialog: MatDialog,
     private snackbar: SnackbarService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private functions: Functions
   ) { }
 
   ngOnInit() {
@@ -372,12 +374,40 @@ export class PricesPage implements OnInit {
     this.snackbar.open("Saving...", "info");
   }
 
-  sendNotification() {
-    addDoc(collection(this.db, "mail"), {
-      to: 'ruben.puga@acnagri.com',
+  async sendNotification(): Promise<void> {
+    this.snackbar.open('Mandando notificación...', 'info');
+
+    const getUserUIDs = httpsCallable(this.functions, 'users-getCompanyPriceUsers');
+    const uidList = (await getUserUIDs({company: this.session.getCompany()})).data as string[];
+
+    addDoc(collection(this.db, 'mail'), {
+      to: uidList,
+      company: this.session.getCompany(),
+      userUID: this.session.getUser().uid,
       message: {
-        subject: `Notificacion de nueva table de precios ${this.datePipe.transform(new Date(), 'yyyy-MM-dd')}`,
-        html: 'Una nueva table de precios ha sido subida a la aplicación de precios.'
+        subject: `Notificación de nueva table de precios ${this.datePipe.transform(new Date(), 'yyyy-MM-dd')}`,
+        text: 'Una nueva tabla de precios ha sido subida a la aplicación de precios.'
+      }
+    }).then(result => {
+      this.messageCheckStatus(result);
+    }).catch(error => {
+      this.snackbar.open('Error', 'error');
+      console.error(error);
+    });
+  }
+
+  messageCheckStatus(docRef: DocumentReference): void {
+    const unsub = onSnapshot(docRef, next => {
+      const status = next.data().delivery?.state;
+      
+      if(!status || status == 'PENDING' || status == 'PROCESSING') return;
+      if(status == 'SUCCESS') {
+        this.snackbar.open('Notificación mandada', 'success');
+        unsub();
+      }
+      if(status == 'ERROR') {
+        this.snackbar.open('Error con notificación', 'error');
+        unsub();
       }
     });
   }
