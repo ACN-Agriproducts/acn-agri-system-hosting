@@ -243,7 +243,7 @@
         </div>
         <div class="contract-info-row">
             <div>EJECUTIVO DE CONTRATO:</div>
-			<div>NOMBRE COMPLETO</div>
+			<div [class.focused]="focusedField == 'contractExecutive'">{{contractForm?.contractExecutive?.name}}</div>
         </div>
     </div>
     <p>PARA CONSTANCIA DE LO CONVENIDO LAS PARTES FIRMAN EL PRESENTE CONTRATO</p>
