@@ -15,6 +15,8 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
   styleUrls: ['./set-order.page.scss'],
 })
 export class SetOrderPage implements OnInit {
+  PlantClass = Plant;
+
   order: ProductionOrder;
   currentPlant: Plant;
 
@@ -48,6 +50,7 @@ export class SetOrderPage implements OnInit {
     ProductionOrder.getOrder(this.db, this.session.getCompany(), +orderId)
     .then(order => {
       this.order = order;
+      this.plantChange(this.order.plant.id);
     })
     .catch(error => {
       console.error(error);
@@ -63,8 +66,9 @@ export class SetOrderPage implements OnInit {
     this.addItem();
   }
 
-  async plantChange(): Promise<void> {
-    this.currentPlant = (await this.plants$).find(p => p.ref == this.order.plant);
+  async plantChange(plantId: string): Promise<void> {
+    this.currentPlant = (await this.plants$).find(plant => plant.ref.id === plantId);
+    this.order.plant = this.currentPlant.ref.withConverter(Plant.converter);
   }
 
   addItem(): void {
@@ -76,10 +80,11 @@ export class SetOrderPage implements OnInit {
     }));
   }
 
-  async itemSelected(item: orderItem): Promise<void> {
-    const newItem = (await this.invoiceItems$).find(invoiceItem => invoiceItem.ref == item.itemRef);
+  async itemSelected(newItemId: string, item: orderItem): Promise<void> {
+    const newItem = (await this.invoiceItems$).find(invoiceItem => invoiceItem.ref.id === newItemId);
 
     item.name = newItem.name;
+    item.itemRef = newItem.ref;
     item.inventoryInfo = [];
 
     newItem.inventoryInfo.info.forEach(inventoryInfoItem => {
@@ -88,15 +93,12 @@ export class SetOrderPage implements OnInit {
   }
 
   deleteItem(index: number): void {
-    this.order.orderInfo.splice(index, 1)
+    this.order.orderInfo.splice(index, 1);
   }
 
   affectsInventoryChange(item: orderItem) {
-    if (item.affectsInventory) {
-      item.inventoryInfo = [new orderItemInfo({})]
-    }
-    else {
-      item.inventoryInfo = null;
+    if (!item.affectsInventory) {
+      this.itemSelected(item.itemRef.id, item);
     }
   }
 

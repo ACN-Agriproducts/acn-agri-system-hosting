@@ -17,8 +17,8 @@
 						</mat-form-field>
 						<mat-form-field>
 							<mat-label>Plant</mat-label>
-							<mat-select [(ngModel)]="order.plant" appearance="fill" (ngModelChange)="plantChange()" name="plant">
-								<mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref">
+							<mat-select [ngModel]="order.plant?.id" appearance="fill" (ngModelChange)="plantChange($event)" name="plant">
+								<mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id">
 									{{plant.ref.id | titlecase}}
 								</mat-option>
 							</mat-select>
@@ -35,9 +35,9 @@
 					<div class="form-row">
 						<mat-form-field>
 							<mat-label>Item</mat-label>
-							<mat-select [(ngModel)]="item.itemRef" appearance="fill" (ngModelChange)="itemSelected(item)" name="itemName">
+							<mat-select [ngModel]="item.itemRef?.id" appearance="fill" (ngModelChange)="itemSelected($event, item)" name="itemName">
 								<mat-option *ngFor="let invoiceItem of invoiceItems$ | async"
-									[value]="invoiceItem.ref">{{invoiceItem.name}}</mat-option>
+									[value]="invoiceItem.ref.id">{{invoiceItem.name}}</mat-option>
 							</mat-select>
 						</mat-form-field>
 						<mat-form-field class="quantity-field">
