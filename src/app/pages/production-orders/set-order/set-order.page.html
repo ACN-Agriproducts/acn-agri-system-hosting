@@ -85,13 +85,12 @@
 				</mat-card-content>
 			</mat-card>
 			<div class="form-action-bar">
-				<button mat-flat-button color="primary" (click)="submit()">Submit</button>
-				<!-- <button 
-					mat-button
+				<button mat-flat-button color="primary"
 					printSectionId="order-printable" 
 					[useExistingCss]="true"
 					ngxPrint
-				>Print</button> -->
+				>Print</button>
+				<button mat-flat-button color="primary" (click)="submit()">{{ editing ? "Update" : "Submit" }}</button>
 			</div>
 		</div>
 		<app-printable-production-order id="order-printable" [order]="order"></app-printable-production-order>

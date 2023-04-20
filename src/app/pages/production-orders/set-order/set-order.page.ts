@@ -15,8 +15,6 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
   styleUrls: ['./set-order.page.scss'],
 })
 export class SetOrderPage implements OnInit {
-  PlantClass = Plant;
-
   order: ProductionOrder;
   currentPlant: Plant;
 
