@@ -3,7 +3,7 @@
     <mat-card-subtitle>Contract Info</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <mat-form-field class="span-4" appFutureDateFormat>
+    <mat-form-field class="span-2" appFutureDateFormat>
       <mat-label>Date</mat-label>
       <input 
         matInput 
@@ -13,6 +13,16 @@
         (focusout)="selectedFieldEvent.emit(null)">
       <mat-datepicker-toggle matSuffix [for]="contractDatepicker"></mat-datepicker-toggle>
       <mat-datepicker #contractDatepicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="span-2">
+      <mat-label>Contract Executive</mat-label>
+      <mat-select
+        matInput
+        [(ngModel)]="contract.contractExecutive"
+        (focus)="selectedFieldEvent.emit('contractExecutive')"
+        (focusout)="selectedFieldEvent.emit(null)">
+        <mat-option *ngFor="let user of usersList" [value]="user">{{user.name}}</mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field class="span-3">
       <mat-label>Contract Type</mat-label>

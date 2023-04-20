@@ -1,10 +1,10 @@
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
-import { Firestore, getDocsFromServer, limit, query } from '@angular/fire/firestore';
+import { Firestore, getDocsFromServer, limit, query, DocumentReference, orderBy } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
-import { Contract } from '@shared/classes/contract';
+import { Contract, Exectuive } from '@shared/classes/contract';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { Mass } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
@@ -15,7 +15,8 @@ import { SelectClientComponent } from '../select-client/select-client.component'
 import { MatDatepicker } from '@angular/material/datepicker';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
-import { orderBy } from 'firebase/firestore';
+import { Functions } from '@angular/fire/functions';
+import { httpsCallable } from 'firebase/functions';
 
 @Component({
   selector: 'app-contract-form',
@@ -37,6 +38,7 @@ export class ContractFormComponent implements OnInit {
     label: string;
     value: Date;
   }[] = [];
+  public usersList: Exectuive[];
 
   public useSameClientForTicket = true;
 
@@ -44,6 +46,7 @@ export class ContractFormComponent implements OnInit {
 
   constructor(
     private db: Firestore,
+    private functions: Functions,
     private session: SessionInfo,
     private dialog: MatDialog,
     private snack: SnackbarService,
@@ -73,6 +76,10 @@ export class ContractFormComponent implements OnInit {
 
     this.products$ = Product.getProductList(this.db, this.session.getCompany());
     this.plants$ = Plant.getPlantList(this.db, this.session.getCompany());
+    
+    httpsCallable(this.functions, 'users-getCompanyUsersSelect')({company: this.session.getCompany()}).then(result => {
+      this.usersList = result.data as Exectuive[];
+    });
 
     // Generate future list
     const monthsList = ['MAR', 'MAY', 'JUL', 'SEP', 'DEC'];

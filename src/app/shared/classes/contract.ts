@@ -46,6 +46,7 @@ export class Contract extends FirebaseDocInterface {
     bankInfo: BankInfo[];
     cargoDelays: string;
     contractOwner: string;
+    contractExecutive: Exectuive;
     currency: string;
     deliveryPlants: string[];
     deliveryType: string;
@@ -528,5 +529,10 @@ export interface BankInfo {
     bank: string;
     account: string;
     interBank: string;
+}
+
+export interface Exectuive {
+    name: string,
+    ref: DocumentReference
 }
 
