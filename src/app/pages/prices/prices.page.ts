@@ -381,7 +381,7 @@ export class PricesPage implements OnInit {
     const uidList = (await getUserUIDs({company: this.session.getCompany()})).data as string[];
 
     addDoc(collection(this.db, 'mail'), {
-      to: uidList,
+      toUids: uidList,
       company: this.session.getCompany(),
       userUID: this.session.getUser().uid,
       message: {
