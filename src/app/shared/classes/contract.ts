@@ -151,6 +151,7 @@ export class Contract extends FirebaseDocInterface {
             this.currentDelivered = new Mass(0, FirebaseDocInterface.session.getDefaultUnit());
             this.loads = 0;
             this.status = status.pending;
+            this.contractOwner = FirebaseDocInterface.session.getUser().uid;
 
             return;
         }
