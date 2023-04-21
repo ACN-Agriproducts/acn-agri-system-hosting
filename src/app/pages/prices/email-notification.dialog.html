@@ -1,8 +1,12 @@
 <h1 mat-dialog-title>Elejir usuarios para recibir notificacion.</h1>
 <div mat-dialog-content>
     <mat-form-field>
+        <mat-label>Asunto de correo</mat-label>
+        <input matInput [(ngModel)]="subject">
+    </mat-form-field>
+    <mat-form-field>
         <mat-label>Texto de notificacion</mat-label>
-        <textarea matInput></textarea>
+        <textarea matInput [(ngModel)]="text"></textarea>
     </mat-form-field>
     <mat-selection-list [(ngModel)]="selectedUsers">
         <mat-list-option *ngFor="let user of userList" [value]="user">
@@ -20,7 +24,7 @@
     <button 
         color="primary"
         mat-button 
-        [mat-dialog-close]="{text, usersList: selectedUsers}"
+        [mat-dialog-close]="{subject, text, usersList: selectedUsers}"
         >Ok
     </button>
 </div>

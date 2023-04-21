@@ -384,17 +384,18 @@ export class PricesPage implements OnInit {
 
     const notificationInfo = await lastValueFrom(dialogRef.afterClosed());
     console.log(notificationInfo);
-    if(!notificationInfo || !notificationInfo.text || !notificationInfo.usersList) return;
+    if(!notificationInfo || !notificationInfo.text || !notificationInfo.usersList || !notificationInfo.subject) return;
     
     this.snackbar.open('Mandando notificación...', 'info');
 
     addDoc(collection(this.db, 'mail'), {
-      bccUids: userList.map(user => user.uid),
+      bccUids: notificationInfo.usersList,
       company: this.session.getCompany(),
       userUID: this.session.getUser().uid,
+      date: serverTimestamp(),
       message: {
-        subject: `Notificación de nueva table de precios ${this.datePipe.transform(new Date(), 'yyyy-MM-dd')}`,
-        text: 'Una nueva tabla de precios ha sido subida a la aplicación de precios.'
+        subject: notificationInfo.subject,
+        text: notificationInfo.text
       }
     }).then(result => {
       this.messageCheckStatus(result);
@@ -429,7 +430,8 @@ export class PricesPage implements OnInit {
 })
 export class EmailNotificationDialog {
   public selectedUsers: { uid: string, name: string }[];
-  public text: string;
+  public subject: string = "Tabla de Precios";
+  public text: string = "Una nueva tabla de precios ha sido subida a la aplicación de precios.";
 
   constructor(
     public dialogRef: MatDialogRef<EmailNotificationDialog>,
