@@ -376,7 +376,7 @@ export class PricesPage implements OnInit {
 
   async sendNotification(): Promise<void> {
     const getUserUIDs = httpsCallable(this.functions, 'users-getCompanyPriceUsers');
-    const userList = (await getUserUIDs({company: this.session.getCompany()})).data as { uid: string, name: string }[];
+    const userList = (await getUserUIDs({company: this.session.getCompany()})).data as { uid: string, name: string, email: string }[];
 
     const dialogRef = this.dialog.open(EmailNotificationDialog, {
       data: userList
@@ -429,15 +429,25 @@ export class PricesPage implements OnInit {
   templateUrl: 'email-notification.dialog.html'
 })
 export class EmailNotificationDialog {
-  public selectedUsers: { uid: string, name: string }[];
+  public selectedUsers: { uid: string, name: string, email: string }[];
+  public selectUsers: { uid: string, name: string, email: string }[];
   public subject: string = "Tabla de Precios";
   public text: string = "Una nueva tabla de precios ha sido subida a la aplicación de precios.";
 
   constructor(
     public dialogRef: MatDialogRef<EmailNotificationDialog>,
-    @Inject(MAT_DIALOG_DATA) public userList: { uid: string, name: string }[]
+    @Inject(MAT_DIALOG_DATA) public userList: { uid: string, name: string, email: string }[]
   ) {
     this.selectedUsers = [...this.userList];
+    this.selectUsers = this.userList.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    })
   };
 }
 
