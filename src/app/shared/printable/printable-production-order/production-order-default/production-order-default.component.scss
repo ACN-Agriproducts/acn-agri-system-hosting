@@ -1,5 +1,5 @@
 
-$border: 1pt solid black;
+$border: 1.5pt solid black;
 
 // * {
 //     box-sizing: border-box;
@@ -35,6 +35,7 @@ $border: 1pt solid black;
     font-size: 12pt;
     text-align: center;
     text-transform: uppercase;
+    margin-bottom: 40px;
 }
 
 ol {
@@ -64,7 +65,7 @@ li {
 }
 
 .order-info {
-    margin: 40px 0 20px;
+    margin-bottom: 20px;
     font-size: 10pt;
     grid-template-columns: 1fr 3fr 1fr;
 
@@ -84,6 +85,7 @@ li {
 
 .order-items {
     grid-template-columns: 1fr 1fr 2fr 4fr 2fr;
+    margin-bottom: 40px;
 
     .body.cell {
         padding: 10px;
@@ -105,10 +107,27 @@ li {
 
 .fill-line {
 	display: inline-block;
-	border-bottom: 1pt solid black;
+	border-bottom: $border;
 	min-width: 4em;
 	line-height: 90%;
 	text-align: center;
+}
+
+.signatures {
+    display: flex;
+    gap: 25%;
+    font-weight: bold;
+
+    .party {
+        flex: 1 0 auto;
+        display: flex;
+        flex-flow: column wrap;
+        align-items: center;
+    }
+
+    .fill-line {
+        width: 100%;
+    }
 }
 
 @media screen {
