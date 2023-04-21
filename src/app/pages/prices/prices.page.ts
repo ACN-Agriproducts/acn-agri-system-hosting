@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { addDoc, collection, CollectionReference, doc, DocumentReference, DocumentSnapshot, FieldValue, Firestore, getDocs, limit, onSnapshot, orderBy, query, serverTimestamp, writeBatch } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Company } from '@shared/classes/company';
@@ -33,7 +33,7 @@ export class PricesPage implements OnInit {
     private dialog: MatDialog,
     private snackbar: SnackbarService,
     private datePipe: DatePipe,
-    private functions: Functions
+    private functions: Functions,
   ) { }
 
   ngOnInit() {
@@ -375,13 +375,21 @@ export class PricesPage implements OnInit {
   }
 
   async sendNotification(): Promise<void> {
+    const getUserUIDs = httpsCallable(this.functions, 'users-getCompanyPriceUsers');
+    const userList = (await getUserUIDs({company: this.session.getCompany()})).data as { uid: string, name: string }[];
+
+    const dialogRef = this.dialog.open(EmailNotificationDialog, {
+      data: userList
+    });
+
+    const notificationInfo = await lastValueFrom(dialogRef.afterClosed());
+    console.log(notificationInfo);
+    if(!notificationInfo || !notificationInfo.text || !notificationInfo.usersList) return;
+    
     this.snackbar.open('Mandando notificación...', 'info');
 
-    const getUserUIDs = httpsCallable(this.functions, 'users-getCompanyPriceUsers');
-    const uidList = (await getUserUIDs({company: this.session.getCompany()})).data as string[];
-
     addDoc(collection(this.db, 'mail'), {
-      toUids: uidList,
+      bccUids: userList.map(user => user.uid),
       company: this.session.getCompany(),
       userUID: this.session.getUser().uid,
       message: {
@@ -395,6 +403,8 @@ export class PricesPage implements OnInit {
       console.error(error);
     });
   }
+
+
 
   messageCheckStatus(docRef: DocumentReference): void {
     const unsub = onSnapshot(docRef, next => {
@@ -411,6 +421,22 @@ export class PricesPage implements OnInit {
       }
     });
   }
+}
+
+@Component({
+  selector: 'email-notification-dialog',
+  templateUrl: 'email-notification.dialog.html'
+})
+export class EmailNotificationDialog {
+  public selectedUsers: { uid: string, name: string }[];
+  public text: string;
+
+  constructor(
+    public dialogRef: MatDialogRef<EmailNotificationDialog>,
+    @Inject(MAT_DIALOG_DATA) public userList: { uid: string, name: string }[]
+  ) {
+    this.selectedUsers = [...this.userList];
+  };
 }
 
 interface pricesDoc {
