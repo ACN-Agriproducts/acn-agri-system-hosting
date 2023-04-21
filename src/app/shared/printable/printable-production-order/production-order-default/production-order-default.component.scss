@@ -1,4 +1,6 @@
 
+$border: 1pt solid black;
+
 // * {
 //     box-sizing: border-box;
 // }
@@ -46,12 +48,13 @@ li {
 
 .grid {
     display: grid;
+    border-top: $border;
+    border-left: $border;
 
-    &, .cell {
-        border: 0.5pt solid black;
-        border-collapse: collapse;
-    }
     .cell {
+        border-bottom: $border;
+        border-right: $border;
+        border-collapse: collapse;
         padding: 0 10px;
     }
     .header {

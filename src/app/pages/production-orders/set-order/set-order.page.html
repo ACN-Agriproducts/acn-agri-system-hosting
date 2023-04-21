@@ -86,6 +86,7 @@
 			</mat-card>
 			<div class="form-action-bar">
 				<button mat-flat-button color="primary"
+					*ngIf="editing"
 					printSectionId="order-printable" 
 					[useExistingCss]="true"
 					ngxPrint
