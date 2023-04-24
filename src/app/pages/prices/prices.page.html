@@ -137,11 +137,19 @@
       >+ Añadir tabla
     </button>
 
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="submit()"
-      >Guardar
-    </button>
+    <span>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="sendNotification()"
+        >Mandar Notificacion
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="submit()"
+        >Guardar
+      </button>
+    </span>
   </div>
 </ion-content>

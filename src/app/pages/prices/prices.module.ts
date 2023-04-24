@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { PricesPageRoutingModule } from './prices-routing.module';
 
-import { PricesPage } from './prices.page';
+import { EmailNotificationDialog, PricesPage } from './prices.page';
 import { CoreModule } from '@core/core.module';
 import { FieldRenameComponent } from './field-rename/field-rename.component';
 import { NewTableDialogComponent } from './new-table-dialog/new-table-dialog.component';
@@ -24,7 +24,8 @@ import { TableImportDialogComponent } from './table-import-dialog/table-import-d
     PricesPage, 
     FieldRenameComponent,
     NewTableDialogComponent,
-    TableImportDialogComponent
+    TableImportDialogComponent,
+    EmailNotificationDialog
   ]
 })
 export class PricesPageModule {}
