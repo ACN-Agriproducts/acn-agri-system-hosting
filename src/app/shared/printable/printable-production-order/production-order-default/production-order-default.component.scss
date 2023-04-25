@@ -1,5 +1,5 @@
 
-$border: 1.5pt solid black;
+$border: 1.5px solid black;
 
 // * {
 //     box-sizing: border-box;
@@ -85,7 +85,7 @@ li {
 
 .order-items {
     grid-template-columns: 1fr 1fr 2fr 4fr 2fr;
-    margin-bottom: 40px;
+    margin-bottom: 70px;
 
     .body.cell {
         padding: 10px;

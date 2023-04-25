@@ -1,7 +1,8 @@
-import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore, QueryConstraint, query, getDocs, getDoc, where, limit, orderBy } from "@angular/fire/firestore";
+import { DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, CollectionReference, collection, Firestore, QueryConstraint, query, getDocs, getDoc, where, limit, orderBy, collectionData } from "@angular/fire/firestore";
 import { Company } from "./company";
 import { FirebaseDocInterface, status } from "./FirebaseDocInterface";
 import { Plant } from "./plant";
+import { Observable } from "rxjs";
 
 export class ProductionOrder extends FirebaseDocInterface {
     date: Date;
@@ -103,6 +104,12 @@ export class ProductionOrder extends FirebaseDocInterface {
         return this.getList(db, company, where('id', '==', id)).then(result => {
             return result[0];
         });
+    }
+
+    public static getListObservable(db: Firestore, company: string, ...constraints: QueryConstraint[]): Observable<ProductionOrder[]> {
+        const collectionRef = ProductionOrder.getCollectionReference(db, company);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return collectionData(collectionQuery);
     }
 }
 
