@@ -115,11 +115,11 @@ li {
 
 .signatures {
     display: flex;
-    gap: 25%;
+    gap: 15%;
     font-weight: bold;
 
     .party {
-        flex: 1 0 auto;
+        flex: 1 0 1px;
         display: flex;
         flex-flow: column wrap;
         align-items: center;
