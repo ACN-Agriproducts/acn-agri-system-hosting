@@ -17,13 +17,14 @@
                         <div class="cell date">Date</div>
                         <div class="cell info">Information</div>
                         <div class="cell storage">Storage</div>
-                        <!-- <div class="cell options"></div> -->
                     </li>
                 </mat-card>
                 <mat-card class="body-card" *ngFor="let order of orderList$ | async">
                     <li class="row" [routerLink]="['/dashboard/production-orders/set-order', order.id]">
                         <div class="cell id" data-name="ID">{{ order.id }}</div>
-                        <div class="cell status" [class]="order.status.toLocaleLowerCase()" data-name="Status">{{ order.status }}</div>
+                        <div class="cell status" data-name="Status">
+                            <div class="status-text" [class]="order.status?.toLocaleLowerCase()">{{ order.status }}</div>
+                        </div>
                         <div class="cell date" data-name="Date">{{ order.date | date }}</div>
                         <div class="cell info" data-name="Information">
                             <div class="info-container">
@@ -34,11 +35,6 @@
                             </div>
                         </div>
                         <div class="cell storage" data-name="Storage">{{ order.plant.id | titlecase }}</div>
-                        <!-- <div class="cell options">
-                            <button mat-icon-button>
-                                <mat-icon>more_vert</mat-icon>
-                            </button>
-                        </div> -->
                     </li>
                 </mat-card>
             </ol>
