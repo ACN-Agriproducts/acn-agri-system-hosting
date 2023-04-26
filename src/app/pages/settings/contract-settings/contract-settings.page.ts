@@ -22,7 +22,8 @@ export class ContractSettingsPage implements OnInit {
     "date-range",
     "plant-select",
     "third-party-plant",
-    "future-month-picker"
+    "future-month-picker",
+    "bank-info"
   ]
 
   constructor(

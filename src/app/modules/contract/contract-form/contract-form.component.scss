@@ -57,3 +57,13 @@ mat-card-content {
     justify-content: flex-end;
     gap: 1rem;
 }
+
+.bank-grid {
+    display: grid;
+    grid-template-columns: auto repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.bank-add-button {
+    justify-self: end;
+}
