@@ -2,7 +2,7 @@
 
 <ion-content class="ion-padding">
 	<div class="content-column" *ngIf="order">
-		<div class="form-column">
+		<form class="form-column" #orderForm="ngForm">
 			<mat-card>
 				<mat-card-header>
 					<mat-card-subtitle>Info</mat-card-subtitle>
@@ -11,17 +11,27 @@
 					<div class="form-row">
 						<mat-form-field>
 							<mat-label>Date</mat-label>
-							<input matInput [(ngModel)]="order.date" disabled [matDatepicker]="picker">
+							<input matInput [(ngModel)]="order.date" 
+								[matDatepicker]="picker" 
+								disabled 
+								name="date"
+							>
 							<mat-hint>MM/DD/YYYY</mat-hint>
 							<mat-datepicker #picker></mat-datepicker>
 						</mat-form-field>
 						<mat-form-field>
 							<mat-label>Plant</mat-label>
-							<mat-select [ngModel]="order.plant?.id" appearance="fill" (ngModelChange)="plantChange($event)" name="plant">
+							<mat-select [ngModel]="order.plant?.id" 
+								(ngModelChange)="plantChange($event)" 
+								appearance="fill" 
+								name="plant"
+								required
+							>
 								<mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id">
 									{{plant.ref.id | titlecase}}
 								</mat-option>
 							</mat-select>
+							<mat-error>Required</mat-error>
 						</mat-form-field>
 					</div>
 				</mat-card-content>
@@ -29,27 +39,43 @@
 					<button mat-button (click)="addItem()">+ Add Item</button>
 				</mat-card-actions>
 			</mat-card>
-			<mat-card *ngFor="let item of order.orderInfo; let index = index" class="item-card">
-				<mat-card-subtitle>Item {{index + 1}}</mat-card-subtitle>
+			<mat-card *ngFor="let item of order.orderInfo; let itemIndex = index" class="item-card">
+				<mat-card-subtitle>Item {{itemIndex + 1}}</mat-card-subtitle>
 				<mat-card-content>
 					<div class="form-row">
 						<mat-form-field>
 							<mat-label>Item</mat-label>
-							<mat-select [ngModel]="item.itemRef?.id" appearance="fill" (ngModelChange)="itemSelected($event, item)" name="itemName">
+							<mat-select [ngModel]="item.itemRef?.id" 
+								appearance="fill" 
+								(ngModelChange)="itemSelected($event, item)"
+								[name]="'itemName'+itemIndex"
+								required
+							>
 								<mat-option *ngFor="let invoiceItem of invoiceItems$ | async"
 									[value]="invoiceItem.ref.id">{{invoiceItem.name}}</mat-option>
 							</mat-select>
+							<mat-error>Required</mat-error>
 						</mat-form-field>
 						<mat-form-field class="quantity-field">
 							<mat-label>Quantity</mat-label>
-							<input matInput [(ngModel)]="item.quantity" appearance="fill" type="number">
+							<input matInput [(ngModel)]="item.quantity" 
+								appearance="fill" 
+								type="number" 
+								min="1" 
+								[name]="'itemQuantity'+itemIndex"
+								required
+							>
+							<mat-error>Required</mat-error>
 						</mat-form-field>
-						<button mat-icon-button (click)="deleteItem(index)">
+						<button mat-icon-button (click)="deleteItem(itemIndex)">
 							<mat-icon color="warn">delete</mat-icon>
 						</button>
 					</div>
 					<div class="item-action-bar">
-						<mat-checkbox [(ngModel)]="item.affectsInventory" (ngModelChange)="affectsInventoryChange(item)">
+						<mat-checkbox [(ngModel)]="item.affectsInventory" 
+							(ngModelChange)="affectsInventoryChange(item)" 
+							[name]="'affectsInventory'+itemIndex"
+						>
 							Affects inventory
 						</mat-checkbox>
 						<button mat-mini-fab *ngIf="item.affectsInventory" (click)="addItemInfo(item)" color="primary">
@@ -59,26 +85,29 @@
 					<ng-container *ngIf="item.affectsInventory">
 						<hr class="solid">
 						<mat-card-subtitle>Inventory info</mat-card-subtitle>
-						<div class="form-row" *ngFor="let info of item.inventoryInfo; let index = index">
-							<button mat-icon-button (click)="deleteItemInfo(item, index)">
+						<div class="form-row" *ngFor="let info of item.inventoryInfo; let infoIndex = index">
+							<button mat-icon-button (click)="deleteItemInfo(item, infoIndex)">
 								<mat-icon color="warn">delete</mat-icon>
 							</button>
 							<mat-form-field>
 								<mat-label>Product</mat-label>
-								<mat-select [(ngModel)]="info.product">
+								<mat-select [(ngModel)]="info.product" [name]="'infoProduct'+itemIndex+infoIndex" required>
 									<mat-option *ngFor="let product of productsList$ | async" [value]="product.ref.id">{{product.ref.id}}</mat-option>
 								</mat-select>
+								<mat-error>Required</mat-error>
 							</mat-form-field>
 							<mat-form-field class="quantity-field">
 								<mat-label>Quantity</mat-label>
-								<input matInput [(ngModel)]="info.quantity">
+								<input matInput [(ngModel)]="info.quantity" type="number" min="1" [name]="'infoQuantity'+itemIndex+infoIndex" required>
 								<span matSuffix>lbs</span>
+								<mat-error>Required</mat-error>
 							</mat-form-field>
 							<mat-form-field>
 								<mat-label>Storage</mat-label>
-								<mat-select [disabled]="!currentPlant" [(ngModel)]="info.tank">
+								<mat-select [disabled]="!currentPlant" [(ngModel)]="info.tank" [name]="'infoTank'+itemIndex+infoIndex" required>
 									<mat-option *ngFor="let storage of currentPlant?.inventory | localInventory" [value]="storage.name">{{storage.name}}</mat-option>
 								</mat-select>
+								<mat-error>Required</mat-error>
 							</mat-form-field>
 						</div>
 					</ng-container>
@@ -86,14 +115,15 @@
 			</mat-card>
 			<div class="form-action-bar">
 				<button mat-flat-button color="primary"
-					*ngIf="editing"
+					#printButton
+					[hidden]="!editing"
 					printSectionId="order-printable" 
 					[useExistingCss]="true"
 					ngxPrint
 				>Print</button>
 				<button mat-flat-button color="primary" (click)="submit()">{{ editing ? "Update" : "Submit" }}</button>
 			</div>
-		</div>
+		</form>
 		<app-printable-production-order id="order-printable" [order]="order"></app-printable-production-order>
 	</div>
 </ion-content>

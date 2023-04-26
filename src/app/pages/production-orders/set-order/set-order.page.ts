@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { doc, Firestore, getDocsFromServer, limit, orderBy, query } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { orderItem, orderItemInfo, ProductionOrder } from '@shared/classes/production-order';
@@ -8,6 +8,7 @@ import { User } from '@shared/classes/user';
 import { Product } from '@shared/classes/product';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-set-order',
@@ -15,6 +16,9 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
   styleUrls: ['./set-order.page.scss'],
 })
 export class SetOrderPage implements OnInit {
+  @ViewChild('printButton', { read: ElementRef }) printButton: ElementRef<HTMLElement>;
+  @ViewChild('orderForm') orderForm: NgForm;
+
   order: ProductionOrder;
   currentPlant: Plant;
 
@@ -25,11 +29,11 @@ export class SetOrderPage implements OnInit {
   editing: boolean = false;
 
   constructor(
-    private session: SessionInfo,
     private db: Firestore,
-    private router: Router,
-    private snack: SnackbarService,
     private route: ActivatedRoute,
+    private router: Router,
+    private session: SessionInfo,
+    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
@@ -40,8 +44,7 @@ export class SetOrderPage implements OnInit {
     const orderId = this.route.snapshot.paramMap.get('id');
 
     if (!orderId) {
-      this.newOrder();
-      return;
+      return this.orderInit();
     }
 
     this.editing = true;
@@ -52,11 +55,12 @@ export class SetOrderPage implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.newOrder();
+      this.snack.open("Could not retrieve document.", "error");
+      this.router.navigate(['/dashboard/production-orders']);
     });
   }
 
-  newOrder(): void {
+  orderInit(): void {
     this.order = new ProductionOrder();
     this.order.date = new Date();
     this.order.orderInfo = [];
@@ -109,9 +113,15 @@ export class SetOrderPage implements OnInit {
   }
 
   submit() {
+    if (this.orderForm.invalid) {
+      this.orderForm.control.markAllAsTouched();
+      this.snack.open("Fields required.", "warn");
+      return;
+    }
+
     if (this.editing) {
       this.order.set().then(() => {
-        this.router.navigate(["dashboard/production-orders"]);
+        this.router.navigate(["/dashboard/production-orders"]);
         this.snack.open("Order successfully updated", "success");
       }).catch(error => {
         console.error(error);
@@ -132,12 +142,12 @@ export class SetOrderPage implements OnInit {
       orderBy("id", "desc"), limit(1)
     );
     getDocsFromServer(queryLast).then(result => {
-      this.order.id = result.empty ? 1 :
-        result.docs[0].data().id + 1;
+      this.order.id = result.empty ? 1 : result.docs[0].data().id + 1;
+      this.printButton.nativeElement.click();
 
       return this.order.set();
     }).then(() => {
-      this.router.navigate(["dashboard/production-orders"]);
+      this.router.navigate(["/dashboard/production-orders"]);
       this.snack.open("Order successfully updated", "success");
     }).catch(error => {
       console.error(error);
