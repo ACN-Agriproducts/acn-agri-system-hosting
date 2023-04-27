@@ -23,7 +23,7 @@
                     <li class="row" [routerLink]="['/dashboard/production-orders/set-order', order.id]">
                         <div class="cell id" data-name="ID">{{ order.id }}</div>
                         <div class="cell status" data-name="Status">
-                            <div class="status-text" [class]="order.status?.toLocaleLowerCase()">{{ order.status }}</div>
+                            <div class="status-text" [class]="order.status">{{ order.status }}</div>
                         </div>
                         <div class="cell date" data-name="Date">{{ order.date | date }}</div>
                         <div class="cell info" data-name="Information">

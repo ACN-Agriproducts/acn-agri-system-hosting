@@ -115,7 +115,7 @@ export class SetOrderPage implements OnInit {
   submit() {
     if (this.orderForm.invalid) {
       this.orderForm.control.markAllAsTouched();
-      this.snack.open("Fields required.", "warn");
+      this.snack.open("Fields invalid or required", "error");
       return;
     }
 

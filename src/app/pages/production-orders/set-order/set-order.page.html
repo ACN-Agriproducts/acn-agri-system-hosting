@@ -1,4 +1,4 @@
-<app-header-toolbar titulo="New Bagging Orders"></app-header-toolbar>
+<app-header-toolbar titulo="New Production Orders"></app-header-toolbar>
 
 <ion-content class="ion-padding">
 	<div class="content-column" *ngIf="order">
@@ -46,9 +46,9 @@
 						<mat-form-field>
 							<mat-label>Item</mat-label>
 							<mat-select [ngModel]="item.itemRef?.id" 
-								appearance="fill" 
 								(ngModelChange)="itemSelected($event, item)"
 								[name]="'itemName'+itemIndex"
+								appearance="fill" 
 								required
 							>
 								<mat-option *ngFor="let invoiceItem of invoiceItems$ | async"
@@ -59,13 +59,17 @@
 						<mat-form-field class="quantity-field">
 							<mat-label>Quantity</mat-label>
 							<input matInput [(ngModel)]="item.quantity" 
+								[name]="'itemQuantity'+itemIndex"
 								appearance="fill" 
 								type="number" 
 								min="1" 
-								[name]="'itemQuantity'+itemIndex"
+								step="1" 
 								required
+								appPositive
+								pattern="\d+"
 							>
-							<mat-error>Required</mat-error>
+							<mat-error *ngIf="orderForm.controls['itemQuantity'+itemIndex]?.errors?.required">Required</mat-error>
+							<mat-error *ngIf="orderForm.controls['itemQuantity'+itemIndex]?.errors && !orderForm.controls['itemQuantity'+itemIndex]?.errors?.required">Invalid</mat-error>
 						</mat-form-field>
 						<button mat-icon-button (click)="deleteItem(itemIndex)">
 							<mat-icon color="warn">delete</mat-icon>
@@ -98,13 +102,25 @@
 							</mat-form-field>
 							<mat-form-field class="quantity-field">
 								<mat-label>Quantity</mat-label>
-								<input matInput [(ngModel)]="info.quantity" type="number" min="1" [name]="'infoQuantity'+itemIndex+infoIndex" required>
+								<input matInput [(ngModel)]="info.quantity" 
+									[name]="'infoQuantity'+itemIndex+infoIndex" 
+									type="number" 
+									min="1" 
+									step="1" 
+									required
+									pattern="\d+"
+								>
 								<span matSuffix>lbs</span>
-								<mat-error>Required</mat-error>
+								<mat-error *ngIf="orderForm.controls['infoQuantity'+itemIndex+infoIndex]?.errors?.required">Required</mat-error>
+								<mat-error *ngIf="orderForm.controls['infoQuantity'+itemIndex+infoIndex]?.errors && !orderForm.controls['infoQuantity'+itemIndex+infoIndex]?.errors?.required">Invalid</mat-error>
 							</mat-form-field>
 							<mat-form-field>
 								<mat-label>Storage</mat-label>
-								<mat-select [disabled]="!currentPlant" [(ngModel)]="info.tank" [name]="'infoTank'+itemIndex+infoIndex" required>
+								<mat-select [(ngModel)]="info.tank"
+									[name]="'infoTank'+itemIndex+infoIndex"
+									[disabled]="!currentPlant"
+									required
+								>
 									<mat-option *ngFor="let storage of currentPlant?.inventory | localInventory" [value]="storage.name">{{storage.name}}</mat-option>
 								</mat-select>
 								<mat-error>Required</mat-error>
@@ -117,6 +133,7 @@
 				<button mat-flat-button color="primary"
 					#printButton
 					[hidden]="!editing"
+					[disabled]="orderForm.invalid"
 					printSectionId="order-printable" 
 					[useExistingCss]="true"
 					ngxPrint
