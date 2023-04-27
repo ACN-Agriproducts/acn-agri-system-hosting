@@ -156,7 +156,7 @@
         </div>
         <div class="contract-info-row">
             <div>PRECIO:</div>
-            <div>$5,550.00 (CINCO MIL QUINIENTOS CINCUENTA PESOS 00/100 MN)</div>
+            <div><span [class.focused]="focusedField == 'price.amount'">{{contractForm?.price?.amount | currency}}</span> ({{contractForm?.price?.amount | numberNameSpanish}} PESOS {{contractForm?.price?.amount % 1 * 100}}/100 MN)</div>
         </div>
         <div class="contract-info-row">
             <div>CANTIDAD:</div>
@@ -216,7 +216,7 @@
         </div>
         <div class="contract-info-row">
             <div>GARANTÍA:</div>
-			<div>20%</div>
+			<div><span [class.focused]="focusedField == 'guarantee'">{{contractForm?.guarantee || 'XX'}}</span>%</div>
         </div>
         <div class="contract-info-row">
             <div>FORMA DE PAGO:</div>
