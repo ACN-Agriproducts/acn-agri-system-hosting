@@ -156,7 +156,7 @@
         </div>
         <div class="contract-info-row">
             <div>PRECIO:</div>
-            <div><span [class.focused]="focusedField == 'price.amount'">{{contractForm?.price?.amount | currency}}</span> ({{contractForm?.price?.amount | numberNameSpanish}} PESOS {{contractForm?.price?.amount % 1 * 100}}/100 MN)</div>
+            <div><span [class.focused]="focusedField == 'price.amount'">{{contractForm?.price?.amount | currency}}</span> ({{contractForm?.price?.amount | truncate | numberNameSpanish}} PESOS {{contractForm?.price?.amount % 1 * 100 | round}}/100 MN)</div>
         </div>
         <div class="contract-info-row">
             <div>CANTIDAD:</div>

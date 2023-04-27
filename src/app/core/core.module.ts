@@ -16,6 +16,7 @@ import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
 import { ListFindPipe } from './pipes/list-find/list-find.pipe';
 import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
 import { TypeTemplateDirective } from './directive/type-template/type-template.directive';
+import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { TypeTemplateDirective } from './directive/type-template/type-template.d
     AsPipe,
     ListFindPipe,
     MassInUnitPipe,
-    TypeTemplateDirective
+    TypeTemplateDirective,
+    TruncatePipe
   ]
 })
 export class CoreModule { }

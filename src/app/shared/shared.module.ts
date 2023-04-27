@@ -32,6 +32,8 @@ import { SalesContractComponent } from './printable/printable-contract/sales-con
 import { PurchaseContractComponent } from './printable/printable-contract/purchase-contract/purchase-contract.component';
 import { TranslatePipe } from './pipes/translate/translate.pipe';
 import { NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable/printable-contract/printable-contract-utilities.service';
+import { TruncatePipe } from './pipes/truncate/truncate.pipe';
+import { RoundPipe } from './pipes/round/round.pipe';
 
 @NgModule({
   imports: [
@@ -87,7 +89,9 @@ import { NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable/print
     PurchaseContractComponent,
     TranslatePipe,
     SelectFieldDisplayPipe,
-    NumberNameSpanishPipe
+    NumberNameSpanishPipe,
+    TruncatePipe,
+    RoundPipe
   ]
 })
 export class SharedModule {}
