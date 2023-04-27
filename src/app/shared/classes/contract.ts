@@ -149,7 +149,7 @@ export class Contract extends FirebaseDocInterface {
             this.futurePriceBase = new Price(null, 'bu');
             this.date = new Date();
             this.currentDelivered = new Mass(0, FirebaseDocInterface.session.getDefaultUnit());
-            this.price = new Price(0, FirebaseDocInterface.session.getDefaultUnit())
+            this.price = new Price(null, null)
             this.loads = 0;
             this.status = status.pending;
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
