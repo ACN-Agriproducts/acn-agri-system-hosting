@@ -140,10 +140,13 @@
 		<span>VALLE HERMOSO, TAMAULIPAS, MX        C.P. 87500</span>
 		<span>R.F.C.: ACN980211QC9</span>
 		<span class="party-title">COMPRADOR:</span>
-		<span class="party-name">GRANJA AVÍCOLA ALTEÑA</span>
-		<span>CARR.  A GUADALAJARA KM. 23</span>
-		<span>ACATIC, JALISCO, MX        C.P. 47640</span>
-		<span>R.F.C.: CAA861206992</span>
+		<span class="party-name" [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name}}</span>
+        <span [class.focused]="focusedField == 'clientInfo.streetAddress'">{{contractForm?.clientInfo?.streetAddress}}</span>
+        <span>
+            <span [class.focused]="focusedField == 'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span>,
+            <span [class.focused]="focusedField == 'clientInfo.state'">{{contractForm?.clientInfo?.state}}</span>, 
+            MX        C.P. <span [class.focused]="focusedField == 'clientInfo.zipCode'">{{contractForm?.clientInfo?.zipCode}}</span></span>
+        <span>R.F.C.: <span [class.focused]="focusedField == 'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc}}</span></span>
 	</div>
 	<div class="contract-info">
 		<div class="contract-info-row">
@@ -177,7 +180,6 @@
 			<div>
                 <span [class.focused]="focusedField == 'quantity.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
                 <span [class.focused]="focusedField == 'quantity.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
-                +- <span [class.focused]="focusedField == 'quantityErrorPercentage'">{{contractForm?.quantityErrorPercentage || 'X'}}</span>%
             </div>
 		</div>
 		<div class="contract-info-row">
