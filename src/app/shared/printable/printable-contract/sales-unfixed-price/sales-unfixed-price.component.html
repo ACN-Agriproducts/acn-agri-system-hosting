@@ -1,7 +1,7 @@
 <div class="page-style main">
-	<div class="text-align-right"><b>No. de contrato:</b></div>
+	<div class="text-align-right"><b>No. de contrato:</b><span [class.focused]="focusedField == 'id'">{{contractForm.id ?? " "}}</span></div>
 	<div class="text-align-justify introduction">
-		CONTRATO DE COMPRA-VENTA DE <b>XXXXXX</b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b>XXXXXXXXXXXXXXXXX</b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b>XXXXXXXXXXXX</b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
+		CONTRATO DE COMPRA-VENTA DE <b><span [class.focused]="focusedField == 'product'">{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b><span [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b><span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
 	</div>
 	<div class="text-align-center section-header-spaced">DECLARACIONES</div>
 	<ol type="I" class="declarations text-align-justify">
@@ -20,7 +20,7 @@
 					Que la Clave Única de Registro de Población (CURP) del apoderado legal es:
 				</li>
 				<li>
-					Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u>XXXXX</u> y teléfono <u>XXXXXX</u>.
+					Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [class.focused]="focusedField == 'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
 				</li>
 			</ol>
 		</li>
@@ -28,16 +28,16 @@
 			- DE <b>“EL COMPRADOR”</b>:
 			<ol type="1">
 				<li>
-					Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u>XXXXXXXXXXXXXXXXX</u>, como se acredita con la Escritura Pública número <u>XXXXX</u>, de fecha <u>XXXXXXXX</u>, y que el señor <u>XXXXXXXX</u>, en su carácter de <u>Apoderado Legal</u> está facultado para celebrar este contrato.
+					Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, como se acredita con la Escritura Pública número <u><span [class.focused]="focusedField == 'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [class.focused]="focusedField == 'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>, y que el señor <u><span [class.focused]="focusedField == 'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u> está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
 				</li>
 				<li>
-					Que su Registro Federal de Contribuyentes es: <u>XXXXXXXXXXX</u> y se encuentra al corriente de sus obligaciones.
+					Que su Registro Federal de Contribuyentes es: <u><span [class.focused]="focusedField == 'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
 				</li>
 				<li>
-					Que la Clave Única de Registro de Población (CURP) del apoderado legal es:
+					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [class.focused]="focusedField == 'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
 				</li>
 				<li>
-					Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u>XXXXXXXXXXXXXXXXX</u>, correo electrónico <u>XXXXXXXXXXXXX</u> y teléfono <u>XXXXXXXXXXX</u>.
+					Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [class.focused]="focusedField == 'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [class.focused]="focusedField == 'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
 				</li>
 			</ol>
 		</li>
@@ -55,7 +55,7 @@
 	</ol>
 	<div class="text-align-center section-header-spaced">CLAUSULAS</div>
 	<div class="text-align-justify">
-		<b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por XXXX toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
+		<b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por <span [class.focused]="focusedField == 'quantity.amount' || focusedField == 'quantity.defaultUnits'">{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.defaultUnits:contractForm.quantity.amount || 'XXXX'}}</span> toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
 		<br>
 		<b>SEGUNDA. &#8211; CALIDAD.</b> - El "VENDEDOR” se compromete a entregar el “PRODUCTO” al “COMPRADOR” dentro de los parámetros y especificaciones establecidos en el “ANEXO 1”. Las muestras serán tomadas en el momento y lugar de carga, mismas que serán identificadas y resguardadas 5 días hábiles. En caso de tener alguna discrepancia respecto a la calidad del “PRODUCTO” las “PARTES” acuerdan sujetarse a un análisis de un tercero certificado para definir dicha calidad, sometiéndose a los resultados.
 		<br>
@@ -125,8 +125,8 @@
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
 			<div class="signature-line"></div>
-			<span>{{ "(REPRESENTATIVE HERE)" }}</span>
-            <span>{{ contractForm.clientInfo?.name }}</span>
+			<span [class.focused]="focusedField == 'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "(REPRESENTATIVE HERE)" }}</span>
+            <span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.name }}</span>
 		</div>
 	</div>
 </div>
@@ -149,74 +149,81 @@
 		<span>VALLE HERMOSO, TAMAULIPAS, MX        C.P. 87500</span>
 		<span>R.F.C.: ACN980211QC9</span>
 		<span class="party-title">COMPRADOR:</span>
-		<span class="party-name">GRANJA AVÍCOLA ALTEÑA</span>
-		<span>CARR.  A GUADALAJARA KM. 23</span>
-		<span>ACATIC, JALISCO, MX        C.P. 47640</span>
-		<span>R.F.C.: CAA861206992</span>
+		<span class="party-name" [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name}}</span>
+        <span [class.focused]="focusedField == 'clientInfo.streetAddress'">{{contractForm?.clientInfo?.streetAddress}}</span>
+        <span>
+            <span [class.focused]="focusedField == 'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span>,
+            <span [class.focused]="focusedField == 'clientInfo.state'">{{contractForm?.clientInfo?.state}}</span>, 
+            MX        C.P. <span [class.focused]="focusedField == 'clientInfo.zipCode'">{{contractForm?.clientInfo?.zipCode}}</span></span>
+        <span>R.F.C.: <span [class.focused]="focusedField == 'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc}}</span></span>
 	</div>
 	<div class="contract-info">
 		<div class="contract-info-row">
 			<div>FECHA:</div>
-			<div>05 DE ENERO DE 2023</div>
-		</div>
+			<div [class.focused]="focusedField == 'date'">{{contractForm?.date | date:'longDate':undefined:'es-MX'}}</div>		</div>
 		<div class="contract-info-row">
 			<div>PRODUCTO:</div>
-			<div>SORGO ROJO NACIONAL</div>
+			<div [class.focused]="focusedField == 'product'">{{contractForm?.product?.id}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TIPO DE CARGA:</div>
-			<div>A GRANEL</div>
+			<div [class.focused]="focusedField == 'loadType'">{{contractForm?.loadType | selectFieldDisplay:contractType:'loadType' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>BASE:</div>
-			<div>+ 1.65 USD / BU</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.base'">{{contractForm?.futurePriceBase?.amount >= 0 ? "+" : ""}}{{contractForm?.futurePriceBase?.amount}} USD / BU</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FUTURO:</div>
-			<div>A DEFINIR</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.future'">{{this.contractForm?.futurePriceInfo?.future || 'A DEFINIR'}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>MES DE VENCIMIENTO:</div>
-			<div>MARZO ZCH3 </div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.expirationMonth'">{{this.contractForm?.futurePriceInfo?.expirationMonth | date:'MMMM':undefined:'es-MX'}} {{ this.contractForm?.futurePriceInfo?.expirationMonth && this.contractForm?.productInfo ? this.contractForm.getTradeCode() : ""}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DIVISA:</div>
+			<!-- TODO -->
 			<div>DÓLARES AMERICANOS (USD)</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TIPO DE CAMBIO:</div>
+			<!-- TODO -->
 			<div>AL MOMENTO DE LA FACTURACIÓN - INTERBANCARIO</div>
 		</div>
 		<div class="contract-info-row">
 			<div>COBERTURA / OPCIÓN:</div>
-			<div>NO APLICA</div>
+            <div [class.focused]="focusedField == 'futurePriceInfo.marketOptions'">{{contractForm?.futurePriceInfo?.marketOptions | selectFieldDisplay:contractType:'marketOptions' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CANTIDAD:</div>
-			<div>500 (QUINIENTAS) TONELADAS MÉTRICAS</div>
-		</div>
+			<div>
+                <span [class.focused]="focusedField == 'quantity.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
+                <span [class.focused]="focusedField == 'quantity.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
+            </div>		</div>
 		<div class="contract-info-row">
 			<div>UNIDAD DE MEDIDA:</div>
-			<div>TONELADA MÉTRICA</div>
+            <div [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CALIDAD GARANTIZADA:</div>
-			<div>Grado: U.S. 2 OFICIAL</div>
+			<div>Grado: U.S. <span [class.focused]="focusedField == 'grade'">{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
 		</div>
 		<div class="contract-info-row">
 			<div>HUMEDAD MÁXIMA:</div>
-			<div>15% </div>
+			<div [class.focused]="focusedField == 'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE ENTREGA:</div>
-			<div>CAMIÓN POR CUENTA DEL COMPRADOR</div>
+			<div [class.focused]="focusedField == 'deliveryType'">{{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>SEGURO DE TRÁNSITO:</div>
-			<div>COMPRADOR</div>
+			<div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.transportInsurance | selectFieldDisplay:contractType:'transportInsurance' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>LUGAR DE ENTREGA:</div>
+			<!-- TODO -->
 			<div>
 				EXW BODEGA SAN FERNANDO, TAMAULIPAS
 				<br>
@@ -225,18 +232,19 @@
 		</div>
 		<div class="contract-info-row">
 			<div>PESOS:</div>
-			<div>EL DE CARGA EN BÁSCULA DE ORIGEN</div>
+			<div [class.focused]="focusedField == 'paymentTerms.origin'">{{contractForm?.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>MERMAS:</div>
-			<div>NO APLICA</div>
+			<div [class.focused]="focusedField == 'shrinkage'">{{contractForm?.shrinkage | selectFieldDisplay:contractType:'shrinkage' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>PERIODO DE EMBARQUE:</div>
-			<div class="period">02-DEC-21<b>AL</b>08-DEC-21</div>
+			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE RETIRO:</div>
+			<!-- TODO -->
 			<div>
 				SE EMBARCARÁ A RAZON DE 500 TONELADAS POR SEMANA
 				<br>
@@ -245,26 +253,30 @@
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS DE CARGAS:</div>
+			<!-- TODO -->
 			<div>EN CASO DE NO CUMPLIR CON LOS PLAZOS DE CARGA</div>
 		</div>
 		<div class="contract-info-row">
 			<div>ALMACENAJE Y FUMIGACIÓN:</div>
-			<div>POR DEFINIR</div>
+			<div [class.focused]="focusedField == 'storageAndFumigation'">{{contractForm?.storageAndFumigation || "NO APLICA"}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE PAGO:</div>
+			<!-- TODO -->
 			<div>PAGO CONTRA EMBARQUE</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS EN PAGOS:</div>
+			<!-- TODO -->
 			<div>(TIIE +6)* 1.5</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TÉRMINOS DE PAGO:</div>
-			<div>CONTADO</div>
+			<div [class.focused]="focusedField == 'termsOfPayment'">{{contractForm?.termsOfPayment | selectFieldDisplay:contractType:'termsOfPayment' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>ANTICIPOS:</div>
+			<!-- TODO -->
 			<div>
 				10 % EN LA COMPRA DE LA BASE
 				<br>
@@ -273,41 +285,29 @@
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE PAGO:</div>
+			<!-- TODO -->
 			<div>TRANSFERENCIA ELECTRÓNICA DE FONDOS</div>
 		</div>
 		<div class="contract-info-row">
 			<div>BANCOS Y CUENTAS DE PAGO:</div>
-			<div class="banks-and-accounts-grid">
-				<div>
+			<div class="banks-and-accounts-grid" [class.focused]="focusedField == 'bankInfo'">
+                <div>
 					<span>BANCO</span>
 					<span>CUENTA</span>
 					<span>CLABE INTERBANCARIA</span>
 				</div>
-				<div>
-					<span>BANAMEX</span>
-					<span>0001428743</span>
-					<span>002825072214287435</span>
-				</div>
-				<div>
-					<span>BANORTE</span>
-					<span>0688799108</span>
-					<span>072810006887991088</span>
-				</div>
-				<div>
-					<span>BAJÍO DOLARES</span>
-					<span>6515470401</span>
-					<span>030822065154704018</span>
-				</div>
-				<div>
-					<span>SANTANDER</span>
-					<span>65502934098</span>
-					<span>014810655029340987</span>
-				</div>
-			</div>
+                <div *ngFor="let bankInfo of contractForm.bankInfo">
+                    <span>{{bankInfo.bank | uppercase}}</span>
+                    <span>{{bankInfo.account}}</span>
+                    <span>{{bankInfo.interBank}}</span>
+                </div>
+                <div *ngIf="contractForm.bankInfo.length == 0">--</div>
+                
+            </div>
 		</div>
 		<div class="contract-info-row">
 			<div>EJECUTIVO DE VENTA:</div>
-			<div>NOMBRE COMPLETO</div>
+			<div [class.focused]="focusedField == 'contractExecutive'">{{contractForm?.contractExecutive?.name}}</div>
 		</div>
 	</div>
 	<p>PARA CONSTANCIA DE LO CONVENIDO LAS PARTES FIRMAN EL PRESENTE CONTRATO</p>
@@ -322,7 +322,7 @@
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
 			<div class="signature-line"></div>
-			<span>{{ "(REPRESENTATIVE HERE)" }}</span>
+			<span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep}}</span>
             <span>{{ contractForm.clientInfo?.name }}</span>
 		</div>
 	</div>
