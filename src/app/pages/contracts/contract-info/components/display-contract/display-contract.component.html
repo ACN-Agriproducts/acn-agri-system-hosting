@@ -9,12 +9,7 @@
 </button>
 
 <div class="wrapper">
-  <app-contract-printable
-    *ngIf="ready"
-    id="printable"
-    [contractForm]="contract"
-    [productsList]="[product]"
-  ></app-contract-printable>
+  <app-printable-contract [contract]="contract"></app-printable-contract>
 </div>
 
 <mat-spinner *ngIf="!ready"></mat-spinner>
