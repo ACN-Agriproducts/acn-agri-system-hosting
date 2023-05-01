@@ -57,9 +57,9 @@ export class Contract extends FirebaseDocInterface {
     loadConditions: string;
     loadDelays: string;
     loadType: string;
-    paymentDelays: { x: number, y: number };
+    paymentDelays: { applies: boolean, x: number, y: number };
     paymentWithdrawal: string;
-    prepaid: number;
+    prepaid: number | string;
     shrinkage: string;
     storageAndFumigation: string;
     transportInsurance: string;
@@ -140,6 +140,12 @@ export class Contract extends FirebaseDocInterface {
             this.companyInfo = {
                 email: null,
                 phone: null,
+            }
+
+            this.paymentDelays = {
+                applies: false,
+                x: null,
+                y: null,
             }
 
             this.bankInfo = [];

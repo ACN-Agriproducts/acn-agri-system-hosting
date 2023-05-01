@@ -342,6 +342,33 @@
   </button>
 </ng-template>
 
+<ng-template typeTemplate="payment-delays" let-data>
+  <div class="payment-delay-flex" [ngClass]="data | getFieldClass">
+    <section>
+      <mat-checkbox [(ngModel)]="contract.paymentDelays.applies">{{data.label}}</mat-checkbox>
+    </section>
+    <!-- (TIIE + 6) * 1.5 -->
+    <span>(TIEE + </span>
+    <mat-form-field>
+      <input 
+        matInput 
+        [(ngModel)]="contract.paymentDelays.x" 
+        type="number"
+        (focus)="selectedFieldEvent.emit('contract.paymentDelays')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <span>) * </span>
+    <mat-form-field>
+      <input 
+        matInput 
+        [(ngModel)]="contract.paymentDelays.y" 
+        type="number"
+        (focus)="selectedFieldEvent.emit('contract.paymentDelays')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field> 
+  </div>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>

@@ -242,7 +242,13 @@
 		<div class="contract-info-row">
 			<div>DEMORAS EN PAGOS:</div>
 			<!-- TODO -->
-			<div>NO APLICA</div>
+			<div [class.focused]="focusedField == 'contract.paymentDelays'">
+				{{
+					contractForm?.paymentDelays?.applies ? 
+					"(TIIE + " + (contractForm?.paymentDelays?.x || "X") + ") * " + (contractForm?.paymentDelays?.y || "Y") 
+					: "NO APLICA"
+				}}
+			</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TÉRMINOS DE PAGO:</div>

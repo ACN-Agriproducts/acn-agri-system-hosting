@@ -67,3 +67,16 @@ mat-card-content {
 .bank-add-button {
     justify-self: end;
 }
+
+.payment-delay-flex {
+    display: flex;
+    align-items: center;
+
+    section {
+        margin-right: 1rem;
+    }
+
+    span {
+        flex: 0 0 auto;
+    }
+}
