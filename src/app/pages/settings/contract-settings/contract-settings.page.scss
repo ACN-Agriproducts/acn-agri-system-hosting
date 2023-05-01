@@ -24,3 +24,7 @@ mat-card {
     grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
     gap: 1rem;
 }
+
+mat-panel-description {
+    justify-content: end;
+}

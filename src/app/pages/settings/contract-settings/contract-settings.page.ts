@@ -52,7 +52,8 @@ export class ContractSettingsPage implements OnInit {
     return settings;
   }
 
-  addGroup(contractName: string) {
+  addGroup(event: any, contractName: string) {
+    event.preventDefault();
     const dialogRef = this.dialog.open(NameDialog);
 
     dialogRef.afterClosed().subscribe(result => {
