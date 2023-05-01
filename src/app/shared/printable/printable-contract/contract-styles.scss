@@ -194,6 +194,9 @@ $text-highlight: #F2F2F2;
 	}
 }
 
+.focused {
+    background-color: yellow;
+}
 
 @media screen {
 	:host {
