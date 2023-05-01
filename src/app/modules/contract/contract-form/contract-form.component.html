@@ -49,6 +49,24 @@
         (focus)="selectedFieldEvent.emit('id')"
         (focusout)="selectedFieldEvent.emit(null)">
     </mat-form-field>
+    <mat-form-field class="span-2">
+      <mat-label>Email</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.companyInfo.email" 
+        type="text"
+        (focus)="selectedFieldEvent.emit('companyInfo.email')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <mat-form-field class="span-2">
+      <mat-label>Phone Number</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.companyInfo.phone" 
+        type="text"
+        (focus)="selectedFieldEvent.emit('companyInfo.phone')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
   </mat-card-content>
 </mat-card>
 
