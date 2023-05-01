@@ -18,3 +18,9 @@ mat-card {
 .delete-field-button, .select-area {
     grid-column-end: span 3;
 }
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
+    gap: 1rem;
+}

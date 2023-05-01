@@ -15,7 +15,7 @@
           <button mat-button (click)="addField(contractName.value, fieldGroupName)">Add Field</button>
         </mat-card-title>
       </mat-card-header>
-      <mat-card-content>
+      <mat-card-content class="fields-grid">
         <div class="group-section" *ngFor="let item of settings.formData[contractName.value][fieldGroupName]; let fieldIndex = index">
           <button mat-flat-button color="warn" class="delete-field-button" (click)="removeField(contractName.value, fieldGroupName, fieldIndex)">Delete</button>
           <mat-form-field appearance="fill">
