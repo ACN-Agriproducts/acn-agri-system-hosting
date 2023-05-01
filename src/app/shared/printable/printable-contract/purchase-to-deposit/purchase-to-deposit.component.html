@@ -216,8 +216,7 @@
         </div>
         <div class="contract-info-row">
             <div>ANTICIPOS:</div>
-            <!-- TODO -->
-			<div>NO APLICA</div>
+            <div [class.focused]="focusedField == 'prepaid'">{{contractForm?.prepaid ? contractForm?.prepaid + "%" : 'NO APLICA' }}</div>
         </div>
         <div class="contract-info-row">
             <div>FORMA DE PAGO:</div>
