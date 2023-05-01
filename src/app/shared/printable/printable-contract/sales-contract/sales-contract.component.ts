@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Contract } from '@shared/classes/contract';
+import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 
 @Component({
   selector: 'sales-contract',
@@ -12,10 +13,10 @@ import { Contract } from '@shared/classes/contract';
 })
 export class SalesContractComponent implements OnInit {
   @Input() contractForm: Contract;
+  @Input() focusedField: string;
+  readonly contractType: string = 'purchase';
 
-  public product: string;
-
-  constructor() { }
+  constructor(public utils: PrintableContractUtilitiesService) { }
 
   ngOnInit() { }
 
