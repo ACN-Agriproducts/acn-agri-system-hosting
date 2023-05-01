@@ -57,6 +57,7 @@ export class ContractSettingsPage implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(!result) return;
+      if(!this.settings.formData[contractName]) this.settings.formData[contractName] = {};
       this.settings.formData[contractName][result] = [];
       this.settings.fieldGroupOrder[contractName].push(result);
     });
