@@ -198,6 +198,10 @@ $text-highlight: #F2F2F2;
     background-color: yellow;
 }
 
+.white-space-wrap {
+	white-space: pre-wrap;
+}
+
 @media screen {
 	:host {
 		display: flex;
