@@ -55,6 +55,7 @@ export class Contract extends FirebaseDocInterface {
     futurePriceInfo: FuturePriceInfo;
     guarantee: number;
     loadConditions: string;
+    loadDelays: string;
     loadType: string;
     paymentDelays: { x: number, y: number };
     paymentWithdrawal: string;
@@ -216,6 +217,7 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceInfo = data.futurePriceInfo;
         this.guarantee = data.guarantee;
         this.loadConditions = data.loadConditions;
+        this.loadDelays = data.loadDelays;
         this.loadType = data.loadType;
         this.paymentDelays = data.paymentDelays;
         this.paymentWithdrawal = data.paymentWithdrawal;
@@ -271,6 +273,7 @@ export class Contract extends FirebaseDocInterface {
                 futurePriceInfo: data.futurePriceInfo,
                 guarantee: data.guarantee,
                 loadConditions: data.loadConditions,
+                loadDelays: data.loadDelays,
                 loadType: data.loadType,
                 paymentDelays: data.paymentDelays,
                 paymentWithdrawal: data.paymentWithdrawal,
