@@ -94,14 +94,10 @@ export class StorageLogsPage implements OnInit {
   }
 
   sliderChange(event: MatSliderChange) {
-    console.log(event.value);
     this.index = event.value;
   }
 
   changeIndex(newIndex: number) {
     this.index = Math.min(Math.max(0, newIndex), this.datesList.length-1);
-    this.storageLogs$.then(result => {
-      console.log(result[newIndex])
-    })
   }
 }
