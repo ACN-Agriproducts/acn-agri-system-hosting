@@ -79,6 +79,10 @@ const routes: Routes = [
             path: 'prices',
             loadChildren: () => import('./pages/prices/prices.module').then( m => m.PricesPageModule)
           },
+          {
+            path: 'production-orders',
+            loadChildren: () => import('./pages/production-orders/production-orders.module').then( m => m.BaggingOrdersPageModule)
+          },
         ]
       },
     ]
@@ -93,6 +97,8 @@ const routes: Routes = [
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
   },
+
+
 ];
 
 @NgModule({

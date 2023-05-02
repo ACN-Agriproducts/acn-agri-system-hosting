@@ -1,0 +1,52 @@
+<div class="page main">
+	<div class="order-heading">
+		<img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
+		<div>
+			No. <span class="fill-line order-id">{{ order?.id }}</span>
+		</div>
+	</div>
+	<div class="order-title">Production Order</div>
+	<ol class="grid order-info">
+		<div class="cell header pay-to">Pay To:</div>
+		<div class="cell pay-to">ACN Agriproducts, LLC</div>
+		<div class="cell header date">Date:</div>
+		<div class="cell header invoice-to">Invoice To:</div>
+		<div class="cell invoice-to">{{ order?.plant?.id }}</div>
+		<div class="cell date">{{ order?.date | date:'dd/MM/yyyy' }}</div>
+		<div class="cell header address">Address:</div>
+		<div class="cell address">1512 Rancho Toluca, Weslaco, TX  78596</div>
+	</ol>
+	<ol class="grid order-items">
+		<div class="cell header">Qty</div>
+		<div class="cell header">Unit</div>
+		<div class="cell header">Name</div>
+		<div class="cell header">Description</div>
+		<div class="cell header">Storage</div>
+		<ng-container *ngFor="let orderItem of order?.orderInfo">
+			<div class="cell body">{{ orderItem?.quantity }}</div>
+			<div class="cell body">{{ orderItem.name ? "Sacks" : "" }}</div>
+			<div class="cell body name">{{ orderItem.name }}</div>
+			<div class="cell body description">
+				<div *ngFor="let info of orderItem?.inventoryInfo">
+					<span>{{ info.product ?? "--" }}</span>
+					<span *ngIf="info.quantity">&nbsp; {{ info.quantity }} lbs</span>
+				</div>
+			</div>
+			<div class="cell body storage">
+				<div *ngFor="let info of orderItem?.inventoryInfo">{{ info.tank ?? "--" }}</div>
+			</div>
+		</ng-container>
+	</ol>
+	<div class="signatures">
+		<div class="party">
+			<div class="fill-line"></div>
+			<div>Warehouse</div>
+			<div>Request Order</div>
+		</div>
+		<div class="party">
+			<div class="fill-line"></div>
+			<div>ACN Agriproducts, LLC</div>
+			<div>Authorize Production</div>
+		</div>
+	</div>
+</div>

@@ -9,10 +9,13 @@ const routes: Routes = [
     component: InventoryPage
   },
   {
+    path: 'storage-logs',
+    loadChildren: () => import('./storage-logs/storage-logs.module').then( m => m.StorageLogsPageModule)
+  },
+  {
     path: ':product',
     loadChildren: () => import('./product/product.module').then( m => m.ProductPageModule)
   }
-
 ];
 
 @NgModule({
