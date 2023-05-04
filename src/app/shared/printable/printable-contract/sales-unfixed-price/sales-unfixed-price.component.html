@@ -245,17 +245,11 @@
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE RETIRO:</div>
-			<!-- TODO -->
-			<div>
-				SE EMBARCARÁ A RAZON DE 500 TONELADAS POR SEMANA
-				<br>
-				SE EMBARCARÁN AL MENOS DOS FULLES POR OPERACIÓN
-			</div>
+			<div [class.focused]="focusedField == 'loadConditions'" class="white-space-wrap">{{contractForm?.loadConditions}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS DE CARGAS:</div>
-			<!-- TODO -->
-			<div>EN CASO DE NO CUMPLIR CON LOS PLAZOS DE CARGA</div>
+			<div [class.focused]="focusedField == 'loadDelays'">{{contractForm?.loadDelays | selectFieldDisplay:contractType:'loadDelays' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>ALMACENAJE Y FUMIGACIÓN:</div>
@@ -263,12 +257,10 @@
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE PAGO:</div>
-			<!-- TODO -->
-			<div>PAGO CONTRA EMBARQUE</div>
+			<div [class.focused]="focusedField == 'paymentWithdrawal'">{{contractForm?.paymentWithdrawal | selectFieldDisplay:contractType:'paymentWithdrawal' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS EN PAGOS:</div>
-			<!-- TODO -->
 			<div>
 				{{
 					contractForm?.paymentDelays?.applies ? 

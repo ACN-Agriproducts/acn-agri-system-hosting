@@ -236,12 +236,10 @@
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE PAGO:</div>
-			<!-- TODO -->
-			<div>PAGO CONTRA EMBARQUE</div>
+			<div [class.focused]="focusedField == 'paymentWithdrawal'">{{contractForm?.paymentWithdrawal | selectFieldDisplay:contractType:'paymentWithdrawal' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS EN PAGOS:</div>
-			<!-- TODO -->
 			<div [class.focused]="focusedField == 'contract.paymentDelays'">
 				{{
 					contractForm?.paymentDelays?.applies ? 
