@@ -10,6 +10,7 @@ import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
+import { ContractSettings } from '@shared/classes/contract-settings';
 
 
 @Component({
@@ -57,45 +58,44 @@ export class ContractsPage implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    this.tabData = [{
-      label: "Purchase Contracts",
-      type: this.table,
-      isInfiniteScrollDisabled: false,
-      data: [
-        {
-          getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), true, ...constraints), 
-          contracts: [],
+    ContractSettings.getDocument(this.db, this.session.getCompany()).then(settings => {
+      const contractsData = Object.entries(settings.contractTypes).map(contract => {
+        return {
+          label: contract[0],
+          type: this.table,
+          isInfiniteScrollDisabled: false,
+          data: [
+            {
+              getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), contract[1], ...constraints), 
+              contracts: [],
+            }
+          ]
         }
-      ]
-    },{
-      label: "Sales Contracts",
-      type: this.table,
-      isInfiniteScrollDisabled: false,
-      data: [
-        {
-          getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), false, ...constraints), 
-          contracts: [],
-        }
-      ]
-    },{
-      label: "Analytics",
-      type: this.cards,
-      isInfiniteScrollDisabled: false,
-      data: [
-        {
-          getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
-          title: "Purchase Contracts", 
-          contracts: [],
-        },
-        {
-          getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
-          title: "Sales Contracts", 
-          contracts: [],
-        }
-      ]
-    }];
+      });
 
-    this.getContracts();
+      this.tabData = [
+        ...contractsData,
+        {
+          label: "Analytics",
+          type: this.cards,
+          isInfiniteScrollDisabled: false,
+          data: [
+            {
+              getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
+              title: "Purchase Contracts", 
+              contracts: [],
+            },
+            {
+              getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
+              title: "Sales Contracts", 
+              contracts: [],
+            }
+          ]
+        }
+      ]
+
+      this.getContracts();
+    });
   }
 
   public segmentChanged(event) {

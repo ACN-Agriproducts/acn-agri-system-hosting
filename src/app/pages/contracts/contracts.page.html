@@ -144,9 +144,8 @@
                         <ion-item lines="none">
                             <ion-text color="primary" class="item-text-customer">
                                 {{
-                                contract.clientName | titlecase | slice:0:25
+                                contract.clientName ?? contract.clientInfo.name | titlecase | slice:0:25
                                 }}
-                                <span *ngIf="contract.clientName.length>25">...</span>
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
