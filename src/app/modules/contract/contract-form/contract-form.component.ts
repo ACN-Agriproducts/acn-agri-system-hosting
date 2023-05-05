@@ -235,6 +235,8 @@ export class ContractFormComponent implements OnInit {
   async submit(): Promise<void> {
     await this.saveClientInfo();
 
+    if(this.useSameClientForTicket) this.contract.clientTicketInfo = this.contract.clientInfo;
+
     console.log(this.contract);
     this.contract.set().then(() => {
       this.snack.open('Contract submitted successfully', 'success');
