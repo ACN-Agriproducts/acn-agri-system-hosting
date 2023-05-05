@@ -69,10 +69,10 @@ export class ContractFormComponent implements OnInit {
     this.currentContract.market_price = formData.market_price;
     this.currentContract.grade = formData.grade; 
     this.currentContract.aflatoxin = formData.aflatoxin;
-    this.currentContract.delivery_dates = new DeliveryDates({
-      begin: new Date(formData.deliveryDateStart),
-      end: new Date(formData.deliveryDateEnd)
-    });
+    // this.currentContract.delivery_dates = new DeliveryDates({
+    //   begin: new Date(formData.deliveryDateStart),
+    //   end: new Date(formData.deliveryDateEnd)
+    // });
     this.currentContract.paymentTerms = new PaymentTerms({
       before: formData.paymentTerms.before,
       measurement: formData.paymentTerms.measurement,
