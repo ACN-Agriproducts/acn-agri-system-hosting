@@ -1,5 +1,6 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc } from "@angular/fire/firestore";
-import { Contract } from "./contract";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, updateDoc } from "@angular/fire/firestore";
+import { ContactInfo, Contract } from "./contract";
+
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Ticket } from "./ticket";
@@ -10,8 +11,6 @@ export class Contact extends FirebaseDocInterface {
     public city: string;
     public metacontacts: MetaContact[];
     public name: string;
-    public publicDeedDate: Date;
-    public publicDeedId: string;
     public rfc: string;
     public state: string;
     public streetAddress: string;
@@ -20,28 +19,52 @@ export class Contact extends FirebaseDocInterface {
     public notarialAct: string;
     public notarialActDate: Date;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
-        super(snapshot, Contact.converter);
-        const data = snapshot.data();
+    constructor(snapshot: QueryDocumentSnapshot<any> | ContactInfo, tags?: string[]) {
+        if(!(snapshot instanceof QueryDocumentSnapshot)) {
+            super(null, Contact.converter)
 
-        this._curp = data._curp;
-        this.caat = data.caat;
-        this.city = data.city;
-        this.metacontacts = [];
-        this.name = data.name;
-        this.publicDeedDate = data.publicDeedDate;
-        this.publicDeedId = data.publicDeedId;
-        this.rfc = data.rfc;
-        this.state = data.state;
-        this.streetAddress = data.streetAddress;
-        this.tags = data.tags;
-        this.zipCode = data.zipCode;
-        this.notarialAct = data.notarialAct;
-        this.notarialActDate = data.notarialActDate;
+            this.metacontacts = [{
+                email: snapshot.email,
+                isPrimary: true,
+                name:  snapshot.clientRep,
+                phone: snapshot.phoneNumber
+            }];
 
-        data.metacontacts?.forEach(metacontact => {
-            this.metacontacts.push(this.createMetaContact(metacontact));
-        });
+            this.caat = snapshot.caat;
+            this.city = snapshot.city;
+            this.name = snapshot.name;
+            this.state = snapshot.state;
+            this.streetAddress = snapshot.streetAddress;
+            this.zipCode = snapshot.zipCode;
+            this.ref = snapshot.ref;
+            this.rfc = snapshot.rfc;
+            this._curp = snapshot.curp;
+            this.notarialAct = snapshot.notarialAct;
+            this.notarialActDate = snapshot.notarialActDate;
+            this.tags = tags ?? [];
+        }
+
+        else {
+            super(snapshot, Contact.converter);
+            const data = snapshot.data();
+
+            this._curp = data._curp;
+            this.caat = data.caat;
+            this.city = data.city;
+            this.metacontacts = [];
+            this.name = data.name;
+            this.rfc = data.rfc;
+            this.state = data.state;
+            this.streetAddress = data.streetAddress;
+            this.tags = data.tags;
+            this.zipCode = data.zipCode;
+            this.notarialAct = data.notarialAct;
+            this.notarialActDate = data.notarialActDate.toDate();
+
+            data.metacontacts?.forEach(metacontact => {
+                this.metacontacts.push(this.createMetaContact(metacontact));
+            });
+        }
     }
 
     public static converter = {
@@ -52,8 +75,6 @@ export class Contact extends FirebaseDocInterface {
                 city: data.city,
                 metacontacts: data.metacontacts,
                 name: data.name,
-                publicDeedDate: data.publicDeedDate,
-                publicDeedId: data.publicDeedId,
                 rfc: data.rfc,
                 state: data.state,
                 streetAddress: data.streetAddress,
@@ -83,6 +104,22 @@ export class Contact extends FirebaseDocInterface {
     public static getDoc(db: Firestore, company: string, contact: string): Promise<Contact> {
         return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
+        });
+    }
+
+    public static updateRef(ref: DocumentReference, info: ContactInfo) {
+        updateDoc(ref, {
+            caat: info.caat,
+            city: info.city,
+            name: info.name,
+            state: info.state,
+            streetAddress: info.streetAddress,
+            zipCode: info.zipCode,
+            ref: info.ref,
+            rfc: info.rfc,
+            _curp: info.curp,
+            notarialAct: info.notarialAct,
+            notarialActDate: info.notarialActDate,
         });
     }
 

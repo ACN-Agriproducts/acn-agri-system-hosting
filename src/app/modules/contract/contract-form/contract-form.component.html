@@ -199,7 +199,7 @@
     <button mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
     <mat-form-field>
       <mat-label>Client Name</mat-label>
-      <input matInput disabled [(ngModel)]="contract.clientName">
+      <input matInput [disabled]="!newClientContact" [(ngModel)]="contract.clientInfo.name">
     </mat-form-field>
   </div>
 </ng-template>
@@ -211,7 +211,7 @@
       <button mat-stroked-button color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
       <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
-        <input matInput disabled [(ngModel)]="contract.clientName">
+        <input matInput [disabled]="!newTicketContact" [(ngModel)]="contract.clientTicketInfo.name">
       </mat-form-field>
     </div>
   </div>

@@ -1,6 +1,7 @@
 <h2>Client Selector</h2>
 <mat-dialog-content>
   <mat-selection-list #client [(ngModel)]="clientSelected" [multiple]="false">
+    <mat-list-option *ngIf="canCreateUser" value="new">+ New client</mat-list-option>
     <mat-list-option *ngFor="let client of clientsList" [value]="client">
       {{client.name}}
     </mat-list-option>

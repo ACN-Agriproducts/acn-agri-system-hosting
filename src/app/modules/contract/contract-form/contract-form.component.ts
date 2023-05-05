@@ -1,5 +1,5 @@
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
-import { Firestore, getDocsFromServer, limit, query, DocumentReference, orderBy } from '@angular/fire/firestore';
+import { Firestore, getDocsFromServer, limit, query, DocumentReference, orderBy, doc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company, CompanyContact } from '@shared/classes/company';
@@ -39,6 +39,8 @@ export class ContractFormComponent implements OnInit {
     value: Date;
   }[] = [];
   public usersList: Exectuive[];
+  public newClientContact: boolean = false;
+  public newTicketContact: boolean = false;
 
   public useSameClientForTicket = true;
 
@@ -117,7 +119,15 @@ export class ContractFormComponent implements OnInit {
     lastValueFrom(dialogRef.afterClosed()).then(result => {
       this.selectedFieldEvent.emit(null);
       if(!result) return;
+      if(result == "new") {
+        this.newClientContact = true;
+        this.contract.clearContactInfo(this.contract.clientInfo);
+        this.contract.clientName = null;
+        this.contract.client = doc(Contact.getCollectionReference(this.db, this.session.getCompany()));
+        return;
+      }
 
+      this.newClientContact = false;
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
         this.contract.clientInfo = Contract.clientInfo(client);
         this.contract.clientName = client.name;
@@ -137,7 +147,14 @@ export class ContractFormComponent implements OnInit {
     lastValueFrom(dialogRef.afterClosed()).then(result => {
       this.selectedFieldEvent.emit(null);
       if(!result) return;
+      if(result == "new") {
+        this.newTicketContact = true;
+        this.contract.clearContactInfo(this.contract.clientTicketInfo);
+        this.contract.client = doc(Contact.getCollectionReference(this.db, this.session.getCompany()));
+        return;
+      }
 
+      this.newTicketContact = false;
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
         //this.ticketClient = client;
         this.contract.clientTicketInfo = Contract.clientInfo(client);
@@ -203,7 +220,22 @@ export class ContractFormComponent implements OnInit {
     return monthChoices.includes(day);
   }
 
-  submit(): void {
+  async saveClientInfo(): Promise<void> {
+    let client;
+    if(this.newClientContact) {
+      client = new Contact(this.contract.clientInfo, ['client']);
+      client.ref = this.contract.client;
+      await client.set();
+    } 
+    else {
+      await Contact.updateRef(this.contract.client, this.contract.clientInfo);
+    }
+  }
+
+  async submit(): Promise<void> {
+    await this.saveClientInfo();
+
+    console.log(this.contract);
     this.contract.set().then(() => {
       this.snack.open('Contract submitted successfully', 'success');
       this.router.navigate(['dashboard/contracts']);
