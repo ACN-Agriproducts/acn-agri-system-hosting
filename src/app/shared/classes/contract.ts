@@ -240,58 +240,58 @@ export class Contract extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: Contract): DocumentData {
             return {
-                aflatoxin: data.aflatoxin,
-                base: data.base,
-                client: data.client,
-                clientName: data.clientName,
-                clientTicketInfo: data.clientTicketInfo,
-                currentDelivered: data.currentDelivered.get(),
-                date: data.date,
-                delivery_dates: data.delivery_dates,
-                grade: data.grade,
-                id: data.id,
-                loads: data.loads,
-                market_price: data.market_price,
-                paymentTerms: data.paymentTerms,
-                pdfReference: data.pdfReference,
-                pricePerBushel: data.pricePerBushel,
-                price: data.price.amount,
-                priceUnit: data.price.unit,
-                product: data.product,
-                productInfo: data.productInfo,
-                quantity: data.quantity.get(),
-                quantityUnits: data.quantity.defaultUnits,
-                seller_terms: data.seller_terms,
-                status: data.status,
-                tags: data.tags,
-                tickets: data.tickets,
-                transport: data.transport,
-                truckers: data.truckers,
+                aflatoxin: data.aflatoxin ?? null,
+                base: data.base ?? null,
+                client: data.client ?? null,
+                clientName: data.clientName ?? null,
+                clientTicketInfo: data.clientTicketInfo ?? null,
+                currentDelivered: data.currentDelivered.get() ?? null,
+                date: data.date ?? null,
+                delivery_dates: data.delivery_dates ?? null,
+                grade: data.grade ?? null,
+                id: data.id ?? null,
+                loads: data.loads ?? null,
+                market_price: data.market_price ?? null,
+                paymentTerms: data.paymentTerms ?? null,
+                pdfReference: data.pdfReference ?? null,
+                pricePerBushel: data.pricePerBushel ?? null,
+                price: data.price.amount ?? null,
+                priceUnit: data.price.unit ?? null,
+                product: data.product ?? null,
+                productInfo: data.productInfo ?? null,
+                quantity: data.quantity.get() ?? null,
+                quantityUnits: data.quantity.defaultUnits ?? null,
+                seller_terms: data.seller_terms ?? null,
+                status: data.status ?? null,
+                tags: data.tags ?? null,
+                tickets: data.tickets ?? null,
+                transport: data.transport ?? null,
+                truckers: data.truckers ?? null,
 
                 // NEW
-                bankInfo: data.bankInfo,
-                cargoDelays: data.cargoDelays,
-                contractOwner: data.contractOwner,
-                currency: data.currency,
-                deliveryPlants: data.deliveryPlants,
-                deliveryType: data.deliveryType,
-                formOfPayment: data.formOfPayment,
-                futurePriceInfo: data.futurePriceInfo,
-                guarantee: data.guarantee,
-                loadConditions: data.loadConditions,
-                loadDelays: data.loadDelays,
-                loadType: data.loadType,
-                paymentDelays: data.paymentDelays,
-                paymentWithdrawal: data.paymentWithdrawal,
-                prepaid: data.prepaid,
-                shrinkage: data.shrinkage,
-                storageAndFumigation: data.storageAndFumigation,
-                transportInsurance: data.transportInsurance,
-                quantityErrorPercentage: data.quantityErrorPercentage,
-                termsOfPayment: data.termsOfPayment,
-                futurePriceBase: data.futurePriceBase.amount,
-                futurePriceBaseUnit: data.futurePriceBase.unit,
-                companyInfo: data.companyInfo,
+                bankInfo: data.bankInfo ?? null,
+                cargoDelays: data.cargoDelays ?? null,
+                contractOwner: data.contractOwner ?? null,
+                currency: data.currency ?? null,
+                deliveryPlants: data.deliveryPlants ?? null,
+                deliveryType: data.deliveryType ?? null,
+                formOfPayment: data.formOfPayment ?? null,
+                futurePriceInfo: data.futurePriceInfo ?? null,
+                guarantee: data.guarantee ?? null,
+                loadConditions: data.loadConditions ?? null,
+                loadDelays: data.loadDelays ?? null,
+                loadType: data.loadType ?? null,
+                paymentDelays: data.paymentDelays ?? null,
+                paymentWithdrawal: data.paymentWithdrawal ?? null,
+                prepaid: data.prepaid ?? null,
+                shrinkage: data.shrinkage ?? null,
+                storageAndFumigation: data.storageAndFumigation ?? null,
+                transportInsurance: data.transportInsurance ?? null,
+                quantityErrorPercentage: data.quantityErrorPercentage ?? null,
+                termsOfPayment: data.termsOfPayment ?? null,
+                futurePriceBase: data.futurePriceBase.amount ?? null,
+                futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
+                companyInfo: data.companyInfo ?? null,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -348,6 +348,24 @@ export class Contract extends FirebaseDocInterface {
         ])
 
         return `${this.productInfo.marketCode}${marketMonthCodes.get(this.futurePriceInfo.expirationMonth.getMonth())}${this.futurePriceInfo.expirationMonth.getFullYear() % 10}`
+    }
+
+    public clearContactInfo(contractInfo: ContactInfo) {
+        contractInfo.caat = null;
+        contractInfo.city = null;
+        contractInfo.email = null;
+        contractInfo.name = null;
+        contractInfo.phoneNumber = null;
+        contractInfo.state = null;
+        contractInfo.streetAddress = null;
+        contractInfo.zipCode = null;
+        contractInfo.ref = null;
+        contractInfo.clientRep = null;
+        contractInfo.rfc = null;
+        contractInfo.curp = null;
+        contractInfo.notarialAct = null;
+        contractInfo.notarialActDate = null;
+
     }
 
     public static getCollectionReference(db: Firestore, company: string, contractType?: contractType): CollectionReference<Contract> {
@@ -510,7 +528,7 @@ enum status {
     cancelled = 'cancelled'
 }
 
-interface ContactInfo {
+export interface ContactInfo {
     caat: string;
     city: string;
     email: string;
