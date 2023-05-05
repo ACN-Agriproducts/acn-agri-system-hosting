@@ -150,7 +150,10 @@ export class Contract extends FirebaseDocInterface {
 
             this.bankInfo = [];
 
-            this.delivery_dates = new DeliveryDates({});
+            this.delivery_dates = {
+                begin: null,
+                end: null
+            };
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
             this.futurePriceBase = new Price(null, 'bu');
@@ -167,18 +170,18 @@ export class Contract extends FirebaseDocInterface {
         let tempTicketList: DocumentReference<Ticket>[] = [];
         let tempTruckerList: TruckerInfo[] = [];
 
-        data.tickets.forEach((ticket: DocumentReference) => {
+        data.tickets?.forEach((ticket: DocumentReference) => {
             tempTicketList.push(ticket.withConverter(Ticket.converter));
         })
 
-        data.truckers.forEach((trucker: any) => {
+        data.truckers?.forEach((trucker: any) => {
             tempTruckerList.push(new TruckerInfo(trucker));
         })
 
         if(data.futurePriceInfo){
-            data.futurePriceInfo.expirationMonth = data.futurePriceInfo?.expirationMonth.toDate();
-            data.futurePriceInfo.priceSetPeriodBegin = data.futurePriceInfo?.priceSetPeriodBegin.toDate();
-            data.futurePriceInfo.priceSetPeriodEnd = data.futurePriceInfo?.priceSetPeriodEnd.toDate();
+            data.futurePriceInfo.expirationMonth = data.futurePriceInfo?.expirationMonth?.toDate();
+            data.futurePriceInfo.priceSetPeriodBegin = data.futurePriceInfo?.priceSetPeriodBegin?.toDate();
+            data.futurePriceInfo.priceSetPeriodEnd = data.futurePriceInfo?.priceSetPeriodEnd?.toDate();
         }
 
         this.aflatoxin = data.aflatoxin;
@@ -189,7 +192,7 @@ export class Contract extends FirebaseDocInterface {
         this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = new Mass(data.currentDelivered, FirebaseDocInterface.session.getDefaultUnit());
         this.date = data.date.toDate();
-        this.delivery_dates = new DeliveryDates({begin: data.delivery_dates?.begin?.toDate(), end: data.delivery_dates?.end?.toDate()});
+        this.delivery_dates = {begin: data.delivery_dates?.begin?.toDate(), end: data.delivery_dates?.end?.toDate()};
         this.grade = data.grade;
         this.id = data.id;
         this.loads = data.loads;
@@ -209,7 +212,7 @@ export class Contract extends FirebaseDocInterface {
         this.truckers = tempTruckerList;
         this.type = data.type;
         
-        this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
+        this.clientTicketInfo.ref = this.clientTicketInfo?.ref?.withConverter(Contract.converter);
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
 
         // NEW
@@ -244,6 +247,7 @@ export class Contract extends FirebaseDocInterface {
                 base: data.base ?? null,
                 client: data.client ?? null,
                 clientName: data.clientName ?? null,
+                clientInfo: data.clientInfo ?? null,
                 clientTicketInfo: data.clientTicketInfo ?? null,
                 currentDelivered: data.currentDelivered.get() ?? null,
                 date: data.date ?? null,
@@ -252,7 +256,7 @@ export class Contract extends FirebaseDocInterface {
                 id: data.id ?? null,
                 loads: data.loads ?? null,
                 market_price: data.market_price ?? null,
-                paymentTerms: data.paymentTerms ?? null,
+                paymentTerms: data.paymentTerms.get() ?? null,
                 pdfReference: data.pdfReference ?? null,
                 pricePerBushel: data.pricePerBushel ?? null,
                 price: data.price.amount ?? null,
@@ -292,6 +296,7 @@ export class Contract extends FirebaseDocInterface {
                 futurePriceBase: data.futurePriceBase.amount ?? null,
                 futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
                 companyInfo: data.companyInfo ?? null,
+                type: data.type ?? null
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -470,14 +475,9 @@ export class Contract extends FirebaseDocInterface {
     }
 }
 
-export class DeliveryDates {
+export interface DeliveryDates {
     begin: Date;
     end: Date;
-
-    constructor(data: any) {
-        this.begin = data.begin;
-        this.end = data.end;
-    }
 }
 
 export class PaymentTerms {
@@ -492,6 +492,15 @@ export class PaymentTerms {
         this.origin = typeof data.origin == "string" ? data.origin:
             data.origin ? "own-scale" : "client-scale";
         this.paymentTerms = data.paymentTerms;
+    }
+
+    get() {
+        return {
+            before: this.before ?? null,
+            measurement: this.measurement ?? null,
+            origin: this.origin ?? null,
+            paymentTerms: this.paymentTerms ?? null,
+        }
     }
 }
 
