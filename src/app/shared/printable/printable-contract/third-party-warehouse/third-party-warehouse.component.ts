@@ -19,8 +19,4 @@ export class ThirdPartyWarehouseComponent implements OnInit {
 
   ngOnInit() {}
 
-  ngOnChanges() {
-    console.log(this.contractForm)
-  }
-
 }
