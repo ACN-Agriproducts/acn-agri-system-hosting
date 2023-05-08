@@ -74,6 +74,16 @@ export class ExchangeRateFieldPipe implements PipeTransform {
   }
 }
 
+@Pipe({
+  name: 'currencySplit'
+})
+export class CurrencySplitPipe implements PipeTransform {
+  transform(currencyLabel: string, index: number): string {
+    const labelArray = currencyLabel.split(' ');
+    return labelArray[index];
+  }
+}
+
 const numeroALetras = (num: number) => {
   let data = {
     numero: num,
