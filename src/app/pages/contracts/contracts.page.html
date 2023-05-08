@@ -159,7 +159,7 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.product.id | titlecase}}
+                                {{contract.product?.id || "" | titlecase}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
