@@ -211,8 +211,6 @@ export class Contract extends FirebaseDocInterface {
         this.transport = data.transport;
         this.truckers = tempTruckerList;
         this.type = data.type;
-        
-        this.clientTicketInfo.ref = this.clientTicketInfo?.ref?.withConverter(Contract.converter);
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
 
         // NEW
@@ -450,7 +448,7 @@ export class Contract extends FirebaseDocInterface {
             state: contact.state,
             streetAddress: contact.streetAddress,
             zipCode: contact.zipCode,
-            ref: contact.ref,
+            ref: contact.ref.withConverter(Contact.converter),
             clientRep: primaryContact.name,
             rfc: contact.rfc,
             curp: contact.curp,
@@ -554,7 +552,7 @@ export interface ContactInfo {
     state: string;
     streetAddress: string;
     zipCode: string;
-    ref: DocumentReference;
+    ref: DocumentReference<Contact>;
     clientRep: string;
     rfc: string;
     curp: string;
