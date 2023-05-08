@@ -12,6 +12,8 @@ import { CoreModule } from '@core/core.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
+import { PlantSelectComponent } from './components/plant-select/plant-select.component';
+import { StorageCardComponent } from './components/storage-card/storage-card.component';
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
@@ -22,6 +24,9 @@ import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-di
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
 import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
+import { PrintableProductionOrderComponent } from './printable/printable-production-order/printable-production-order.component';
+import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
+import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
 
 
 @NgModule({
@@ -39,24 +44,8 @@ import { TypeTemplateDirective } from './directives/type-template/type-template.
     ScaleToFitDirective,
     PrintableTicketComponent,
     PrintableInvoiceComponent,
-    FilterContractsPipe,
-    SectionTitleComponent,
-    HashMapPipe,
-    SelectedTicketsPipe,
-    InvoiceOneComponent,
-    InvoiceTwoComponent,
-    InvoiceDialogComponent,
-    DocumentWrapperComponent,
-    TypeTemplateDirective
-  ],
-  declarations: [
-    ToolbarComponent,
-    ContractPrintableComponent,
-    ScaleToFitDirective,
-    PrintableTicketComponent,
-    FixTicketStorageComponent,
-    UploadDocumentDialogComponent,
-    PrintableInvoiceComponent,
+    PlantSelectComponent,
+    StorageCardComponent,
     FilterContractsPipe,
     SectionTitleComponent,
     HashMapPipe,
@@ -66,6 +55,32 @@ import { TypeTemplateDirective } from './directives/type-template/type-template.
     InvoiceDialogComponent,
     DocumentWrapperComponent,
     TypeTemplateDirective,
+    PrintableProductionOrderComponent,
+    ProductionOrderDefaultComponent,
+    LocalInventoryPipe,
+  ],
+  declarations: [
+    ToolbarComponent,
+    ContractPrintableComponent,
+    ScaleToFitDirective,
+    PrintableTicketComponent,
+    FixTicketStorageComponent,
+    UploadDocumentDialogComponent,
+    PrintableInvoiceComponent,
+    PlantSelectComponent,
+    StorageCardComponent,
+    FilterContractsPipe,
+    SectionTitleComponent,
+    HashMapPipe,
+    SelectedTicketsPipe,
+    InvoiceOneComponent,
+    InvoiceTwoComponent,
+    InvoiceDialogComponent,
+    DocumentWrapperComponent,
+    TypeTemplateDirective,
+    PrintableProductionOrderComponent,
+    ProductionOrderDefaultComponent,
+    LocalInventoryPipe,
   ]
 })
 export class SharedModule {}

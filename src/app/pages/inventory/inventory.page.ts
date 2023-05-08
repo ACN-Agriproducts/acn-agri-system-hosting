@@ -1,109 +1,66 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { firstValueFrom, Observable } from 'rxjs';
 import { NewStorageModalComponent } from './components/new-storage-modal/new-storage-modal.component';
-import { StoragePopoverComponent } from './components/storage-popover/storage-popover.component';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
 import { Functions, httpsCallable } from '@angular/fire/functions';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.page.html',
   styleUrls: ['./inventory.page.scss'],
 })
-export class InventoryPage implements OnInit, OnDestroy{
+export class InventoryPage implements OnInit {
+  public showArchivedInv: boolean = false;
 
-  public currentCompany: string;
-  public currentPlantName: string;
-  public plantList: Plant[];
-  public productList: Product[];
-  public currentSubs: Subscription[] = [];
-  public dataUser: any;
-  public permissions: any;
+  public plant$: Observable<Plant>;
+  public products$: Observable<Product[]>;
+
+  @ViewChild('InvMenuTrigger') InvMenuTrigger: HTMLElement;
+  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
 
   constructor(
     private db: Firestore,
-    private store: Storage,
-    private navController: NavController,
     private modalController: ModalController,
-    private popoverController: PopoverController,
-    private localStorage: Storage,
-    private fns: Functions
-  ) { 
-    this.store.get('currentCompany').then(async val => {
-      this.currentCompany = val;
-      this.currentPlantName = await this.store.get("currentPlant");
-
-      var tempSub;
-      tempSub = Plant.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
-        this.plantList = val;
-      })
-      this.currentSubs.push(tempSub);
-
-      tempSub = Product.getCollectionSnapshot(this.db, this.currentCompany).subscribe(val => {
-        this.productList = val;
-      })
-      this.currentSubs.push(tempSub);
-    })
-  }
+    private fns: Functions,
+    public session: SessionInfo
+  ) {}
 
   ngOnInit() {
-    this.localStorage.get('user').then(data => {
-      this.dataUser = data;
-      this.permissions = data.currentPermissions;
-    });
+    this.products$ = Product.getCollectionSnapshot(this.db, this.session.getCompany());
+    this.getPlantSnapshot();
   }
 
-  ngOnDestroy() {
-    for(const sub of this.currentSubs) {
-      sub.unsubscribe();
-    }
-  }
-
-  public nav(path:string): void {
-    this.navController.navigateForward(path);
-  }
-
-  public async inventoryMenu(ev: any, storageId: number): Promise<void> {
-    const popover = await this.popoverController.create({
-      component: StoragePopoverComponent,
-      event: ev,
-      componentProps: {
-        plantRef: this.getCurrentPlant().ref,
-        storageId: storageId,
-        tankList: this.getCurrentPlant().inventory,
-        productList: this.productList
-      }
-    });
-
-    return popover.present();
+  getPlantSnapshot() {
+    this.plant$ = Plant.getPlantSnapshot(this.db, this.session.getCompany(), this.session.getPlant());
   }
 
   public async newStorageModal(): Promise<any> {
     const modal = await this.modalController.create({
       component: NewStorageModalComponent,
       componentProps:{
-        plantRef: Plant.getDocReference(this.db, this.currentCompany, this.currentPlantName),
-        productList: this.productList,
+        plantRef: Plant.getDocReference(this.db, this.session.getCompany(), this.session.getPlant()),
+        productList: await firstValueFrom(this.products$),
       }
     });
 
     return await modal.present();
   }
 
-  // public hasReadPermission = (): Boolean => {
-  //   return this.permissions?.developer || this.permissions?.admin || this.permissions?.inventory?.warehouseReceiptRead;
-  // }
-
-  public getCurrentPlant(): Plant {
-    return this.plantList.find(p => p.ref.id == this.currentPlantName);
+  public updateProductInv(): void {
+    httpsCallable(this.fns, 'helperFunctions-calculateProductValues')({company: this.session.getCompany()});
   }
 
-  public updateProductInv(): void {
-    httpsCallable(this.fns, 'helperFunctions-calculateProductValues')({company: this.currentCompany});
+  public onContextMenu(event: MouseEvent) {
+    event.preventDefault();
+    this.InvMenuTrigger["nativeElement"].style.left =  event.clientX + 'px';
+    this.InvMenuTrigger["nativeElement"].style.top = event.clientY + 'px';
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.contextMenu.openMenu();
   }
 
 }

@@ -1,19 +1,21 @@
-import { DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PricesPage } from './prices.page';
+import { SetOrderPage } from './set-order.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: PricesPage
+    component: SetOrderPage
+  },
+  {
+    path: ':id',
+    component: SetOrderPage
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [DatePipe]
 })
-export class PricesPageRoutingModule {}
+export class SetOrderPageRoutingModule {}

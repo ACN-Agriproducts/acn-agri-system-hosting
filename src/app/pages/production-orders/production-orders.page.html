@@ -1,0 +1,43 @@
+<app-header-toolbar titulo="Production Orders"></app-header-toolbar>
+
+<ion-content class="ion-padding">
+    <div class="center-content">
+        <div class="content-column">
+            <div class="action-bar">
+                <button mat-flat-button class="new-button" color="primary"
+                routerLink="/dashboard/production-orders/set-order">
+                    New Order
+                </button>
+            </div>
+            <ol class="order-collection">
+                <mat-card class="header-card">
+                    <li class="row">
+                        <div class="cell id">ID</div>
+                        <div class="cell status">Status</div>
+                        <div class="cell date">Date</div>
+                        <div class="cell info">Information</div>
+                        <div class="cell storage">Storage</div>
+                    </li>
+                </mat-card>
+                <mat-card class="body-card" *ngFor="let order of orderList$ | async">
+                    <li class="row" [routerLink]="['/dashboard/production-orders/set-order', order.id]">
+                        <div class="cell id" data-name="ID">{{ order.id }}</div>
+                        <div class="cell status" data-name="Status">
+                            <div class="status-text" [class]="order.status">{{ order.status }}</div>
+                        </div>
+                        <div class="cell date" data-name="Date">{{ order.date | date }}</div>
+                        <div class="cell info" data-name="Information">
+                            <div class="info-container">
+                                <div class="info-item" *ngFor="let item of order.orderInfo">
+                                    <span class="item-quantity">( {{ item.quantity}} )</span>
+                                    <ion-text class="item-name" color="tertiary">{{ item.name }}</ion-text>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cell storage" data-name="Storage">{{ order.plant.id | titlecase }}</div>
+                    </li>
+                </mat-card>
+            </ol>
+        </div>
+    </div>
+</ion-content>
