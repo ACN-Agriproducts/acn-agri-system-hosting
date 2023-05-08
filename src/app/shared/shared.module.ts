@@ -32,7 +32,7 @@ import { SalesUnfixedPriceComponent } from './printable/printable-contract/sales
 import { SalesContractComponent } from './printable/printable-contract/sales-contract/sales-contract.component';
 import { PurchaseContractComponent } from './printable/printable-contract/purchase-contract/purchase-contract.component';
 import { TranslatePipe } from './pipes/translate/translate.pipe';
-import { NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable/printable-contract/printable-contract-utilities.service';
+import { ExchangeRateFieldPipe, NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable/printable-contract/printable-contract-utilities.service';
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { RoundPipe } from './pipes/round/round.pipe';
 // import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
@@ -107,6 +107,7 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
+    ExchangeRateFieldPipe
   ]
 })
 export class SharedModule {}

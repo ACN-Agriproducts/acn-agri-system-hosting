@@ -41,6 +41,7 @@ export class ContractFormComponent implements OnInit {
   public usersList: Exectuive[];
   public newClientContact: boolean = false;
   public newTicketContact: boolean = false;
+  public exchangeRateSelect: string;
 
   public useSameClientForTicket = true;
 
@@ -226,6 +227,11 @@ export class ContractFormComponent implements OnInit {
     const monthChoices = [2, 4, 6, 8, 11]
     const day = (d || new Date()).getMonth();
     return monthChoices.includes(day);
+  }
+
+  exchangeRateChange(event: any): void {
+    this.exchangeRateSelect = event.value;
+    if(event.value != "fixed") this.contract.futurePriceInfo.exchangeRate = event.value;
   }
 
   async saveClientInfo(): Promise<void> {

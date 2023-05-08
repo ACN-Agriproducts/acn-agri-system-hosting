@@ -173,7 +173,9 @@
 		<div class="contract-info-row">
 			<div>TIPO DE CAMBIO:</div>
 			<!-- TODO -->
-			<div>NO APLICA</div>
+			<div [class.focused]="focusedField == 'futurePriceInfo.exchangeRate'">
+				{{contractForm?.futurePriceInfo?.exchangeRate | exchangeRateField:contractType | async}}
+			</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CANTIDAD:</div>

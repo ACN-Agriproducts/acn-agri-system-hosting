@@ -88,7 +88,7 @@ export interface FormField {
     required: boolean;
 }
 
-interface SelectOption {
+export interface SelectOption {
     label: string;
     value: string;
 }
