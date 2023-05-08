@@ -238,6 +238,8 @@ export class Contract extends FirebaseDocInterface {
         this.termsOfPayment = data.termsOfPayment;
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
+
+        this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
     }
 
     public static converter = {
@@ -322,6 +324,12 @@ export class Contract extends FirebaseDocInterface {
 
     public getClient(): Promise<Contact> {
         return getDoc(this.client).then(result => {
+            return result.data();
+        });
+    }
+
+    public getTicketClient(): Promise<Contact> {
+        return getDoc(this.clientTicketInfo.ref).then(result => {
             return result.data();
         });
     }
