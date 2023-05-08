@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { collection, DocumentReference, serverTimestamp } from '@angular/fire/firestore';
 import { runTransaction, doc } from '@angular/fire/firestore'
 import { MatDialog } from '@angular/material/dialog';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { PopoverController } from '@ionic/angular';
 import { Inventory, Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
@@ -23,6 +24,7 @@ export class StoragePopoverComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private popoverController: PopoverController,
+    private session: SessionInfo
     ) { }
 
   ngOnInit() {}
@@ -84,7 +86,7 @@ export class StoragePopoverComponent implements OnInit {
             transaction.set(logRef, {
               before: beforeInv,
               after: inventory,
-              updatedBy: '',
+              updatedBy: this.session.getUser().uid,
               updatedOn: serverTimestamp(),
               change: changes,
               updateType: 'Manual'
@@ -146,7 +148,7 @@ export class StoragePopoverComponent implements OnInit {
             transaction.set(logRef, {
               before: beforeInv,
               after: inventory,
-              updatedBy: '',
+              updatedBy: this.session.getUser().uid,
               updatedOn: serverTimestamp(),
               change: changes,
               updateType: 'Manual'
@@ -189,7 +191,7 @@ export class StoragePopoverComponent implements OnInit {
             transaction.set(logRef, {
               before: beforeInv,
               after: inventory,
-              updatedBy: '',
+              updatedBy: this.session.getUser().uid,
               updatedOn: serverTimestamp(),
               change: changes,
               updateType: 'Manual'
@@ -202,5 +204,32 @@ export class StoragePopoverComponent implements OnInit {
     });
 
     this.popoverController.dismiss();
+  }
+
+  public archiveButton(event: any) { 
+    runTransaction(this.plantRef.firestore, async transaction => {
+      const plant = (await transaction.get(this.plantRef)).data();
+      const beforeInv = plant.getRawInventory();
+      const inventory = plant.getRawInventory();
+
+      inventory[this.storageId].archived = !inventory[this.storageId].archived;
+
+      const changes = [{
+        type: 'Inventory archive status changed',
+        tank: inventory[this.storageId].name,
+      }];
+
+      const logRef = doc(collection(this.plantRef, 'storageLogs'));
+      transaction.set(logRef, {
+        before: beforeInv,
+        after: inventory,
+        updatedBy: this.session.getUser().uid,
+        updatedOn: serverTimestamp(),
+        change: changes,
+        updateType: 'Manual'
+      });
+
+      return transaction.update(this.plantRef, {inventory, lastStorageUpdate: logRef});
+    });
   }
 }

@@ -5,6 +5,9 @@
   <ion-item button (click)="editInvButton($event)">
     Edit Inventory
   </ion-item>
+  <ion-item button (click)="archiveButton($event)" *ngIf="tankList[storageId].current.get() === 0">
+    {{tankList[storageId].archived ? "Unarchive": "Archive"}} Inventory
+  </ion-item>
   <ion-item button lines="none" (click)="zeroOutButton($event)">
     Zero Out Tank
   </ion-item>

@@ -1,0 +1,40 @@
+.item-card {
+	margin-top: 1rem;
+}
+
+.form-row {
+	display: flex;
+	gap: 0.8rem;
+}
+
+.content-column {
+	display: flex;
+	justify-content: center;
+	flex-flow: row wrap;
+	gap: 10px;
+}
+
+.form-column {
+	flex: 1 1 600px;
+	max-width: 600px;
+}
+
+.form-action-bar {
+	margin-top: 0.5rem;
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+hr.solid {
+	border-top: 1px solid #bbb;
+}
+
+.quantity-field {
+	width: 80px;
+}
+
+.item-action-bar {
+	display: flex;
+	justify-content: space-between;
+}

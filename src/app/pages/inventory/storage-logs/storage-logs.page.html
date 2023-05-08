@@ -1,0 +1,94 @@
+<app-header-toolbar titulo="Inventory Logs"></app-header-toolbar>
+
+<ion-content>
+    <mat-card class="main-content">
+        <mat-card-content>
+            <div>
+                <app-plant-select (plantChangeEvent)="getLogs()"></app-plant-select>
+                <mat-form-field>
+                    <mat-label>Choose week</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                        <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+                    </mat-date-range-input>
+                    <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker (closed)="getLogs()"></mat-date-range-picker>
+                </mat-form-field>
+            </div>
+            
+            <div class="pagination-bar">
+                <button 
+                    mat-icon-button 
+                    color="primary"
+                    (click)="changeIndex(index-1)" 
+                    [disabled]="index == 0">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <span>
+                    <div>{{datesList?.[index] | date}}</div>
+                    <div>{{index + 1}} / {{(storageLogs$ | async)?.length}}</div>
+                </span> 
+                <button 
+                    mat-icon-button 
+                    color="primary"
+                    (click)="changeIndex(index+1)" 
+                    [disabled]="((storageLogs$ | async)?.length - 1 ?? 0) == index">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+
+            <div class="change-container">
+                <div>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index]?.before" [tank]="tank" [hasDefaultUnits]="true"></app-storage-card>
+                </div>
+                <div>
+                    <mat-card *ngFor="let changes of (storageLogs$ | async)?.[index]?.change">
+                        <div>{{changes.tank}}</div>
+                        <div>{{changes.amount? changes.amount.get() + " " + changes.amount.getUnit(): ""}}</div>
+                        <div>{{changes.type}}</div>
+                    </mat-card>
+                    <mat-icon id="down">arrow_downward</mat-icon>
+                    <mat-icon id="right">arrow_forward</mat-icon>
+                </div>
+                <div>
+                    <app-storage-card *ngFor="let tank of (storageLogs$ | async)?.[index]?.after" [tank]="tank"></app-storage-card>
+                </div>
+            </div>
+
+            <div class="pagination-bar">
+                <button 
+                    mat-icon-button 
+                    color="primary"
+                    (click)="changeIndex(index-1)" 
+                    [disabled]="index == 0">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <span>
+                    {{index + 1}} / {{(storageLogs$ | async)?.length}}
+                </span> 
+                <button 
+                    mat-icon-button 
+                    color="primary"
+                    (click)="changeIndex(index+1)" 
+                    [disabled]="((storageLogs$ | async)?.length - 1 ?? 0) == index">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
+            <div>
+                <mat-slider 
+                    [min]="0" 
+                    [max]="(storageLogs$ | async)?.length - 1 ?? 0" 
+                    tickInterval="1" 
+                    step="1" 
+                    showTickMarks 
+                    discrete 
+                    [displayWith]="formatLabel.bind(this)" 
+                    (change)="sliderChange($event)" 
+                    color="primary">
+                    <input matSliderThumb>
+                </mat-slider>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</ion-content>
