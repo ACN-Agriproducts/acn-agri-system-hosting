@@ -1,5 +1,5 @@
 import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
-import { Contact } from "./contact";
+import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass, units } from "./mass";
@@ -561,12 +561,6 @@ interface FuturePriceInfo {
     marketOptions: string;
     priceSetPeriodBegin: Date;
     priceSetPeriodEnd: Date;
-}
-
-export interface BankInfo {
-    bank: string;
-    account: string;
-    interBank: string;
 }
 
 export interface Exectuive {

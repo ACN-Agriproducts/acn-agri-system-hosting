@@ -44,6 +44,8 @@ export class ContractFormComponent implements OnInit {
 
   public useSameClientForTicket = true;
 
+  private currentClient:Contact;
+
   @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TypeTemplateDirective>;
 
   constructor(
@@ -124,14 +126,17 @@ export class ContractFormComponent implements OnInit {
         this.contract.clearContactInfo(this.contract.clientInfo);
         this.contract.clientName = null;
         this.contract.client = doc(Contact.getCollectionReference(this.db, this.session.getCompany()));
+        this.currentClient = null;
         return;
       }
 
       this.newClientContact = false;
       Contact.getDoc(this.db, this.session.getCompany(), result[0].id).then(client => {
+        this.currentClient = client;
         this.contract.clientInfo = Contract.clientInfo(client);
         this.contract.clientName = client.name;
         this.contract.client = this.contract.clientInfo.ref.withConverter(Contact.converter);
+        if(this.contract.tags.includes("purchase") && client.bankInfo?.length) this.contract.bankInfo = client.bankInfo;
       });
     });
   }
@@ -174,6 +179,8 @@ export class ContractFormComponent implements OnInit {
     else {
       this.contract.bankInfo = [];
     }
+
+    if(this.currentClient?.bankInfo.length && this.contract.tags.includes("purchase")) this.contract.bankInfo = this.currentClient.bankInfo;
 
     getDocsFromServer(query(
       Contract.getCollectionQuery(this.db, this.session.getCompany(), this.contract.type),
@@ -221,14 +228,15 @@ export class ContractFormComponent implements OnInit {
   }
 
   async saveClientInfo(): Promise<void> {
-    let client;
+    let client: Contact;
     if(this.newClientContact) {
       client = new Contact(this.contract.clientInfo, ['client']);
       client.ref = this.contract.client;
+      if(this.currentClient?.bankInfo.length && this.contract.tags.includes("purchase")) client.bankInfo = this.currentClient.bankInfo;
       await client.set();
     } 
     else {
-      await Contact.updateRef(this.contract.client, this.contract.clientInfo);
+      await Contact.updateRef(this.contract.client, this.contract.clientInfo, this.contract.tags.includes("purchase") ? this.contract.bankInfo : null);
     }
   }
 
