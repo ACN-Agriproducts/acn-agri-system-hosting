@@ -260,7 +260,7 @@
 		</div>
 		<div class="contract-info-row">
 			<div>ANTICIPOS:</div>
-			<div [class.focused]="focusedField == 'prepaid'">{{contractForm?.prepaid ? contractForm.prepaid + "% DEL VALOR TOTAL DEL CONTRATO" : "NO APLICA" }}</div>
+			<div [class.focused]="focusedField == 'prepaid'" class="white-space-wrap">{{contractForm?.prepaid}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE PAGO:</div>
