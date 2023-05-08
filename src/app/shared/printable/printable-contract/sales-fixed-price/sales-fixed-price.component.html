@@ -167,7 +167,8 @@
 				{{contractForm?.price?.amount | currency}}</span> 
 				({{contractForm?.price?.amount | truncate | numberNameSpanish}}
 				{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async | currencySplit:0}}
-				{{contractForm?.price?.amount % 1 * 100 | round}}/100 MN)
+				{{contractForm?.price?.amount % 1 * 100 | round}}/100 
+				{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async | currencySplit:2}})
 			</div>
 		</div>
 		<div class="contract-info-row">

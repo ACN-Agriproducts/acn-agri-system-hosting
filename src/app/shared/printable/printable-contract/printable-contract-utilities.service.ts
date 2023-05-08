@@ -79,8 +79,8 @@ export class ExchangeRateFieldPipe implements PipeTransform {
 })
 export class CurrencySplitPipe implements PipeTransform {
   transform(currencyLabel: string, index: number): string {
-    const labelArray = currencyLabel.split(' ');
-    return labelArray[index];
+    const labelArray = currencyLabel.split(/[( )]+/);
+    return labelArray[index] ?? "";
   }
 }
 
