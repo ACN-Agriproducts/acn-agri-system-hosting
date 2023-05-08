@@ -204,7 +204,7 @@ export class Ticket extends FirebaseDocInterface{
     public async getPrintDocs(db: Firestore): Promise<[Ticket, Contract, Contact, Contact]> {
         const contract = await this.getContract(db);
         const transport = await this.getTransport(db);
-        const client = await contract.getClient();
+        const client = await contract.getTicketClient();
 
         return [this, contract, transport, client];
     }
