@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ProductionOrder } from '@shared/classes/production-order';
-import { TypeTemplateDirective } from '@shared/directives/type-template/type-template.directive';
+import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 
 @Component({
   selector: 'app-printable-production-order',
