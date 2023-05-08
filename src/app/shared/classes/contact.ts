@@ -127,9 +127,7 @@ export class Contact extends FirebaseDocInterface {
             notarialActDate: info.notarialActDate,
         }
 
-        if(bankInfo) {
-            updateData.bankInfo = bankInfo;
-        }
+        if(bankInfo) updateData.bankInfo = bankInfo;
 
         updateDoc(ref, updateData);
     }

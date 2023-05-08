@@ -127,6 +127,7 @@ export class ContractFormComponent implements OnInit {
         this.contract.clientName = null;
         this.contract.client = doc(Contact.getCollectionReference(this.db, this.session.getCompany()));
         this.currentClient = null;
+        if(this.contract.tags.includes("purchase")) this.contract.bankInfo = []
         return;
       }
 
@@ -136,7 +137,7 @@ export class ContractFormComponent implements OnInit {
         this.contract.clientInfo = Contract.clientInfo(client);
         this.contract.clientName = client.name;
         this.contract.client = this.contract.clientInfo.ref.withConverter(Contact.converter);
-        if(this.contract.tags.includes("purchase") && client.bankInfo?.length) this.contract.bankInfo = client.bankInfo;
+        if(this.contract.tags.includes("purchase")) this.contract.bankInfo = client.bankInfo ?? [];
       });
     });
   }
@@ -232,7 +233,7 @@ export class ContractFormComponent implements OnInit {
     if(this.newClientContact) {
       client = new Contact(this.contract.clientInfo, ['client']);
       client.ref = this.contract.client;
-      if(this.currentClient?.bankInfo.length && this.contract.tags.includes("purchase")) client.bankInfo = this.currentClient.bankInfo;
+      if(this.contract?.bankInfo.length && this.contract.tags.includes("purchase")) client.bankInfo = this.contract.bankInfo;
       await client.set();
     } 
     else {
