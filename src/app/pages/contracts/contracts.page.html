@@ -103,7 +103,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>Bushels</ion-text>
+                    <ion-text>To Deliver</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
@@ -166,14 +166,14 @@
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getDeliveredTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.currentDelivered.getBushelWeight(contract.productInfo).toFixed(2)}}
+                                {{contract.currentDelivered | massDisplay:2:displayUnit}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getQuantityTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.quantity.getBushelWeight(contract.productInfo).toFixed(2)}}
+                                {{contract.quantity | massDisplay:2:displayUnit}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">

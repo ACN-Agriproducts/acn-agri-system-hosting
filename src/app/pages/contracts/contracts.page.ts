@@ -11,6 +11,7 @@ import { Contract } from '@shared/classes/contract';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { units } from '@shared/classes/mass';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class ContractsPage implements AfterViewInit {
   public listFilter: any = [];
   public activeFilter: boolean;
   public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
+  public displayUnit: units;
 
   public tabData: {
     label: string;
@@ -96,6 +98,8 @@ export class ContractsPage implements AfterViewInit {
 
       this.getContracts();
     });
+    
+    this.displayUnit = this.session.getDefaultUnit();
   }
 
   public segmentChanged(event) {
