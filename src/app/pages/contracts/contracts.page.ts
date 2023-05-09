@@ -100,7 +100,7 @@ export class ContractsPage implements AfterViewInit {
   }
 
   public segmentChanged(event) {
-    this.orderStatus = event.detail.value.split(',');
+    this.orderStatus = event.value.split(',');
     this.tabData.forEach(tab => {
       if(tab.type != this.table) {
         return;
@@ -115,7 +115,7 @@ export class ContractsPage implements AfterViewInit {
   };
 
   public changedContractType(event) {
-    this.tabIndex = event.detail.value;
+    this.tabIndex = event.value;
     this.getContracts();
   };
 

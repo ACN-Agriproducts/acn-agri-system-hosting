@@ -1,29 +1,23 @@
 <ion-header>
     <app-header-toolbar titulo="Contract"></app-header-toolbar>
-    <ion-toolbar class="ion-align-items-stretch">
-        <ion-segment class="ion-justify-content-start" value="0"
-            (ionChange)="changedContractType($event)">
-            <ion-segment-button *ngFor="let tab of tabData; let index = index" [value]="index">
-                <ion-label>{{tab.label}}</ion-label>
-            </ion-segment-button>
-        </ion-segment>
-    </ion-toolbar>
-    <ion-toolbar *ngIf="tabData?.[tabIndex].type == table">
-        <ion-segment class="ion-justify-content-start" value="active,closed,pending,cancelled"
-            (ionChange)="segmentChanged($event)">
-            <ion-segment-button value="active,closed,pending,cancelled">
-                <ion-label>All</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="active">
-                <ion-label>Active</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="closed">
-                <ion-label>Closed</ion-label>
-            </ion-segment-button>
-            <!-- <ion-segment-button value="new">
-        <ion-label>New Contract</ion-label>
-      </ion-segment-button> -->
-        </ion-segment>
+    <ion-toolbar class="contract-toolbar">
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>Contract type</mat-label>
+                <mat-select (selectionChange)="changedContractType($event)" [value]="0">
+                    <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{tab.label}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,cancelled">
+                    <mat-option value="active,closed,pending,cancelled">All</mat-option>
+                    <mat-option value="active">Active</mat-option>
+                    <mat-option value="pending">Pending</mat-option>
+                    <mat-option value="closed">Closed</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="">

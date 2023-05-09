@@ -303,6 +303,28 @@ ion-item {
   margin: 1rem;
 }
 
+.contract-toolbar {
+  height:auto;
+
+  div {
+    display: flex;
+    padding: 16px;
+    gap: 1rem;
+
+    mat-form-field {
+      width: auto;
+
+      ::ng-deep .mat-form-field-wrapper{
+        margin-bottom: -1.25em;
+        
+        .mat-form-field-outline {
+          background-color: white;
+        }
+      }
+    }
+  }
+}
+
 app-delivered-chart-card {
   height: 300px;
 }
