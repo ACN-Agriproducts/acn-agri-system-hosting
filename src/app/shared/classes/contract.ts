@@ -90,6 +90,7 @@ export class Contract extends FirebaseDocInterface {
                 name: null,
                 phoneNumber: null,
                 state: null,
+                country: null,
                 streetAddress: null,
                 zipCode: null,
                 ref: null,
@@ -107,6 +108,7 @@ export class Contract extends FirebaseDocInterface {
                 name: null,
                 phoneNumber: null,
                 state: null,
+                country: null,
                 streetAddress: null,
                 zipCode: null,
                 ref: null,
@@ -446,6 +448,7 @@ export class Contract extends FirebaseDocInterface {
             name: contact.name,
             phoneNumber: primaryContact.phone,
             state: contact.state,
+            country: contact.country,
             streetAddress: contact.streetAddress,
             zipCode: contact.zipCode,
             ref: contact.ref.withConverter(Contact.converter),
@@ -550,6 +553,7 @@ export interface ContactInfo {
     name: string;
     phoneNumber: string;
     state: string;
+    country: string;
     streetAddress: string;
     zipCode: string;
     ref: DocumentReference<Contact>;

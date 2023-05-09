@@ -72,8 +72,7 @@
 		<br>
         <b>CUARTA. &#8211; PRECIO Y PAGO.</b> - El precio objeto del presente contrato se fijará en volúmenes parciales o volumen total, a opción del “VENDEDOR”, formarán parte integral de este contrato los “ANEXOS” con la confirmación de fijación de precios, mismos que serán referenciados con el número de contrato y la firma de “EL VENDEDOR” y “EL COMPRADOR”. “EL COMPRADOR” se obliga a pagar a “EL VENDEDOR” el precio fijado del “PRODUCTO” de la forma, números de cuenta y bancos indicados por “EL VENDEDOR”. El pago se efectuará en un plazo de quince días posteriores a la recepción de la factura y la documentación que acredite la entrega del producto.
 		<br>
-        <!-- TODO -->
-        <b>QUINTA. &#8211; FIJACIÓN DE PRECIO.</b> - El precio se fijará a opción de “EL VENDEDOR” a partir del día………. y hasta el día…………El programa de fijación de precio será el siguiente: ………………………….
+        <b>QUINTA. &#8211; FIJACIÓN DE PRECIO.</b> - El precio se fijará a opción de “EL VENDEDOR” a partir del día <span [class.focused]="focusedField == 'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodBegin | date:'longDate':undefined:'es-MX'}}</span> y hasta el día <span [class.focused]="focusedField == 'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodEnd | date:'longDate':undefined:'es-MX'}}</span>. El programa de fijación de precio será el siguiente: <!-- TODO -->………………………….
         <br><br>
         Si “EL VENDEDOR” tiene la opción de rolar la base notificando con anticipación a “EL VENDEDOR”.
         <br>

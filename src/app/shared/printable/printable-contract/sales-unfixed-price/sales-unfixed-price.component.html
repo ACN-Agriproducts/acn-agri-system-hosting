@@ -61,8 +61,7 @@
 		<br>
 		<b>TERCERA. &#8211; PRECIO Y PAGO.</b> - El precio objeto del presente contrato se fijará en volúmenes parciales o volumen total, a opción del “COMPRADOR”, formarán parte integral de este contrato los “ANEXOS 1 y 2” generados con la confirmación de fijación de precios, mismos que serán referenciados con el número de contrato y la firma de “EL COMPRADOR” y “EL VENDEDOR”. “EL COMPRADOR” se obliga a pagar a “EL VENDEDOR” el precio fijado del “PRODUCTO” de la forma, números de cuenta y bancos indicados por “EL VENDEDOR”.
 		<br>
-		<!-- TODO -->
-		<b>CUARTA. &#8211; FIJACIÓN DE PRECIO.</b> - El precio se fijará a opción de “EL COMPRADOR” a partir del día………. y hasta el día…………o el día anterior al primer día de notificación del mes de futuros del contrato en cuestión, lo que ocurra primero.  El (los) precio(s) se fijará(n) mientras el mercado de futuros esté abierto y sea negociable (https://www.cmegroup.com/company/cbot.html). En ningún caso se harán embarques de “PRODUCTO” sin precio fijo. Si “EL COMPRADOR” no fija el precio del contrato en el periodo indicado el precio será automáticamente fijado el último día del plazo indicado en el párrafo anterior o el día anterior del día de la notificación del mes de vencimiento. Si “EL COMPRADOR” decide rolar la base deberá notificar a “EL VENDEDOR” lo cual implicará un costo, mismo que será cubierto por “EL COMPRADOR”.
+		<b>CUARTA. &#8211; FIJACIÓN DE PRECIO.</b> - El precio se fijará a opción de “EL COMPRADOR” a partir del día <span [class.focused]="focusedField == 'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodBegin | date:'longDate':undefined:'es-MX'}}</span> y hasta el día <span [class.focused]="focusedField == 'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodEnd | date:'longDate':undefined:'es-MX'}}</span> o el día anterior al primer día de notificación del mes de futuros del contrato en cuestión, lo que ocurra primero.  El (los) precio(s) se fijará(n) mientras el mercado de futuros esté abierto y sea negociable (https://www.cmegroup.com/company/cbot.html). En ningún caso se harán embarques de “PRODUCTO” sin precio fijo. Si “EL COMPRADOR” no fija el precio del contrato en el periodo indicado el precio será automáticamente fijado el último día del plazo indicado en el párrafo anterior o el día anterior del día de la notificación del mes de vencimiento. Si “EL COMPRADOR” decide rolar la base deberá notificar a “EL VENDEDOR” lo cual implicará un costo, mismo que será cubierto por “EL COMPRADOR”.
 		<br>
 		<b>QUINTA. &#8211; ANTICIPOS.</b> - “LAS PARTES” acuerdan que el "COMPRADOR” pagará a el “VENDEDOR”, dos anticipos constituidos por:
 		<ol class="letter-parenthesis-list">
@@ -184,13 +183,13 @@
 		</div>
 		<div class="contract-info-row">
 			<div>DIVISA:</div>
-			<!-- TODO -->
-			<div>DÓLARES AMERICANOS (USD)</div>
+			<div [class.focused]="focusedField == 'currency'">{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TIPO DE CAMBIO:</div>
-			<!-- TODO -->
-			<div>AL MOMENTO DE LA FACTURACIÓN - INTERBANCARIO</div>
+			<div [class.focused]="focusedField == 'futurePriceInfo.exchangeRate'">
+				{{contractForm?.futurePriceInfo?.exchangeRate | exchangeRateField:contractType | async}}
+			</div>
 		</div>
 		<div class="contract-info-row">
 			<div>COBERTURA / OPCIÓN:</div>
@@ -224,11 +223,10 @@
 		</div>
 		<div class="contract-info-row">
 			<div>LUGAR DE ENTREGA:</div>
-			<!-- TODO -->
-			<div>
-				EXW BODEGA SAN FERNANDO, TAMAULIPAS
-				<br>
-				CARRETERA CD. VICTORIA-MATAMOROS
+            <div [class.focused]="focusedField == 'plants'">
+                <ng-container *ngFor="let address of contractForm.deliveryPlants; let last = last">
+                    <span>{{address}}</span><ng-container *ngIf="!last">,</ng-container><br>
+                </ng-container>
 			</div>
 		</div>
 		<div class="contract-info-row">
@@ -275,17 +273,11 @@
 		</div>
 		<div class="contract-info-row">
 			<div>ANTICIPOS:</div>
-			<!-- TODO -->
-			<div>
-				10 % EN LA COMPRA DE LA BASE
-				<br>
-				10 % AL MOMENTO DE FIJAR EL PRECIO
-			</div>
+			<div [class.focused]="focusedField == 'prepaid'" class="white-space-wrap">{{contractForm?.prepaid}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE PAGO:</div>
-			<!-- TODO -->
-			<div>TRANSFERENCIA ELECTRÓNICA DE FONDOS</div>
+			<div [class.focused]="focusedField == 'formOfPayment'">{{contractForm?.formOfPayment | selectFieldDisplay:contractType:'formOfPayment' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>BANCOS Y CUENTAS DE PAGO:</div>

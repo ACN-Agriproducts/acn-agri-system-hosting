@@ -13,6 +13,7 @@ export class Contact extends FirebaseDocInterface {
     public name: string;
     public rfc: string;
     public state: string;
+    public country: string;
     public streetAddress: string;
     public tags: string[];
     public zipCode: string;
@@ -37,6 +38,7 @@ export class Contact extends FirebaseDocInterface {
             this.city = snapshot.city;
             this.name = snapshot.name;
             this.state = snapshot.state;
+            this.country = snapshot.country;
             this.streetAddress = snapshot.streetAddress;
             this.zipCode = snapshot.zipCode;
             this.ref = snapshot.ref;
@@ -59,6 +61,7 @@ export class Contact extends FirebaseDocInterface {
             this.name = data.name;
             this.rfc = data.rfc;
             this.state = data.state;
+            this.country = data.country;
             this.streetAddress = data.streetAddress;
             this.tags = data.tags;
             this.zipCode = data.zipCode;
@@ -82,6 +85,7 @@ export class Contact extends FirebaseDocInterface {
                 name: data.name,
                 rfc: data.rfc,
                 state: data.state,
+                country: data.country,
                 streetAddress: data.streetAddress,
                 tags: data.tags,
                 zipCode: data.zipCode,
