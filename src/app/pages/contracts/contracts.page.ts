@@ -61,7 +61,7 @@ export class ContractsPage implements AfterViewInit {
 
   ngAfterViewInit() {
     ContractSettings.getDocument(this.db, this.session.getCompany()).then(settings => {
-      const contractsData = Object.entries(settings.contractTypes).map(contract => {
+      this.tabData = Object.entries(settings.contractTypes).map(contract => {
         return {
           label: contract[0],
           type: this.table,
@@ -75,26 +75,23 @@ export class ContractsPage implements AfterViewInit {
         }
       });
 
-      this.tabData = [
-        ...contractsData,
-        {
-          label: "Analytics",
-          type: this.cards,
-          isInfiniteScrollDisabled: false,
-          data: [
-            {
-              getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
-              title: "Purchase Contracts", 
-              contracts: [],
-            },
-            {
-              getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
-              title: "Sales Contracts", 
-              contracts: [],
-            }
-          ]
-        }
-      ]
+      this.tabData.push({
+        label: "Analytics",
+        type: this.cards,
+        isInfiniteScrollDisabled: false,
+        data: [
+          {
+            getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
+            title: "Purchase Contracts", 
+            contracts: [],
+          },
+          {
+            getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
+            title: "Sales Contracts", 
+            contracts: [],
+          }
+        ]
+      });
 
       this.getContracts();
     });
