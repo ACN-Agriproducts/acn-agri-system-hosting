@@ -1,3 +1,4 @@
+import { Pipe, PipeTransform } from "@angular/core";
 import { Mass, units } from "./mass";
 
 // export class Price {
@@ -49,11 +50,20 @@ export class Price {
      * @param mass must provide if the desired unit to convert the price to is bushels
      * @returns price per unit ($/unit)
      */
-    public getPricePerUnit(priceUnit: units, mass: Mass): number {
+    public getPricePerUnit(priceUnit: units, mass: Mass = new Mass(null, null)): number {
         const unitConversion = mass.conversions.get(priceUnit) / mass.conversions.get(this.unit);
         return this.amount / unitConversion;
     }
 
+}
+
+@Pipe({
+    name: 'pricePerUnit'
+})
+export class pricerPerUnitPipe implements PipeTransform {
+    transform(price: Price, priceUnit?: units, mass?: Mass) {
+        return price.getPricePerUnit(priceUnit || price.unit, mass);
+    }
 }
 
 

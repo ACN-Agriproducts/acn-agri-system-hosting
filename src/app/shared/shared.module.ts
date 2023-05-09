@@ -39,6 +39,7 @@ import { RoundPipe } from './pipes/round/round.pipe';
 import { PrintableProductionOrderComponent } from './printable/printable-production-order/printable-production-order.component';
 import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
 import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
+import { pricerPerUnitPipe } from './classes/price';
 
 @NgModule({
   imports: [
@@ -71,6 +72,7 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
+    pricerPerUnitPipe
   ],
   declarations: [
     ToolbarComponent,
@@ -108,7 +110,8 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
     ExchangeRateFieldPipe,
-    CurrencySplitPipe
+    CurrencySplitPipe,
+    pricerPerUnitPipe
   ]
 })
 export class SharedModule {}
