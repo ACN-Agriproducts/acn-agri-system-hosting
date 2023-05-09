@@ -201,7 +201,9 @@ export class Contract extends FirebaseDocInterface {
         this.market_price = data.market_price;
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
         this.pdfReference = data.pdfReference;
-        this.price = new Price(data.price, data.priceUnit);
+        this.price = data.price ?
+                        new Price(data.price, data.priceUnit) :
+                        new Price(data.pricePerBushel, 'bu');
         this.printableFormat = data.printableFormat ?? "";
         this.product = data.product?.withConverter(Product.converter);
         this.productInfo = data.productInfo;
@@ -240,6 +242,11 @@ export class Contract extends FirebaseDocInterface {
         this.companyInfo = data.companyInfo;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
+
+        if(this.product) {
+            this.quantity.defineBushels(this.productInfo);
+            this.currentDelivered.defineBushels(this.productInfo);
+        }
     }
 
     public static converter = {

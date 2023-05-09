@@ -178,7 +178,7 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.pricePerBushel | currency:'$'}}
+                                {{contract.price | pricePerUnit:null:contract.quantity | currency:'$'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
