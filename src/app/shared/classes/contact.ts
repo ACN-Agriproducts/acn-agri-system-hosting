@@ -13,11 +13,14 @@ export class Contact extends FirebaseDocInterface {
     public name: string;
     public rfc: string;
     public state: string;
+    public country: string;
     public streetAddress: string;
     public tags: string[];
     public zipCode: string;
     public notarialAct: string;
     public notarialActDate: Date;
+
+    public bankInfo: BankInfo[];
 
     constructor(snapshot: QueryDocumentSnapshot<any> | ContactInfo, tags?: string[]) {
         if(!(snapshot instanceof QueryDocumentSnapshot)) {
@@ -30,10 +33,12 @@ export class Contact extends FirebaseDocInterface {
                 phone: snapshot.phoneNumber
             }];
 
+            this.bankInfo = [];
             this.caat = snapshot.caat;
             this.city = snapshot.city;
             this.name = snapshot.name;
             this.state = snapshot.state;
+            this.country = snapshot.country;
             this.streetAddress = snapshot.streetAddress;
             this.zipCode = snapshot.zipCode;
             this.ref = snapshot.ref;
@@ -48,6 +53,7 @@ export class Contact extends FirebaseDocInterface {
             super(snapshot, Contact.converter);
             const data = snapshot.data();
 
+            this.bankInfo = data.bankInfo ?? [];
             this._curp = data._curp;
             this.caat = data.caat;
             this.city = data.city;
@@ -55,6 +61,7 @@ export class Contact extends FirebaseDocInterface {
             this.name = data.name;
             this.rfc = data.rfc;
             this.state = data.state;
+            this.country = data.country;
             this.streetAddress = data.streetAddress;
             this.tags = data.tags;
             this.zipCode = data.zipCode;
@@ -70,6 +77,7 @@ export class Contact extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: Contact): DocumentData {
             return {
+                bankInfo: data.bankInfo,
                 _curp: data._curp,
                 caat: data.caat,
                 city: data.city,
@@ -77,6 +85,7 @@ export class Contact extends FirebaseDocInterface {
                 name: data.name,
                 rfc: data.rfc,
                 state: data.state,
+                country: data.country,
                 streetAddress: data.streetAddress,
                 tags: data.tags,
                 zipCode: data.zipCode,
@@ -107,8 +116,8 @@ export class Contact extends FirebaseDocInterface {
         });
     }
 
-    public static updateRef(ref: DocumentReference, info: ContactInfo) {
-        updateDoc(ref, {
+    public static updateRef(ref: DocumentReference, info: ContactInfo, bankInfo?: BankInfo[]) {
+        let updateData: any = {
             caat: info.caat,
             city: info.city,
             name: info.name,
@@ -120,7 +129,11 @@ export class Contact extends FirebaseDocInterface {
             _curp: info.curp,
             notarialAct: info.notarialAct,
             notarialActDate: info.notarialActDate,
-        });
+        }
+
+        if(bankInfo) updateData.bankInfo = bankInfo;
+
+        updateDoc(ref, updateData);
     }
 
     public createMetaContact(metacontact: any): MetaContact {
@@ -167,4 +180,10 @@ interface MetaContact {
     isPrimary: boolean;
     name: string;
     phone: string;
+}
+
+export interface BankInfo {
+    bank: string;
+    account: string;
+    interBank: string;
 }

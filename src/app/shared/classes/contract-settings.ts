@@ -1,7 +1,7 @@
 import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc } from "@angular/fire/firestore";
 import { Company } from "./company";
-import { BankInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { BankInfo } from "./contact";
 
 export class ContractSettings extends FirebaseDocInterface {
     contractTypes: {
@@ -88,7 +88,7 @@ export interface FormField {
     required: boolean;
 }
 
-interface SelectOption {
+export interface SelectOption {
     label: string;
     value: string;
 }

@@ -369,6 +369,32 @@
   </div>
 </ng-template>
 
+<ng-template typeTemplate="exchange-rate" let-data>
+  <div class="exchange-rate-flex" [ngClass]="data | getFieldClass">
+    <mat-form-field id="exchange-rate-select">
+      <mat-label>{{data.label}}</mat-label>
+      <mat-select 
+        (selectionChange)="exchangeRateChange($event)"
+        (focus)="selectedFieldEvent.emit(data.fieldName)"
+        (focusout)="selectedFieldEvent.emit(null)">
+        <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+          {{option.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field id="exchange-rate-number" [hidden]="exchangeRateSelect != 'fixed'">
+      <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+      <mat-label>{{data.suffix}}</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.futurePriceInfo.exchangeRate"
+        (focus)="selectedFieldEvent.emit(data.fieldName)"
+        (focusout)="selectedFieldEvent.emit(null)"
+        type="number">
+    </mat-form-field>
+  </div>
+</ng-template>
+
 <ng-template #error>
 	<p>ERROR</p>
 </ng-template>

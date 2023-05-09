@@ -1,7 +1,7 @@
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { ContractSettings, FormField } from '@shared/classes/contract-settings';
+import { ContractSettings, FormField, SelectOption } from '@shared/classes/contract-settings';
 import { Mass, units } from '@shared/classes/mass';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class PrintableContractUtilitiesService {
     return Mass.getUnitFullName(unit);
   }
 
-  async selectFieldDisplay(contractType: string, fieldName: string, value: string): Promise<string> {
+  async selectFieldDisplay(contractType: string, fieldName: string, value: string): Promise<SelectOption> {
     const contractGroups = (await this.contractSettings$).formData[contractType];
     let field: FormField;
 
@@ -35,7 +35,9 @@ export class PrintableContractUtilitiesService {
 
       if(field) break;
     }
-    return field?.selectOptions?.find(option => option.value == value)?.label ?? value;
+
+    console.log(field)
+    return field?.selectOptions?.find(option => option.value == value);
   }
 }
 
@@ -45,8 +47,8 @@ export class PrintableContractUtilitiesService {
 export class SelectFieldDisplayPipe implements PipeTransform {
   constructor(private utils: PrintableContractUtilitiesService) {}
 
-  transform(value: string, contractType: string, fieldName: string): Promise<string> {
-    return this.utils.selectFieldDisplay(contractType, fieldName, value);
+  async transform(value: string, contractType: string, fieldName: string): Promise<string> {
+    return (await this.utils.selectFieldDisplay(contractType, fieldName, value))?.label ?? value;
   }
 }
 
@@ -57,6 +59,28 @@ export class NumberNameSpanishPipe implements PipeTransform {
   transform(num: number): string {
     if(typeof num != "number") return "";
     return numeroALetras(num);
+  }
+}
+
+@Pipe({
+  name: 'exchangeRateField'
+})
+export class ExchangeRateFieldPipe implements PipeTransform {
+  constructor(private utils: PrintableContractUtilitiesService) {}
+
+  async transform(value: string | number, contractType: string): Promise<string> {
+    if(typeof(value) == "number") return `$${value.toFixed(2)} MXN`;
+    return (await this.utils.selectFieldDisplay(contractType, "exchangeRate", value))?.label ?? value;
+  }
+}
+
+@Pipe({
+  name: 'currencySplit'
+})
+export class CurrencySplitPipe implements PipeTransform {
+  transform(currencyLabel: string, index: number): string {
+    const labelArray = currencyLabel.split(/[( )]+/);
+    return labelArray[index] ?? "";
   }
 }
 

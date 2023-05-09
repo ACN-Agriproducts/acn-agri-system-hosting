@@ -1,5 +1,5 @@
 import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
-import { Contact } from "./contact";
+import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass, units } from "./mass";
@@ -90,6 +90,7 @@ export class Contract extends FirebaseDocInterface {
                 name: null,
                 phoneNumber: null,
                 state: null,
+                country: null,
                 streetAddress: null,
                 zipCode: null,
                 ref: null,
@@ -107,6 +108,7 @@ export class Contract extends FirebaseDocInterface {
                 name: null,
                 phoneNumber: null,
                 state: null,
+                country: null,
                 streetAddress: null,
                 zipCode: null,
                 ref: null,
@@ -201,9 +203,9 @@ export class Contract extends FirebaseDocInterface {
         this.pdfReference = data.pdfReference;
         this.price = new Price(data.price, data.priceUnit);
         this.printableFormat = data.printableFormat ?? "";
-        this.product = data.product.withConverter(Product.converter);
+        this.product = data.product?.withConverter(Product.converter);
         this.productInfo = data.productInfo;
-        this.quantity = new Mass(data.quantity, data.quantity.defaultUnits || FirebaseDocInterface.session.getDefaultUnit());
+        this.quantity = new Mass(data.quantity, data.quantity?.defaultUnits || FirebaseDocInterface.session.getDefaultUnit());
         this.seller_terms = data.seller_terms;
         this.status = data.status;
         this.tags = data.tags;
@@ -211,8 +213,6 @@ export class Contract extends FirebaseDocInterface {
         this.transport = data.transport;
         this.truckers = tempTruckerList;
         this.type = data.type;
-        
-        this.clientTicketInfo.ref = this.clientTicketInfo?.ref?.withConverter(Contract.converter);
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
 
         // NEW
@@ -238,6 +238,8 @@ export class Contract extends FirebaseDocInterface {
         this.termsOfPayment = data.termsOfPayment;
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
+
+        this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
     }
 
     public static converter = {
@@ -322,6 +324,12 @@ export class Contract extends FirebaseDocInterface {
 
     public getClient(): Promise<Contact> {
         return getDoc(this.client).then(result => {
+            return result.data();
+        });
+    }
+
+    public getTicketClient(): Promise<Contact> {
+        return getDoc(this.clientTicketInfo.ref).then(result => {
             return result.data();
         });
     }
@@ -440,9 +448,10 @@ export class Contract extends FirebaseDocInterface {
             name: contact.name,
             phoneNumber: primaryContact.phone,
             state: contact.state,
+            country: contact.country,
             streetAddress: contact.streetAddress,
             zipCode: contact.zipCode,
-            ref: contact.ref,
+            ref: contact.ref.withConverter(Contact.converter),
             clientRep: primaryContact.name,
             rfc: contact.rfc,
             curp: contact.curp,
@@ -544,9 +553,10 @@ export interface ContactInfo {
     name: string;
     phoneNumber: string;
     state: string;
+    country: string;
     streetAddress: string;
     zipCode: string;
-    ref: DocumentReference;
+    ref: DocumentReference<Contact>;
     clientRep: string;
     rfc: string;
     curp: string;
@@ -561,12 +571,6 @@ interface FuturePriceInfo {
     marketOptions: string;
     priceSetPeriodBegin: Date;
     priceSetPeriodEnd: Date;
-}
-
-export interface BankInfo {
-    bank: string;
-    account: string;
-    interBank: string;
 }
 
 export interface Exectuive {

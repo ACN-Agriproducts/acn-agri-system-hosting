@@ -163,17 +163,23 @@
 		</div>
 		<div class="contract-info-row">
 			<div>PRECIO:</div>
-			<div><span [class.focused]="focusedField == 'price.amount'">{{contractForm?.price?.amount | currency}}</span> ({{contractForm?.price?.amount | truncate | numberNameSpanish}} PESOS {{contractForm?.price?.amount % 1 * 100 | round}}/100 MN)</div>
+			<div><span [class.focused]="focusedField == 'price.amount'">
+				{{contractForm?.price?.amount | currency}}</span> 
+				({{contractForm?.price?.amount | truncate | numberNameSpanish}}
+				{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async | currencySplit:0}}
+				{{contractForm?.price?.amount % 1 * 100 | round}}/100 
+				{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async | currencySplit:2}})
+			</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DIVISA:</div>
-			<!-- TODO -->
-			<div>PESOS MEXICANOS (MXN)</div>
+			<div [class.focused]="focusedField == 'currency'">{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TIPO DE CAMBIO:</div>
-			<!-- TODO -->
-			<div>NO APLICA</div>
+			<div [class.focused]="focusedField == 'futurePriceInfo.exchangeRate'">
+				{{contractForm?.futurePriceInfo?.exchangeRate | exchangeRateField:contractType | async}}
+			</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CANTIDAD:</div>
@@ -204,10 +210,10 @@
 		</div>
 		<div class="contract-info-row">
 			<div>LUGAR DE ENTREGA:</div>
-			<!-- TODO -->
-			<div>EXW BODEGA SAN FERNANDO, TAMAULIPAS
-				<br>
-				CARRETERA CD. VICTORIA-MATAMOROS
+            <div [class.focused]="focusedField == 'plants'">
+                <ng-container *ngFor="let address of contractForm.deliveryPlants; let last = last">
+                    <span>{{address}}</span><ng-container *ngIf="!last">,</ng-container><br>
+                </ng-container>
 			</div>
 		</div>
 		<div class="contract-info-row">
@@ -254,13 +260,11 @@
 		</div>
 		<div class="contract-info-row">
 			<div>ANTICIPOS:</div>
-			<!-- TODO -->
-			<div>POR DEFINIR</div>
+			<div [class.focused]="focusedField == 'prepaid'" class="white-space-wrap">{{contractForm?.prepaid}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE PAGO:</div>
-			<!-- TODO -->
-			<div>TRANSFERENCIA ELECTRÓNICA DE FONDOS</div>
+			<div [class.focused]="focusedField == 'formOfPayment'">{{contractForm?.formOfPayment | selectFieldDisplay:contractType:'formOfPayment' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>BANCOS Y CUENTAS DE PAGO:</div>

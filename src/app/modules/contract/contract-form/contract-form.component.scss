@@ -80,3 +80,16 @@ mat-card-content {
         flex: 0 0 auto;
     }
 }
+
+.exchange-rate-flex {
+    display: flex;
+    gap: 1rem;
+
+    #exchange-rate-select {
+        flex: 1 0 0;
+    }
+
+    #exchange-rate-number {
+        flex: 2 0 0;
+    }
+}

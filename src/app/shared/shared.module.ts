@@ -11,6 +11,8 @@ import { CoreModule } from '@core/core.module';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { UploadDocumentDialogComponent } from './components/upload-document-dialog/upload-document-dialog.component';
 import { PrintableInvoiceComponent } from './printable/printable-invoice/printable-invoice.component';
+import { PlantSelectComponent } from './components/plant-select/plant-select.component';
+import { StorageCardComponent } from './components/storage-card/storage-card.component';
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
@@ -30,9 +32,13 @@ import { SalesUnfixedPriceComponent } from './printable/printable-contract/sales
 import { SalesContractComponent } from './printable/printable-contract/sales-contract/sales-contract.component';
 import { PurchaseContractComponent } from './printable/printable-contract/purchase-contract/purchase-contract.component';
 import { TranslatePipe } from './pipes/translate/translate.pipe';
-import { NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable/printable-contract/printable-contract-utilities.service';
+import { CurrencySplitPipe, ExchangeRateFieldPipe, NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable/printable-contract/printable-contract-utilities.service';
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { RoundPipe } from './pipes/round/round.pipe';
+// import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
+import { PrintableProductionOrderComponent } from './printable/printable-production-order/printable-production-order.component';
+import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
+import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
 
 @NgModule({
   imports: [
@@ -48,6 +54,8 @@ import { RoundPipe } from './pipes/round/round.pipe';
     ScaleToFitDirective,
     PrintableTicketComponent,
     PrintableInvoiceComponent,
+    PlantSelectComponent,
+    StorageCardComponent,
     FilterContractsPipe,
     SectionTitleComponent,
     HashMapPipe,
@@ -59,6 +67,10 @@ import { RoundPipe } from './pipes/round/round.pipe';
     PrintableContractComponent,
     PurchaseToDepositComponent,
     NgxPrintModule,
+    // TypeTemplateDirective,
+    PrintableProductionOrderComponent,
+    ProductionOrderDefaultComponent,
+    LocalInventoryPipe,
   ],
   declarations: [
     ToolbarComponent,
@@ -67,6 +79,8 @@ import { RoundPipe } from './pipes/round/round.pipe';
     FixTicketStorageComponent,
     UploadDocumentDialogComponent,
     PrintableInvoiceComponent,
+    PlantSelectComponent,
+    StorageCardComponent,
     FilterContractsPipe,
     SectionTitleComponent,
     HashMapPipe,
@@ -88,7 +102,13 @@ import { RoundPipe } from './pipes/round/round.pipe';
     SelectFieldDisplayPipe,
     NumberNameSpanishPipe,
     TruncatePipe,
-    RoundPipe
+    RoundPipe,
+    // TypeTemplateDirective,
+    PrintableProductionOrderComponent,
+    ProductionOrderDefaultComponent,
+    LocalInventoryPipe,
+    ExchangeRateFieldPipe,
+    CurrencySplitPipe
   ]
 })
 export class SharedModule {}

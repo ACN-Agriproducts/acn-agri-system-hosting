@@ -120,3 +120,5 @@ export class Pagination<T extends FirebaseDocInterface> {
         this.unsubscribe = [];
     }
 }
+
+export declare type status = "active" | "pending" | "cancelled" | "paid";
