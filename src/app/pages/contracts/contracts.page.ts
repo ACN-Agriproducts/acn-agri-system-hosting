@@ -79,18 +79,13 @@ export class ContractsPage implements AfterViewInit {
         label: "Analytics",
         type: this.cards,
         isInfiniteScrollDisabled: false,
-        data: [
-          {
-            getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
-            title: "Purchase Contracts", 
-            contracts: [],
-          },
-          {
-            getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
-            title: "Sales Contracts", 
-            contracts: [],
+        data: Object.entries(settings.contractTypes).map(contract => {
+          return {
+            getData: () => Contract.getContracts(this.db, this.session.getCompany(), contract[1], where('status', '==', 'active'), orderBy('id', 'desc')),
+            title: contract[0],
+            contracts: []
           }
-        ]
+        })
       });
 
       this.getContracts();
