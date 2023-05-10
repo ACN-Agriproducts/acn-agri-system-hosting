@@ -10,6 +10,8 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
+import { MatDialog } from '@angular/material/dialog';
+import { ExportModalComponent } from './components/export-modal/export-modal.component';
 
 
 @Component({
@@ -51,7 +53,8 @@ export class ContractsPage implements AfterViewInit {
     private popoverController: PopoverController,
     private db: Firestore,
     private session: SessionInfo,
-    private navController: NavController
+    private navController: NavController,
+    private dialog: MatDialog
   ) { }
 
   ngAfterViewInit() {
@@ -206,7 +209,7 @@ export class ContractsPage implements AfterViewInit {
   }
 
   public exportButton() {
-    
+    this.dialog.open(ExportModalComponent);
   }
 
   public openContractOptions= async (event: any, contract: Contract) => {

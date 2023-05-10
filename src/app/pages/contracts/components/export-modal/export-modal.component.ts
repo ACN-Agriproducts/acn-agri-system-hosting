@@ -6,9 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./export-modal.component.scss'],
 })
 export class ExportModalComponent implements OnInit {
+  public startDate: Date;
+  public endDate: Date;
 
   constructor() { }
 
   ngOnInit() {}
+
+  public export() {
+
+  }
 
 }
