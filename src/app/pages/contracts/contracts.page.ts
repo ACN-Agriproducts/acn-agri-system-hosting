@@ -1,9 +1,7 @@
-import { IonInfiniteScroll, ModalController, NavController, PopoverController } from '@ionic/angular';
-import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { IonInfiniteScroll, NavController, PopoverController } from '@ionic/angular';
+import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
-import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
@@ -50,10 +48,7 @@ export class ContractsPage implements AfterViewInit {
   private contractStep = 20;
 
   constructor(
-    private modalController: ModalController,
     private popoverController: PopoverController,
-    private cd: ChangeDetectorRef,
-    private dataService: DataContractService,
     private db: Firestore,
     private session: SessionInfo,
     private navController: NavController
@@ -153,14 +148,6 @@ export class ContractsPage implements AfterViewInit {
     this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled = snapshot[0].length < this.contractStep;
   }
 
-  public openModal = async () => {
-    const modal = await this.modalController.create({
-      component: ContractModalComponent,
-      cssClass: 'modal-contract',
-    });
-    return await modal.present();
-  }
-
   // public openOptionsFilter = async (event, objet?: string, typeObjet?: string) => {
   //   const popover = await this.popoverController.create({
   //     component: OptionFilterComponent,
@@ -216,6 +203,10 @@ export class ContractsPage implements AfterViewInit {
 
   public newContractButton() {
     this.navController.navigateForward('dashboard/contracts/new-contract')
+  }
+
+  public exportButton() {
+    
   }
 
   public openContractOptions= async (event: any, contract: Contract) => {
