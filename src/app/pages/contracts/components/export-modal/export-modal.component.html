@@ -13,5 +13,13 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Close</button>
-  <button mat-button [disabled]="!startDate || !endDate">Export</button>
+  <button mat-button [disabled]="!startDate || !endDate" color="primary" (click)="export()">
+    <span *ngIf="!exporting; else spinner">
+      Export
+    </span>
+  </button>
 </div>
+
+<ng-template #spinner>
+  <mat-spinner [diameter]="20"></mat-spinner>
+</ng-template>
