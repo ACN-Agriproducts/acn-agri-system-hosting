@@ -328,3 +328,41 @@ ion-item {
 app-delivered-chart-card {
   height: 300px;
 }
+
+section {
+  margin-right: 0.5rem;
+}
+
+.content-action {
+  bottom: 20px;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  position: absolute;
+}
+
+.panel-action {
+  background: var(--ion-color-dark);
+  width: 80%;
+  margin: auto;
+}
+
+.content-panel-button {
+  display: grid;
+  justify-content: space-between;
+  align-content: center;
+  grid-template-columns: auto auto;
+}
+
+.panel-list{
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: center;
+  ion-item{
+    font-style: italic;
+  }
+  ion-label{
+    overflow: visible;
+  }
+}

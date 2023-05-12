@@ -10,8 +10,6 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
-import { MatDialog } from '@angular/material/dialog';
-import { ExportModalComponent } from './components/export-modal/export-modal.component';
 
 
 @Component({
@@ -33,6 +31,8 @@ export class ContractsPage implements AfterViewInit {
   public activeFilter: boolean;
   public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
   public displayUnit: units;
+  public exportMode: boolean = false;
+  public exportList: Set<Contract>;
 
   public tabData: {
     label: string;
@@ -54,10 +54,10 @@ export class ContractsPage implements AfterViewInit {
     private db: Firestore,
     private session: SessionInfo,
     private navController: NavController,
-    private dialog: MatDialog
   ) { }
 
   ngAfterViewInit() {
+    this.exportList = new Set<Contract>();
     ContractSettings.getDocument(this.db, this.session.getCompany()).then(settings => {
       this.tabData = Object.entries(settings.contractTypes).map(contract => {
         return {
@@ -209,7 +209,8 @@ export class ContractsPage implements AfterViewInit {
   }
 
   public exportButton() {
-    this.dialog.open(ExportModalComponent);
+    console.log(this.exportList);
+    // this.dialog.open(ExportModalComponent);
   }
 
   public openContractOptions= async (event: any, contract: Contract) => {
@@ -244,5 +245,10 @@ export class ContractsPage implements AfterViewInit {
     return `${weight.getMassInUnit('lbs').toFixed(3)} lbs
     ${weight.getBushelWeight(contract.productInfo).toFixed(3)} bu
     ${weight.getMassInUnit('mTon').toFixed(3)} mTon`
+  }
+
+  public exportSelect(checked: any, contract: Contract) {
+    if(checked) this.exportList.add(contract);
+    else this.exportList.delete(contract);
   }
 }

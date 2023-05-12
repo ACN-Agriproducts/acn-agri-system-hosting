@@ -37,7 +37,7 @@
     <div class="content">
         <div class="header-filter">
             <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
-            <ion-button color="dark" (click)='exportButton()'>
+            <ion-button color="dark" (click)='exportMode = !exportMode'>
                 <ion-text>Export</ion-text>
             </ion-button>
             <ion-button color="dark" (click)='newContractButton()'>
@@ -131,7 +131,10 @@
             <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
                 <div *ngFor="let contract of contractsPromise | async">
                     <div (contextmenu)="openOptions($event)" class="grid-item item-table">
-                        <ion-item lines="none">
+                        <ion-item lines="none ">
+                            <section [hidden]="!exportMode">
+                                <mat-checkbox (change)="exportSelect($event.checked, contract)" color="primary"></mat-checkbox>
+                            </section>
                             <ion-text color="dark" class="item-text-number">{{contract.id}}</ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -201,3 +204,19 @@
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ng-template>
+
+<div class="content-action" *ngIf="exportMode">
+    <ion-card class="panel-action">
+        <ion-card-content>
+            <div class="content-panel-button">
+                <ion-button fill="clear" color="secondary" (click)="exportMode = false;">Cancel</ion-button>
+                    <div class="panel-list">
+                        <ion-item color="dark" lines="none">
+                            <ion-label *ngFor="let item of exportList; let last = last">{{item.id}} {{ last ? "" : ", " }}</ion-label>
+                        </ion-item>
+                    <ion-button (click)="exportButton()">Download</ion-button>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</div>
