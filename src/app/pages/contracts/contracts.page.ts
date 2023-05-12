@@ -89,7 +89,7 @@ export class ContractsPage implements AfterViewInit {
       this.getContracts();
     });
     
-    this.displayUnit = this.session.getDefaultUnit();
+    this.displayUnit = this.session.getDisplayUnit();
   }
 
   public segmentChanged(event) {
