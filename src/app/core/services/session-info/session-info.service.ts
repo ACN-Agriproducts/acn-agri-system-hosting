@@ -14,7 +14,7 @@ interface User {
   currentPermissions: any
 }
 
-declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit'
+declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit' | 'companyDisplayUnit'
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,7 @@ export class SessionInfo {
   private plant: string;
   private user: User;
   private companyUnit: units;
+  private companyDisplayUnit: units;
   private userUnit: units;
 
   private keyMap: Map<keyOpts, string>;
@@ -38,6 +39,7 @@ export class SessionInfo {
     this.keyMap.set('user', 'user');
     this.keyMap.set('companyUnit', 'companyUnit');
     this.keyMap.set('userUnit', 'userUnit');
+    this.keyMap.set('companyDisplayUnit', 'companyDisplayUnit');
   }
 
   public load(): Promise<void> {
@@ -49,12 +51,22 @@ export class SessionInfo {
     }).then(async company => {
       if(!company) return;
       let unit = await this.localStorage.get('companyUnit');
+      let companyDoc: Company;
       if(!unit) {
-        unit = (await Company.getCompany(this.db, company)).defaultUnit;
-        this.localStorage.set('userUnit', unit);
+        companyDoc = await Company.getCompany(this.db, company);
+        unit = companyDoc.defaultUnit;
+        this.localStorage.set('userUnit', companyDoc.defaultUnit);
+      }
+
+      let companyDisplayUnit = await this.localStorage.get('companyDisplayUnit');
+      if(!companyDisplayUnit) {
+        companyDoc ??= await Company.getCompany(this.db, company);
+        companyDisplayUnit = companyDoc.displayUnit;
+        this.localStorage.set('companyDisplayUnit', companyDoc.displayUnit);
       }
 
       this.companyUnit = unit;
+      this.companyDisplayUnit = companyDisplayUnit;
     }).catch(error => {
       console.error(error);
     }));
@@ -108,6 +120,10 @@ export class SessionInfo {
 
   public getUserUnits(): units {
     return this.userUnit;
+  }
+
+  public getDisplayUnit(): units {
+    return this.companyDisplayUnit;
   }
 
   public clear(): Promise<void> {
