@@ -35,9 +35,9 @@
       <div class='column-size-3' *ngIf="contractForm.date">
         <b>{{ contractForm.id || 0 }}-{{ contractForm.date.getFullYear() % 100 }}</b><br>
         <!-- {{ contractForm.price | getPricePerUnit:"bu":product }} -->
-        {{ contractForm.price.getPricePerUnit("bu", contractForm.quantity) - contractForm.market_price | number:"0.5-5" }}<br>
+        {{ (contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) - contractForm.market_price | number:"0.5-5" }}<br>
         {{ contractForm.market_price | number:"0.5-5" }}<br>
-        {{ contractForm.price.getPricePerUnit("bu", contractForm.quantity) | number:"0.5-5" }}<br>
+        {{ contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:"0.5-5" }}<br>
         {{ contractForm.date | date:'MM/dd/YYYY' }}<br>
         <br>
         <br>
@@ -56,9 +56,9 @@
         <span>{{ contractForm.product?.id }}</span><br>
         <div class='grid-3'>
           <div class='column-size-2'>
-            <span class='right-justify'>{{ contractForm.quantity.getBushelWeight(contractForm.productInfo) | number:'0.5' }}</span>
-            <span class='right-justify'>{{ contractForm.quantity | massInUnit:'lbs' | number:'0.5-5' }}</span>
-            <span class='right-justify'>{{ contractForm.quantity | massInUnit:'mTon' | number:'0.5-5' }}</span>
+            <span class='right-justify'>{{ contractForm.quantity | massInUnit:'bu':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5' }}</span>
+            <span class='right-justify'>{{ contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}</span>
+            <span class='right-justify'>{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}</span>
           </div>
           <div class='column-size-1'>
             <span>BUSHELS</span><br>
@@ -81,7 +81,7 @@
         <span><b>REFERENCE:</b></span>
       </div>
       <div class='column-size-2 text-align-right'>
-        <span>{{ contractForm.paymentTerms.origin ? "ORIGIN" : "DESTINATION" }}</span><br>
+        <span>{{ contractForm.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async | uppercase }}</span><br>
         <span>U.S. {{ contractForm.grade }} OR BETTER</span><br>
         <span>TRUCK</span><br>
         <span>{{ contractForm.aflatoxin }} OR LESS</span>
@@ -113,8 +113,8 @@
           </ng-container>
         </div>
         <div class='column-size-2 text-align-right'>
-          {{ contractForm.price.getPricePerUnit("CWT", contractForm.quantity) | number:'0.5-5' }}<br>
-          {{ contractForm.price.getPricePerUnit("mTon", contractForm.quantity) | number:'0.5-5' }}
+          ${{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}<br>
+          ${{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}
         </div>
         <div class='column-size-2 text-align-right'>
           CWT<br>
@@ -139,7 +139,8 @@
       <div class='column-size-2'>
         <div id='total'>
           <span><b>$</b></span>
-          <span><b>{{ (contractForm.quantity | massInUnit:'lbs') * (contractForm.price | pricePerUnit:"lbs") | number:'1.2-2'  }}</b></span>
+          <span><b>{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
+            (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2'  }}</b></span>
         </div>
       </div>
     </div>
@@ -167,8 +168,9 @@
     
     <p>The Buyer is purchasing the following Goods from the Seller: {{ contractForm.product?.id }}	</p>
     
-    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ ((contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2') }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
-  
+    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
+      (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2'  }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+    
     <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods: <br>
     •	<br>
     •	<br>
@@ -211,7 +213,7 @@
     <div class="party-signature">
       <b>SELLER: {{ contractForm.clientInfo?.name ?? "" }}</b>
       <div class="signature-line">BY:</div>
-      <span>Name/title:</span>
+      <span>Name/title: <b>{{contractForm.clientInfo.clientRep}}</b></span>
       <span>Date:</span>
     </div>
     <div class="party-signature">
