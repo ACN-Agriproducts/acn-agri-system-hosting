@@ -36,7 +36,6 @@ export class PrintableContractUtilitiesService {
       if(field) break;
     }
 
-    console.log(field)
     return field?.selectOptions?.find(option => option.value == value);
   }
 }

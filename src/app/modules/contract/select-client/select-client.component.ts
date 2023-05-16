@@ -24,7 +24,6 @@ export class SelectClientComponent implements OnInit {
     this.clientsList = this.data;
     
     const permissions = this.session.getPermissions();
-    console.log(permissions);
     this.canCreateUser = permissions.admin || permissions.directory.addContact;
   }
 
