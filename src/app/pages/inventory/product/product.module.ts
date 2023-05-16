@@ -12,6 +12,7 @@ import { DiscountTableComponent } from './components/discount-table/discount-tab
 import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
 import { DprTicketsTableComponent } from './components/dpr-tickets-table/dpr-tickets-table.component';
 import { DprInvoiceTableComponent } from './components/dpr-invoice-table/dpr-invoice-table.component';
+import { DamageDiscountTableComponent } from './components/damage-discount-table/damage-discount-table.component';
 
 @NgModule({
   imports: [
@@ -20,14 +21,15 @@ import { DprInvoiceTableComponent } from './components/dpr-invoice-table/dpr-inv
     IonicModule,
     ProductPageRoutingModule,
     CoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [
     ProductPage,
     DiscountTableComponent,
     ProductDprTableComponent,
     DprTicketsTableComponent,
-    DprInvoiceTableComponent
+    DprInvoiceTableComponent,
+    DamageDiscountTableComponent,
   ]
 })
 export class ProductPageModule {}
