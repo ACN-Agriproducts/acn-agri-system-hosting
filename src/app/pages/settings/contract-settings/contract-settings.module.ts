@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ContractSettingsPageRoutingModule } from './contract-settings-routing.module';
 
-import { ContractSettingsPage, NameDialog } from './contract-settings.page';
+import { ContractSettingsPage, MoveGroupDialog, NameDialog } from './contract-settings.page';
 import { CoreModule } from '@core/core.module';
 
 @NgModule({
@@ -19,7 +19,8 @@ import { CoreModule } from '@core/core.module';
   ],
   declarations: [
     ContractSettingsPage,
-    NameDialog
+    NameDialog,
+    MoveGroupDialog
   ]
 })
 export class ContractSettingsPageModule {}

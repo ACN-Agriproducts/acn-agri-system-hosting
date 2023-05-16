@@ -15,8 +15,13 @@ mat-card {
     margin-bottom: 1rem;
 }
 
-.delete-field-button, .select-area {
+.group-action-bar, .select-area {
     grid-column-end: span 3;
+}
+
+.group-action-bar {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .fields-grid {

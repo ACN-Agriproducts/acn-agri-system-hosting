@@ -104,6 +104,18 @@ export class ContractSettingsPage implements OnInit {
     this.settings.formData[contractName][groupName][fieldIndex].selectOptions.splice(optionIndex, 1);
   }
 
+  moveGroup(contractName: string, groupName: string, fieldIndex: number) {
+    const dialogRef = this.dialog.open(MoveGroupDialog);
+
+    dialogRef.afterClosed().subscribe((newIndex:number) => {
+      if(!newIndex) return;
+
+      const fieldArray = this.settings.formData[contractName][groupName];
+      const group = fieldArray.splice(fieldIndex, 1)[0];
+      fieldArray.splice(newIndex, 0, group);
+    });
+  }
+
   submit() {
     this.settings.set().then(() => {
       this.snack.open("Settings submitted", "success");
@@ -124,4 +136,14 @@ export class NameDialog {
   constructor(
     public dialogRef: MatDialogRef<NameDialog>
   ) {}
+}
+
+@Component({
+  selector: 'move-group-dialog',
+  templateUrl: './move-group.dialog.html'
+})
+export class MoveGroupDialog {
+  public index: number;
+
+  constructor() {}
 }
