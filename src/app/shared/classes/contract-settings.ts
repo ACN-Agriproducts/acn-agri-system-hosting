@@ -89,8 +89,6 @@ export class ContractSettings extends FirebaseDocInterface {
         const db = contract.ref.firestore;
         const company = contract.ref.parent.parent.id;
 
-        console.log(company);
-
         const colQuery = query(this.getCollectionRef(db, company), where('date', '<=', contract.date), orderBy('date'), limit(1));
         return getDocsFromServer(colQuery).then(result => {
             return result.docs[0].data();
