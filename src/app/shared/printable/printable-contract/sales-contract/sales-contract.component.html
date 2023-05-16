@@ -6,10 +6,10 @@
       <div class='column-size-4 party-info'>
         <div class='party-header'><b>BUYER</b></div>
         <ng-container *ngIf="contractForm.clientInfo">
-          <span><b>{{ contractForm.clientInfo.name }}</b></span>
-          <span>{{ contractForm.clientInfo.streetAddress }}</span>
-          <span>{{ contractForm.clientInfo.city }}{{ contractForm.clientInfo.state && contractForm.clientInfo.city ? ",": "" }}
-            {{ contractForm.clientInfo.state }}{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode ? ",": "" }} {{ contractForm.clientInfo.zipCode }}</span>
+          <span><b>{{ contractForm.clientInfo.name | uppercase }}</b></span>
+          <span>{{ contractForm.clientInfo.streetAddress | uppercase }}</span>
+          <span>{{ contractForm.clientInfo.city | uppercase }}{{ contractForm.clientInfo.state && contractForm.clientInfo.city ? ",": "" }}
+            {{ contractForm.clientInfo.state | uppercase }}{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode ? ",": "" }} {{ contractForm.clientInfo.zipCode | uppercase }}</span>
             <span>{{ contractForm.clientInfo.phoneNumber }}</span>
         </ng-container>
         <br>
