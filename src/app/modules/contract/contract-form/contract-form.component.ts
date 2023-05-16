@@ -200,7 +200,7 @@ export class ContractFormComponent implements OnInit {
   async productChange() {
     const product = (await this.products$).find(p => p.ref.id == this.contract.product.id);
     this.contract.productInfo = product.getProductInfo();
-    
+    this.contract.quantity.defineBushels(this.contract.productInfo);    
   }
 
   async plantSelectChange() {

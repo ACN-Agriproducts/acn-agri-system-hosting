@@ -61,9 +61,10 @@ export class Price {
     name: 'pricePerUnit'
 })
 export class pricerPerUnitPipe implements PipeTransform {
-    transform(price: Price, priceUnit?: units, mass?: Mass): number {
-        return price.getPricePerUnit(priceUnit || price.unit, mass);
-    }
+    transform(value: Price, unit?: units, massOrSomething?: Mass | any, ...args: unknown[]): number {
+        const mass: Mass = massOrSomething instanceof Mass ? massOrSomething : new Mass(null, null);
+        return unit || value.unit ? value.getPricePerUnit(unit || value.unit, mass) : value.amount;
+      }
 }
 
 

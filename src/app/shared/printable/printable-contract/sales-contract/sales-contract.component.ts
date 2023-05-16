@@ -14,7 +14,7 @@ import { PrintableContractUtilitiesService } from '../printable-contract-utiliti
 export class SalesContractComponent implements OnInit {
   @Input() contractForm: Contract;
   @Input() focusedField: string;
-  readonly contractType: string = 'purchase';
+  readonly contractType: string = 'sales';
 
   constructor(public utils: PrintableContractUtilitiesService) { }
 

@@ -139,7 +139,7 @@
       <div class='column-size-2'>
         <div id='total'>
           <span><b>$</b></span>
-          <span><b>{{ (contractForm.quantity | massInUnit:'lbs') * contractForm.price.getPricePerUnit("lbs", contractForm.quantity) | number:'1.2-2'  }}</b></span>
+          <span><b>{{ (contractForm.quantity | massInUnit:'lbs') * (contractForm.price | pricePerUnit:"lbs") | number:'1.2-2'  }}</b></span>
         </div>
       </div>
     </div>
