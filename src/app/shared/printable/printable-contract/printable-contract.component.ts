@@ -5,6 +5,7 @@ import { Company } from '@shared/classes/company';
 import { Contract } from '@shared/classes/contract';
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
+import { ContractSettings } from '@shared/classes/contract-settings';
 
 @Component({
   selector: 'app-printable-contract',
@@ -28,25 +29,15 @@ export class PrintableContractComponent implements OnInit {
     map(version => this.versionTemplates.find(template => template.typeTemplate === (version ?? this.contract.type))?.templateRef)
   );
 
-  constructor(
-    private db: Firestore,
-    private session: SessionInfo
-  ) { }
+  constructor() { }
 
   ngOnInit() {
-    const settingsRef = doc(
-      Company.getCompanyRef(this.db, this.session.getCompany()),
-      'settings/contracts'
-    );
-
-    getDocFromServer(settingsRef).then(snap => {
-      const typesObject = snap.data().contractTypes;
-      this.contractTypesListEmitter.emit(new Map(Object.entries(typesObject)));
+    ContractSettings.getContractDoc(this.contract).then(result => {
+      this.contractTypesListEmitter.emit(new Map(Object.entries(result.contractTypes)));
     });
   }
 
   ngAfterViewInit() {
     this.version$.next(this.version$.getValue());
   }
-
 }

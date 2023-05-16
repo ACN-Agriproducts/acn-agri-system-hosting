@@ -1,7 +1,8 @@
-import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc, CollectionReference, Query, collection, query, where, orderBy, limit, getDocs } from "@angular/fire/firestore";
+import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc, CollectionReference, Query, collection, query, where, orderBy, limit, getDocs, getDocsFromServer } from "@angular/fire/firestore";
 import { Company } from "./company";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { BankInfo } from "./contact";
+import { Contract } from "./contract";
 
 export class ContractSettings extends FirebaseDocInterface {
     date: Date;
@@ -80,6 +81,18 @@ export class ContractSettings extends FirebaseDocInterface {
         const colQuery = query(ContractSettings.getCollectionRef(db, company), orderBy('date'), limit(1));
 
         return getDocs(colQuery).then(result => {
+            return result.docs[0].data();
+        });
+    }
+
+    public static getContractDoc(contract: Contract): Promise<ContractSettings> {
+        const db = contract.ref.firestore;
+        const company = contract.ref.parent.parent.id;
+
+        console.log(company);
+
+        const colQuery = query(this.getCollectionRef(db, company), where('date', '<=', contract.date), orderBy('date'), limit(1));
+        return getDocsFromServer(colQuery).then(result => {
             return result.docs[0].data();
         });
     }
