@@ -2,29 +2,6 @@
 
 <ion-content class="ion-padding">
     <div class="main-grid">
-        <!-- <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention> -->
+        <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
     </div>
-
-    <!-- <app-contract-form [contract]="contract" (selectedFieldEvent)="focusEventHandler($event)"></app-contract-form> -->
-
-    <mat-form-field>
-        <mat-select [(ngModel)]="contractType">
-            <mat-option *ngFor="let type of contractTypeList | keyvalue" [value]="type.value">{{ type.key }}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <button
-        mat-raised-button
-        *ngIf="contractType"
-        ngxPrint
-        previewOnly="true"
-        printSectionId="printable"
-        [useExistingCss]="true"
-    >
-        PRINT
-    </button>
-    <app-printable-contract
-        id="printable"
-        [version]="contractType"
-        (contractTypesListEmitter)="contractTypeList = $event"
-    ></app-printable-contract>
 </ion-content>
