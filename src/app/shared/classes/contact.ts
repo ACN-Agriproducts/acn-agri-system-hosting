@@ -66,7 +66,7 @@ export class Contact extends FirebaseDocInterface {
             this.tags = data.tags;
             this.zipCode = data.zipCode;
             this.notarialAct = data.notarialAct;
-            this.notarialActDate = data.notarialActDate.toDate();
+            this.notarialActDate = data.notarialActDate?.toDate() ?? null;
 
             data.metacontacts?.forEach(metacontact => {
                 this.metacontacts.push(this.createMetaContact(metacontact));

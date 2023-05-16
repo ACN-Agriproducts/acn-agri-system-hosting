@@ -193,7 +193,7 @@ export class Contract extends FirebaseDocInterface {
         this.clientName = data.clientName;
         this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = new Mass(data.currentDelivered ?? 0, FirebaseDocInterface.session.getDefaultUnit());
-        this.date = data.date.toDate();
+        this.date = data.date?.toDate();
         this.delivery_dates = {begin: data.delivery_dates?.begin?.toDate(), end: data.delivery_dates?.end?.toDate()};
         this.grade = data.grade;
         this.id = data.id;
