@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { addDoc, doc, Firestore } from '@angular/fire/firestore';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -117,6 +117,9 @@ export class ContractSettingsPage implements OnInit {
   }
 
   submit() {
+    this.settings.ref = doc(this.settings.ref.parent);
+    this.settings.date = new Date();
+
     this.settings.set().then(() => {
       this.snack.open("Settings submitted", "success");
     }).catch(error => {

@@ -1,9 +1,11 @@
-import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc } from "@angular/fire/firestore";
+import { Firestore, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, DocumentData, doc, getDoc, CollectionReference, Query, collection, query, where, orderBy, limit, getDocs } from "@angular/fire/firestore";
 import { Company } from "./company";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { BankInfo } from "./contact";
 
 export class ContractSettings extends FirebaseDocInterface {
+    date: Date;
+    type: string = "contract";
     contractTypes: {
         [name: string]: string;
     }
@@ -41,6 +43,7 @@ export class ContractSettings extends FirebaseDocInterface {
 
         if(data == undefined) return;
 
+        this.date = data.date?.toDate();
         this.contractTypes = data.contractTypes;
         this.formData = data.formData;
         this.fieldGroupOrder = data.fieldGroupOrder;
@@ -51,6 +54,8 @@ export class ContractSettings extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: ContractSettings): DocumentData {
             return {
+                date: data.date,
+                type: data.type,
                 contractTypes: data.contractTypes,
                 formData: data.formData,
                 fieldGroupOrder: data.fieldGroupOrder,
@@ -63,13 +68,19 @@ export class ContractSettings extends FirebaseDocInterface {
         }
     }
 
+    public static getCollectionRef(db: Firestore, company: string): Query<ContractSettings> {
+        return query(collection(Company.getCompanyRef(db, company), 'settings').withConverter(ContractSettings.converter), where('type', '==', 'contract'))
+    }
+
     public static getRef(db: Firestore, company: string): DocumentReference<ContractSettings> {
-        return doc(Company.getCompanyRef(db, company), "settings/contracts").withConverter(ContractSettings.converter);
+        return doc(Company.getCompanyRef(db, company), 'settings/contracts').withConverter(ContractSettings.converter);
     }
 
     public static getDocument(db: Firestore, company: string): Promise<ContractSettings> {
-        return getDoc(ContractSettings.getRef(db, company)).then(result => {
-            return result.data();
+        const colQuery = query(ContractSettings.getCollectionRef(db, company), orderBy('date'), limit(1));
+
+        return getDocs(colQuery).then(result => {
+            return result.docs[0].data();
         });
     }
 }
