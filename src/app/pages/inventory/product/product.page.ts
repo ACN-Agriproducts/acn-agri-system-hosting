@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, getDocs } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { DiscountTables } from '@shared/classes/discount-tables';
 import { Product } from '@shared/classes/product';
 
 @Component({
@@ -26,9 +27,15 @@ export class ProductPage implements OnInit {
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
 
-    Product.getProduct(this.db, this.currentCompany, this.product).then(val => {
-      this.doc = val;
+    Product.getProduct(this.db, this.currentCompany, this.product)
+    .then(productData => {
+      this.doc = productData;
       this.ready = true;
+
+      return DiscountTables.getDiscountTables(this.db, this.currentCompany, this.product);
     })
+    .then(discountTables => {
+      console.log(discountTables);
+    });
   }
 }
