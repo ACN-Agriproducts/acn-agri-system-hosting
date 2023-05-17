@@ -6,11 +6,11 @@ import { NavController } from '@ionic/angular';
 import { Product } from '@shared/classes/product';
 
 @Component({
-  selector: 'app-discount-table',
-  templateUrl: './discount-table.component.html',
-  styleUrls: ['./discount-table.component.scss'],
+  selector: 'app-discount-table-moisture',
+  templateUrl: './discount-table-moisture.component.html',
+  styleUrls: ['./discount-table-moisture.component.scss'],
 })
-export class DiscountTableComponent implements OnInit {
+export class DiscountTableMoistureComponent implements OnInit {
   @Input() doc: Product;
   @ViewChild(MatTable) tableView:MatTable<any>;
 

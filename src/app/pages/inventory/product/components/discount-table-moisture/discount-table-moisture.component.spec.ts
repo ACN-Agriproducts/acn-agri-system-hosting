@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DiscountTableComponent } from './discount-table.component';
+import { DiscountTableMoistureComponent } from './discount-table-moisture.component';
 
 describe('DiscountTableComponent', () => {
-  let component: DiscountTableComponent;
-  let fixture: ComponentFixture<DiscountTableComponent>;
+  let component: DiscountTableMoistureComponent;
+  let fixture: ComponentFixture<DiscountTableMoistureComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiscountTableComponent ],
+      declarations: [ DiscountTableMoistureComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DiscountTableComponent);
+    fixture = TestBed.createComponent(DiscountTableMoistureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

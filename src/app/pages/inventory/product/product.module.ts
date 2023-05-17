@@ -8,11 +8,11 @@ import { ProductPageRoutingModule } from './product-routing.module';
 
 import { ProductPage } from './product.page';
 import { CoreModule } from '@core/core.module';
-import { DiscountTableComponent } from './components/discount-table/discount-table.component';
+import { DiscountTableMoistureComponent } from './components/discount-table-moisture/discount-table-moisture.component';
 import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
 import { DprTicketsTableComponent } from './components/dpr-tickets-table/dpr-tickets-table.component';
 import { DprInvoiceTableComponent } from './components/dpr-invoice-table/dpr-invoice-table.component';
-import { DamageDiscountTableComponent } from './components/damage-discount-table/damage-discount-table.component';
+import { DiscountTableDamageComponent } from './components/discount-table-damage/discount-table-damage.component';
 
 @NgModule({
   imports: [
@@ -25,11 +25,11 @@ import { DamageDiscountTableComponent } from './components/damage-discount-table
   ],
   declarations: [
     ProductPage,
-    DiscountTableComponent,
+    DiscountTableMoistureComponent,
     ProductDprTableComponent,
     DprTicketsTableComponent,
     DprInvoiceTableComponent,
-    DamageDiscountTableComponent,
+    DiscountTableDamageComponent,
   ]
 })
 export class ProductPageModule {}

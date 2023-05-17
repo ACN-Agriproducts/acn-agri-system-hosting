@@ -13,11 +13,11 @@ const DAMAGE_DISCOUNT_MOCK_DATA = [
 ];
 
 @Component({
-  selector: 'app-damage-discount-table',
-  templateUrl: './damage-discount-table.component.html',
-  styleUrls: ['./damage-discount-table.component.scss'],
+  selector: 'app-discount-table-damage',
+  templateUrl: './discount-table-damage.component.html',
+  styleUrls: ['./discount-table-damage.component.scss'],
 })
-export class DamageDiscountTableComponent implements OnInit {
+export class DiscountTableDamageComponent implements OnInit {
   @Input() product: Product;
 
   displayedColumns: string[] = ['row'];
