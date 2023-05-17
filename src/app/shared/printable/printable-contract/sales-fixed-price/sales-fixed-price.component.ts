@@ -24,21 +24,21 @@ export class SalesFixedPriceComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
-      if(this.focusedField == null) {
+    if(this.focusedField == null) {
+      this.focusedFields.forEach(f => f.isFocused = false);
+      this.focusedFields = [];
+    }
+
+    if(changes['focusedField'] && this.focusedField) {
+      const fields = this.fieldsList?.filter(ff => ff.fieldName == this.focusedField);
+
+      if(fields?.length) {
         this.focusedFields.forEach(f => f.isFocused = false);
-        this.focusedFields = [];
+        fields[0].el.nativeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+        fields.forEach(f => f.isFocused = true);
+        this.focusedFields = fields;
       }
-
-      if(changes['focusedField'] && this.focusedField) {
-        const fields = this.fieldsList?.filter(ff => ff.fieldName == this.focusedField);
-
-        if(fields?.length) {
-          this.focusedFields.forEach(f => f.isFocused = false);
-          fields[0].el.nativeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
-          fields.forEach(f => f.isFocused = true);
-          this.focusedFields = fields;
-        }
-      }
+    }
   }
 
 }

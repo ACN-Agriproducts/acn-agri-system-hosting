@@ -1,7 +1,7 @@
 <div class="page-style main">
-	<div class="text-align-right"><b>No. de contrato:</b><span [class.focused]="focusedField == 'id'">{{contractForm.id ?? " "}}</span></div>
+	<div class="text-align-right"><b>No. de contrato:</b><span [printableField]="'id'">{{contractForm.id ?? " "}}</span></div>
 	<div class="text-align-justify introduction">
-		CONTRATO DE COMPRA-VENTA DE <b><span [class.focused]="focusedField == 'product'">{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b><span [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b><span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
+		CONTRATO DE COMPRA-VENTA DE <b><span [printableField]="'product'">{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b><span [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b><span [printableField]="'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
 	</div>
 	<div class="text-align-center section-header-spaced">DECLARACIONES</div>
 	<ol type="I" class="declarations text-align-justify">
@@ -20,7 +20,7 @@
 					Que la Clave Única de Registro de Población (CURP) del apoderado legal es:
 				</li>
 				<li>
-					Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [class.focused]="focusedField == 'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
+					Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [printableField]="'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [printableField]="'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
 				</li>
 			</ol>
 		</li>
@@ -28,16 +28,16 @@
 			- DE <b>“EL COMPRADOR”</b>:
 			<ol type="1">
 				<li>
-					Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, como se acredita con la Escritura Pública número <u><span [class.focused]="focusedField == 'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [class.focused]="focusedField == 'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>, y que el señor <u><span [class.focused]="focusedField == 'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u> está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
+					Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, como se acredita con la Escritura Pública número <u><span [printableField]="'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [printableField]="'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>, y que el señor <u><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u> está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
 				</li>
 				<li>
-					Que su Registro Federal de Contribuyentes es: <u><span [class.focused]="focusedField == 'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
+					Que su Registro Federal de Contribuyentes es: <u><span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
 				</li>
 				<li>
-					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [class.focused]="focusedField == 'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
+					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [printableField]="'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
 				</li>
 				<li>
-					Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [class.focused]="focusedField == 'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [class.focused]="focusedField == 'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [class.focused]="focusedField == 'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
+					Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
 				</li>
 			</ol>
 		</li>
@@ -61,7 +61,7 @@
 		<br>
 		<b>TERCERA. &#8211; PRECIO Y PAGO.</b> - El precio objeto del presente contrato se fijará en volúmenes parciales o volumen total, a opción del “COMPRADOR”, formarán parte integral de este contrato los “ANEXOS 1 y 2” generados con la confirmación de fijación de precios, mismos que serán referenciados con el número de contrato y la firma de “EL COMPRADOR” y “EL VENDEDOR”. “EL COMPRADOR” se obliga a pagar a “EL VENDEDOR” el precio fijado del “PRODUCTO” de la forma, números de cuenta y bancos indicados por “EL VENDEDOR”.
 		<br>
-		<b>CUARTA. &#8211; FIJACIÓN DE PRECIO.</b> - El precio se fijará a opción de “EL COMPRADOR” a partir del día <span [class.focused]="focusedField == 'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodBegin | date:'longDate':undefined:'es-MX'}}</span> y hasta el día <span [class.focused]="focusedField == 'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodEnd | date:'longDate':undefined:'es-MX'}}</span> o el día anterior al primer día de notificación del mes de futuros del contrato en cuestión, lo que ocurra primero.  El (los) precio(s) se fijará(n) mientras el mercado de futuros esté abierto y sea negociable (https://www.cmegroup.com/company/cbot.html). En ningún caso se harán embarques de “PRODUCTO” sin precio fijo. Si “EL COMPRADOR” no fija el precio del contrato en el periodo indicado el precio será automáticamente fijado el último día del plazo indicado en el párrafo anterior o el día anterior del día de la notificación del mes de vencimiento. Si “EL COMPRADOR” decide rolar la base deberá notificar a “EL VENDEDOR” lo cual implicará un costo, mismo que será cubierto por “EL COMPRADOR”.
+		<b>CUARTA. &#8211; FIJACIÓN DE PRECIO.</b> - El precio se fijará a opción de “EL COMPRADOR” a partir del día <span [printableField]="'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodBegin | date:'longDate':undefined:'es-MX'}}</span> y hasta el día <span [printableField]="'futurePriceInfo.priceSetPeriodBegin'">{{contractForm?.futurePriceInfo?.priceSetPeriodEnd | date:'longDate':undefined:'es-MX'}}</span> o el día anterior al primer día de notificación del mes de futuros del contrato en cuestión, lo que ocurra primero.  El (los) precio(s) se fijará(n) mientras el mercado de futuros esté abierto y sea negociable (https://www.cmegroup.com/company/cbot.html). En ningún caso se harán embarques de “PRODUCTO” sin precio fijo. Si “EL COMPRADOR” no fija el precio del contrato en el periodo indicado el precio será automáticamente fijado el último día del plazo indicado en el párrafo anterior o el día anterior del día de la notificación del mes de vencimiento. Si “EL COMPRADOR” decide rolar la base deberá notificar a “EL VENDEDOR” lo cual implicará un costo, mismo que será cubierto por “EL COMPRADOR”.
 		<br>
 		<b>QUINTA. &#8211; ANTICIPOS.</b> - “LAS PARTES” acuerdan que el "COMPRADOR” pagará a el “VENDEDOR”, dos anticipos constituidos por:
 		<ol class="letter-parenthesis-list">
@@ -125,8 +125,8 @@
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
 			<div class="signature-line"></div>
-			<span [class.focused]="focusedField == 'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "(REPRESENTATIVE HERE)" }}</span>
-            <span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.name }}</span>
+			<span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "(REPRESENTATIVE HERE)" }}</span>
+            <span [printableField]="'clientInfo.name'">{{ contractForm?.clientInfo?.name }}</span>
 		</div>
 	</div>
 </div>
@@ -149,81 +149,81 @@
 		<span>VALLE HERMOSO, TAMAULIPAS, MX        C.P. 87500</span>
 		<span>R.F.C.: ACN980211QC9</span>
 		<span class="party-title">COMPRADOR:</span>
-		<span class="party-name" [class.focused]="focusedField == 'clientInfo.name'">{{contractForm?.clientInfo?.name}}</span>
-        <span [class.focused]="focusedField == 'clientInfo.streetAddress'">{{contractForm?.clientInfo?.streetAddress}}</span>
+		<span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name}}</span>
+        <span [printableField]="'clientInfo.streetAddress'">{{contractForm?.clientInfo?.streetAddress}}</span>
         <span>
-            <span [class.focused]="focusedField == 'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span>,
-            <span [class.focused]="focusedField == 'clientInfo.state'">{{contractForm?.clientInfo?.state}}</span>, 
-            <span [class.focused]="focusedField == 'clientInfo.country'">{{contractForm?.clientInfo?.country}}</span>        C.P. <span [class.focused]="focusedField == 'clientInfo.zipCode'">{{contractForm?.clientInfo?.zipCode}}</span></span>
-        <span>R.F.C.: <span [class.focused]="focusedField == 'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc}}</span></span>
+            <span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span>,
+            <span [printableField]="'clientInfo.state'">{{contractForm?.clientInfo?.state}}</span>, 
+            <span [printableField]="'clientInfo.country'">{{contractForm?.clientInfo?.country}}</span>        C.P. <span [printableField]="'clientInfo.zipCode'">{{contractForm?.clientInfo?.zipCode}}</span></span>
+        <span>R.F.C.: <span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc}}</span></span>
 	</div>
 	<div class="contract-info">
 		<div class="contract-info-row">
 			<div>FECHA:</div>
-			<div [class.focused]="focusedField == 'date'">{{contractForm?.date | date:'longDate':undefined:'es-MX'}}</div>		</div>
+			<div [printableField]="'date'">{{contractForm?.date | date:'longDate':undefined:'es-MX'}}</div>		</div>
 		<div class="contract-info-row">
 			<div>PRODUCTO:</div>
-			<div [class.focused]="focusedField == 'product'">{{contractForm?.product?.id}}</div>
+			<div [printableField]="'product'">{{contractForm?.product?.id}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TIPO DE CARGA:</div>
-			<div [class.focused]="focusedField == 'loadType'">{{contractForm?.loadType | selectFieldDisplay:contractType:'loadType' | async}}</div>
+			<div [printableField]="'loadType'">{{contractForm?.loadType | selectFieldDisplay:contractType:'loadType' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>BASE:</div>
-            <div [class.focused]="focusedField == 'futurePriceInfo.base'">{{contractForm?.futurePriceBase?.amount >= 0 ? "+" : ""}}{{contractForm?.futurePriceBase?.amount}} USD / BU</div>
+            <div [printableField]="'futurePriceInfo.base'">{{contractForm?.futurePriceBase?.amount >= 0 ? "+" : ""}}{{contractForm?.futurePriceBase?.amount}} USD / BU</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FUTURO:</div>
-            <div [class.focused]="focusedField == 'futurePriceInfo.future'">{{this.contractForm?.futurePriceInfo?.future || 'A DEFINIR'}}</div>
+            <div [printableField]="'futurePriceInfo.future'">{{this.contractForm?.futurePriceInfo?.future || 'A DEFINIR'}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>MES DE VENCIMIENTO:</div>
-            <div [class.focused]="focusedField == 'futurePriceInfo.expirationMonth'">{{this.contractForm?.futurePriceInfo?.expirationMonth | date:'MMMM':undefined:'es-MX'}} {{ this.contractForm?.futurePriceInfo?.expirationMonth && this.contractForm?.productInfo ? this.contractForm.getTradeCode() : ""}}</div>
+            <div [printableField]="'futurePriceInfo.expirationMonth'">{{this.contractForm?.futurePriceInfo?.expirationMonth | date:'MMMM':undefined:'es-MX'}} {{ this.contractForm?.futurePriceInfo?.expirationMonth && this.contractForm?.productInfo ? this.contractForm.getTradeCode() : ""}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DIVISA:</div>
-			<div [class.focused]="focusedField == 'currency'">{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async}}</div>
+			<div [printableField]="'currency'">{{contractForm?.currency | selectFieldDisplay:contractType:'currency' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>TIPO DE CAMBIO:</div>
-			<div [class.focused]="focusedField == 'futurePriceInfo.exchangeRate'">
+			<div [printableField]="'futurePriceInfo.exchangeRate'">
 				{{contractForm?.futurePriceInfo?.exchangeRate | exchangeRateField:contractType | async}}
 			</div>
 		</div>
 		<div class="contract-info-row">
 			<div>COBERTURA / OPCIÓN:</div>
-            <div [class.focused]="focusedField == 'futurePriceInfo.marketOptions'">{{contractForm?.futurePriceInfo?.marketOptions | selectFieldDisplay:contractType:'marketOptions' | async}}</div>
+            <div [printableField]="'futurePriceInfo.marketOptions'">{{contractForm?.futurePriceInfo?.marketOptions | selectFieldDisplay:contractType:'marketOptions' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CANTIDAD:</div>
 			<div>
-                <span [class.focused]="focusedField == 'quantity.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
-                <span [class.focused]="focusedField == 'quantity.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
+                <span [printableField]="'quantity.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
+                <span [printableField]="'quantity.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
             </div>		</div>
 		<div class="contract-info-row">
 			<div>UNIDAD DE MEDIDA:</div>
-            <div [class.focused]="focusedField == 'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</div>
+            <div [printableField]="'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CALIDAD GARANTIZADA:</div>
-			<div>Grado: U.S. <span [class.focused]="focusedField == 'grade'">{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
+			<div>Grado: U.S. <span [printableField]="'grade'">{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
 		</div>
 		<div class="contract-info-row">
 			<div>HUMEDAD MÁXIMA:</div>
-			<div [class.focused]="focusedField == 'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
+			<div [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE ENTREGA:</div>
-			<div [class.focused]="focusedField == 'deliveryType'">{{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}</div>
+			<div [printableField]="'deliveryType'">{{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>SEGURO DE TRÁNSITO:</div>
-			<div [class.focused]="focusedField == 'transportInsurance'">{{contractForm?.transportInsurance | selectFieldDisplay:contractType:'transportInsurance' | async}}</div>
+			<div [printableField]="'transportInsurance'">{{contractForm?.transportInsurance | selectFieldDisplay:contractType:'transportInsurance' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>LUGAR DE ENTREGA:</div>
-            <div [class.focused]="focusedField == 'plants'">
+            <div [printableField]="'plants'">
                 <ng-container *ngFor="let address of contractForm.deliveryPlants; let last = last">
                     <span>{{address}}</span><ng-container *ngIf="!last">,</ng-container><br>
                 </ng-container>
@@ -231,31 +231,31 @@
 		</div>
 		<div class="contract-info-row">
 			<div>PESOS:</div>
-			<div [class.focused]="focusedField == 'paymentTerms.origin'">{{contractForm?.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async}}</div>
+			<div [printableField]="'paymentTerms.origin'">{{contractForm?.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>MERMAS:</div>
-			<div [class.focused]="focusedField == 'shrinkage'">{{contractForm?.shrinkage | selectFieldDisplay:contractType:'shrinkage' | async}}</div>
+			<div [printableField]="'shrinkage'">{{contractForm?.shrinkage | selectFieldDisplay:contractType:'shrinkage' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>PERIODO DE EMBARQUE:</div>
-			<div class="period" [class.focused]="focusedField == 'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}</div>
+			<div class="period" [printableField]="'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE RETIRO:</div>
-			<div [class.focused]="focusedField == 'loadConditions'" class="white-space-wrap">{{contractForm?.loadConditions}}</div>
+			<div [printableField]="'loadConditions'" class="white-space-wrap">{{contractForm?.loadConditions}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS DE CARGAS:</div>
-			<div [class.focused]="focusedField == 'loadDelays'">{{contractForm?.loadDelays | selectFieldDisplay:contractType:'loadDelays' | async}}</div>
+			<div [printableField]="'loadDelays'">{{contractForm?.loadDelays | selectFieldDisplay:contractType:'loadDelays' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>ALMACENAJE Y FUMIGACIÓN:</div>
-			<div [class.focused]="focusedField == 'storageAndFumigation'">{{contractForm?.storageAndFumigation || "NO APLICA"}}</div>
+			<div [printableField]="'storageAndFumigation'">{{contractForm?.storageAndFumigation || "NO APLICA"}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>CONDICIONES DE PAGO:</div>
-			<div [class.focused]="focusedField == 'paymentWithdrawal'">{{contractForm?.paymentWithdrawal | selectFieldDisplay:contractType:'paymentWithdrawal' | async}}</div>
+			<div [printableField]="'paymentWithdrawal'">{{contractForm?.paymentWithdrawal | selectFieldDisplay:contractType:'paymentWithdrawal' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>DEMORAS EN PAGOS:</div>
@@ -269,19 +269,19 @@
 		</div>
 		<div class="contract-info-row">
 			<div>TÉRMINOS DE PAGO:</div>
-			<div [class.focused]="focusedField == 'termsOfPayment'">{{contractForm?.termsOfPayment | selectFieldDisplay:contractType:'termsOfPayment' | async}}</div>
+			<div [printableField]="'termsOfPayment'">{{contractForm?.termsOfPayment | selectFieldDisplay:contractType:'termsOfPayment' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>ANTICIPOS:</div>
-			<div [class.focused]="focusedField == 'prepaid'" class="white-space-wrap">{{contractForm?.prepaid}}</div>
+			<div [printableField]="'prepaid'" class="white-space-wrap">{{contractForm?.prepaid}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE PAGO:</div>
-			<div [class.focused]="focusedField == 'formOfPayment'">{{contractForm?.formOfPayment | selectFieldDisplay:contractType:'formOfPayment' | async}}</div>
+			<div [printableField]="'formOfPayment'">{{contractForm?.formOfPayment | selectFieldDisplay:contractType:'formOfPayment' | async}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>BANCOS Y CUENTAS DE PAGO:</div>
-			<div class="banks-and-accounts-grid" [class.focused]="focusedField == 'bankInfo'">
+			<div class="banks-and-accounts-grid" [printableField]="'bankInfo'">
                 <div>
 					<span>BANCO</span>
 					<span>CUENTA</span>
@@ -298,7 +298,7 @@
 		</div>
 		<div class="contract-info-row">
 			<div>EJECUTIVO DE VENTA:</div>
-			<div [class.focused]="focusedField == 'contractExecutive'">{{contractForm?.contractExecutive?.name}}</div>
+			<div [printableField]="'contractExecutive'">{{contractForm?.contractExecutive?.name}}</div>
 		</div>
 	</div>
 	<p>PARA CONSTANCIA DE LO CONVENIDO LAS PARTES FIRMAN EL PRESENTE CONTRATO</p>
@@ -313,7 +313,7 @@
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
 			<div class="signature-line"></div>
-			<span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep}}</span>
+			<span [printableField]="'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep}}</span>
             <span>{{ contractForm.clientInfo?.name }}</span>
 		</div>
 	</div>
