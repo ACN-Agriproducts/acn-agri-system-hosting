@@ -53,15 +53,21 @@ input::-webkit-inner-spin-button {
 }
 
 .content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    display: flex;
     height: 100%;
     overflow-y: auto;
     justify-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
 
     & > * {
         overflow-y: scroll;
         max-height: 100%;
+        max-width: 826px;
+    }
+
+    .form-flex {
+        flex: 1 0 500px;
     }
 }
 
