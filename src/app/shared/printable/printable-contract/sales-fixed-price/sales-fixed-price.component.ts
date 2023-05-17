@@ -15,6 +15,8 @@ export class SalesFixedPriceComponent implements OnInit, OnChanges {
   @Input() contractForm: Contract;
   @Input() focusedField: string;
   @ViewChildren(FocusedFieldDirective) fieldsList: QueryList<FocusedFieldDirective>;
+  private focusedFields: FocusedFieldDirective[] = [];
+
   readonly contractType: string = 'deVenta_precioFijo';
 
   constructor(public utils: PrintableContractUtilitiesService) { }
@@ -22,8 +24,20 @@ export class SalesFixedPriceComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
+      if(this.focusedField == null) {
+        this.focusedFields.forEach(f => f.isFocused = false);
+        this.focusedFields = [];
+      }
+
       if(changes['focusedField'] && this.focusedField) {
-        this.fieldsList?.find(ff => ff.fieldName == this.focusedField)?.el.nativeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+        const fields = this.fieldsList?.filter(ff => ff.fieldName == this.focusedField);
+
+        if(fields?.length) {
+          this.focusedFields.forEach(f => f.isFocused = false);
+          fields[0].el.nativeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+          fields.forEach(f => f.isFocused = true);
+          this.focusedFields = fields;
+        }
       }
   }
 

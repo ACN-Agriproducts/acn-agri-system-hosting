@@ -43,14 +43,12 @@ export class PrintableContractComponent implements OnInit {
   selector: '[printableField]'
 })
 export class FocusedFieldDirective {
-  @Input('printableField') fieldName;
-  @Input('focusedField') focusedField;
+  @Input('printableField') fieldName: string;
+  isFocused: boolean = false;
 
-  //background-color: yellow;
   @HostBinding('class.focused')
   get function() {
-    console.log(this.fieldName, this.focusedField, this.fieldName == this.focusedField);
-    return this.fieldName == this.focusedField;
+    return this.isFocused;
   }
 
   constructor(public el: ElementRef) {}
