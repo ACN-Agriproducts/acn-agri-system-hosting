@@ -1,7 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
-import { doc, Firestore, getDoc, getDocFromServer } from '@angular/fire/firestore';
-import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Company } from '@shared/classes/company';
+import { Component, Directive, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Contract } from '@shared/classes/contract';
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
@@ -40,4 +37,21 @@ export class PrintableContractComponent implements OnInit {
   ngAfterViewInit() {
     this.version$.next(this.version$.getValue());
   }
+}
+
+@Directive({
+  selector: '[printableField]'
+})
+export class FocusedFieldDirective {
+  @Input('printableField') fieldName;
+  @Input('focusedField') focusedField;
+
+  //background-color: yellow;
+  @HostBinding('class.focused')
+  get function() {
+    console.log(this.fieldName, this.focusedField, this.fieldName == this.focusedField);
+    return this.fieldName == this.focusedField;
+  }
+
+  constructor(public el: ElementRef) {}
 }

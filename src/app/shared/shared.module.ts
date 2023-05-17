@@ -22,7 +22,7 @@ import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/i
 import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
-import { PrintableContractComponent } from './printable/printable-contract/printable-contract.component';
+import { PrintableContractComponent, FocusedFieldDirective } from './printable/printable-contract/printable-contract.component';
 import { PurchaseToDepositComponent } from './printable/printable-contract/purchase-to-deposit/purchase-to-deposit.component';
 import { ThirdPartyWarehouseComponent } from './printable/printable-contract/third-party-warehouse/third-party-warehouse.component';
 import { PurchaseFixedPriceComponent } from './printable/printable-contract/purchase-fixed-price/purchase-fixed-price.component';
@@ -111,7 +111,8 @@ import { pricerPerUnitPipe } from './classes/price';
     LocalInventoryPipe,
     ExchangeRateFieldPipe,
     CurrencySplitPipe,
-    pricerPerUnitPipe
+    pricerPerUnitPipe,
+    FocusedFieldDirective,
   ]
 })
 export class SharedModule {}
