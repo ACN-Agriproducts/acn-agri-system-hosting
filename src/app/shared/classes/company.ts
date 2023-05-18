@@ -4,6 +4,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
 import { Observable } from "rxjs";
 import { units } from "./mass";
+import { Plant } from "./plant";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];
@@ -67,6 +68,10 @@ export class Company extends FirebaseDocInterface {
                     return new User(u);
                 });
             });
+    }
+
+    public getPlants(): Promise<Plant[]> {
+        return Plant.getPlantList(this.ref.firestore, this.ref.id);
     }
 
     public static getCollectionReference(db: Firestore): CollectionReference<Company> {
