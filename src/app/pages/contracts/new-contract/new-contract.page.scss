@@ -55,19 +55,11 @@ input::-webkit-inner-spin-button {
 .content-grid {
     display: flex;
     height: 100%;
-    overflow-y: auto;
-    justify-items: center;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    overflow-y: hidden;
 
     & > * {
         overflow-y: scroll;
-        max-height: 100%;
         max-width: 826px;
-    }
-
-    .form-flex {
-        flex: 1 0 500px;
     }
 }
 
@@ -79,6 +71,29 @@ app-printable-contract {
     min-width: min-content;
     margin: 10px;
 }
+
+@media screen and (min-width: 1649px) {
+    .content-grid {
+        justify-items: center;
+        justify-content: space-around;
+    }
+
+    .form-flex {
+        flex: 1 0 500px;
+    }
+}
+
+@media screen and (max-width: 1648px) {
+    .content-grid {
+        flex-direction: column;
+        align-items: center;
+
+        & > * {
+            flex: 1 1 1px;
+        }
+    }
+}
+
 
 ::-webkit-scrollbar {
     width: 10px;
