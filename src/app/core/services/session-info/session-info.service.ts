@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Firestore, where } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, where } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { Company } from '@shared/classes/company';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
+import { User } from '@shared/classes/user';
 
-interface User {
+interface UserInterface {
   email: string,
   uid: string, 
   refreshToken: string, 
@@ -22,7 +23,7 @@ declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit
 export class SessionInfo {
   private company: string;
   private plant: string;
-  private user: User;
+  private user: UserInterface;
   private companyUnit: units;
   private companyDisplayUnit: units;
   private userUnit: units;
@@ -87,6 +88,26 @@ export class SessionInfo {
     return Promise.all(promises).then(() => {});
   }
 
+  public loadNewCompany(companyName: string): Promise<any> {
+    this.set('currentCompany', companyName);
+    const promises = [];
+
+    promises.push(Company.getCompany(this.db, companyName).then(companyDoc => {
+      companyDoc.getPlants().then(plants => {
+        this.set('currentPlant', plants[0]);
+      });
+
+      this.set('companyDisplayUnit', companyDoc.displayUnit);
+      this.set('companyUnit', companyDoc.defaultUnit);
+    }));
+
+    promises.push(getDoc(doc(User.getDocumentReference(this.db, this.user.uid), 'companies', companyName)).then(permissionsDoc => {
+      this.user.currentPermissions = permissionsDoc.get('permissions');
+    }));
+
+    return Promise.all(promises);
+  }
+
   public set(key: keyOpts, data: any): Promise<void> {
     const objectKey: string = this.keyMap.get(key);
     if(objectKey == null) {
@@ -106,7 +127,7 @@ export class SessionInfo {
     return this.plant;
   }
 
-  public getUser(): User {
+  public getUser(): UserInterface {
     return this.user;
   }
 
