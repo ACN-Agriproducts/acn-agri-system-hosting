@@ -207,7 +207,7 @@ export class Contract extends FirebaseDocInterface {
         this.printableFormat = data.printableFormat ?? "";
         this.product = data.product?.withConverter(Product.converter);
         this.productInfo = data.productInfo;
-        this.quantity = new Mass(data.quantity, data.quantity?.defaultUnits || FirebaseDocInterface.session.getDefaultUnit());
+        this.quantity = new Mass(data.quantity, data.quantityUnits || FirebaseDocInterface.session.getDefaultUnit());
         this.seller_terms = data.seller_terms;
         this.status = data.status;
         this.tags = data.tags;

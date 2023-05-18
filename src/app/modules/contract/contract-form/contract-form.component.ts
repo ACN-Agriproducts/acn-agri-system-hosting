@@ -239,6 +239,7 @@ export class ContractFormComponent implements OnInit {
     if(this.newClientContact) {
       client = new Contact(this.contract.clientInfo, ['client']);
       client.ref = this.contract.client;
+      this.contract.clientInfo.ref = this.contract.client;
       if(this.contract?.bankInfo.length && this.contract.tags.includes("purchase")) client.bankInfo = this.contract.bankInfo;
       await client.set();
     } 
