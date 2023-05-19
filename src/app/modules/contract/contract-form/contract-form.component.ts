@@ -84,9 +84,7 @@ export class ContractFormComponent implements OnInit {
     this.plants$ = Plant.getPlantList(this.db, this.session.getCompany());
 
     this.products$.then(products => {
-      console.log(this.contract, !!this.contract.product, products.find(p => p.ref.id == this.contract.product.id).ref == this.contract.product);
       if(this.contract.product) this.contract.product = products.find(p => p.ref.id == this.contract.product.id)?.ref;
-      console.log(products.find(p => p.ref.id == this.contract.product.id).ref == this.contract.product);
     });
     
     httpsCallable(this.functions, 'users-getCompanyUsersSelect')({company: this.session.getCompany()}).then(result => {
