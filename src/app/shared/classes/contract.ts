@@ -204,7 +204,7 @@ export class Contract extends FirebaseDocInterface {
         this.price = data.price ?
                         new Price(data.price, data.priceUnit) :
                         new Price(data.pricePerBushel, 'bu');
-        this.printableFormat = data.printableFormat ?? "";
+        this.printableFormat = data.printableFormat ?? data.type;
         this.product = data.product?.withConverter(Product.converter);
         this.productInfo = data.productInfo;
         this.quantity = new Mass(data.quantity, data.quantityUnits || FirebaseDocInterface.session.getDefaultUnit());
