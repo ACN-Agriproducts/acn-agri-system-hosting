@@ -9,6 +9,7 @@ import { Ticket } from "./ticket";
 
 declare type contractType = string | boolean;
 declare type FutureMonth = "MAR CH" | "MAY CK" | "JUL CN" | "SEP CU" | "DEC CZ";
+declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
@@ -163,7 +164,7 @@ export class Contract extends FirebaseDocInterface {
             this.currentDelivered = new Mass(0, FirebaseDocInterface.session.getDefaultUnit());
             this.price = new Price(null, null)
             this.loads = 0;
-            this.status = status.pending;
+            this.status = 'pending';
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
 
             return;
@@ -549,13 +550,6 @@ export class TruckerInfo {
         this.trucker = data.trucker.withConverter(Contact.converter);
         this.freight = data.freight;
     }
-}
-
-enum status {
-    pending = 'pending',
-    active = 'active',
-    closed = 'closed',
-    cancelled = 'cancelled'
 }
 
 export interface ContactInfo {
