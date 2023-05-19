@@ -247,6 +247,11 @@ export class Contract extends FirebaseDocInterface {
             this.quantity.defineBushels(this.productInfo);
             this.currentDelivered.defineBushels(this.productInfo);
         }
+
+        this.companyInfo ??= {
+            email: null,
+            phone: null,
+        };
     }
 
     public static converter = {

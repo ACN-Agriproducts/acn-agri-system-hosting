@@ -80,7 +80,7 @@ export class ContractSettings extends FirebaseDocInterface {
     public static getDocument(db: Firestore, company: string): Promise<ContractSettings> {
         const colQuery = query(ContractSettings.getCollectionRef(db, company), orderBy('date'), limit(1));
 
-        return getDocs(colQuery).then(result => {
+        return getDocsFromServer(colQuery).then(result => {
             return result.docs[0].data();
         });
     }
@@ -90,7 +90,11 @@ export class ContractSettings extends FirebaseDocInterface {
         const company = contract.ref.parent.parent.id;
 
         const colQuery = query(this.getCollectionRef(db, company), where('date', '<=', contract.date), orderBy('date'), limit(1));
-        return getDocsFromServer(colQuery).then(result => {
+        return getDocs(colQuery).then(result => {
+            if(result.empty) {
+                return this.getDocument(db, company);
+            }
+
             return result.docs[0].data();
         });
     }
