@@ -32,7 +32,7 @@ export class Contract extends FirebaseDocInterface {
     price: Price;
     pricePerBushel: number;
     printableFormat: string;
-    product: DocumentReference<Product>;
+    product: DocumentReference<Product | DocumentData>;
     productInfo: ProductInfo;
     quantity: Mass;
     seller_terms: string;
@@ -480,9 +480,11 @@ export class Contract extends FirebaseDocInterface {
         return contractSnapshot.data().count;
     }
 
-    public static getContracts(db: Firestore, company: string, contractType: contractType, ...constraints: QueryConstraint[]): Promise<Contract[]> {
+    public static getContracts(db: Firestore, company: string, contractType?: contractType, ...constraints: QueryConstraint[]): Promise<Contract[]> {
         const collectionRef = Contract.getCollectionReference(db, company, contractType);
-        const collectionQuery = query(collectionRef, where('type', '==', this.getContractType(contractType)), ...constraints);
+        let collectionQuery = query(collectionRef);
+        if(contractType) collectionQuery = query(collectionQuery, where('type', '==', this.getContractType(contractType)));
+        collectionQuery = query(collectionQuery, ...constraints);
         return getDocs(collectionQuery).then(result => {
             return result.docs.map(snap => snap.data());
         });

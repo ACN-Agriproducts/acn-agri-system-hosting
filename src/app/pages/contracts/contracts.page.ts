@@ -74,6 +74,17 @@ export class ContractsPage implements AfterViewInit {
       });
 
       this.tabData.push({
+        label: "All",
+        type: this.table,
+        isInfiniteScrollDisabled: false,
+        data: [
+          {
+            getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), null, ...constraints), 
+            contracts: [],
+          }
+        ]
+      },
+      {
         label: "Analytics",
         type: this.cards,
         isInfiniteScrollDisabled: false,

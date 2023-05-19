@@ -5,8 +5,8 @@
     <div class="form-flex">
       <app-contract-form id="form"
         [contract]="contract"
+        [isNew]="true"
         (selectedFieldEvent)="focusedFieldName = $event">
-    
       <ng-template #actionBar>
         <button mat-raised-button
           ngxPrint

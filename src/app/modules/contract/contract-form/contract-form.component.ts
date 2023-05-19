@@ -25,6 +25,7 @@ import { httpsCallable } from 'firebase/functions';
 })
 export class ContractFormComponent implements OnInit {
   @Input() contract: Contract;
+  @Input() isNew: boolean;
   @Output() selectedFieldEvent = new EventEmitter<string>();
   @ContentChild('actionBar') actionBar: TemplateRef<any>;
 
@@ -81,6 +82,12 @@ export class ContractFormComponent implements OnInit {
 
     this.products$ = Product.getProductList(this.db, this.session.getCompany());
     this.plants$ = Plant.getPlantList(this.db, this.session.getCompany());
+
+    this.products$.then(products => {
+      console.log(this.contract, !!this.contract.product, products.find(p => p.ref.id == this.contract.product.id).ref == this.contract.product);
+      if(this.contract.product) this.contract.product = products.find(p => p.ref.id == this.contract.product.id)?.ref;
+      console.log(products.find(p => p.ref.id == this.contract.product.id).ref == this.contract.product);
+    });
     
     httpsCallable(this.functions, 'users-getCompanyUsersSelect')({company: this.session.getCompany()}).then(result => {
       this.usersList = result.data as Exectuive[];
