@@ -90,6 +90,8 @@ app-printable-contract {
 
         & > * {
             flex: 1 1 1px;
+            max-width: 100%;
+            overflow-x: scroll;
         }
     }
 }
