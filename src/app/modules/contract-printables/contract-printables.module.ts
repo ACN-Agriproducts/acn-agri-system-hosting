@@ -11,6 +11,7 @@ import { PurchaseFixedPriceComponent } from './purchase-fixed-price/purchase-fix
 import { PurchaseContractComponent } from './purchase-contract/purchase-contract.component';
 import { CurrencySplitPipe, ExchangeRateFieldPipe, NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable-contract-utilities.service';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 
 
@@ -29,14 +30,15 @@ import { CoreModule } from '@core/core.module';
     NumberNameSpanishPipe,
     ExchangeRateFieldPipe,
     CurrencySplitPipe,
-    FocusedFieldDirective
+    FocusedFieldDirective,
   ],
   exports: [
     PrintableContractComponent
   ],
   imports: [
     CommonModule,
-    CoreModule
+    CoreModule,
+    SharedModule
   ]
 })
 export class ContractPrintablesModule { }
