@@ -90,7 +90,7 @@
 
 <div class="action-bar">
   <ng-container *ngTemplateOutlet="actionBar || none"></ng-container>
-  <button *ngIf="contract.status != 'pending'" mat-raised-button color="primary" (click)="submit()">Submit</button>
+  <button *ngIf="contract.status == 'pending'" mat-flat-button color="primary" (click)="submit()">Submit</button>
 </div>
 
 <ng-template #none></ng-template>
