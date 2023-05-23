@@ -12,6 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
 import { UniqueIdValidatorDirective } from './components/unique-id-validator.directive';
 import { ContractModule } from './../../../modules/contract/contract.module';
+import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { ContractModule } from './../../../modules/contract/contract.module';
     CoreModule,
     SharedModule,
     NgxPrintModule,
-    ContractModule
+    ContractModule,
+    ContractPrintablesModule
   ],
   declarations: [NewContractPage, DisplayContractComponent, UniqueIdValidatorDirective],
 })

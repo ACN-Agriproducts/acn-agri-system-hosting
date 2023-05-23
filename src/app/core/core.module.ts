@@ -18,6 +18,8 @@ import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
 import { TypeTemplateDirective } from './directive/type-template/type-template.directive';
 import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { MassDisplayPipe } from './pipes/mass/mass-display.pipe';
+import { RoundPipe } from './pipes/round/round.pipe';
+import { TranslatePipe } from './pipes/translate/translate.pipe';
 
 @NgModule({
   imports: [
@@ -46,7 +48,10 @@ import { MassDisplayPipe } from './pipes/mass/mass-display.pipe';
     ListFindPipe,
     MassInUnitPipe,
     TypeTemplateDirective,
-    MassDisplayPipe
+    MassDisplayPipe,
+    TruncatePipe,
+    RoundPipe,
+    TranslatePipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -61,7 +66,9 @@ import { MassDisplayPipe } from './pipes/mass/mass-display.pipe';
     MassInUnitPipe,
     TypeTemplateDirective,
     TruncatePipe,
-    MassDisplayPipe
+    MassDisplayPipe,
+    RoundPipe,
+    TranslatePipe
   ]
 })
 export class CoreModule { }

@@ -32,6 +32,10 @@ export class PrintableContractComponent implements OnInit {
     ContractSettings.getContractDoc(this.contract).then(result => {
       this.contractTypesListEmitter.emit(new Map(Object.entries(result.contractTypes)));
     });
+
+    this.template$.subscribe(result => {
+      console.log('Contract changed', result);
+    })
   }
 
   ngAfterViewInit() {
