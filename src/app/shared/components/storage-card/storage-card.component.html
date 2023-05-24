@@ -1,0 +1,40 @@
+<ion-card class="ion-no-margin" [color]="tank.archived ? 'warning' : ''" >
+  <ion-buttons class="content-btn-options" *ngIf="plant && products">
+    <ion-button (click)="inventoryMenu($event)">
+      <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+  <ion-card-header>
+    <ion-card-subtitle>Max Capacity: {{tank.max.get()}} | {{tank.max.getMassInUnit('mTon').toFixed(3)}} MT.</ion-card-subtitle>
+    <ion-card-title>{{tank.name}}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="item-inventory">
+      <div class="item-text-inventory">
+        <p>
+          <span>Product: </span>
+          <b>{{tank.product.id}}</b>
+        </p>
+      </div>
+    </div>
+    <div class="item-inventory">
+      <div class="item-text-inventory">
+        <p>
+          <span>Current: </span>
+          <b>
+            {{tank.current.getMassInUnit('mTon').toFixed(3)}} MT
+            <ng-container *ngIf="hasDefaultUnits">{{"| " + tank.current.get().toFixed(0) + " " + tank.current.getUnit()}}</ng-container>
+          </b>
+        </p>
+      </div>
+    </div>
+    <div class="content-range-inventory">
+      <ion-progress-bar class="ion-no-padding" [value]="tank.current.get() / tank.max.get()" pin snaps="true" color="primary"></ion-progress-bar>
+      <div class="item-percentage">
+        <p class="item-text-percentage">
+          <b>{{(tank.current.get() / tank.max.get() * 100).toFixed(2)}}%</b>
+        </p>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>

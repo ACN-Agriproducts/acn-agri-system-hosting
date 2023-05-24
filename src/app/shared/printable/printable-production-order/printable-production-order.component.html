@@ -1,0 +1,10 @@
+
+<ng-container *ngTemplateOutlet="getTemplate(templates, 'typeTemplate', order.type)?.templateRef ?? error"></ng-container>
+
+<ng-template typeTemplate="default">
+	<app-production-order-default [order]="order"></app-production-order-default>
+</ng-template>
+
+<ng-template #error>
+	<p>error</p>
+</ng-template>

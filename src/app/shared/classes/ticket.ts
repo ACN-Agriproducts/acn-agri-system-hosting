@@ -27,6 +27,7 @@ export class Ticket extends FirebaseDocInterface{
     public lot: string;
     public moisture: number;
     public needsAttention: boolean;
+    public net: Mass;
     public origin: string;
     public original_ticket: string;
     public original_weight: Mass;
@@ -90,6 +91,8 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
+
+        this.net = this.gross.subtract(this.tare);
     }
 
     public static converter = {
@@ -201,7 +204,7 @@ export class Ticket extends FirebaseDocInterface{
     public async getPrintDocs(db: Firestore): Promise<[Ticket, Contract, Contact, Contact]> {
         const contract = await this.getContract(db);
         const transport = await this.getTransport(db);
-        const client = await contract.getClient();
+        const client = await contract.getTicketClient();
 
         return [this, contract, transport, client];
     }

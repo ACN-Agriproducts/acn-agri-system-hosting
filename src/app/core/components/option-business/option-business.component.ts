@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
-import { NavController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+import { doc, Firestore, getDoc, getDocs, limit, query } from '@angular/fire/firestore';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Plant } from '@shared/classes/plant';
 
 @Component({
   selector: 'app-option-business',
@@ -12,29 +12,33 @@ export class OptionBusinessComponent implements OnInit {
   companyList: any;
 
   constructor(
-    private store: Storage,
-    private navController: NavController,
+    private session: SessionInfo,
     private db: Firestore,
     ) { }
 
   ngOnInit(): void {
-    this.store.get('user').then(val => {
-      this.companyList = val.worksAt
-    })
+    this.companyList = this.session.getUser().worksAt;
   }
 
   public changeCompany(company) {
-    this.store.set('currentCompany', company);
-    this.store.get('user').then(user => {
-      getDoc(doc(this.db, `users/${user.uid}/companies/${company}`)).then(compDoc => {
-        user.currentPermissions = compDoc.get('permissions');
+    this.session.set('currentCompany', company);
+    const user = this.session.getUser();
+    const promises = [];
+    let tempPromise;
+   
+    tempPromise = getDoc(doc(this.db, `users/${user.uid}/companies/${company}`)).then(compDoc => {
+      user.currentPermissions = compDoc.get('permissions');
+      return this.session.set('user', user);
+    });
+    promises.push(tempPromise);
 
-        this.store.set('user', user);
-        location.reload();
-      })
-    })
+    tempPromise = getDocs(query(Plant.getCollectionReference(this.db, company), limit(1))).then(plant => {
+      return this.session.set('currentPlant', plant.docs[0].id); 
+    });
+    promises.push(tempPromise);
+
+    Promise.all(promises).then(() => {
+      location.reload();
+    });
   }
-
-  
-
 }

@@ -10,6 +10,7 @@ import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
 import { Contact } from '@shared/classes/contact';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Mass } from '@shared/classes/mass';
 
 
 @Component({
@@ -64,6 +65,7 @@ export class ConfirmInvoicePage implements OnInit {
     this.groups = {};
     this.contracts = new Map();
     this.printTicketDocs = [];
+    let totalWeight = new Mass(0, this.session.getDefaultUnit());
 
     this.selectedTickets.forEach(ticket => {
       this.generatePromises.push(ticket.getPrintDocs(this.db).then(docs => {
@@ -87,7 +89,7 @@ export class ConfirmInvoicePage implements OnInit {
       if(!this.groups[ticket.productName][ticket.clientName][driver]) {
         this.groups[ticket.productName][ticket.clientName][driver] = {
           tickets: [],
-          price: 0,
+          price: null,
           totalWeight: 0,
         };
       }
@@ -98,9 +100,10 @@ export class ConfirmInvoicePage implements OnInit {
 
       const object = this.groups[ticket.productName][ticket.clientName][driver];
       object.tickets.push(ticket);
-      object.totalWeight += ticket.getNet().get();
+      object.totalWeight += ticket.net.get();
+      totalWeight = totalWeight.add(ticket.net);
     });
-
+    
     this.invoice = {
       buyer: {
         city: "Valle Hermoso",
@@ -126,7 +129,13 @@ export class ConfirmInvoicePage implements OnInit {
         zip: "78579",
         other: null
       },
-      total: 0
+      total: 0,
+      isExportInvoice: true,
+      exportInfo: {
+        product: null,
+        quantity: totalWeight,
+      },
+      printableDocumentName: "Document two"
     }
   }
 
@@ -175,8 +184,10 @@ export class ConfirmInvoicePage implements OnInit {
   async generateInvoice() {
     await Promise.all(this.generatePromises);
     this.invoice.id = this.companyDoc.nextInvoice;
+    const productSet = new Set<string>();
     
     for(let product in this.groups) {
+      productSet.add(product);
       this.invoice.items.push({
         affectsInventory: false,
         details: null,
@@ -189,7 +200,8 @@ export class ConfirmInvoicePage implements OnInit {
       for(let client in this.groups[product]) {
         for(let group in this.groups[product][client]){
           const ticketGroup = this.groups[product][client][group];
-          ticketGroup.price = await this.getItemPrice(ticketGroup);
+          console.log(ticketGroup.price);
+          ticketGroup.price ??= await this.getItemPrice(ticketGroup);
           const nextItem: item = {
             affectsInventory: false,
             details: this.getItemDetails(ticketGroup),
@@ -205,7 +217,15 @@ export class ConfirmInvoicePage implements OnInit {
       }
     }
 
+    if(productSet.size == 1) {
+      this.invoice.exportInfo.product = productSet.values().next().value;
+    }
+
     this.invoiceCreated = true;
+
+    setTimeout(() => {
+      this.invoice.printableDocumentName = "Document two";
+    }, 1);
   }
 
   getItemDetails(group: TicketGroup): string {
@@ -249,8 +269,7 @@ export class ConfirmInvoicePage implements OnInit {
   }
 
   submit() {
-    console.log(this.invoice);
-    addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()).withConverter(null), this.invoice)
+    addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()), this.invoice)
     .then((result => {
       document.getElementById("print-button").click();
       this.snack.open("Inovice succesfully created", "success");
@@ -270,6 +289,12 @@ interface invoiceInterface {
   status: string;
   seller: contactInfo;
   total: number;
+  isExportInvoice: boolean;
+  exportInfo: {
+      product: string;
+      quantity: Mass;
+  }
+  printableDocumentName: string;
 }
 
 interface TicketGroup {

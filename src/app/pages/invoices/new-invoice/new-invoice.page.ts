@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, getDocs, QuerySnapshot, where } from '@angular/fire/firestore';
+import { Firestore, getDocs, orderBy, QuerySnapshot, where } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Ticket } from '@shared/classes/ticket';
 
@@ -19,8 +19,7 @@ export class NewInvoicePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    const today = new Date();
-    const requestDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 14);
+    const requestDate = new Date(2023, 0, 0) //new Date(today.getFullYear(), today.getMonth(), today.getDate() - 14);
     this.selectedTickets = new Set<Ticket>;
 
     this.ticketsPromise = Ticket.getTickets(
@@ -28,7 +27,8 @@ export class NewInvoicePage implements OnInit {
       this.session.getCompany(), 
       this.session.getPlant(),
       where("in", "==", false),
-      where("dateOut", ">=", requestDate));
+      where("dateOut", ">=", requestDate),
+      orderBy("dateOut", "desc"));
   }
 
   public set(ticket: Ticket) {

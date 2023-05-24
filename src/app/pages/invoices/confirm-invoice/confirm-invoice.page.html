@@ -16,13 +16,13 @@
                 <ion-col size="6">
                   <mat-form-field appearance="fill">
                     <mat-label>Name</mat-label>
-                    <input matInput [(ngModel)]="invoice.seller.name">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.seller.name">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="6">
                   <mat-form-field appearance="fill">
                     <mat-label>Phone</mat-label>
-                    <input matInput [(ngModel)]="invoice.seller.phone">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.seller.phone">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -37,7 +37,7 @@
                 <ion-col size="12">
                   <mat-form-field appearance="fill">
                     <mat-label>Street</mat-label>
-                    <input matInput [(ngModel)]="invoice.seller.street">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.seller.street">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -47,19 +47,19 @@
                 <ion-col size="4">
                   <mat-form-field appearance="fill">
                     <mat-label>City</mat-label>
-                    <input matInput [(ngModel)]="invoice.seller.city">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.seller.city">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="3">
                   <mat-form-field appearance="fill">
                     <mat-label>Zip</mat-label>
-                    <input matInput [(ngModel)]="invoice.seller.zip">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.seller.zip">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="5">
                   <mat-form-field appearance="fill">
                     <mat-label>State</mat-label>
-                    <input matInput [(ngModel)]="invoice.seller.state">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.seller.state">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -76,13 +76,13 @@
                 <ion-col size="6">
                   <mat-form-field appearance="fill">
                     <mat-label>Name</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.name">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.name">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="6">
                   <mat-form-field appearance="fill">
                     <mat-label>Phone</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.phone">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.phone">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -97,7 +97,7 @@
                 <ion-col size="12">
                   <mat-form-field appearance="fill">
                     <mat-label>Street</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.street">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.street">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -107,25 +107,25 @@
                 <ion-col size="3">
                   <mat-form-field appearance="fill">
                     <mat-label>City</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.city">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.city">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="2">
                   <mat-form-field appearance="fill">
                     <mat-label>Zip</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.zip">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.zip">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="4">
                   <mat-form-field appearance="fill">
                     <mat-label>State</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.state">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.state">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="3">
                   <mat-form-field appearance="fill">
                     <mat-label>Country</mat-label>
-                    <input matInput [(ngModel)]="invoice.buyer.country">
+                    <input autocomplete="off" data-lpignore="true" matInput [(ngModel)]="invoice.buyer.country">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -155,6 +155,13 @@
                     <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
                     <span>{{group.value.totalWeight}} lbs | {{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
                   </span>
+                  <span>
+                    <mat-form-field>
+                      <mat-label>Price</mat-label>
+                      <span matPrefix>$</span>
+                      <input matInput [(ngModel)]="group.value.price" [disabled]="invoiceCreated">
+                    </mat-form-field>
+                  </span>
                   <button class="list-action-bar" mat-icon-button (click)="deleteGroup(productGroup.key, client.key, group.key)">
                     <mat-icon>delete</mat-icon>
                   </button>
@@ -170,7 +177,7 @@
                     <span>{{ticket.id}}</span>
                     <span>{{ticket.driver}}</span>
                     <span>{{ticket.plates}}</span>
-                    <span>{{ticket.getNet().getMassInUnit('lbs')}} lbs | {{ticket.getNet().getMassInUnit('mTon') | number:"0.3"}} mTon</span>
+                    <span>{{ticket.net | massInUnit:"lbs"}} lbs | {{ticket.net | massInUnit:'mTon' | number:"0.3"}} mTon</span>
                   </div>
                 </div>
               </div>
@@ -188,6 +195,9 @@
         [date]="invoice.date" 
         [items]="invoice.items"
         [total]="invoice.total"
+        [isExportInvoice]="invoice.isExportInvoice"
+        [exportInfo]="invoice.exportInfo"
+        [documentName]="invoice.printableDocumentName"
       ></app-printable-invoice>
 
       <div id="second-print-page" *ngFor="let product of groups | keyvalue">

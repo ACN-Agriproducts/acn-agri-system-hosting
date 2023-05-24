@@ -1,0 +1,89 @@
+.main-content {
+    margin: 1rem;
+}
+
+div:has(app-plant-select) {
+    display: flex;
+    gap: 1rem;
+
+    mat-form-field {
+        width: 200px;
+    }
+}
+
+.change-container {
+    display: flex;
+    gap: 1rem;
+
+    >* {
+        display: flex;
+        gap: 1rem;
+    }
+}
+
+div:has(>app-storage-card) {
+    flex-wrap: wrap;
+    margin: 1rem 0rem;
+
+    app-storage-card {
+        min-width: 300px;
+        max-width: 450px;
+    }
+}
+
+div:has(>mat-card) {
+    justify-content: center;
+}
+
+.pagination-bar, div:has(mat-slider) {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+mat-slider {
+    width: 80%;
+    margin: auto;
+}
+
+@media screen and (max-width: 1299px) {
+    .change-container {
+        flex-direction: column;
+
+        >* {
+            align-items: center;
+        }
+    }
+
+    div:has(>app-storage-card) {
+        flex-direction: row;
+
+        app-storage-card {
+            flex: 300px 1 0;
+        }
+    }
+    
+    #right {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1300px) {
+    .change-container {
+        flex-direction: row;
+
+        >* {
+            flex: 1px 1 0;
+            flex-direction: column;
+            align-items: center;
+    
+            app-storage-card {
+                width: 100%;
+            }
+        }
+    }
+
+    #down {
+        display: none;
+    }
+}

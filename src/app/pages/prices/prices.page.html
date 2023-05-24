@@ -10,12 +10,20 @@
         </span>
       </h4>
     </div>
-    <div id="prices-data">
-      <mat-form-field appearance="outline">
-        <mat-label>Precio de Dolar</mat-label>
-        <input matInput [(ngModel)]="dollarPrice" type="number" />
-        <span matSuffix class="suffix">MXN</span>
-      </mat-form-field>
+    <div class="info-area-fields">
+      <div id="prices-data">
+        <mat-form-field appearance="outline">
+          <mat-label>Precio de Dolar</mat-label>
+          <input matInput [(ngModel)]="dollarPrice" type="number" />
+          <span matSuffix class="suffix">MXN</span>
+        </mat-form-field>
+      </div>
+      <div id="prices-data">
+        <mat-form-field appearance="outline">
+          <mat-label>Precio de Futuros</mat-label>
+          <input matInput (change)="futuresFieldChange($event)" type="number" />
+        </mat-form-field>
+      </div>
     </div>
   </div>
 
@@ -129,11 +137,19 @@
       >+ Añadir tabla
     </button>
 
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="submit()"
-      >Guardar
-    </button>
+    <span>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="sendNotification()"
+        >Mandar Notificacion
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="submit()"
+        >Guardar
+      </button>
+    </span>
   </div>
 </ion-content>

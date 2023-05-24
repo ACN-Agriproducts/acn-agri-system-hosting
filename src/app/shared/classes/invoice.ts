@@ -1,5 +1,6 @@
 import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, query, limit, where, getDoc, getDocs } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Mass } from "./mass";
 
 export class Invoice extends FirebaseDocInterface {
     public buyer: contactInfo;
@@ -8,9 +9,17 @@ export class Invoice extends FirebaseDocInterface {
     public items: item[];
     public needsAttention: boolean;
     public pdfReference: string;
+    public proofLinks: string[];
     public seller: contactInfo;
     public status: string;
     public total: number;
+    public isExportInvoice: boolean;
+    public exportInfo: {
+        product: string;
+        quantity: Mass;
+    }
+
+    public printableDocumentName: string;
 
     constructor(snapshot:QueryDocumentSnapshot<any>) {
         super(snapshot, Invoice.converter);
@@ -23,9 +32,16 @@ export class Invoice extends FirebaseDocInterface {
         this.items = [];
         this.needsAttention = data.needsAttention;
         this.pdfReference = data.pdfReference;
+        this.proofLinks = data.proofLinks;
         this.seller = new contactInfo(data.seller);
         this.status = data.status;
         this.total = data.total;
+        this.printableDocumentName = data.printableDocumentName ?? "Document one";
+        this.isExportInvoice = data.isExportInvoice;
+        this.exportInfo = data.exportInfo ? {
+            product: data.exportInfo.product,
+            quantity: new Mass(data.exportInfo.quantity, FirebaseDocInterface.session.getDefaultUnit())
+        } : null;
 
         data.items.forEach(element => {
             this.items.push(new item(element));
@@ -40,10 +56,16 @@ export class Invoice extends FirebaseDocInterface {
                 id: data.id,
                 items: [],
                 pdfReference: data.pdfReference ?? null,
-                needsAttention: data.needsAttention,
+                needsAttention: data.needsAttention ?? null,
                 seller: {...data.seller},
                 status: data.status,
-                total: data.total 
+                total: data.total,
+                printableDocumentName: data.printableDocumentName,
+                isExportInvoice: data.isExportInvoice ?? null,
+                exportInfo: data.exportInfo ? {
+                    product: data.exportInfo.product,
+                    quantity: data.exportInfo.quantity.get()
+                } : null
             }
 
             data.items.forEach(item => {

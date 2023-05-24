@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { addDoc, Firestore } from '@angular/fire/firestore';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators, AbstractControlOptions, UntypedFormControl } from '@angular/forms';
-import { AlertController, ModalController, NavController } from '@ionic/angular';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators, AbstractControlOptions, UntypedFormControl } from '@angular/forms';
+import { AlertController, NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Company } from '@shared/classes/company';
 import { Invoice } from '@shared/classes/invoice';
@@ -9,7 +9,6 @@ import { InvoiceItem } from '@shared/classes/invoice_item';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Subscription } from 'rxjs';
-import { PrintableInvoiceComponent } from '@shared/printable/printable-invoice/printable-invoice.component';
 
 @Component({
   selector: 'app-create-invoice',
@@ -17,6 +16,7 @@ import { PrintableInvoiceComponent } from '@shared/printable/printable-invoice/p
   styleUrls: ['./create-invoice.page.scss'],
 })
 export class CreateInvoicePage implements OnInit {
+  @ViewChild("printBtn") printBtn:ElementRef<HTMLElement>;
 
   public currentCompany: string;
   public plantsList: Plant[];
@@ -29,8 +29,10 @@ export class CreateInvoicePage implements OnInit {
   public allItems: any[];
   public total: number = 0;
   public ready: boolean = false;
+  public submitting: boolean = false;
   
   invoiceForm: UntypedFormGroup;
+  public documentList: string[];
 
   private currentSubs: Subscription[] = [];
 
@@ -39,8 +41,7 @@ export class CreateInvoicePage implements OnInit {
     private db: Firestore,
     private localStorage: Storage,
     private navController: NavController,
-    private modalController: ModalController,
-    private alertController: AlertController
+    private alertController: AlertController,
     ) {}
 
   ngOnInit() {
@@ -65,6 +66,7 @@ export class CreateInvoicePage implements OnInit {
       }),
       date: [new Date()],
       items: this.fb.array([this.createItem()]),
+      printableDocumentName: [,Validators.required]
     })
 
     this.ready = true;
@@ -226,9 +228,11 @@ export class CreateInvoicePage implements OnInit {
     return form.items[itemIndex].inventoryInfo.info[infoIndex];
   }
 
-  async submitButton() {    
+  async submitButton() {   
+    if(this.submitting) return;
+    
+    this.submitting = true;
     let doc = this.invoiceForm.getRawValue();
-
     this.total = 0;
     
     doc.items.forEach(item => {
@@ -245,6 +249,9 @@ export class CreateInvoicePage implements OnInit {
         {
           text: "cancel",
           role: 'cancel',
+          handler: () => {
+            this.submitting = false;
+          }
         },
         {
           text:"Submit",
@@ -267,25 +274,14 @@ export class CreateInvoicePage implements OnInit {
 
     addDoc(Invoice.getCollectionReference(this.db, this.currentCompany).withConverter(null), invoice);
 
-    let modal = await this.modalController.create({
-      component: PrintableInvoiceComponent,
-      componentProps: {
-        seller: invoice.seller,
-        buyer: invoice.buyer,
-        id: this.id,
-        date: invoice.date,
-        items: invoice.items,
-        total: this.total
-      },
-      mode: 'md'
-    });
+    let el: HTMLElement = this.printBtn.nativeElement;
+    el.click();
+    this.navController.navigateForward('dashboard/invoices');
+    this.submitting = false;    
+  }
 
-    await modal.present();
-
-    window.onafterprint = () => {
-      this.navController.navigateForward('dashboard/invoices');
-      modal.dismiss();
-    }
-    window.print();
+  getDocumentNameList(list: string[]) {
+    this.documentList = list;
+    this.invoiceForm.get("printableDocumentName").setValue(list[0]);
   }
 }

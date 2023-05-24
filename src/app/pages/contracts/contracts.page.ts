@@ -83,12 +83,12 @@ export class ContractsPage implements AfterViewInit {
       isInfiniteScrollDisabled: false,
       data: [
         {
-          getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active")), 
+          getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
           title: "Purchase Contracts", 
           contracts: [],
         },
         {
-          getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active")), 
+          getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
           title: "Sales Contracts", 
           contracts: [],
         }

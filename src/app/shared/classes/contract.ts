@@ -33,7 +33,7 @@ export class Contract extends FirebaseDocInterface {
         streetAddress: string,
         type: string,
         zipCode: string,
-        ref: DocumentReference,
+        ref: DocumentReference<Contact>,
     };
     currentDelivered: Mass;
     date: Date;
@@ -97,7 +97,7 @@ export class Contract extends FirebaseDocInterface {
         this.transport = data.transport;
         this.truckers = tempTruckerList;
 
-        this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contract.converter);
+        this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
     }
 
     public static converter = {
@@ -142,27 +142,21 @@ export class Contract extends FirebaseDocInterface {
     }
 
     public getTickets(): Promise<Ticket[]> {
-        const ticketList = [];
-
-        this.tickets.forEach((ticketRef: DocumentReference<any>) => {
-            ticketList.push(getDoc(ticketRef.withConverter(Ticket.converter)));
-        });
-
-        return Promise.all(ticketList).then(result => {
-            const tickets: Ticket[] = [];
-
-            result.forEach((ticketSnap: DocumentSnapshot<Ticket>) => {
-                tickets.push(ticketSnap.data());
-            });
-
-            tickets.sort((a, b) => a.id - b.id);
-            
-            return tickets;
+        return Promise.all(
+            this.tickets.map(doc => getDoc(doc.withConverter(Ticket.converter)))
+        ).then(result => {
+            return result.map(snap => snap.data()).sort((a, b) => a.id - b.id);
         });
     }
 
     public getClient(): Promise<Contact> {
         return getDoc(this.client).then(result => {
+            return result.data();
+        });
+    }
+
+    public getTicketClient(): Promise<Contact> {
+        return getDoc(this.clientTicketInfo.ref).then(result => {
             return result.data();
         });
     }

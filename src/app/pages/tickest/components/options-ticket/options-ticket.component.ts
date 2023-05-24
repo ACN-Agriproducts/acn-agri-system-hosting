@@ -46,7 +46,10 @@ export class OptionsTicketComponent implements OnInit {
     this.closePanel();
     const modal = await this.modalController.create({
       component: ModalTicketComponent,
-      cssClass: 'modal-dialog-ticket'
+      cssClass: 'modal-dialog-ticket',
+      componentProps: {
+        ticket: this.ticket
+      }
     });
     return await modal.present();
   }
