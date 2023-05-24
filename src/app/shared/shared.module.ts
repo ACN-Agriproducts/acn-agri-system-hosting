@@ -17,6 +17,10 @@ import { StorageCardComponent } from './components/storage-card/storage-card.com
 import { FilterContractsPipe } from './pipes/filter-contracts.pipe';
 import { SectionTitleComponent } from './components/section-title/section-title.component';
 import { HashMapPipe } from './pipes/hashmap/hashmap.pipe';
+import { TableConfigurableComponent } from './components/tables/table-configurable/table-configurable.component';
+import { TableContractsComponent } from './components/tables/table-contracts/table-contracts.component';
+import { FilterPopoverComponent } from './components/tables/filter-popover/filter-popover.component';
+import { RoundUpPipe } from './pipes/roundUp/round-up.pipe';
 import { SelectedTicketsPipe } from './pipes/selectedTickets/selected-tickets.pipe';
 import { InvoiceOneComponent } from './printable/printable-invoice/invoice-one/invoice-one.component';
 import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/invoice-two.component';
@@ -49,6 +53,8 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     FilterContractsPipe,
     SectionTitleComponent,
     HashMapPipe,
+    TableConfigurableComponent,
+    TableContractsComponent,
     SelectedTicketsPipe,
     InvoiceOneComponent,
     InvoiceTwoComponent,
@@ -72,6 +78,10 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     FilterContractsPipe,
     SectionTitleComponent,
     HashMapPipe,
+    TableConfigurableComponent,
+    TableContractsComponent,
+    FilterPopoverComponent,
+    RoundUpPipe
     SelectedTicketsPipe,
     InvoiceOneComponent,
     InvoiceTwoComponent,

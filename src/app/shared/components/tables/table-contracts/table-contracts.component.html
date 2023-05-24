@@ -1,0 +1,113 @@
+
+<app-configurable-table 
+	#configTable
+	[rowAction]="openContract.bind(this)"
+	[collRef]="collRef"
+	[steps]="steps"
+	[displayOptions]="displayOptions"
+>
+	<ng-template #headers>
+		<th *ngFor="let column of displayColumns"
+			[style.width]="column.width || (defaultWidth | hashmap:column.fieldName) || '1fr'"
+			[style.min-width]="column.minWidth || (defaultMinWidth | hashmap:column.fieldName) || '80px'"
+			[style.max-width]="column.maxWidth || (defaultMaxWidth | hashmap:column.fieldName) || '250px'"
+			nowrap
+		>
+			<button
+				class="header-text"
+				[class.selected]="sortFieldName === column.fieldName"
+				(click)="handleSort(column.fieldName)" 
+				(contextmenu)="openFilterMenu(column.fieldName, $event)" 
+			>
+				<ng-container
+					*ngTemplateOutlet="
+						templateRefs | hashmap:column.fieldName;
+						context: { isHeader: true }
+					"
+				></ng-container>
+				<mat-icon [class.flipped]="sortFieldName === column.fieldName && sortDirection === 'asc'">
+					arrow_downward
+				</mat-icon>
+			</button>
+		</th>
+	</ng-template>
+	<ng-template #rows let-row>
+		<td *ngFor="let column of displayColumns"
+			[style.width]="column.width || ''"
+			[style.min-width]="column.minWidth || (defaultMinWidth | hashmap:column.fieldName) || '80px'"
+			[style.max-width]="column.maxWidth || (defaultMaxWidth | hashmap:column.fieldName) || '250px'"
+		>
+			<div class="compact-header header-text">
+				<ng-container
+					*ngTemplateOutlet="
+						templateRefs | hashmap:column.fieldName;
+						context: { isHeader: true }
+					"
+				></ng-container>
+			</div>
+			<div class="compact-data">
+				<ng-container
+					*ngTemplateOutlet="
+						templateRefs | hashmap:column.fieldName;
+						context: { $implicit: row, isHeader: false }
+					"
+				></ng-container>
+			</div>
+		</td>
+	</ng-template>
+</app-configurable-table>
+
+
+<ng-template #clientName let-row let-isHeader="isHeader">
+	<!-- <span class="header-text" *ngIf="isHeader; else clientNameData">Client</span>
+	<ng-template #clientNameData>{{ row.clientName | titlecase }}</ng-template> -->
+	{{ isHeader ? 'Client' : (row.clientName | titlecase) }}
+</ng-template>
+
+<ng-template #currentDelivered let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Delivered' : (row.currentDelivered | massInUnit | number) }}
+</ng-template>
+
+<ng-template #date let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Date' : (row.date | date:(displayOptions?.dateFormat || displayOptions?.defaultDateFormat || "mediumDate")) }}
+</ng-template>
+
+<ng-template #delivery_dates let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Delivery' : (row.delivery_dates.begin | date:(displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate"))
+	 + ' - ' + 
+	(row.delivery_dates.end | date:(displayOptions?.deliveryDatesFormat || displayOptions?.defaultDateFormat || "shortDate")) }}
+</ng-template>
+
+<ng-template #grade let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Grade' : row.grade }}
+</ng-template>
+
+<ng-template #id let-row let-isHeader="isHeader">
+	{{ isHeader ? 'ID' : row.id }}
+</ng-template>
+
+<ng-template #loads let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Loads' : (row.loads | number) }}
+</ng-template>
+
+<ng-template #pricePerBushel let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Price ( $ / Bu )' : (row.pricePerBushel | currency) }}
+</ng-template>
+
+<ng-template #product let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Product' : (row.productInfo.name | titlecase) }}
+</ng-template>
+
+<ng-template #quantity let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Bushels' : (row.quantity | massInUnit | number) }}
+</ng-template>
+
+<ng-template #status let-row let-isHeader="isHeader">
+	<span [class.status]="!isHeader" [class]="isHeader ? '' : (row.status | lowercase)">
+		{{ isHeader ? 'Status' : row.status }}
+	</span>
+</ng-template>
+
+<ng-template #transport let-row let-isHeader="isHeader">
+	{{ isHeader ? 'Transport' : (row.transport | titlecase) }}
+</ng-template>

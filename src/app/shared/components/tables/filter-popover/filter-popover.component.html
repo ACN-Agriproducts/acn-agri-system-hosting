@@ -1,0 +1,15 @@
+
+<ion-content>
+	<ion-list>
+		<ion-item lines="full">
+			<ion-searchbar #searchbar class="custom-searchbar" (keyup.enter)="filter(searchbar.value)">Filter By:</ion-searchbar>
+		</ion-item>
+		<ion-item lines="none" class="clear-filter-item" button (click)="clearFilter()">
+			<div class="clear-filter" slot="start">
+				<ion-icon name="funnel-outline" color="primary"></ion-icon>
+				<ion-icon name="close" color="danger" class="clear-icon"></ion-icon>
+			</div>
+			<ion-label>Clear Filter</ion-label>
+		</ion-item>
+	</ion-list>
+</ion-content>

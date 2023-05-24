@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { Plant } from '@shared/classes/plant';
 import { DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { ContractInfo, contractColumn } from '@shared/components/tables/table-contracts/table-contracts.component';
+
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
