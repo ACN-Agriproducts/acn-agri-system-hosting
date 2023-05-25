@@ -8,7 +8,6 @@ import { Product } from "./product";
 import { Ticket } from "./ticket";
 
 declare type contractType = string | boolean;
-declare type FutureMonth = "MAR CH" | "MAY CK" | "JUL CN" | "SEP CU" | "DEC CZ";
 declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
 
 export class Contract extends FirebaseDocInterface {
@@ -138,6 +137,7 @@ export class Contract extends FirebaseDocInterface {
                 marketOptions: null,
                 priceSetPeriodBegin: null,
                 priceSetPeriodEnd: null,
+                program: null,
             }
 
             this.companyInfo = {
@@ -376,21 +376,21 @@ export class Contract extends FirebaseDocInterface {
         return `${this.productInfo.marketCode}${marketMonthCodes.get(this.futurePriceInfo.expirationMonth.getMonth())}${this.futurePriceInfo.expirationMonth.getFullYear() % 10}`
     }
 
-    public clearContactInfo(contractInfo: ContactInfo) {
-        contractInfo.caat = null;
-        contractInfo.city = null;
-        contractInfo.email = null;
-        contractInfo.name = null;
-        contractInfo.phoneNumber = null;
-        contractInfo.state = null;
-        contractInfo.streetAddress = null;
-        contractInfo.zipCode = null;
-        contractInfo.ref = null;
-        contractInfo.clientRep = null;
-        contractInfo.rfc = null;
-        contractInfo.curp = null;
-        contractInfo.notarialAct = null;
-        contractInfo.notarialActDate = null;
+    public clearContactInfo(contactInfo: ContactInfo) {
+        contactInfo.caat = null;
+        contactInfo.city = null;
+        contactInfo.email = null;
+        contactInfo.name = null;
+        contactInfo.phoneNumber = null;
+        contactInfo.state = null;
+        contactInfo.streetAddress = null;
+        contactInfo.zipCode = null;
+        contactInfo.ref = null;
+        contactInfo.clientRep = null;
+        contactInfo.rfc = null;
+        contactInfo.curp = null;
+        contactInfo.notarialAct = null;
+        contactInfo.notarialActDate = null;
 
     }
 
@@ -579,6 +579,7 @@ interface FuturePriceInfo {
     marketOptions: string;
     priceSetPeriodBegin: Date;
     priceSetPeriodEnd: Date;
+    program: string;
 }
 
 export interface Exectuive {

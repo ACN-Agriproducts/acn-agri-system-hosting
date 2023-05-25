@@ -21,23 +21,6 @@ export class DisplayContractComponent implements OnInit {
       return;
     }
 
-    if(!this.contract.productInfo) {
-      const productRef = this.contract.product;
-      getDoc(productRef).then(result => {
-        // this.contract.productInfo = new ProductInfo({
-        //   name: result.ref.id,
-        //   moisture: result.get('moisture'),
-        //   weight: result.get('weight')
-        // });
-        // this.contract.productInfo.name = result.id;
-
-        // if(this.contract.productInfo && this.contract.clientInfo) {
-        //   this.ready = true;
-        //   this.product = this.contract.productInfo;
-        // }
-      });
-    }
-
     if(!this.contract.clientInfo) {
       const clientRef = this.contract.client;
       getDoc(clientRef).then(result => {

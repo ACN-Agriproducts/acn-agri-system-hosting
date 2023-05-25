@@ -130,7 +130,7 @@
 			<span class="contract-version">CONTRATO DE COMPRAVENTA PRECIO FIJO</span>
 		</b>
 		<br>
-		<span class="contract-id">Número de contrato <span class="emphasis">CVBACN050123-0001</span></span>
+		<span class="contract-id">Número de contrato <span class="emphasis"><span [printableField]="'id'" >{{contractForm.id ?? " "}}</span></span></span>
 	</p>
 	<p class="text-align-center page-title">“ANEXO 1”</p>
 	<div class="party-info">
@@ -144,7 +144,7 @@
         <span [printableField]="'clientInfo.streetAddress'" >{{contractForm?.clientInfo?.streetAddress}}</span>
         <span>
             <span [printableField]="'clientInfo.city'" >{{contractForm?.clientInfo?.city}}</span>,
-            <span class="focused" [printableField]="'clientInfo.state'" >{{contractForm?.clientInfo?.state}}</span>, 
+            <span [printableField]="'clientInfo.state'" >{{contractForm?.clientInfo?.state}}</span>, 
             <span [printableField]="'clientInfo.country'" >{{contractForm?.clientInfo?.country}}</span>        C.P. <span [printableField]="'clientInfo.zipCode'" >{{contractForm?.clientInfo?.zipCode}}</span></span>
         <span>R.F.C.: <span [printableField]="'clientInfo.rfc'" >{{contractForm?.clientInfo?.rfc}}</span></span>
 	</div>
@@ -198,7 +198,7 @@
 		</div>
 		<div class="contract-info-row">
 			<div>HUMEDAD MÁXIMA:</div>
-			<div [printableField]="'productInfo.moisutre'" >{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
+			<div [printableField]="'productInfo.moisture'" >{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE ENTREGA:</div>
@@ -300,8 +300,8 @@
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
 			<div class="signature-line"></div>
-			<span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm?.clientInfo?.clientRep}}</span>
-            <span>{{ contractForm.clientInfo?.name }}</span>
+			<span [class.focused]="focusedField == 'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep}}</span>
+            <span [class.focused]="focusedField == 'clientInfo.name'">{{ contractForm.clientInfo?.name }}</span>
 		</div>
 	</div>
 </div>
