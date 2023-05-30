@@ -49,6 +49,18 @@ export class Ticket extends FirebaseDocInterface{
     public voidRequester: string;
     public weight: number;
 
+    public clientStreetAddress: string;
+    public clientCity: string;
+    public clientState: string;
+    public clientZipCode: string;
+
+    public transportName: string;
+    public transportStreetAddress: string;
+    public transportCity: string;
+    public transportState: string;
+    public transportZipCode: string;
+    public transportCaat: string;
+
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
 
@@ -93,6 +105,18 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
 
+        this.clientStreetAddress = data.clientStreetAddress;
+        this.clientCity = data.clientCity;
+        this.clientState = data.clientState;
+        this.clientZipCode = data.clientZipCode;
+
+        this.transportName = data.transportName;
+        this.transportStreetAddress = data.transportStreetAddress;
+        this.transportCity = data.transportCity;
+        this.transportState = data.transportState;
+        this.transportZipCode = data.transportZipCode;
+        this.transportCaat = data.transportCaat;
+
         this.net = this.gross.subtract(this.tare);
     }
 
@@ -134,7 +158,19 @@ export class Ticket extends FirebaseDocInterface{
                 voidReason: data.voidReason,
                 voidRequest: data.voidRequest,
                 voidRquester: data.voidRequester,
-                weight: data.weight
+                weight: data.weight,
+
+                clientStreetAddress: data.weight,
+                clientCity: data.weight,
+                clientState: data.weight,
+                clientZipCode: data.weight,
+                
+                transportName: data.weight,
+                transportStreetAddress: data.weight,
+                transportCity: data.weight,
+                transportState: data.weight,
+                transportZipCode: data.weight,
+                transportCaat: data.weight,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
