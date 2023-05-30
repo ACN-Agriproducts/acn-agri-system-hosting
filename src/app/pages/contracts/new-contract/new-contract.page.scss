@@ -65,14 +65,28 @@ input::-webkit-inner-spin-button {
 
 
 app-printable-contract {
-    // overflow-y: auto;
-    // max-height: 11in;
     max-width: min-content;
     min-width: min-content;
     margin: 10px;
+
+    transform-origin: center;
+    zoom: 80%;
+    max-width: 660px;
 }
 
-@media screen and (min-width: 1649px) {
+@media screen and (min-width: 1479px){
+    app-printable-contract {
+        zoom: 80%
+    }
+}
+
+@media screen and (max-width: 1478px) and (min-width: 1280px) {
+    app-printable-contract {
+        zoom: 60%
+    }
+}
+
+@media screen and (min-width: 1280px) {
     .content-grid {
         justify-items: center;
         justify-content: space-around;
@@ -83,7 +97,7 @@ app-printable-contract {
     }
 }
 
-@media screen and (max-width: 1648px) {
+@media screen and (max-width: 1279px) {
     .content-grid {
         flex-direction: column;
         align-items: center;
@@ -94,6 +108,9 @@ app-printable-contract {
             overflow-x: scroll;
         }
     }
+
+    app-printable-contract {
+        zoom: 80%    }
 }
 
 

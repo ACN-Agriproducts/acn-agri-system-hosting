@@ -7,16 +7,15 @@
         [contract]="contract"
         [isNew]="true"
         (selectedFieldEvent)="focusedFieldName = $event">
-      <ng-template #actionBar>
-        <button mat-flat-button
-          ngxPrint
-          [useExistingCss]="true"
-          printSectionId="printable-document"
-        >Print</button>
-      </ng-template>
-    </app-contract-form>
+        <ng-template #actionBar>
+          <button mat-flat-button
+            ngxPrint
+            [useExistingCss]="true"
+            printSectionId="printable-document"
+          >Print</button>
+        </ng-template>
+      </app-contract-form>
     </div>
-    <!-- <app-display-contract id='printable-doc' [contractForm]="contract" [weight]="this.contractWeight" [productsList]="this.productsList"></app-display-contract> -->
     <app-printable-contract
       id="printable-document"
       [contract]="contract"
