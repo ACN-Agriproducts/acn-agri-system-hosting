@@ -41,19 +41,21 @@ export class ProductPage implements OnInit {
       if (!result) {
         const newTables = new DiscountTables(doc(DiscountTables.getCollectionReference(this.db, this.session.getCompany(), this.product)));
         await newTables.set();
+        
         this.discountTables = newTables;
+        return;
       }
-      else {
-        this.discountTables = result;
-      }
+
+      this.discountTables = result;
     });
   }
 
   async addTable() {
-    const dialogRef = this.dialog.open(NewDiscountTableDialog);
+    const dialogRef = this.dialog.open(NewDiscountTableDialog, {
+      disableClose: true
+    });
 
     dialogRef.afterClosed().subscribe(async result => {
-      console.log(result)
       if (!result) return;
 
       this.discountTables.tables.push(result);
@@ -69,6 +71,7 @@ export class ProductPage implements OnInit {
 })
 export class NewDiscountTableDialog implements OnInit {
   public table: DiscountTable;
+  public standardConfig: boolean = true;
 
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
@@ -77,27 +80,22 @@ export class NewDiscountTableDialog implements OnInit {
 
   ngOnInit() {
     this.table = new DiscountTable();
-    console.log(this.table)
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    console.log(event)
     moveItemInArray(this.table.headers, event.previousIndex, event.currentIndex);
   }
 
-  add(event: MatChipInputEvent): void {
+  add(event: MatChipInputEvent) {
     const value = (event.value || '').trim();
 
-    // Add our fruit
     if (value) {
       this.table.headers.push(value);
     }
-
-    // Clear the input value
     event.chipInput!.clear();
   }
 
-  remove(header: string): void {
+  remove(header: string) {
     const index = this.table.headers.indexOf(header);
 
     if (index >= 0) {

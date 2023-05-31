@@ -12,7 +12,7 @@ export class DiscountTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.table)
+    // console.log(this.table)
   }
 
 }

@@ -16,10 +16,15 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col *ngFor="let table of discountTables?.tables" size-sm="12" size-md="6">
+      <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
         <ion-card>
-          <ion-card-header>
-            <ion-card-title> Discount Table {{ table.name }}</ion-card-title>
+          <ion-card-header class="discount-table-header">
+            <ion-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</ion-card-title>
+            <button mat-icon-button color="warn" 
+              (click)="discountTables.tables.splice(tableIndex, 1); discountTables.set()"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
           </ion-card-header>
           <ion-card-content>
             <app-discount-table [table]="table"></app-discount-table>

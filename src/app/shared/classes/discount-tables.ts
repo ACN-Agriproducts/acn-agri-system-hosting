@@ -42,7 +42,15 @@ export class DiscountTables extends FirebaseDocInterface {
         toFirestore(data: DiscountTables): DocumentData {
             return {
                 date: data.date,
-                tables: data.tables
+                tables: data.tables.map(table => Object.assign({}, table))
+                // tables: data.tables.map(table => {
+                //     return {
+                //         name: table.name,
+                //         fieldName: table.fieldName,
+                //         headers: table.headers,
+                //         data: table.data
+                //     }
+                // })
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): DiscountTables {
@@ -74,7 +82,6 @@ export class DiscountTable {
     }[];
 
     constructor(tableData?: any) {
-
         this.name = tableData?.name ?? "";
         this.fieldName = tableData?.fieldName ?? "";
         this.headers = tableData?.headers ?? [];
