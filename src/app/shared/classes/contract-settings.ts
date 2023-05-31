@@ -78,7 +78,7 @@ export class ContractSettings extends FirebaseDocInterface {
     }
 
     public static getDocument(db: Firestore, company: string): Promise<ContractSettings> {
-        const colQuery = query(ContractSettings.getCollectionRef(db, company), orderBy('date'), limit(1));
+        const colQuery = query(ContractSettings.getCollectionRef(db, company), orderBy('date', 'desc'), limit(1));
 
         return getDocsFromServer(colQuery).then(result => {
             return result.docs[0].data();

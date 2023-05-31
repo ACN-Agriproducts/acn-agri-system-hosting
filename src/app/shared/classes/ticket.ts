@@ -49,6 +49,8 @@ export class Ticket extends FirebaseDocInterface{
     public voidRequester: string;
     public weight: number;
 
+    public contractRef: DocumentReference<Contract>;
+
     public clientStreetAddress: string;
     public clientCity: string;
     public clientState: string;
@@ -105,6 +107,8 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
 
+        this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
+
         this.clientStreetAddress = data.clientStreetAddress;
         this.clientCity = data.clientCity;
         this.clientState = data.clientState;
@@ -159,6 +163,8 @@ export class Ticket extends FirebaseDocInterface{
                 voidRequest: data.voidRequest,
                 voidRquester: data.voidRequester,
                 weight: data.weight,
+
+                contractRef: data.contractRef,
 
                 clientStreetAddress: data.weight,
                 clientCity: data.weight,

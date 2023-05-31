@@ -216,7 +216,7 @@ export class ContractFormComponent implements OnInit {
       if(plantId == 'third-party') return;
 
       const plantObject = plantList.find(plant => plant.ref.id == plantId);
-      this.contract.deliveryPlants.push(plantObject.address);
+      this.contract.deliveryPlants.push(plantObject.address ?? "");
     });
 
     if(this.contract.plants.includes('third-party')) this.contract.deliveryPlants.push('');

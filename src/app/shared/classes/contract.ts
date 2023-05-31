@@ -157,6 +157,8 @@ export class Contract extends FirebaseDocInterface {
                 begin: null,
                 end: null
             };
+            this.plants = [];
+
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
             this.futurePriceBase = new Price(null, 'bu');
@@ -202,6 +204,7 @@ export class Contract extends FirebaseDocInterface {
         this.market_price = data.market_price;
         this.paymentTerms = new PaymentTerms(data.paymentTerms);
         this.pdfReference = data.pdfReference;
+        this.plants = data.plants;
         this.price = data.price ?
                         new Price(data.price, data.priceUnit) :
                         new Price(data.pricePerBushel, 'bu');
@@ -273,6 +276,7 @@ export class Contract extends FirebaseDocInterface {
                 market_price: data.market_price ?? null,
                 paymentTerms: data.paymentTerms.get() ?? null,
                 pdfReference: data.pdfReference ?? null,
+                plants: data.plants ?? null,
                 pricePerBushel: data.pricePerBushel ?? null,
                 price: data.price.amount ?? null,
                 priceUnit: data.price.unit ?? null,
@@ -285,7 +289,7 @@ export class Contract extends FirebaseDocInterface {
                 tags: data.tags ?? null,
                 tickets: data.tickets ?? null,
                 transport: data.transport ?? null,
-                truckers: data.truckers ?? null,
+                truckers: data.truckers ?? [],
 
                 // NEW
                 bankInfo: data.bankInfo ?? null,
@@ -455,21 +459,21 @@ export class Contract extends FirebaseDocInterface {
         const primaryContact = contact.metacontacts.find(c => c.isPrimary);
 
         return {
-            caat: contact.caat,
-            city: contact.city,
-            email: primaryContact.email,
-            name: contact.name,
-            phoneNumber: primaryContact.phone,
-            state: contact.state,
-            country: contact.country,
-            streetAddress: contact.streetAddress,
-            zipCode: contact.zipCode,
-            ref: contact.ref.withConverter(Contact.converter),
-            clientRep: primaryContact.name,
-            rfc: contact.rfc,
-            curp: contact.curp,
-            notarialAct: contact.notarialAct,
-            notarialActDate: contact.notarialActDate
+            caat: contact.caat ?? null,
+            city: contact.city ?? null,
+            email: primaryContact.email ?? null,
+            name: contact.name ?? null,
+            phoneNumber: primaryContact.phone ?? null,
+            state: contact.state ?? null,
+            country: contact.country ?? null,
+            streetAddress: contact.streetAddress ?? null,
+            zipCode: contact.zipCode ?? null,
+            ref: contact.ref.withConverter(Contact.converter) ?? null,
+            clientRep: primaryContact.name ?? null,
+            rfc: contact.rfc ?? null,
+            curp: contact.curp ?? null,
+            notarialAct: contact.notarialAct ?? null,
+            notarialActDate: contact.notarialActDate ?? null,
         };
     }
 
