@@ -1,6 +1,7 @@
 <app-header-toolbar titulo="{{product}}"></app-header-toolbar>
 
-<ion-content class="ion-padding" *ngIf="ready">
+<ion-content class="ion-padding" *ngIf="ready else loading">
+  <button mat-flat-button (click)="addTable()" color="primary">+ Add Table</button>
   <ion-grid>
     <ion-row>
       <ion-col size-sm='12' size-md='6'>
@@ -13,31 +14,22 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size-sm='12' size-md='6'>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Moisture Discount Table</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <!-- <app-discount-table-moisture [doc]="doc"></app-discount-table-moisture> -->
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col>
+      <ion-col *ngFor="let table of discountTables?.tables" size-sm="12" size-md="6">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Damage Discount Table</ion-card-title>
+            <ion-card-title> Discount Table {{ table.name }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <!-- <app-discount-table-damage [product]="doc"></app-discount-table-damage> -->
+            <app-discount-table [table]="table"></app-discount-table>
           </ion-card-content>
         </ion-card>
-      </ion-col>
-      <ion-col>
-        <ion-card></ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

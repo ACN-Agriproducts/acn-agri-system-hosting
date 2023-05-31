@@ -1,15 +1,15 @@
 import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { CollectionReference, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
-import { Firestore, collection, getDocs } from "@angular/fire/firestore";
+import { CollectionReference, DocumentReference, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
+import { Firestore, collection, getDocs, limit, orderBy, query, where } from "@angular/fire/firestore";
 
 export class DiscountTables extends FirebaseDocInterface {
     date: Date;
     tables: DiscountTable[];
 
-    // constructor();
-    // constructor(snapshot: QueryDocumentSnapshot<any>);
-    // constructor(ref: DocumentReference<any>);
+    constructor();
+    constructor(snapshot: QueryDocumentSnapshot<any>);
+    constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef?: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
@@ -21,34 +21,29 @@ export class DiscountTables extends FirebaseDocInterface {
 
         if(snapshotOrRef instanceof DocumentReference) {
             this.ref = snapshotOrRef;
+
+            this.date = new Date();
+            this.tables = [];
+            
             return;
         }
 
         if(data == undefined) return;
 
-        this.date = data.date.toDate();
+        this.date = data.date?.toDate();
         this.tables = [];
 
         data.tables.forEach(table => {
-            this.tables.push(table);
+            this.tables.push(new DiscountTable(table));
         });
     }
 
     public static converter = {
         toFirestore(data: DiscountTables): DocumentData {
-            const doc = {
+            return {
                 date: data.date,
-                tables: []
+                tables: data.tables
             }
-
-            data.tables.forEach(table => {
-                doc.tables.push({
-                    name: table.name,
-                    field: table.field
-                });
-            });
-
-            return doc;
         },
         fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): DiscountTables {
             return new DiscountTables(snapshot);
@@ -59,24 +54,33 @@ export class DiscountTables extends FirebaseDocInterface {
         return collection(db, `companies/${company}/products/${product}/discounts`).withConverter(DiscountTables.converter);
     }
 
-    public static getDiscountTables(db: Firestore, company: string, product: string): Promise<DiscountTables[]> {
-        return getDocs(DiscountTables.getCollectionReference(db, company, product)).then(res => {
-            return res.docs.map(doc => doc.data());
+    public static getDiscountTables(db: Firestore, company: string, product: string, date?: Date): Promise<DiscountTables> {
+        return getDocs(query(
+            DiscountTables.getCollectionReference(db, company, product), 
+            date ? where('date', '==', date) : orderBy('date', 'asc'),
+            limit(1)
+        )).then(result => {
+            return result.docs[0]?.data();
         });
     }
 }
 
-class DiscountTable {
+export class DiscountTable {
     name: string;
-    field: string;
-    data: any[];
+    fieldName: string;
+    headers: string[];
+    data: {
+        [fieldName: string]: number
+    }[];
 
-    constructor(tableData: any) {
-        this.name = tableData.name;
-        this.field = tableData.field;
+    constructor(tableData?: any) {
+
+        this.name = tableData?.name ?? "";
+        this.fieldName = tableData?.fieldName ?? "";
+        this.headers = tableData?.headers ?? [];
         this.data = [];
 
-        tableData.data.forEach(item => {
+        tableData?.data.forEach(item => {
             this.data.push(item);
         });
     }

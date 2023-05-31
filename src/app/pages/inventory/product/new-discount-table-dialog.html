@@ -1,0 +1,50 @@
+
+<h2 mat-dialog-title>New Discount Table</h2>
+
+<mat-dialog-content>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="table.name" type="text">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Field Name</mat-label>
+            <input matInput [(ngModel)]="table.fieldName" type="text">
+        </mat-form-field>
+    </div>
+
+    <!-- <mat-divider></mat-divider> -->
+
+    <mat-form-field appearance="fill">
+        <mat-label>Headers</mat-label>
+        <mat-chip-list #chipList
+            cdkDropList
+            cdkDropListOrientation="horizontal"
+            (cdkDropListDropped)="drop($event)"
+            [selectable]="true"
+            [multiple]="true"
+        >
+            <mat-chip 
+                cdkDrag 
+                *ngFor="let header of table.headers" 
+                (removed)="remove(header)"
+            >
+                {{ header }}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip>
+            <input placeholder="New header..."
+                    [matChipInputFor]="chipList"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="addOnBlur"
+                    (matChipInputTokenEnd)="add($event)"
+                >
+        </mat-chip-list>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-flat-button color="primary" mat-dialog-close>Cancel</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="table">Submit</button>
+</mat-dialog-actions>

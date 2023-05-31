@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { DiscountTableDamageComponent } from './discount-table-damage.component';
+import { DiscountTableComponent } from './discount-table.component';
 
-describe('DiscountTableDamageComponent', () => {
-  let component: DiscountTableDamageComponent;
-  let fixture: ComponentFixture<DiscountTableDamageComponent>;
+describe('DiscountTableComponent', () => {
+  let component: DiscountTableComponent;
+  let fixture: ComponentFixture<DiscountTableComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiscountTableDamageComponent ],
+      declarations: [ DiscountTableComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DiscountTableDamageComponent);
+    fixture = TestBed.createComponent(DiscountTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
