@@ -79,7 +79,7 @@
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.discounts.infested | currency }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.discounts.inspection | currency }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>
-            {{ contract.pricePerBushel * (ticket.data.dryWeight | massInUnit) / contract.productInfo.weight - ticket.discounts.infested - ticket.discounts.inspection | currency }}
+            {{ (contract.price | pricePerUnit:'lbs') * (ticket.data.dryWeight | massInUnit) / contract.productInfo.weight - ticket.discounts.infested - ticket.discounts.inspection | currency }}
         </td>
     </tr>
     <tr>
