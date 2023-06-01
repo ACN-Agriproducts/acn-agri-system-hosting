@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ProductPageRoutingModule } from './product-routing.module';
 
-import { NewDiscountTableDialog, ProductPage } from './product.page';
+import { SetDiscountTableDialog, ProductPage } from './product.page';
 import { CoreModule } from '@core/core.module';
 import { DiscountTableMoistureComponent } from './components/discount-table-moisture/discount-table-moisture.component';
 import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
@@ -32,7 +32,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     DprTicketsTableComponent,
     DprInvoiceTableComponent,
     DiscountTableComponent,
-    NewDiscountTableDialog
+    SetDiscountTableDialog
   ]
 })
 export class ProductPageModule {}

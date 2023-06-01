@@ -1,16 +1,9 @@
 
-ion-grid, ion-col {
-    padding: 0;
-}
-
-.discount-table-header {
+mat-chip {
+    max-width: 50%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-}
-
-mat-chip {
-    width: min-content;
+    // try clamp() ??
 }
 
 .cdk-drag-animating {
@@ -29,4 +22,27 @@ mat-chip {
 
 .default-layout-checkbox {
     margin: 20px 0;
+}
+
+ion-grid, ion-col {
+    padding: 0;
+}
+
+.discount-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.discount-table mat-form-field {
+    color: var(--ion-color-step-850, #262626);
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.2;
+
+    ::ng-deep .mat-form-field-underline {
+        display: none !important;
+    }
 }

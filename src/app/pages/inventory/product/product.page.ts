@@ -51,7 +51,7 @@ export class ProductPage implements OnInit {
   }
 
   async addTable() {
-    const dialogRef = this.dialog.open(NewDiscountTableDialog, {
+    const dialogRef = this.dialog.open(SetDiscountTableDialog, {
       disableClose: true
     });
 
@@ -65,11 +65,11 @@ export class ProductPage implements OnInit {
 }
 
 @Component({
-  selector: 'new-discount-table-dialog',
-  templateUrl: './new-discount-table-dialog.html',
+  selector: 'set-discount-table-dialog',
+  templateUrl: './set-discount-table-dialog.html',
   styleUrls: ['./product.page.scss']
 })
-export class NewDiscountTableDialog implements OnInit {
+export class SetDiscountTableDialog implements OnInit {
   public table: DiscountTable;
   public standardConfig: boolean = true;
 

@@ -14,12 +14,25 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
+      <ion-col size-sm='12' size-md='6'>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Moisture</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <app-discount-table-moisture [doc]="doc"></app-discount-table-moisture>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
     </ion-row>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
-        <ion-card>
+        <ion-card class="discount-table">
           <ion-card-header class="discount-table-header">
-            <ion-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</ion-card-title>
+            <!-- <ion-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</ion-card-title> -->
+            <mat-form-field>
+              <input matInput [(ngModel)]="table.name" type="text">
+            </mat-form-field>
             <button mat-icon-button color="warn" 
               (click)="discountTables.tables.splice(tableIndex, 1); discountTables.set()"
             >
