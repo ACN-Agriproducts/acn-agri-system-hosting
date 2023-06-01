@@ -30,7 +30,10 @@
         <ion-card class="discount-table">
           <ion-card-header class="discount-table-header">
             <!-- <ion-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</ion-card-title> -->
-            <mat-form-field>
+            <mat-form-field 
+              (keydown.enter)="discountTables.set()" 
+              (focusout)="discountTables.set()"
+            >
               <input matInput [(ngModel)]="table.name" type="text">
             </mat-form-field>
             <button mat-icon-button color="warn" 
