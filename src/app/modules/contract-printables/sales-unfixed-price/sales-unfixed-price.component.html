@@ -28,24 +28,24 @@
 			- DE <b>“EL COMPRADOR”</b>:
 			<ol type="1">
 				<li>
-					Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, como se acredita con la Escritura Pública número <u><span [printableField]="'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [printableField]="'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>, y que el señor <u><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u> está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
-				</li>
-				<li>
-					Que su Registro Federal de Contribuyentes es: <u><span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
-				</li>
-				<li>
-					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [printableField]="'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
-				</li>
-				<li>
-					Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
-				</li>
+                    Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, <span [hidden]="!contractForm?.clientInfo?.notarialAct">como se acredita con la Escritura Pública número <u><span [printableField]="'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [printableField]="'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>,</span> y que el señor <u><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u>, está facultado para celebrar este contrato.
+                </li>
+                <li>
+                    Que su Registro Federal de Contribuyentes es: <u><span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
+                </li>
+                <li [hidden]="!contractForm?.clientInfo?.curp">
+                    Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [printableField]="'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
+                </li>
+                <li>
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
+                </li>
 			</ol>
 		</li>
 		<li>
 			- DE <b>“LAS PARTES”</b>
 			<ol type="1">
 				<li>
-					“Dictamen Jurídico” Que el formato denominado “ANEXO 1” que se adhiere al contrato suscrito por “LAS PARTES”, forma parte integral del presente contrato, el cual contiene la información siguiente: Fecha, Producto, Tipo de carga, Precio determinado, Cantidad, Calidad garantizada, humedad máxima , Forma de entrega, Seguro de tránsito, Lugar de entrega, Pesos, Mermas, Periodo de embarque, Condiciones de retiro, Demoras de cargas, Almacenaje y fumigación, Condiciones de pago, Demoras en pagos, Términos de Pago, Anticipos, Formas de pago, Cuentas y bancos de pago, ejecutivo de ventas y el nombre y firma de “EL COMPRADOR” y “EL VENDEDOR”.
+					“Dictamen Jurídico” Que el formato denominado “ANEXO 1” que se adhiere al contrato suscrito por “LAS PARTES”, forma parte integral del presente contrato, el cual contiene la información siguiente: Fecha, Producto, Tipo de carga, Precio determinado, Cantidad, Calidad garantizada, humedad máxima , Forma de entrega, Seguro de tránsito, Lugar de entrega, Pesos, Mermas, Periodo de embarque, Condiciones de retiro, Demoras de descargas, Almacenaje y fumigación, Condiciones de pago, Demoras en pagos, Términos de Pago, Anticipos, Formas de pago, Cuentas y bancos de pago, ejecutivo de ventas y el nombre y firma de “EL COMPRADOR” y “EL VENDEDOR”.
 				</li>
 				<li>
 					Que en la celebración del presente contrato no ha existido mala fe, error, dolo o violencia de ningún tipo y que las contraprestaciones establecidas en el mismo son las justas, por lo que es su libre voluntad celebrar este contrato de compraventa a término y obligarse de acuerdo con las siguientes:
@@ -246,7 +246,7 @@
 			<div [printableField]="'loadConditions'" class="white-space-wrap">{{contractForm?.loadConditions}}</div>
 		</div>
 		<div class="contract-info-row">
-			<div>DEMORAS DE CARGAS:</div>
+			<div>DEMORAS DE DESCARGAS:</div>
 			<div [printableField]="'loadDelays'">{{contractForm?.loadDelays | selectFieldDisplay:contractType:'loadDelays' | async}}</div>
 		</div>
 		<div class="contract-info-row">

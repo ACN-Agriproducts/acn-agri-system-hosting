@@ -28,16 +28,16 @@
             - DE <b>“EL COMPRADOR”</b>:
             <ol type="1">
                 <li>
-                    Sociedad mercantil, constituida de conformidad con las leyes mexicanas bajo la denominación de <u>Agropecuaria La Capilla del Noreste, SA de CV;</u>, como se acredita con la Escritura Pública número <u>860</u>, de fecha <u>11 de Febrero de 2011</u> y que el señor <u>Rubén Darío Puga Juárez</u>, en su carácter de <u>Representante Legal</u>, está facultado para celebrar este contrato, como se acredita con la Escritura Pública del Poder Notarial número 11,989, de fecha 01 de Febrero de 2011, y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
+                    Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, <span [hidden]="!contractForm?.clientInfo?.notarialAct">como se acredita con la Escritura Pública número <u><span [printableField]="'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [printableField]="'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>,</span> y que el señor <u><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u>, está facultado para celebrar este contrato.
                 </li>
                 <li>
-                    Que su Registro Federal de Contribuyentes es: <u>ACN980211QC9</u> y se encuentra al corriente de sus obligaciones.
+                    Que su Registro Federal de Contribuyentes es: <u><span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
+                </li>
+                <li [hidden]="!contractForm?.clientInfo?.curp">
+                    Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [printableField]="'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
                 </li>
                 <li>
-                    Que la Clave Única de Registro de Población (CURP) del apoderado legal es:
-                </li>
-                <li>
-                    Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª  y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [printableField]="'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [printableField]="'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
                 </li>
             </ol>
         </li>
