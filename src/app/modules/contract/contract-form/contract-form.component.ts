@@ -182,9 +182,11 @@ export class ContractFormComponent implements OnInit {
 
     if(this.contract.tags.includes('sale')) {
       this.contract.bankInfo = settings.defaultBankInfo;
+      this.contract.deliveryPlants = [""];
     }
     else {
       this.contract.bankInfo = [];
+      this.plantSelectChange();
     }
 
     if(this.currentClient?.bankInfo.length && this.contract.tags.includes("purchase")) this.contract.bankInfo = this.currentClient.bankInfo;
@@ -209,6 +211,8 @@ export class ContractFormComponent implements OnInit {
   }
 
   async plantSelectChange() {
+    if(this.contract.tags.includes('sale')) return;
+
     const plantList = await this.plants$;
     this.contract.deliveryPlants = [];
 

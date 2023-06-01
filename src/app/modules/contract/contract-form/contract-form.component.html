@@ -309,7 +309,7 @@
 </ng-template>
 
 <ng-template typeTemplate="third-party-plant" let-data>
-  <mat-form-field [ngClass]="data | getFieldClass" *ngIf="contract?.plants?.includes('third-party')">
+  <mat-form-field [ngClass]="data | getFieldClass" *ngIf="contract?.plants?.includes('third-party') || contract?.tags?.includes('sale')">
     <mat-label>{{data.label}}</mat-label>
     <textarea matInput [disabled]="contract.status != 'pending'" [(ngModel)]="contract.deliveryPlants[contract.deliveryPlants.length - 1]"></textarea>
   </mat-form-field>
