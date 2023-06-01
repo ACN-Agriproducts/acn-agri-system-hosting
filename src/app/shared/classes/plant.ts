@@ -25,7 +25,7 @@ export class Plant extends FirebaseDocInterface {
         this.lastStorageUpdate = data.lastStorageUpdate;
         this.address = data.address;
 
-        data.inventory.forEach(inv => {
+        data.inventory?.forEach(inv => {
             this.inventory.push(new Inventory(inv));
         });
     }

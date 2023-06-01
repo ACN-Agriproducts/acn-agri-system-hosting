@@ -158,6 +158,7 @@ export class Contract extends FirebaseDocInterface {
                 end: null
             };
             this.plants = [];
+            this.deliveryPlants = [];
 
             this.paymentTerms = new PaymentTerms({});
             this.paymentTerms.origin = null;
