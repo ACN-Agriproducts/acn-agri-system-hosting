@@ -3,13 +3,13 @@
   *ngIf="ready"
   ngxPrint
   printSectionId="printable"
-  [printStyle]="{'#first-page' : {'font-size': '13px', 'line-height': '150%'}, '.terms-and-conditions' : {'font-size': 'x-small', 'line-height': '125%'} }"
+  [printStyle]="{'@page' : { size: 'letter portrait', margin: '1in' }}"
   [useExistingCss]="true">
   PRINT
 </button>
 
 <div class="wrapper">
-  <app-printable-contract [contract]="contract"></app-printable-contract>
+  <app-printable-contract id="printable" [contract]="contract"></app-printable-contract>
 </div>
 
 <mat-spinner *ngIf="!ready"></mat-spinner>

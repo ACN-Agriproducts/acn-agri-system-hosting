@@ -12,6 +12,7 @@
             ngxPrint
             [useExistingCss]="true"
             printSectionId="printable-document"
+            [printStyle]="{'@page' : { size: 'letter portrait', margin: '1in' }}"
           >Print</button>
         </ng-template>
       </app-contract-form>

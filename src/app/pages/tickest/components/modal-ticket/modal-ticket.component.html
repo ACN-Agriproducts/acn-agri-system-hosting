@@ -18,6 +18,7 @@
                     ngxPrint
                     [useExistingCss]="true"
                     printSectionId="printableTicket"
+                    [printStyle]="{'@page' : { size: 'letter portrait', margin: '0.5in' }}"
                 >Print</button>
                 <app-printable-ticket  
                     [ticket]="ticket"
