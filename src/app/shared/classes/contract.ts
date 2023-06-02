@@ -6,6 +6,7 @@ import { Mass, units } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
 import { Ticket } from "./ticket";
+import { ContractSettings } from "./contract-settings";
 
 declare type contractType = string | boolean;
 declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
@@ -128,6 +129,7 @@ export class Contract extends FirebaseDocInterface {
                 name: null,
                 weight: null,
                 marketCode: null,
+                productCode: null,
             };
 
             this.futurePriceInfo = {
@@ -324,8 +326,45 @@ export class Contract extends FirebaseDocInterface {
         }
     }
 
-    public getContractType(): string { 
-        return this.ref.parent.id;
+    public async getId(settings: ContractSettings): Promise<string> { 
+        settings ??= await ContractSettings.getContractDoc(this);
+        
+        let id = settings.contractIdFormat ?? '';
+        if(id == '') return this.id?.toString();
+
+        let replaceStartId = id.indexOf('${');
+        let ReplaceEndId;
+
+        while(replaceStartId != -1) {
+            ReplaceEndId = id.indexOf('}', replaceStartId);
+            let replaceString: string;
+
+            switch (id.substring(replaceStartId + 2, ReplaceEndId)) {
+                case 'ID': {
+                    replaceString = this.id.toString().padStart(4, '0') ?? null;
+                    break;
+                }
+
+                case 'CONTRACTTYPE': {
+                    replaceString = settings.contractTypeCodes[this.type] ?? '';
+                    break;
+                }
+
+                case 'PRODUCT': {
+                    replaceString = this.productInfo.productCode ?? '';
+                    break;
+                }
+
+                default: {
+                    replaceString = '';
+                }
+            }
+
+            id = id.slice(0, replaceStartId) + replaceString + id.slice(ReplaceEndId + 1);
+            replaceStartId = id.indexOf('${');
+        }
+
+        return id;
     }
 
     public getCollectionReference(): CollectionReference<Contract> {
@@ -542,6 +581,7 @@ export interface ProductInfo {
     name: string;
     weight: number;
     marketCode: string;
+    productCode: string;
 }
 
 export class TruckerInfo {

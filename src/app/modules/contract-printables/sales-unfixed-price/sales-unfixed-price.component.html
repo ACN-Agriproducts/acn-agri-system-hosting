@@ -1,5 +1,5 @@
 <div class="page-style main">
-	<div class="text-align-right"><b>No. de contrato:</b><span [printableField]="'id'">{{contractForm.id ?? " "}}</span></div>
+	<div class="text-align-right"><b>No. de contrato:</b><span [printableField]="'id'">{{(contractForm | contractId:settings:contractForm.id:contractForm.product | async)?? " "}}</span></div>
 	<div class="text-align-justify introduction">
 		CONTRATO DE COMPRA-VENTA DE <b><span [printableField]="'product'">{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b><span [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
 	</div>
@@ -139,7 +139,7 @@
 			<span class="contract-version">CONTRATO DE COMPRAVENTA BASES</span>
 		</b>
 		<br>
-		<span class="contract-id">Número de contrato <span class="emphasis"><span [printableField]="'id'">{{contractForm.id ?? " "}}</span></span></span>
+		<span class="contract-id">Número de contrato <span class="emphasis"><span [printableField]="'id'">{{(contractForm | contractId:settings:contractForm.id:contractForm.product | async)?? " "}}</span></span></span>
 	</p>
 	<p class="text-align-center page-title">“ANEXO 1”</p>
 	<div class="party-info">

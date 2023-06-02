@@ -26,6 +26,11 @@ export class ContractSettings extends FirebaseDocInterface {
         [contractName: string]: string[];
     }
 
+    contractIdFormat: string;
+    contractTypeCodes: {
+        [contractName: string]: string;
+    }
+
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
@@ -50,6 +55,8 @@ export class ContractSettings extends FirebaseDocInterface {
         this.fieldGroupOrder = data.fieldGroupOrder;
         this.defaultBankInfo = data.defaultBankInfo;
         this.contractTags = data.contractTags;
+        this.contractIdFormat = data.contractIdFormat;
+        this.contractTypeCodes = data.contractTypeCodes;
     }
 
     public static converter = {
@@ -62,6 +69,8 @@ export class ContractSettings extends FirebaseDocInterface {
                 fieldGroupOrder: data.fieldGroupOrder,
                 defaultBankInfo: data.defaultBankInfo,
                 contractTags: data.contractTags,
+                contractIdFormat: data.contractIdFormat,
+                contractTypeCodes: data.contractTypeCodes,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): ContractSettings {
@@ -89,7 +98,7 @@ export class ContractSettings extends FirebaseDocInterface {
         const db = contract.ref.firestore;
         const company = contract.ref.parent.parent.id;
 
-        const colQuery = query(this.getCollectionRef(db, company), where('date', '<=', contract.date), orderBy('date'), limit(1));
+        const colQuery = query(this.getCollectionRef(db, company), where('date', '<=', contract.date), orderBy('date', 'desc'), limit(1));
         return getDocs(colQuery).then(result => {
             if(result.empty) {
                 return this.getDocument(db, company);

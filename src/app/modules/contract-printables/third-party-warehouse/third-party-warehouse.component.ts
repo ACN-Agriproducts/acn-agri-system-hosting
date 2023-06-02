@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, QueryList, SimpleChanges, ViewChil
 import { Contract } from '@shared/classes/contract';
 import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 import { FocusedFieldDirective } from '../printable-contract.component';
+import { ContractSettings } from '@shared/classes/contract-settings';
 
 @Component({
   selector: 'contract-third-party-warehouse',
@@ -14,6 +15,7 @@ import { FocusedFieldDirective } from '../printable-contract.component';
 export class ThirdPartyWarehouseComponent implements OnInit, OnChanges {
   @Input() contractForm: Contract;
   @Input() focusedField: string;
+  @Input() settings: ContractSettings;
   @ViewChildren(FocusedFieldDirective) fieldsList: QueryList<FocusedFieldDirective>;
   private focusedFields: FocusedFieldDirective[] = [];
 

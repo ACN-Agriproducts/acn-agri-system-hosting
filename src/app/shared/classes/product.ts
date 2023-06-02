@@ -16,6 +16,7 @@ export class Product extends FirebaseDocInterface {
     public physicalInventory: Mass;
     public weight: number;
     public marketCode: string;
+    public productCode: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Product.converter);
@@ -34,6 +35,7 @@ export class Product extends FirebaseDocInterface {
         this.physicalInventory = new Mass(data.physicalInventory, unit);
         this.weight = data.weight;
         this.marketCode = data.marketCode;
+        this.productCode = data.productCode;
     }
 
     public static converter = {
@@ -49,7 +51,8 @@ export class Product extends FirebaseDocInterface {
                 ownedPhysical: data.ownedPhysical.get(),
                 physicalInventory: data.physicalInventory.get(),
                 weight: data.weight,
-                marketCode: data.marketCode
+                marketCode: data.marketCode,
+                productCode: data.productCode,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Product {
@@ -71,6 +74,7 @@ export class Product extends FirebaseDocInterface {
             name: this.getName() ?? null,
             weight: this.weight ?? null,
             marketCode: this.marketCode ?? null,
+            productCode: this.productCode ?? '',
         };
     }
 
