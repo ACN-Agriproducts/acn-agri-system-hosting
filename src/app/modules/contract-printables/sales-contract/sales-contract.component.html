@@ -1,0 +1,232 @@
+<div class="page-style main">
+  <div class='header-section' *ngIf="contractForm">
+    <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
+    <h1><b>CONTRACT</b></h1>
+    <div class='grid-12'>
+      <div class='column-size-4 party-info'>
+        <div class='party-header'><b>BUYER</b></div>
+        <ng-container *ngIf="contractForm.clientInfo">
+          <span [printableField]="'clientInfo.name'"><b>{{ contractForm.clientInfo.name | uppercase }}</b></span>
+          <span [printableField]="'clientInfo.streetAddress'">{{ contractForm.clientInfo.streetAddress | uppercase }}</span>
+          <span><span [printableField]="'clientInfo.city'">{{ contractForm.clientInfo.city | uppercase }}</span>{{ contractForm.clientInfo.state && contractForm.clientInfo.city ? ",": "" }}
+            <span [printableField]="'clientInfo.state'">{{ contractForm.clientInfo.state | uppercase }}</span>{{ contractForm.clientInfo.state && contractForm.clientInfo.zipCode ? ",": "" }} <span [printableField]="'clientInfo.zipCode'">{{ contractForm.clientInfo.zipCode }}</span></span>
+          <span [printableField]="'clientInfo.phoneNumber'">{{ contractForm.clientInfo.phoneNumber }}</span>
+        </ng-container>
+        <br>
+        <div class='party-header'><b>SELLER</b></div>
+        <span><b>ACN AGRIPRODUTS LLC</b></span>
+        <span>1512 RANCHO TOLUCA RD</span>
+        <span>WESLACO TX. 78596</span>
+      </div>
+      <div class='column-size-2'></div>
+      <div class='column-size-3'>
+        <b>CONTRACT NUMBER</b><br>
+        <b>BASE</b><br>
+        <b>FUTURE PRICE</b><br>
+        <b>PRICED</b><br>
+        <b>CONTRACT DATE</b><br>
+        <b>CUSTOMER NO.</b><br>
+        <b>PAYMENT TERMS</b><br>
+        <b>CHECK</b><br>
+        <b>BROKER</b><br>
+        <b>BROKER NUMBER</b><br>
+        <b>FREIGHT PRICE</b><br>
+      </div>
+      <div class='column-size-3' *ngIf="contractForm.date">
+        <b><span [printableField]="'id'">{{ contractForm.id || 0 }}</span>-{{ contractForm.date.getFullYear() % 100 }}</b><br>
+        <!-- {{ contractForm.price | getPricePerUnit:"bu":product }} -->
+        {{ (contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) - contractForm.market_price | number:"0.5-5" }}<br>
+        <span [printableField]="'market_price'">{{ contractForm.market_price | number:"0.5-5" }}</span><br>
+        <span [printableField]="'price.amount'">{{ contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:"0.5-5" }}</span><br>
+        <span [printableField]="'date'">{{ contractForm.date | date:'MM/dd/YYYY' }}</span><br>
+        <br>
+        <br>
+        <br>
+      </div>
+    </div>
+  </div>
+
+  <div class='info-chart'>
+    <div class='grid-12'>
+      <div class='column-size-2'>
+        <span><b>COMMODITY:</b></span><br>
+        <span><b>QUANTITY:</b></span>
+      </div>
+      <div class='column-size-3 text-align-right'>
+        <span [printableField]="'product'">{{ contractForm.product?.id }}</span><br>
+        <div class='grid-3'>
+          <div class='column-size-2'>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'bu':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5' }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}</span>
+          </div>
+          <div class='column-size-1'>
+            <span>BUSHELS</span><br>
+            <span>LBS</span><br>
+            <span>M. TONS</span>
+          </div>
+        </div>
+      </div>
+      <div class='column-size-1'>
+        <span class='right-justify'><b>MST:</b></span>
+      </div>
+      <div class='column-size-1 text-align-right'>
+        <span [printableField]="'productInfo.moisture'">{{contractForm.productInfo.moisture}}%</span>
+      </div>
+      <div class='column-size-1'></div>
+      <div class='column-size-2'>
+        <span><b>WEIGHT:</b></span><br>
+        <span><b>GRADES:</b></span><br>
+        <span><b>TRANSPORTATION:</b></span><br>
+        <span><b>REFERENCE:</b></span>
+      </div>
+      <div class='column-size-2 text-align-right'>
+        <span [printableField]="'paymentTerms.origin'">{{ contractForm.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async | uppercase }}</span><br>
+        <span [printableField]="'grade'">U.S. {{ contractForm.grade }} OR BETTER</span><br>
+        <span>TRUCK</span><br>
+        <span [printableField]="'aflatoxin'">{{ contractForm.aflatoxin }} OR LESS</span>
+      </div>
+    </div>
+    <div id='extra-info-header' class="text-align-center">
+      <div class='grid-12'>
+        <div class='column-size-1'><b>STATUS</b></div>
+        <div class='column-size-4'><b>DELIVERY DATES</b></div>
+        <div class='column-size-3'><b>SCHEDULE PRICE</b></div>
+        <div class='column-size-4'><b>PRICE</b></div>
+      </div>
+    </div>
+    <div>
+      <div class='underline grid-12'>
+        <div class='column-size-2'>Priced</div>
+        <div class='column-size-3'>
+          <ng-container *ngIf="contractForm.delivery_dates?.begin && contractForm.delivery_dates?.end" [printableField]="'delivery_dates'">
+            {{ contractForm.delivery_dates.begin | date:'MM/dd/yy' }} to {{ contractForm.delivery_dates.end | date:'MM/dd/yy' }}
+          </ng-container>
+          <br><br>
+          <div class='underline text-align-left'>
+            Please sign and return this confirmation IMMEDIATELY
+          </div>
+        </div>
+        <div class='column-size-3'>
+          <ng-container *ngIf="contractForm.paymentTerms.paymentTerms && contractForm.paymentTerms.measurement">
+            <!-- EVERY {{ contractForm.paymentTerms.paymentTerms }} {{ contractForm.paymentTerms.measurement | uppercase }} {{ contractForm.paymentTerms.before? "PREPAID": "" }} -->
+          </ng-container>
+        </div>
+        <div class='column-size-2 text-align-right' [printableField]="'price.amount'">
+          ${{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}<br>
+          ${{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}
+        </div>
+        <div class='column-size-2 text-align-right'>
+          CWT<br>
+          M. TON
+        </div>
+      </div>
+    </div>
+    <div class='grid-12'>
+      <div class='column-size-5'>
+        <br>
+        <div class='box'>
+          Buyer's scale of discounts at time of delivery to apply
+          <br>
+          rules to apply: TGFA
+          <br>
+          Arbitration to apply: TGFA
+        </div>
+      </div>
+      <div class='column-size-1'></div>
+      <div class='column-size-3'><b>TOTAL CONTRACTED</b></div>
+      <div class='column-size-1'></div>
+      <div class='column-size-2'>
+        <div id='total'>
+          <span><b>$</b></span>
+          <span><b>{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
+            (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2'  }}</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terms-and-conditions">
+    <p class="introduction">
+      SELLER OBJECTS TO THE INCLUSION OF ANY DIFFERENT OR ADDITIONAL TERMS PROPOSED BY BUYER. IF PRICE OF GRAIN IS ON A PREMIUM BASIS, CONTRACT TO BE PRICED OR SPREAD PRIOR TO THE LAST TRADING
+      DAY PRECEDING THE FIRST DELIVERY DAY OF THE FUTURES CONTRACT.
+      <br>
+      <br>
+      <span class="fill-line" [printableField]="'clientInfo.name'">{{ contractForm.clientInfo?.name }}</span> (“SELLER”) AGREES TO AND CONFIRMS THE SALE OF THE FOLLOWING DESCRIBED GOODS TO <b>ACN AGRIPRODUCTS LLC</b> (“BUYER”), SUBJECT TO THE TERMS AND CONDITIONS STATED ON THE FACE AND BACK HEREOF.
+      <br>
+      <br>
+      FAILURE TO ADVISE <b>ACN AGRIPRODUCTS LLC</b> IMMEDIATELY BY WIRE OF ANY DISCREPANCY, OBJECTION TO OR DISAGREEMENT WITH SUCH TERMS AND CONDITIONS SHALL BE AN ACCEPTANCE OF THEM.
+    </p>
+    
+    <p class="header">TERMS AND CONDITIONS</p>
+    
+    <p>The terms of this Contract include the Purchase Terms listed below, which form part of this Contract and are legally binding upon the parties. The statements below are understood to be an accurate statement of the terms and conditions of the agreement between the parties. Failure to advise Seller immediately of any discrepancies, objections to or disagreements with such terms and conditions shall constitute acceptance of this Contract.</p>
+    
+    <p>In addition, Seller or producer and Buyer or customer agree as follows:</p>
+    
+    <p><b>GOODS:</b> Seller agrees to transfer title and possession to Buyer, and Buyer shall pay and accept Seller's agreed price, for the "Goods" agreed to by the Parties in this Agreement.
+    <br>
+    The Buyer is purchasing the following Goods from the Seller: {{ contractForm.product?.id }}</p>
+    
+    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
+      (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2'  }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+    
+    <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods:
+    <br>
+    •
+    <br>
+    •
+    <br>
+    The Buyer must pay the Purchase Price immediately after receipt of the Goods unless the Parties have agreed on something different in writing.</p>
+    
+    <p>In case of late payment, the seller can terminate the agreement for default by the buyer and charge the following late fee: <span class="fill-line">{{ "" }}</span>$.</p>
+    
+    <p><b>QUALITY:</b> Seller warrants that the Goods sold meets conform to the description (grades and quality) on the face of this Contract, are free from defects, are free from liens and encumbrances, are suited for their intended use and are merchantable.</p>
+    
+    <p><b>SAMPLING, ANALYSIS AND CERTIFICATES OF ANALYSIS:</b> Unless otherwise agreed, samples shall be taken at time and place of load.</p>
+    
+    <p><b>WEIGHING:</b> Final at time and place of delivery. Buyers have the right to attend at delivery.</p>
+    
+    <p><b>PAYMENT:</b> Buyer shall make payment under the terms specified herein upon receipt of each shipment and supporting documentation hereunder.</p>
+    
+    <p><b>PRICE:</b> For contracts that establish price by reference to a futures contract, the contract must be priced prior to First Notice Date of the reference futures contract. If price is not established prior to First Notice date Buyer will have the right to establish price in their sole discretion.</p>
+    
+    <p><b>VOLATILITY:</b> Unless otherwise stated, the prices set forth on this Agreement are in US Dollars. For the avoidance of doubt, Buyer and Seller recognize that the market price when delivery is required under this Agreement may differ substantially from the Agreement price, and each party agrees not to assert such a difference as an excuse for non-performance hereunder or as a defense for damages for failure to perform in whole or in part.</p>
+    
+    <p><b>SHIPMENTS:</b> If shipping instructions are not set forth herein, Seller will make delivery in a timely manner in accordance with Buyer’s instructions.</p>
+    
+    <p><b>NON-DELIVERY:</b> If Buyer (i) fails to comply with receiving instructions within the time specified, (ii) fails to receive any shipments therefore, (iii) refuses to execute any receive as required hereunder, (iv) is otherwise in breach of Contract, Seller may treat such default as a total breach of this Contract, or a partial breach of this Contract (e. a breach only as to the individual shipment or installment).</p>
+    
+    <p><b>FORCE MAJEURE:</b> Seller shall not be liable for delay in Seller’s performance or failure when such delay or failure in due to unforeseen causes beyond its control and without its fault or negligence, including but not limited to acts of God, acts of public enemy, governmental action, fires floods, earthquakes, epidemics, quarantine restriction, labor difficulties, freight embargoes, transportation shortages or unusually severe weather buyer shall not be required to pay for or to accept Seller’s application of on title to any Goods for so long as Seller is delayed in performance as a result of one or more of the events described in the preceding sentence.</p>
+    
+    <p><b>FREIGHT RATES:</b> This agreement is based on current freight rates and any freight rates and any increase in such freight rates will be at on behalf of the contracting party expense, regardless of price basis. All delay or hold charges that are the direct result of Buyer will be at Buyer’s expense.</p>
+    
+    <p><b>BREACH OR TERMINATION OF CONTRACT:</b> Seller expressly reserves the right to cause the liquidation or cancellation of this contract because of (a) insolvency or financial condition of buyer, failure to comply with shipping or any breach of this contract.</p>
+    
+    <p><b>CONTROVERSIES/ARBITRATION:</b> Controversies and/or other disagreements between Buyer and Seller arising under this Contract shall be settled by arbitration which shall be a condition precedent to any right of legal action that either Buyer or Seller may have against the other party. Any arbitration shall be in accordance with the rules of the Texas Grain and Feed Association (TGFA). At the time notice of arbitration is served by either Buyer or Seller upon the other, (i) if either is a member of TGFA, the TGFA Arbitration Committee shall serve as the arbitrator; (ii) if neither is a member of the TGFA, the American Arbitration Association shall serve as the arbitrator.</p>
+    
+    <p>The parties agree to be bound by the arbitration award and agree that judgment upon the award may be entered in any Court having jurisdiction.</p>
+    
+    <p><b>MODIFICATIONS:</b> It is agreed that the terms herein set forth and the trading rules set from hereto (to the extent that they are not in conflict with the terms stated in the preceding contract Special instructions) constitute the entire contract between the parties, and there shall be no modifications or alterations except with the consent of both parties in writing.</p>
+    
+    <p>This Contract shall be governed by the laws of the State of Texas.</p>
+  </div>
+
+    <b class="confirmation">CONFIRMATION</b>
+    <div class="signatures contract-english">
+      <div class="party-signature">
+        <b>SELLER: ACN AGRIPRODUCTS LLC</b>
+        <div class="signature-line">BY:</div>
+        <span>Name/title: <b>Ruben D. Puga/General Manager</b></span>
+        <span>Date:</span>
+      </div>
+      <div class="party-signature">
+        <b>BUYER: <span [printableField]="'clientInfo.name'">{{ contractForm.clientInfo?.name ?? "" }}</span></b>
+        <div class="signature-line">BY:</div>
+        <span>Name/title: <b [printableField]="'clientInfo.clientRep'">{{contractForm.clientInfo.clientRep}}</b></span>
+        <span>Date:</span>
+      </div>
+    </div>
+    
+    <p class="page-footer">PLEASE SIGN ONE COPY AND RETURN TO ABOVE ADDRESS</p>
+</div>

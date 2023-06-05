@@ -1,0 +1,95 @@
+:host {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+::ng-deep .mat-form-field-infix {
+    width: auto !important;
+}
+
+mat-card { 
+    margin-bottom: 1.2rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+mat-card-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.span-1 {
+    grid-column-end: span 1;
+}
+
+.span-2 {
+    grid-column-end: span 2;
+}
+
+.span-3 {
+    grid-column-end: span 3;    
+}
+
+.span-4 {
+    grid-column-end: span 4;    
+}
+
+.flex-field {
+    display: flex;
+    gap: 1rem;
+}
+
+.field-width-200 {
+    width: 200px;
+}
+
+.test {
+    background-color: yellow;
+}
+
+.ticket-client-checkbox {
+    margin-bottom: 1rem;
+}
+
+.action-bar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.bank-grid {
+    display: grid;
+    grid-template-columns: auto repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.bank-add-button {
+    justify-self: end;
+}
+
+.payment-delay-flex {
+    display: flex;
+    align-items: center;
+
+    section {
+        margin-right: 1rem;
+    }
+
+    span {
+        flex: 0 0 auto;
+    }
+}
+
+.exchange-rate-flex {
+    display: flex;
+    gap: 1rem;
+
+    #exchange-rate-select {
+        flex: 1 0 0;
+    }
+
+    #exchange-rate-number {
+        flex: 2 0 0;
+    }
+}

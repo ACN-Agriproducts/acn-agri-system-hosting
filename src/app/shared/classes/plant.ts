@@ -12,6 +12,7 @@ export class Plant extends FirebaseDocInterface {
     public nextInTicket: number;
     public nextOutTicket: number;
     public lastStorageUpdate: DocumentReference;
+    public address: string;
 
     constructor(snapshot: QueryDocumentSnapshot<DocumentData>) {
         super(snapshot, Plant.converter);
@@ -22,8 +23,9 @@ export class Plant extends FirebaseDocInterface {
         this.nextInTicket = data.nextInTicket;
         this.nextOutTicket = data.nextOutTicket;
         this.lastStorageUpdate = data.lastStorageUpdate;
+        this.address = data.address;
 
-        data.inventory.forEach(inv => {
+        data.inventory?.forEach(inv => {
             this.inventory.push(new Inventory(inv));
         });
     }
@@ -35,7 +37,8 @@ export class Plant extends FirebaseDocInterface {
                 inventoryNames: data.inventoryNames,
                 nextInTicket: data.nextInTicket,
                 nextOutTicket: data.nextOutTicket,
-                lastStorageUpdate: data.lastStorageUpdate
+                lastStorageUpdate: data.lastStorageUpdate,
+                address: data.address
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Plant {

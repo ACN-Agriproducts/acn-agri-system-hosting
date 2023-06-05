@@ -4,6 +4,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { User } from "./user";
 import { Observable } from "rxjs";
 import { units } from "./mass";
+import { Plant } from "./plant";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];
@@ -14,6 +15,7 @@ export class Company extends FirebaseDocInterface {
     nextPurchaseContract: number;
     nextSalesContract: number;
     defaultUnit: units;
+    displayUnit: units;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
@@ -26,6 +28,7 @@ export class Company extends FirebaseDocInterface {
         this.nextPurchaseContract = data.nextPurchaseContract;
         this.nextSalesContract =  data.nextSalesContract;
         this.defaultUnit = data.defaultUnit;
+        this.displayUnit = data.displayUnit;
 
         this.contactList = [];
 
@@ -45,6 +48,7 @@ export class Company extends FirebaseDocInterface {
                 nextPurchaseContract: data.nextPurchaseContract,
                 nextSalesContract: data.nextSalesContract,
                 defaultUnit: data.defaultUnit,
+                displayUnit: data.displayUnit,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Company {
@@ -64,6 +68,10 @@ export class Company extends FirebaseDocInterface {
                     return new User(u);
                 });
             });
+    }
+
+    public getPlants(): Promise<Plant[]> {
+        return Plant.getPlantList(this.ref.firestore, this.ref.id);
     }
 
     public static getCollectionReference(db: Firestore): CollectionReference<Company> {

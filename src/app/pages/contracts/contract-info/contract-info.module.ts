@@ -14,9 +14,10 @@ import { ContractLiquidationLongComponent } from './components/contract-liquidat
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
-import { ContractFormComponent } from './components/contract-form/contract-form.component';
 import { TicketDiscountTableComponent } from './components/ticket-discount-table/ticket-discount-table.component';
 import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
+import { ContractModule } from 'src/app/modules/contract/contract.module';
+import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,9 @@ import { TruckersFormComponent } from './components/truckers-form/truckers-form.
     CoreModule,
     NgxPrintModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ContractModule,
+    ContractPrintablesModule,
   ],
   declarations: [
     ContractInfoPage,
@@ -35,7 +38,6 @@ import { TruckersFormComponent } from './components/truckers-form/truckers-form.
     TruckerTableComponent,
     ContractLiquidationLongComponent,
     DisplayContractComponent,
-    ContractFormComponent,
     TicketDiscountTableComponent,
     TruckersFormComponent
   ]

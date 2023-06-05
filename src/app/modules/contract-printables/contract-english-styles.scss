@@ -1,0 +1,113 @@
+
+.header-section, .info-chart {
+    font-size: 13px !important;
+    line-height: 150% !important;
+}
+
+.header-section {
+    border: black solid 1px;
+}
+
+#company-logo {
+    width: 40%;
+    display: inline-block;
+}
+
+h1{
+    display: inline-block;
+    vertical-align: top;
+    margin: 5%;
+}
+
+.party-header {
+    border-top: 1px solid black;
+    border-bottom: 2px solid black;
+}
+
+.right-justify {
+    display: block;
+    text-align: right;
+}
+
+#extra-info-header {
+    border: 2px solid black;
+}
+
+.underline {
+    border-bottom: 2px solid black;
+}
+
+#total {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box {
+    border: 2px solid black;
+}
+
+.info-chart {
+	margin-bottom: 20px;
+}
+
+.terms-and-conditions {
+	text-align: justify;
+}
+
+.page-footer {
+    text-align: center;
+    font-weight: bold;
+}
+
+.signatures {
+    margin: unset;
+    margin-bottom: 20px;
+    font-weight: unset;
+    font-size: 9pt;
+    font-family: Calibri;
+    text-align: left;
+
+    .signature-line {
+        height: unset;
+        margin-top: 5px;
+    }
+}
+
+
+
+.grid-12 {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 5px;
+}
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+.column-size-1 {
+    grid-column-end: span 1;
+}
+.column-size-2 {
+    grid-column-end: span 2;
+}
+.column-size-3 {
+    grid-column-end: span 3;
+}
+.column-size-4 {
+    grid-column-end: span 4;
+}
+.column-size-5 {
+    grid-column-end: span 5;
+}
+
+@media screen {
+    .terms-and-conditions {
+        line-height: 125%;
+    }
+}
+
+@media print {
+    
+}

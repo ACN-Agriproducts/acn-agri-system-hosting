@@ -45,7 +45,7 @@ export class ContractModalOptionsComponent implements OnInit {
     }
 
     const oldStatus = this.contract.status;
-    this.contract.status = Contract.getStatusEnum().active;
+    this.contract.status = 'active';
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "active"
     }).then(() => {
@@ -107,7 +107,7 @@ export class ContractModalOptionsComponent implements OnInit {
       if (newFieldData == null) return;
     }
 
-    this.contract.status = Contract.getStatusEnum().closed;
+    this.contract.status = 'closed';
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "closed",
       market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
@@ -119,7 +119,7 @@ export class ContractModalOptionsComponent implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.contract.status = Contract.getStatusEnum().active;
+      this.contract.status = 'active';
       this.snack.open("Error updating status", "error");
     });
   }

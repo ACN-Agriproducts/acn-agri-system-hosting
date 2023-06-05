@@ -22,6 +22,9 @@ import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fir
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angular/fire/functions';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { registerLocaleData } from '@angular/common';
+import localeMx from '@angular/common/locales/es-MX';
+registerLocaleData(localeMx)
 
 
 @NgModule({

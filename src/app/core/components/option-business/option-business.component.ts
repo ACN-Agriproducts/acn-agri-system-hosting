@@ -21,23 +21,7 @@ export class OptionBusinessComponent implements OnInit {
   }
 
   public changeCompany(company) {
-    this.session.set('currentCompany', company);
-    const user = this.session.getUser();
-    const promises = [];
-    let tempPromise;
-   
-    tempPromise = getDoc(doc(this.db, `users/${user.uid}/companies/${company}`)).then(compDoc => {
-      user.currentPermissions = compDoc.get('permissions');
-      return this.session.set('user', user);
-    });
-    promises.push(tempPromise);
-
-    tempPromise = getDocs(query(Plant.getCollectionReference(this.db, company), limit(1))).then(plant => {
-      return this.session.set('currentPlant', plant.docs[0].id); 
-    });
-    promises.push(tempPromise);
-
-    Promise.all(promises).then(() => {
+    this.session.loadNewCompany(company).then(() => {
       location.reload();
     });
   }

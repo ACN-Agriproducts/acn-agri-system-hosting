@@ -1,29 +1,23 @@
 <ion-header>
     <app-header-toolbar titulo="Contract"></app-header-toolbar>
-    <ion-toolbar class="ion-align-items-stretch">
-        <ion-segment class="ion-justify-content-start" value="0"
-            (ionChange)="changedContractType($event)">
-            <ion-segment-button *ngFor="let tab of tabData; let index = index" [value]="index">
-                <ion-label>{{tab.label}}</ion-label>
-            </ion-segment-button>
-        </ion-segment>
-    </ion-toolbar>
-    <ion-toolbar *ngIf="tabData?.[tabIndex].type == table">
-        <ion-segment class="ion-justify-content-start" value="active,closed,pending,cancelled"
-            (ionChange)="segmentChanged($event)">
-            <ion-segment-button value="active,closed,pending,cancelled">
-                <ion-label>All</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="active">
-                <ion-label>Active</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="closed">
-                <ion-label>Closed</ion-label>
-            </ion-segment-button>
-            <!-- <ion-segment-button value="new">
-        <ion-label>New Contract</ion-label>
-      </ion-segment-button> -->
-        </ion-segment>
+    <ion-toolbar class="contract-toolbar">
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>Contract type</mat-label>
+                <mat-select (selectionChange)="changedContractType($event)" [value]="0">
+                    <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{tab.label}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,cancelled">
+                    <mat-option value="active,closed,pending,cancelled">All</mat-option>
+                    <mat-option value="active">Active</mat-option>
+                    <mat-option value="pending">Pending</mat-option>
+                    <mat-option value="closed">Closed</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
     </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" class="">
@@ -43,14 +37,13 @@
     <div class="content">
         <div class="header-filter">
             <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
+            <ion-button color="dark" (click)='exportMode = !exportMode'>
+                <ion-text>Export</ion-text>
+            </ion-button>
             <ion-button color="dark" (click)='newContractButton()'>
                 <ion-icon name="add" slot="start"></ion-icon>
                 <ion-text>New</ion-text>
             </ion-button>
-            <!-- <ion-button fill="outline" color="primary" (click)="openFilter($event)">
-            <ion-icon name="filter" slot="start"></ion-icon>
-            <ion-text>Filter</ion-text>
-        </ion-button> -->
         </div>
         <ion-card class="table-header grid-item ion-hide-md-down">
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('id')">
@@ -103,7 +96,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>Bushels</ion-text>
+                    <ion-text>To Deliver</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
@@ -138,15 +131,17 @@
             <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
                 <div *ngFor="let contract of contractsPromise | async">
                     <div (contextmenu)="openOptions($event)" class="grid-item item-table">
-                        <ion-item lines="none">
+                        <ion-item lines="none ">
+                            <section [hidden]="!exportMode">
+                                <mat-checkbox (change)="exportSelect($event.checked, contract)" color="primary"></mat-checkbox>
+                            </section>
                             <ion-text color="dark" class="item-text-number">{{contract.id}}</ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text color="primary" class="item-text-customer">
                                 {{
-                                contract.clientName | titlecase | slice:0:25
+                                contract.clientName ?? contract.clientInfo.name | titlecase | slice:0:25
                                 }}
-                                <span *ngIf="contract.clientName.length>25">...</span>
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -160,31 +155,31 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.product.id | titlecase}}
+                                {{contract.product?.id || "" | titlecase}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getDeliveredTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.currentDelivered.getBushelWeight(contract.productInfo).toFixed(2)}}
+                                {{contract.currentDelivered | massDisplay:2:displayUnit}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getQuantityTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.quantity.getBushelWeight(contract.productInfo).toFixed(2)}}
+                                {{contract.quantity | massDisplay:2:displayUnit}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.pricePerBushel | currency:'$'}}
+                                {{contract.price | pricePerUnit:null:contract.quantity | currency:'$'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.quantity.getBushelWeight(contract.productInfo) * contract.pricePerBushel | currency:'$'}}
+                                {{(contract.quantity | massInUnit: displayUnit) * (contract.price | pricePerUnit: displayUnit:contract.quantity) | currency}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none" class="ion-hide-md-down">
@@ -209,3 +204,19 @@
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ng-template>
+
+<div class="content-action" *ngIf="exportMode">
+    <ion-card class="panel-action">
+        <ion-card-content>
+            <div class="content-panel-button">
+                <ion-button fill="clear" color="secondary" (click)="exportMode = false;">Cancel</ion-button>
+                    <div class="panel-list">
+                        <ion-item color="dark" lines="none">
+                            <ion-label *ngFor="let item of exportList; let last = last">{{item.id}} {{ last ? "" : ", " }}</ion-label>
+                        </ion-item>
+                    <ion-button (click)="exportButton()">Download</ion-button>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</div>

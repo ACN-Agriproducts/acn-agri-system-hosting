@@ -10,7 +10,9 @@ import { NewContractPage } from './new-contract.page';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
-import { SelectClientComponent } from './components/select-client/select-client.component';
+import { UniqueIdValidatorDirective } from './components/unique-id-validator.directive';
+import { ContractModule } from './../../../modules/contract/contract.module';
+import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { SelectClientComponent } from './components/select-client/select-client.
     CoreModule,
     SharedModule,
     NgxPrintModule,
+    ContractModule,
+    ContractPrintablesModule
   ],
-  declarations: [NewContractPage, DisplayContractComponent, SelectClientComponent]
+  declarations: [NewContractPage, DisplayContractComponent, UniqueIdValidatorDirective],
 })
 export class NewContractPageModule {}

@@ -1,0 +1,35 @@
+mat-card {
+    margin-bottom: 1rem;
+}
+
+.select-option-row {
+    display: flex;
+    gap: .7rem;
+}
+
+.group-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: .7rem;
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
+}
+
+.group-action-bar, .select-area {
+    grid-column-end: span 3;
+}
+
+.group-action-bar {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
+    gap: 1rem;
+}
+
+mat-panel-description {
+    justify-content: end;
+}

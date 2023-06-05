@@ -1,15 +1,15 @@
-import { IonInfiniteScroll, ModalController, NavController, PopoverController } from '@ionic/angular';
-import { ContractModalComponent } from './components/contract-modal/contract-modal.component';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { IonInfiniteScroll, NavController, PopoverController } from '@ionic/angular';
+import { AfterViewInit, Component, TemplateRef, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { UntypedFormControl } from '@angular/forms';
-import { DataContractService } from './../../core/data/data-contract.service';
 import { OptionsContractComponent } from './components/options-contract/options-contract.component';
 import { ContractModalOptionsComponent } from './components/contract-modal-options/contract-modal-options.component';
 import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
+import { ContractSettings } from '@shared/classes/contract-settings';
+import { units } from '@shared/classes/mass';
 
 
 @Component({
@@ -30,6 +30,9 @@ export class ContractsPage implements AfterViewInit {
   public listFilter: any = [];
   public activeFilter: boolean;
   public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
+  public displayUnit: units;
+  public exportMode: boolean = false;
+  public exportList: Set<Contract>;
 
   public tabData: {
     label: string;
@@ -47,59 +50,61 @@ export class ContractsPage implements AfterViewInit {
   private contractStep = 20;
 
   constructor(
-    private modalController: ModalController,
     private popoverController: PopoverController,
-    private cd: ChangeDetectorRef,
-    private dataService: DataContractService,
     private db: Firestore,
     private session: SessionInfo,
-    private navController: NavController
+    private navController: NavController,
   ) { }
 
   ngAfterViewInit() {
-    this.tabData = [{
-      label: "Purchase Contracts",
-      type: this.table,
-      isInfiniteScrollDisabled: false,
-      data: [
-        {
-          getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), true, ...constraints), 
-          contracts: [],
+    this.exportList = new Set<Contract>();
+    ContractSettings.getDocument(this.db, this.session.getCompany()).then(settings => {
+      this.tabData = Object.entries(settings.contractTypes).map(contract => {
+        return {
+          label: contract[0],
+          type: this.table,
+          isInfiniteScrollDisabled: false,
+          data: [
+            {
+              getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), contract[1], ...constraints), 
+              contracts: [],
+            }
+          ]
         }
-      ]
-    },{
-      label: "Sales Contracts",
-      type: this.table,
-      isInfiniteScrollDisabled: false,
-      data: [
-        {
-          getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), false, ...constraints), 
-          contracts: [],
-        }
-      ]
-    },{
-      label: "Analytics",
-      type: this.cards,
-      isInfiniteScrollDisabled: false,
-      data: [
-        {
-          getData: () => Contract.getContracts(this.db, this.session.getCompany(), true, where("status", "==", "active"), orderBy("id", "desc")), 
-          title: "Purchase Contracts", 
-          contracts: [],
-        },
-        {
-          getData: () => Contract.getContracts(this.db, this.session.getCompany(), false, where("status", "==", "active"), orderBy("id", "desc")), 
-          title: "Sales Contracts", 
-          contracts: [],
-        }
-      ]
-    }];
+      });
 
-    this.getContracts();
+      this.tabData.push({
+        label: "All",
+        type: this.table,
+        isInfiniteScrollDisabled: false,
+        data: [
+          {
+            getData: (constraints: QueryConstraint[]) => Contract.getContracts(this.db, this.session.getCompany(), null, ...constraints), 
+            contracts: [],
+          }
+        ]
+      },
+      {
+        label: "Analytics",
+        type: this.cards,
+        isInfiniteScrollDisabled: false,
+        data: Object.entries(settings.contractTypes).map(contract => {
+          return {
+            getData: () => Contract.getContracts(this.db, this.session.getCompany(), contract[1], where('status', '==', 'active'), orderBy('id', 'desc')),
+            title: contract[0],
+            contracts: []
+          }
+        })
+      });
+
+      this.getContracts();
+    });
+    
+    this.displayUnit = this.session.getDisplayUnit();
   }
 
   public segmentChanged(event) {
-    this.orderStatus = event.detail.value.split(',');
+    this.orderStatus = event.value.split(',');
     this.tabData.forEach(tab => {
       if(tab.type != this.table) {
         return;
@@ -114,7 +119,7 @@ export class ContractsPage implements AfterViewInit {
   };
 
   public changedContractType(event) {
-    this.tabIndex = event.detail.value;
+    this.tabIndex = event.value;
     this.getContracts();
   };
 
@@ -155,14 +160,6 @@ export class ContractsPage implements AfterViewInit {
     const snapshot = await Promise.all(promises);
     event.target.complete();
     this.infiniteScroll.disabled = currentTabData.isInfiniteScrollDisabled = snapshot[0].length < this.contractStep;
-  }
-
-  public openModal = async () => {
-    const modal = await this.modalController.create({
-      component: ContractModalComponent,
-      cssClass: 'modal-contract',
-    });
-    return await modal.present();
   }
 
   // public openOptionsFilter = async (event, objet?: string, typeObjet?: string) => {
@@ -222,6 +219,11 @@ export class ContractsPage implements AfterViewInit {
     this.navController.navigateForward('dashboard/contracts/new-contract')
   }
 
+  public exportButton() {
+    console.log(this.exportList);
+    // this.dialog.open(ExportModalComponent);
+  }
+
   public openContractOptions= async (event: any, contract: Contract) => {
     event.preventDefault();
     const popover = await this.popoverController.create({
@@ -254,5 +256,10 @@ export class ContractsPage implements AfterViewInit {
     return `${weight.getMassInUnit('lbs').toFixed(3)} lbs
     ${weight.getBushelWeight(contract.productInfo).toFixed(3)} bu
     ${weight.getMassInUnit('mTon').toFixed(3)} mTon`
+  }
+
+  public exportSelect(checked: any, contract: Contract) {
+    if(checked) this.exportList.add(contract);
+    else this.exportList.delete(contract);
   }
 }

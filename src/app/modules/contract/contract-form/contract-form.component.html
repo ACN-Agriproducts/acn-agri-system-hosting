@@ -1,0 +1,425 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-subtitle>Contract Info</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-form-field class="span-2" appFutureDateFormat>
+      <mat-label>Date</mat-label>
+      <input 
+        matInput 
+        [matDatepicker]="contractDatepicker"
+        [(ngModel)]="contract.date" 
+        [disabled]="!isNew"
+        (focus)="selectedFieldEvent.emit('date')"
+        (focusout)="selectedFieldEvent.emit(null)">
+      <mat-datepicker-toggle matSuffix [for]="contractDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #contractDatepicker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field class="span-2">
+      <mat-label>Contract Executive</mat-label>
+      <mat-select
+        matInput
+        [(ngModel)]="contract.contractExecutive"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('contractExecutive')"
+        (focusout)="selectedFieldEvent.emit(null)">
+        <mat-option *ngFor="let user of usersList" [value]="user">{{user.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="span-3">
+      <mat-label>Contract Type</mat-label>
+      <mat-select 
+        [(ngModel)]="contract.type" 
+        (ngModelChange)="docTypeChange()"
+        [disabled]="!isNew"
+        (focus)="selectedFieldEvent.emit('type')"
+        (focusout)="selectedFieldEvent.emit(null)">
+        <mat-option 
+          *ngFor="let type of (settings$ | async)?.contractTypes | keyvalue" 
+          [value]="type.value">
+          {{type.key}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>ID</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.id" 
+        type="number" 
+        required 
+        [disabled]="!contract.type || !isNew"
+        (focus)="selectedFieldEvent.emit('id')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <mat-form-field class="span-2">
+      <mat-label>Email</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.companyInfo.email" 
+        type="text"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('companyInfo.email')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <mat-form-field class="span-2">
+      <mat-label>Phone Number</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.companyInfo.phone" 
+        type="text"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('companyInfo.phone')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
+
+<ng-container *ngIf="contract?.printableFormat">
+  <mat-card *ngFor="let fieldGroupName of (settings$ | async)?.fieldGroupOrder[contract.printableFormat]">
+    <mat-card-header>
+      <mat-card-subtitle>{{fieldGroupName}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngFor="let field of (settings$ | async)?.formData[contract.printableFormat][fieldGroupName]">
+        <ng-container *ngTemplateOutlet="(versionTemplates | listFind:'typeTemplate':field.type)?.templateRef ?? error; context: { $implicit: field }"></ng-container>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+
+<div class="action-bar">
+  <ng-container *ngTemplateOutlet="actionBar || none"></ng-container>
+  <button *ngIf="contract.status == 'pending'" mat-flat-button color="primary" (click)="submit()">Submit</button>
+</div>
+
+<ng-template #none></ng-template>
+
+<ng-template typeTemplate="primitive" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
+    <mat-label>{{data.label}}</mat-label>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
+    
+    <mat-select 
+      *ngSwitchCase="'select'" 
+      [(ngModel)]="contract[data.fieldName]"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+
+    <input 
+      *ngSwitchCase="'date'" 
+      matInput 
+      [matDatepicker]="picker" 
+      [(ngModel)]="contract[data.fieldName]"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)">
+    <mat-datepicker-toggle *ngSwitchCase="'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [hidden]="data.primitiveType != 'date'" #picker></mat-datepicker>
+
+    <textarea
+      matInput
+      [(ngModel)]="contract[data.fieldName]"
+      *ngSwitchCase="'textarea'"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)"
+    ></textarea>
+
+    <input 
+      matInput 
+      *ngSwitchCase="'number'"
+      [(ngModel)]="contract[data.fieldName]"
+      type="number"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)">
+
+    <input 
+      matInput 
+      *ngSwitchDefault 
+      [(ngModel)]="contract[data.fieldName]"
+      [type]="data.primitiveType"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)">
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="nested-primitive" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
+    <mat-label>{{data.label}}</mat-label>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
+    
+    <mat-select 
+      *ngSwitchCase="'select'" 
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+
+    <input 
+      *ngSwitchCase="'date'" 
+      matInput 
+      [matDatepicker]="picker" 
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)">
+    <mat-datepicker-toggle *ngSwitchCase="'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [hidden]="data.primitiveType != 'date'" #picker></mat-datepicker>
+
+    <textarea
+      matInput
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      *ngSwitchCase="'textarea'"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)"
+    ></textarea>
+
+    <input 
+      matInput 
+      *ngSwitchCase="'number'"
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      type="number"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)">
+
+    <input 
+      matInput 
+      *ngSwitchDefault 
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      [type]="data.primitiveType"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)">
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="client-select" let-data>
+  <div class="flex-field" [ngClass]="data | getFieldClass">
+    <button [disabled]="contract.status != 'pending'" mat-stroked-button color="primary" type="button" (click)="openClientSelect()">Client:</button>
+    <mat-form-field>
+      <mat-label>Client Name</mat-label>
+      <input matInput [disabled]="!newClientContact" [(ngModel)]="contract.clientInfo.name">
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template typeTemplate="ticket-client-select" let-data>
+  <div [ngClass]="data | getFieldClass">
+    <mat-checkbox [disabled]="contract.status != 'pending'" class="ticket-client-checkbox" [(ngModel)]="useSameClientForTicket">{{data.prefix}}</mat-checkbox>
+    <div class="flex-field" *ngIf="!useSameClientForTicket">
+      <button mat-stroked-button [disabled]="contract.status != 'pending'" color="primary" type="button" (click)="openTicketClientSelect()">Client:</button>
+      <mat-form-field>
+        <mat-label>{{data.label}}</mat-label>
+        <input matInput [disabled]="!newTicketContact" [(ngModel)]="contract.clientTicketInfo.name">
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template typeTemplate="primitive-prototype" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" class="test" [ngSwitch]="data.primitiveType">
+    <mat-label>{{data.label}}</mat-label>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
+    
+    <mat-select *ngSwitchCase="'select'" [disabled]="contract.status != 'pending'">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+        {{option.label}}
+      </mat-option>
+    </mat-select>
+
+    <input *ngSwitchCase="'date'" [disabled]="contract.status != 'pending'" matInput [matDatepicker]="picker">
+    <mat-datepicker-toggle *ngSwitchCase="'date'" matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker [hidden]="data.primitiveType != 'date'" #picker></mat-datepicker>
+
+    <textarea
+      matInput
+      [disabled]="contract.status != 'pending'"
+      *ngSwitchCase="'textarea'"
+    ></textarea>
+
+    <input 
+      matInput 
+      [disabled]="contract.status != 'pending'"
+      *ngSwitchDefault 
+      [type]="data.primitiveType">
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="product-select" let-data>
+ <mat-form-field [ngClass]="data | getFieldClass">
+  <mat-label>{{data.label}}</mat-label>
+  <mat-select 
+    [(ngModel)]="contract.product" 
+    (ngModelChange)="productChange()"
+    [disabled]="contract.status != 'pending'"
+    (focus)="selectedFieldEvent.emit('product')"
+    (focusout)="selectedFieldEvent.emit(null)">
+    <mat-option 
+      *ngFor="let product of products$ | async" 
+      [value]="product.ref"
+      >{{product.ref.id}}
+    </mat-option>
+  </mat-select>
+ </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="date-range" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass">
+    <mat-label>{{data.label}}</mat-label>
+    <mat-date-range-input [rangePicker]="deliveryDatesPicker">
+      <input matStartDate [disabled]="contract.status != 'pending'" [(ngModel)]="contract[data.fieldName][data.prefix]">
+      <input matEndDate [disabled]="contract.status != 'pending'" [(ngModel)]="contract[data.fieldName][data.suffix]">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="deliveryDatesPicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #deliveryDatesPicker></mat-date-range-picker>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="plant-select" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass">
+    <mat-label>{{data.label}}</mat-label>
+    <mat-select 
+      multiple 
+      [(ngModel)]="contract.plants" 
+      (ngModelChange)="plantSelectChange()"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit('plants')"
+      (focusout)="selectedFieldEvent.emit(null)">
+      <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id">{{plant.ref.id | titlecase}}</mat-option>
+      <mat-option *ngIf="data.suffix" value="third-party">{{data.suffix}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="third-party-plant" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" *ngIf="contract?.plants?.includes('third-party') || contract?.tags?.includes('sale')">
+    <mat-label>{{data.label}}</mat-label>
+    <textarea matInput [disabled]="contract.status != 'pending'" [(ngModel)]="contract.deliveryPlants[contract.deliveryPlants.length - 1]"></textarea>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="future-month-picker" let-data>
+  <mat-form-field [ngClass]="data | getFieldClass" appFutureDateFormat>
+      <mat-label>{{data.label}}</mat-label>
+      <mat-select
+        [(ngModel)]="contract.futurePriceInfo.expirationMonth"
+        [disabled]="contract.status != 'pending'">
+        <mat-option *ngFor="let option of futureOptions" [value]="option.value">
+          {{option.label}}
+        </mat-option>
+      </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="bank-info" let-data>
+  <div class="bank-grid" [ngClass]="data | getFieldClass">
+    <ng-container *ngFor="let bank of contract.bankInfo; let index = index">
+      <button *ngIf="contract.status != 'pending'" mat-icon-button color="warn" (click)="contract.bankInfo.splice(index, 1)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-form-field>
+        <mat-label>Banco</mat-label>
+        <input matInput [(ngModel)]="bank.bank" [disabled]="contract.status != 'pending'" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Cuenta</mat-label>
+        <input matInput [(ngModel)]="bank.account" [disabled]="contract.status != 'pending'" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Clabe Interbancaria</mat-label>
+        <input matInput [(ngModel)]="bank.interBank" [disabled]="contract.status != 'pending'" />
+      </mat-form-field>
+    </ng-container>
+  </div>
+  <button 
+    mat-mini-fab 
+    (click)="contract.bankInfo.push({ 
+      bank: '', 
+      account:'', 
+      interBank: '' 
+    })"
+    [disabled]="contract.status != 'pending'" 
+    color="primary" 
+    [ngClass]="data | getFieldClass"
+    class="bank-add-button">
+    <mat-icon>add</mat-icon>
+  </button>
+</ng-template>
+
+<ng-template typeTemplate="payment-delays" let-data>
+  <div class="payment-delay-flex" [ngClass]="data | getFieldClass">
+    <section>
+      <mat-checkbox [disabled]="contract.status != 'pending'" [(ngModel)]="contract.paymentDelays.applies">{{data.label}}</mat-checkbox>
+    </section>
+    <!-- (TIIE + 6) * 1.5 -->
+    <span>(TIEE + </span>
+    <mat-form-field>
+      <input 
+        matInput 
+        [(ngModel)]="contract.paymentDelays.x" 
+        type="number"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('contract.paymentDelays')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <span>) * </span>
+    <mat-form-field>
+      <input 
+        matInput 
+        [(ngModel)]="contract.paymentDelays.y" 
+        type="number"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('contract.paymentDelays')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field> 
+  </div>
+</ng-template>
+
+<ng-template typeTemplate="exchange-rate" let-data>
+  <div class="exchange-rate-flex" [ngClass]="data | getFieldClass">
+    <mat-form-field id="exchange-rate-select">
+      <mat-label>{{data.label}}</mat-label>
+      <mat-select 
+        (selectionChange)="exchangeRateChange($event)"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit(data.fieldName)"
+        (focusout)="selectedFieldEvent.emit(null)">
+        <mat-option *ngFor="let option of data.selectOptions" [value]="option.value">
+          {{option.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field id="exchange-rate-number" [hidden]="exchangeRateSelect != 'fixed'">
+      <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
+      <mat-label>{{data.suffix}}</mat-label>
+      <input 
+        matInput 
+        [(ngModel)]="contract.futurePriceInfo.exchangeRate"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit(data.fieldName)"
+        (focusout)="selectedFieldEvent.emit(null)"
+        type="number">
+    </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template #error>
+	<p>ERROR</p>
+</ng-template>

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { ContractPrintableComponent } from './printable/contract-printable/contract-printable.component';
 import { ScaleToFitDirective } from './scale-to-fit.directive';
 import { PrintableTicketComponent } from './printable/printable-ticket/printable-ticket.component';
 import { FixTicketStorageComponent } from './components/fix-ticket-storage/fix-ticket-storage.component';
@@ -23,11 +22,11 @@ import { InvoiceTwoComponent } from './printable/printable-invoice/invoice-two/i
 import { InvoiceDialogComponent } from './printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DocumentWrapperComponent } from './components/document-wrapper/document-wrapper.component';
-import { TypeTemplateDirective } from './directives/type-template/type-template.directive';
+import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { PrintableProductionOrderComponent } from './printable/printable-production-order/printable-production-order.component';
 import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
 import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
-
+import { pricerPerUnitPipe } from './classes/price';
 
 @NgModule({
   imports: [
@@ -40,7 +39,6 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
   ],
   exports: [
     ToolbarComponent,
-    ContractPrintableComponent,
     ScaleToFitDirective,
     PrintableTicketComponent,
     PrintableInvoiceComponent,
@@ -54,14 +52,14 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
-    TypeTemplateDirective,
+    NgxPrintModule,
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
+    pricerPerUnitPipe
   ],
   declarations: [
     ToolbarComponent,
-    ContractPrintableComponent,
     ScaleToFitDirective,
     PrintableTicketComponent,
     FixTicketStorageComponent,
@@ -77,10 +75,11 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
     InvoiceTwoComponent,
     InvoiceDialogComponent,
     DocumentWrapperComponent,
-    TypeTemplateDirective,
+    TruncatePipe,
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
+    pricerPerUnitPipe,
   ]
 })
 export class SharedModule {}

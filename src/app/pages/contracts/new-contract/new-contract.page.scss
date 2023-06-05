@@ -1,3 +1,7 @@
+ion-content {
+    height: 100%;
+}
+
 ion-label{
     max-width: 20% !important;
 }
@@ -9,6 +13,15 @@ ion-col{
 mat-grid-tile mat-figure{ 
     justify-content: flex-start !important;
     align-items: flex-start !important;
+}
+
+.client-row {
+    display: flex;
+    gap: 1rem;
+
+    span:has(>mat-form-field) {
+        flex: 1 0 auto;
+    }
 }
 
 .mat-text {
@@ -38,3 +51,84 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   display: none;
 }
+
+.content-grid {
+    display: flex;
+    height: 100%;
+    overflow-y: hidden;
+
+    & > * {
+        overflow-y: scroll;
+        max-width: 826px;
+    }
+}
+
+
+app-printable-contract {
+    max-width: min-content;
+    min-width: min-content;
+    margin: 10px;
+
+    transform-origin: center;
+    zoom: 80%;
+    max-width: 660px;
+}
+
+@media screen and (min-width: 1479px){
+    app-printable-contract {
+        zoom: 80%
+    }
+}
+
+@media screen and (max-width: 1478px) and (min-width: 1280px) {
+    app-printable-contract {
+        zoom: 60%
+    }
+}
+
+@media screen and (min-width: 1280px) {
+    .content-grid {
+        justify-items: center;
+        justify-content: space-around;
+    }
+
+    .form-flex {
+        flex: 1 0 500px;
+    }
+}
+
+@media screen and (max-width: 1279px) {
+    .content-grid {
+        flex-direction: column;
+        align-items: center;
+
+        & > * {
+            flex: 1 1 1px;
+            max-width: 100%;
+            overflow-x: scroll;
+        }
+    }
+
+    app-printable-contract {
+        zoom: 80%    }
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }

@@ -1,10 +1,11 @@
 .wrapper{
     height: fit-content;
+    padding: 0.5in;
+
 }
 
 @media screen {
     app-contract-printable {
-        padding: 12.7mm;
         //transform-origin: 0 0;
         display: block;
         background-color: white;

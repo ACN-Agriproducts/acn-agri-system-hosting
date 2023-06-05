@@ -11,7 +11,15 @@ import { ComponentsModule } from './components/components.module';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { IonicStorageModule } from '@ionic/storage';
+import { StateAbbreviationPipe } from './pipes/stateAbbreviation/state-abbreviation.pipe';
+import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
+import { ListFindPipe } from './pipes/list-find/list-find.pipe';
 import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
+import { TypeTemplateDirective } from './directive/type-template/type-template.directive';
+import { TruncatePipe } from './pipes/truncate/truncate.pipe';
+import { MassDisplayPipe } from './pipes/mass/mass-display.pipe';
+import { RoundPipe } from './pipes/round/round.pipe';
+import { TranslatePipe } from './pipes/translate/translate.pipe';
 
 @NgModule({
   imports: [
@@ -35,7 +43,15 @@ import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
     DirectivesCoreModule,
     FormatPriceLetterPipe,
     SearchPipe,
-    MassInUnitPipe
+    StateAbbreviationPipe,
+    AsPipe,
+    ListFindPipe,
+    MassInUnitPipe,
+    TypeTemplateDirective,
+    MassDisplayPipe,
+    TruncatePipe,
+    RoundPipe,
+    TranslatePipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -44,7 +60,15 @@ import { MassInUnitPipe } from './pipes/MassInUnit/mass-in-unit.pipe';
     FormatPriceLetterPipe,
     FormatStringPipe,
     SearchPipe,
-    MassInUnitPipe
+    StateAbbreviationPipe,
+    AsPipe,
+    ListFindPipe,
+    MassInUnitPipe,
+    TypeTemplateDirective,
+    TruncatePipe,
+    MassDisplayPipe,
+    RoundPipe,
+    TranslatePipe
   ]
 })
 export class CoreModule { }

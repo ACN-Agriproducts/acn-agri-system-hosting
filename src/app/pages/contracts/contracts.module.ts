@@ -41,7 +41,7 @@ import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tick
     FilterComponent,
     ContractModalOptionsComponent,
     CloseContractFieldsDialogComponent,
-    DeliveredChartCardComponent
+    DeliveredChartCardComponent,
   ],
   providers: [DatePipe, SelectedTicketsPipe]
 })

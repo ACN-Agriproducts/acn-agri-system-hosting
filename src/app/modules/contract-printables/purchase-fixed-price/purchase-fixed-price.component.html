@@ -1,0 +1,263 @@
+<div class="page-style main">
+    <div class="text-align-right"><b>No. de contrato:</b><span [printableField]="'id'">{{(contractForm | contractId:settings:contractForm.id:contractForm.product | async)?? " "}}</span></div>
+    <div class="text-align-justify introduction">
+        CONTRATO DE COMPRA-VENTA DE <b><span [printableField]="'product'">{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b><span [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR <b><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
+    </div>
+    <div class="text-align-center section-header-spaced">DECLARACIONES</div>
+    <ol type="I" class="declarations text-align-justify">
+        <li>
+            - DE <b>“EL VENDEDOR”</b>:
+            <br>
+            PERSONAS MORALES
+            <ol type="1">
+                <li>
+                    Que es una sociedad mercantil constituida de conformidad con las leyes mexicanas, bajo la denominación de <u><span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></u>, <span [hidden]="!contractForm?.clientInfo?.notarialAct">como se acredita con la Escritura Pública número <u><span [printableField]="'clientInfo.notarialAct'">{{contractForm?.clientInfo?.notarialAct || 'XXXXX'}}</span></u>, de fecha <u><span [printableField]="'clientInfo.notarialActDate'">{{(contractForm?.clientInfo?.notarialActDate | date:undefined:undefined:'es-MX' | uppercase) || 'XXXXXXXX'}}</span></u>,</span> y que el señor <u><span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "XXXXXXXX"}}</span></u>, en su carácter de <u>Apoderado Legal</u>, está facultado para celebrar este contrato.
+                </li>
+                <li>
+                    Que su Registro Federal de Contribuyentes es: <u><span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc || 'XXXXXXXXXXX'}}</span></u> y se encuentra al corriente de sus obligaciones.
+                </li>
+                <li [hidden]="!contractForm?.clientInfo?.curp">
+                    Que la Clave Única de Registro de Población (CURP) del apoderado legal es: <span [printableField]="'clientInfo.curp'">{{contractForm?.clientInfo?.curp}}</span>
+                </li>
+                <li>
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar, derivados del presente contrato, el ubicado en <u><span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span></u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
+                </li>
+            </ol>
+        </li>
+        <li>
+            - DE <b>“EL COMPRADOR”</b>:
+            <ol type="1">
+                <li>
+                    Sociedad mercantil, constituida de conformidad con las leyes mexicanas bajo la denominación de <u>Agropecuaria La Capilla del Noreste, SA de CV;</u>, como se acredita con la Escritura Pública número <u>860</u>, de fecha <u>11 de Febrero de 2011</u> y que el señor <u>Rubén Darío Puga Juárez</u>, en su carácter de <u>Representante Legal</u>, está facultado para celebrar este contrato, como se acredita con la Escritura Pública del Poder Notarial número 11,989, de fecha 01 de Febrero de 2011, y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
+                </li>
+                <li>
+                    Que su Registro Federal de Contribuyentes es: <u>ACN980211QC9</u> y se encuentra al corriente de sus obligaciones.
+                </li>
+                <li>
+                    Que la Clave Única de Registro de Población (CURP) del apoderado legal es: PUJR680330HTSGRB05
+                </li>
+                <li>
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª  y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [printableField]="'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [printableField]="'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
+                </li>
+            </ol>
+        </li>
+        <li>
+            - DE <b>“LAS PARTES”</b>
+            <ol type="1">
+                <li>
+                    “Dictamen Jurídico” Que el formato denominado “ANEXO 1” que se adhiere al contrato suscrito por “LAS PARTES”, forma parte integral del presente contrato, el cual contiene la información siguiente: Fecha, Producto, Tipo de carga, Precio determinado, Cantidad, Unidad de medida, Calidad garantizada, Humedad máxima, Forma de entrega, Seguro de tránsito, Lugar de entrega, Pesos, Mermas, Periodo de entrega, Términos de pago, Almacenaje y fumigación, Garantía, Forma de pago, Cuentas y bancos de pago, ejecutivo de contrato y el nombre y firma de “EL COMPRADOR” y “EL VENDEDOR”.
+                </li>
+                <li>
+                    Que en la celebración del presente contrato no ha existido mala fe, error, dolo o violencia de ningún tipo y que las contraprestaciones establecidas en el mismo son las justas, por lo que es su libre voluntad celebrar este contrato de compraventa a término y obligarse de acuerdo con las siguientes:
+                </li>
+            </ol>
+        </li>
+    </ol>
+    <div class="text-align-center section-header-spaced">CLAUSULAS</div>
+    <div class="text-align-justify">
+		<b>PRIMERA. &#8211; OBJETO.</b> - Que declaran, bajo protesta de decir verdad, que al amparo del presente “CONTRATO” celebran una compraventa a término por <span [class.focused]="focusedField == 'quantity.amount' || focusedField == 'quantity.defaultUnits'">{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.defaultUnits:contractForm.quantity.amount || 'XXXX'}}</span> toneladas del “PRODUCTO” y que quienes firman se encuentran facultados para suscribirlo en su nombre y representación.
+		<br>
+		<b>SEGUNDA. &#8211; CALIDAD.</b> - Las muestras serán tomadas en el momento y lugar de descarga, mismas que serán identificadas y resguardadas. En caso de tener alguna diferencia respecto a la calidad del “PRODUCTO” las “PARTES” acuerdan sujetarse a un análisis de un tercero para definir dicha calidad, sometiéndose a los resultados. El "VENDEDOR” se compromete a entregar el “PRODUCTO” al “COMPRADOR” dentro de los parámetros y especificaciones convenidos que se muestran a continuación:
+        <div class="product-info">
+            <div class="product-info-item">Humedad:<br><span [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}</span>%<br>maximo</div>
+            <div class="product-info-item">Impurezas:<br><span [printableField]="'productInfo.impurities'">{{ contractForm?.productInfo?.impurities ? (contractForm?.productInfo?.impurities | number:'.1') : "XX.X"}}</span>%<br>máximo</div>
+            <div class="product-info-item">Grano dañado:<br><span [printableField]="'productInfo.damagedGrain'">{{ contractForm?.productInfo?.damagedGrain ? (contractForm?.productInfo?.damagedGrain | number:'.1') : "XX.X"}}</span>%<br>máximo</div>
+            <div class="product-info-item">Grano quebrado:<br><span [printableField]="'productInfo.brokenGrain'">{{ contractForm?.productInfo?.brokenGrain ? (contractForm?.productInfo?.brokenGrain | number:'.1') : "XX.X"}}</span>%<br>máximo.</div>
+            <div class="product-info-item">Material extraño:<br><span [printableField]="'productInfo.foreignMatter'">{{ contractForm?.productInfo?.foreignMatter ? (contractForm?.productInfo?.foreignMatter | number:'.1') : "XX.X"}}</span>%<br>máximo.</div>
+            <div class="product-info-item">Peso volumétrico:<br><span [printableField]="'productInfo.weight'">{{ contractForm?.productInfo?.weight ? (contractForm?.productInfo?.weight | number:'.1') : "XXX"}}</span> kg/ hl<br>mínimo</div>
+        </div>
+        Así mismo, el producto que por cualquier otra causa no especificada en esta cláusula sea de calidad inferior será considerada fuera de la norma. “EL COMPRADOR”, a su exclusivo criterio, puede decidir si rechaza o acepta producto fuera las norma. En el caso de ser aceptado producto que incumpla algunos factores de las normas de calidad se aplicará el descuento de precio vigente en el momento de la descarga. Para cualquier producto rechazado que incumpla con las normas de calidad “EL COMPRADOR” no tendrá ninguna obligación con “EL VENDEDOR”.
+		<br>
+        <b>TERCERA. &#8211; HUMEDAD Y SECADO.</b> - “EL COMPRADOR” aplicará la merma porcentual de peso correspondiente según la tabla oficial vigente en el momento de la entrega sobre el producto recibido que exceda la tolerancia establecida de humedad. Deberá, además, aplicar el cobro de la tarifa de secado según la tabla oficial vigente al momento de la entrega.
+		<br>
+        <b>CUARTA. &#8211; PRECIO Y PAGO.</b> - El “COMPRADOR” se obliga a pagar a el “VENDEDOR” el precio pactado del “PRODUCTO” conforme lo establecido en el “ANEXO 1” de la forma, números de cuenta y bancos indicados por el “VENDEDOR”.
+        <br>
+		El pago se efectuará en un plazo de quince días posteriores a la recepción de la factura y la documentación que avale la entrega de producto.
+		<br>
+        <b>QUINTA. &#8211; GARANTÍAS.</b> - “EL VENDEDOR” garantizará el cumplimiento de este contrato mediante una garantía de cumplimiento que será equivalente a un 20% del valor total del contrato; asimismo, se constituirá por alguno de los siguientes instrumentos o su combinación: (1) Fianza otorgada por institución autorizada en los términos de la Ley Federal de Instituciones de Fianzas (2) Transferencia electrónica de fondos a favor de “EL COMPRADOR” (3) Garantía prendaria y/o hipotecaria con dación en pago. La garantía será entregada por “EL VENDEDOR” a “EL COMPRADOR” dentro de los 2 (dos) días naturales siguientes, contados a partir de la fecha en que se suscriba este contrato.
+		<br>
+        <b>SEXTA. &#8211; INCUMPLIMIENTO DE ENTREGAS.</b> - Las penalizaciones convenidas por incumplimiento de entregas de “EL VENDEDOR” por causas imputables al mismo serán determinadas en función del grano no entregado. La pena convencional por incumplimiento en la entrega del producto será del 20% del monto del producto no entregado (equivalente en dinero del valor del tonelaje incumplido).
+		<br>
+        <b>SÉPTIMA. &#8211; MODIFICACIONES.</b> - “LAS PARTES” acuerdan que cualquier modificación en el presente contrato y/o cualquier otro dato que modifique los asentados en las presentes cláusulas, deberá ser formalizado por escrito y en común acuerdo a fin de que surta efectos.
+		<br>
+        <b>OCTAVA. &#8211; VIGENCIA Y VALIDEZ.</b> - El presente contrato sólo será válido a partir de la fecha en que sea firmado y hasta en tanto las “PARTES” cumplan con sus obligaciones derivadas del presente.
+		<br>
+        <b>NOVENA. &#8211; COMPETENCIA Y LEGISLACIÓN APLICABLE.</b> - En caso de controversia sobre la interpretación y cumplimiento del presente contrato, así como para todo aquello que no esté expresamente estipulado en el mismo, “LAS PARTES” se someten a las leyes aplicables y a los tribunales competentes del Estado de <u>Tamaulipas</u> renunciando expresamente a cualquier otra jurisdicción que, debido a sus domicilios presentes o futuros, o por cualesquiera otra, les corresponda o pudiera corresponderles.
+        <br>
+		Para efectos de lo anterior y para cumplimiento “LAS PARTES” firman por duplicado expresando su voluntad para celebrar el presente contrato, aceptando los términos y condiciones que se establecen.
+		<br>
+        <b>DÉCIMA. &#8211; DIVISIBILIDAD.</b> - Si por cualquier motivo alguna de las cláusulas, párrafos o disposiciones del presente Contrato resultaré inválida o inejecutable y no fuere factible su cumplimiento, este incumplimiento no afectará ni alterará la fuerza, el alcance ni vigencia de las cláusulas y/o demás cláusulas, párrafos o disposiciones, las que se interpretarán de tal manera que se mantenga la intención original de “LAS PARTES” al celebrar el presente Contrato.
+		<br>
+        <b>DÉCIMA PRIMERA. &#8211; RESPONSABILIDAD LABORAL.</b> - Queda expresamente convenido por “LAS PARTES” que el presente Contrato es de naturaleza mercantil y no se deriva de la misma responsabilidad laboral alguna, entre ellas, ni entre éstas y los trabajadores de la contraparte.
+		<br>
+        <b>DÉCIMA SEGUNDA. &#8211; SEGUROS.</b> - “LAS PARTES" acuerdan que el pago del seguro de la mercancía será según lo pactado en base a las condiciones de entrega que quedarán estipuladas en el “ANEXO 1" del presente instrumento.
+		<br>
+        <b>DÉCIMA TERCERA. &#8211; DOMICILIOS.</b> - Para todos los efectos del presente Contrato, “LAS PARTES” señalan como sus respectivos domicilios, los señalados en el “ANEXO 1” de este instrumento, por lo que todos los avisos, notificaciones y demás diligencias judiciales y extrajudiciales, que deban hacerse con motivo de este Contrato se realizarán a los domicilios antes señalados o en el último que hayan notificado por escrito cuando menos con 10 (diez) días hábiles de anticipación a la fecha en que deba surtir efectos el cambio.
+		<br>
+        <b>DÉCIMA CUARTA. &#8211; CESIÓN DE DERECHOS.</b> - “LAS PARTES" no podrán ceder, gravar, transferir, modificar o traspasar sus derechos y obligaciones derivados del presente Contrato, sin el consentimiento previo y por escrito de la otra parte.
+		<br>
+        <b>DÉCIMA QUINTA. &#8211; JURISDICCIÓN.</b> - Para la interpretación y cumplimiento del presente Contrato, "LAS PARTES" se sujetan a las leyes del Estado de Tamaulipas y a la competencia de los Tribunales de la ciudad de Valle Hermoso, Tamaulipas, renunciando expresamente a cualquier otro fuero que pudiere corresponder en razón de sus domicilios presentes o futuros, o por cualquier otra índole.
+    </div>
+    <div class="signatures">
+        <div class="party-signature">
+            POR “EL VENDEDOR”:
+            <div class="signature-line"></div>
+            <span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep || "(REPRESENTATIVE HERE)" }}</span>
+            <span [printableField]="'clientInfo.name'">{{ contractForm?.clientInfo?.name }}</span>
+        </div>
+        <div class="party-signature">
+            POR “EL COMPRADOR”:
+            <div class="signature-line"></div>
+            <span>ING. RUBÉN DARIO PUGA JUAREZ</span>
+            <span>AGROPECUARIA LA CAPILLA DEL NORESTE,</span>
+            <span>SA DE CV</span>
+        </div>
+    </div>
+</div>
+
+<div class="page-style anexo-1 page-standard-height">
+    <p class="page-header">
+        <b>
+            <span class="company-name">AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</span>
+            <br>
+            <span class="contract-version">CONTRATO DE COMPRA PRECIO FIJO</span>
+        </b>
+        <br>
+        <span class="contract-id">Número de contrato <span class="emphasis"><span [printableField]="'id'">{{(contractForm | contractId:settings:contractForm.id:contractForm.product | async)?? " "}}</span></span></span>
+    </p>
+    <p class="text-align-center page-title">“ANEXO 1”</p>
+    <div class="party-info">
+        <span class="party-role">VENDEDOR:</span>
+        <span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name}}</span>
+        <span [printableField]="'clientInfo.streetAddress'">{{contractForm?.clientInfo?.streetAddress}}</span>
+        <span>
+            <span [printableField]="'clientInfo.city'">{{contractForm?.clientInfo?.city}}</span>,
+            <span [printableField]="'clientInfo.state'">{{contractForm?.clientInfo?.state}}</span>, 
+            <span [printableField]="'clientInfo.country'">{{contractForm?.clientInfo?.country}}</span>        C.P. <span [printableField]="'clientInfo.zipCode'">{{contractForm?.clientInfo?.zipCode}}</span></span>
+        <span>R.F.C.: <span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc}}</span></span>
+        <span class="party-role">COMPRADOR:</span>
+        <span class="party-name">AGROPECUARIA LA CAPILLA DEL NORESTE, S.A. DE C.V.</span>
+        <span>ZARAGOZA ENTRE PRIMERA Y SEGUNDA S/N</span>
+        <span>VALLE HERMOSO, TAMAULIPAS, C.P. 87500</span>
+        <span>R.F.C.: ACN980211QC9</span>
+    </div>
+    <div class="contract-info">
+        <div class="contract-info-row">
+            <div>FECHA:</div>
+            <div [printableField]="'date'">{{contractForm?.date | date:'longDate':undefined:'es-MX'}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>PRODUCTO:</div>
+            <div [printableField]="'product'">{{contractForm?.product?.id}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>TIPO DE CARGA:</div>
+            <div [printableField]="'loadType'">{{contractForm?.loadType | selectFieldDisplay:contractType:'loadType' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>PRECIO:</div>
+            <div><span [printableField]="'price.amount'">{{contractForm?.price?.amount | currency}}</span> ({{contractForm?.price?.amount | truncate | numberNameSpanish}} PESOS {{contractForm?.price?.amount % 1 * 100 | round}}/100 MN)</div>
+        </div>
+        <div class="contract-info-row">
+            <div>CANTIDAD:</div>
+            <div>
+                <span [printableField]="'quantity.amount'">{{contractForm?.quantity?.amount}}</span> ({{contractForm?.quantity?.amount | numberNameSpanish}}) 
+                <span [printableField]="'quantity.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</span>
+                +- <span [printableField]="'quantityErrorPercentage'">{{contractForm?.quantityErrorPercentage || 'X'}}</span>%
+            </div>
+        </div>
+        <div class="contract-info-row">
+            <div>UNIDAD DE MEDIDA:</div>
+            <div [printableField]="'quantiy.defaultUnits'">{{utils.getUnitName(contractForm?.quantity?.defaultUnits) | translate | uppercase}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>CALIDAD GARANTIZADA:</div>
+			<div>Grado: U.S. <span [printableField]="'grade'">{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
+        </div>
+        <div class="contract-info-row">
+            <div>HUMEDAD MÁXIMA:</div>
+			<div [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
+        </div>
+        <div class="contract-info-row">
+            <div>FORMA DE ENTREGA:</div>
+			<div [printableField]="'deliveryType'">{{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>SEGURO DE TRÁNSITO:</div>
+            <div [printableField]="'transportInsurance'">{{contractForm?.transportInsurance | selectFieldDisplay:contractType:'transportInsurance' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>LUGAR DE ENTREGA: </div>
+            <div [printableField]="'plants'">
+                <ng-container *ngFor="let address of contractForm.deliveryPlants; let last = last">
+                    <span>{{address}}</span><ng-container *ngIf="!last">,</ng-container><br>
+                </ng-container>
+			</div>
+        </div>
+        <div class="contract-info-row">
+            <div>PESOS:</div>
+			<div [printableField]="'paymentTerms.origin'">{{contractForm?.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>MERMAS:</div>
+			<div [printableField]="'shrinkage'">{{contractForm?.shrinkage | selectFieldDisplay:contractType:'shrinkage' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>PERIODO DE ENTREGA:</div>
+			<div class="period" [printableField]="'delivery_dates'">{{contractForm?.delivery_dates?.begin | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}<b>AL</b>{{contractForm?.delivery_dates?.end | date:'dd-MMM-YY':undefined:'es-MX' | uppercase}}</div>
+        </div>
+		<div class="contract-info-row">
+            <div>ALMACENAJE Y FUMIGACIÓN:</div>
+			<div [printableField]="'storageAndFumigation'">{{contractForm?.storageAndFumigation || "NO APLICA"}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>TÉRMINOS DE PAGO:</div>
+			<div [printableField]="'termsOfPayment'">{{contractForm?.termsOfPayment | selectFieldDisplay:contractType:'termsOfPayment' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>GARANTÍA:</div>
+			<div><span [printableField]="'guarantee'">{{contractForm?.guarantee || 'XX'}}</span>%</div>
+        </div>
+        <div class="contract-info-row">
+            <div>FORMA DE PAGO:</div>
+			<div [printableField]="'formOfPayment'">{{contractForm?.formOfPayment | selectFieldDisplay:contractType:'formOfPayment' | async}}</div>
+        </div>
+        <div class="contract-info-row">
+            <div>BANCOS Y CUENTAS DE PAGO:</div>
+			<div class="banks-and-accounts-grid" [printableField]="'bankInfo'">
+                <div>
+					<span>BANCO</span>
+					<span>CUENTA</span>
+					<span>CLABE INTERBANCARIA</span>
+				</div>
+                <div *ngFor="let bankInfo of contractForm.bankInfo">
+                    <span>{{bankInfo.bank | uppercase}}</span>
+                    <span>{{bankInfo.account}}</span>
+                    <span>{{bankInfo.interBank}}</span>
+                </div>
+                <div *ngIf="contractForm.bankInfo.length == 0">--</div>
+                
+            </div>
+        </div>
+        <div class="contract-info-row">
+            <div>EJECUTIVO DE CONTRATO:</div>
+			<div [printableField]="'contractExecutive'">{{contractForm?.contractExecutive?.name}}</div>
+        </div>
+    </div>
+    <p>PARA CONSTANCIA DE LO CONVENIDO LAS PARTES FIRMAN EL PRESENTE CONTRATO</p>
+    <div class="signatures">
+        <div class="party-signature">
+            POR “EL VENDEDOR”:
+            <div class="signature-line"></div>
+            <span [printableField]="'clientInfo.clientRep'">{{ contractForm?.clientInfo?.clientRep}}</span>
+            <span [printableField]="'clientInfo.name'">{{ contractForm.clientInfo?.name }}</span>
+        </div>
+        <div class="party-signature">
+            POR “EL COMPRADOR”:
+            <div class="signature-line"></div>
+            <span>ING. RUBÉN DARIO PUGA JUAREZ</span>
+            <span>AGROPECUARIA LA CAPILLA DEL NORESTE,</span>
+            <span>SA DE CV</span>
+        </div>
+    </div>
+</div>

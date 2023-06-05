@@ -1,5 +1,6 @@
+
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer } from "@angular/fire/firestore";
 import { Injectable } from "@angular/core";
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
@@ -48,6 +49,20 @@ export class Ticket extends FirebaseDocInterface{
     public voidRequester: string;
     public weight: number;
 
+    public contractRef: DocumentReference<Contract>;
+
+    public clientStreetAddress: string;
+    public clientCity: string;
+    public clientState: string;
+    public clientZipCode: string;
+
+    public transportName: string;
+    public transportStreetAddress: string;
+    public transportCity: string;
+    public transportState: string;
+    public transportZipCode: string;
+    public transportCaat: string;
+
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
 
@@ -92,6 +107,20 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
 
+        this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
+
+        this.clientStreetAddress = data.clientStreetAddress;
+        this.clientCity = data.clientCity;
+        this.clientState = data.clientState;
+        this.clientZipCode = data.clientZipCode;
+
+        this.transportName = data.transportName;
+        this.transportStreetAddress = data.transportStreetAddress;
+        this.transportCity = data.transportCity;
+        this.transportState = data.transportState;
+        this.transportZipCode = data.transportZipCode;
+        this.transportCaat = data.transportCaat;
+
         this.net = this.gross.subtract(this.tare);
     }
 
@@ -133,7 +162,21 @@ export class Ticket extends FirebaseDocInterface{
                 voidReason: data.voidReason,
                 voidRequest: data.voidRequest,
                 voidRquester: data.voidRequester,
-                weight: data.weight
+                weight: data.weight,
+
+                contractRef: data.contractRef,
+
+                clientStreetAddress: data.weight,
+                clientCity: data.weight,
+                clientState: data.weight,
+                clientZipCode: data.weight,
+                
+                transportName: data.weight,
+                transportStreetAddress: data.weight,
+                transportCity: data.weight,
+                transportState: data.weight,
+                transportZipCode: data.weight,
+                transportCaat: data.weight,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
@@ -229,13 +272,20 @@ export class Ticket extends FirebaseDocInterface{
     public static async getTickets(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<Ticket[]>;
     public static async getTickets(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<Ticket[]> {
         const collectionReference = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
-
         const ticketCollectionData = await getDocs(collectionReference);
+
         return ticketCollectionData.docs.map(snap => snap.data());
     }
 
     public static getTicketSnapshot(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Observable<Ticket[]> {
         const collectionQuery = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
         return collectionData(collectionQuery);
+    }
+
+    public static async getTicketCount(db: Firestore, company: string, plant: string, ...constraints: QueryConstraint[]): Promise<number> {
+        const ticketCollQuery = query(Ticket.getCollectionReference(db, company, plant), ...constraints);
+        const ticketSnapshot = await getCountFromServer(ticketCollQuery);
+
+        return ticketSnapshot.data().count;
     }
 }
