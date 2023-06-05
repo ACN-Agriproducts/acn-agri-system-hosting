@@ -1,8 +1,7 @@
 <app-header-toolbar titulo="{{product}}"></app-header-toolbar>
 
-<ion-content class="ion-padding" *ngIf="ready else loading">
-  <button mat-flat-button (click)="addTable()" color="primary">+ Add Table</button>
-  <ion-grid>
+<ion-content class="ion-padding">
+  <ion-grid *ngIf="ready else loading">
     <ion-row>
       <ion-col size-sm='12' size-md='6'>
         <ion-card>
@@ -14,7 +13,7 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size-sm='12' size-md='6'>
+      <!-- <ion-col size-sm='12' size-md='6'>
         <ion-card>
           <ion-card-header>
             <ion-card-title>Moisture</ion-card-title>
@@ -23,29 +22,42 @@
             <app-discount-table-moisture [doc]="doc"></app-discount-table-moisture>
           </ion-card-content>
         </ion-card>
-      </ion-col>
+      </ion-col> -->
     </ion-row>
+
+    <div class="content-subtitle">
+      <h4><span></span></h4>
+    </div>
+
+    <button mat-flat-button style="margin: 10px" color="primary" (click)="addTable()">+ Add Discount Table</button>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
-        <ion-card class="discount-table">
-          <ion-card-header class="discount-table-header">
-            <!-- <ion-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</ion-card-title> -->
+        <mat-card class="discount-table">
+          <mat-card-header class="discount-table-header">
+            <!-- <mat-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</mat-card-title> -->
             <mat-form-field 
               (keydown.enter)="discountTables.set()" 
               (focusout)="discountTables.set()"
             >
               <input matInput [(ngModel)]="table.name" type="text">
             </mat-form-field>
-            <button mat-icon-button color="warn" 
-              (click)="discountTables.tables.splice(tableIndex, 1); discountTables.set()"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </ion-card-header>
-          <ion-card-content>
+            <div class="action-bar">
+              <button mat-mini-fab color="primary" (click)="table.addTableData()">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" (click)="deleteTable(tableIndex)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
             <app-discount-table [table]="table"></app-discount-table>
-          </ion-card-content>
-        </ion-card>
+          </mat-card-content>
+          <div class="action-bar">
+            <!-- <button mat-flat-button color="primary" (click)="table.addTableData()">+ Add Item</button> -->
+            <button mat-flat-button color="primary" (click)="discountTables.set()">Save</button>
+          </div>
+        </mat-card>
       </ion-col>
     </ion-row>
   </ion-grid>

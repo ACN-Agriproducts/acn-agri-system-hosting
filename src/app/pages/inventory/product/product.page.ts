@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Firestore, doc } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { DiscountTable, DiscountTables } from '@shared/classes/discount-tables';
+import { DiscountTables } from '@shared/classes/discount-tables';
 import { Product } from '@shared/classes/product';
-import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { SetDiscountTableDialogComponent } from './components/set-discount-table-dialog/set-discount-table-dialog.component';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
   selector: 'app-product',
@@ -27,6 +25,7 @@ export class ProductPage implements OnInit {
     private db: Firestore,
     private session: SessionInfo,
     private dialog: MatDialog,
+    private confirmation: ConfirmationDialogService,
   ) { 
     this.product = route.snapshot.paramMap.get('product');
   }
@@ -51,7 +50,7 @@ export class ProductPage implements OnInit {
   }
 
   async addTable() {
-    const dialogRef = this.dialog.open(SetDiscountTableDialog, {
+    const dialogRef = this.dialog.open(SetDiscountTableDialogComponent, {
       disableClose: true
     });
 
@@ -62,44 +61,17 @@ export class ProductPage implements OnInit {
       await this.discountTables.set();
     });
   }
-}
 
-@Component({
-  selector: 'set-discount-table-dialog',
-  templateUrl: './set-discount-table-dialog.html',
-  styleUrls: ['./product.page.scss']
-})
-export class SetDiscountTableDialog implements OnInit {
-  public table: DiscountTable;
-  public standardConfig: boolean = true;
+  async deleteTable(tableIndex: number) {
+    const confirm = this.confirmation.openDialog(`delete the "${this.discountTables.tables[tableIndex].name}" table`);
 
-  addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  
-  constructor() {}
-
-  ngOnInit() {
-    this.table = new DiscountTable();
-  }
-
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.table.headers, event.previousIndex, event.currentIndex);
-  }
-
-  add(event: MatChipInputEvent) {
-    const value = (event.value || '').trim();
-
-    if (value) {
-      this.table.headers.push(value);
+    if ((await confirm) == true) {
+      this.discountTables.tables.splice(tableIndex, 1);
+      this.discountTables.set();
     }
-    event.chipInput!.clear();
   }
 
-  remove(header: string) {
-    const index = this.table.headers.indexOf(header);
-
-    if (index >= 0) {
-      this.table.headers.splice(index, 1);
-    }
+  ngOnDestroy() {
+    delete this.discountTables;
   }
 }

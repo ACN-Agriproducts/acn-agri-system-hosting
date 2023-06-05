@@ -17,11 +17,11 @@
     <mat-form-field appearance="fill">
         <mat-label>Headers</mat-label>
         <mat-chip-list #chipList
+            class="mat-chip-list-stacked"
             cdkDropList
             cdkDropListOrientation="vertical"
             (cdkDropListDropped)="drop($event)"
             [multiple]="true"
-            class="mat-chip-list-stacked"
         >
             <mat-chip 
                 cdkDrag 

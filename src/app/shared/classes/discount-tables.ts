@@ -78,7 +78,7 @@ export class DiscountTable {
     fieldName: string;
     headers: string[];
     data: {
-        [fieldName: string]: number
+        [key: string]: number
     }[];
 
     constructor(tableData?: any) {
@@ -89,6 +89,13 @@ export class DiscountTable {
 
         tableData?.data.forEach(item => {
             this.data.push(item);
+        });
+    }
+
+    public addTableData() {
+        this.data.push({});
+        this.headers.forEach(header => {
+            this.data[this.data.length - 1][header] = 0;
         });
     }
 }

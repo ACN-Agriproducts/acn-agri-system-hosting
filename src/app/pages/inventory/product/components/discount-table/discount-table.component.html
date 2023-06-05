@@ -2,14 +2,26 @@
 <ol class="collection">
   <mat-card class="header-card">
     <li class="row">
-      <div class="cell">Something</div>
-      <div class="cell">Something else</div>
+      <div class="cell" *ngFor="let header of table.headers">{{ header | titlecase }}</div>
+      <div class="cell options">
+        <!-- <button mat-mini-fab color="primary" (click)="table.addTableData()">
+          <mat-icon>add</mat-icon>
+        </button> -->
+      </div>
     </li>
   </mat-card>
-  <mat-card class="body-card">
+  <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index">
     <li class="row">
-      <div class="cell"></div>
-      <div class="cell"></div>
+      <div class="cell" *ngFor="let header of table.headers">
+        <mat-form-field>
+          <input matInput [(ngModel)]="row[header]" type="number" step="0.01" min="0">
+        </mat-form-field>
+      </div>
+      <div class="cell options">
+        <button mat-icon-button color="warn" (click)="table.data.splice(rowIndex, 1)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </li>
   </mat-card>
 </ol>
