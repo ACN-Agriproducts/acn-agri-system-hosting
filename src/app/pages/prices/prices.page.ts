@@ -382,14 +382,14 @@ export class PricesPage implements OnInit {
       data: userList
     });
 
-    const notificationInfo = await lastValueFrom(dialogRef.afterClosed());
+    const notificationInfo = await lastValueFrom(dialogRef.afterClosed()) as emailNotificationInfo;
     console.log(notificationInfo);
     if(!notificationInfo || !notificationInfo.text || !notificationInfo.usersList || !notificationInfo.subject) return;
     
     this.snackbar.open('Mandando notificación...', 'info');
 
     addDoc(collection(this.db, 'mail'), {
-      bccUids: notificationInfo.usersList,
+      bccUids: notificationInfo.usersList.map(u => u.uid),
       company: this.session.getCompany(),
       userUID: this.session.getUser().uid,
       date: serverTimestamp(),
@@ -449,6 +449,12 @@ export class EmailNotificationDialog {
       return 0;
     })
   };
+}
+
+interface emailNotificationInfo {
+  subject: string;
+  text: string;
+  usersList: { uid: string, name: string, email: string }[];
 }
 
 interface pricesDoc {
