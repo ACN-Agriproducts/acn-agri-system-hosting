@@ -3,11 +3,7 @@
   <mat-card class="header-card">
     <li class="row">
       <div class="cell" *ngFor="let header of table.headers">{{ header | titlecase }}</div>
-      <div class="cell options">
-        <!-- <button mat-mini-fab color="primary" (click)="table.addTableData()">
-          <mat-icon>add</mat-icon>
-        </button> -->
-      </div>
+      <div class="cell options"></div>
     </li>
   </mat-card>
   <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index">
@@ -19,7 +15,7 @@
       </div>
       <div class="cell options">
         <button mat-icon-button color="warn" (click)="table.data.splice(rowIndex, 1)">
-          <mat-icon>delete</mat-icon>
+          <mat-icon>delete_outline</mat-icon>
         </button>
       </div>
     </li>

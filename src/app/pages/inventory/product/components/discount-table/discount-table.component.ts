@@ -8,14 +8,11 @@ import { DiscountTable } from '@shared/classes/discount-tables';
 })
 export class DiscountTableComponent implements OnInit {
   @Input() table: DiscountTable;
-  
-  @ViewChild('btn-plus') plusBtn: HTMLElement;
-  @ViewChildren('btn-plus') plusBtns: QueryList<HTMLElement>;
 
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
 }
