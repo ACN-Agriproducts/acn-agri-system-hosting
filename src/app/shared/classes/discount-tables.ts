@@ -84,12 +84,10 @@ export class DiscountTable {
     constructor(tableData?: any) {
         this.name = tableData?.name ?? "";
         this.fieldName = tableData?.fieldName ?? "";
-        this.headers = tableData?.headers ?? [];
+        this.headers = [...tableData?.headers] ?? [];
         this.data = [];
 
-        tableData?.data.forEach(item => {
-            this.data.push(item);
-        });
+        tableData?.data.forEach(item => this.data.push(item));
     }
 
     public addTableData() {

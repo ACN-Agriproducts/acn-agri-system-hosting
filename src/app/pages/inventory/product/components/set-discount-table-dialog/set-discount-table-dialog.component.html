@@ -69,5 +69,5 @@
 
 <mat-dialog-actions>
     <button mat-flat-button color="primary" mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="primary" [disabled]="tableForm.invalid" [mat-dialog-close]="table">{{ editing ? "Update" : "Generate"}}</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="table" [disabled]="tableForm.invalid" (click)="generateDiscountData()">{{ editing ? "Update" : "Generate"}}</button>
 </mat-dialog-actions>

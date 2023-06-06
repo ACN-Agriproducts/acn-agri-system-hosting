@@ -36,6 +36,7 @@ export class SetDiscountTableDialogComponent implements OnInit {
     const value = (event.value || '').trim();
     if (value) {
       this.table.headers.push(value);
+      this.table.data.forEach(item => item[value] = 0);
     }
     event.chipInput!.clear();
   }
@@ -44,7 +45,15 @@ export class SetDiscountTableDialogComponent implements OnInit {
     const index = this.table.headers.indexOf(header);
     if (index >= 0) {
       this.table.headers.splice(index, 1);
+      this.table.data.forEach(item => delete item[header]);
     }
+  }
+
+  generateDiscountData() {
+    if (!this.standardConfig || this.editing) return;
+    console.log("generate numbas!!!")
+
+    
   }
 
   ngOnDestroy() {
