@@ -2,76 +2,72 @@
 <h2 mat-dialog-title>New Discount Table</h2>
 
 <mat-dialog-content>
-    <div class="form-field-group">
+    <form #tableForm="ngForm">
+        <div class="form-field-group">
+            <mat-form-field appearance="fill">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="table.name" type="text" name="name" required>
+                <mat-error>Field Required</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Field Name</mat-label>
+                <input matInput [(ngModel)]="table.fieldName" type="text" name="fieldName" required>
+                <mat-error>Field Required</mat-error>
+            </mat-form-field>
+        </div>
         <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="table.name" type="text">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Field Name</mat-label>
-            <input matInput [(ngModel)]="table.fieldName" type="text">
-        </mat-form-field>
-    </div>
-
-    <mat-form-field appearance="fill">
-        <mat-label>Headers</mat-label>
-        <mat-chip-list #chipList
-            class="mat-chip-list-stacked"
-            cdkDropList
-            cdkDropListOrientation="vertical"
-            (cdkDropListDropped)="drop($event)"
-            [multiple]="true"
-        >
-            <mat-chip 
-                cdkDrag 
-                *ngFor="let header of table.headers" 
-                (removed)="remove(header)"
-                selected
+            <mat-label>Headers</mat-label>
+            <mat-chip-list #chipList
+                class="mat-chip-list-stacked"
+                cdkDropList
+                cdkDropListOrientation="vertical"
+                (cdkDropListDropped)="drop($event)"
+                [multiple]="true"
             >
-                {{ header }}
-                <button matChipRemove>
-                    <mat-icon>cancel</mat-icon>
-                </button>
-            </mat-chip>
-            
-        </mat-chip-list>
-        <input placeholder="New header..."
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="addOnBlur"
-            (matChipInputTokenEnd)="add($event)"
-        >
-    </mat-form-field>
-
-    <mat-divider></mat-divider>
-
-    <mat-checkbox class="default-layout-checkbox" [(ngModel)]="standardConfig">Standard Discount Configuration</mat-checkbox>
-
-    <section class="form-field-group" *ngIf="standardConfig">
-        <mat-form-field appearance="fill">
-            <mat-label>Min</mat-label>
-            <input matInput type="number">
+                <mat-chip
+                    cdkDrag
+                    *ngFor="let header of table.headers"
+                    (removed)="remove(header)"
+                    selected
+                >
+                    {{ header }}
+                    <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip>
+        
+            </mat-chip-list>
+            <input placeholder="New header..."
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"
+            >
         </mat-form-field>
-
-        <mat-form-field appearance="fill">
-            <mat-label>Max</mat-label>
-            <input matInput type="number">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" style="grid-column: span 2">
-            <mat-label>Step</mat-label>
-            <input matInput type="number">
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" style="grid-column: span 2">
-            <mat-label>Discount</mat-label>
-            <input matInput type="number">
-        </mat-form-field>
-    </section>
+        <mat-divider></mat-divider>
+        <mat-checkbox class="default-layout-checkbox" [(ngModel)]="standardConfig" name="standardConfig">Standard Discount Configuration</mat-checkbox>
+        <section class="form-field-group" *ngIf="standardConfig">
+            <mat-form-field appearance="fill">
+                <mat-label>Min</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Max</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+            <mat-form-field appearance="fill" style="grid-column: span 2">
+                <mat-label>Step</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+            <mat-form-field appearance="fill" style="grid-column: span 2">
+                <mat-label>Discount</mat-label>
+                <input matInput type="number">
+            </mat-form-field>
+        </section>
+    </form>
 </mat-dialog-content>
 
 <mat-dialog-actions>
     <button mat-flat-button color="primary" mat-dialog-close>Cancel</button>
-    <button mat-flat-button color="primary" [mat-dialog-close]="table">Submit</button>
+    <button mat-flat-button color="primary" [disabled]="tableForm.invalid" [mat-dialog-close]="table">{{ editing ? "Update" : "Generate"}}</button>
 </mat-dialog-actions>

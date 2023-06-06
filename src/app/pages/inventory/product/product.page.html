@@ -29,33 +29,43 @@
       <h4><span></span></h4>
     </div>
 
-    <button mat-flat-button style="margin: 10px" color="primary" (click)="addTable()">+ Add Discount Table</button>
+    <button mat-flat-button style="margin: 10px" color="primary" (click)="setTable()">+ Add Discount Table</button>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
         <mat-card class="discount-table">
           <mat-card-header class="discount-table-header">
-            <!-- <mat-card-title>{{ table.name || ("Discount Table" + " " + (tableIndex + 1)) }}</mat-card-title> -->
-            <mat-form-field 
-              (keydown.enter)="discountTables.set()" 
-              (focusout)="discountTables.set()"
+            <mat-card-title>{{ table.name }}</mat-card-title>
+            <!-- <mat-form-field 
+              (keydown.enter)="save()" 
+              (focusout)="save()"
             >
               <input matInput [(ngModel)]="table.name" type="text">
-            </mat-form-field>
+            </mat-form-field> -->
             <div class="action-bar">
-              <button mat-mini-fab color="primary" (click)="table.addTableData()">
-                <mat-icon>add</mat-icon>
+              <button mat-icon-button color="primary" (click)="table.addTableData()">
+                <mat-icon>add_box</mat-icon>
               </button>
-              <button mat-mini-fab color="warn" (click)="deleteTable(tableIndex)">
-                <mat-icon>delete</mat-icon>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
               </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="setTable(table, tableIndex)">
+                  <mat-icon color="primary">edit</mat-icon>
+                  <span>Edit Table Details</span>
+                </button>
+                <button mat-menu-item (click)="deleteTable(tableIndex)">
+                  <mat-icon color="warn">delete_forever</mat-icon>
+                  <span>Delete Table</span>
+                </button>
+              </mat-menu>
             </div>
           </mat-card-header>
           <mat-card-content>
             <app-discount-table [table]="table"></app-discount-table>
           </mat-card-content>
           <div class="action-bar">
-            <!-- <button mat-flat-button color="primary" (click)="table.addTableData()">+ Add Item</button> -->
-            <button mat-flat-button color="primary" (click)="discountTables.set()">Save</button>
+            <button mat-flat-button color="primary" (click)="save()">Save</button>
+            <mat-spinner *ngIf="saving" [diameter]="25"></mat-spinner>
           </div>
         </mat-card>
       </ion-col>

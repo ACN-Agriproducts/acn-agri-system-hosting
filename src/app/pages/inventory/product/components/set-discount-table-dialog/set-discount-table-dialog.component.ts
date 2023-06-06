@@ -1,7 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DiscountTable } from '@shared/classes/discount-tables';
 
 @Component({
@@ -17,11 +18,14 @@ export class SetDiscountTableDialogComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   
-  constructor() {}
+  constructor(
+    public dialogRef: MatDialogRef<SetDiscountTableDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DiscountTable
+  ) {}
 
   ngOnInit() {
-    this.editing = this.table ? true : false;
-    this.table = new DiscountTable();
+    this.editing = this.data ? true : false;
+    this.table = new DiscountTable(this.data);
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -30,7 +34,6 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   add(event: MatChipInputEvent) {
     const value = (event.value || '').trim();
-
     if (value) {
       this.table.headers.push(value);
     }
@@ -39,9 +42,12 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   remove(header: string) {
     const index = this.table.headers.indexOf(header);
-
     if (index >= 0) {
       this.table.headers.splice(index, 1);
     }
+  }
+
+  ngOnDestroy() {
+    delete this.table;
   }
 }

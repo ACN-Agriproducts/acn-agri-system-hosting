@@ -7,6 +7,11 @@ ion-grid, ion-col {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+	&:has(mat-card-title) {
+		margin-bottom: 15px;
+		mat-card-title { margin: 0 }
+	}
 }
 
 .discount-table {
@@ -29,6 +34,7 @@ ion-grid, ion-col {
 .action-bar {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 
