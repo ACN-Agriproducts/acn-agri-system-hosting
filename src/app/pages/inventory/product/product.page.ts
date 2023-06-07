@@ -70,7 +70,7 @@ export class ProductPage implements OnInit {
     }
 
     await this.discountTables.set();
-    this.snack.open(`Table Successfully ${table ? "Updated" : "Created"}`, "success");
+    this.snack.open(`Table ${table ? "Updated" : "Created"}`, "success");
   }
 
   async deleteTable(tableIndex: number) {
@@ -79,7 +79,7 @@ export class ProductPage implements OnInit {
     if (await confirm) {
       this.discountTables.tables.splice(tableIndex, 1);
       await this.discountTables.set();
-      this.snack.open(`Table Successfully Deleted`, "success");
+      this.snack.open(`Table Deleted`);
     }
   }
 
