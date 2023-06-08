@@ -65,6 +65,7 @@
     ngxPrint
     [useExistingCss]="true"
     printSectionId="ContractLiquidationLong"
+    [printStyle]="{'@page' : { size: 'letter landscape' }}"
   >Print</button>
   <span *ngIf="selectedTickets?.length !== 0" class="selected-tickets-count">( {{ selectedTickets?.length }} Selected )</span>
 

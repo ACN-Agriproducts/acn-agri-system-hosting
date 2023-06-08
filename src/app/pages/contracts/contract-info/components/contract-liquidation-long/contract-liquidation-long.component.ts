@@ -22,6 +22,9 @@ export class ContractLiquidationLongComponent implements OnInit {
     moistureAdjustedWeight: number,
     totalBeforeDiscounts: number,
     infested: number,
+    musty: number,
+    sour: number,
+    weathered: number,
     inspection: number,
     netToPay: number
   };

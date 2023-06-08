@@ -61,7 +61,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
       this.ticketDiscountList = tickets.map(t => ({
         data: t,
-        discounts: { infested: 0, inspection: 0 },
+        discounts: { infested: 0, musty: 0, sour: 0, weathered: 0, inspection: 0 },
         includeInReport: false
       }));
       
@@ -219,7 +219,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       {
         return {
           data: ticket,
-          discounts: { infested: 0, inspection: 0 },
+          discounts: { infested: 0, musty: 0, sour: 0, weathered: 0, inspection: 0 },
           includeInReport: false
         }
       }));
@@ -252,10 +252,14 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       totals.totalBeforeDiscounts += total;
 
       totals.infested += ticket.discounts.infested;
+      totals.musty += ticket.discounts.musty;
+      totals.sour += ticket.discounts.sour;
+      totals.weathered += ticket.discounts.weathered;
       totals.inspection += ticket.discounts.inspection;
 
       totals.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
-      console.log(ticket, totals, total, ticket.data.dryWeight.getBushelWeight(this.currentContract.productInfo), this.currentContract.pricePerBushel);
+
+      console.log(this.selectedTickets, totals)
     });
     
     return totals;
@@ -276,11 +280,14 @@ class LiquidationTotals {
   public moistureAdjustedWeight: number;
   public totalBeforeDiscounts: number;
   public infested: number;
+  public musty: number;
+  public sour: number;
+  public weathered: number;
   public inspection: number;
   public netToPay: number;
 
   constructor() {
     this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = 0;
-    this.totalBeforeDiscounts = this.infested = this.inspection = this.netToPay = 0;
+    this.totalBeforeDiscounts = this.infested = this.musty = this.sour = this.weathered = this.inspection = this.netToPay = 0;
   }
 }
