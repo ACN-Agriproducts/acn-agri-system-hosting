@@ -8,8 +8,11 @@
     <ion-text>Gross</ion-text>
     <ion-text>Tare</ion-text>
     <ion-text>Net</ion-text>
-    <ion-text>Infested Discount</ion-text>
-    <ion-text>Inspection Discount</ion-text>
+    <ion-text>Infested</ion-text>
+    <ion-text>Musty</ion-text>
+    <ion-text>Sour</ion-text>
+    <ion-text>Weathered</ion-text>
+    <ion-text>Inspection</ion-text>
   </div>
   <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
     <ion-text>
@@ -24,13 +27,31 @@
     <ion-text>{{ticket.data.getNet() | massInUnit}}</ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.infested" type="number"/>
+        <input matInput [(ngModel)]="ticket.discounts.infested" type="number" (ngModelChange)="selectChange.emit()"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.inspection" type="number"/>
+        <input matInput [(ngModel)]="ticket.discounts.musty" type="number" (ngModelChange)="selectChange.emit()"/>
+        <span matPrefix>$ &nbsp;</span>
+      </mat-form-field>
+    </ion-text>
+    <ion-text>
+      <mat-form-field>
+        <input matInput [(ngModel)]="ticket.discounts.sour" type="number" (ngModelChange)="selectChange.emit()"/>
+        <span matPrefix>$ &nbsp;</span>
+      </mat-form-field>
+    </ion-text>
+    <ion-text>
+      <mat-form-field>
+        <input matInput [(ngModel)]="ticket.discounts.weathered" type="number" (ngModelChange)="selectChange.emit()"/>
+        <span matPrefix>$ &nbsp;</span>
+      </mat-form-field>
+    </ion-text>
+    <ion-text>
+      <mat-form-field>
+        <input matInput [(ngModel)]="ticket.discounts.inspection" type="number" (ngModelChange)="selectChange.emit()"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>
