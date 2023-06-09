@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-card-button',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./card-button.component.scss'],
 })
 export class CardButtonComponent implements OnInit {
+  @Input() icon: string;
+  @Input() name: string;
+  @Input() callback: () => void = () => {console.log("pressed")}
 
   constructor() { }
 

@@ -1,6 +1,8 @@
-<mat-card>
-  <mat-card-content>
-    <ion-icon name="car-outline" style="font-size: 64px;"></ion-icon>
-    <h1 style="font-size: 32px;">Transport</h1>
-  </mat-card-content>
-</mat-card>
+<td (click)="callback()">
+  <mat-card>
+    <mat-card-content>
+      <ion-icon [name]="icon" style="font-size: 64px;"></ion-icon>
+      <h1 style="font-size: 32px;">{{name}}</h1>
+    </mat-card-content>
+  </mat-card>
+</td>
