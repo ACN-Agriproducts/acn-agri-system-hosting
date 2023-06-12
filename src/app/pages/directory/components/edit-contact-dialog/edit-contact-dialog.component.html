@@ -12,6 +12,16 @@
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Contact Type</mat-label>
+					<mat-select [(ngModel)]="data.tags" multiple name="tags">
+						<mat-option value="client">Client</mat-option>
+						<mat-option value="trucker">Trucker</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill" *ngIf="data.tags | includes:'trucker'">
 					<mat-label>CAAT</mat-label>
 					<input matInput [(ngModel)]="data.caat" name="caat">
