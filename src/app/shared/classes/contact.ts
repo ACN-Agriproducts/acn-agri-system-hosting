@@ -4,7 +4,7 @@ import { ContactInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class Contact extends FirebaseDocInterface {
-    private _curp: string;
+    public _curp: string;
     public caat: string;
     public city: string;
     public metacontacts: MetaContact[];
