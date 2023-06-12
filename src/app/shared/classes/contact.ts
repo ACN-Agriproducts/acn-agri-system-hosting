@@ -1,12 +1,10 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, updateDoc } from "@angular/fire/firestore";
-import { ContactInfo, Contract } from "./contract";
-
+import { ContactInfo } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Ticket } from "./ticket";
 
 export class Contact extends FirebaseDocInterface {
-    private _curp: string;
+    public _curp: string;
     public caat: string;
     public city: string;
     public metacontacts: MetaContact[];
@@ -22,8 +20,8 @@ export class Contact extends FirebaseDocInterface {
 
     public bankInfo: BankInfo[];
 
-    constructor(snapshot: QueryDocumentSnapshot<any> | ContactInfo, tags?: string[]) {
-        if(!(snapshot instanceof QueryDocumentSnapshot)) {
+    constructor(snapshot: QueryDocumentSnapshot<any> | DocumentReference<any> | ContactInfo, tags?: string[]) {
+        if(!(snapshot instanceof QueryDocumentSnapshot) && !(snapshot instanceof DocumentReference)) {
             super(null, Contact.converter)
 
             this.metacontacts = [{
@@ -46,6 +44,34 @@ export class Contact extends FirebaseDocInterface {
             this._curp = snapshot.curp;
             this.notarialAct = snapshot.notarialAct;
             this.notarialActDate = snapshot.notarialActDate;
+            this.tags = tags ?? [];
+
+            return;
+        }
+
+        if(snapshot instanceof DocumentReference) {
+            super(null, Contact.converter)
+            this.ref = snapshot;
+
+            this.metacontacts = [{
+                email: null,
+                isPrimary: true,
+                name:  null,
+                phone: null,
+            }];
+
+            this.bankInfo = [];
+            this.caat = null;
+            this.city = null;
+            this.name = null;
+            this.state = null;
+            this.country = null;
+            this.streetAddress = null;
+            this.zipCode = null;
+            this.rfc = null;
+            this._curp = null;
+            this.notarialAct = null;
+            this.notarialActDate = null;
             this.tags = tags ?? [];
         }
 
