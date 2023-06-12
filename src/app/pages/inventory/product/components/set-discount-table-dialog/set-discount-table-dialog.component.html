@@ -16,7 +16,7 @@
             </mat-form-field>
         </div>
         <mat-form-field appearance="fill">
-            <mat-label>Headers</mat-label>
+            <mat-label>{{ standardConfig ? "Additional Headers" : "Headers" }}</mat-label>
             <mat-chip-list #chipList
                 class="mat-chip-list-stacked"
                 cdkDropList
@@ -35,7 +35,6 @@
                         <mat-icon>cancel</mat-icon>
                     </button>
                 </mat-chip>
-        
             </mat-chip-list>
             <input placeholder="New header..."
                 [matChipInputFor]="chipList"
@@ -44,25 +43,43 @@
                 (matChipInputTokenEnd)="add($event)"
             >
         </mat-form-field>
-        <mat-divider></mat-divider>
-        <mat-checkbox class="default-layout-checkbox" [(ngModel)]="standardConfig" name="standardConfig">Standard Discount Configuration</mat-checkbox>
-        <section class="form-field-group" *ngIf="standardConfig">
-            <mat-form-field appearance="fill">
-                <mat-label>Min</mat-label>
-                <input matInput type="number">
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>Max</mat-label>
-                <input matInput type="number">
-            </mat-form-field>
-            <mat-form-field appearance="fill" style="grid-column: span 2">
-                <mat-label>Step</mat-label>
-                <input matInput type="number">
-            </mat-form-field>
-            <mat-form-field appearance="fill" style="grid-column: span 2">
-                <mat-label>Discount</mat-label>
-                <input matInput type="number">
-            </mat-form-field>
+
+        <section *ngIf="!editing">
+            <mat-divider></mat-divider>
+            <mat-checkbox 
+                class="default-layout-checkbox" 
+                [(ngModel)]="standardConfig" 
+                name="standardConfig"
+            >
+                Standard Discount Configuration
+            </mat-checkbox>
+            <div class="form-field-group" *ngIf="standardConfig">
+                <mat-form-field appearance="fill">
+                    <mat-label>Min</mat-label>
+                    <input matInput [(ngModel)]="min" type="number" name="min" required>
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Max</mat-label>
+                    <input matInput [(ngModel)]="max" type="number" name="max" required>
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill" style="grid-column: span 2">
+                    <mat-label>Step</mat-label>
+                    <input matInput [(ngModel)]="step" type="number" name="step" required>
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Discount Start</mat-label>
+                    <input matInput [(ngModel)]="discountStart" type="number" name="discount" required>
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Discount Step</mat-label>
+                    <input matInput [(ngModel)]="discountStep" type="number" name="discountStep" required>
+                    <mat-error>Required</mat-error>
+                </mat-form-field>
+            </div>
         </section>
     </form>
 </mat-dialog-content>

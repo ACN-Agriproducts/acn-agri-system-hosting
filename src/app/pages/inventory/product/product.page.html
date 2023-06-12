@@ -13,6 +13,7 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
+
       <!-- <ion-col size-sm='12' size-md='6'>
         <ion-card>
           <ion-card-header>
@@ -23,13 +24,17 @@
           </ion-card-content>
         </ion-card>
       </ion-col> -->
+      
     </ion-row>
 
     <div class="content-subtitle">
       <h4><span></span></h4>
     </div>
 
-    <button mat-flat-button style="margin: 10px" color="primary" (click)="setTable()">+ Add Discount Table</button>
+    <div class="action-bar sticky" style="margin: 0 10px; padding: 10px 0">
+      <button mat-flat-button color="primary" (click)="setTable()">+ Add Discount Table</button>
+      <button mat-flat-button color="warn" (click)="discountTables.tables = []; save()">Delete All Tables</button>
+    </div>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
         <mat-card class="discount-table">

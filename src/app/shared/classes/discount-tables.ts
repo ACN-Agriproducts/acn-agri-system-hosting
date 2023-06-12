@@ -7,9 +7,9 @@ export class DiscountTables extends FirebaseDocInterface {
     date: Date;
     tables: DiscountTable[];
 
-    constructor();
-    constructor(snapshot: QueryDocumentSnapshot<any>);
-    constructor(ref: DocumentReference<any>);
+    // constructor();
+    // constructor(snapshot: QueryDocumentSnapshot<any>);
+    // constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef?: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
@@ -31,26 +31,20 @@ export class DiscountTables extends FirebaseDocInterface {
         if(data == undefined) return;
 
         this.date = data.date?.toDate();
-        this.tables = [];
-
-        data.tables.forEach(table => {
-            this.tables.push(new DiscountTable(table));
-        });
+        this.tables = data.tables?.map(table => new DiscountTable(table)) ?? [];
+        
+        // this.tables = [];
+        // data.tables.forEach(table => {
+        //     this.tables.push(new DiscountTable(table));
+        // });
     }
 
     public static converter = {
         toFirestore(data: DiscountTables): DocumentData {
             return {
                 date: data.date,
-                tables: data.tables.map(table => Object.assign({}, table))
-                // tables: data.tables.map(table => {
-                //     return {
-                //         name: table.name,
-                //         fieldName: table.fieldName,
-                //         headers: table.headers,
-                //         data: table.data
-                //     }
-                // })
+                tables: data.tables.map(table => ({ ...table }))
+                // tables: data.tables.map(table => Object.assign({}, table))
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): DiscountTables {
@@ -84,18 +78,24 @@ export class DiscountTable {
     constructor(tableData?: any) {
         this.name = tableData?.name ?? "";
         this.fieldName = tableData?.fieldName ?? "";
-        this.headers = [...tableData?.headers ?? []];
-        this.data = [];
-
-        tableData?.data.forEach(item => this.data.push(item));
+        this.headers = [ ...tableData?.headers ?? [] ];
+        // this.data = tableData?.data.map(item => ({ ...item })) ?? [];
+        this.data = tableData?.data.map(item => item) ?? [];
     }
 
-    public addTableData() {
-        this.data.push({});
-        this.headers.forEach(header => {
-            this.data[this.data.length - 1][header] = 0;
-        });
+    public addTableData(tableData?: any): void {
+        if (tableData) {
+            this.data.push(tableData);
+            return;
+        }
+
+        const length = this.data.push({});
+        this.headers.forEach(header => this.data[length - 1][header] = 0);
     }
+}
+
+interface DiscountData {
+    [key: string]: number
 }
 
 interface MoistureData {

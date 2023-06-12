@@ -15,6 +15,12 @@ export class SetDiscountTableDialogComponent implements OnInit {
   public standardConfig: boolean = true;
   public editing: boolean;
 
+  public min: number;
+  public max: number;
+  public step: number;
+  public discountStart: number;
+  public discountStep: number;
+
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   
@@ -51,9 +57,24 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   generateDiscountData() {
     if (!this.standardConfig || this.editing) return;
-    console.log("generate numbas!!!")
 
-    
+    this.table.headers.push("low", "high", "discount");
+
+    this.table.addTableData({
+      low: 0,
+      high: Math.round((this.min - 0.01) * 100) / 100,
+      discount: 0
+    });
+
+    this.discountStep ??= this.discountStart;
+
+    for (let i = this.min, discount = this.discountStart; i <= this.max; i+=this.step, discount+=this.discountStep) {
+      this.table.addTableData({
+        low: Math.round(i * 100) / 100,
+        high: Math.round((i + this.step - 0.01) * 100) / 100,
+        discount: Math.round(discount * 100) / 100,
+      });
+    }
   }
 
   ngOnDestroy() {

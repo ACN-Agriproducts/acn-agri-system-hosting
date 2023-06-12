@@ -87,7 +87,7 @@ export class ProductPage implements OnInit {
     this.saving = true;
     await this.discountTables.set();
     this.saving = false;
-    this.snack.open(`Table Saved`, "success");
+    this.snack.open(`Tables Saved`, "success");
   }
 
   ngOnDestroy() {
