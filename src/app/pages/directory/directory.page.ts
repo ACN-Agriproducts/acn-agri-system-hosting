@@ -81,7 +81,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
       data: newContact
     });
 
-    await lastValueFrom(dialogRef.afterClosed());
+    if (await lastValueFrom(dialogRef.afterClosed()) == null) return;
     newContact.set();
   }
 

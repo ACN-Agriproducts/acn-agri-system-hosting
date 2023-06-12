@@ -12,7 +12,7 @@
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="3">
-				<mat-form-field appearance="fill" *ngIf="contactType === 'trucker'">
+				<mat-form-field appearance="fill" *ngIf="data.tags | includes:'trucker'">
 					<mat-label>CAAT</mat-label>
 					<input matInput [(ngModel)]="data.caat" name="caat">
 					<mat-error>CAAT is <strong>required</strong></mat-error>
