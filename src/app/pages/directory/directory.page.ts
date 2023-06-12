@@ -3,7 +3,7 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { lastValueFrom, Subscription } from 'rxjs';
-import { collectionData, Firestore, orderBy, query } from '@angular/fire/firestore';
+import { collectionData, doc, Firestore, orderBy, query } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -73,8 +73,16 @@ export class DirectoryPage implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-  public openNewContact(){
-    this.navController.navigateForward('dashboard/directory/new')
+  public async openNewContact(){
+    const newContact = new Contact(doc(Contact.getCollectionReference(this.db, this.session.getCompany())));
+
+    const dialogRef = this.dialog.open(EditContactDialogComponent, {
+      autoFocus: false,
+      data: newContact
+    });
+
+    await lastValueFrom(dialogRef.afterClosed());
+    newContact.set();
   }
 
   public async edit(contact: Contact): Promise<void> {
@@ -136,5 +144,5 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
   }
 
-  public searchResults = (): Contact[] => this.contacts?.filter(contact => contact.name.match(this.searchQuery)) ?? [];
+  public searchResults = (): Contact[] => this.contacts?.filter(contact => contact?.name?.match(this.searchQuery)) ?? [];
 }
