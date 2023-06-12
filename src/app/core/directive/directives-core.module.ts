@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { CursorDirective } from './cursor.directive';
 import { PositiveDirective } from './positive/positive.directive';
-import { IncludesPipe } from './includes/includes.pipe';
 @NgModule({
   imports: [CommonModule],
-  declarations: [CursorDirective, PositiveDirective, IncludesPipe],
-  exports: [CursorDirective, PositiveDirective, IncludesPipe]
+  declarations: [CursorDirective, PositiveDirective],
+  exports: [CursorDirective, PositiveDirective]
 })
 export class DirectivesCoreModule { }
