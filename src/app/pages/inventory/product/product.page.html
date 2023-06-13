@@ -24,7 +24,6 @@
           </ion-card-content>
         </ion-card>
       </ion-col> -->
-      
     </ion-row>
 
     <div class="content-subtitle">
@@ -58,6 +57,26 @@
                   <mat-icon color="primary">edit</mat-icon>
                   <span>Edit Table Details</span>
                 </button>
+                <button mat-menu-item (click)="discountTable.reordering=!discountTable.reordering">
+                  <ng-template [ngIf]="!discountTable.reordering" [ngIfElse]="cancelReorder">
+                    <mat-icon color="primary">reorder</mat-icon>
+                    <span>Reorder Table</span>
+                  </ng-template>
+                  <ng-template #cancelReorder>
+                    <mat-icon color="warn">cancel</mat-icon>
+                    <span>Stop Reordering</span>
+                  </ng-template>
+                </button>
+                <button mat-menu-item (click)="discountTable.removing=!discountTable.removing">
+                  <ng-template [ngIf]="!discountTable.removing" [ngIfElse]="cancelRemove">
+                    <mat-icon color="warn">remove_circle</mat-icon>
+                    <span>Remove Rows</span>
+                  </ng-template>
+                  <ng-template #cancelRemove>
+                    <mat-icon color="warn">cancel</mat-icon>
+                    <span>Stop Removing</span>
+                  </ng-template>
+                </button>
                 <button mat-menu-item (click)="deleteTable(tableIndex)">
                   <mat-icon color="warn">delete_forever</mat-icon>
                   <span>Delete Table</span>
@@ -66,10 +85,18 @@
             </div>
           </mat-card-header>
           <mat-card-content>
-            <app-discount-table [table]="table"></app-discount-table>
+            <app-discount-table #discountTable [table]="table"></app-discount-table>
           </mat-card-content>
           <div class="action-bar">
-            <button mat-flat-button color="primary" (click)="save()">Save</button>
+            <button mat-flat-button color="primary" 
+              (click)="
+                discountTable.reordering=false; 
+                discountTable.removing=false; 
+                save()
+              "
+            >
+              Save
+            </button>
             <mat-spinner *ngIf="saving" [diameter]="25"></mat-spinner>
           </div>
         </mat-card>

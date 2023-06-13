@@ -41,6 +41,10 @@
     mat-form-field {
         pointer-events: all;
     }
+
+    mat-icon[cdkDragHandle] {
+        cursor: move;
+    }
 }
 
 .form-control[type="number"]::-webkit-inner-spin-button,
@@ -75,8 +79,6 @@
     &:has(input) {
         padding: 0 15px;
     }
-
-
 }
 
 .header-card {
