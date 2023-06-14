@@ -1,0 +1,50 @@
+:host {
+    display: inline-block;
+    height: 203.2mm;
+    width: 266.7mm;
+    background-color: white;
+    margin: 1em;
+
+    print-color-adjust: exact;
+}
+
+.page-header {
+    display: flex;
+
+    #left-header {
+        flex: 2 0 0px;
+    
+    }
+
+    #company-info {
+        flex: 1 0 0px;
+    }
+}
+
+.page-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: yellow;
+}
+
+thead {
+    display: table-header-group;
+    height: 185px;
+}
+
+th, td {
+    break-inside: avoid;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr, td {
+    background: none;
+}
+
+.page-header-space {
+    height: 145px;
+}
