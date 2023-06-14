@@ -10,8 +10,7 @@ import { DiscountTable } from '@shared/classes/discount-tables';
 export class DiscountTableComponent implements OnInit {
   @Input() table: DiscountTable;
   
-  public reordering: boolean = false;
-  public removing: boolean = false;
+  public editing: boolean = false;
 
   constructor() { }
 

@@ -16,7 +16,7 @@
     }
 }
 
-.body-card .row {
+.hover {
     &:before {
         content: "";
         position: absolute;
@@ -36,14 +36,6 @@
     &:hover {
         background-color: white;
         transition: .2s;
-    }
-
-    mat-form-field {
-        pointer-events: all;
-    }
-
-    mat-icon[cdkDragHandle] {
-        cursor: move;
     }
 }
 
@@ -101,5 +93,13 @@
     }
     &:last-child {
         border-radius: 0 0 4px 4px;
+    }
+
+    mat-form-field {
+        pointer-events: all;
+    }
+
+    mat-icon[cdkDragHandle] {
+        cursor: move;
     }
 }

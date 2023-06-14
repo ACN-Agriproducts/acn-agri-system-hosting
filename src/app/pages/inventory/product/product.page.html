@@ -13,17 +13,6 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-
-      <!-- <ion-col size-sm='12' size-md='6'>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Moisture</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <app-discount-table-moisture [doc]="doc"></app-discount-table-moisture>
-          </ion-card-content>
-        </ion-card>
-      </ion-col> -->
     </ion-row>
 
     <div class="content-subtitle">
@@ -32,7 +21,6 @@
 
     <div class="action-bar sticky" style="margin: 0 10px; padding: 10px 0">
       <button mat-flat-button color="primary" (click)="setTable()">+ Add Discount Table</button>
-      <button mat-flat-button color="warn" (click)="discountTables.tables = []; save()">Delete All Tables</button>
     </div>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
@@ -54,27 +42,17 @@
               </button>
               <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="setTable(table, tableIndex)">
-                  <mat-icon color="primary">edit</mat-icon>
+                  <mat-icon color="primary">notes</mat-icon>
                   <span>Edit Table Details</span>
                 </button>
-                <button mat-menu-item (click)="discountTable.reordering=!discountTable.reordering">
-                  <ng-template [ngIf]="!discountTable.reordering" [ngIfElse]="cancelReorder">
-                    <mat-icon color="primary">reorder</mat-icon>
-                    <span>Reorder Table</span>
+                <button mat-menu-item (click)="discountTable.editing=!discountTable.editing">
+                  <ng-template [ngIf]="!discountTable.editing" [ngIfElse]="cancelReorder">
+                    <mat-icon color="primary">edit</mat-icon>
+                    <span>Edit Table</span>
                   </ng-template>
                   <ng-template #cancelReorder>
                     <mat-icon color="warn">cancel</mat-icon>
-                    <span>Stop Reordering</span>
-                  </ng-template>
-                </button>
-                <button mat-menu-item (click)="discountTable.removing=!discountTable.removing">
-                  <ng-template [ngIf]="!discountTable.removing" [ngIfElse]="cancelRemove">
-                    <mat-icon color="warn">remove_circle</mat-icon>
-                    <span>Remove Rows</span>
-                  </ng-template>
-                  <ng-template #cancelRemove>
-                    <mat-icon color="warn">cancel</mat-icon>
-                    <span>Stop Removing</span>
+                    <span>Stop Editing</span>
                   </ng-template>
                 </button>
                 <button mat-menu-item (click)="deleteTable(tableIndex)">
@@ -90,8 +68,7 @@
           <div class="action-bar">
             <button mat-flat-button color="primary" 
               (click)="
-                discountTable.reordering=false; 
-                discountTable.removing=false; 
+                discountTable.editing=false; 
                 save()
               "
             >
