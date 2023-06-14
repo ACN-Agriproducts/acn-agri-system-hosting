@@ -10,6 +10,7 @@ import { SetDiscountTableDialogComponent } from './components/set-discount-table
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { lastValueFrom } from 'rxjs';
+import { DiscountTableComponent } from './components/discount-table/discount-table.component';
 
 @Component({
   selector: 'app-product',
@@ -83,11 +84,12 @@ export class ProductPage implements OnInit {
     }
   }
 
-  async save() {
-    this.saving = true;
+  async save(table: DiscountTableComponent) {
+    table.editing = false;
+    table.saving = true;
     await this.discountTables.set();
-    this.saving = false;
-    this.snack.open(`Tables Saved`, "success");
+    table.saving = false;
+    this.snack.open(`Table Saved`, "success");
   }
 
   ngOnDestroy() {
