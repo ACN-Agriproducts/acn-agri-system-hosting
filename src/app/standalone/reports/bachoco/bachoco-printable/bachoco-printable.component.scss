@@ -10,10 +10,26 @@
 
 .page-header {
     display: flex;
+    text-align: initial;
 
     #left-header {
         flex: 2 0 0px;
-    
+
+        #report-and-logo {
+            display: flex;
+            align-items: center;
+
+            span {
+                flex: 1 1 auto;
+                text-align: center;
+                font-family: 'Times New Roman', Times, serif;
+                font-size: 1.5rem;
+            }
+
+            img {
+                margin: 1em;
+            }
+        }
     }
 
     #company-info {
@@ -21,12 +37,6 @@
     }
 }
 
-.page-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: yellow;
-}
 
 thead {
     display: table-header-group;
@@ -47,4 +57,42 @@ tr, td {
 
 .page-header-space {
     height: 145px;
+
+    td {
+        border: none;
+    }
+}
+
+td { 
+    border: 1px solid black;
+}
+
+tr:not(:has(.page-header)) {
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+th:not(:has(.page-header)) {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#header-split-row-bottom {
+    border-top: none;
+    background-color:aqua;
+}
+
+#header-split-row-top {
+    border-bottom: none;
+    background-color: aqua;
+}
+
+// .page-footer {
+//     position: fixed;
+//     bottom: 0;
+//     width: 100%;
+// }
+
+@page {
+    margin: 0.5in;
 }
