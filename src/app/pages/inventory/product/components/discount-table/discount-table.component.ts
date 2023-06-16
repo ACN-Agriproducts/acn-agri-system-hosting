@@ -26,6 +26,8 @@ export class DiscountTableComponent implements OnInit {
 
   ngOnInit() { }
 
+  // FIX BUG WITH CDK DRAG LIST
+
   drop(event: CdkDragDrop<any>) {
     moveItemInArray(this.table.data, event.previousIndex, event.currentIndex);
   }
