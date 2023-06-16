@@ -13,7 +13,7 @@
     text-align: initial;
 
     #left-header {
-        flex: 2 0 0px;
+        flex: 3 0 0px;
 
         #report-and-logo {
             display: flex;
@@ -34,6 +34,31 @@
 
     #company-info {
         flex: 1 0 0px;
+
+        #zip-rfc {
+            display: flex;
+
+            #rfc {
+                flex: 2 0 0;
+            }
+
+            #zip {
+                flex: 1 0 0;
+            }
+        }
+
+        #season {
+            margin-top: auto;
+            align-self: flex-end;
+        }
+
+        *:not(#name) {
+            font-size: x-small;
+        }
+    }
+
+    #address, #city, #zip, #rfc, #phone, #season {
+        line-height: normal;
     }
 }
 
@@ -63,7 +88,7 @@ tr, td {
     }
 }
 
-td { 
+td:not(:has(.page-footer)) { 
     border: 1px solid black;
 }
 
@@ -75,23 +100,16 @@ tr:not(:has(.page-header)) {
 th:not(:has(.page-header)) {
     border-top: 1px solid black;
     border-bottom: 1px solid black;
+    background-color: rgb(51, 204, 204);
 }
 
 #header-split-row-bottom {
     border-top: none;
-    background-color:aqua;
 }
 
 #header-split-row-top {
     border-bottom: none;
-    background-color: aqua;
 }
-
-// .page-footer {
-//     position: fixed;
-//     bottom: 0;
-//     width: 100%;
-// }
 
 @page {
     margin: 0.5in;
