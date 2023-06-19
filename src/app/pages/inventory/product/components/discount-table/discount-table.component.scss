@@ -53,6 +53,15 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     font-size: 0.9em;
+
+    &.add-item {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin: 10px;
+        }
+    }
 }
 
 .cell {
@@ -105,6 +114,6 @@
 }
 
 div[cdkDropList] {
-    max-height: 70vh;
+    max-height: 60vh;
     overflow-y: scroll;
 }

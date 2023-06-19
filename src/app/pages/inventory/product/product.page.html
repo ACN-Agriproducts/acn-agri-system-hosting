@@ -29,7 +29,12 @@
           <mat-card-header class="discount-table-header">
             <mat-card-title>{{ table.name }}</mat-card-title>
             <div class="action-bar">
-              <button mat-icon-button color="primary" (click)="table.addTableData(); discountTable.editing=true">
+              <button mat-icon-button color="primary" *ngIf="discountTable.editing" (click)="table.addTableData()" 
+                matTooltip="Add Item"
+                matTooltipClass="tooltip-primary-solid" 
+                matTooltipPosition="above" 
+                matTooltipShowDelay="1000"
+              >
                 <mat-icon>add_box</mat-icon>
               </button>
               <button mat-icon-button [matMenuTriggerFor]="menu">

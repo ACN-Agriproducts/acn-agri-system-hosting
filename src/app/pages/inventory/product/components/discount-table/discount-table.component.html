@@ -41,7 +41,7 @@
         </li>
       </mat-card>
       <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editing">
-        <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag cdkDragLockAxis="y">
+        <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag>
           <li class="row" [class.hover]="!editing">
             <div class="cell options" *ngIf="editing">
               <button mat-icon-button color="warn" (click)="table.data.splice(rowIndex, 1)">
@@ -57,6 +57,15 @@
             <div class="cell options" *ngIf="editing">
               <mat-icon cdkDragHandle>drag_handle</mat-icon>
             </div>
+          </li>
+        </mat-card>
+        <mat-card class="body-card add-item" *ngIf="editing">
+          <li class="row">
+            <button mat-button color="primary" (click)="table.addTableData()">
+              <span><i>Add Item</i></span>
+              &nbsp;
+              <mat-icon>add_box</mat-icon>
+            </button>
           </li>
         </mat-card>
       </div>
@@ -84,7 +93,7 @@
     </li>
   </mat-card>
   <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editing">
-    <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag cdkDragLockAxis="y">
+    <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag>
       <li class="row" [class.hover]="!editing">
         <div class="cell options" *ngIf="editing">
           <button mat-icon-button color="warn" (click)="table.data.splice(rowIndex, 1)">
@@ -100,6 +109,15 @@
         <div class="cell options" *ngIf="editing">
           <mat-icon cdkDragHandle>drag_handle</mat-icon>
         </div>
+      </li>
+    </mat-card>
+    <mat-card class="body-card" *ngIf="editing">
+      <li class="row add-item">
+        <button mat-button color="primary" (click)="table.addTableData()">
+          <span><i>Add Item</i></span>
+          &nbsp;
+          <mat-icon>add_box</mat-icon>
+        </button>
       </li>
     </mat-card>
   </div>
