@@ -92,7 +92,7 @@ td:not(:has(.page-footer)) {
     border: 1px solid black;
 }
 
-tr:not(:has(.page-header)) {
+tr:not(:has(.page-header, .footer-space)) {
     border-right: 1px solid black;
     border-left: 1px solid black;
 }
@@ -111,6 +111,17 @@ th:not(:has(.page-header)) {
     border-bottom: none;
 }
 
+.page-footer{ 
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-space {
+    height: 1.5rem;
+}
+
 @page {
+    size: letter landscape;
     margin: 0.5in;
 }
