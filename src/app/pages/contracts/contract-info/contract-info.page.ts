@@ -255,6 +255,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       totals.inspection += ticket.discounts.inspection;
 
       totals.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
+      console.log(ticket, totals, total, ticket.data.dryWeight.getBushelWeight(this.currentContract.productInfo), this.currentContract.pricePerBushel);
     });
     
     return totals;
