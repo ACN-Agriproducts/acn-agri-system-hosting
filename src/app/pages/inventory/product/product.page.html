@@ -26,9 +26,9 @@
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
         <app-discount-table #discountTable 
           [table]="table" 
-          (tableSet)="setTable(table)" 
-          (tableSave)="saveTable()" 
-          (tableDelete)="deleteTable(table)" 
+          (setTable)="setTable(table)" 
+          (saveTable)="saveTable()" 
+          (deleteTable)="deleteTable(table)" 
           [saved]="saved"
         ></app-discount-table>
       </ion-col>

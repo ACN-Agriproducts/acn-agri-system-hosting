@@ -12,12 +12,13 @@ export class DiscountTableComponent implements OnInit {
   @Input() table: DiscountTable;
   @Input() saved: boolean;
 
-  @Output() tableSet: EventEmitter<any> = new EventEmitter();
-  @Output() tableSave: EventEmitter<any> = new EventEmitter();
-  @Output() tableDelete: EventEmitter<any> = new EventEmitter();
+  @Output() setTable: EventEmitter<any> = new EventEmitter();
+  @Output() saveTable: EventEmitter<any> = new EventEmitter();
+  @Output() deleteTable: EventEmitter<any> = new EventEmitter();
   
   public editing: boolean = false;
   public saving: boolean = false;
+  public cancelled: boolean = false;
   public prevTable: DiscountTable;
 
   constructor(
@@ -29,7 +30,8 @@ export class DiscountTableComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.saved.previousValue != changes.saved.currentValue) {
       this.saving = false;
-      this.snack.open(`Table Saved`, "success");
+      if (!this.cancelled) this.snack.open(`Table Saved`, "success");
+      this.cancelled = false;
     }
   }
 
@@ -41,7 +43,7 @@ export class DiscountTableComponent implements OnInit {
     delete this.prevTable;
     this.editing = false;
     this.saving = true;
-    this.tableSave.emit();
+    this.saveTable.emit();
   }
 
   edit() {
@@ -51,7 +53,7 @@ export class DiscountTableComponent implements OnInit {
 
   cancel() {
     this.table = this.prevTable;
-    delete this.prevTable;
+    this.cancelled = true;
     this.save();
     this.snack.open(`Changes Cancelled`);
   }

@@ -53,7 +53,7 @@ export class DiscountTables extends FirebaseDocInterface {
     public static getDiscountTables(db: Firestore, company: string, product: string, date?: Date): Promise<DiscountTables> {
         return getDocs(query(
             DiscountTables.getCollectionReference(db, company, product), 
-            date ? where('date', '==', date) : orderBy('date', 'asc'),
+            date ? where('date', '==', date) : orderBy('date', 'desc'),
             limit(1)
         )).then(result => {
             return result.docs[0]?.data();

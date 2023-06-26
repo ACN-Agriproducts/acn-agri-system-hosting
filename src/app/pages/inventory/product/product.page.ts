@@ -42,7 +42,8 @@ export class ProductPage implements OnInit {
 
     DiscountTables.getDiscountTables(this.db, this.session.getCompany(), this.product).then(async result => {
       if (!result) {
-        await this.setTables();
+        this.discountTables = new DiscountTables(doc(DiscountTables.getCollectionReference(this.db, this.session.getCompany(), this.product)));
+        await this.discountTables.set();
         return;
       }
 
