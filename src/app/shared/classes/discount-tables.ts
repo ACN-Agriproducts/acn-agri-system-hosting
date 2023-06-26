@@ -32,11 +32,6 @@ export class DiscountTables extends FirebaseDocInterface {
 
         this.date = data.date?.toDate();
         this.tables = data.tables?.map(table => new DiscountTable(table)) ?? [];
-        
-        // this.tables = [];
-        // data.tables.forEach(table => {
-        //     this.tables.push(new DiscountTable(table));
-        // });
     }
 
     public static converter = {
@@ -44,7 +39,6 @@ export class DiscountTables extends FirebaseDocInterface {
             return {
                 date: data.date,
                 tables: data.tables.map(table => ({ ...table }))
-                // tables: data.tables.map(table => Object.assign({}, table))
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): DiscountTables {
@@ -79,7 +73,6 @@ export class DiscountTable {
         this.name = tableData?.name ?? "";
         this.fieldName = tableData?.fieldName ?? "";
         this.headers = [ ...tableData?.headers ?? [] ];
-        // this.data = tableData?.data.map(item => ({ ...item })) ?? [];
         this.data = tableData?.data.map(item => item) ?? [];
     }
 
@@ -92,10 +85,6 @@ export class DiscountTable {
         const length = this.data.push({});
         this.headers.forEach(header => this.data[length - 1][header] = 0);
     }
-}
-
-interface DiscountData {
-    [key: string]: number
 }
 
 interface MoistureData {

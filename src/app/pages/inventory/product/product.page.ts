@@ -10,7 +10,6 @@ import { SetDiscountTableDialogComponent } from './components/set-discount-table
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { lastValueFrom } from 'rxjs';
-import { DiscountTableComponent } from './components/discount-table/discount-table.component';
 
 @Component({
   selector: 'app-product',
@@ -22,7 +21,7 @@ export class ProductPage implements OnInit {
   public ready: boolean = false;
   public doc: Product;
   public discountTables: DiscountTables;
-  public saving: boolean = false;
+  public saved: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -43,10 +42,7 @@ export class ProductPage implements OnInit {
 
     DiscountTables.getDiscountTables(this.db, this.session.getCompany(), this.product).then(async result => {
       if (!result) {
-        const newTables = new DiscountTables(doc(DiscountTables.getCollectionReference(this.db, this.session.getCompany(), this.product)));
-        await newTables.set();
-        
-        this.discountTables = newTables;
+        await this.setTables();
         return;
       }
 
@@ -54,7 +50,7 @@ export class ProductPage implements OnInit {
     });
   }
 
-  async setTable(table?: DiscountTable, tableIndex?: number) {
+  async setTable(table?: DiscountTable) {
     const dialogRef = this.dialog.open(SetDiscountTableDialogComponent, {
       data: table,
       disableClose: true
@@ -64,32 +60,37 @@ export class ProductPage implements OnInit {
     if (!result) return;
 
     if (table) {
+      let tableIndex = this.discountTables.tables.indexOf(table);
       this.discountTables.tables.splice(tableIndex, 1, result);
     }
     else {
       this.discountTables.tables.push(result);
     }
 
-    await this.discountTables.set();
+    await this.setTables();
     this.snack.open(`Table ${table ? "Updated" : "Created"}`, "success");
   }
 
-  async deleteTable(tableIndex: number) {
+  async deleteTable(table: DiscountTable) {
+    let tableIndex = this.discountTables.tables.indexOf(table);
     const confirm = this.confirmation.openDialog(`delete the "${this.discountTables.tables[tableIndex].name}" table`);
 
     if (await confirm) {
       this.discountTables.tables.splice(tableIndex, 1);
-      await this.discountTables.set();
+      await this.setTables();
       this.snack.open(`Table Deleted`);
     }
   }
 
-  async save(table: DiscountTableComponent) {
-    table.editing = false;
-    table.saving = true;
+  async saveTable() {
+    await this.setTables();
+    this.saved = !this.saved;
+  }
+
+  async setTables() {
+    this.discountTables.ref = doc(DiscountTables.getCollectionReference(this.db, this.session.getCompany(), this.product));
+    this.discountTables.date = new Date();
     await this.discountTables.set();
-    table.saving = false;
-    this.snack.open(`Table Saved`, "success");
   }
 
   ngOnDestroy() {

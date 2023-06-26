@@ -1,30 +1,27 @@
-<!-- 
+
 <mat-card class="discount-table">
   <mat-card-header class="discount-table-header">
     <mat-card-title>{{ table.name }}</mat-card-title>
     <div class="action-bar">
-      <button mat-icon-button color="primary" (click)="table.addTableData()">
-        <mat-icon>add_box</mat-icon>
-      </button>
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="setTable(table, tableIndex)">
+        <button mat-menu-item (click)="tableSet.emit()">
           <mat-icon color="primary">notes</mat-icon>
           <span>Edit Table Details</span>
         </button>
-        <button mat-menu-item (click)="discountTable.editing=!discountTable.editing">
-          <ng-template [ngIf]="!discountTable.editing" [ngIfElse]="cancelReorder">
-            <mat-icon color="primary">edit</mat-icon>
-            <span>Edit Table</span>
-          </ng-template>
-          <ng-template #cancelReorder>
+        <button mat-menu-item *ngIf="!editing else stopEditing" (click)="edit()">
+          <mat-icon color="primary">edit</mat-icon>
+          <span>Edit Table</span>
+        </button>
+        <ng-template #stopEditing>
+          <button mat-menu-item (click)="save()">
             <mat-icon color="warn">cancel</mat-icon>
             <span>Stop Editing</span>
-          </ng-template>
-        </button>
-        <button mat-menu-item (click)="deleteTable(tableIndex)">
+          </button>
+        </ng-template>
+        <button mat-menu-item (click)="tableDelete.emit()">
           <mat-icon color="warn">delete_forever</mat-icon>
           <span>Delete Table</span>
         </button>
@@ -59,8 +56,8 @@
             </div>
           </li>
         </mat-card>
-        <mat-card class="body-card add-item" *ngIf="editing">
-          <li class="row">
+        <mat-card class="body-card" *ngIf="editing">
+          <li class="row add-item">
             <button mat-button color="primary" (click)="table.addTableData()">
               <span><i>Add Item</i></span>
               &nbsp;
@@ -71,54 +68,9 @@
       </div>
     </ol>
   </mat-card-content>
-  <div class="action-bar">
-    <button mat-flat-button color="primary" 
-      (click)="
-        discountTable.editing=false; 
-        save()
-      "
-    >
-      Save
-    </button>
+  <div class="action-bar" [class.invisible]="!editing && !saving">
+    <button mat-flat-button color="primary" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="save()">Save</button>
     <mat-spinner *ngIf="saving" [diameter]="25"></mat-spinner>
   </div>
-</mat-card> -->
-
-<ol class="collection">
-  <mat-card class="header-card">
-    <li class="row">
-      <div class="cell options" *ngIf="editing"></div>
-      <div class="cell" *ngFor="let header of table.headers">{{ header | titlecase }}</div>
-      <div class="cell options" *ngIf="editing"></div>
-    </li>
-  </mat-card>
-  <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editing">
-    <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag>
-      <li class="row" [class.hover]="!editing">
-        <div class="cell options" *ngIf="editing">
-          <button mat-icon-button color="warn" (click)="table.data.splice(rowIndex, 1)">
-            <mat-icon>remove_circle_outline</mat-icon>
-          </button>
-        </div>
-        <div class="cell" *ngFor="let header of table.headers">
-          <mat-form-field>
-            <input matInput [(ngModel)]="row[header]" type="number" step="0.01" min="0" [readonly]="!editing">
-          </mat-form-field>
-          <ng-template #inputEditing>{{ row[header] | number:"1.2" }}</ng-template>
-        </div>
-        <div class="cell options" *ngIf="editing">
-          <mat-icon cdkDragHandle>drag_handle</mat-icon>
-        </div>
-      </li>
-    </mat-card>
-    <mat-card class="body-card" *ngIf="editing">
-      <li class="row add-item">
-        <button mat-button color="primary" (click)="table.addTableData()">
-          <span><i>Add Item</i></span>
-          &nbsp;
-          <mat-icon>add_box</mat-icon>
-        </button>
-      </li>
-    </mat-card>
-  </div>
-</ol>
+</mat-card>

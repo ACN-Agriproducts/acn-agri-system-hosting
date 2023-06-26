@@ -1,4 +1,4 @@
-<app-header-toolbar titulo="{{product}}"></app-header-toolbar>
+<app-header-toolbar titulo="{{ product }}"></app-header-toolbar>
 
 <ion-content class="ion-padding">
   <ion-grid *ngIf="ready else loading">
@@ -24,55 +24,13 @@
     </div>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
-        <!-- <app-discount-table [table]="table"></app-discount-table> -->
-        <mat-card class="discount-table">
-          <mat-card-header class="discount-table-header">
-            <mat-card-title>{{ table.name }}</mat-card-title>
-            <div class="action-bar">
-              <button mat-icon-button color="primary" *ngIf="discountTable.editing" (click)="table.addTableData()" 
-                matTooltip="Add Item"
-                matTooltipClass="tooltip-primary-solid" 
-                matTooltipPosition="above" 
-                matTooltipShowDelay="1000"
-              >
-                <mat-icon>add_box</mat-icon>
-              </button>
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="setTable(table, tableIndex)">
-                  <mat-icon color="primary">notes</mat-icon>
-                  <span>Edit Table Details</span>
-                </button>
-                <button mat-menu-item *ngIf="!discountTable.editing else stopEditing" (click)="discountTable.editing=true">
-                  <mat-icon color="primary">edit</mat-icon>
-                  <span>Edit Table</span>
-                </button>
-                <ng-template #stopEditing>
-                  <button mat-menu-item (click)="save(discountTable)">
-                    <mat-icon color="warn">cancel</mat-icon>
-                    <span>Stop Editing</span>
-                  </button>
-                </ng-template>
-                <button mat-menu-item (click)="deleteTable(tableIndex)">
-                  <mat-icon color="warn">delete_forever</mat-icon>
-                  <span>Delete Table</span>
-                </button>
-              </mat-menu>
-            </div>
-          </mat-card-header>
-          <mat-card-content>
-            <app-discount-table #discountTable [table]="table"></app-discount-table>
-          </mat-card-content>
-          <div class="action-bar">
-            <button mat-flat-button color="primary" 
-              [class.invisible]="!discountTable.editing && !discountTable.saving" 
-              (click)="save(discountTable)"
-            >Save</button>
-            <mat-spinner *ngIf="discountTable.saving" [diameter]="25"></mat-spinner>
-          </div>
-        </mat-card>
+        <app-discount-table #discountTable 
+          [table]="table" 
+          (tableSet)="setTable(table)" 
+          (tableSave)="saveTable()" 
+          (tableDelete)="deleteTable(table)" 
+          [saved]="saved"
+        ></app-discount-table>
       </ion-col>
     </ion-row>
   </ion-grid>

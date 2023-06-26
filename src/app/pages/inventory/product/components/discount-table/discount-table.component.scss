@@ -117,3 +117,41 @@ div[cdkDropList] {
     max-height: 60vh;
     overflow-y: scroll;
 }
+
+.discount-table-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	&:has(mat-card-title) {
+		margin-bottom: 15px;
+		mat-card-title { margin: 0 }
+	}
+}
+
+.discount-table {
+	margin: 10px;
+
+	.discount-table-header mat-form-field {
+		color: var(--ion-color-step-850, #262626);
+		margin: 0px;
+		padding: 0px;
+		font-size: 20px;
+		font-weight: 500;
+		line-height: 1.2;
+	}
+
+	::ng-deep .mat-form-field-underline {
+		display: none !important;
+	}
+}
+
+.action-bar {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+.invisible {
+	visibility: hidden;
+}
