@@ -1,7 +1,7 @@
 <app-header-toolbar titulo="{{ product }}"></app-header-toolbar>
 
 <ng-template #loading [ngIf]="saving">
-  <mat-spinner diameter="40"></mat-spinner>
+  <mat-spinner class="loading-spinner" diameter="40"></mat-spinner>
 </ng-template>
 
 <ion-content class="ion-padding">

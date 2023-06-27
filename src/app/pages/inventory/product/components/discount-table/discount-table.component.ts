@@ -38,7 +38,8 @@ export class DiscountTableComponent implements OnInit {
 
   cancel() {
     this.table = this.prevTable;
-    this.save(true);
+    delete this.prevTable;
+    this.editing = false;
   }
 
   ngOnDestroy() {

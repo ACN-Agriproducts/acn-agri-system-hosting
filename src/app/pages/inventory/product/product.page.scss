@@ -7,9 +7,9 @@ ion-grid, ion-col {
 	padding: 0;
 }
 
-mat-spinner {
+.loading-spinner {
 	position: fixed;
-	bottom: 30px;
+	bottom: 40px;
 	right: 30px;
 	z-index: 3;
 }
