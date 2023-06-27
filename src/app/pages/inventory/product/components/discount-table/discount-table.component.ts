@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { DiscountTable } from '@shared/classes/discount-tables';
 
 @Component({
@@ -11,13 +12,15 @@ export class DiscountTableComponent implements OnInit {
   @Input() table: DiscountTable;
 
   @Output() setTable: EventEmitter<undefined> = new EventEmitter();
-  @Output() saveTable: EventEmitter<boolean> = new EventEmitter();
+  @Output() saveTable: EventEmitter<undefined> = new EventEmitter();
   @Output() deleteTable: EventEmitter<undefined> = new EventEmitter();
   
   public editing: boolean = false;
   public prevTable: DiscountTable;
 
-  constructor() { }
+  constructor(
+    private snack: SnackbarService
+  ) { }
 
   ngOnInit() { }
 
@@ -25,10 +28,10 @@ export class DiscountTableComponent implements OnInit {
     moveItemInArray(this.table.data, event.previousIndex, event.currentIndex);
   }
 
-  save(cancelled?: boolean) {
+  save() {
     delete this.prevTable;
     this.editing = false;
-    this.saveTable.emit(cancelled);
+    this.saveTable.emit();
   }
 
   edit() {
@@ -40,6 +43,7 @@ export class DiscountTableComponent implements OnInit {
     this.table = this.prevTable;
     delete this.prevTable;
     this.editing = false;
+    this.snack.open(`Changes Cancelled`);
   }
 
   ngOnDestroy() {

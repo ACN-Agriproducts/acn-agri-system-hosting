@@ -82,7 +82,7 @@ export class ProductPage implements OnInit {
     }
   }
 
-  async saveTables(cancelled?: boolean) {
+  async saveTables() {
     this.saving = true;
     
     this.discountTables.ref = doc(DiscountTables.getCollectionReference(
@@ -93,8 +93,7 @@ export class ProductPage implements OnInit {
     this.discountTables.date = new Date();
     await this.discountTables.set();
 
-    if (cancelled) this.snack.open(`Changes Cancelled`);
-    else this.snack.open(`Changes Saved`, 'success');
+    this.snack.open(`Changes Saved`, 'success');
     this.saving = false;
   }
 
