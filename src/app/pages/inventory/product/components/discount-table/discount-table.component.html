@@ -8,19 +8,13 @@
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="setTable.emit()">
-          <mat-icon color="primary">notes</mat-icon>
+          <mat-icon>notes</mat-icon>
           <span>Edit Table Details</span>
         </button>
-        <button mat-menu-item *ngIf="!editing else stopEditing" (click)="edit()">
+        <button mat-menu-item [disabled]="editing" (click)="edit()">
           <mat-icon color="primary">edit</mat-icon>
           <span>Edit Table</span>
         </button>
-        <ng-template #stopEditing>
-          <button mat-menu-item (click)="save()">
-            <mat-icon color="warn">cancel</mat-icon>
-            <span>Stop Editing</span>
-          </button>
-        </ng-template>
         <button mat-menu-item (click)="deleteTable.emit()">
           <mat-icon color="warn">delete_forever</mat-icon>
           <span>Delete Table</span>
