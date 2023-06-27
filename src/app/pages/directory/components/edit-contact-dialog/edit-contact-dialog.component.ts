@@ -13,14 +13,9 @@ export class EditContactDialogComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Contact,
-    private dialogRef: MatDialogRef<EditContactDialogComponent>,
-    private snack: SnackbarService,
   ) { }
 
-  ngOnInit() {
-    this.contactType = this.data.tags.includes('client') ? "client" :
-      this.data.tags.includes('trucker') ? "trucker" : null;
-  }
+  ngOnInit() {}
 
   public primaryMetaContact(): any {
     return this.data.metacontacts.find(metacontact => metacontact.isPrimary);

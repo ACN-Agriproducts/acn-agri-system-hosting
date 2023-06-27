@@ -2,8 +2,8 @@
 
 <mat-dialog-content>
 	<form #contactForm="ngForm">
-		<mat-grid-list cols="9" rowHeight="70px" gutterSize="10px">
-			<mat-grid-tile colspan="6">
+		<mat-grid-list cols="12" rowHeight="70px" gutterSize="10px">
+			<mat-grid-tile colspan="8">
 				<mat-form-field appearance="fill">
 					<mat-label>Name</mat-label>
 					<input matInput required [(ngModel)]="data.name" name="name">
@@ -11,15 +11,17 @@
 				</mat-form-field>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="3">
-				<mat-form-field appearance="fill" *ngIf="contactType === 'trucker'">
-					<mat-label>CAAT</mat-label>
-					<input matInput [(ngModel)]="data.caat" name="caat">
-					<mat-error>CAAT is <strong>required</strong></mat-error>
+			<mat-grid-tile colspan="4">
+				<mat-form-field appearance="fill">
+					<mat-label>Contact Type</mat-label>
+					<mat-select [(ngModel)]="data.tags" multiple name="tags" required>
+						<mat-option value="client">Client</mat-option>
+						<mat-option value="trucker">Trucker</mat-option>
+					</mat-select>
 				</mat-form-field>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="9">
+			<mat-grid-tile colspan="12">
 				<mat-form-field appearance="fill">
 					<mat-label>Street Address</mat-label>
 					<input matInput [(ngModel)]="data.streetAddress" name="streetAddress">
@@ -27,7 +29,7 @@
 				</mat-form-field>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="3">
+			<mat-grid-tile colspan="4">
 				<mat-form-field appearance="fill">
 					<mat-label>City</mat-label>
 					<input matInput [(ngModel)]="data.city" name="city">
@@ -35,7 +37,7 @@
 				</mat-form-field>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="3">
+			<mat-grid-tile colspan="4">
 				<mat-form-field appearance="fill">
 					<mat-label>State</mat-label>
 					<input matInput [(ngModel)]="data.state" name="state">
@@ -43,13 +45,58 @@
 				</mat-form-field>
 			</mat-grid-tile>
 
-			<mat-grid-tile colspan="3">
+			<mat-grid-tile colspan="2">
 				<mat-form-field appearance="fill">
 					<mat-label>Zip</mat-label>
 					<input matInput [(ngModel)]="data.zipCode" name="zipCode">
 					<mat-error>Zip code is <strong>required</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
+
+			<mat-grid-tile colspan="2">
+				<mat-form-field appearance="fill">
+					<mat-label>Country</mat-label>
+					<input matInput [(ngModel)]="data.country" name="country">
+					<mat-error>Country is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="12" *ngIf="data.tags | includes:'trucker'">
+				<mat-form-field appearance="fill">
+					<mat-label>CAAT</mat-label>
+					<input matInput [(ngModel)]="data.caat" name="caat">
+					<mat-error>CAAT is <strong>required</strong></mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="6">
+				<mat-form-field appearance="fill">
+					<mat-label>RFC</mat-label>
+					<input matInput [(ngModel)]="data.rfc" name="rfc">
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<mat-grid-tile colspan="6">
+				<mat-form-field appearance="fill">
+					<mat-label>CURP</mat-label>
+					<input matInput [(ngModel)]="data._curp" name="curp">
+				</mat-form-field>
+			</mat-grid-tile>
+
+			<!-- <mat-grid-tile colspan="6">
+				<mat-form-field appearance="fill">
+					<mat-label>Notarial Act</mat-label>
+					<input matInput [(ngModel)]="data.notarialAct" name="rfc">
+				</mat-form-field>
+			</mat-grid-tile>
+			
+			<mat-grid-tile colspan="6">
+				<mat-form-field appearance="fill">
+					<mat-label>RFC</mat-label>
+					<input matInput [(ngModel)]="data.rfc" name="rfc">
+				</mat-form-field>
+			</mat-grid-tile> -->
+
 		</mat-grid-list>
 
 		<div>

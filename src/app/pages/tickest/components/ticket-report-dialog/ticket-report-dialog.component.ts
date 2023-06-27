@@ -8,6 +8,8 @@ import * as Excel from 'exceljs';
 import { Firestore, QueryConstraint, where } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
+import { Mass } from '@shared/classes/mass';
+import { units } from '@shared/classes/mass';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -28,13 +30,31 @@ export class TicketReportDialogComponent implements OnInit {
   public contractId: number;
   public startId: number;
   public endId: number;
+  public displayUnit: units;
 
   public ticketList: Ticket[];
   public productTicketLists: {[product: string]: Ticket[]} = {};
   public contractList: any = {};
   public transportList: any = {};
   public clientList: any = {};
-  public totals: any = {
+  public totals: {
+    products: {
+      net: {
+        [productName: string]: Mass;
+      }
+      dryWeight: {
+        [productName: string]: Mass;
+      }
+    },
+    inventory: {
+      net: {
+        [productName: string]: Mass;
+      },
+      dryWeight: {
+        [productName: string]: Mass;
+      }
+    }
+  } = {
     products: {
       net: {},
       dryWeight: {}
@@ -54,6 +74,7 @@ export class TicketReportDialogComponent implements OnInit {
 
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
+    this.displayUnit = this.session.getDefaultUnit();
   }
 
   async generateReport(): Promise<void> {
@@ -79,7 +100,18 @@ export class TicketReportDialogComponent implements OnInit {
         const list = this.productTicketLists[product] as Ticket[];
         for(let tIndex = 0; tIndex < list.length; tIndex++){
           const ticket = this.productTicketLists[product][tIndex] as Ticket;
-          const thisRow = workSheet.addRow({...ticket, net: ticket.getNet().get() * (ticket.in? 1 : -1)});
+          const thisRow = workSheet.addRow({
+            date: ticket.dateOut,
+            id: ticket.id,
+            clientName: ticket.clientName,
+            contractID: ticket.contractID,
+            tare: ticket.tare.getMassInUnit(this.session.getDefaultUnit()),
+            gross: ticket.gross.getMassInUnit(this.session.getDefaultUnit()),
+            net: ticket.getNet().get() * (ticket.in? 1 : -1),
+            moisture: ticket.moisture,
+            discount: ticket.discount,
+            dryWeight: ticket.dryWeight.get(),
+          });
           thisRow.getCell('dryWeight').value = ticket.dryWeight.get() * (ticket.in? 1 : -1);
 
           if(tIndex == 0) {
@@ -263,19 +295,19 @@ export class TicketReportDialogComponent implements OnInit {
 
           // check if totals lists exist
           if(!this.totals.products.net[ticketSnap.productName]){
-            this.totals.products.net[ticketSnap.productName] = 0;
-            this.totals.products.dryWeight[ticketSnap.productName] = 0;
+            this.totals.products.net[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit());
+            this.totals.products.dryWeight[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit());
           }
           if(!this.totals.inventory.net[ticketSnap.tank]) {
-            this.totals.inventory.net[ticketSnap.tank] = 0;
-            this.totals.inventory.dryWeight[ticketSnap.tank] = 0;
+            this.totals.inventory.net[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit());
+            this.totals.inventory.dryWeight[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit());
           }
 
           // Add to totals lists
-          this.totals.products.net[ticketSnap.productName] += ticketSnap.getNet();
-          this.totals.products.dryWeight[ticketSnap.productName] += ticketSnap.dryWeight;
-          this.totals.inventory.net[ticketSnap.tank] += ticketSnap.getNet();
-          this.totals.inventory.dryWeight[ticketSnap.tank] += ticketSnap.dryWeight;
+          this.totals.products.net[ticketSnap.productName] = this.totals.products.net[ticketSnap.productName].add(ticketSnap.getNet());
+          this.totals.products.dryWeight[ticketSnap.productName] = this.totals.products.dryWeight[ticketSnap.productName].add(ticketSnap.getNet());
+          this.totals.inventory.net[ticketSnap.tank] = this.totals.inventory.net[ticketSnap.tank].add(ticketSnap.getNet());
+          this.totals.inventory.dryWeight[ticketSnap.tank] = this.totals.inventory.dryWeight[ticketSnap.tank].add(ticketSnap.dryWeight) //ticketSnap.dryWeight;
 
           // Get needed documents (contract, transport, client)
           if(this.contractList[ticketSnap.contractID] == null) {

@@ -68,7 +68,7 @@
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.tare | massInUnit }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.gross | massInUnit) - (ticket.data.tare | massInUnit) }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture | number:'1.1-1'}}</td>
-        <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.dryWeight | massInUnit) - ((ticket.data.gross | massInUnit) - (ticket.data.tare | massInUnit))}}</td>
+        <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.dryWeight | massInUnit) - ((ticket.data.gross | massInUnit) - (ticket.data.tare | massInUnit)) | number:'0.3'}}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeight | massInUnit }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ 0 | number:'1.1-1' }}</td>
         <td [class.odd]='!even' [class.even]='even' class='right'>{{ 0 | number:'1.1-1' }}</td>
@@ -90,7 +90,7 @@
         <td class='total-row right'>{{ totals.tare | number }}</td>
         <td class='total-row right'>{{ totals.net | number }}</td>
         <td class='total-row'></td>
-        <td class='total-row right'>{{ totals.moistureDiscount }}</td>
+        <td class='total-row right'>{{ totals.moistureDiscount | number:'0.3'}}</td>
         <td class='total-row right'>{{ totals.moistureAdjustedWeight | number }}</td>
         <td class='total-row'></td>
         <td class='total-row right'>-</td>
