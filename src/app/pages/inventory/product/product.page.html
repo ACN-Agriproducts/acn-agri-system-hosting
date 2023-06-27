@@ -22,9 +22,10 @@
     <div class="content-subtitle">
       <h4><span>Discount Tables</span></h4>
     </div>
-
-    <div class="action-bar sticky" style="margin: 0 10px; padding: 10px 0">
-      <button mat-flat-button color="primary" (click)="setTable()">+ Add Discount Table</button>
+    <div class="sticky-section">
+      <div class="action-bar">
+        <button mat-flat-button color="primary" (click)="setTable()">+ Add Discount Table</button>
+      </div>
     </div>
     <ion-row>
       <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
