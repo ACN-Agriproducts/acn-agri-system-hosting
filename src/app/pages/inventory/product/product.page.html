@@ -1,5 +1,9 @@
 <app-header-toolbar titulo="{{ product }}"></app-header-toolbar>
 
+<ng-template #loading [ngIf]="saving">
+  <mat-spinner diameter="40"></mat-spinner>
+</ng-template>
+
 <ion-content class="ion-padding">
   <ion-grid *ngIf="ready else loading">
     <ion-row>
@@ -16,7 +20,7 @@
     </ion-row>
 
     <div class="content-subtitle">
-      <h4><span></span></h4>
+      <h4><span>Discount Tables</span></h4>
     </div>
 
     <div class="action-bar sticky" style="margin: 0 10px; padding: 10px 0">
@@ -27,15 +31,11 @@
         <app-discount-table #discountTable 
           [table]="table" 
           (setTable)="setTable(table)" 
-          (saveTable)="saveTable()" 
+          (saveTable)="saveTables($event)" 
           (deleteTable)="deleteTable(table)" 
-          [saved]="saved"
         ></app-discount-table>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
 
-<ng-template #loading>
-  <mat-spinner></mat-spinner>
-</ng-template>

@@ -21,7 +21,7 @@ export class ProductPage implements OnInit {
   public ready: boolean = false;
   public doc: Product;
   public discountTables: DiscountTables;
-  public saved: boolean;
+  public saving: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,7 +46,6 @@ export class ProductPage implements OnInit {
         await this.discountTables.set();
         return;
       }
-
       this.discountTables = result;
     });
   }
@@ -68,7 +67,7 @@ export class ProductPage implements OnInit {
       this.discountTables.tables.push(result);
     }
 
-    await this.setTables();
+    await this.saveTables();
     this.snack.open(`Table ${table ? "Updated" : "Created"}`, "success");
   }
 
@@ -78,20 +77,25 @@ export class ProductPage implements OnInit {
 
     if (await confirm) {
       this.discountTables.tables.splice(tableIndex, 1);
-      await this.setTables();
+      await this.saveTables();
       this.snack.open(`Table Deleted`);
     }
   }
 
-  async saveTable() {
-    await this.setTables();
-    this.saved = !this.saved;
-  }
-
-  async setTables() {
-    this.discountTables.ref = doc(DiscountTables.getCollectionReference(this.db, this.session.getCompany(), this.product));
+  async saveTables(cancelled?: boolean) {
+    this.saving = true;
+    
+    this.discountTables.ref = doc(DiscountTables.getCollectionReference(
+      this.db,
+      this.session.getCompany(), 
+      this.product
+    ));
     this.discountTables.date = new Date();
     await this.discountTables.set();
+
+    if (cancelled) this.snack.open(`Changes Cancelled`);
+    else this.snack.open(`Changes Saved`, 'success');
+    this.saving = false;
   }
 
   ngOnDestroy() {

@@ -68,9 +68,8 @@
       </div>
     </ol>
   </mat-card-content>
-  <div class="action-bar" [class.invisible]="!editing && !saving">
+  <div class="action-bar" [class.invisible]="!editing">
     <button mat-flat-button color="primary" (click)="cancel()">Cancel</button>
     <button mat-flat-button color="primary" (click)="save()">Save</button>
-    <mat-spinner *ngIf="saving" [diameter]="25"></mat-spinner>
   </div>
 </mat-card>

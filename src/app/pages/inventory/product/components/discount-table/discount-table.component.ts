@@ -1,6 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DiscountTable } from '@shared/classes/discount-tables';
 
 @Component({
@@ -10,40 +9,26 @@ import { DiscountTable } from '@shared/classes/discount-tables';
 })
 export class DiscountTableComponent implements OnInit {
   @Input() table: DiscountTable;
-  @Input() saved: boolean;
 
-  @Output() setTable: EventEmitter<any> = new EventEmitter();
-  @Output() saveTable: EventEmitter<any> = new EventEmitter();
-  @Output() deleteTable: EventEmitter<any> = new EventEmitter();
+  @Output() setTable: EventEmitter<undefined> = new EventEmitter();
+  @Output() saveTable: EventEmitter<boolean> = new EventEmitter();
+  @Output() deleteTable: EventEmitter<undefined> = new EventEmitter();
   
   public editing: boolean = false;
-  public saving: boolean = false;
-  public cancelled: boolean = false;
   public prevTable: DiscountTable;
 
-  constructor(
-    private snack: SnackbarService,
-  ) { }
+  constructor() { }
 
   ngOnInit() { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.saved.previousValue != changes.saved.currentValue) {
-      this.saving = false;
-      if (!this.cancelled) this.snack.open(`Table Saved`, "success");
-      this.cancelled = false;
-    }
-  }
 
   drop(event: CdkDragDrop<any>) {
     moveItemInArray(this.table.data, event.previousIndex, event.currentIndex);
   }
 
-  save() {
+  save(cancelled?: boolean) {
     delete this.prevTable;
     this.editing = false;
-    this.saving = true;
-    this.saveTable.emit();
+    this.saveTable.emit(cancelled);
   }
 
   edit() {
@@ -53,9 +38,7 @@ export class DiscountTableComponent implements OnInit {
 
   cancel() {
     this.table = this.prevTable;
-    this.cancelled = true;
-    this.save();
-    this.snack.open(`Changes Cancelled`);
+    this.save(true);
   }
 
   ngOnDestroy() {
