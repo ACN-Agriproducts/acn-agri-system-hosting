@@ -1,9 +1,9 @@
 
 mat-chip {
-    max-width: 50%;
-    display: flex;
-    justify-content: space-between;
-    // try clamp() ??
+    width: fit-content !important;
+}
+mat-chip-list + input {
+    height: 30px !important;
 }
 
 .cdk-drag-animating {

@@ -1,15 +1,12 @@
 import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { CollectionReference, DocumentReference, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
+import { CollectionReference, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 import { Firestore, collection, getDocs, limit, orderBy, query, where } from "@angular/fire/firestore";
 
 export class DiscountTables extends FirebaseDocInterface {
     date: Date;
     tables: DiscountTable[];
 
-    // constructor();
-    // constructor(snapshot: QueryDocumentSnapshot<any>);
-    // constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef?: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
@@ -85,18 +82,4 @@ export class DiscountTable {
         const length = this.data.push({});
         this.headers.forEach(header => this.data[length - 1][header] = 0);
     }
-}
-
-interface MoistureData {
-    bonus: number;
-    charge: number;
-    high: number;
-    low: number;
-    weightDiscount: number;
-}
-
-interface DamageData {
-    range: number;
-    grade: string;
-    weightDiscount: number;
 }

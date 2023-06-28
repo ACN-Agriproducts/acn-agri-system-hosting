@@ -40,10 +40,10 @@
               </button>
             </div>
             <div class="cell" *ngFor="let header of table.headers">
-              <mat-form-field>
-                <input matInput [(ngModel)]="row[header]" type="number" step="0.01" min="0" [readonly]="!editing">
+              <mat-form-field *ngIf="editing else readonly">
+                <input matInput [(ngModel)]="row[header]" type="number" step="0.01" min="0" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/">
               </mat-form-field>
-              <ng-template #inputEditing>{{ row[header] | number:"1.2" }}</ng-template>
+              <ng-template #readonly>{{ row[header] | number:"1.2" }}</ng-template>
             </div>
             <div class="cell options" *ngIf="editing">
               <mat-icon cdkDragHandle>drag_handle</mat-icon>
