@@ -1,14 +1,17 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
+import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DiscountTable } from '@shared/classes/discount-tables';
+import { DISCOUNT_FIELDS_LIST } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-set-discount-table-dialog',
   templateUrl: './set-discount-table-dialog.component.html',
   styleUrls: ['./set-discount-table-dialog.component.scss'],
+  providers: [TitleCasePipe]
 })
 export class SetDiscountTableDialogComponent implements OnInit {
   public table: DiscountTable;
@@ -22,10 +25,12 @@ export class SetDiscountTableDialogComponent implements OnInit {
   public discountStep: number;
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  readonly discountFieldsList = DISCOUNT_FIELDS_LIST;
   
   constructor(
+    @Inject(MAT_DIALOG_DATA) public data: DiscountTable,
     public dialogRef: MatDialogRef<SetDiscountTableDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DiscountTable
+    private titleCasePipe: TitleCasePipe,
   ) {}
 
   ngOnInit() {
@@ -74,6 +79,10 @@ export class SetDiscountTableDialogComponent implements OnInit {
         discount: Math.round(discount * 100) / 100,
       });
     }
+  }
+
+  setName(fieldName: string) {
+    this.table.name = this.titleCasePipe.transform(fieldName);
   }
 
   ngOnDestroy() {

@@ -5,13 +5,15 @@
     <form #tableForm="ngForm">
         <div class="form-field-group">
             <mat-form-field appearance="fill">
-                <mat-label>Name</mat-label>
-                <input matInput [(ngModel)]="table.name" type="text" name="name" required>
+                <mat-label>Field Name</mat-label>
+                <mat-select [(ngModel)]="table.fieldName" (selectionChange)="setName($event.value)" name="fieldName" required>
+                    <mat-option *ngFor="let discountField of discountFieldsList" [value]="discountField">{{ discountField }}</mat-option>
+                </mat-select>
                 <mat-error>Field Required</mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>Field Name</mat-label>
-                <input matInput [(ngModel)]="table.fieldName" type="text" name="fieldName" required>
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="table.name" type="text" name="name" required>
                 <mat-error>Field Required</mat-error>
             </mat-form-field>
         </div>
