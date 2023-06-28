@@ -21,7 +21,6 @@ export class SetDiscountTableDialogComponent implements OnInit {
   public discountStart: number;
   public discountStep: number;
 
-  addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   
   constructor(
