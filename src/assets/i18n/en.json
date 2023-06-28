@@ -1,1 +1,23 @@
-{}
+{
+    "layout": {
+        "administrator": "administrator",
+        "dashboard": "dashboard",
+        "tickets": "tickets",
+        "inventory": "inventory",
+        "production orders": "production orders",
+        "warehouse receipts": "warehouse receipts",
+        "invoices": "invoices",
+        "contracts": "contracts",
+        "treasury": "treasury",
+        "directory": "directory",
+        "employees": "employees",
+        "portfolio": "portfolio",
+        "reports": "reports",
+        "prices": "prices",
+        "Options": "Options",
+        "Users": "Users",
+        "Test": "Test",
+        "Settings": "Settings",
+        "Sign out": "Sign out"
+    } 
+}

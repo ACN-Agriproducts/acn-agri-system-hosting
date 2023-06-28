@@ -1,11 +1,11 @@
 <!-- <ion-app>
 </ion-app> -->
-<ion-app (contextmenu)="$event.preventDefault()" *ngIf="ready">
+<ion-app (contextmenu)="$event.preventDefault()">
     <ion-split-pane contentId="main-content"
         [when]="(collapse$ | async)  ? '(min-width: 10250px)' : '(min-width: 1250px)' ">
-        <ion-menu contentId="main-content" type="overlay">
+        <ion-menu contentId="main-content" type="overlay" *transloco="let t, read: 'layout'">
             <ion-content>
-                <ion-list id="inbox-list" *ngIf="ready">
+                <ion-list id="inbox-list">
                     <ion-list-header>
                         <ion-img class="logo-main"
                             src="https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789">
@@ -15,7 +15,7 @@
                         <ion-note *ngIf="dataUser">
                             <div class="content-note-user">
                                 <span>{{dataUser.email}}</span>
-                                <span class="subitem-note-user">Administrator</span>
+                                <span class="subitem-note-user">{{t('administrator') | titlecase}}</span>
                             </div>
                         </ion-note>
                     </ng-container>
@@ -25,38 +25,38 @@
                         <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected"
                             [routerLink]="[p.url]" lines="none" detail="false" *ngIf="p.permission(permissions)">
                             <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
-                            <ion-label>{{ p.title }}</ion-label>
+                            <ion-label>{{ t(p.title) | titlecase}}</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
                 </ion-list>
 
                 <ion-list id="labels-list">
-                    <ion-list-header>Options</ion-list-header>
+                    <ion-list-header>{{t('Options')}}</ion-list-header>
                     <ion-menu-toggle  auto-hide="false" *ngIf="permissions.developer && permissions.admin">
                         <ion-item button routerLinkActive="selected" routerLink="/dashboard/users"
                             routerDirection="forward" lines="none" detail="false">
                             <ion-icon slot="start" ios="person-outline" md="person-outline"></ion-icon>
-                            <ion-label>Users</ion-label>
+                            <ion-label>{{t('Users')}}</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
                     <ion-menu-toggle auto-hide="false" *ngIf="permissions.developer && permissions.admin">
                         <ion-item button 
                             (click)="test()" lines="none" detail="false">
                             <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
-                            <ion-label>Test</ion-label>
+                            <ion-label>{{t('Test')}}</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
                     <ion-menu-toggle auto-hide="false">
                         <ion-item button routerLinkActive="selected" routerLink="/dashboard/settings"
                             routerDirection="forward" lines="none" detail="false">
                             <ion-icon slot="start" ios="settings-outline" md="settings-outline"></ion-icon>
-                            <ion-label>Settings</ion-label>
+                            <ion-label>{{t('Settings')}}</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
                     <ion-menu-toggle auto-hide="false">
                         <ion-item button (click)="logout()" lines="none" detail="false">
                             <ion-icon slot="start" ios="log-out-outline" md="log-out-outline"></ion-icon>
-                            <ion-label>Sign out</ion-label>
+                            <ion-label>{{t('Sign out')}}</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
                 </ion-list>
