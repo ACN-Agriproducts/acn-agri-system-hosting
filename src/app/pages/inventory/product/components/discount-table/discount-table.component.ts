@@ -40,10 +40,19 @@ export class DiscountTableComponent implements OnInit {
   }
 
   cancel() {
+    this.revert();
+    this.editing = false;
+  }
+
+  reset() {
+    this.revert();
+    this.edit();
+  }
+
+  revert() {
     this.table = this.prevTable;
     delete this.prevTable;
-    this.editing = false;
-    this.snack.open(`Changes Cancelled`);
+    this.snack.open(`Changes Reverted`);
   }
 
   ngOnDestroy() {

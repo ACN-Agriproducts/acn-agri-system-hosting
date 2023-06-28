@@ -70,7 +70,7 @@ export class DiscountTable {
         this.name = tableData?.name ?? "";
         this.fieldName = tableData?.fieldName ?? "";
         this.headers = [ ...tableData?.headers ?? [] ];
-        this.data = tableData?.data.map(item => item) ?? [];
+        this.data = tableData?.data.map(item => ({ ...item })) ?? [];
     }
 
     public addTableData(tableData?: any): void {
