@@ -1,5 +1,8 @@
 
 mat-chip {
+    min-width: 33%;
+    display: flex;
+    justify-content: space-between;
     width: fit-content !important;
 }
 mat-chip-list + input {
