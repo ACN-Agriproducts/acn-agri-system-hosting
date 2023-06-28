@@ -9,21 +9,37 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
 import { Plant } from "./plant";
 
+export const DISCOUNT_FIELDS_LIST = [ 
+    "brokenGrain",
+    "damagedGrain",
+    "dryWeight",
+    "dryWeightPercent",
+    "foreignMatter",
+    "impurities",
+    "moisture",
+    "PPB",
+    "weight"
+];
+
 @Injectable()
 export class Ticket extends FirebaseDocInterface{
+    public brokenGrain: number;
     public clientName: string;
     public comment: string;
     public contractID: number;
+    public damagedGrain: number;
     public dateIn: Date;
     public dateOut: Date;
     public discount: number;
     public driver: string;
     public dryWeight: Mass;
     public dryWeightPercent: number;
+    public foreignMatter: number;
     public grade: number;
     public gross: Mass;
     public id: number;
     public imageLinks: string[];
+    public impurities: number;
     public in: boolean;
     public lot: string;
     public moisture: number;
@@ -70,19 +86,23 @@ export class Ticket extends FirebaseDocInterface{
 
         const data = snapshot.data();
 
+        this.brokenGrain = data.brokenGrain;
         this.clientName = data.clientName;
         this.comment = data.comment;
         this.contractID = data.contractID;
+        this.damagedGrain = data.damagedGrain;
         this.dateIn = data.dateIn.toDate();
         this.dateOut = data.dateOut.toDate();
         this.discount = data.discount;
         this.driver = data.driver;
         this.dryWeight = new Mass(data.dryWeight, unit);
         this.dryWeightPercent = data.dryWeightPercent;
+        this.foreignMatter = data.foreignMatter;
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
         this.id = data.id;
         this.imageLinks = data.imageLinks;
+        this.impurities = data.impurities;
         this.in = data.in;
         this.lot = data.lot;
         this.moisture = data.moisture;
@@ -127,19 +147,23 @@ export class Ticket extends FirebaseDocInterface{
     public static converter = {
         toFirestore(data: Ticket): DocumentData {
             return {
+                brokenGrain: data.brokenGrain,
                 clientName: data.clientName,
                 comment: data.comment,
                 contractID: data.contractID,
+                damagedGrain: data.damagedGrain,
                 dateIn: data.dateIn,
                 dateOut: data.dateOut,
                 discount: data.discount,
                 driver: data.driver,
                 dryWeight: data.dryWeight.get(),
                 dryWeightPercent: data.dryWeightPercent,
+                foreignMatter: data.foreignMatter,
                 grade: data.grade,
                 gross: data.gross.get(),
                 id: data.id,
                 imageLinks: data.imageLinks,
+                impurities: data.impurities,
                 in: data.in,
                 lot: data.lot,
                 moisture: data.moisture,
