@@ -63,7 +63,7 @@
         <td class="border-left text-end">{{total | currency}}</td>
       </tr>
       <tr>
-        <td class="bold" [class.space]="!isExportInvoice" colspan="3">PRODUCT: YELLOW CORN</td>
+        <td class="bold" [class.space]="!isExportInvoice" colspan="3">PRODUCT: {{exportInfo.product | uppercase}}</td>
       </tr>
       <tr>
         <td class="bold" [class.space]="!isExportInvoice" colspan="2">METRIC TONS: {{ exportInfo ? (exportInfo.quantity | massInUnit:'mTon' | number:"0.3-3") : "null"}}</td>
