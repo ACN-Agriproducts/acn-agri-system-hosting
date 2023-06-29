@@ -3,6 +3,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
 import { Contract, TruckerInfo } from '@shared/classes/contract';
@@ -25,7 +26,8 @@ export class TruckersFormComponent implements OnInit {
     private fb: FormBuilder,
     private session: SessionInfo,
     private db: Firestore,
-    private snack: SnackbarService
+    private snack: SnackbarService,
+    private transloco: TranslocoService
     ) { }
 
   ngOnInit() {
@@ -105,7 +107,7 @@ export class TruckersFormComponent implements OnInit {
     this.contract.update({truckers}).then(() => {
       this.truckerForm.markAsPristine();
       this.submitting = false;
-      this.snack.open("Truckers saved", "success");
+      this.snack.open(this.transloco.translate("contracts.info.truckers-saved-message"), "success");
     });
   }
 }

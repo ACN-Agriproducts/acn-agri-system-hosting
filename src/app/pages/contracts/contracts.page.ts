@@ -10,6 +10,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
+import { TranslocoService } from '@ngneat/transloco';
 
 
 @Component({
@@ -54,6 +55,7 @@ export class ContractsPage implements AfterViewInit {
     private db: Firestore,
     private session: SessionInfo,
     private navController: NavController,
+    private transloco: TranslocoService
   ) { }
 
   ngAfterViewInit() {
@@ -74,7 +76,7 @@ export class ContractsPage implements AfterViewInit {
       });
 
       this.tabData.push({
-        label: "All",
+        label: this.transloco.translate("contracts.table.all"),
         type: this.table,
         isInfiniteScrollDisabled: false,
         data: [
@@ -85,7 +87,7 @@ export class ContractsPage implements AfterViewInit {
         ]
       },
       {
-        label: "Analytics",
+        label: this.transloco.translate("contracts.table.analytics"),
         type: this.cards,
         isInfiniteScrollDisabled: false,
         data: Object.entries(settings.contractTypes).map(contract => {

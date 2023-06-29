@@ -18,6 +18,7 @@ import { TicketDiscountTableComponent } from './components/ticket-discount-table
 import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { ContractPrintablesModule } from 'src/app/modules/contract-printables/co
     ReactiveFormsModule,
     ContractModule,
     ContractPrintablesModule,
+    TranslocoModule
   ],
   declarations: [
     ContractInfoPage,

@@ -1,52 +1,54 @@
-<ng-container *ngIf="truckerForm" >
-  <ion-row *ngFor="let trucker of truckerForm['controls']; let index = index" [formGroup]="getTruckerFormGroup(index)">
-    <ion-col size-xs='8' size-sm='9'>
-      <mat-form-field>
-        <mat-label>Truckers</mat-label>
-        <input  matInput
-                type="text"
-                placeholder="Trucker Name..."
-                [matAutocomplete]="truckerAuto"
-                formControlName="trucker">
-        <mat-autocomplete 
-          autoActiveFirstOption 
-          #truckerAuto >
-          <mat-option 
-            *ngFor="let option of filteredTruckerOptions[index] | async" 
-            [value]="option.name">
-            {{option.name}}
-          </mat-option>
-        </mat-autocomplete>
-        <button matSuffix mat-icon-button (click)="truckerForm.get([index, 'trucker']).setValue('')">
-          <mat-icon>clear</mat-icon>
-        </button>
-        <mat-error>Trucker name not found</mat-error>
-      </mat-form-field>
-    </ion-col>
-    <ion-col size-xs='4' size-sm='3'>
-      <mat-form-field>
-        <mat-label>Freight</mat-label>
-        <span matPrefix>$</span>
-        <input  matInput
-                formControlName="freight"
-                type="number"
-                min="0">
-      </mat-form-field>
-    </ion-col>
-  </ion-row>
-  <div class="action-bar">
-    <button mat-icon-button (click)="addTruckerGroup()">
-      <mat-icon>add</mat-icon>
-    </button>
-    <div>
-      <mat-spinner [diameter]="20" *ngIf="submitting"></mat-spinner>
-      <button
-        mat-flat-button
-        color="primary"
-        (click)="submit()"
-        [disabled]="!truckerForm.dirty || truckerForm.invalid">
-        Save
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <ng-container *ngIf="truckerForm" >
+    <ion-row *ngFor="let trucker of truckerForm['controls']; let index = index" [formGroup]="getTruckerFormGroup(index)">
+      <ion-col size-xs='8' size-sm='9'>
+        <mat-form-field>
+          <mat-label>{{t('Truckers')}}</mat-label>
+          <input  matInput
+                  type="text"
+                  [placeholder]="t('Trucker Name') + '...'"
+                  [matAutocomplete]="truckerAuto"
+                  formControlName="trucker">
+          <mat-autocomplete
+            autoActiveFirstOption
+            #truckerAuto >
+            <mat-option
+              *ngFor="let option of filteredTruckerOptions[index] | async"
+              [value]="option.name">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <button matSuffix mat-icon-button (click)="truckerForm.get([index, 'trucker']).setValue('')">
+            <mat-icon>clear</mat-icon>
+          </button>
+          <mat-error>{{t('Trucker name not found')}}</mat-error>
+        </mat-form-field>
+      </ion-col>
+      <ion-col size-xs='4' size-sm='3'>
+        <mat-form-field>
+          <mat-label>{{t('Freight')}}</mat-label>
+          <span matPrefix>$</span>
+          <input  matInput
+                  formControlName="freight"
+                  type="number"
+                  min="0">
+        </mat-form-field>
+      </ion-col>
+    </ion-row>
+    <div class="action-bar">
+      <button mat-icon-button (click)="addTruckerGroup()">
+        <mat-icon>add</mat-icon>
       </button>
+      <div>
+        <mat-spinner [diameter]="20" *ngIf="submitting"></mat-spinner>
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="submit()"
+          [disabled]="!truckerForm.dirty || truckerForm.invalid">
+          {{t('Save')}}
+        </button>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </ng-container>
