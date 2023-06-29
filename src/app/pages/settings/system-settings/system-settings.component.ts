@@ -1,3 +1,4 @@
+import { TranslocoService } from '@ngneat/transloco';
 import { SettingsService } from './../utils/service/settings.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -11,11 +12,15 @@ export class SystemSettingsComponent implements OnInit {
   public collapse = false;
   public displayName = true;
   public type: boolean;
+  public language: string;
+
   constructor(
-    private service: SettingsService
+    private service: SettingsService,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit(): void {
+    this.language = this.transloco.getActiveLang();
   }
   public collapseMenu = (event) => {
     this.service.collapseMenu.next(event.detail.checked);
@@ -29,6 +34,11 @@ export class SystemSettingsComponent implements OnInit {
     } else {
       document.body.classList.remove('dark-mode');
     }
+  }
+
+  public languageChange() {
+    console.log(this.language);
+    this.transloco.setActiveLang(this.language);
   }
 
 }

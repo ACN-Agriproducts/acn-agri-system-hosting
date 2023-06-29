@@ -14,10 +14,10 @@
         "portfolio": "portafolio",
         "reports": "reportes",
         "prices": "precios",
-        "options": "opciones",
-        "users": "usuarios",
-        "test": "prueba",
-        "settings": "ajustes",
-        "sign out": "salir"
+        "Options": "opciones",
+        "Users": "usuarios",
+        "Test": "prueba",
+        "Settings": "ajustes",
+        "signout": "salir"
     } 
 }
