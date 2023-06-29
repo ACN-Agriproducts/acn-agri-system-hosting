@@ -1,45 +1,48 @@
-<app-header-toolbar titulo="New Contact"></app-header-toolbar>
-
-<ion-content class="ion-padding">
-  <ion-card>
-    <div class="content-form">
-      <h2><span>New Contact</span></h2>
-      <form [formGroup]="contactForm" (ngSubmit)="submitModal()">  
-        <ion-list>
-          <ion-item>
-            <ion-input class="form-input" formControlName="name" placeholder="Name"></ion-input>        </ion-item>
-          <ion-item>
-            <ion-input class="form-input" formControlName="streetAddress" placeholder="Street Address"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input class="form-input" formControlName="city" placeholder="City"></ion-input>
-          </ion-item> 
-          <ion-item>
-            <ion-input class="form-input" formControlName="state" placeholder="State"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input class="form-input" formControlName="zipCode" placeholder="Zip Code"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input class="form-input" formControlName="phoneNumber" placeholder="Phone Number" type="tel"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input class="form-input" formControlName="email" placeholder="E-mail" type="email"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input class="form-input" formControlName="caat" placeholder="CAAT"></ion-input>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Customer Type</ion-label>
-            <ion-select placeholder="Select One" formControlName="type" interface="popover">
-              <ion-select-option value="Client">Client</ion-select-option>
-              <ion-select-option value="Trucker">Trucker</ion-select-option>
-            </ion-select>
-          </ion-item>
-          <ion-button color="success" type="submit" [disabled]="contactForm.invalid">Submit</ion-button>
-        </ion-list>
-      </form>
-    </div>
-  </ion-card>
-</ion-content>
+<ng-container *transloco="let t, read: 'directory'">
+  <app-header-toolbar [titulo]="t('New Contact')"></app-header-toolbar>
+  
+  <ion-content class="ion-padding">
+    <ion-card>
+      <div class="content-form">
+        <h2><span>{{t('New Contact')}}</span></h2>
+        <form [formGroup]="contactForm" (ngSubmit)="submitModal()">
+          <ion-list>
+            <ion-item>
+              <ion-input class="form-input" formControlName="name" [placeholder]="t('Name')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="streetAddress" [placeholder]="t('Street Address')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="city" [placeholder]="t('City')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="state" [placeholder]="t('State')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="zipCode" [placeholder]="t('Zip Code')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="phoneNumber" type="tel" [placeholder]="t('Phone Number')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="email" type="email" [placeholder]="t('E-mail')"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input class="form-input" formControlName="caat" [placeholder]="t('CAAT')"></ion-input>
+            </ion-item>
+  
+            <ion-item>
+              <ion-label>{{t('Customer Type')}}</ion-label>
+              <ion-select [placeholder]="t('Select One')" formControlName="type" interface="popover">
+                <ion-select-option value="Client">{{t('client') | titlecase}}</ion-select-option>
+                <ion-select-option value="Trucker">{{t('trucker') | titlecase}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-button color="success" type="submit" [disabled]="contactForm.invalid">{{t('Submit')}}</ion-button>
+          </ion-list>
+        </form>
+      </div>
+    </ion-card>
+  </ion-content>
+</ng-container>
