@@ -19,5 +19,28 @@
         "Test": "Test",
         "Settings": "Settings",
         "signout": "Sign out"
-    } 
+    },
+    "contracts": {
+        "table": {
+            "contracts": "contracts",
+            "Contract type": "Contract type",
+            "Export": "Export",
+            "New": "New",
+            "search": "search",
+            "Customer": "Customer",
+            "Date": "Date",
+            "Status": "Status",
+            "product": "product",
+            "delivered": "delivered",
+            "to deliver": "to deliver",
+            "price": "price",
+            "total": "total",
+            "loading more data": "Loading more data",
+            "pending": "pending",
+            "all": "all",
+            "closed": "closed",
+            "active": "active",
+            "cancelled": "cancelado"
+        }
+    }
 }

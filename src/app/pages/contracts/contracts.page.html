@@ -1,20 +1,20 @@
-<ion-header>
-    <app-header-toolbar titulo="Contract"></app-header-toolbar>
+<ion-header *transloco="let t, read: 'contracts.table'">
+    <app-header-toolbar [titulo]="t('contracts') | titlecase"></app-header-toolbar>
     <ion-toolbar class="contract-toolbar">
         <div>
             <mat-form-field appearance="outline">
-                <mat-label>Contract type</mat-label>
+                <mat-label>{{t('Contract type')}}</mat-label>
                 <mat-select (selectionChange)="changedContractType($event)" [value]="0">
                     <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{tab.label}}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>Status</mat-label>
+                <mat-label>{{t('Status')}}</mat-label>
                 <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,cancelled">
-                    <mat-option value="active,closed,pending,cancelled">All</mat-option>
-                    <mat-option value="active">Active</mat-option>
-                    <mat-option value="pending">Pending</mat-option>
-                    <mat-option value="closed">Closed</mat-option>
+                    <mat-option value="active,closed,pending,cancelled">{{t('all')}}</mat-option>
+                    <mat-option value="active">{{t('active') | titlecase}}</mat-option>
+                    <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
+                    <mat-option value="closed">{{t('closed') | titlecase}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -33,12 +33,12 @@
     </div>
 </ng-template>
 
-<ng-template #tableTemplate let-tabData>
+<ng-template #tableTemplate let-tabData *transloco="let t, read: 'contracts.table'">
     <div class="content">
         <div class="header-filter">
             <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
             <ion-button color="dark" (click)='exportMode = !exportMode'>
-                <ion-text>Export</ion-text>
+                <ion-text>{{t('Export')}}</ion-text>
             </ion-button>
             <ion-button color="dark" (click)='newContractButton()'>
                 <ion-icon name="add" slot="start"></ion-icon>
@@ -56,7 +56,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('client')">
                 <div class="item-text-header">
-                    <ion-text>Customer</ion-text>
+                    <ion-text>{{t('Customer')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'client' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
@@ -64,7 +64,7 @@
             </ion-item>
             <ion-item lines="none" matTooltip="Contract Date">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>Date</ion-text>
+                    <ion-text>{{t('Date')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'id' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
@@ -72,7 +72,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('status')">
                 <div class="item-text-header">
-                    <ion-text>State</ion-text>
+                    <ion-text>{{t('Status')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'status' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
