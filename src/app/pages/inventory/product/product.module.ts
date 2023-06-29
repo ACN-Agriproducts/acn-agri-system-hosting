@@ -8,7 +8,6 @@ import { ProductPageRoutingModule } from './product-routing.module';
 
 import { ProductPage } from './product.page';
 import { CoreModule } from '@core/core.module';
-import { DiscountTableMoistureComponent } from './components/discount-table-moisture/discount-table-moisture.component';
 import { ProductDprTableComponent } from './components/product-dpr-table/product-dpr-table.component';
 import { DprTicketsTableComponent } from './components/dpr-tickets-table/dpr-tickets-table.component';
 import { DprInvoiceTableComponent } from './components/dpr-invoice-table/dpr-invoice-table.component';
@@ -28,7 +27,6 @@ import { SetDiscountTableDialogComponent } from './components/set-discount-table
   ],
   declarations: [
     ProductPage,
-    DiscountTableMoistureComponent,
     ProductDprTableComponent,
     DprTicketsTableComponent,
     DprInvoiceTableComponent,
