@@ -30,17 +30,22 @@
             "Customer": "Customer",
             "Date": "Date",
             "Status": "Status",
-            "product": "product",
-            "delivered": "delivered",
-            "to deliver": "to deliver",
-            "price": "price",
-            "total": "total",
+            "Product": "Product",
+            "Delivered": "Delivered",
+            "To Deliver": "To Deliver",
+            "Price": "Price",
+            "Total": "Total",
             "loading more data": "Loading more data",
             "pending": "pending",
             "all": "all",
             "closed": "closed",
             "active": "active",
-            "cancelled": "cancelado"
+            "cancelled": "cancelled",
+            "cancel": "Cancel",
+            "download": "Download"
+        },
+        "new": {
+
         }
     }
 }

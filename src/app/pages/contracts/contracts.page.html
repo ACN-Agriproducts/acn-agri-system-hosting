@@ -80,7 +80,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('product')" matTooltip="Product">
                 <div class="item-text-header">
-                    <ion-text>Product</ion-text>
+                    <ion-text>{{t('Product')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'product' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
@@ -88,7 +88,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>Delivered</ion-text>
+                    <ion-text>{{t('Delivered')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
@@ -96,7 +96,7 @@
             </ion-item>
             <ion-item lines="none" class="item-icon-hide-hover" (click)="sortList('quantity')">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>To Deliver</ion-text>
+                    <ion-text>{{t('To Deliver')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'quantity' && !assending" name="funnel-outline"
                         color="primary"></ion-icon>
@@ -104,7 +104,7 @@
             </ion-item>
             <ion-item lines="none" matTooltip="Price per Bushel" (click)="sortList('price')">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>Price</ion-text>
+                    <ion-text>{{t('Price')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'price' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
@@ -112,7 +112,7 @@
             </ion-item>
             <ion-item lines="none">
                 <div class="item-text-header item-icon-hide-hover">
-                    <ion-text>Total</ion-text>
+                    <ion-text>{{t('Total')}}</ion-text>
                     <ion-icon
                         [class.active-arrow]="sortField == 'total' && !assending" name="funnel-outline" color="primary">
                     </ion-icon>
@@ -150,7 +150,7 @@
                         <ion-item lines="none">
                             <ion-text class="item-status" [class.pending]="contract.status === 'pending'"
                                 [class.active]="contract.status === 'active'" [class.close]="contract.status === 'closed'"
-                                [class.cancel]="contract.status === 'cancelled'">{{contract.status}}
+                                [class.cancel]="contract.status === 'cancelled'">{{t(contract.status)}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -200,21 +200,21 @@
     <ion-infinite-scroll #infiniteScroll threshold="200px" (ionInfinite)="infiniteContracts($event)">
         <ion-infinite-scroll-content
             loadingSpinner="bubbles"
-            loadingText="Loading more data...">
+            [loadingText]="t('loading more data') + '...'">
         </ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ng-template>
 
 <div class="content-action" *ngIf="exportMode">
-    <ion-card class="panel-action">
+    <ion-card class="panel-action" *transloco="let t, read: 'contracts.table'">
         <ion-card-content>
             <div class="content-panel-button">
-                <ion-button fill="clear" color="secondary" (click)="exportMode = false;">Cancel</ion-button>
+                <ion-button fill="clear" color="secondary" (click)="exportMode = false;">{{t('cancel')}}</ion-button>
                     <div class="panel-list">
                         <ion-item color="dark" lines="none">
                             <ion-label *ngFor="let item of exportList; let last = last">{{item.id}} {{ last ? "" : ", " }}</ion-label>
                         </ion-item>
-                    <ion-button (click)="exportButton()">Download</ion-button>
+                    <ion-button (click)="exportButton()">{{t('download')}}</ion-button>
                 </div>
             </div>
         </ion-card-content>
