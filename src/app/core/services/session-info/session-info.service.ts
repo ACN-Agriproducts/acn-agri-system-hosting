@@ -7,7 +7,7 @@ import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
 import { User } from '@shared/classes/user';
 
-interface UserInterface {
+export interface UserInterface {
   email: string,
   uid: string, 
   refreshToken: string, 
