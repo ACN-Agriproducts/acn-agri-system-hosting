@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { doc, Firestore, getDoc, where } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
+import { TranslocoService } from '@ngneat/transloco';
 import { Company } from '@shared/classes/company';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
@@ -15,7 +16,7 @@ interface UserInterface {
   currentPermissions: any
 }
 
-declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit' | 'companyDisplayUnit'
+declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit' | 'companyDisplayUnit' | 'defaultLanguage';
 
 @Injectable({
   providedIn: 'root'
@@ -27,12 +28,14 @@ export class SessionInfo {
   private companyUnit: units;
   private companyDisplayUnit: units;
   private userUnit: units;
+  private defaultLanguage: 'en' | 'es';
 
   private keyMap: Map<keyOpts, string>;
 
   constructor(
     private localStorage: Storage,
-    private db: Firestore
+    private db: Firestore,
+    private transloco: TranslocoService,
   ) { 
     this.keyMap= new Map<keyOpts, string>();
     this.keyMap.set('currentCompany', 'company');
@@ -41,6 +44,7 @@ export class SessionInfo {
     this.keyMap.set('companyUnit', 'companyUnit');
     this.keyMap.set('userUnit', 'userUnit');
     this.keyMap.set('companyDisplayUnit', 'companyDisplayUnit');
+    this.keyMap.set('defaultLanguage', 'defaultLanguage');
   }
 
   public load(): Promise<void> {
@@ -82,6 +86,11 @@ export class SessionInfo {
 
     promises.push(this.localStorage.get('userUnit').then(val => {
       this.userUnit = val;
+    }));
+
+    promises.push(this.localStorage.get('defaultLanguage').then(val => {
+      this.defaultLanguage = val || 'es';
+      this.transloco.setActiveLang(this.defaultLanguage);
     }));
 
     FirebaseDocInterface.session = this;

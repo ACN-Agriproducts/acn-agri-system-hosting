@@ -1,6 +1,7 @@
 import { TranslocoService } from '@ngneat/transloco';
 import { SettingsService } from './../utils/service/settings.service';
 import { Component, OnInit } from '@angular/core';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 
 @Component({
@@ -16,7 +17,8 @@ export class SystemSettingsComponent implements OnInit {
 
   constructor(
     private service: SettingsService,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private session: SessionInfo,
   ) { }
 
   ngOnInit(): void {
@@ -37,8 +39,9 @@ export class SystemSettingsComponent implements OnInit {
   }
 
   public languageChange() {
-    console.log(this.language);
     this.transloco.setActiveLang(this.language);
+    this.transloco.setDefaultLang(this.language);
+    this.session.set('defaultLanguage', this.language);
   }
 
 }
