@@ -13,10 +13,12 @@ interface UserInterface {
   refreshToken: string, 
   name: string,
   worksAt: string[],
-  currentPermissions: any
+  currentPermissions: any,
+  defaultLanguage: langOpts
 }
 
 declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit' | 'companyDisplayUnit' | 'defaultLanguage';
+declare type langOpts = 'en' | 'es';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,7 @@ export class SessionInfo {
   private companyUnit: units;
   private companyDisplayUnit: units;
   private userUnit: units;
-  private defaultLanguage: 'en' | 'es';
+  private language: langOpts;
 
   private keyMap: Map<keyOpts, string>;
 
@@ -49,29 +51,31 @@ export class SessionInfo {
 
   public load(): Promise<void> {
     const promises = [];
+    let companyPromise, userPromise;
+    let companyDoc: Promise<Company>;
 
-    promises.push(this.localStorage.get('currentCompany').then(val => {
+    promises.push(companyPromise = this.localStorage.get('currentCompany').then(val => {
       return this.company = val;
       
     }).then(async company => {
       if(!company) return;
       let unit = await this.localStorage.get('companyUnit');
-      let companyDoc: Company;
       if(!unit) {
-        companyDoc = await Company.getCompany(this.db, company);
-        unit = companyDoc.defaultUnit;
-        this.localStorage.set('userUnit', companyDoc.defaultUnit);
+        companyDoc = Company.getCompany(this.db, company);
+        unit = (await companyDoc).defaultUnit;
+        this.localStorage.set('userUnit', (await companyDoc).defaultUnit);
       }
 
       let companyDisplayUnit = await this.localStorage.get('companyDisplayUnit');
       if(!companyDisplayUnit) {
-        companyDoc ??= await Company.getCompany(this.db, company);
-        companyDisplayUnit = companyDoc.displayUnit;
-        this.localStorage.set('companyDisplayUnit', companyDoc.displayUnit);
+        companyDoc ??= Company.getCompany(this.db, company);
+        companyDisplayUnit = (await companyDoc).displayUnit;
+        this.localStorage.set('companyDisplayUnit', (await companyDoc).displayUnit);
       }
 
       this.companyUnit = unit;
       this.companyDisplayUnit = companyDisplayUnit;
+      return this.company;
     }).catch(error => {
       console.error(error);
     }));
@@ -80,7 +84,7 @@ export class SessionInfo {
       this.plant = val;
     }));
 
-    promises.push(this.localStorage.get('user').then(val => {
+    promises.push(userPromise = this.localStorage.get('user').then(val => {
       this.user = val;
     }));
 
@@ -88,9 +92,12 @@ export class SessionInfo {
       this.userUnit = val;
     }));
 
-    promises.push(this.localStorage.get('defaultLanguage').then(val => {
-      this.defaultLanguage = val || 'es';
-      this.transloco.setActiveLang(this.defaultLanguage);
+    promises.push(this.localStorage.get('defaultLanguage').then(async val => {
+      this.language = val 
+        || (await userPromise)?.defaultLanguage 
+        || (await (companyDoc ??= Company.getCompany(this.db, await companyPromise))).defaultLanguage
+        || 'es';
+      this.transloco.setActiveLang(this.language);
     }));
 
     FirebaseDocInterface.session = this;
