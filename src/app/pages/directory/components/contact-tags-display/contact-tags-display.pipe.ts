@@ -3,7 +3,8 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Contact } from '@shared/classes/contact';
 
 @Pipe({
-  name: 'contactTagsDisplay'
+  name: 'contactTagsDisplay',
+  standalone: true,
 })
 export class ContactTagsDisplayPipe implements PipeTransform {
   constructor(private transloco: TranslocoService) {}

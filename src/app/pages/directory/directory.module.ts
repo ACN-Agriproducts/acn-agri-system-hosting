@@ -22,17 +22,14 @@ import { ContactTagsDisplayPipe } from './components/contact-tags-display/contac
     DirectoryPageRoutingModule,
     CoreModule,
     ReactiveFormsModule,
-    TranslocoModule
+    TranslocoModule,
+    ContactTagsDisplayPipe
   ],
   declarations: [
     DirectoryPage, 
     OptionsDirectoryComponent, 
     ShowContactModalComponent,
     EditContactDialogComponent,
-    ContactTagsDisplayPipe,
-  ],
-  exports: [
-    ContactTagsDisplayPipe
   ]
 })
 export class DirectoryPageModule {}
