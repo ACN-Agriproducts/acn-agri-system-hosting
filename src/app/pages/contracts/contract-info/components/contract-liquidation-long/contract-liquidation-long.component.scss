@@ -105,3 +105,9 @@ table {
 .odd {
     background-color: white;
 }
+
+@media print {
+    * {
+        print-color-adjust: exact;
+    }
+}
