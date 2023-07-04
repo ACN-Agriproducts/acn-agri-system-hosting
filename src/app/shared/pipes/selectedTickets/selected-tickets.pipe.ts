@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TicketWithDiscount } from '@pages/contracts/contract-info/contract-info.page';
+import { TicketWithDiscount } from '@shared/classes/ticket';
 
 @Pipe({
   name: 'selectedTickets'

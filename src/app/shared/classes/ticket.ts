@@ -8,18 +8,13 @@ import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
 import { Plant } from "./plant";
+import { DiscountTables } from "./discount-tables";
 
-export const DISCOUNT_FIELDS_LIST = [ 
-    "brokenGrain",
-    "damagedGrain",
-    "dryWeight",
-    "dryWeightPercent",
-    "foreignMatter",
-    "impurities",
-    "moisture",
-    "PPB",
-    "weight"
-];
+export declare type TicketWithDiscount = {
+    data: Ticket, 
+    discounts: TicketDiscounts, 
+    includeInReport: boolean 
+};
 
 @Injectable()
 export class Ticket extends FirebaseDocInterface{
@@ -311,5 +306,32 @@ export class Ticket extends FirebaseDocInterface{
         const ticketSnapshot = await getCountFromServer(ticketCollQuery);
 
         return ticketSnapshot.data().count;
+    }
+}
+
+export class TicketDiscounts {
+    public brokenGrain: number = 0;
+    public damagedGrain: number = 0;
+    public dryWeight: number = 0;
+    public dryWeightPercent: number = 0;
+    public foreignMatter: number = 0;
+    public impurities: number = 0;
+    public infested: number = 0;
+    public inspection: number = 0;
+    public moisture: number = 0;
+    public musty: number = 0;
+    public PPB: number = 0;
+    public sour: number = 0;
+    public weathered: number = 0;
+    public weight: number = 0;
+
+    public constructor(ticket?: Ticket, discountTables?: DiscountTables) {
+        if (!ticket && !discountTables) return;
+
+        for (const key of Object.keys(this)) {
+            const table = discountTables.tables.find(table => table.fieldName === key);
+            const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
+            this[key] = valueRange?.discount ?? 0;
+        }
     }
 }

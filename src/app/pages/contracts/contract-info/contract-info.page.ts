@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
-import { Contract } from "@shared/classes/contract";
-import { Ticket } from '@shared/classes/ticket';
+import { Contract, LiquidationTotals } from "@shared/classes/contract";
+import { TicketDiscounts, Ticket, TicketWithDiscount } from '@shared/classes/ticket';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 
 import * as Excel from 'exceljs';
@@ -12,8 +11,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-
-export declare type TicketWithDiscount = { data: Ticket, discounts: any, includeInReport: boolean };
+import { DiscountTables } from '@shared/classes/discount-tables';
 
 @Component({
   selector: 'app-contract-info',
@@ -29,11 +27,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ready: boolean = false;
   public ticketList: Ticket[];
   public ticketDiscountList: TicketWithDiscount[];
-  public ticketsReady: boolean = false;
   public showLiquidation: boolean = false;
   public totals: LiquidationTotals = new LiquidationTotals();
-  public allSelected: boolean = false;
   public selectedTickets: TicketWithDiscount[] = [];
+  public discountTables: DiscountTables;
 
   private currentSub: Subscription;
 
@@ -52,16 +49,14 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.id = this.route.snapshot.paramMap.get('id');
     this.type = this.route.snapshot.paramMap.get('type');
     this.currentCompany = this.session.getCompany();
-    
-    Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
-      const tickets = await contract.getTickets();
-      
-      this.currentContract = contract;
-      this.ticketList = tickets;
 
-      this.ticketDiscountList = tickets.map(t => ({
-        data: t,
-        discounts: { infested: 0, musty: 0, sour: 0, weathered: 0, inspection: 0 },
+    Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
+      this.currentContract = contract;
+      this.ticketList = await contract.getTickets();
+      this.discountTables = await DiscountTables.getDiscountTables(this.db, this.currentCompany, contract.product.id);
+      this.ticketDiscountList = this.ticketList.map(ticket => ({
+        data: ticket,
+        discounts: new TicketDiscounts(ticket, this.discountTables),
         includeInReport: false
       }));
       
@@ -215,79 +210,26 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       this.ticketList = tickets;
       
       const ticketsToAdd = tickets.filter(t => !this.ticketDiscountList.some(d => d.data.id == t.id));
-      this.ticketDiscountList.push(...ticketsToAdd.map(ticket => 
-      {
-        return {
-          data: ticket,
-          discounts: { infested: 0, musty: 0, sour: 0, weathered: 0, inspection: 0 },
-          includeInReport: false
-        }
-      }));
+      this.ticketDiscountList.push(...ticketsToAdd.map(ticket => ({
+        data: ticket,
+        discounts: new TicketDiscounts(ticket, this.discountTables),
+        includeInReport: false
+      })));
     }).catch(error => {
       this.snack.open(error, "error");
     });
   }
 
-  public selectAllTickets = (): void => {
+  public selectAllTickets = (selectAll: boolean): void => {
+    if ((selectAll && this.selectedTickets.length === this.ticketList.length) || (!selectAll && this.selectedTickets.length === 0)) return;
     this.ticketDiscountList.forEach(ticket => {
-      ticket.includeInReport = !this.allSelected ? true : false;
+      ticket.includeInReport = selectAll ? true : false;
     });
     this.handleSelectChange();
   }
 
-  public getTotals = (): LiquidationTotals => {
-    const totals = new LiquidationTotals();
-
-    this.selectedTickets.forEach(ticket => {
-      totals.gross += ticket.data.gross.get();
-      totals.tare += ticket.data.tare.get();
-
-      const net = ticket.data.gross.get() - ticket.data.tare.get();
-      totals.net += net;
-
-      totals.moistureDiscount += ticket.data.dryWeight.get() - net;
-      totals.moistureAdjustedWeight += ticket.data.dryWeight.get();
-
-      const total = this.currentContract.pricePerBushel * ticket.data.dryWeight.getBushelWeight(this.currentContract.productInfo);
-      totals.totalBeforeDiscounts += total;
-
-      totals.infested += ticket.discounts.infested;
-      totals.musty += ticket.discounts.musty;
-      totals.sour += ticket.discounts.sour;
-      totals.weathered += ticket.discounts.weathered;
-      totals.inspection += ticket.discounts.inspection;
-
-      totals.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
-
-      console.log(this.selectedTickets, totals)
-    });
-    
-    return totals;
-  }
-
-  public handleSelectChange() {
-    this.allSelected = this.ticketDiscountList?.every(ticket => ticket.includeInReport);
+  public handleSelectChange = (): void => {
     this.selectedTickets = this.selectedTicketsPipe.transform(this.ticketDiscountList);
-    this.totals = this.getTotals();
-  }
-}
-
-class LiquidationTotals {
-  public gross: number;
-  public tare: number;
-  public net: number;
-  public moistureDiscount: number;
-  public moistureAdjustedWeight: number;
-  public totalBeforeDiscounts: number;
-  public infested: number;
-  public musty: number;
-  public sour: number;
-  public weathered: number;
-  public inspection: number;
-  public netToPay: number;
-
-  constructor() {
-    this.gross = this.tare = this.net = this.moistureDiscount = this.moistureAdjustedWeight = 0;
-    this.totalBeforeDiscounts = this.infested = this.musty = this.sour = this.weathered = this.inspection = this.netToPay = 0;
+    this.totals.getTotals(this.selectedTickets, this.currentContract);
   }
 }

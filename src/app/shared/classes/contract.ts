@@ -5,7 +5,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass, units } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
-import { Ticket } from "./ticket";
+import { Ticket, TicketWithDiscount } from "./ticket";
 import { ContractSettings } from "./contract-settings";
 
 declare type contractType = string | boolean;
@@ -631,5 +631,45 @@ interface FuturePriceInfo {
 export interface Exectuive {
     name: string,
     ref: DocumentReference
+}
+
+export class LiquidationTotals {
+    public gross: number = 0;
+    public tare: number = 0;
+    public net: number = 0;
+    public moistureDiscount: number = 0;
+    public moistureAdjustedWeight: number = 0;
+    public totalBeforeDiscounts: number = 0;
+    public infested: number = 0;
+    public musty: number = 0;
+    public sour: number = 0;
+    public weathered: number = 0;
+    public inspection: number = 0;
+    public netToPay: number = 0;
+
+    public getTotals(tickets: TicketWithDiscount[], contract: Contract) {
+        Object.keys(this).forEach(key => this[key] = 0);
+        tickets.forEach(ticket => {
+            this.gross += ticket.data.gross.get();
+            this.tare += ticket.data.tare.get();
+
+            const net = ticket.data.gross.get() - ticket.data.tare.get();
+            this.net += net;
+
+            this.moistureDiscount += ticket.data.dryWeight.get() - net;
+            this.moistureAdjustedWeight += ticket.data.dryWeight.get();
+
+            const total = contract.pricePerBushel * ticket.data.dryWeight.getBushelWeight(contract.productInfo);
+            this.totalBeforeDiscounts += total;
+
+            this.infested += ticket.discounts.infested;
+            this.musty += ticket.discounts.musty;
+            this.sour += ticket.discounts.sour;
+            this.weathered += ticket.discounts.weathered;
+            this.inspection += ticket.discounts.inspection;
+
+            this.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
+        });
+    }
 }
 
