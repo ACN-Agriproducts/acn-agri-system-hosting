@@ -124,12 +124,12 @@
         <td>{{ticket.clientName}}</td>
         <td>{{ticket.contractID}}</td>
         <td>{{ticket.tank}}</td>
-        <td>{{ticket.tare}}</td>
-        <td>{{ticket.gross}}</td>
-        <td>{{ticket.getNet()}}</td>
+        <td>{{ticket.tare | massInUnit:displayUnit}}</td>
+        <td>{{ticket.gross | massInUnit:displayUnit}}</td>
+        <td>{{ticket.getNet() | massInUnit:displayUnit}}</td>
         <td>{{ticket.moisture | number:'0.1'}}</td>
         <td>{{ticket.discount}}</td>
-        <td>{{ticket.dryWeight}}</td>
+        <td>{{ticket.dryWeight | massInUnit:displayUnit}}</td>
       </tr>
       <tr>
         <td></td>
@@ -139,10 +139,10 @@
         <td></td>
         <td></td>
         <td></td>
-        <td>{{totals.products.net[ticketList.key]}}</td>
+        <td>{{totals.products.net[ticketList.key] | massInUnit:displayUnit}}</td>
         <td></td>
-        <td>{{totals.products.net[ticketList.key] - totals.products.dryWeight[ticketList.key]}}</td>
-        <td>{{totals.products.dryWeight[ticketList.key]}}</td></tr>
+        <td>{{totals.products.net[ticketList.key].subtract(totals.products.dryWeight[ticketList.key]) | massInUnit:displayUnit}}</td>
+        <td>{{totals.products.dryWeight[ticketList.key] | massInUnit:displayUnit}}</td></tr>
     </table>
 
     <app-printable-ticket

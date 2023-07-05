@@ -20,6 +20,7 @@ import { TruncatePipe } from './pipes/truncate/truncate.pipe';
 import { MassDisplayPipe } from './pipes/mass/mass-display.pipe';
 import { RoundPipe } from './pipes/round/round.pipe';
 import { TranslatePipe } from './pipes/translate/translate.pipe';
+import { IncludesPipe } from './pipes/includes/includes.pipe';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import { TranslatePipe } from './pipes/translate/translate.pipe';
     MassDisplayPipe,
     TruncatePipe,
     RoundPipe,
-    TranslatePipe
+    TranslatePipe,
+    IncludesPipe
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
@@ -68,7 +70,8 @@ import { TranslatePipe } from './pipes/translate/translate.pipe';
     TruncatePipe,
     MassDisplayPipe,
     RoundPipe,
-    TranslatePipe
+    TranslatePipe,
+    IncludesPipe
   ]
 })
 export class CoreModule { }

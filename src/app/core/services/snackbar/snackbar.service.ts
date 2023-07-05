@@ -13,6 +13,7 @@ export class SnackbarService {
 
   public open(message: string, snackType: snackType = 'info', action?: string) {
     const className = `snackbar-${snackType}`;
+    if(snackType === 'error') console.error(message);
 
     this.snackbar.openFromComponent(SnackbarComponent, {
       duration: snackType === 'error' ? 5000 : 2000,

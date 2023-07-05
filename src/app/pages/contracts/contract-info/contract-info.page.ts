@@ -258,8 +258,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       totals.inspection += ticket.discounts.inspection;
 
       totals.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
-
-      console.log(this.selectedTickets, totals)
     });
     
     return totals;
