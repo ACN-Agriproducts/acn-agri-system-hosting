@@ -13,6 +13,7 @@ import { Ticket } from '@shared/classes/ticket';
 export class BachocoPrintableComponent implements OnInit {
   @Input() contract: Contract;
   @Input() tickets: Ticket[];
+  public today = new Date();
 
   constructor() { }
 

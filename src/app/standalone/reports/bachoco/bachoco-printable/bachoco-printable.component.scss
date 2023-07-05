@@ -8,6 +8,10 @@
     print-color-adjust: exact;
 }
 
+table {
+    width: 100%;
+}
+
 .page-header {
     display: flex;
     text-align: initial;
@@ -30,10 +34,17 @@
                 margin: 1em;
             }
         }
+
+        #client-name {
+            font-size: medium;
+        }
     }
 
     #company-info {
         flex: 1 0 0px;
+        #name {
+            font-size: medium;
+        }
 
         #zip-rfc {
             display: flex;
@@ -53,7 +64,7 @@
         }
 
         *:not(#name) {
-            font-size: x-small;
+            font-size: xx-small;
         }
     }
 
@@ -65,11 +76,13 @@
 
 thead {
     display: table-header-group;
-    height: 185px;
+    max-height: 185px;
+    print-color-adjust: exact;
 }
 
 th, td {
     break-inside: avoid;
+    font-size: x-small;
 }
 
 table {
@@ -88,7 +101,7 @@ tr, td {
     }
 }
 
-td:not(:has(.page-footer)) { 
+td:not(:has(.footer-space)) { 
     border: 1px solid black;
 }
 
@@ -115,10 +128,21 @@ th:not(:has(.page-header)) {
     position: fixed;
     bottom: 0;
     width: 100%;
+    font-size: x-small;
+    border-top: 3px solid gray;
 }
 
 .footer-space {
     height: 1.5rem;
+    border: none !important;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.right-text {
+    text-align: end;
 }
 
 @page {

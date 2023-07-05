@@ -24,10 +24,10 @@
           <div class="page-header">
             <div id="left-header">
               <div id="report-and-logo">
-                <img id='company-logo' style="height: 100px" src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Fcompanylogoonly.png?alt=media&token=cd8bbf25-c1ae-4880-b883-6cfb8f12f9bb'>
+                <img id='company-logo' style="height: 90px" src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Fcompanylogoonly.png?alt=media&token=cd8bbf25-c1ae-4880-b883-6cfb8f12f9bb'>
                 <span>REPORTE DE EMBARQUES</span>
               </div>
-              <span id="client-name">IMPORTADORA DE GRANOS TEPA S.A. DE C.V.</span>
+              <span id="client-name">{{contract?.clientName}}</span>
             </div>
             <div id="company-info">
               <div id="name">AGROPECUARIA LA CAPILLA DEL NORESTE S.A. DE C.V.</div>
@@ -45,39 +45,47 @@
       </tr>
     
       <tr>
-        <th rowspan="2">OUT #</th>
-        <th rowspan="2">OUT DATE</th>
-        <th rowspan="2">TICKET</th>
-        <th rowspan="2">IN #</th>
-        <th rowspan="2">ORIGIN PLANT</th>
-        <th rowspan="2">GROSS WEIGHT</th>
-        <th rowspan="2">TARE WEIGHT</th>
-        <th rowspan="2">NET WEIGHT</th>
-        <th rowspan="2">MOISTURE</th>
+        <th rowspan="2" style="width: 35px">OUT #</th>
+        <th rowspan="2" style="width: 60px">OUT DATE</th>
+        <th rowspan="2" style="width: 45px">TICKET</th>
+        <th rowspan="2" style="width: 35px">IN #</th>
+        <th rowspan="2" style="width: 70px">ORIGIN PLANT</th>
+        <th rowspan="2" style="width: 45px">GROSS WEIGHT</th>
+        <th rowspan="2" style="width: 45px">TARE WEIGHT</th>
+        <th rowspan="2" style="width: 45px">NET WEIGHT</th>
+        <th rowspan="2" style="width: 30px">MOIST.</th>
         <th rowspan="2">DRIVER</th>
-        <th id="header-split-row-top" colspan="2">PLATES</th>
+        <th id="header-split-row-top" colspan="2" >PLATES</th>
         <th rowspan="2">TRUCKING COMPANY</th>
         <th rowspan="2">DESTINY</th>
         <th rowspan="2">REQUEST #</th>
       </tr>
 
       <tr id="header-split-row-bottom">
-        <th id="header-split-row-bottom">TRUCK</th>
-        <th id="header-split-row-bottom">TRAILER</th>
+        <th id="header-split-row-bottom" style="width: 50px">TRUCK</th>
+        <th id="header-split-row-bottom" style="width: 50px">TRAILER</th>
       </tr>
     </thead>
+
+    <tfoot>
+      <tr>
+        <td>
+          <div class="footer-space"></div>
+        </td>
+      </tr>
+    </tfoot>
 
     <tbody>
       <tr *ngFor="let ticket of tickets">
         <td class="center-text">{{ticket.id}}</td>
-        <td class="center-text">{{ticket.dateOut | date:'shortDate'}}</td>
+        <td class="center-text">{{ticket.dateOut | date:'dd/MM/yyyy'}}</td>
         <td class="center-text">{{ticket.id}}</td>
         <td class="center-text">{{ticket.id}}</td>
-        <td>{{ticket.ref.parent.parent.id}}</td>
+        <td>{{ticket.ref.parent.parent.id | titlecase}}</td>
         <td class="right-text">{{ticket.gross.amount}}</td>
         <td class="right-text">{{ticket.tare.amount}}</td>
         <td class="right-text">{{ticket.net.amount}}</td>
-        <td class="center-text">{{ticket.moisture}}</td>
+        <td class="center-text">{{ticket.moisture | number:'1.1'}}</td>
         <td>{{ticket.driver}}</td>
         <td>{{ticket.plates}}</td>
         <td>{{ticket.plates}}</td>
@@ -86,15 +94,9 @@
         <td>{{""}}</td>
       </tr>
     </tbody>
-
-    <tfoot>
-      <tr>
-        <div class="footer-space"></div>
-      </tr>
-    </tfoot>
   </table>
 </div>
 
 <div class="page-footer">
-  <span>Date</span>
+  <span>{{today | date:'fullDate'}}</span>
 </div>
