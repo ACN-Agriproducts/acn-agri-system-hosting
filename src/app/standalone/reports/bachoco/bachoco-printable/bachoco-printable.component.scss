@@ -145,6 +145,10 @@ th:not(:has(.page-header)) {
     text-align: end;
 }
 
+td {
+    padding: 1px;
+}
+
 @page {
     size: letter landscape;
     margin: 0.5in;
