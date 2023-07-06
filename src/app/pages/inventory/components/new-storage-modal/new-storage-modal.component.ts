@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { collection, doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { Plant } from '@shared/classes/plant';
+import { Product } from '@shared/classes/product';
 import { runTransaction } from 'firebase/firestore';
 
 @Component({
@@ -10,8 +12,8 @@ import { runTransaction } from 'firebase/firestore';
   styleUrls: ['./new-storage-modal.component.scss'],
 })
 export class NewStorageModalComponent implements OnInit {
-  @Input() plantRef: DocumentReference;
-  @Input() productList: any[];
+  @Input() plantRef: DocumentReference<Plant>;
+  @Input() productList: Product[];
 
   public storageForm: UntypedFormGroup;
 
@@ -29,8 +31,6 @@ export class NewStorageModalComponent implements OnInit {
       product: [, Validators.required],
       type: [, Validators.required]
     });
-
-    
   }
 
   public async submitForm(): Promise<void> {
@@ -41,12 +41,11 @@ export class NewStorageModalComponent implements OnInit {
         }
 
         let updateDoc = {
-          inventory: plant.data().inventory,
+          inventory: plant.data().inventory.map(i => i.getRawData()),
           inventoryNames: plant.data().inventoryNames
         }
 
         let submitInv = this.storageForm.getRawValue();
-        submitInv.product = doc(collection(this.plantRef.parent.parent, 'products'), submitInv.product);
 
         updateDoc.inventory.push(submitInv);
         updateDoc.inventoryNames.push(submitInv.name);
