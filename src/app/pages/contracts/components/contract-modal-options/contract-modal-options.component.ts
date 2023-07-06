@@ -93,10 +93,13 @@ export class ContractModalOptionsComponent implements OnInit {
 
     const requiredFieldData = {
       marketPrice: this.contract.market_price,
-      price: this.contract.pricePerBushel,
-      quantity: this.contract.quantity
+      price: this.contract.price.amount,
+      priceUnit: this.contract.price.unit,
+      quantity: this.contract.quantity.amount,
+      quantityUnits: this.contract.quantity.defaultUnits
     };
 
+    console.log(this.contract);
     let newFieldData;
     if (Object.entries(requiredFieldData).some(([key, value]) => (value ?? 0) === 0)) {
       const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
@@ -111,8 +114,10 @@ export class ContractModalOptionsComponent implements OnInit {
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       status: "closed",
       market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
-      pricePerBushel: newFieldData?.price ?? requiredFieldData.price,
-      quantity: newFieldData?.quantity ?? requiredFieldData.quantity.getMassInUnit(this.session.getDefaultUnit())
+      price: newFieldData?.price ?? requiredFieldData.price,
+      priceUnit: newFieldData?.priceUnit ?? requiredFieldData.priceUnit,
+      quantity: newFieldData?.quantity ?? requiredFieldData.quantity,
+      quantityUnits: newFieldData?.quantityUnits ?? requiredFieldData.quantityUnits
     })
     .then(() => {
       this.snack.open("Contract Successfully Closed", "success");
