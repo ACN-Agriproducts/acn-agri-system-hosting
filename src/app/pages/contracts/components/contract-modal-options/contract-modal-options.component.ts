@@ -123,4 +123,18 @@ export class ContractModalOptionsComponent implements OnInit {
       this.snack.open("Error updating status", "error");
     });
   }
+
+  public async reopen() {
+    const oldStatus = this.contract.status;
+    this.contract.status = 'active';
+    updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
+      status: "active"
+    }).then(() => {
+      this.snack.open("Contract status updated", "success");
+    }).catch(error => {
+      console.error(error);
+      this.contract.status = oldStatus;
+      this.snack.open("Error updating status", "error");
+    });
+  }
 }
