@@ -45,20 +45,20 @@
       </tr>
     
       <tr>
-        <th rowspan="2" style="width: 35px">OUT #</th>
-        <th rowspan="2" style="width: 60px">OUT DATE</th>
+        <th rowspan="2" style="width: 35px">No. SALIDA</th>
+        <th rowspan="2" style="width: 60px">FECHA DE EMBARQUE</th>
         <th rowspan="2" style="width: 45px">TICKET</th>
-        <th rowspan="2" style="width: 35px">IN #</th>
-        <th rowspan="2" style="width: 70px">ORIGIN PLANT</th>
-        <th rowspan="2" style="width: 45px">GROSS WEIGHT</th>
-        <th rowspan="2" style="width: 45px">TARE WEIGHT</th>
-        <th rowspan="2" style="width: 45px">NET WEIGHT</th>
-        <th rowspan="2" style="width: 30px">MOIST.</th>
-        <th rowspan="2">DRIVER</th>
-        <th id="header-split-row-top" colspan="2" >PLATES</th>
-        <th rowspan="2">TRUCKING COMPANY</th>
-        <th rowspan="2">DESTINY</th>
-        <th rowspan="2">REQUEST #</th>
+        <th rowspan="2" style="width: 35px">FOLIO ENTRADA PLANTA</th>
+        <th rowspan="2" style="width: 70px">BODEGA ORIGEN</th>
+        <th rowspan="2" style="width: 45px">PESO BRUTO</th>
+        <th rowspan="2" style="width: 45px">TARA</th>
+        <th rowspan="2" style="width: 45px">PESO NETO</th>
+        <th rowspan="2" style="width: 30px">HUM.</th>
+        <th rowspan="2">CHOFER</th>
+        <th id="header-split-row-top" colspan="2" >PLACAS</th>
+        <th rowspan="2">COMPAÑIA TRANSPORTISTA</th>
+        <th rowspan="2">DETINO</th>
+        <th rowspan="2">No. PEDIDO</th>
       </tr>
 
       <tr id="header-split-row-bottom">
@@ -98,5 +98,5 @@
 </div>
 
 <div class="page-footer">
-  <i>{{today | date:'fullDate'}}</i>
+  <i>{{today | date:'fullDate':null:'es-MX'}}</i>
 </div>
