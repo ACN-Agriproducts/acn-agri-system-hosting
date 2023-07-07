@@ -158,7 +158,7 @@ export class TicketReportDialogComponent implements OnInit {
       const ticketList = this.ticketList.map(this.ticketYTDFormat);
 
       const inTicketTable = ticketSheet.addTable({
-        name: 'testTable',
+        name: 'ticket_table',
         ref: 'A1',
         headerRow: true,
         totalsRow: true,
