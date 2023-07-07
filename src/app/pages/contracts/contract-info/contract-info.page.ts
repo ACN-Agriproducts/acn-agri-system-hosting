@@ -19,6 +19,7 @@ import { DiscountTables } from '@shared/classes/discount-tables';
   styleUrls: ['./contract-info.page.scss'],
 })
 export class ContractInfoPage implements OnInit, OnDestroy {
+  @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
 
   public id: string;
   public type: string;
@@ -31,10 +32,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public totals: LiquidationTotals = new LiquidationTotals();
   public selectedTickets: TicketWithDiscount[] = [];
   public discountTables: DiscountTables;
-
-  private currentSub: Subscription;
-
-  @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
   
   constructor(
     private route: ActivatedRoute,
@@ -65,9 +62,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.currentSub != null) {
-      this.currentSub.unsubscribe();
-    }
+    delete this.totals;
   }
 
   public onDownloadLiquidation = async () => {
@@ -139,9 +134,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         pricePerBushel: this.currentContract.pricePerBushel,
         adjustedPrice: this.currentContract.pricePerBushel,
         total: this.currentContract.pricePerBushel * undamagedWeight.getBushelWeight(this.currentContract.productInfo),
-        infested: ticket.discounts.infested,
-        inspection: ticket.discounts.inspection,
-        netToPay: this.currentContract.pricePerBushel * dryWeight.getBushelWeight(this.currentContract.productInfo) - ticket.discounts.infested - ticket.discounts.inspection
+        infested: ticket.discounts.priceDiscounts.infested,
+        inspection: ticket.discounts.priceDiscounts.inspection,
+        netToPay: this.currentContract.pricePerBushel * dryWeight.getBushelWeight(this.currentContract.productInfo) - ticket.discounts.priceDiscounts.infested - ticket.discounts.priceDiscounts.inspection
       });
     });
 

@@ -1,3 +1,6 @@
+
+$lightlightgray: rgb(230, 230, 230);
+
 :host {
     display: block;
     height: auto; //203.2mm;
@@ -99,7 +102,7 @@ table {
 }
 
 .even {
-    background-color: lightgray;
+    background-color: $lightlightgray;
 }
 
 .odd {

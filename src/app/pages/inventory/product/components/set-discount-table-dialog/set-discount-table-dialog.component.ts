@@ -25,7 +25,7 @@ export class SetDiscountTableDialogComponent implements OnInit {
   public discountStep: number;
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  readonly discountFieldsList = Object.keys(new TicketDiscounts());
+  readonly discountFieldsList = Object.keys((new TicketDiscounts()).weightDiscounts);
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DiscountTable,

@@ -27,31 +27,31 @@
     <ion-text>{{ticket.data.getNet() | massInUnit}}</ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.infested" type="number" (ngModelChange)="selectChange.emit()"/>
+        <input matInput [(ngModel)]="ticket.discounts.priceDiscounts.infested" type="number" (ngModelChange)="selectChange.emit()" min="0"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.musty" type="number" (ngModelChange)="selectChange.emit()"/>
+        <input matInput [(ngModel)]="ticket.discounts.priceDiscounts.musty" type="number" (ngModelChange)="selectChange.emit()" min="0"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.sour" type="number" (ngModelChange)="selectChange.emit()"/>
+        <input matInput [(ngModel)]="ticket.discounts.priceDiscounts.sour" type="number" (ngModelChange)="selectChange.emit()" min="0"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.weathered" type="number" (ngModelChange)="selectChange.emit()"/>
+        <input matInput [(ngModel)]="ticket.discounts.priceDiscounts.weathered" type="number" (ngModelChange)="selectChange.emit()" min="0"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>
     <ion-text>
       <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.inspection" type="number" (ngModelChange)="selectChange.emit()"/>
+        <input matInput [(ngModel)]="ticket.discounts.priceDiscounts.inspection" type="number" (ngModelChange)="selectChange.emit()" min="0"/>
         <span matPrefix>$ &nbsp;</span>
       </mat-form-field>
     </ion-text>

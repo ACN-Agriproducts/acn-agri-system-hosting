@@ -5,7 +5,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass, units } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
-import { Ticket, TicketWithDiscount } from "./ticket";
+import { Ticket, TicketDiscounts, TicketWithDiscount } from "./ticket";
 import { ContractSettings } from "./contract-settings";
 
 declare type contractType = string | boolean;
@@ -637,38 +637,33 @@ export class LiquidationTotals {
     public gross: number = 0;
     public tare: number = 0;
     public net: number = 0;
-    public moistureDiscount: number = 0;
-    public moistureAdjustedWeight: number = 0;
-    public totalBeforeDiscounts: number = 0;
-    public infested: number = 0;
-    public musty: number = 0;
-    public sour: number = 0;
-    public weathered: number = 0;
-    public inspection: number = 0;
+    public adjustedWeight: number = 0;
+    public beforeFinalDiscounts: number = 0;
     public netToPay: number = 0;
+    public discounts: TicketDiscounts = new TicketDiscounts();
 
     public getTotals(tickets: TicketWithDiscount[], contract: Contract) {
-        Object.keys(this).forEach(key => this[key] = 0);
+        Object.keys(this).forEach(key => this[key] = key !== "discounts" ? 0 : this[key]);
+        Object.keys(this.discounts.weightDiscounts).forEach(key => this.discounts.weightDiscounts[key] = 0);
+        Object.keys(this.discounts.priceDiscounts).forEach(key => this.discounts.priceDiscounts[key] = 0);
+
         tickets.forEach(ticket => {
             this.gross += ticket.data.gross.get();
             this.tare += ticket.data.tare.get();
+            this.net += ticket.data.net.get();
 
-            const net = ticket.data.gross.get() - ticket.data.tare.get();
-            this.net += net;
-
-            this.moistureDiscount += ticket.data.dryWeight.get() - net;
-            this.moistureAdjustedWeight += ticket.data.dryWeight.get();
+            for (const key of Object.keys(this.discounts.weightDiscounts)) {
+                this.discounts.weightDiscounts[key] += ticket.discounts.weightDiscounts[key];
+            }
+            this.adjustedWeight += ticket.data.net.get() - ticket.discounts.weightDiscountTotal();
 
             const total = contract.pricePerBushel * ticket.data.dryWeight.getBushelWeight(contract.productInfo);
-            this.totalBeforeDiscounts += total;
+            this.beforeFinalDiscounts += total;
 
-            this.infested += ticket.discounts.infested;
-            this.musty += ticket.discounts.musty;
-            this.sour += ticket.discounts.sour;
-            this.weathered += ticket.discounts.weathered;
-            this.inspection += ticket.discounts.inspection;
-
-            this.netToPay += total - ticket.discounts.infested - ticket.discounts.inspection;
+            for (const key of Object.keys(this.discounts.priceDiscounts)) {
+                this.discounts.priceDiscounts[key] += ticket.discounts.priceDiscounts[key];
+            }
+            this.netToPay += total - ticket.discounts.priceDiscountTotal();
         });
     }
 }
