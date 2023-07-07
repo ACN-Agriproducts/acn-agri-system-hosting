@@ -225,21 +225,22 @@ export class ContractsPage implements AfterViewInit {
     const contractsTable = worksheet.addTable({
       name: 'contract-table',
       ref: 'A1',
+      headerRow: true,
       style: {
         theme: "TableStyleMedium2",
         showRowStripes: true,
       },
       columns: [
-        {name: "ID"},
-        {name: "Contract Type"},
-        {name: "Customer"},
-        {name: "Date"},
-        {name: "Status"},
-        {name: "Product"},
-        {name: "Delivered"},
-        {name: "Quantity"}, 
-        {name: "Price ($/bu)"},
-        {name: "Price ($/lbs)"}
+        {name: "ID", filterButton: true},
+        {name: "Contract Type", filterButton: true},
+        {name: "Customer", filterButton: true},
+        {name: "Date", filterButton: true},
+        {name: "Status", filterButton: true},
+        {name: "Product", filterButton: true},
+        {name: "Delivered (lbs)", filterButton: true},
+        {name: "Quantity (lbs)", filterButton: true}, 
+        {name: "Price ($/bu)", filterButton: true},
+        {name: "Price ($/lbs)", filterButton: true}
       ],
       rows:[]
     });
@@ -250,7 +251,7 @@ export class ContractsPage implements AfterViewInit {
         contract.type,
         contract.clientName,
         contract.date,
-        contract.status,
+        contract.status.toString(),
         contract.product.id,
         contract.currentDelivered.getMassInUnit('lbs'),
         contract.quantity.getMassInUnit('lbs'),
