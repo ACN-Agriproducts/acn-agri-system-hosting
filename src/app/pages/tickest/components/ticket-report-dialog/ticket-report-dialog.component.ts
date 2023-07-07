@@ -213,6 +213,11 @@ export class TicketReportDialogComponent implements OnInit {
         map.forEach((val, col) => {
           row.push(ticket[ticket.void ? val.void : val.key] ?? "");
         });
+        if(!ticket.void) {
+          row[9] = (row[9] as Mass).getMassInUnit(this.session.getDefaultUnit());
+          row[10] = (row[10] as Mass).getMassInUnit(this.session.getDefaultUnit());
+          row[13] = (row[13] as Mass).getMassInUnit(this.session.getDefaultUnit());
+        }
 
         inTicketTable.addRow(row);
 
