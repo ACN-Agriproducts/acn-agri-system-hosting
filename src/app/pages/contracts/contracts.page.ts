@@ -223,7 +223,7 @@ export class ContractsPage implements AfterViewInit {
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet('Contracts');
     const contractsTable = worksheet.addTable({
-      name: 'contract-table',
+      name: 'contract_table',
       ref: 'A1',
       headerRow: true,
       style: {
