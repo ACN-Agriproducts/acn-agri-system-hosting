@@ -27,5 +27,11 @@
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
   </ng-container>
+  <ng-container *ngIf="userPermissions.admin">
+    <ion-item lines="none" button (click)='fixFields()'>
+      Modify Price and Quantity
+      <ion-icon slot='end' name="create-outline"></ion-icon>
+    </ion-item>
+  </ng-container>
   
 </ion-list>
