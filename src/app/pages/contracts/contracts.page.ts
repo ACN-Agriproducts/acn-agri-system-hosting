@@ -10,7 +10,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
-
+import * as Excel from 'exceljs';
 
 @Component({
   selector: 'app-contracts',
@@ -220,8 +220,76 @@ export class ContractsPage implements AfterViewInit {
   }
 
   public exportButton() {
-    console.log(this.exportList);
-    // this.dialog.open(ExportModalComponent);
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet('Contracts');
+    const contractsTable = worksheet.addTable({
+      name: 'contract-table',
+      ref: 'A1',
+      style: {
+        theme: "TableStyleMedium2",
+        showRowStripes: true,
+      },
+      columns: [
+        {name: "ID"},
+        {name: "Contract Type"},
+        {name: "Customer"},
+        {name: "Date"},
+        {name: "Status"},
+        {name: "Product"},
+        {name: "Delivered"},
+        {name: "Quantity"}, 
+        {name: "Price ($/bu)"},
+        {name: "Price ($/lbs)"}
+      ],
+      rows:[]
+    });
+
+    [...this.exportList].forEach(contract => {
+      contractsTable.addRow([
+        contract.id,
+        contract.type,
+        contract.clientName,
+        contract.date,
+        contract.status,
+        contract.product.id,
+        contract.currentDelivered.getMassInUnit('lbs'),
+        contract.quantity.getMassInUnit('lbs'),
+        contract.pricePerBushel,
+        contract.price.getPricePerUnit('lbs', contract.quantity)
+      ]);
+    });
+    contractsTable.commit();
+
+    worksheet.columns.forEach(column => {
+      let maxLength = 0;
+
+      column.eachCell({ includeEmpty: false }, cell => {
+        const cellLength = (cell.value ?? null) instanceof Date 
+          ? cell.value?.toLocaleString().split(' ')[0].length ?? 10 
+          : cell.value?.toLocaleString().length ?? 10;
+          
+        if (maxLength < cellLength) maxLength = cellLength;
+      });
+
+      column.width = maxLength < 10 ? 10 : maxLength > 35 ? 35 : maxLength;
+    });
+
+    
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("style", "display: none");
+      a.href = url;
+      a.download = `CONTRACTS-EXPORT.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    });
   }
 
   public openContractOptions= async (event: any, contract: Contract) => {
