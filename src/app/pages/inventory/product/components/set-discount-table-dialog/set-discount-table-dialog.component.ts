@@ -5,7 +5,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DiscountTable } from '@shared/classes/discount-tables';
-import { TicketDiscounts } from '@shared/classes/ticket';
+import { WeightDiscounts } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-set-discount-table-dialog',
@@ -25,7 +25,7 @@ export class SetDiscountTableDialogComponent implements OnInit {
   public discountStep: number;
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  readonly discountFieldsList = Object.keys((new TicketDiscounts()).weightDiscounts);
+  readonly discountFieldsList = Object.keys(new WeightDiscounts);
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DiscountTable,

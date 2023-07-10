@@ -1,10 +1,9 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, KeyValueDiffers, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { Contract, LiquidationTotals } from "@shared/classes/contract";
-import { TicketDiscounts, Ticket, TicketWithDiscount } from '@shared/classes/ticket';
 import { Functions, httpsCallable } from '@angular/fire/functions';
+import { Ticket, TicketWithDiscounts, WeightDiscounts, PriceDiscounts } from '@shared/classes/ticket';
 
 import * as Excel from 'exceljs';
 import { Firestore } from '@angular/fire/firestore';
@@ -27,10 +26,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public currentContract: Contract;
   public ready: boolean = false;
   public ticketList: Ticket[];
-  public ticketDiscountList: TicketWithDiscount[];
+  public ticketDiscountList: TicketWithDiscounts[];
   public showLiquidation: boolean = false;
   public totals: LiquidationTotals = new LiquidationTotals();
-  public selectedTickets: TicketWithDiscount[] = [];
+  public selectedTickets: TicketWithDiscounts[] = [];
   public discountTables: DiscountTables;
   
   constructor(
@@ -40,12 +39,14 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private snack: SnackbarService,
     private selectedTicketsPipe: SelectedTicketsPipe,
     private session: SessionInfo,
+    private differs: KeyValueDiffers,
     ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.type = this.route.snapshot.paramMap.get('type');
     this.currentCompany = this.session.getCompany();
+    this.differs
 
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
@@ -53,7 +54,8 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.currentCompany, contract.product.id);
       this.ticketDiscountList = this.ticketList.map(ticket => ({
         data: ticket,
-        discounts: new TicketDiscounts(ticket, this.discountTables),
+        weightDiscounts: new WeightDiscounts(ticket, this.discountTables),
+        priceDiscounts: new PriceDiscounts(),
         includeInReport: false
       }));
       
@@ -63,6 +65,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     delete this.totals;
+  }
+
+  ngDoCheck() {
+
   }
 
   public onDownloadLiquidation = async () => {
@@ -134,9 +140,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         pricePerBushel: this.currentContract.pricePerBushel,
         adjustedPrice: this.currentContract.pricePerBushel,
         total: this.currentContract.pricePerBushel * undamagedWeight.getBushelWeight(this.currentContract.productInfo),
-        infested: ticket.discounts.priceDiscounts.infested,
-        inspection: ticket.discounts.priceDiscounts.inspection,
-        netToPay: this.currentContract.pricePerBushel * dryWeight.getBushelWeight(this.currentContract.productInfo) - ticket.discounts.priceDiscounts.infested - ticket.discounts.priceDiscounts.inspection
+        infested: ticket.priceDiscounts.infested,
+        inspection: ticket.priceDiscounts.inspection,
+        netToPay: this.currentContract.pricePerBushel * dryWeight.getBushelWeight(this.currentContract.productInfo) - ticket.priceDiscounts.infested - ticket.priceDiscounts.inspection
       });
     });
 
@@ -207,7 +213,8 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       const ticketsToAdd = tickets.filter(t => !this.ticketDiscountList.some(d => d.data.id == t.id));
       this.ticketDiscountList.push(...ticketsToAdd.map(ticket => ({
         data: ticket,
-        discounts: new TicketDiscounts(ticket, this.discountTables),
+        weightDiscounts: new WeightDiscounts(ticket, this.discountTables),
+        priceDiscounts: new PriceDiscounts(),
         includeInReport: false
       })));
     }).catch(error => {
@@ -225,6 +232,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
   public handleSelectChange = (): void => {
     this.selectedTickets = this.selectedTicketsPipe.transform(this.ticketDiscountList);
-    this.totals.getTotals(this.selectedTickets, this.currentContract);
+    this.totals = new LiquidationTotals(this.selectedTickets, this.currentContract);
   }
 }

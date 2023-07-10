@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TicketWithDiscount } from '@shared/classes/ticket';
+import { TicketWithDiscounts } from '@shared/classes/ticket';
 
 @Pipe({
   name: 'selectedTickets'
 })
 export class SelectedTicketsPipe implements PipeTransform {
 
-  transform(tickets: TicketWithDiscount[]): TicketWithDiscount[] {
+  transform(tickets: TicketWithDiscounts[]): TicketWithDiscounts[] {
     return tickets?.filter(ticket => ticket.includeInReport) ?? [];
   }
 

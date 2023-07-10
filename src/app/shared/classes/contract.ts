@@ -2,11 +2,12 @@ import { collection, CollectionReference, doc, DocumentData, DocumentReference, 
 import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Mass, units } from "./mass";
+import { Mass } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
-import { Ticket, TicketDiscounts, TicketWithDiscount } from "./ticket";
 import { ContractSettings } from "./contract-settings";
+import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from "./ticket";
+
 
 declare type contractType = string | boolean;
 declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
@@ -640,30 +641,30 @@ export class LiquidationTotals {
     public adjustedWeight: number = 0;
     public beforeFinalDiscounts: number = 0;
     public netToPay: number = 0;
-    public discounts: TicketDiscounts = new TicketDiscounts();
+    public weightDiscounts: WeightDiscounts = new WeightDiscounts();
+    public priceDiscounts: PriceDiscounts = new PriceDiscounts();
 
-    public getTotals(tickets: TicketWithDiscount[], contract: Contract) {
-        Object.keys(this).forEach(key => this[key] = key !== "discounts" ? 0 : this[key]);
-        Object.keys(this.discounts.weightDiscounts).forEach(key => this.discounts.weightDiscounts[key] = 0);
-        Object.keys(this.discounts.priceDiscounts).forEach(key => this.discounts.priceDiscounts[key] = 0);
+    constructor(tickets?: TicketWithDiscounts[], contract?: Contract) {
+        if (!tickets || !contract) return;
 
         tickets.forEach(ticket => {
             this.gross += ticket.data.gross.get();
             this.tare += ticket.data.tare.get();
             this.net += ticket.data.net.get();
 
-            for (const key of Object.keys(this.discounts.weightDiscounts)) {
-                this.discounts.weightDiscounts[key] += ticket.discounts.weightDiscounts[key];
+            for (const key of Object.keys(this.weightDiscounts)) {
+                this.weightDiscounts[key] += ticket.weightDiscounts[key];
             }
-            this.adjustedWeight += ticket.data.net.get() - ticket.discounts.weightDiscountTotal();
+            const tempAdjustedWeight = ticket.data.net.get() - ticket.weightDiscounts.total();
+            this.adjustedWeight += tempAdjustedWeight;
 
-            const total = contract.pricePerBushel * ticket.data.dryWeight.getBushelWeight(contract.productInfo);
-            this.beforeFinalDiscounts += total;
+            const tempBeforeFinalDiscounts = contract.price.getPricePerUnit("lbs", contract.quantity) * tempAdjustedWeight;
+            this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
 
-            for (const key of Object.keys(this.discounts.priceDiscounts)) {
-                this.discounts.priceDiscounts[key] += ticket.discounts.priceDiscounts[key];
+            for (const key of Object.keys(this.priceDiscounts)) {
+                this.priceDiscounts[key] += ticket.priceDiscounts[key];
             }
-            this.netToPay += total - ticket.discounts.priceDiscountTotal();
+            this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
         });
     }
 }

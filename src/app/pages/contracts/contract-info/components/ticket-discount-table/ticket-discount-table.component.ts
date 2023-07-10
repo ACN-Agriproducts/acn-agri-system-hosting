@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Ticket } from '@shared/classes/ticket';
+import { TicketWithDiscounts } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-ticket-discount-table',
@@ -7,13 +7,11 @@ import { Ticket } from '@shared/classes/ticket';
   styleUrls: ['./ticket-discount-table.component.scss'],
 })
 export class TicketDiscountTableComponent implements OnInit {
-  @Input() ticketDiscountList: { data: Ticket, discounts: any, includeInReport: boolean }[];
+  @Input() ticketDiscountList: TicketWithDiscounts[];
 
-  @Output("selectChange") selectChange: EventEmitter<any> = new EventEmitter<any>(); 
+  @Output("selectChange") selectChange: EventEmitter<any> = new EventEmitter<any>();
 
   constructor() { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 }

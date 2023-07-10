@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Contract, LiquidationTotals } from '@shared/classes/contract';
-import { TicketDiscounts, TicketWithDiscount } from '@shared/classes/ticket';
+import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
+
 
 @Component({
   selector: 'app-contract-liquidation-long',
@@ -9,7 +10,7 @@ import { TicketDiscounts, TicketWithDiscount } from '@shared/classes/ticket';
 })
 export class ContractLiquidationLongComponent implements OnInit {
   @Input() contract: Contract;
-  @Input() selectedTickets: TicketWithDiscount[];
+  @Input() selectedTickets: TicketWithDiscounts[];
   @Input() totals: LiquidationTotals;
 
   public date: Date = new Date();
@@ -27,10 +28,10 @@ export class ContractLiquidationLongComponent implements OnInit {
   name: 'discounts'
 })
 export class DiscountsPipe implements PipeTransform {
-  
-  transform(discounts: TicketDiscounts, priceDiscounts?: boolean): number {
-    if (priceDiscounts) return discounts.priceDiscountTotal();
-    return discounts.weightDiscountTotal();
+
+  transform(discounts: WeightDiscounts | PriceDiscounts): number {
+    if (discounts instanceof PriceDiscounts) console.log(discounts.total())
+    return discounts.total();
   }
 
 }

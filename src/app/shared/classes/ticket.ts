@@ -304,51 +304,47 @@ export class Ticket extends FirebaseDocInterface{
 }
 
 
-export declare type TicketWithDiscount = {
+export declare type TicketWithDiscounts = {
     data: Ticket, 
-    discounts: TicketDiscounts, 
+    weightDiscounts: WeightDiscounts, 
+    priceDiscounts: PriceDiscounts, 
     includeInReport: boolean
 };
 
-export class TicketDiscounts {
-    public weightDiscounts = {
-        brokenGrain: 0,
-        damagedGrain: 0,
-        dryWeight: 0,
-        dryWeightPercent: 0,
-        foreignMatter: 0,
-        moisture: 0,
-        PPB: 0,
-        weight: 0,
-        impurities: 0,
-    };
-    
-    public priceDiscounts = {
-        infested: 0,
-        musty: 0,
-        sour: 0,
-        weathered: 0,
-        inspection: 0,
-    };
-
-    public constructor(ticket?: Ticket, discountTables?: DiscountTables) {
-        if (!ticket || !discountTables) return;
-        this.getWeightDiscounts(ticket, discountTables);
+class Discounts {
+    public total(): number {
+        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
     }
+}
 
-    public getWeightDiscounts(ticket: Ticket, discountTables: DiscountTables) {
-        for (const key of Object.keys(this.weightDiscounts)) {
+export class PriceDiscounts extends Discounts {
+    public infested: number = 0;
+    public musty: number = 0;
+    public sour: number = 0;
+    public weathered: number = 0;
+    public inspection: number = 0;
+}
+
+export class WeightDiscounts extends Discounts {
+    brokenGrain: number = 0;
+    damagedGrain: number = 0;
+    dryWeight: number = 0;
+    dryWeightPercent: number = 0;
+    foreignMatter: number = 0;
+    moisture: number = 0;
+    PPB: number = 0;
+    weight: number = 0;
+    impurities: number = 0;
+
+    constructor(ticket?: Ticket, discountTables?: DiscountTables) {
+        super();
+
+        if (!ticket || !discountTables) return;
+
+        for (const key of Object.keys(this)) {
             const table = discountTables.tables.find(table => table.fieldName === key);
             const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
-            this.weightDiscounts[key] = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
+            this[key] = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
         }
-    }
-
-    public weightDiscountTotal(): number {
-        return Object.values(this.weightDiscounts).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-    }
-
-    public priceDiscountTotal(): number {
-        return Object.values(this.priceDiscounts).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
     }
 }
