@@ -1,36 +1,40 @@
-<app-header-toolbar titulo="Directory"></app-header-toolbar>
-
-<ion-content class="ion-padding">
-	<div class="content-header margin-inline">
-		<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
-		<ion-button (click)="openNewContact()">
-			<ion-text slot="end">New Contact</ion-text>
-		</ion-button>
-	</div>
-	<ion-card>
-		<div class="content-subtitle">Contacts ({{ searchResults().length ?? 0 }})</div>
-		<div class="content-item" (contextmenu)="openOptions($event)"
-			*ngFor="let contact of searchResults(); let i = index">
-			<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
-				<ion-avatar slot="start">
-					<img src="../../../assets/avatar.svg">
-				</ion-avatar>
-				<ion-label>
-					<div class="content-label">
-						<span>{{ contact.name }} </span>
-						<span class="label-text">{{ contact.getType().join(" / ") | titlecase }}</span>
-					</div>
-				</ion-label>
-				<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact().phone ?? "" }}</ion-label>
-				<ion-buttons class="ion-hide-sm-down" slot="end">
-					<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
-						<ion-icon name="create-outline"></ion-icon>
-					</ion-button>
-					<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
-						<ion-icon name="archive-outline"></ion-icon>
-					</ion-button>
-				</ion-buttons>
-			</ion-item>
+<ng-container *transloco="let t, read: 'directory'">
+	<app-header-toolbar [titulo]="t('Directory')"></app-header-toolbar>
+	
+	<ion-content class="ion-padding">
+		<div class="content-header margin-inline">
+			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
+			<ion-button (click)="openNewContact()">
+				<ion-text slot="end">{{t('New Contact')}}</ion-text>
+			</ion-button>
 		</div>
-	</ion-card>
-</ion-content>
+		<ion-card>
+			<div class="content-subtitle">{{t('Contacts')}} ({{ searchResults().length ?? 0 }})</div>
+			<div class="content-item" (contextmenu)="openOptions($event)"
+				*ngFor="let contact of searchResults(); let i = index">
+				<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
+					<ion-avatar slot="start">
+						<img src="../../../assets/avatar.svg">
+					</ion-avatar>
+					<ion-label>
+						<div class="content-label">
+							<span>{{ contact.name }} </span>
+							<span class="label-text">
+								{{ contact | contactTagsDisplay | titlecase }}
+							</span>
+						</div>
+					</ion-label>
+					<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact().phone ?? "" }}</ion-label>
+					<ion-buttons class="ion-hide-sm-down" slot="end">
+						<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
+							<ion-icon name="create-outline"></ion-icon>
+						</ion-button>
+						<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
+							<ion-icon name="archive-outline"></ion-icon>
+						</ion-button>
+					</ion-buttons>
+				</ion-item>
+			</div>
+		</ion-card>
+	</ion-content>
+</ng-container>

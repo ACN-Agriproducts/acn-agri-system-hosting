@@ -4,6 +4,8 @@ import { AuthenticationService } from '@core/services/Authentication/Authenticat
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
+import { TranslocoService } from '@ngneat/transloco';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 
 @Component({
   selector: 'app-layout',
@@ -14,90 +16,90 @@ export class LayoutComponent implements OnInit {
   public selectedIndex = 0;
   public appPages = [
     {
-      title: 'Dashboard',
+      title: 'dashboard',
       url: '/dashboard/home',
       icon: 'speedometer',
       permission: p => true,
       permissionName: ''
     },
     {
-      title: 'Tickets',
+      title: 'tickets',
       url: '/dashboard/tickets',
       icon: 'receipt',
       permission: p => this.hasPermission('tickets', p),
       permissionName: 'tickets'
     },
     {
-      title: 'Inventory',
+      title: 'inventory',
       url: '/dashboard/inventory',
       icon: 'podium',
       permission: p => this.hasPermission('inventory', p),
       permissionName: 'inventory'
     },
     {
-      title: 'Production Orders',
+      title: 'production orders',
       url: 'dashboard/production-orders',
       icon: 'bag-handle',
       permission: p => this.hasPermission('production-orders', p),
       permissionName: 'production-orders'
     },
     {
-      title: 'Warehouse Receipts',
+      title: 'warehouse receipts',
       url: 'dashboard/warehouse-receipts',
       icon: 'file-tray-full',
       permission: p => this.hasPermission('warehouseReceipts', p),
       permissionName: 'warehouseReceipts'
     },
     {
-      title: 'Invoices',
+      title: 'invoices',
       url: '/dashboard/invoices',
       icon: 'document-text',
       permission: p => this.hasPermission('invoices', p),
       permissionName: 'invoices'
     },
     {
-      title: 'Contracts',
+      title: 'contracts',
       url: '/dashboard/contracts',
       icon: 'newspaper',
       permission: p => this.hasPermission('contracts', p),
       permissionName: 'contracts'
     },
     {
-      title: 'Treasury',
+      title: 'treasury',
       url: '/dashboard/treasury',
       icon: 'wallet',
       permission: p => this.hasPermission('treasury', p) && p.developer,
       permissionName: 'treasury'
     },
     {
-      title: 'Directory',
+      title: 'directory',
       url: '/dashboard/directory',
       icon: 'library',
       permission: p => this.hasPermission('directory', p),
       permissionName: 'contacts'
     },
     {
-      title: 'Employees',
+      title: 'employees',
       url: '/dashboard/employees',
       icon: 'people',
       permission: p => this.hasPermission('tickets', p) && p.developer,
       permissionName: 'employees'
     },
     {
-      title: "Portfolio",
+      title: "portfolio",
       url: '/dashboard/portfolio',
       icon: 'bag',
       permission: p => this.hasPermission('tickets', p) && p.developer,
       permissionName: 'portfolio'
     },
     {
-      title: "Reports",
+      title: "reports",
       url: '/dashboard/reports',
       icon: 'bar-chart',
       permission: p => this.hasPermission('tickets', p),
     }, 
     {
-      title: "Precios",
+      title: "prices",
       url: '/dashboard/prices',
       icon: 'pricetag',
       permission: p => this.hasPermission('prices', p) || p?.prices?.write,
@@ -113,21 +115,17 @@ export class LayoutComponent implements OnInit {
   constructor(
     private authentication: AuthenticationService,
     private navController: NavController,
-    private storage: Storage,
     private serviceSettings: SettingsService,
+    private session: SessionInfo,
     // private nav: IonNav
   ) { }
 
   ngOnInit(): void {
-    this.storage.get('user').then(data => {
-      this.dataUser = data;
-      this.permissions = data.currentPermissions;
-      if(!this.permissions) {
-        this.authentication.logout();
-      }
-
-      this.ready = true;
-    });
+    this.dataUser = this.session.getUser();
+    this.permissions = this.session.getPermissions();
+    if(!this.permissions) {
+      this.authentication.logout();
+    }
     
     this.collapse$ = this.serviceSettings.collapseMenu$;
     this.displayName$ = this.serviceSettings.displayName$;

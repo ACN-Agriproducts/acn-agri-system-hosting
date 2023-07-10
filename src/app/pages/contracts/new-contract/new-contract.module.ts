@@ -26,7 +26,7 @@ import { ContractPrintablesModule } from 'src/app/modules/contract-printables/co
     SharedModule,
     NgxPrintModule,
     ContractModule,
-    ContractPrintablesModule
+    ContractPrintablesModule,
   ],
   declarations: [NewContractPage, DisplayContractComponent, UniqueIdValidatorDirective],
 })

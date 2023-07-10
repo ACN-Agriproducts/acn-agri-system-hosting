@@ -1,4 +1,3 @@
-import { DataUser } from './../../models/DataUser';
 import { Injectable } from '@angular/core';
 import { Auth, signOut } from '@angular/fire/auth';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -18,7 +17,7 @@ export class AuthenticationService {
     signOut(this.auth);
   }
 
-  public registerNewUser = (dataUser: DataUser) => {
+  public registerNewUser = (dataUser: any) => {
     return createUserWithEmailAndPassword(this.auth, dataUser.email, dataUser.password)
   }
   // public user = () => {

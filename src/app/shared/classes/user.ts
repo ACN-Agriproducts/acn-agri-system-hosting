@@ -11,6 +11,7 @@ export class User extends FirebaseDocInterface {
     pictureURL: string;
     pictureRef: string;
     worksAt: string[];
+    language: string;
 
     constructor(snapshotOrData: QueryDocumentSnapshot<any> | any) {
         super(snapshotOrData, User.converter);
@@ -26,6 +27,7 @@ export class User extends FirebaseDocInterface {
         this.email = data.email;
         this.pictureRef = data.pictureURL;
         this.worksAt = data.worksAt;
+        this.language = data.language;
     }
 
     public static converter = {
@@ -34,6 +36,13 @@ export class User extends FirebaseDocInterface {
                 createdAt: data.createdAt,
                 email: data.email,
                 name: data.name,
+                type: data.type,
+                position: data.position,
+                pictureURL: data.pictureURL,
+                pictureRef: data.pictureRef,
+                worksAt: data.worksAt,
+                language: data.language,
+                
             }
         },
         fromFirestore(snapshot:QueryDocumentSnapshot<any>, options: SnapshotOptions): User {

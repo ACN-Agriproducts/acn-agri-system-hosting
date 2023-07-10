@@ -9,6 +9,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-directory',
@@ -31,6 +32,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     private popoverController: PopoverController,
     private session: SessionInfo,
     private snack: SnackbarService,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {
@@ -123,7 +125,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
       contact.tags = data.tags;
       contact.zipCode = data.zipCode;
 
-      this.snack.open("Contact successfully updated", "success");
+      this.snack.open(this.transloco.translate("contact-update-success"), "success");
     })
     .catch(error => {
       this.snack.open(error, "error");

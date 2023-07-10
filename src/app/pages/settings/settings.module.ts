@@ -18,7 +18,7 @@ import { NewUserComponent } from './new-user/new-user.component';
     FormsModule,
     IonicModule,
     SettingsPageRoutingModule,
-    CoreModule
+    CoreModule,
   ],
   declarations: [SettingsPage, SystemSettingsComponent, UserDataComponent, NewUserComponent]
 })

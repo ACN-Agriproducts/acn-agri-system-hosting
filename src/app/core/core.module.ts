@@ -21,6 +21,7 @@ import { MassDisplayPipe } from './pipes/mass/mass-display.pipe';
 import { RoundPipe } from './pipes/round/round.pipe';
 import { TranslatePipe } from './pipes/translate/translate.pipe';
 import { IncludesPipe } from './pipes/includes/includes.pipe';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { IncludesPipe } from './pipes/includes/includes.pipe';
     MaterialModule,
     NgxDropzoneModule,
     DirectivesCoreModule,
+    TranslocoModule
     
     // IonicStorageModule.forRoot()
     
@@ -53,7 +55,8 @@ import { IncludesPipe } from './pipes/includes/includes.pipe';
     TruncatePipe,
     RoundPipe,
     TranslatePipe,
-    IncludesPipe
+    IncludesPipe,
+    TranslocoModule
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,

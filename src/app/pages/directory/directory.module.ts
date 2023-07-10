@@ -11,6 +11,7 @@ import { DirectoryPage } from './directory.page';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
+import { ContactTagsDisplayPipe } from './components/contact-tags-display/contact-tags-display.pipe';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { EditContactDialogComponent } from './components/edit-contact-dialog/edi
     IonicModule,
     DirectoryPageRoutingModule,
     CoreModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ContactTagsDisplayPipe
   ],
   declarations: [
     DirectoryPage, 

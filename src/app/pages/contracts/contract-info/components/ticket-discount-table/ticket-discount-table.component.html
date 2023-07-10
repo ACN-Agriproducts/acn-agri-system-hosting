@@ -1,15 +1,15 @@
-<ion-card>
+<ion-card *transloco="let t, read: 'contracts.info'">
   <div class="table-row header">
-    <ion-text>Include</ion-text>
-    <ion-text>Date</ion-text>
-    <ion-text>ID</ion-text>
-    <ion-text>Moisture</ion-text>
-    <ion-text>Test Wt</ion-text>
-    <ion-text>Gross</ion-text>
-    <ion-text>Tare</ion-text>
-    <ion-text>Net</ion-text>
-    <ion-text>Infested Discount</ion-text>
-    <ion-text>Inspection Discount</ion-text>
+    <ion-text>{{t('Include')}}</ion-text>
+    <ion-text>{{t('Date')}}</ion-text>
+    <ion-text>{{t('ID')}}</ion-text>
+    <ion-text>{{t('Moisture')}}</ion-text>
+    <ion-text>{{t('Test Wt')}}</ion-text>
+    <ion-text>{{t('Gross')}}</ion-text>
+    <ion-text>{{t('Tare')}}</ion-text>
+    <ion-text>{{t('Net')}}</ion-text>
+    <ion-text>{{t('Infested Discount')}}</ion-text>
+    <ion-text>{{t('Inspection Discount')}}</ion-text>
   </div>
   <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
     <ion-text>

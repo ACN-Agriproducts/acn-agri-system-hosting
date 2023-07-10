@@ -20,7 +20,7 @@ import { FutureDateFormatDirective } from './directives/future-date-format.direc
     FormsModule,
     IonicModule,
     FormsModule,
-    CoreModule,
+    CoreModule
   ],
   exports: [
     ContractFormComponent

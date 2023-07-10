@@ -1,9 +1,9 @@
-<div class='table-row'>
-  <ion-item lines='none'><b>ID</b></ion-item>
-  <ion-item lines='none'><b>Date</b></ion-item>
-  <ion-item lines='none'><b>Gross</b></ion-item>
-  <ion-item lines='none'><b>Tare</b></ion-item>
-  <ion-item lines='none'><b>Net</b></ion-item>
+<div class='table-row' *transloco="let t, read: 'contracts.info'">
+  <ion-item lines='none'><b>{{t('ID')}}</b></ion-item>
+  <ion-item lines='none'><b>{{t('Date')}}</b></ion-item>
+  <ion-item lines='none'><b>{{t('Gross')}}</b></ion-item>
+  <ion-item lines='none'><b>{{t('Tare')}}</b></ion-item>
+  <ion-item lines='none'><b>{{t('Net')}}</b></ion-item>
 </div>
 <div *ngFor="let ticket of ticketList" class='table-row'>
   <ion-item lines='none'><b>{{ticket.id}}</b></ion-item>

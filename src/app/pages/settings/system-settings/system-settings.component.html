@@ -101,9 +101,9 @@
                                     <ion-text class="label-item-title">System language</ion-text>
                                 </div>
                             </ion-label>
-                            <ion-select value="english">
-                                <ion-select-option value="english">English</ion-select-option>
-                                <ion-select-option value="spanish">Spanish</ion-select-option>
+                            <ion-select [(ngModel)]="language" (ngModelChange)="languageChange()">
+                                <ion-select-option value="en">English</ion-select-option>
+                                <ion-select-option value="es">Spanish</ion-select-option>
                             </ion-select>
                         </ion-item>
                     </ion-col>

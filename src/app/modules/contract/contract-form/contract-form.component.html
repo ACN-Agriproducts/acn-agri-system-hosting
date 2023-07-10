@@ -1,10 +1,10 @@
-<mat-card>
+<mat-card *transloco="let t, read: 'contracts.new'">
   <mat-card-header>
-    <mat-card-subtitle>Contract Info</mat-card-subtitle>
+    <mat-card-subtitle>{{t('contract info')}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <mat-form-field class="span-2" appFutureDateFormat>
-      <mat-label>Date</mat-label>
+      <mat-label>{{t('date')}}</mat-label>
       <input 
         matInput 
         [matDatepicker]="contractDatepicker"
@@ -16,7 +16,7 @@
       <mat-datepicker #contractDatepicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field class="span-2">
-      <mat-label>Contract Executive</mat-label>
+      <mat-label>{{t('contract executive')}}</mat-label>
       <mat-select
         matInput
         [(ngModel)]="contract.contractExecutive"
@@ -27,7 +27,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field class="span-3">
-      <mat-label>Contract Type</mat-label>
+      <mat-label>{{t('contract type')}}</mat-label>
       <mat-select 
         [(ngModel)]="contract.type" 
         (ngModelChange)="docTypeChange()"
@@ -42,7 +42,7 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>ID</mat-label>
+      <mat-label>{{t('ID')}}</mat-label>
       <input 
         matInput 
         [(ngModel)]="contract.id" 
@@ -53,7 +53,7 @@
         (focusout)="selectedFieldEvent.emit(null)">
     </mat-form-field>
     <mat-form-field class="span-2">
-      <mat-label>Email</mat-label>
+      <mat-label>{{t('email')}}</mat-label>
       <input 
         matInput 
         [(ngModel)]="contract.companyInfo.email" 
@@ -63,7 +63,7 @@
         (focusout)="selectedFieldEvent.emit(null)">
     </mat-form-field>
     <mat-form-field class="span-2">
-      <mat-label>Phone Number</mat-label>
+      <mat-label>{{t('phone number')}}</mat-label>
       <input 
         matInput 
         [(ngModel)]="contract.companyInfo.phone" 
@@ -88,9 +88,9 @@
   </mat-card>
 </ng-container>
 
-<div class="action-bar">
+<div class="action-bar" *transloco="let t, read: 'contracts.new'">
   <ng-container *ngTemplateOutlet="actionBar || none"></ng-container>
-  <button *ngIf="contract.status == 'pending'" mat-flat-button color="primary" (click)="submit()">Submit</button>
+  <button *ngIf="contract.status == 'pending'" mat-flat-button color="primary" (click)="submit()">{{t('submit')}}</button>
 </div>
 
 <ng-template #none></ng-template>
