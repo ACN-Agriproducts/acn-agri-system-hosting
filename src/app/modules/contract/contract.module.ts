@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { GetFieldClassPipe } from './pipes/get-field-class.pipe';
 import { FutureDateFormatDirective } from './directives/future-date-format.directive';
-import { TranslocoModule } from '@ngneat/transloco';
 
 @NgModule({
   declarations: [
@@ -21,8 +20,7 @@ import { TranslocoModule } from '@ngneat/transloco';
     FormsModule,
     IonicModule,
     FormsModule,
-    CoreModule,
-    TranslocoModule
+    CoreModule
   ],
   exports: [
     ContractFormComponent

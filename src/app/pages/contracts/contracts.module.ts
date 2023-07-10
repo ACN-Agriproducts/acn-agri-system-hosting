@@ -19,7 +19,6 @@ import { CloseContractFieldsDialogComponent } from './components/close-contract-
 import { DeliveredChartCardComponent } from './components/delivered-chart-card/delivered-chart-card.component';
 import { LineChartModule, NgxChartsModule } from '@swimlane/ngx-charts';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
-import { TranslocoModule } from '@ngneat/transloco';
 
 @NgModule({
   imports: [
@@ -32,7 +31,6 @@ import { TranslocoModule } from '@ngneat/transloco';
     SharedModule,
     LineChartModule,
     NgxChartsModule,
-    TranslocoModule
   ],
   declarations: [
     ContractsPage,

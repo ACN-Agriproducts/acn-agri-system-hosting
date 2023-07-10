@@ -26,7 +26,6 @@ import { registerLocaleData } from '@angular/common';
 import localeMx from '@angular/common/locales/es-MX';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from './transloco-root.module';
-import { TranslocoModule } from '@ngneat/transloco';
 registerLocaleData(localeMx)
 
 
@@ -77,7 +76,6 @@ registerLocaleData(localeMx)
         MomentDateModule,
         HttpClientModule,
         TranslocoRootModule,
-        TranslocoModule
     ],
     providers: [
         StatusBar,

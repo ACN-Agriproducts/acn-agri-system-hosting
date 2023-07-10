@@ -11,7 +11,6 @@ import { SettingsPage } from './settings.page';
 import { SystemSettingsComponent } from './system-settings/system-settings.component';
 import { UserDataComponent } from './user-data/user-data.component';
 import { NewUserComponent } from './new-user/new-user.component';
-import { TranslocoModule } from '@ngneat/transloco';
 
 @NgModule({
   imports: [
@@ -20,7 +19,6 @@ import { TranslocoModule } from '@ngneat/transloco';
     IonicModule,
     SettingsPageRoutingModule,
     CoreModule,
-    TranslocoModule
   ],
   declarations: [SettingsPage, SystemSettingsComponent, UserDataComponent, NewUserComponent]
 })

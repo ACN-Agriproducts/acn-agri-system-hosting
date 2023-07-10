@@ -11,7 +11,6 @@ import { DirectoryPage } from './directory.page';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
-import { TranslocoModule } from '@ngneat/transloco';
 import { ContactTagsDisplayPipe } from './components/contact-tags-display/contact-tags-display.pipe';
 
 @NgModule({
@@ -22,7 +21,6 @@ import { ContactTagsDisplayPipe } from './components/contact-tags-display/contac
     DirectoryPageRoutingModule,
     CoreModule,
     ReactiveFormsModule,
-    TranslocoModule,
     ContactTagsDisplayPipe
   ],
   declarations: [
