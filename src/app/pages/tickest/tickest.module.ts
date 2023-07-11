@@ -20,6 +20,7 @@ import { TicketReportDialogComponent } from './components/ticket-report-dialog/t
 import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
     NgxDropzoneModule,
     SharedModule,
     NgxPrintModule,
-    MatDialogModule
+    MatDialogModule,
+    SplitTicketComponent
   ],
   declarations: [
     TickestPage,
