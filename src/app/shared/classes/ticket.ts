@@ -195,7 +195,6 @@ export class Ticket extends FirebaseDocInterface{
     public getContract(db: Firestore): Promise<Contract> {
         const company = this.ref.parent.parent.parent.parent.id;
         const contractColRef = Contract.getCollectionReference(db, company);
-        console.log(this.contractID)
 
         return this.contractRef ? getDoc(this.contractRef).then(res => res.data()) 
             : getDocs(query(contractColRef, where('tickets', 'array-contains', this.ref), limit(1))).then(result => result.docs[0].data());
