@@ -134,4 +134,8 @@ export class OptionsTicketComponent implements OnInit {
     
     this.popoverController.dismiss();
   }
+
+  public splitTicket(): void {
+    
+  }
 }

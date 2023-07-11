@@ -20,10 +20,15 @@
     Fix Inventory
     <ion-icon slot="end" name="create-outline"></ion-icon>
   </ion-item>
+  <ion-item button (click)="splitTicket()" *ngIf="ticket.needsAttention && (userPermissions?.admin || userPermissions?.tickets.ticketStorageFix)">
+    Split Ticket
+    <ion-icon name="duplicate-outline"></ion-icon>
+  </ion-item>
   <ion-item button lines="none" color="danger" (click)="voidTicket()" 
     *ngIf="!ticket.void && userPermissions?.admin || userPermissions?.['tickets']?.voidTicketRequest">
     Void
     <ion-icon slot="end" name="close-outline"></ion-icon>
   </ion-item>
+  
   <!-- <ion-item lines="none" detail="false" button onClick="dismissPopover()">Close</ion-item> -->
 </ion-list>
