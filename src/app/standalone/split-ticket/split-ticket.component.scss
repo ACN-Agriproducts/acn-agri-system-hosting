@@ -1,0 +1,15 @@
+.flex-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.ticket-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+#arrow-right {
+    font-size: xxx-large;
+}

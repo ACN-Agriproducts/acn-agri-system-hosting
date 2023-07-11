@@ -32,7 +32,7 @@ export class SplitTicketComponent implements OnInit {
   ngOnInit() {
     this.contract = this.data.getContract(this.db);
     this.contract.then(ticketContract => {
-      this.possibleContracts =  Contract.getContracts(
+      this.possibleContracts = Contract.getContracts(
         this.db, 
         this.session.getCompany(), 
         ticketContract.type,
