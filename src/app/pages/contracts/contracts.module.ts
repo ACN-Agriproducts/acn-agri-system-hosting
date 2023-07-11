@@ -30,7 +30,7 @@ import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tick
     CoreModule,
     SharedModule,
     LineChartModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
   declarations: [
     ContractsPage,

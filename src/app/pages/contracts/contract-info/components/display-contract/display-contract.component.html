@@ -1,12 +1,14 @@
-<button 
-  mat-button 
-  *ngIf="ready"
-  ngxPrint
-  printSectionId="printable"
-  [printStyle]="{'@page' : { size: 'letter portrait', margin: '1in' }}"
-  [useExistingCss]="true">
-  PRINT
-</button>
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <button
+    mat-button
+    *ngIf="ready"
+    ngxPrint
+    printSectionId="printable"
+    [printStyle]="{'@page' : { size: 'letter portrait', margin: '1in' }}"
+    [useExistingCss]="true">
+    {{t("print") | uppercase}}
+  </button>
+</ng-container>
 
 <div class="wrapper">
   <app-printable-contract id="printable" [contract]="contract"></app-printable-contract>

@@ -10,6 +10,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { DiscountTables } from '@shared/classes/discount-tables';
 
 @Component({
@@ -39,7 +40,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private snack: SnackbarService,
     private selectedTicketsPipe: SelectedTicketsPipe,
     private session: SessionInfo,
-    private differs: KeyValueDiffers,
     ) { }
 
   ngOnInit() {
@@ -77,24 +77,24 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
     // initializing columns
     worksheet.columns = [
-      { header: "Inbound Date", key: 'dateIn' },
-      { header: "Ticket #", key: 'id' },
-      { header: "Contract", key: 'contractID' },
-      { header: "Gross", key: 'gross' },
-      { header: "Tare", key: 'tare' },
-      { header: "Net", key: 'net' },
-      { header: "%", key: 'moisture' },
-      { header: "CWT", key: 'moistureCwt' },                        // net - dryWeight
-      { header: "Adjusted Weight", key: 'dryWeight' },
-      { header: "%", key: 'damage' },                               // not in the ticket yet
-      { header: "CWT", key: 'damageCwt' },                          // damageWeight - undamagedWeight
-      { header: "Adjusted Weight", key: 'undamagedWeight' },
-      { header: "Price ($/BU)", key: 'pricePerBushel' },            // located in contract
-      { header: "Adjusted Price ($/BU)", key: 'adjustedPrice' },    // ???
-      { header: "Total ($)", key: 'total' },                        // AdjustedWeight / Product.weight * price
-      { header: "Infested", key: 'infested' },      
-      { header: "Inspection", key: 'inspection' },
-      { header: "Net to Pay ($)", key: 'netToPay' },                // total - infested - inspection
+      { header: this.transloco.translate("contracts.info.Inbound Date"), key: 'dateIn' },
+      { header: this.transloco.translate("contracts.info.Ticket #"), key: 'id' },
+      { header: this.transloco.translate("contracts.info.Contract"), key: 'contractID' },
+      { header: this.transloco.translate("contracts.info.Gross"), key: 'gross' },
+      { header: this.transloco.translate("contracts.info.Tare"), key: 'tare' },
+      { header: this.transloco.translate("contracts.info.Net"), key: 'net' },
+      { header: this.transloco.translate("contracts.info.%"), key: 'moisture' },
+      { header: this.transloco.translate("contracts.info.CWT"), key: 'moistureCwt' },                        // net - dryWeight
+      { header: this.transloco.translate("contracts.info.Adjusted Weight"), key: 'dryWeight' },
+      { header: this.transloco.translate("contracts.info.%"), key: 'damage' },                               // not in the ticket yet
+      { header: this.transloco.translate("contracts.info.CWT"), key: 'damageCwt' },                          // damageWeight - undamagedWeight
+      { header: this.transloco.translate("contracts.info.Adjusted Weight"), key: 'undamagedWeight' },
+      { header: this.transloco.translate("contracts.info.Price ($/BU)"), key: 'pricePerBushel' },            // located in contract
+      { header: this.transloco.translate("contracts.info.Adjusted Price ($/BU)"), key: 'adjustedPrice' },    // ???
+      { header: this.transloco.translate("contracts.info.Total ($)"), key: 'total' },                        // AdjustedWeight / Product.weight * price
+      { header: this.transloco.translate("contracts.info.Infested"), key: 'infested' },      
+      { header: this.transloco.translate("contracts.info.Inspection"), key: 'inspection' },
+      { header: this.transloco.translate("contracts.info.Net to Pay ($)"), key: 'netToPay' },                // total - infested - inspection
     ];
 
     let rowValues = [];

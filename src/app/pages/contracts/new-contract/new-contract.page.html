@@ -1,6 +1,6 @@
-<app-header-toolbar titulo="New Contract"></app-header-toolbar>
+<app-header-toolbar [titulo]="t('new contract')" *transloco="let t, read: 'contracts.new'"></app-header-toolbar>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" *transloco="let t, read: 'contracts.new'">
   <div class="content-grid">
     <div class="form-flex">
       <app-contract-form id="form"
@@ -13,7 +13,7 @@
             [useExistingCss]="true"
             printSectionId="printable-document"
             [printStyle]="{'@page' : { size: 'letter portrait', margin: '1in' }}"
-          >Print</button>
+          >{{t('print')}}</button>
         </ng-template>
       </app-contract-form>
     </div>

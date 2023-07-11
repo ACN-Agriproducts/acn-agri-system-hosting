@@ -1,76 +1,79 @@
-<app-header-toolbar titulo="{{currentContract.type | titlecase}} Contract {{currentContract?.id}}" *ngIf="ready"></app-header-toolbar>
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <app-header-toolbar [titulo]="t('contract') + ' ' + currentContract?.id"></app-header-toolbar>
 
-<ion-content class="ion-padding">
-  <mat-toolbar>
-    <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
-  </mat-toolbar>
+  <ion-content class="ion-padding">
+    <mat-toolbar>
+      <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
+    </mat-toolbar>
 
-  <section *ngIf="ready">
-    <ion-grid *ngIf="!showLiquidation else liquidation">
-      <div class="flex-row">
-        <app-contract-form class="form info-card"
-          *ngIf="currentContract"
-          [contract]="currentContract">
-        </app-contract-form>
-        <ion-card id="printable-card">
-          <ion-card-header>
-            Contract Document
-          </ion-card-header>
-            <app-display-contract [contract]="currentContract"></app-display-contract>
-        </ion-card>
-      </div>
-      <ion-row>
-        <ion-col size="6">
-          <ion-card>
+    <section *ngIf="ready">
+      <ion-grid *ngIf="!showLiquidation else liquidation">
+        <div class="flex-row">
+          <app-contract-form class="form info-card"
+            *ngIf="currentContract"
+            [contract]="currentContract">
+          </app-contract-form>
+          <ion-card id="printable-card">
             <ion-card-header>
-              Ticket List
+              {{t('contract document')}}
             </ion-card-header>
-            <ion-card-content>
-              <app-tickets-table #ticketTable *ngIf="ticketList" [ticketList]="ticketList"></app-tickets-table>
-            </ion-card-content>
+              <app-display-contract [contract]="currentContract"></app-display-contract>
           </ion-card>
-        </ion-col>
-        <ion-col size="6">
-          <ion-card>
-            <ion-card-header>
-              Trucker List
-            </ion-card-header>
-            <ion-card-content>
-              <app-truckers-form [contract]="currentContract"></app-truckers-form>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </section>
+        </div>
+        <ion-row>
+          <ion-col size="6">
+            <ion-card>
+              <ion-card-header>
+                {{t("ticket list")}}
+              </ion-card-header>
+              <ion-card-content>
+                <app-tickets-table #ticketTable *ngIf="ticketList" [ticketList]="ticketList"></app-tickets-table>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="6">
+            <ion-card>
+              <ion-card-header>
+                {{t('trucker list')}}
+              </ion-card-header>
+              <ion-card-content>
+                <app-truckers-form [contract]="currentContract"></app-truckers-form>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </section>
 
-  <ng-template #liquidation>
-    <button mat-raised-button (click)="reloadContractTickets()">Reload Tickets</button>
+    <ng-template #liquidation>
+      <button mat-raised-button (click)="reloadContractTickets()">{{t("reload tickets")}}</button>
 
-    <app-ticket-discount-table 
-      [ticketDiscountList]="ticketDiscountList"
-      (selectChange)="handleSelectChange()"
-    ></app-ticket-discount-table>
-  
-    <button mat-raised-button (click)="selectAllTickets(false)">Deselect All</button>
-    <button mat-raised-button (click)="selectAllTickets(true)">Select All</button>
-    <button mat-raised-button 
-      [disabled]="selectedTickets.length === 0" 
-      (click)="onDownloadLiquidation()"
-    >Download</button>
-    <button mat-raised-button
-      [disabled]="selectedTickets.length === 0"
-      ngxPrint
-      [useExistingCss]="true"
-      printSectionId="ContractLiquidationLong"
-      [printStyle]="{'@page' : { size: 'letter landscape' }}"
-    >Print</button>
-    <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
-  
-    <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
-      [selectedTickets]="selectedTickets"
-      [contract]="currentContract"
-      [totals]="totals"
-    ></app-contract-liquidation-long>
-  </ng-template>
-</ion-content>
+      <app-ticket-discount-table 
+        [ticketDiscountList]="ticketDiscountList"
+        (selectChange)="handleSelectChange()"
+      ></app-ticket-discount-table>
+    
+      <button mat-raised-button (click)="selectAllTickets(false)">{{t('Deselect All')}}</button>
+      <button mat-raised-button (click)="selectAllTickets(true)">{{t('Select All')}}</button>
+      <button mat-raised-button 
+        [disabled]="selectedTickets.length === 0" 
+        (click)="onDownloadLiquidation()"
+      >{{t('download')}}</button>
+      <button mat-raised-button
+        [disabled]="selectedTickets.length === 0"
+        ngxPrint
+        [useExistingCss]="true"
+        printSectionId="ContractLiquidationLong"
+        [printStyle]="{'@page' : { size: 'letter landscape' }}"
+      >{{t('print')}}</button>
+      <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
+    
+      <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
+        [selectedTickets]="selectedTickets"
+        [contract]="currentContract"
+        [totals]="totals"
+      ></app-contract-liquidation-long>
+    </ng-template>
+  </ion-content>
+</ng-container>
+

@@ -1,9 +1,9 @@
-<h2>Missing Fields</h2>
+<!-- <h2>Missing Fields</h2> -->
 
 <mat-dialog-content>
 	<form #requiredFieldsForm="ngForm">
-		<mat-grid-list cols="6" rowHeight="75px">
-			<mat-grid-tile colspan="6">
+		<mat-grid-list cols="6" rowHeight="75px" gutterSize="15px">
+			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
 					<mat-label>Quantity</mat-label>
 					<input
@@ -16,13 +16,25 @@
 						type="number"
 						min="0"
 					>
-					<span matSuffix>lbs</span>
 					<mat-error *ngIf="quantity.errors?.required">Quantity is <strong>required</strong></mat-error>
 					<mat-error *ngIf="quantity.errors?.positive">Quantity must be <strong>positive</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
-		</mat-grid-list>
-		<mat-grid-list cols="6" rowHeight="75px" gutterSize="15px">
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Quantity Units</mat-label>
+					<mat-select 
+						[(ngModel)]="data.quantityUnits"
+						#quantityUnits="ngModel"
+						name="quantityUnits">
+						<mat-option value="lbs">lbs</mat-option>
+						<mat-option value="kg">kg</mat-option>
+						<mat-option value="mTon">mTon</mat-option>
+						<mat-option value="CWT">CWT</mat-option>
+						<mat-option value="bu">bu</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</mat-grid-tile>
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
 					<mat-label>Price</mat-label>
@@ -42,6 +54,21 @@
 				</mat-form-field>
 			</mat-grid-tile>
 			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>Price Units</mat-label>
+					<mat-select 
+						[(ngModel)]="data.priceUnit"
+						#priceUnits="ngModel"
+						name="priceUnit">
+						<mat-option value="lbs">/ lbs</mat-option>
+						<mat-option value="kg">/ kg</mat-option>
+						<mat-option value="mTon">/ mTon</mat-option>
+						<mat-option value="CWT">/ CWT</mat-option>
+						<mat-option value="bu">/ bu</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="6">
 				<mat-form-field appearance="fill">
 					<mat-label>Market Price</mat-label>
 					<span matPrefix>$ &nbsp;</span>

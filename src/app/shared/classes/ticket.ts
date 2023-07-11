@@ -1,5 +1,5 @@
 
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer, where, limit } from "@angular/fire/firestore";
 import { Injectable } from "@angular/core";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
@@ -207,8 +207,11 @@ export class Ticket extends FirebaseDocInterface{
 
     public getContract(db: Firestore): Promise<Contract> {
         const company = this.ref.parent.parent.parent.parent.id;
+        const contractColRef = Contract.getCollectionReference(db, company);
+        console.log(this.contractID)
 
-        return Contract.getDoc(db, company, this.in, this.contractID);
+        return this.contractRef ? getDoc(this.contractRef).then(res => res.data()) 
+            : getDocs(query(contractColRef, where('tickets', 'array-contains', this.ref), limit(1))).then(result => result.docs[0].data());
     }
 
     public getTransport(db: Firestore): Promise<Contact> {

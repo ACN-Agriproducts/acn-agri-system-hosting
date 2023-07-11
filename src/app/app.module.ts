@@ -24,6 +24,8 @@ import { connectFunctionsEmulator, getFunctions, provideFunctions } from '@angul
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { registerLocaleData } from '@angular/common';
 import localeMx from '@angular/common/locales/es-MX';
+import { HttpClientModule } from '@angular/common/http';
+import { TranslocoRootModule } from './transloco-root.module';
 registerLocaleData(localeMx)
 
 
@@ -71,7 +73,9 @@ registerLocaleData(localeMx)
         IonicStorageModule.forRoot({
             name: 'dbAgriproductos',
         }),
-        MomentDateModule
+        MomentDateModule,
+        HttpClientModule,
+        TranslocoRootModule,
     ],
     providers: [
         StatusBar,
