@@ -95,7 +95,7 @@ export class SessionInfo {
     promises.push(this.localStorage.get('defaultLanguage').then(async val => {
       this.language = val 
         || (await userPromise)?.defaultLanguage 
-        || await companyPromise ? (await (companyDoc ??= Company.getCompany(this.db, await companyPromise))).defaultLanguage : null
+        || (await companyPromise ? (await (companyDoc ??= Company.getCompany(this.db, await companyPromise))).defaultLanguage : null)
         || 'es';
       this.transloco.setActiveLang(this.language);
     }));
