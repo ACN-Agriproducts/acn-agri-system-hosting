@@ -40,13 +40,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private snack: SnackbarService,
     private selectedTicketsPipe: SelectedTicketsPipe,
     private session: SessionInfo,
+    private transloco: TranslocoService,
     ) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.type = this.route.snapshot.paramMap.get('type');
     this.currentCompany = this.session.getCompany();
-    this.differs
 
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
