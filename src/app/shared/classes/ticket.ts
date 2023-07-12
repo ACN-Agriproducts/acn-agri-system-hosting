@@ -63,6 +63,12 @@ export class Ticket extends FirebaseDocInterface{
     public transportZipCode: string;
     public transportCaat: string;
 
+    public splitTicketChildA: DocumentReference<Ticket>;
+    public splitTicketChildB: DocumentReference<Ticket>;
+    public splitTicketSibling: DocumentReference<Ticket>;
+    public splitTicketParent: DocumentReference<Ticket>;
+    public subId: string;
+
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
 
@@ -121,6 +127,12 @@ export class Ticket extends FirebaseDocInterface{
         this.transportZipCode = data.transportZipCode;
         this.transportCaat = data.transportCaat;
 
+        this.splitTicketChildA = data.splitTicketChildA;
+        this.splitTicketChildB = data.splitTicketChildB;
+        this.splitTicketSibling = data.splitTicketSibling;
+        this.splitTicketParent = data.splitTicketParent;
+        this.subId = data.subId;
+
         this.net = this.gross.subtract(this.tare);
     }
 
@@ -177,6 +189,13 @@ export class Ticket extends FirebaseDocInterface{
                 transportState: data.weight,
                 transportZipCode: data.weight,
                 transportCaat: data.weight,
+
+                splitTicketChildA: data.splitTicketChildA,
+                splitTicketChildB: data.splitTicketChildB,
+                splitTicketSibling: data.splitTicketSibling,
+                splitTicketParent: data.splitTicketParent,
+                subId: data.subId,
+
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
@@ -224,7 +243,8 @@ export class Ticket extends FirebaseDocInterface{
         const copy: any = {};
 
         Object.keys(this).forEach(key => {
-            copy[key] = this[key];
+            if(key == 'ref' || key == 'snapshot' || key == 'net') return;
+            copy[key] = this[key] instanceof Mass ? this[key].get() : this[key] ?? null;
         });
 
         return copy;
