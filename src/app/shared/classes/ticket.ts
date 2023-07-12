@@ -315,6 +315,11 @@ export declare type TicketWithDiscounts = {
 };
 
 class Discounts {
+    constructor(data?: Discounts) {
+        if (!data) return;
+        Object.keys(this).forEach(key => this[key] = data[key]);
+    }
+
     public total(): number {
         return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
     }

@@ -17,11 +17,14 @@ table {
     line-height: 1.5em;
     table-layout: fixed;
     width: 100%;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto; // break word with hyphen possible ??? 
 
     th, td {
         border: black solid 1px;
         padding: 0px 2px;
+        hyphens: auto;
     }
 
     .one-fr {

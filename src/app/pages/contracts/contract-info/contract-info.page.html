@@ -45,35 +45,11 @@
       </ion-grid>
     </section>
 
-    <ng-template #liquidation>
-      <button mat-raised-button (click)="reloadContractTickets()">{{t("reload tickets")}}</button>
-
-      <app-ticket-discount-table 
-        [ticketDiscountList]="ticketDiscountList"
-        (selectChange)="handleSelectChange()"
-      ></app-ticket-discount-table>
-    
-      <button mat-raised-button (click)="selectAllTickets(false)">{{t('Deselect All')}}</button>
-      <button mat-raised-button (click)="selectAllTickets(true)">{{t('Select All')}}</button>
-      <button mat-raised-button 
-        [disabled]="selectedTickets.length === 0" 
-        (click)="onDownloadLiquidation()"
-      >{{t('download')}}</button>
-      <button mat-raised-button
-        [disabled]="selectedTickets.length === 0"
-        ngxPrint
-        [useExistingCss]="true"
-        printSectionId="ContractLiquidationLong"
-        [printStyle]="{'@page' : { size: 'letter landscape' }}"
-      >{{t('print')}}</button>
-      <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
-    
-      <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
-        [selectedTickets]="selectedTickets"
-        [contract]="currentContract"
-        [totals]="totals"
-      ></app-contract-liquidation-long>
-    </ng-template>
-  </ion-content>
-</ng-container>
-
+  <ng-template #liquidation>
+    <app-ticket-discount-table 
+      [ticketList]="ticketList" 
+      [contract]="currentContract" 
+      [discountTables]="discountTables"
+    ></app-ticket-discount-table>
+  </ng-template>
+</ion-content>

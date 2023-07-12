@@ -29,8 +29,7 @@ export class ContractLiquidationLongComponent implements OnInit {
 })
 export class DiscountsPipe implements PipeTransform {
 
-  transform(discounts: WeightDiscounts | PriceDiscounts): number {
-    if (discounts instanceof PriceDiscounts) console.log(discounts.total())
+  transform(discounts: WeightDiscounts | PriceDiscounts, ...args: any): number {
     return discounts.total();
   }
 
