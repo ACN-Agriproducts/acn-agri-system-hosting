@@ -8,8 +8,14 @@
 .ticket-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 #arrow-right {
     font-size: xxx-large;
+}
+
+mat-form-field {
+    width: 100px !important;
 }

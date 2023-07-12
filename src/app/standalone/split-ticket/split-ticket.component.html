@@ -56,8 +56,7 @@
       <div class="ticket-row">
         <span><b>Contract ID:</b></span>
         <mat-form-field>
-          <mat-label>Contract ID</mat-label>
-          <mat-select [(ngModel)]="newContract" (ngModelChange)="test()">
+          <mat-select [(ngModel)]="newContract">
             <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract">{{contract.id}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -73,8 +72,12 @@
       <div class="ticket-row">
         <span>Net:</span>
         <mat-form-field>
-          <mat-label>Net</mat-label>
-          <input matInput type="number" [(ngModel)]="newWeight" (ngModelChange)="test()">
+          <input 
+            matInput 
+            type="number" 
+            [(ngModel)]="newWeight" 
+            min="0"
+            [max]="data.getNet().get()">
         </mat-form-field>
       </div>
       <div class="ticket-row">{{data.productName}}</div>

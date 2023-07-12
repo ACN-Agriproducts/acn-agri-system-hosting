@@ -44,8 +44,15 @@ export class SplitTicketComponent implements OnInit {
         where('status', '==', 'active'));
     });
 
-    this.contract.then(_contract => {
-      this.newContract = _contract;
+    this.possibleContracts.then(async contractsList => {
+      const ticketContract = await this.contract;
+      this.newContract = contractsList.find(c => c.ref.id == ticketContract.ref.id) ?? null;
+      if(!this.newContract) return;
+
+      const contractOverdelivery = this.newContract.currentDelivered.subtract(this.newContract.quantity)
+      if(contractOverdelivery.get() > 0 && contractOverdelivery.subtract(this.data.getNet()).get() < 0) {
+        this.newWeight = Math.round(contractOverdelivery.getMassInUnit('lbs'));
+      }
     });
   }
 
