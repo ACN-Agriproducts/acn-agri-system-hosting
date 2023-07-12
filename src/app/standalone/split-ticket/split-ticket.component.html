@@ -44,7 +44,7 @@
       </div>
       <div class="ticket-row">
         <span>Net:</span>
-        <span>{{data.getNet() | massInUnit:'lbs'}}</span>
+        <span>{{(data.getNet() | massInUnit:'lbs') - newWeight}}</span>
       </div>
       <div class="ticket-row">{{data.productName}}</div>
     </mat-card>
@@ -55,7 +55,12 @@
       </div>
       <div class="ticket-row">
         <span><b>Contract ID:</b></span>
-        <span><b>{{data.contractID}}</b></span>
+        <mat-form-field>
+          <mat-label>Contract ID</mat-label>
+          <mat-select [(ngModel)]="newContract">
+            <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract">{{contract.id}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <div class="ticket-row">
         <span>Gross:</span>
@@ -67,7 +72,10 @@
       </div>
       <div class="ticket-row">
         <span>Net:</span>
-        <span>{{data.getNet() | massInUnit:'lbs'}}</span>
+        <mat-form-field>
+          <mat-label>Net</mat-label>
+          <input matInput  type="number">
+        </mat-form-field>
       </div>
       <div class="ticket-row">{{data.productName}}</div>
     </mat-card>

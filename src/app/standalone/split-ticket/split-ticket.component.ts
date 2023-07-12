@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { Firestore, where } from '@angular/fire/firestore';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreModule } from '@core/core.module';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -16,12 +17,15 @@ import { Ticket } from '@shared/classes/ticket';
   imports: [
     CoreModule,
     CommonModule,
-    IonicModule
+    IonicModule,
+    FormsModule,
   ]
 })
 export class SplitTicketComponent implements OnInit {
   public contract: Promise<Contract>;
   public possibleContracts: Promise<Contract[]>;
+  public newContract: Contract;
+  public newWeight: number = 0;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Ticket,
@@ -31,8 +35,8 @@ export class SplitTicketComponent implements OnInit {
 
   ngOnInit() {
     this.contract = this.data.getContract(this.db);
-    this.contract.then(ticketContract => {
-      this.possibleContracts = Contract.getContracts(
+    this.possibleContracts = this.contract.then(ticketContract => {
+      return Contract.getContracts(
         this.db, 
         this.session.getCompany(), 
         ticketContract.type,
