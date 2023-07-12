@@ -43,6 +43,14 @@ export class SplitTicketComponent implements OnInit {
         where('client', '==', ticketContract.client),
         where('status', '==', 'active'));
     });
+
+    this.contract.then(_contract => {
+      this.newContract = _contract;
+    });
+  }
+
+  test() {
+    console.log(this.newContract, this.newWeight);
   }
 
 }
