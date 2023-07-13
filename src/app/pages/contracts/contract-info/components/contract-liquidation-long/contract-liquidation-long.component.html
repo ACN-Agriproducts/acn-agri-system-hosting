@@ -39,21 +39,21 @@
             <col class="two-fr">  <!-- NET TO PAY -->
         </colgroup>
         <tr>
-            <th rowspan="2">{{ t('Inbound Date') | uppercase }}</th>
-            <th rowspan="2">{{ t('Ticket #') | uppercase }}</th>
-            <th colspan="3">{{ t('Weight (lbs)') | uppercase }}</th>
-            <th colspan="2">{{ t('Moisture') | uppercase }}</th>
-            <th colspan="2">{{ t('Drying') | uppercase }}</th>
-            <th colspan="2">{{ t('Damage') | uppercase }}</th>
-            <th rowspan="2">{{ t('Adjusted Weight (lbs)') | uppercase }}</th>
-            <th rowspan="2">{{ t('Price ($/BU)') | uppercase }}</th>
-            <th rowspan="2">{{ t('Total ($)') | uppercase }}</th>
-            <th rowspan="2" *ngIf="totals.priceDiscounts.infested">{{ t('Infested') | uppercase }}</th>
-            <th rowspan="2" *ngIf="totals.priceDiscounts.musty">{{ t('Musty') | uppercase }}</th>
-            <th rowspan="2" *ngIf="totals.priceDiscounts.sour">{{ t('Sour') | uppercase }}</th>
-            <th rowspan="2" *ngIf="totals.priceDiscounts.weathered">{{ t('Weathered') | uppercase }}</th>
-            <th rowspan="2" *ngIf="totals.priceDiscounts.inspection">{{ t('Inspection') | uppercase }}</th>
-            <th rowspan="2">{{ t('Net to Pay ($)') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Inbound Date') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Ticket #') | uppercase }}</th>
+            <th [lang]="language" colspan="3">{{ t('Weight (lbs)') | uppercase }}</th>
+            <th [lang]="language" colspan="2">{{ t('Moisture') | uppercase }}</th>
+            <th [lang]="language" colspan="2">{{ t('Drying') | uppercase }}</th>
+            <th [lang]="language" colspan="2">{{ t('Damage') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Adjusted Weight (lbs)') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Price ($/BU)') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Total ($)') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.infested">{{ t('Infested') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.musty">{{ t('Musty') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.sour">{{ t('Sour') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.weathered">{{ t('Weathered') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.inspection">{{ t('Inspection') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Net to Pay ($)') | uppercase }}</th>
     
         </tr>
         <tr>

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract, LiquidationTotals } from '@shared/classes/contract';
 import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 
@@ -14,10 +15,15 @@ export class ContractLiquidationLongComponent implements OnInit {
   @Input() totals: LiquidationTotals;
 
   public date: Date = new Date();
+  public language: string;
 
-  constructor() { }
+  constructor(
+    private session: SessionInfo
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.language = this.session.getLanguage();
+  }
 
   ngOnDestroy() {
     delete this.date;
