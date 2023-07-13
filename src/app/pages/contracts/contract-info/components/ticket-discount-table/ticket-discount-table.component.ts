@@ -69,7 +69,18 @@ export class TicketDiscountTableComponent implements OnInit {
       { header: this.transloco.translate("contracts.info.CWT"), key: 'damageCwt' },
       { header: this.transloco.translate("contracts.info.Adjusted Weight (lbs)"), key: 'adjustedWeight' },
       { header: this.transloco.translate("contracts.info.Price ($/BU)"), key: 'pricePerBushel', style: { numFmt: '0.0000' } },
-      { header: this.transloco.translate("contracts.info.Total ($)"), key: 'total', style: { numFmt: '0.000' } },
+      { 
+        header: this.transloco.translate("contracts.info.Total ($)"), 
+        key: 'total', 
+        style: { numFmt: '0.000' },
+        hidden: (
+          !this.totals.priceDiscounts.infested 
+          && !this.totals.priceDiscounts.musty 
+          && !this.totals.priceDiscounts.sour 
+          && !this.totals.priceDiscounts.weathered 
+          && !this.totals.priceDiscounts.inspection
+        )
+      },
       { 
         header: this.transloco.translate("contracts.info.Infested"), 
         key: 'infested', 
@@ -132,11 +143,11 @@ export class TicketDiscountTableComponent implements OnInit {
         tare: ticket.data.tare.getMassInUnit("lbs"),
         net: net,
         moisture: ticket.data.moisture,
-        moistureCwt: ticket.weightDiscounts.moisture,
+        moistureCwt: ticket.weightDiscounts.moisture.getMassInUnit("CWT"),
         dryWeightPercent: ticket.data.dryWeightPercent,
-        dryCwt: ticket.weightDiscounts.dryWeight,
+        dryCwt: ticket.weightDiscounts.dryWeight.getMassInUnit("CWT"),
         damage: ticket.data.damagedGrain,
-        damageCwt: ticket.weightDiscounts.damagedGrain,
+        damageCwt: ticket.weightDiscounts.damagedGrain.getMassInUnit("CWT"),
         adjustedWeight: adjustedWeight,
         pricePerBushel: this.contract.price.getPricePerUnit("bu", this.contract.quantity),
         total: total,

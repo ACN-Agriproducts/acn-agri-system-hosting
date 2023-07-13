@@ -653,7 +653,8 @@ export class LiquidationTotals {
             this.net += ticket.data.net.get();
 
             for (const key of Object.keys(this.weightDiscounts)) {
-                this.weightDiscounts[key] += ticket.weightDiscounts[key];
+                this.weightDiscounts[key].defaultUnits = ticket.data.net.getUnit();
+                this.weightDiscounts[key].amount += ticket.weightDiscounts[key].amount;
             }
             const tempAdjustedWeight = ticket.data.net.get() - ticket.weightDiscounts.total();
             this.adjustedWeight += tempAdjustedWeight;

@@ -321,6 +321,9 @@ class Discounts {
     }
 
     public total(): number {
+        if (this instanceof WeightDiscounts) {
+            return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
+        }
         return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
     }
 }
@@ -334,15 +337,15 @@ export class PriceDiscounts extends Discounts {
 }
 
 export class WeightDiscounts extends Discounts {
-    brokenGrain: number = 0;
-    damagedGrain: number = 0;
-    dryWeight: number = 0;
-    dryWeightPercent: number = 0;
-    foreignMatter: number = 0;
-    moisture: number = 0;
-    PPB: number = 0;
-    weight: number = 0;
-    impurities: number = 0;
+    brokenGrain: Mass = new Mass(0, null);
+    damagedGrain: Mass = new Mass(0, null);
+    dryWeight: Mass = new Mass(0, null);
+    dryWeightPercent: Mass = new Mass(0, null);
+    foreignMatter: Mass = new Mass(0, null);
+    moisture: Mass = new Mass(0, null);
+    PPB: Mass = new Mass(0, null);
+    weight: Mass = new Mass(0, null);
+    impurities: Mass = new Mass(0, null);
 
     constructor(ticket?: Ticket, discountTables?: DiscountTables) {
         super();
@@ -352,7 +355,8 @@ export class WeightDiscounts extends Discounts {
         for (const key of Object.keys(this)) {
             const table = discountTables.tables.find(table => table.fieldName === key);
             const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
-            this[key] = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
+            this[key].defaultUnits = ticket.net.getUnit();
+            this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
         }
     }
 }
