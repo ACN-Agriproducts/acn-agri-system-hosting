@@ -73,11 +73,11 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.gross | massInUnit }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.tare | massInUnit }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.net | massInUnit }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture | number:'1.1-1' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture ?? 0 | number:'1.1-1' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.moisture | number:'1.0-2' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeightPercent | number:'1.1-1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.dryWeightPercent| number:'1.0-2' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.damagedGrain | number:'1.1-1' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeightPercent ?? 0 | number:'1.1-1' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.dryWeightPercent | number:'1.0-2' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.damagedGrain ?? 0 | number:'1.1-1' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.damagedGrain | number:'1.0-2' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.net | massInUnit) - (ticket.weightDiscounts | discounts) }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (contract.price | pricePerUnit:'bu':contract.quantity) | currency }}</td>
