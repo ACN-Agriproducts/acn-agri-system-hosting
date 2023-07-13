@@ -47,7 +47,13 @@
             <th [lang]="language" colspan="2">{{ t('Damage') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Adjusted Weight (lbs)') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Price ($/BU)') | uppercase }}</th>
-            <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.infested || totals.priceDiscounts.musty || totals.priceDiscounts.sour || totals.priceDiscounts.weathered || totals.priceDiscounts.inspection">{{ t('Total ($)') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" 
+                *ngIf="totals.priceDiscounts.infested 
+                    || totals.priceDiscounts.musty 
+                    || totals.priceDiscounts.sour 
+                    || totals.priceDiscounts.weathered 
+                    || totals.priceDiscounts.inspection"
+            >{{ t('Total ($)') | uppercase }}</th>
             <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.infested">{{ t('Infested') | uppercase }}</th>
             <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.musty">{{ t('Musty') | uppercase }}</th>
             <th [lang]="language" rowspan="2" *ngIf="totals.priceDiscounts.sour">{{ t('Sour') | uppercase }}</th>
