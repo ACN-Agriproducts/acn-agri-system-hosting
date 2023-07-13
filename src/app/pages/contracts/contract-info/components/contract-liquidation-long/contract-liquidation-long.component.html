@@ -81,14 +81,28 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.damagedGrain | number:'1.0-2' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.net | massInUnit) - (ticket.weightDiscounts | discounts) }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (contract.price | pricePerUnit:'bu':contract.quantity) | currency:'USD':'$':'1.4-4' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="totals.priceDiscounts.infested || totals.priceDiscounts.musty || totals.priceDiscounts.sour || totals.priceDiscounts.weathered || totals.priceDiscounts.inspection">{{ (contract.price | pricePerUnit:'lbs':contract.quantity) * ((ticket.data.net | massInUnit) - (ticket.weightDiscounts | discounts)) | currency:'USD':'$':'1.3-3' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right' 
+                *ngIf="totals.priceDiscounts.infested 
+                    || totals.priceDiscounts.musty 
+                    || totals.priceDiscounts.sour 
+                    || totals.priceDiscounts.weathered 
+                    || totals.priceDiscounts.inspection"
+            >{{ (contract.price | pricePerUnit:'lbs':contract.quantity) * ((ticket.data.net | massInUnit) - (ticket.weightDiscounts | discounts)) | currency:'USD':'$':'1.3-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="totals.priceDiscounts.infested">{{ ticket.priceDiscounts.infested | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="totals.priceDiscounts.musty">{{ ticket.priceDiscounts.musty | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="totals.priceDiscounts.sour">{{ ticket.priceDiscounts.sour | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="totals.priceDiscounts.weathered">{{ ticket.priceDiscounts.weathered | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="totals.priceDiscounts.inspection">{{ ticket.priceDiscounts.inspection | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>
-                {{ (contract.price | pricePerUnit:'lbs':contract.quantity) * ((ticket.data.net | massInUnit) - (ticket.weightDiscounts | discounts)) - (ticket.priceDiscounts | discounts:ticket.priceDiscounts.infested:ticket.priceDiscounts.musty:ticket.priceDiscounts.sour:ticket.priceDiscounts.weathered:ticket.priceDiscounts.inspection) | currency:'USD':'$':'1.3-3' }}
+                {{ (contract.price | pricePerUnit:'lbs':contract.quantity) * ((ticket.data.net | massInUnit) - (ticket.weightDiscounts | discounts)) 
+                    - (ticket.priceDiscounts | discounts
+                        :ticket.priceDiscounts.infested
+                        :ticket.priceDiscounts.musty
+                        :ticket.priceDiscounts.sour
+                        :ticket.priceDiscounts.weathered
+                        :ticket.priceDiscounts.inspection
+                      ) | currency:'USD':'$':'1.3-3' 
+                }}
             </td>
         </tr>
         <tr>
@@ -105,7 +119,13 @@
             <td class='total-row right'>{{ totals.weightDiscounts.damagedGrain | number:'1.0-2' }}</td>
             <td class='total-row right'>{{ totals.adjustedWeight | number:'1.0-2' }} </td>
             <td class='total-row right'></td>
-            <td class='total-row right' *ngIf="totals.priceDiscounts.infested || totals.priceDiscounts.musty || totals.priceDiscounts.sour || totals.priceDiscounts.weathered || totals.priceDiscounts.inspection">{{ totals.beforeFinalDiscounts | currency:'USD':'$':'1.3-3' }}</td>
+            <td class='total-row right' 
+                *ngIf="totals.priceDiscounts.infested 
+                    || totals.priceDiscounts.musty 
+                    || totals.priceDiscounts.sour 
+                    || totals.priceDiscounts.weathered 
+                    || totals.priceDiscounts.inspection"
+            >{{ totals.beforeFinalDiscounts | currency:'USD':'$':'1.3-3' }}</td>
             <td class='total-row right' *ngIf="totals.priceDiscounts.infested">{{ totals.priceDiscounts.infested | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right' *ngIf="totals.priceDiscounts.musty">{{ totals.priceDiscounts.musty | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right' *ngIf="totals.priceDiscounts.sour">{{ totals.priceDiscounts.sour | currency:'USD':'$':'1.2-3' }}</td>

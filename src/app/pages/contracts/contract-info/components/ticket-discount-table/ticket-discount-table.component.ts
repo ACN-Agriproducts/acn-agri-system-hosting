@@ -6,7 +6,6 @@ import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from '@s
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
 import * as Excel from 'exceljs';
-import { ContractLiquidationLongComponent } from '../contract-liquidation-long/contract-liquidation-long.component';
 
 @Component({
   selector: 'app-ticket-discount-table',
@@ -14,8 +13,6 @@ import { ContractLiquidationLongComponent } from '../contract-liquidation-long/c
   styleUrls: ['./ticket-discount-table.component.scss'],
 })
 export class TicketDiscountTableComponent implements OnInit {
-  @ViewChild(ContractLiquidationLongComponent) contractLiquidationLong: ContractLiquidationLongComponent;
-
   @Input() ticketList: Ticket[];
   @Input() contract: Contract;
   @Input() discountTables: DiscountTables
