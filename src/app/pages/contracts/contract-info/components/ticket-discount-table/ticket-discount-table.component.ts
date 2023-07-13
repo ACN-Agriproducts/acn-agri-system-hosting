@@ -70,11 +70,36 @@ export class TicketDiscountTableComponent implements OnInit {
       { header: this.transloco.translate("contracts.info.Adjusted Weight (lbs)"), key: 'adjustedWeight' },
       { header: this.transloco.translate("contracts.info.Price ($/BU)"), key: 'pricePerBushel', style: { numFmt: '0.0000' } },
       { header: this.transloco.translate("contracts.info.Total ($)"), key: 'total', style: { numFmt: '0.000' } },
-      { header: this.transloco.translate("contracts.info.Infested"), key: 'infested', style: { numFmt: '0.000' } , hidden: !this.totals.priceDiscounts.infested },
-      { header: this.transloco.translate("contracts.info.Musty"), key: 'musty', style: { numFmt: '0.000' } , hidden: !this.totals.priceDiscounts.musty },
-      { header: this.transloco.translate("contracts.info.Sour"), key: 'sour', style: { numFmt: '0.000' } , hidden: !this.totals.priceDiscounts.sour },
-      { header: this.transloco.translate("contracts.info.Weathered"), key: 'weathered', style: { numFmt: '0.000' } , hidden: !this.totals.priceDiscounts.weathered },
-      { header: this.transloco.translate("contracts.info.Inspection"), key: 'inspection', style: { numFmt: '0.000' } , hidden: !this.totals.priceDiscounts.inspection },
+      { 
+        header: this.transloco.translate("contracts.info.Infested"), 
+        key: 'infested', 
+        style: { numFmt: '0.000' }, 
+        hidden: !this.totals.priceDiscounts.infested 
+      },
+      { 
+        header: this.transloco.translate("contracts.info.Musty"), 
+        key: 'musty', 
+        style: { numFmt: '0.000' }, 
+        hidden: !this.totals.priceDiscounts.musty 
+      },
+      { 
+        header: this.transloco.translate("contracts.info.Sour"), 
+        key: 'sour', 
+        style: { numFmt: '0.000' }, 
+        hidden: !this.totals.priceDiscounts.sour 
+      },
+      { 
+        header: this.transloco.translate("contracts.info.Weathered"), 
+        key: 'weathered', 
+        style: { numFmt: '0.000' }, 
+        hidden: !this.totals.priceDiscounts.weathered 
+      },
+      { 
+        header: this.transloco.translate("contracts.info.Inspection"), 
+        key: 'inspection', 
+        style: { numFmt: '0.000' }, 
+        hidden: !this.totals.priceDiscounts.inspection 
+      },
       { header: this.transloco.translate("contracts.info.Net to Pay ($)"), key: 'netToPay', style: { numFmt: '0.000' } }
     ];
 
