@@ -81,7 +81,7 @@ export class SplitTicketComponent implements OnInit {
     ticketDataA.splitTicketParent = this.data.ref;
     ticketDataA.subId = 'A';
 
-    ticketDataB.gross = this.newWeight + ticketDataB.tare;
+    ticketDataB.gross = this.newWeight.getMassInUnit(this.session.getDefaultUnit()) + ticketDataB.tare;
     ticketDataB.contractRef = this.newContract.ref;
     ticketDataB.contractID = this.newContract.id;
     ticketDataB.splitTicketSibling = ticketRefA;
