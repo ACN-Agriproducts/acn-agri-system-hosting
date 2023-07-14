@@ -20,11 +20,11 @@
     Fix Inventory
     <ion-icon slot="end" name="create-outline"></ion-icon>
   </ion-item>
-  <ion-item button (click)="splitTicket()">
+  <ion-item button (click)="splitTicket()" *ngIf="!ticket.void && (userPermissions?.admin || userPermissions?.splitTicket)">
     Split Ticket
     <ion-icon slot="end" name="duplicate-outline"></ion-icon>
   </ion-item>
-  <ion-item button (click)="changeTicketContract()">
+  <ion-item button (click)="changeTicketContract()" hidden> <!-- TODO Not complete -->
     Change Ticket Contract
     <ion-icon slot="end" name="documents-outline"></ion-icon>
   </ion-item>
