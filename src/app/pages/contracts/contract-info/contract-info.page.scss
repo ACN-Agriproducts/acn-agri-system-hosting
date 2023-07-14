@@ -15,19 +15,3 @@ app-display-contract {
     transform-origin: 0 0;
     transform: scale(.2);
 }
-
-@media screen {
-    app-contract-liquidation-long {
-        display: none;
-    }
-}
-
-button {
-    margin: 10px;
-}
-
-.selected-tickets-count {
-    color: gray;
-    font-size: 0.9em;
-    font-style: italic;
-}

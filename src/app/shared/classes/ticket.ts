@@ -8,22 +8,27 @@ import { Contract } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
 import { Plant } from "./plant";
+import { DiscountTables } from "./discount-tables";
 
 @Injectable()
 export class Ticket extends FirebaseDocInterface{
+    public brokenGrain: number;
     public clientName: string;
     public comment: string;
     public contractID: number;
+    public damagedGrain: number;
     public dateIn: Date;
     public dateOut: Date;
     public discount: number;
     public driver: string;
     public dryWeight: Mass;
     public dryWeightPercent: number;
+    public foreignMatter: number;
     public grade: number;
     public gross: Mass;
     public id: number;
     public imageLinks: string[];
+    public impurities: number;
     public in: boolean;
     public lot: string;
     public moisture: number;
@@ -76,19 +81,23 @@ export class Ticket extends FirebaseDocInterface{
 
         const data = snapshot.data();
 
+        this.brokenGrain = data.brokenGrain;
         this.clientName = data.clientName;
         this.comment = data.comment;
         this.contractID = data.contractID;
+        this.damagedGrain = data.damagedGrain;
         this.dateIn = data.dateIn.toDate();
         this.dateOut = data.dateOut.toDate();
         this.discount = data.discount;
         this.driver = data.driver;
         this.dryWeight = new Mass(data.dryWeight, unit);
         this.dryWeightPercent = data.dryWeightPercent;
+        this.foreignMatter = data.foreignMatter;
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
         this.id = data.id;
         this.imageLinks = data.imageLinks;
+        this.impurities = data.impurities;
         this.in = data.in;
         this.lot = data.lot;
         this.moisture = data.moisture;
@@ -139,19 +148,23 @@ export class Ticket extends FirebaseDocInterface{
     public static converter = {
         toFirestore(data: Ticket): DocumentData {
             return {
+                brokenGrain: data.brokenGrain,
                 clientName: data.clientName,
                 comment: data.comment,
                 contractID: data.contractID,
+                damagedGrain: data.damagedGrain,
                 dateIn: data.dateIn,
                 dateOut: data.dateOut,
                 discount: data.discount,
                 driver: data.driver,
                 dryWeight: data.dryWeight.get(),
                 dryWeightPercent: data.dryWeightPercent,
+                foreignMatter: data.foreignMatter,
                 grade: data.grade,
                 gross: data.gross.get(),
                 id: data.id,
                 imageLinks: data.imageLinks,
+                impurities: data.impurities,
                 in: data.in,
                 lot: data.lot,
                 moisture: data.moisture,
@@ -309,5 +322,60 @@ export class Ticket extends FirebaseDocInterface{
         const ticketSnapshot = await getCountFromServer(ticketCollQuery);
 
         return ticketSnapshot.data().count;
+    }
+}
+
+
+export declare type TicketWithDiscounts = {
+    data: Ticket, 
+    weightDiscounts: WeightDiscounts, 
+    priceDiscounts: PriceDiscounts, 
+    includeInReport: boolean
+};
+
+class Discounts {
+    constructor(data?: Discounts) {
+        if (!data) return;
+        Object.keys(this).forEach(key => this[key] = data[key]);
+    }
+
+    public total(): number {
+        if (this instanceof WeightDiscounts) {
+            return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
+        }
+        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
+    }
+}
+
+export class PriceDiscounts extends Discounts {
+    public infested: number = 0;
+    public musty: number = 0;
+    public sour: number = 0;
+    public weathered: number = 0;
+    public inspection: number = 0;
+}
+
+export class WeightDiscounts extends Discounts {
+    brokenGrain: Mass = new Mass(0, null);
+    damagedGrain: Mass = new Mass(0, null);
+    dryWeight: Mass = new Mass(0, null);
+    dryWeightPercent: Mass = new Mass(0, null);
+    foreignMatter: Mass = new Mass(0, null);
+    moisture: Mass = new Mass(0, null);
+    PPB: Mass = new Mass(0, null);
+    weight: Mass = new Mass(0, null);
+    impurities: Mass = new Mass(0, null);
+
+    constructor(ticket?: Ticket, discountTables?: DiscountTables) {
+        super();
+
+        if (!ticket || !discountTables) return;
+
+        for (const key of Object.keys(this)) {
+            const table = discountTables.tables.find(table => table.fieldName === key);
+            const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
+            this[key].defaultUnits = ticket.net.getUnit();
+            this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
+        }
     }
 }

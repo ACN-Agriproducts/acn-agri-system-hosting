@@ -163,6 +163,10 @@ export class SessionInfo {
     return this.companyDisplayUnit;
   }
 
+  public getLanguage(): string {
+    return this.language;
+  }
+
   public clear(): Promise<void> {
     this.company = null;
     this.plant = null;

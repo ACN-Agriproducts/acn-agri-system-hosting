@@ -1,9 +1,7 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { Firestore, collection, doc, getDoc, updateDoc } from '@angular/fire/firestore';
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatTable } from '@angular/material/table';
-import { NavController } from '@ionic/angular';
-import { Product } from '@shared/classes/product';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { DiscountTable } from '@shared/classes/discount-tables';
 
 @Component({
   selector: 'app-discount-table',
@@ -11,115 +9,54 @@ import { Product } from '@shared/classes/product';
   styleUrls: ['./discount-table.component.scss'],
 })
 export class DiscountTableComponent implements OnInit {
-  @Input() doc: Product;
-  @ViewChild(MatTable) tableView:MatTable<any>;
+  @Input() table: DiscountTable;
 
-  public ready = false;
-  public table: UntypedFormGroup;
-  public currentCompany: string;
-  public displayedColumns: string[] = ['low', 'high', 'weightDiscount', 'charge', 'bonus', 'delete'];
+  @Output() setTable: EventEmitter<undefined> = new EventEmitter();
+  @Output() saveTable: EventEmitter<undefined> = new EventEmitter();
+  @Output() deleteTable: EventEmitter<undefined> = new EventEmitter();
+  
+  public editing: boolean = false;
+  public prevTable: DiscountTable;
 
   constructor(
-    private db: Firestore,
-    private fb: UntypedFormBuilder,
-    private navController: NavController
+    private snack: SnackbarService
   ) { }
 
-  ngOnInit() {
-    this.table = this.fb.group({
-      data: this.fb.array([])
-    });
-    
-    getDoc(doc(collection(this.doc.ref, "discounts"), "moisture")).then(val => {
-      const data = this.table.get("data") as UntypedFormArray;
+  ngOnInit() { }
 
-      if(val.data()['data']){
-        val.data()['data'].forEach(row => {
-          data.push(this.createItem(row));
-        });  
-      }
-    
-      this.ready = true;
-
-      if (this.data.length == 0) {
-        this.addItem();
-      }
-    })
+  drop(event: CdkDragDrop<any>) {
+    moveItemInArray(this.table.data, event.previousIndex, event.currentIndex);
   }
 
-  createItem(row?: any): UntypedFormGroup{
-    if(typeof row == "undefined"){
-      row = {
-        low: null,
-        high: null,
-        weightDiscount: null,
-        charge: null,
-        bonus: null
-      }
-    }
-
-    return this.fb.group({
-      low: [row.low,Validators.required],
-      high: [row.high,Validators.required],
-      weightDiscount: [row.weightDiscount,Validators.required],
-      charge: [row.charge,Validators.required],
-      bonus: [row.bonus,Validators.required]
-    })
+  save() {
+    delete this.prevTable;
+    this.editing = false;
+    this.saveTable.emit();
   }
 
-  public addItem(): void{
-    const data = this.table.get("data") as UntypedFormArray;
-    data.push(this.createItem());
-
-    if(this.tableView){
-      this.tableView.renderRows();
-    }
+  edit() {
+    this.prevTable = new DiscountTable(this.table);
+    this.editing = true;
   }
 
-  public deleteItem(index: number): void{
-    const data = this.table.get("data") as UntypedFormArray;
-    if(index >= data.length){
-      return;
-    }
-
-    data.removeAt(index);
-    this.tableView.renderRows();
+  cancel() {
+    this.revert();
+    this.editing = false;
   }
 
-  public submit(): void {
-    var rawTable: any[] = this.table.getRawValue().data as any[];
-    rawTable.sort((a,b) => a.low - b.low);
-    
-    if(!this.checkOverlap(rawTable)){
-      return;
-    }
-
-    updateDoc(doc(collection(this.doc.ref, "discounts"), "moisture"), {
-      data: rawTable
-    });
-
-    this.navController.navigateForward('dashboard/inventory');
+  reset() {
+    this.revert();
+    this.edit();
   }
 
-  public checkOverlap(rawTable: any[]): boolean {
-    var tableRanges: number[] = [];
-
-    rawTable.forEach(row => {
-      if(row.low >= row.high){
-        return false;
-      }
-
-      tableRanges.forEach(high => {
-        if(row.low < high){
-          return false;
-        }
-      });
-    });
-
-    return true;
+  revert() {
+    this.table = this.prevTable;
+    delete this.prevTable;
+    this.snack.open(`Changes Reverted`);
   }
 
-  get data(): UntypedFormArray {
-    return this.table.get('data') as UntypedFormArray;
+  ngOnDestroy() {
+    delete this.table;
+    delete this.prevTable;
   }
 }

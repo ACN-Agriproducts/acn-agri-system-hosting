@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Contract } from '@shared/classes/contract';
-import { Ticket } from '@shared/classes/ticket';
+import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Contract, LiquidationTotals } from '@shared/classes/contract';
+import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
+
 
 @Component({
   selector: 'app-contract-liquidation-long',
@@ -9,38 +11,32 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class ContractLiquidationLongComponent implements OnInit {
   @Input() contract: Contract;
-  @Input() ticketList: { 
-    data: Ticket, 
-    discounts: any, 
-    includeInReport: boolean 
-  }[];
-  @Input() totals: {
-    gross: number,
-    tare: number,
-    net: number,
-    moistureDiscount: number,
-    moistureAdjustedWeight: number,
-    totalBeforeDiscounts: number,
-    infested: number,
-    inspection: number,
-    netToPay: number
-  };
+  @Input() selectedTickets: TicketWithDiscounts[];
+  @Input() totals: LiquidationTotals;
 
-  constructor() { }
+  public date: Date = new Date();
+  public language: string;
+
+  constructor(
+    private session: SessionInfo
+  ) { }
 
   ngOnInit() {
-
+    this.language = this.session.getLanguage();
   }
 
   ngOnDestroy() {
+    delete this.date;
+  }
+}
 
+@Pipe({
+  name: 'discounts'
+})
+export class DiscountsPipe implements PipeTransform {
+
+  transform(discounts: WeightDiscounts | PriceDiscounts, ...args: any): number {
+    return discounts.total();
   }
 
-  public getDate(): Date {
-    return new Date();
-  }
-
-  public getTable(): HTMLElement{ 
-    return document.getElementById("liquidation-table");
-  }
 }
