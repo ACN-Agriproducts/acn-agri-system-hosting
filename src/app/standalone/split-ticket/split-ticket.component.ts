@@ -42,7 +42,7 @@ export class SplitTicketComponent implements OnInit {
     this.displayUnit = this.session.getDisplayUnit();
     this.defaultUnit = this.session.getDefaultUnit();
 
-    this.language = this.session.getLangauge();
+    this.language = this.session.getLanguage();
     this.newWeight.defaultUnits = this.session.getDefaultUnit();
     this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
       this.contract = ticketContract
