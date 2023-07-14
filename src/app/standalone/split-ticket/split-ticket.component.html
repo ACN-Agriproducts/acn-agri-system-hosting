@@ -36,7 +36,7 @@
       </div>
       <div class="card-row">
         <span>Gross:</span>
-        <span>{{data.gross | massInUnit:defaultUnit}}</span>
+        <span>{{((data.gross | massInUnit:defaultUnit) - (newWeight | massInUnit:defaultUnit:newWeight.amount))}}</span>
       </div>
       <div class="card-row">
         <span>Tare:</span>
