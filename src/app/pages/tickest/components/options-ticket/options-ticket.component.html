@@ -24,6 +24,10 @@
     Split Ticket
     <ion-icon slot="end" name="duplicate-outline"></ion-icon>
   </ion-item>
+  <ion-item button (click)="changeTicketContract()">
+    Change Ticket Contract
+    <ion-icon slot="end" name="duplicate-outline"></ion-icon>
+  </ion-item>
   <ion-item button lines="none" color="danger" (click)="voidTicket()" 
     *ngIf="!ticket.void && userPermissions?.admin || userPermissions?.['tickets']?.voidTicketRequest">
     Void

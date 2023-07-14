@@ -9,6 +9,7 @@ import { Ticket } from '@shared/classes/ticket';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage/fix-ticket-storage.component';
 import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
+import { ChangeTicketContractComponent } from 'src/app/standalone/change-ticket-contract/change-ticket-contract.component';
 
 @Component({
   selector: 'app-options-ticket',
@@ -140,5 +141,15 @@ export class OptionsTicketComponent implements OnInit {
     this.dialog.open(SplitTicketComponent, {
       data: this.ticket
     });
+
+    this.popoverController.dismiss();
+  }
+
+  public changeTicketContract(): void {
+    this.dialog.open(ChangeTicketContractComponent, {
+      data: this.ticket
+    });
+
+    this.popoverController.dismiss();
   }
 }
