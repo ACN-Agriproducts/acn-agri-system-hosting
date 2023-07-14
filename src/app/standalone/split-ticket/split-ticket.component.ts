@@ -7,6 +7,7 @@ import { CoreModule } from '@core/core.module';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { IonicModule } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
+import { Mass, units } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -22,10 +23,14 @@ import { Ticket } from '@shared/classes/ticket';
   ]
 })
 export class SplitTicketComponent implements OnInit {
-  public contract: Promise<Contract>;
+  public contract: Contract;
   public possibleContracts: Promise<Contract[]>;
   public newContract: Contract;
-  public newWeight: number = 0;
+  public newWeight: Mass = new Mass(0, null);
+
+  public displayUnit: units;
+  public defaultUnit: units;
+  public language: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Ticket,
@@ -34,8 +39,14 @@ export class SplitTicketComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.contract = this.data.getContract(this.db);
-    this.possibleContracts = this.contract.then(ticketContract => {
+    this.displayUnit = this.session.getDisplayUnit();
+    this.defaultUnit = this.session.getDefaultUnit();
+
+    this.language = this.session.getLangauge();
+    this.newWeight.defaultUnits = this.session.getDefaultUnit();
+    this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
+      this.contract = ticketContract
+      this.newWeight.defineBushels(this.contract.productInfo);
       return Contract.getContracts(
         this.db, 
         this.session.getCompany(), 
@@ -51,7 +62,7 @@ export class SplitTicketComponent implements OnInit {
 
       const contractOverdelivery = this.newContract.currentDelivered.subtract(this.newContract.quantity)
       if(contractOverdelivery.get() > 0 && contractOverdelivery.subtract(this.data.net).get() < 0) {
-        this.newWeight = Math.round(contractOverdelivery.getMassInUnit('lbs'));
+        this.newWeight.amount = Math.round(contractOverdelivery.getMassInUnit(this.newWeight.defaultUnits));
       }
     });
   }
@@ -65,7 +76,7 @@ export class SplitTicketComponent implements OnInit {
     const ticketDataA = this.data.getGenericCopy();
     const ticketDataB = this.data.getGenericCopy();
 
-    ticketDataA.gross -= this.newWeight;
+    ticketDataA.gross -= this.newWeight.getMassInUnit(this.session.getDefaultUnit());
     ticketDataA.splitTicketSibling = ticketRefB;
     ticketDataA.splitTicketParent = this.data.ref;
     ticketDataA.subId = 'A';

@@ -1,59 +1,59 @@
 <h2 mat-dialog-title>Split Ticket {{data.id}}</h2>
 <mat-dialog-content>
-  <div class="flex-container">
+  <div class="ticket-container">
     <mat-card class="ticket-card">
-      <div class="ticket-row">
+      <div class="card-row">
         <span><b>ID:</b></span>
         <span><b>{{data.id}}</b></span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span><b>Contract ID:</b></span>
         <span><b>{{data.contractID}}</b></span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Gross:</span>
-        <span>{{data.gross | massInUnit:'lbs'}}</span>
+        <span>{{data.gross | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Tare:</span>
-        <span>{{data.tare | massInUnit:'lbs'}}</span>
+        <span>{{data.tare | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Net:</span>
-        <span>{{data.getNet() | massInUnit:'lbs'}}</span>
+        <span>{{data.net | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">{{data.productName}}</div>
+      <div class="card-row">{{data.productName}}</div>
     </mat-card>
-    <span id="arrow-right">&#8594;</span>
+    <span class="arrow-right">&#8594;</span>
     <mat-card class="ticket-card">
-      <div class="ticket-row">
+      <div class="card-row">
         <span><b>ID:</b></span>
         <span><b>{{data.id}}A</b></span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span><b>Contract ID:</b></span>
         <span><b>{{data.contractID}}</b></span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Gross:</span>
-        <span>{{data.gross | massInUnit:'lbs'}}</span>
+        <span>{{data.gross | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Tare:</span>
-        <span>{{data.tare | massInUnit:'lbs'}}</span>
+        <span>{{data.tare | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Net:</span>
-        <span>{{(data.getNet() | massInUnit:'lbs') - newWeight}}</span>
+        <span>{{((data.net | massInUnit:defaultUnit) - (newWeight | massInUnit:defaultUnit:newWeight.amount)) | number:'1.0-0'}}</span>
       </div>
-      <div class="ticket-row">{{data.productName}}</div>
+      <div class="card-row">{{data.productName}}</div>
     </mat-card>
     <mat-card class="ticket-card">
-      <div class="ticket-row">
+      <div class="card-row">
         <span><b>ID:</b></span>
         <span><b>{{data.id}}B</b></span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span><b>Contract ID:</b></span>
         <mat-form-field>
           <mat-select [(ngModel)]="newContract">
@@ -61,26 +61,68 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Gross:</span>
-        <span>{{data.gross | massInUnit:'lbs'}}</span>
+        <span>{{data.gross | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Tare:</span>
-        <span>{{data.tare | massInUnit:'lbs'}}</span>
+        <span>{{data.tare | massInUnit:defaultUnit}}</span>
       </div>
-      <div class="ticket-row">
+      <div class="card-row">
         <span>Net:</span>
         <mat-form-field>
           <input 
             matInput 
             type="number" 
-            [(ngModel)]="newWeight" 
+            [(ngModel)]="newWeight.amount" 
             min="0"
-            [max]="data.getNet().get()">
+            [max]="data.net | massInUnit:defaultUnit">
         </mat-form-field>
       </div>
-      <div class="ticket-row">{{data.productName}}</div>
+      <div class="card-row">{{data.productName}}</div>
+    </mat-card>
+  </div>
+  
+  <h2 
+    *ngIf="(possibleContracts |async) 
+    && contract 
+    && contract.ref.id != newContract?.ref?.id">
+    Contract Changes</h2>
+  <div 
+    class="contract-container" 
+    *ngIf="(possibleContracts |async) 
+      && contract 
+      && contract.ref.id != newContract?.ref?.id">
+    <mat-card class="contract-card">
+      <div><b>Contract {{contract.id}}</b></div>
+      <div class="card-row"><span>Current:</span><span>{{contract.currentDelivered | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="percent-block">{{(contract.currentDelivered | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+      <mat-progress-bar mode="determinate" [value]="(contract.currentDelivered | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+    </mat-card>
+    <span class="arrow-right">&#8594;</span>
+    <mat-card class="contract-card">
+      <div><b>Contract {{contract.id}}</b></div>
+      <div class="card-row"><span>Current:</span><span>{{((contract.currentDelivered | massInUnit:displayUnit) - (newWeight | massInUnit:displayUnit:newWeight.amount)) | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="percent-block">{{((contract.currentDelivered | massInUnit:displayUnit) - (newWeight | massInUnit:displayUnit:newWeight.amount)) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+      <mat-progress-bar mode="determinate" [value]="((contract.currentDelivered | massInUnit:displayUnit) - (newWeight | massInUnit:displayUnit:newWeight.amount)) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+    </mat-card>
+    <mat-card class="contract-card">
+      <div><b>Contract {{newContract.id}}</b></div>
+      <div class="card-row"><span>Current:</span><span>{{newContract.currentDelivered | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="card-row"><span>Quantity:</span><span>{{newContract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="percent-block">{{(newContract.currentDelivered | massInUnit:displayUnit) / (newContract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+      <mat-progress-bar mode="determinate" [value]="(newContract.currentDelivered | massInUnit:displayUnit) / (newContract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+    </mat-card>
+    <span class="arrow-right">&#8594;</span>
+    <mat-card class="contract-card">
+      <div><b>Contract {{newContract.id}}</b></div>
+      <div class="card-row"><span>Current:</span><span>{{((newContract.currentDelivered | massInUnit:displayUnit) + (newWeight | massInUnit:displayUnit:newWeight.amount)) | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="card-row"><span>Quantity:</span><span>{{newContract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="percent-block">{{((newContract.currentDelivered | massInUnit:displayUnit) + (newWeight | massInUnit:displayUnit:newWeight.amount)) / (newContract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+      <mat-progress-bar mode="determinate" [value]="((newContract.currentDelivered | massInUnit:displayUnit) + (newWeight | massInUnit:displayUnit:newWeight.amount)) / (newContract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
     </mat-card>
   </div>
 </mat-dialog-content>
