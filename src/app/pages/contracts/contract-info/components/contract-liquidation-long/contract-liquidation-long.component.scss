@@ -1,3 +1,6 @@
+
+$lightlightgray: rgb(230, 230, 230);
+
 :host {
     display: block;
     height: auto; //203.2mm;
@@ -14,11 +17,11 @@ table {
     line-height: 1.5em;
     table-layout: fixed;
     width: 100%;
-    word-wrap: break-word;
 
     th, td {
         border: black solid 1px;
         padding: 0px 2px;
+        hyphens: auto;
     }
 
     .one-fr {
@@ -57,6 +60,7 @@ table {
 
 .client-info {
     margin-top: 2em;
+    margin-bottom: 1em;
     display: flex;
     justify-content: space-evenly;
     
@@ -98,9 +102,15 @@ table {
 }
 
 .even {
-    background-color: lightgray;
+    background-color: $lightlightgray;
 }
 
 .odd {
     background-color: white;
+}
+
+@media print {
+    * {
+        print-color-adjust: exact;
+    }
 }

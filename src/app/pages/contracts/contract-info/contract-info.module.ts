@@ -10,7 +10,7 @@ import { ContractInfoPage } from './contract-info.page';
 import { CoreModule } from '@core/core.module';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
-import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
+import { ContractLiquidationLongComponent, DiscountsPipe } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
@@ -39,7 +39,8 @@ import { ContractPrintablesModule } from 'src/app/modules/contract-printables/co
     ContractLiquidationLongComponent,
     DisplayContractComponent,
     TicketDiscountTableComponent,
-    TruckersFormComponent
+    TruckersFormComponent,
+    DiscountsPipe,
   ]
 })
 export class ContractInfoPageModule {}

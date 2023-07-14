@@ -15,7 +15,7 @@ import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 
 import * as Excel from 'exceljs';
 import { FormControl } from '@angular/forms';
-import { collection, Firestore, getDocs, query, where } from '@angular/fire/firestore';
+import { collection, Firestore, getDocs, query, where, limit } from '@angular/fire/firestore';
 import { Product } from '@shared/classes/product';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 
@@ -118,8 +118,9 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
     getDocs(query(collection(Plant.getDocReference(this.db, this.currentCompany, this.currentPlant), 'inventory'),
       where("month", "==", date.month() + 1),
       where("year", "==", date.year()),
-      where("product", "==", this.productDoc.ref.id)))
-      .then(dpr => {
+      where("product", "==", this.productDoc.ref.id),
+      limit(1)
+    )).then(dpr => {
         this.tableData = [];
         this.dprDoc = dpr.docs[0].data();
 
@@ -136,31 +137,8 @@ export class ProductDprTableComponent implements OnInit, OnDestroy {
             endOfDay: 0
           }
 
-
-          if(data[day] != null){
-            if(data[day].inQuantity != null){
-              tempData.inQuantity = data[day].inQuantity;
-            }
-
-            if(data[day].outQuantity != null){
-              tempData.outQuantity = data[day].outQuantity;
-            }
-
-            if(data[day].adjustment != null){
-              tempData.adjustment = data[day].adjustment;
-            }
-
-            if(data[day].inTickets != null){
-              tempData.inTickets = data[day].inTickets;
-            }
-
-            if(data[day].outTickets != null){
-              tempData.outTickets = data[day].outTickets;
-            }
-
-            if(data[day].invoices != null){
-              tempData.invoices = data[day].invoices;
-            }
+          for (let prop in data[day]) {
+            if (data[day][prop] != null) tempData[prop] = data[day][prop];
           }
 
           if(day > 1){

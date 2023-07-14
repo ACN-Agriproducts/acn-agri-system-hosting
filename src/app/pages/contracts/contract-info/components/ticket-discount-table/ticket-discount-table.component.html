@@ -1,38 +1,108 @@
-<ion-card *transloco="let t, read: 'contracts.info'">
-  <div class="table-row header">
-    <ion-text>{{t('Include')}}</ion-text>
-    <ion-text>{{t('Date')}}</ion-text>
-    <ion-text>{{t('ID')}}</ion-text>
-    <ion-text>{{t('Moisture')}}</ion-text>
-    <ion-text>{{t('Test Wt')}}</ion-text>
-    <ion-text>{{t('Gross')}}</ion-text>
-    <ion-text>{{t('Tare')}}</ion-text>
-    <ion-text>{{t('Net')}}</ion-text>
-    <ion-text>{{t('Infested Discount')}}</ion-text>
-    <ion-text>{{t('Inspection Discount')}}</ion-text>
-  </div>
-  <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
-    <ion-text>
-      <mat-checkbox [(ngModel)]="ticket.includeInReport" (ngModelChange)="selectChange.emit()"></mat-checkbox>
-    </ion-text>
-    <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
-    <ion-text>{{ticket.data.id}}</ion-text>
-    <ion-text>{{ticket.data.moisture}}</ion-text>
-    <ion-text>{{ticket.data.weight}}</ion-text>
-    <ion-text>{{ticket.data.gross | massInUnit}}</ion-text>
-    <ion-text>{{ticket.data.tare | massInUnit}}</ion-text>
-    <ion-text>{{ticket.data.getNet() | massInUnit}}</ion-text>
-    <ion-text>
-      <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.infested" type="number"/>
-        <span matPrefix>$ &nbsp;</span>
-      </mat-form-field>
-    </ion-text>
-    <ion-text>
-      <mat-form-field>
-        <input matInput [(ngModel)]="ticket.discounts.inspection" type="number"/>
-        <span matPrefix>$ &nbsp;</span>
-      </mat-form-field>
-    </ion-text>
-  </div>
-</ion-card>
+
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <ion-card>
+    <div class="table-row header">
+      <ion-text>{{ t('Include') | titlecase }}</ion-text>
+      <ion-text>{{ t('Date') | titlecase }}</ion-text>
+      <ion-text>{{ t('ID') | titlecase }}</ion-text>
+      <ion-text>{{ t('Moisture') | titlecase }}</ion-text>
+      <ion-text>{{ t('Test Wt') | titlecase }}</ion-text>
+      <ion-text>{{ t('Gross') | titlecase }}</ion-text>
+      <ion-text>{{ t('Tare') | titlecase }}</ion-text>
+      <ion-text>{{ t('Net') | titlecase }}</ion-text>
+      <ion-text>{{ t('Infested') | titlecase }}</ion-text>
+      <ion-text>{{ t('Musty') | titlecase }}</ion-text>
+      <ion-text>{{ t('Sour') | titlecase }}</ion-text>
+      <ion-text>{{ t('Weathered') | titlecase }}</ion-text>
+      <ion-text>{{ t('Inspection') | titlecase }}</ion-text>
+    </div>
+    <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
+      <ion-text>
+        <mat-checkbox [(ngModel)]="ticket.includeInReport" (change)="selectedTicketsChange()"></mat-checkbox>
+      </ion-text>
+      <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
+      <ion-text>{{ticket.data.id}}</ion-text>
+      <ion-text>{{ticket.data.moisture}}</ion-text>
+      <ion-text>{{ticket.data.weight}}</ion-text>
+      <ion-text>{{ticket.data.gross | massInUnit}}</ion-text>
+      <ion-text>{{ticket.data.tare | massInUnit}}</ion-text>
+      <ion-text>{{ticket.data.getNet() | massInUnit}}</ion-text>
+      <ion-text>
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="ticket.priceDiscounts.infested"
+            (change)="selectedTicketsChange()"
+            type="number"
+            min="0"
+          />
+          <span matPrefix>$ &nbsp;</span>
+        </mat-form-field>
+      </ion-text>
+      <ion-text>
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="ticket.priceDiscounts.musty"
+            (change)="selectedTicketsChange()"
+            type="number"
+            min="0"
+          />
+          <span matPrefix>$ &nbsp;</span>
+        </mat-form-field>
+      </ion-text>
+      <ion-text>
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="ticket.priceDiscounts.sour"
+            (change)="selectedTicketsChange()"
+            type="number"
+            min="0"
+          />
+          <span matPrefix>$ &nbsp;</span>
+        </mat-form-field>
+      </ion-text>
+      <ion-text>
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="ticket.priceDiscounts.weathered"
+            (change)="selectedTicketsChange()"
+            type="number"
+            min="0"
+          />
+          <span matPrefix>$ &nbsp;</span>
+        </mat-form-field>
+      </ion-text>
+      <ion-text>
+        <mat-form-field>
+          <input matInput
+            [(ngModel)]="ticket.priceDiscounts.inspection"
+            (change)="selectedTicketsChange()"
+            type="number"
+            min="0"
+          />
+          <span matPrefix>$ &nbsp;</span>
+        </mat-form-field>
+      </ion-text>
+    </div>
+  </ion-card>
+  
+  <button mat-raised-button (click)="selectAllTickets(false)" [disabled]="selectedTickets.length === 0">Deselect All</button>
+  <button mat-raised-button (click)="selectAllTickets(true)" [disabled]="selectedTickets.length === ticketDiscountList.length">Select All</button>
+  <button mat-raised-button
+    [disabled]="selectedTickets.length === 0"
+    (click)="onDownloadLiquidation()"
+  >{{ t('download') | titlecase }}</button>
+  <button mat-raised-button
+    [disabled]="selectedTickets.length === 0"
+    ngxPrint
+    [useExistingCss]="true"
+    printSectionId="ContractLiquidationLong"
+    [printStyle]="{'@page' : { size: 'letter landscape' }}"
+  >{{ t('print') | titlecase }}</button>
+  <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
+  
+  <app-contract-liquidation-long id='ContractLiquidationLong' class="printable"
+    [selectedTickets]="selectedTickets"
+    [contract]="contract"
+    [totals]="totals"
+  ></app-contract-liquidation-long>
+</ng-container>
