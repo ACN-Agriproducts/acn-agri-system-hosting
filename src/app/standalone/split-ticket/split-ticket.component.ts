@@ -136,6 +136,10 @@ export class SplitTicketComponent implements OnInit {
     this.ticketContractChange();
   }
 
+  formIsValid(): boolean {
+    return this.data.net.getMassInUnit(this.defaultUnit) == this.newTickets.map(t => t.net).reduce((prev, current) => prev + current) && !this.newTickets.some(t => t.net < 0);
+  }
+
   async submit() {
     console.log(this.newTickets);
     // const batch = writeBatch(this.db);
