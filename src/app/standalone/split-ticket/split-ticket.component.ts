@@ -27,7 +27,7 @@ export class SplitTicketComponent implements OnInit {
   public possibleContracts: Promise<Contract[]>;
   public newTickets: SplitTicket[] = [];
   public numberOfTickets: number = 2;
-  public newContracts: splitContract[] = [];
+  public newContracts: splitContract[] = []; // Object to display contract changes
 
   public displayUnit: units;
   public defaultUnit: units;
@@ -43,19 +43,22 @@ export class SplitTicketComponent implements OnInit {
   ngOnInit() {
     this.displayUnit = this.session.getDisplayUnit();
     this.defaultUnit = this.session.getDefaultUnit();
-
     this.language = this.session.getLanguage();
+
+    // Get current ticket contract
     this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
       this.contract = ticketContract
       this.newTickets = [ this.newSplitTicket(), this.newSplitTicket() ];
       this.newTickets[0].net = this.data.net.getMassInUnit(this.defaultUnit);
       
+      // Check if ticket can be split so that exess goes into the new contract
       const contractOverdelivery = Math.round(this.contract.currentDelivered.getMassInUnit(this.defaultUnit));
       if(contractOverdelivery > 0 && contractOverdelivery - this.data.net.getMassInUnit(this.defaultUnit) < 0) {
         this.newTickets[0].net -= contractOverdelivery;
         this.newTickets[1].net = contractOverdelivery;
       }
 
+      // Get possible contracts ticket can be split into, contracts with the same client that are active
       return Contract.getContracts(
         this.db, 
         this.session.getCompany(), 
@@ -64,6 +67,7 @@ export class SplitTicketComponent implements OnInit {
         where('status', '==', 'active'));
     });
 
+    // Set newContracts object
     this.possibleContracts.then(() => {
       this.ticketContractChange();
     });
@@ -88,13 +92,16 @@ export class SplitTicketComponent implements OnInit {
   ticketWeightChange(): void {
     this.newTickets[0].net = this.data.net.getMassInUnit(this.defaultUnit);
     
+    // First ticket will always be calculated using the other tickets.
     for(let index = 1; index < this.newTickets.length; index++) {
       this.newTickets[0].net -= this.newTickets[index].net;
     }
 
+    // Find and reset contracts
     const originalContract = this.newContracts.find(c => c.docId == this.contract.ref.id);
     this.newContracts.forEach(c => c.afterCurrent.amount = c.current.amount);
 
+    // Calculate newContract objects
     this.newTickets.forEach(ticket => {
       const c = this.newContracts.find(c => c.docId == ticket.contractId);
       originalContract.afterCurrent.amount -= ticket.net;
@@ -105,7 +112,9 @@ export class SplitTicketComponent implements OnInit {
   async ticketContractChange(): Promise<void> {
     const contracts: splitContract[] = [];
     const pContracts = await this.possibleContracts;
+    
     this.newTickets.forEach(ticket => {
+      // Check if contract is other than original
       if(contracts.some(c => c.docId == ticket.contractId)) return;
       const tContract = pContracts.find(c => c.ref.id == ticket.contractId);
 
