@@ -22,21 +22,41 @@
         <span>Net:</span>
         <span>{{data.net | massInUnit:defaultUnit}}</span>
       </div>
+      <div class="card-row">
+        <span>lot</span>
+        <span>{{data.lot}}</span>
+      </div>
       <div class="card-row">{{data.productName}}</div>
     </mat-card>
     <span class="arrow-right">&#8594;</span>
-    <mat-card class="ticket-card">
+    <mat-card class="ticket-card" *ngFor="let ticket of newTickets; let first = first; let index = index">
       <div class="card-row">
         <span><b>ID:</b></span>
-        <span><b>{{data.id}}A</b></span>
+        <span>
+          <b>{{data.id}}{{getSubIdChar(index)}}</b>
+          <button 
+            mat-icon-button 
+            color="warn" 
+            (click)="removeTicket(index)"
+            *ngIf="!first && newTickets.length > 2">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </span>
       </div>
       <div class="card-row">
         <span><b>Contract ID:</b></span>
-        <span><b>{{data.contractID}}</b></span>
+        <span *ngIf="first; else contractField"><b>{{data.contractID}}</b></span>
+        <ng-template #contractField>
+          <mat-form-field>
+            <mat-select [(ngModel)]="ticket.contractId">
+              <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract.ref.id">{{contract.id}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-template>
       </div>
       <div class="card-row">
         <span>Gross:</span>
-        <span>{{((data.gross | massInUnit:defaultUnit) - (newWeight | massInUnit:defaultUnit:newWeight.amount))}}</span>
+        <span>{{ticket.net + (data.tare | massInUnit:defaultUnit)}}</span>
       </div>
       <div class="card-row">
         <span>Tare:</span>
@@ -44,47 +64,33 @@
       </div>
       <div class="card-row">
         <span>Net:</span>
-        <span>{{((data.net | massInUnit:defaultUnit) - (newWeight | massInUnit:defaultUnit:newWeight.amount)) | number:'1.0-0'}}</span>
+        <span *ngIf="first; else netField">{{ticket.net}}</span>
+        <ng-template #netField>
+          <mat-form-field>
+            <input
+              matInput
+              type="number"
+              [(ngModel)]="ticket.net"
+              (ngModelChange)="ticketWeightChange()"
+              min="0"
+              [max]="data.net | massInUnit:defaultUnit">
+          </mat-form-field>
+        </ng-template>
       </div>
-      <div class="card-row">{{data.productName}}</div>
-    </mat-card>
-    <mat-card class="ticket-card">
       <div class="card-row">
-        <span><b>ID:</b></span>
-        <span><b>{{data.id}}B</b></span>
-      </div>
-      <div class="card-row">
-        <span><b>Contract ID:</b></span>
+        <span>lot</span>
         <mat-form-field>
-          <mat-select [(ngModel)]="newContract">
-            <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract">{{contract.id}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="card-row">
-        <span>Gross:</span>
-        <span>{{data.gross | massInUnit:defaultUnit}}</span>
-      </div>
-      <div class="card-row">
-        <span>Tare:</span>
-        <span>{{data.tare | massInUnit:defaultUnit}}</span>
-      </div>
-      <div class="card-row">
-        <span>Net:</span>
-        <mat-form-field>
-          <input 
-            matInput 
-            type="number" 
-            [(ngModel)]="newWeight.amount" 
-            min="0"
-            [max]="data.net | massInUnit:defaultUnit">
+          <input matInput [(ngModel)]="ticket.lot">
         </mat-form-field>
       </div>
       <div class="card-row">{{data.productName}}</div>
     </mat-card>
+    <button mat-fab color="primary" (click)="addTicket()">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
   
-  <h2 
+  <!-- <h2 
     *ngIf="(possibleContracts |async) 
     && contract 
     && contract.ref.id != newContract?.ref?.id">
@@ -125,7 +131,7 @@
       <mat-progress-bar mode="determinate" [value]="((newContract.currentDelivered | massInUnit:displayUnit) + (newWeight | massInUnit:displayUnit:newWeight.amount)) / (newContract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
     </mat-card>
   </div>
-</mat-dialog-content>
+</mat-dialog-content> -->
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button (click)="submit()">Submit</button>

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { doc, Firestore, where, writeBatch } from '@angular/fire/firestore';
+import { doc, DocumentReference, Firestore, where, writeBatch } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreModule } from '@core/core.module';
@@ -25,12 +25,13 @@ import { Ticket } from '@shared/classes/ticket';
 export class SplitTicketComponent implements OnInit {
   public contract: Contract;
   public possibleContracts: Promise<Contract[]>;
-  public newContract: Contract;
-  public newWeight: Mass = new Mass(0, null);
+  public newTickets: SplitTicket[] = [];
+  public numberOfTickets: number = 2;
 
   public displayUnit: units;
   public defaultUnit: units;
   public language: string;
+  public 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Ticket,
@@ -43,10 +44,17 @@ export class SplitTicketComponent implements OnInit {
     this.defaultUnit = this.session.getDefaultUnit();
 
     this.language = this.session.getLanguage();
-    this.newWeight.defaultUnits = this.session.getDefaultUnit();
     this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
       this.contract = ticketContract
-      this.newWeight.defineBushels(this.contract.productInfo);
+      this.newTickets = [ this.newSplitTicket(), this.newSplitTicket() ];
+      this.newTickets[0].net = this.data.net.getMassInUnit(this.defaultUnit);
+      
+      const contractOverdelivery = Math.round(this.contract.currentDelivered.getMassInUnit(this.defaultUnit));
+      if(contractOverdelivery > 0 && contractOverdelivery - this.data.net.getMassInUnit(this.defaultUnit) < 0) {
+        this.newTickets[0].net -= contractOverdelivery;
+        this.newTickets[1].net = contractOverdelivery;
+      }
+
       return Contract.getContracts(
         this.db, 
         this.session.getCompany(), 
@@ -54,57 +62,82 @@ export class SplitTicketComponent implements OnInit {
         where('client', '==', ticketContract.client),
         where('status', '==', 'active'));
     });
+  }
 
-    this.possibleContracts.then(async contractsList => {
-      const ticketContract = await this.contract;
-      this.newContract = contractsList.find(c => c.ref.id == ticketContract.ref.id) ?? null;
-      if(!this.newContract) return;
+  newSplitTicket(): SplitTicket {
+    return {
+      net: 0,
+      contractId: this.contract.ref.id,
+      lot: this.data.lot
+    };
+  }
 
-      const contractOverdelivery = this.newContract.currentDelivered.subtract(this.newContract.quantity)
-      if(contractOverdelivery.get() > 0 && contractOverdelivery.subtract(this.data.net).get() < 0) {
-        this.newWeight.amount = Math.round(contractOverdelivery.getMassInUnit(this.newWeight.defaultUnits));
-      }
-    });
+  addTicket(): void {
+    this.newTickets.push(this.newSplitTicket());
+  }
+
+  getSubIdChar(index: number): string {
+    return String.fromCharCode(65 + index);
+  }
+
+  ticketWeightChange(): void {
+    this.newTickets[0].net = this.data.net.getMassInUnit(this.defaultUnit);
+    
+    for(let index = 1; index < this.newTickets.length; index++) {
+      this.newTickets[0].net -= this.newTickets[index].net;
+    }
+  }
+
+  removeTicket(index: number): void {
+    this.newTickets.splice(index, 1);
+    this.ticketWeightChange();
   }
 
   async submit() {
-    const batch = writeBatch(this.db);
-    const ticketCol = this.data.ref.parent.withConverter(null);
+    console.log(this.newTickets);
+    // const batch = writeBatch(this.db);
+    // const ticketCol = this.data.ref.parent.withConverter(null);
 
-    const ticketRefA = doc(ticketCol)
-    const ticketRefB = doc(ticketCol)
-    const ticketDataA = this.data.getGenericCopy();
-    const ticketDataB = this.data.getGenericCopy();
+    // const ticketRefA = doc(ticketCol)
+    // const ticketRefB = doc(ticketCol)
+    // const ticketDataA = this.data.getGenericCopy();
+    // const ticketDataB = this.data.getGenericCopy();
 
-    ticketDataA.gross -= this.newWeight.getMassInUnit(this.session.getDefaultUnit());
-    ticketDataA.splitTicketSibling = ticketRefB;
-    ticketDataA.splitTicketParent = this.data.ref;
-    ticketDataA.subId = 'A';
+    // ticketDataA.gross -= this.newWeight.getMassInUnit(this.session.getDefaultUnit());
+    // ticketDataA.splitTicketSibling = ticketRefB;
+    // ticketDataA.splitTicketParent = this.data.ref;
+    // ticketDataA.subId = 'A';
 
-    ticketDataB.gross = this.newWeight.getMassInUnit(this.session.getDefaultUnit()) + ticketDataB.tare;
-    ticketDataB.contractRef = this.newContract.ref;
-    ticketDataB.contractID = this.newContract.id;
-    ticketDataB.splitTicketSibling = ticketRefA;
-    ticketDataB.splitTicketParent = this.data.ref;
-    ticketDataB.subId = 'B';
+    // ticketDataB.gross = this.newWeight.getMassInUnit(this.session.getDefaultUnit()) + ticketDataB.tare;
+    // ticketDataB.contractRef = this.newContract.ref;
+    // ticketDataB.contractID = this.newContract.id;
+    // ticketDataB.splitTicketSibling = ticketRefA;
+    // ticketDataB.splitTicketParent = this.data.ref;
+    // ticketDataB.subId = 'B';
 
-    console.log(ticketDataA);
-    console.log(ticketDataB);
+    // console.log(ticketDataA);
+    // console.log(ticketDataB);
 
-    batch.update(this.data.ref.withConverter(null), {
-      splitTicketChildA: ticketRefA,
-      splitTicketChildB: ticketRefB,
-      void: true,
-      voidAcceptor: 'System',
-      voidReason: 'Split Ticket',
-      voidRequester: this.session.getUser().uid
-    });
+    // batch.update(this.data.ref.withConverter(null), {
+    //   splitTicketChildA: ticketRefA,
+    //   splitTicketChildB: ticketRefB,
+    //   void: true,
+    //   voidAcceptor: 'System',
+    //   voidReason: 'Split Ticket',
+    //   voidRequester: this.session.getUser().uid
+    // });
 
-    console.log("setting")
-    batch.set(ticketRefA, ticketDataA);
-    batch.set(ticketRefB, ticketDataB);
+    // console.log("setting")
+    // batch.set(ticketRefA, ticketDataA);
+    // batch.set(ticketRefB, ticketDataB);
 
-    console.log(batch, 'set');
-    batch.commit();
+    // console.log(batch, 'set');
+    // batch.commit();
   }
+}
+
+interface SplitTicket {
+  net: number;
+  contractId: string;
+  lot: string;
 }
