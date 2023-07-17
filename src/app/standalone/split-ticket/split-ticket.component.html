@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Split Ticket {{data.id}}</h2>
-<mat-dialog-content>
+<mat-dialog-content *ngIf="possibleContracts | async; else loading">
   <div class="ticket-container">
     <mat-card class="ticket-card">
       <div class="card-row">
@@ -134,3 +134,7 @@
   <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button (click)="submit()">Submit</button>
 </mat-dialog-actions>
+
+<ng-template #loading>
+  Loading...
+</ng-template>

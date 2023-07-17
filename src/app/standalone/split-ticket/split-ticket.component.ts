@@ -63,6 +63,10 @@ export class SplitTicketComponent implements OnInit {
         where('client', '==', ticketContract.client),
         where('status', '==', 'active'));
     });
+
+    this.possibleContracts.then(() => {
+      this.ticketContractChange();
+    });
   }
 
   newSplitTicket(): SplitTicket {
@@ -89,12 +93,12 @@ export class SplitTicketComponent implements OnInit {
     }
 
     const originalContract = this.newContracts.find(c => c.docId == this.contract.ref.id);
+    this.newContracts.forEach(c => c.afterCurrent.amount = c.current.amount);
 
     this.newTickets.forEach(ticket => {
       const c = this.newContracts.find(c => c.docId == ticket.contractId);
-      originalContract.afterCurrent.amount = originalContract.current.amount - ticket.net;
-      c.afterCurrent.amount = c.current.amount + ticket.net;
-      console.log(ticket, c)
+      originalContract.afterCurrent.amount -= ticket.net;
+      c.afterCurrent.amount += ticket.net;
     });
   }
 
