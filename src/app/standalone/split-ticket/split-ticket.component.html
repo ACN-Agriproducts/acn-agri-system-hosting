@@ -23,7 +23,7 @@
         <span>{{data.net | massInUnit:defaultUnit}}</span>
       </div>
       <div class="card-row">
-        <span>lot</span>
+        <span>Lot:</span>
         <span>{{data.lot}}</span>
       </div>
       <div class="card-row">{{data.productName}}</div>
@@ -33,7 +33,7 @@
       <div class="card-row">
         <span><b>ID:</b></span>
         <span>
-          <b>{{data.id}}{{getSubIdChar(index)}}</b>
+          <b>{{data.id}}-{{getSubIdChar(index)}}</b>
           <button 
             mat-icon-button 
             color="warn" 
@@ -48,7 +48,7 @@
         <span *ngIf="first; else contractField"><b>{{data.contractID}}</b></span>
         <ng-template #contractField>
           <mat-form-field>
-            <mat-select [(ngModel)]="ticket.contractId">
+            <mat-select [(ngModel)]="ticket.contractId" (ngModelChange)="ticketContractChange()">
               <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract.ref.id">{{contract.id}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -78,7 +78,7 @@
         </ng-template>
       </div>
       <div class="card-row">
-        <span>lot</span>
+        <span>Lot:</span>
         <mat-form-field>
           <input matInput [(ngModel)]="ticket.lot">
         </mat-form-field>
@@ -90,32 +90,30 @@
     </button>
   </div>
   
-  <!-- <h2 
-    *ngIf="(possibleContracts |async) 
-    && contract 
-    && contract.ref.id != newContract?.ref?.id">
+  <h2 
+    *ngIf="newContracts.length > 1">
     Contract Changes</h2>
   <div 
     class="contract-container" 
-    *ngIf="(possibleContracts |async) 
-      && contract 
-      && contract.ref.id != newContract?.ref?.id">
-    <mat-card class="contract-card">
-      <div><b>Contract {{contract.id}}</b></div>
-      <div class="card-row"><span>Current:</span><span>{{contract.currentDelivered | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
-      <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
-      <div class="percent-block">{{(contract.currentDelivered | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
-      <mat-progress-bar mode="determinate" [value]="(contract.currentDelivered | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
-    </mat-card>
-    <span class="arrow-right">&#8594;</span>
-    <mat-card class="contract-card">
-      <div><b>Contract {{contract.id}}</b></div>
-      <div class="card-row"><span>Current:</span><span>{{((contract.currentDelivered | massInUnit:displayUnit) - (newWeight | massInUnit:displayUnit:newWeight.amount)) | number:'1.2-2':language}} {{displayUnit}}</span></div>
-      <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
-      <div class="percent-block">{{((contract.currentDelivered | massInUnit:displayUnit) - (newWeight | massInUnit:displayUnit:newWeight.amount)) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
-      <mat-progress-bar mode="determinate" [value]="((contract.currentDelivered | massInUnit:displayUnit) - (newWeight | massInUnit:displayUnit:newWeight.amount)) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
-    </mat-card>
-    <mat-card class="contract-card">
+    *ngIf="newContracts.length > 1">
+    <ng-container *ngFor="let contract of newContracts">
+      <mat-card class="contract-card">
+        <div><b>Contract {{contract.id}}</b></div>
+        <div class="card-row"><span>Current:</span><span>{{contract.current | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="percent-block">{{(contract.current | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+        <mat-progress-bar mode="determinate" [value]="(contract.current | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+      </mat-card>
+      <span class="arrow-right">&#8594;</span>
+      <mat-card class="contract-card">
+        <div><b>Contract {{contract.id}}</b></div>
+        <div class="card-row"><span>Current:</span><span>{{contract.afterCurrent | massInUnit:displayUnit:contract.afterCurrent.amount | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="percent-block">{{(contract.afterCurrent | massInUnit:displayUnit:contract.afterCurrent.amount) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+        <mat-progress-bar mode="determinate" [value]="(contract.afterCurrent | massInUnit:displayUnit:contract.afterCurrent.amount) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+      </mat-card>
+    </ng-container>
+    <!-- <mat-card class="contract-card">
       <div><b>Contract {{newContract.id}}</b></div>
       <div class="card-row"><span>Current:</span><span>{{newContract.currentDelivered | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
       <div class="card-row"><span>Quantity:</span><span>{{newContract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
@@ -129,9 +127,9 @@
       <div class="card-row"><span>Quantity:</span><span>{{newContract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
       <div class="percent-block">{{((newContract.currentDelivered | massInUnit:displayUnit) + (newWeight | massInUnit:displayUnit:newWeight.amount)) / (newContract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
       <mat-progress-bar mode="determinate" [value]="((newContract.currentDelivered | massInUnit:displayUnit) + (newWeight | massInUnit:displayUnit:newWeight.amount)) / (newContract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
-    </mat-card>
+    </mat-card> -->
   </div>
-</mat-dialog-content> -->
+</mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button (click)="submit()">Submit</button>

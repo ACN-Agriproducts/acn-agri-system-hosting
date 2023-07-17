@@ -27,6 +27,7 @@ export class SplitTicketComponent implements OnInit {
   public possibleContracts: Promise<Contract[]>;
   public newTickets: SplitTicket[] = [];
   public numberOfTickets: number = 2;
+  public newContracts: splitContract[] = [];
 
   public displayUnit: units;
   public defaultUnit: units;
@@ -86,11 +87,40 @@ export class SplitTicketComponent implements OnInit {
     for(let index = 1; index < this.newTickets.length; index++) {
       this.newTickets[0].net -= this.newTickets[index].net;
     }
+
+    const originalContract = this.newContracts.find(c => c.docId == this.contract.ref.id);
+
+    this.newTickets.forEach(ticket => {
+      const c = this.newContracts.find(c => c.docId == ticket.contractId);
+      originalContract.afterCurrent.amount = originalContract.current.amount - ticket.net;
+      c.afterCurrent.amount = c.current.amount + ticket.net;
+      console.log(ticket, c)
+    });
+  }
+
+  async ticketContractChange(): Promise<void> {
+    const contracts: splitContract[] = [];
+    const pContracts = await this.possibleContracts;
+    this.newTickets.forEach(ticket => {
+      if(contracts.some(c => c.docId == ticket.contractId)) return;
+      const tContract = pContracts.find(c => c.ref.id == ticket.contractId);
+
+      contracts.push({
+        docId: ticket.contractId,
+        id: tContract.id,
+        current: new Mass(tContract.currentDelivered.getMassInUnit(this.defaultUnit), this.defaultUnit, tContract.productInfo),
+        quantity: new Mass(tContract.quantity.getMassInUnit(this.defaultUnit), this.defaultUnit, tContract.productInfo),
+        afterCurrent: new Mass(tContract.currentDelivered.getMassInUnit(this.defaultUnit), this.defaultUnit, tContract.productInfo),
+      });
+    });
+
+    this.newContracts = contracts;
+    this.ticketWeightChange()
   }
 
   removeTicket(index: number): void {
     this.newTickets.splice(index, 1);
-    this.ticketWeightChange();
+    this.ticketContractChange();
   }
 
   async submit() {
@@ -140,4 +170,12 @@ interface SplitTicket {
   net: number;
   contractId: string;
   lot: string;
+}
+
+interface splitContract {
+  docId: string;
+  id: number;
+  current: Mass;
+  quantity: Mass;
+  afterCurrent: Mass;
 }
