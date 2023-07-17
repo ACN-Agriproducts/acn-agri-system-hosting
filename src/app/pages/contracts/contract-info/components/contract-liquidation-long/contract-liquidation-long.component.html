@@ -80,7 +80,7 @@
         </tr>
         <tr *ngFor="let ticket of selectedTickets; even as even">
             <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.data.dateIn | date:'shortDate' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.data.id }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.data.displayId }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.gross | massInUnit }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.tare | massInUnit }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.net | massInUnit }}</td>

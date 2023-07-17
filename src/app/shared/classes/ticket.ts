@@ -27,6 +27,7 @@ export class Ticket extends FirebaseDocInterface{
     public grade: number;
     public gross: Mass;
     public id: number;
+    public displayId: string;
     public imageLinks: string[];
     public impurities: number;
     public in: boolean;
@@ -96,6 +97,7 @@ export class Ticket extends FirebaseDocInterface{
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
         this.id = data.id;
+        this.displayId = data.id + (data.subId ? "-" + data.subId : '')
         this.imageLinks = data.imageLinks;
         this.impurities = data.impurities;
         this.in = data.in;
