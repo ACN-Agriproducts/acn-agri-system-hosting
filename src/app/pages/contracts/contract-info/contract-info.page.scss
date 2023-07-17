@@ -1,17 +1,50 @@
-.flex-row {
+
+* {
+    box-sizing: border-box;
+}
+
+app-ticket-discount-table {
+    // max-width: 1500px !important;
+}
+
+// ::ng-deep div.wrapper {
+//     max-height: 1075px;
+//     overflow-y: scroll;
+// }
+
+.flex-column {
     display: flex;
-    flex-wrap: wrap;
+    flex-flow: column;
+    gap: 10px;
+    align-items: center;
 
-    .info-card {
-        flex: 1 0 475px;
-    }
-
-    #printable-card {
-        flex: 0 0 auto;
+    > * {
+        width: 100%;
     }
 }
 
-app-display-contract {
-    transform-origin: 0 0;
-    transform: scale(.2);
+.flex-row {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    justify-content: center;
+
+    #form-and-liquidations {
+        flex: 1 1 470px;
+        max-width: 945px;
+    }
+
+    &.list-content {
+        & > * {
+            height: min-content;
+        }
+        #ticket-list {
+            flex: 1 1 470px;
+            max-width: 945px;
+        }
+        #trucker-list {
+            flex: 1 1 945px;
+            max-width: 945px;
+        }
+    }
 }

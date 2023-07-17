@@ -42,6 +42,7 @@ export class Ticket extends FirebaseDocInterface{
     public plague: string;
     public plates: string;
     public PPB: number;
+    public priceDiscounts: PriceDiscounts;
     public productName: string;
     public tank: string;
     public tankId: number;
@@ -54,6 +55,7 @@ export class Ticket extends FirebaseDocInterface{
     public voidRequest: boolean;
     public voidRequester: string;
     public weight: number;
+    public weightDiscounts: WeightDiscounts;
 
     public contractRef: DocumentReference<Contract>;
 
@@ -323,18 +325,13 @@ export declare type TicketWithDiscounts = {
     includeInReport: boolean
 };
 
-class Discounts {
+abstract class Discounts {
     constructor(data?: Discounts) {
         if (!data) return;
         Object.keys(this).forEach(key => this[key] = data[key]);
     }
 
-    public total(): number {
-        if (this instanceof WeightDiscounts) {
-            return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
-        }
-        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
-    }
+    public abstract total(): number;
 }
 
 export class PriceDiscounts extends Discounts {
@@ -343,6 +340,10 @@ export class PriceDiscounts extends Discounts {
     public sour: number = 0;
     public weathered: number = 0;
     public inspection: number = 0;
+
+    total() {
+        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
+    }
 }
 
 export class WeightDiscounts extends Discounts {
@@ -367,5 +368,9 @@ export class WeightDiscounts extends Discounts {
             this[key].defaultUnits = ticket.net.getUnit();
             this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
         }
+    }
+
+    total() {
+        return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
     }
 }
