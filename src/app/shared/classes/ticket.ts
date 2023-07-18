@@ -69,10 +69,6 @@ export class Ticket extends FirebaseDocInterface{
     public transportZipCode: string;
     public transportCaat: string;
 
-    public splitTicketChildA: DocumentReference<Ticket>;
-    public splitTicketChildB: DocumentReference<Ticket>;
-    public splitTicketSibling: DocumentReference<Ticket>;
-    public splitTicketParent: DocumentReference<Ticket>;
     public subId: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
@@ -138,10 +134,6 @@ export class Ticket extends FirebaseDocInterface{
         this.transportZipCode = data.transportZipCode;
         this.transportCaat = data.transportCaat;
 
-        this.splitTicketChildA = data.splitTicketChildA;
-        this.splitTicketChildB = data.splitTicketChildB;
-        this.splitTicketSibling = data.splitTicketSibling;
-        this.splitTicketParent = data.splitTicketParent;
         this.subId = data.subId;
 
         this.net = this.gross.subtract(this.tare);
@@ -205,10 +197,6 @@ export class Ticket extends FirebaseDocInterface{
                 transportZipCode: data.weight,
                 transportCaat: data.weight,
 
-                splitTicketChildA: data.splitTicketChildA,
-                splitTicketChildB: data.splitTicketChildB,
-                splitTicketSibling: data.splitTicketSibling,
-                splitTicketParent: data.splitTicketParent,
                 subId: data.subId,
 
             }
