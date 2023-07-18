@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { doc, DocumentReference, Firestore, where, writeBatch } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 import { FormsModule } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreModule } from '@core/core.module';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { IonicModule } from '@ionic/angular';
 import { Contract } from '@shared/classes/contract';
 import { Mass, units } from '@shared/classes/mass';
@@ -32,12 +34,14 @@ export class SplitTicketComponent implements OnInit {
   public displayUnit: units;
   public defaultUnit: units;
   public language: string;
-  public 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Ticket,
+    public dialogRef: MatDialogRef<SplitTicketComponent>,
     private db: Firestore,
     private session: SessionInfo,
+    private functions: Functions,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -137,49 +141,22 @@ export class SplitTicketComponent implements OnInit {
   }
 
   formIsValid(): boolean {
-    return this.data.net.getMassInUnit(this.defaultUnit) == this.newTickets.map(t => t.net).reduce((prev, current) => prev + current) && !this.newTickets.some(t => t.net < 0);
+    const initialValue = 0;
+    return this.data.net.getMassInUnit(this.defaultUnit) == this.newTickets.map(t => t.net).reduce((prev, current) => prev + current, initialValue) && !this.newTickets.some(t => t.net < 0);
   }
 
   async submit() {
-    console.log(this.newTickets);
-    // const batch = writeBatch(this.db);
-    // const ticketCol = this.data.ref.parent.withConverter(null);
-
-    // const ticketRefA = doc(ticketCol)
-    // const ticketRefB = doc(ticketCol)
-    // const ticketDataA = this.data.getGenericCopy();
-    // const ticketDataB = this.data.getGenericCopy();
-
-    // ticketDataA.gross -= this.newWeight.getMassInUnit(this.session.getDefaultUnit());
-    // ticketDataA.splitTicketSibling = ticketRefB;
-    // ticketDataA.splitTicketParent = this.data.ref;
-    // ticketDataA.subId = 'A';
-
-    // ticketDataB.gross = this.newWeight.getMassInUnit(this.session.getDefaultUnit()) + ticketDataB.tare;
-    // ticketDataB.contractRef = this.newContract.ref;
-    // ticketDataB.contractID = this.newContract.id;
-    // ticketDataB.splitTicketSibling = ticketRefA;
-    // ticketDataB.splitTicketParent = this.data.ref;
-    // ticketDataB.subId = 'B';
-
-    // console.log(ticketDataA);
-    // console.log(ticketDataB);
-
-    // batch.update(this.data.ref.withConverter(null), {
-    //   splitTicketChildA: ticketRefA,
-    //   splitTicketChildB: ticketRefB,
-    //   void: true,
-    //   voidAcceptor: 'System',
-    //   voidReason: 'Split Ticket',
-    //   voidRequester: this.session.getUser().uid
-    // });
-
-    // console.log("setting")
-    // batch.set(ticketRefA, ticketDataA);
-    // batch.set(ticketRefB, ticketDataB);
-
-    // console.log(batch, 'set');
-    // batch.commit();
+    httpsCallable(this.functions, 'tickets-splitTicket')({
+      tickets: this.newTickets,
+      ticketRef: this.data.ref.path,
+    }).then(result => {
+      console.log(result);
+      this.snack.open("Successful", 'success');
+      this.dialogRef.close();
+    }).catch(e => {
+      this.snack.open("Error", 'error');
+      console.error(e)
+    });
   }
 }
 
