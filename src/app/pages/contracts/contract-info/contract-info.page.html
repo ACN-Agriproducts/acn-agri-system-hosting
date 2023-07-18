@@ -3,50 +3,52 @@
 
   <ion-content class="ion-padding">
     <ng-container *ngIf="ready">
-      <mat-toolbar>
-        <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
-      </mat-toolbar>
-      
-      <div class="flex-column" *ngIf="!showLiquidation else liquidation">
-        <div class="flex-row">
-          <div id="form-and-liquidations">
-            <app-contract-form *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
-            <mat-card id="contract-liquidations">
+      <div class="flex-column">
+        <mat-toolbar class="flex-row">
+          <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
+        </mat-toolbar>
+        
+        <ng-container *ngIf="!showLiquidation else liquidation">
+          <div class="flex-row">
+            <div id="form-and-liquidations">
+              <app-contract-form *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
+              <mat-card id="contract-liquidations">
+                <mat-card-header>
+                  <mat-card-subtitle>Contract Liquidations</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <app-contract-liquidations></app-contract-liquidations>
+                </mat-card-content>
+              </mat-card>
+            </div>
+            <mat-card id="printable-card">
               <mat-card-header>
-                <mat-card-subtitle>Contract Liquidations</mat-card-subtitle>
+                <mat-card-subtitle>{{t('contract document')}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <app-contract-liquidations></app-contract-liquidations>
+                <app-display-contract [contract]="currentContract"></app-display-contract>
               </mat-card-content>
             </mat-card>
           </div>
-          <mat-card id="printable-card">
-            <mat-card-header>
-              <mat-card-subtitle>{{t('contract document')}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <app-display-contract [contract]="currentContract"></app-display-contract>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div class="flex-row list-content">
-          <mat-card id="ticket-list">
-            <mat-card-header>
-              <mat-card-subtitle>{{t("ticket list")}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <app-tickets-table #ticketTable *ngIf="ticketList" [ticketList]="ticketList"></app-tickets-table>
-            </mat-card-content>
-          </mat-card>
-          <mat-card id="trucker-list">
-            <mat-card-header>
-              <mat-card-subtitle>{{t('trucker list')}}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <app-truckers-form [contract]="currentContract"></app-truckers-form>
-            </mat-card-content>
-          </mat-card>
-        </div>
+          <div class="flex-row list-content">
+            <mat-card id="ticket-list">
+              <mat-card-header>
+                <mat-card-subtitle>{{t("ticket list")}}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <app-tickets-table #ticketTable *ngIf="ticketList" [ticketList]="ticketList"></app-tickets-table>
+              </mat-card-content>
+            </mat-card>
+            <mat-card id="trucker-list">
+              <mat-card-header>
+                <mat-card-subtitle>{{t('trucker list')}}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <app-truckers-form [contract]="currentContract"></app-truckers-form>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </ng-container>
       </div>
     </ng-container>
   </ion-content>

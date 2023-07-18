@@ -10,6 +10,8 @@ import { Mass } from "./mass";
 import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
 
+type TicketStatus = "none" | "pending" | "paid";
+
 @Injectable()
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
@@ -44,6 +46,7 @@ export class Ticket extends FirebaseDocInterface{
     public PPB: number;
     public priceDiscounts: PriceDiscounts;
     public productName: string;
+    public status: TicketStatus;
     public tank: string;
     public tankId: number;
     public tare: Mass;
@@ -109,7 +112,9 @@ export class Ticket extends FirebaseDocInterface{
         this.plague = data.plague;
         this.plates = data.plates;
         this.PPB = data.PPB;
+        this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
+        this.status = data.status;
         this.tank = data.tank;
         this.tankId = data.tankId;
         this.tare = new Mass(data.tare, unit);
@@ -121,6 +126,7 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
+        this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
@@ -172,7 +178,9 @@ export class Ticket extends FirebaseDocInterface{
                 plague: data.plague,
                 plates: data.plates,
                 PPB: data.PPB,
+                priceDiscounts: data.priceDiscounts,
                 productName: data.productName,
+                status: data.status,
                 tank: data.tank,
                 tankId: data.tankId,
                 tare: data.tare.get(),
@@ -184,6 +192,7 @@ export class Ticket extends FirebaseDocInterface{
                 voidRequest: data.voidRequest,
                 voidRquester: data.voidRequester,
                 weight: data.weight,
+                weightDiscounts: data.weightDiscounts,
 
                 contractRef: data.contractRef,
 

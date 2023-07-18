@@ -10,7 +10,7 @@ import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from "./
 
 
 declare type contractType = string | boolean;
-declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
+declare type ContractStatus = 'pending' | 'active' | 'closed' | 'cancelled' | 'paid';
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
@@ -37,7 +37,7 @@ export class Contract extends FirebaseDocInterface {
     productInfo: ProductInfo;
     quantity: Mass;
     seller_terms: string;
-    status: status;
+    status: ContractStatus;
     tags: string[];
     tickets: DocumentReference<Ticket>[];
     transport: string;
@@ -464,10 +464,6 @@ export class Contract extends FirebaseDocInterface {
 
     public static getDocRef(db: Firestore, company: string, contractType: contractType, contractId: string): DocumentReference<Contract> {
         return doc(Contract.getCollectionReference(db, company, contractType), contractId);
-    }
-
-    public static getStatusEnum(): typeof status {
-        return status;
     }
 
     public static onSnapshot(ref: CollectionReference<Contract> | Query<Contract>, list: Contract[], onNext: (snapshot: QuerySnapshot<Contract>) => void = () => {}) {
