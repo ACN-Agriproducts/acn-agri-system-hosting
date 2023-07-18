@@ -6,7 +6,7 @@ import { Mass } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
 import { ContractSettings } from "./contract-settings";
-import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from "./ticket";
+import { Ticket } from "./ticket";
 
 
 declare type contractType = string | boolean;
@@ -77,7 +77,7 @@ export class Contract extends FirebaseDocInterface {
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
-            snapshot = snapshotOrRef
+            snapshot = snapshotOrRef;
         }
         
         super(snapshot, Contract.converter);
@@ -629,40 +629,3 @@ export interface Exectuive {
     name: string,
     ref: DocumentReference
 }
-
-export class LiquidationTotals {
-    public gross: number = 0;
-    public tare: number = 0;
-    public net: number = 0;
-    public adjustedWeight: number = 0;
-    public beforeFinalDiscounts: number = 0;
-    public netToPay: number = 0;
-    public weightDiscounts: WeightDiscounts = new WeightDiscounts();
-    public priceDiscounts: PriceDiscounts = new PriceDiscounts();
-
-    constructor(tickets?: TicketWithDiscounts[], contract?: Contract) {
-        if (!tickets || !contract) return;
-
-        tickets.forEach(ticket => {
-            this.gross += ticket.data.gross.get();
-            this.tare += ticket.data.tare.get();
-            this.net += ticket.data.net.get();
-
-            for (const key of Object.keys(this.weightDiscounts)) {
-                this.weightDiscounts[key].defaultUnits = ticket.data.net.getUnit();
-                this.weightDiscounts[key].amount += ticket.weightDiscounts[key].amount;
-            }
-            const tempAdjustedWeight = ticket.data.net.get() - ticket.weightDiscounts.total();
-            this.adjustedWeight += tempAdjustedWeight;
-
-            const tempBeforeFinalDiscounts = contract.price.getPricePerUnit("lbs", contract.quantity) * tempAdjustedWeight;
-            this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
-
-            for (const key of Object.keys(this.priceDiscounts)) {
-                this.priceDiscounts[key] += ticket.priceDiscounts[key];
-            }
-            this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
-        });
-    }
-}
-

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Contract, LiquidationTotals } from '@shared/classes/contract';
+import { Contract } from '@shared/classes/contract';
+import { LiquidationTotals } from '@shared/classes/contract-liquidation';
 import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 
 
