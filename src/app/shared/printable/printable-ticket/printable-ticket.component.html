@@ -1,7 +1,7 @@
 <div class='ticket-container' *ngIf="ticket">
   <!-- ID Block -->
   <div class='header' id='ticket-id-block'>
-    <h1>Ticket {{ticket.id}}</h1>
+    <h1>Ticket {{ticket.id}}<span *ngIf="ticket.subId">-{{ticket.subId}}</span></h1>
   </div>
 
   <!-- Date Block -->
