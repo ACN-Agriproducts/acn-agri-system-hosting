@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Split Ticket {{data.id}}</h2>
-<mat-dialog-content *ngIf="possibleContracts | async; else loading">
+<mat-dialog-content *ngIf="possibleContractsAsync | async; else loading">
   <div class="ticket-container">
     <mat-card class="ticket-card">
       <div class="card-row">
@@ -49,7 +49,7 @@
         <ng-template #contractField>
           <mat-form-field>
             <mat-select [(ngModel)]="ticket.contractId" (ngModelChange)="ticketContractChange()">
-              <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract.ref.id">{{contract.id}}</mat-option>
+              <mat-option *ngFor="let contract of possibleContracts" [value]="contract.ref.id">{{contract.id}}</mat-option>
             </mat-select>
           </mat-form-field>
         </ng-template>
@@ -132,9 +132,12 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [disabled]="!formIsValid()" (click)="submit()">Submit</button>
+  <button mat-button [disabled]="!formIsValid() || submitting" (click)="submit()">Submit</button>
+  <ng-container *ngIf="submitting">
+    <mat-spinner [diameter]="16"></mat-spinner>
+  </ng-container>
 </mat-dialog-actions>
 
-<ng-template #loading>
-  Loading...
+<ng-template #loading let-diameter>
+  <mat-spinner [diameter]="64"></mat-spinner>
 </ng-template>

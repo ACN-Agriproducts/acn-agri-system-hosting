@@ -26,7 +26,8 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class SplitTicketComponent implements OnInit {
   public contract: Contract;
-  public possibleContracts: Promise<Contract[]>;
+  public possibleContractsAsync: Promise<Contract[]>;
+  public possibleContracts: Contract[];
   public newTickets: SplitTicket[] = [];
   public numberOfTickets: number = 2;
   public newContracts: splitContract[] = []; // Object to display contract changes
@@ -34,6 +35,7 @@ export class SplitTicketComponent implements OnInit {
   public displayUnit: units;
   public defaultUnit: units;
   public language: string;
+  public submitting: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Ticket,
@@ -50,7 +52,7 @@ export class SplitTicketComponent implements OnInit {
     this.language = this.session.getLanguage();
 
     // Get current ticket contract
-    this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
+    this.possibleContractsAsync = this.data.getContract(this.db).then(ticketContract => {
       this.contract = ticketContract
       this.newTickets = [ this.newSplitTicket(), this.newSplitTicket() ];
       this.newTickets[0].net = this.data.net.getMassInUnit(this.defaultUnit);
@@ -70,9 +72,11 @@ export class SplitTicketComponent implements OnInit {
         where('client', '==', ticketContract.client),
         where('status', '==', 'active'));
     });
-
-    // Set newContracts object
-    this.possibleContracts.then(() => {
+    
+    this.possibleContractsAsync.then(result => {
+      // Set newContracts object
+      this.possibleContracts = result;
+      if(!this.possibleContracts.some(c => this.contract.ref.id == c.ref.id)) this.possibleContracts.push(this.contract); //Make sure current contract exists even if it's closed
       this.ticketContractChange();
     });
   }
@@ -115,12 +119,12 @@ export class SplitTicketComponent implements OnInit {
 
   async ticketContractChange(): Promise<void> {
     const contracts: splitContract[] = [];
-    const pContracts = await this.possibleContracts;
+    if(!this.possibleContracts.some(c => this.contract.ref.id == c.ref.id)) this.possibleContracts.push(this.contract);
     
     this.newTickets.forEach(ticket => {
       // Check if contract is other than original
       if(contracts.some(c => c.docId == ticket.contractId)) return;
-      const tContract = pContracts.find(c => c.ref.id == ticket.contractId);
+      const tContract = this.possibleContracts.find(c => c.ref.id == ticket.contractId);
 
       contracts.push({
         docId: ticket.contractId,
@@ -146,6 +150,7 @@ export class SplitTicketComponent implements OnInit {
   }
 
   async submit() {
+    this.submitting = true;
     httpsCallable(this.functions, 'tickets-splitTicket')({
       tickets: this.newTickets,
       ticketRef: this.data.ref.path,
@@ -154,6 +159,7 @@ export class SplitTicketComponent implements OnInit {
       this.snack.open("Successful", 'success');
       this.dialogRef.close();
     }).catch(e => {
+      this.submitting = false;
       this.snack.open("Error", 'error');
       console.error(e)
     });
