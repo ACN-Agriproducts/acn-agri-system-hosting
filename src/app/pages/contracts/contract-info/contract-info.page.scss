@@ -4,7 +4,12 @@
 }
 
 app-ticket-discount-table {
-    // max-width: 1500px !important;
+    width: 100%;
+}
+
+app-contract-liquidations {
+    overflow-y: scroll;
+    max-height: min-content;
 }
 
 // ::ng-deep div.wrapper {
@@ -14,12 +19,8 @@ app-ticket-discount-table {
 
 .flex-column {
     display: flex;
-    flex-flow: column;
+    flex-flow: column nowrap;
     gap: 10px;
-
-    // mat-toolbar {
-    //     width: max-content;
-    // }
 }
 
 .flex-row {
@@ -46,4 +47,10 @@ app-ticket-discount-table {
             max-width: 945px;
         }
     }
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }

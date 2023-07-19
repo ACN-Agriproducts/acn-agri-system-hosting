@@ -102,7 +102,12 @@
             "truckers-saved-message": "Camioneros guardados",
             "Truckers": "Camioneros",
             "Weathered": "Desgastado",
-            "Weight (lbs)": "Peso (lbs)"
+            "Weight (lbs)": "Peso (lbs)",
+            "status": "estatus",
+            "tickets": "boletas",
+            "options": "opciones",
+            "contract liquidations": "liquidaciones de contratos",
+            "liquidation": "liquidación"
         }
     },
     "directory": {

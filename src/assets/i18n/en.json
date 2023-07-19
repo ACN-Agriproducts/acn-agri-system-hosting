@@ -101,7 +101,12 @@
             "truckers-saved-message": "Truckers saved",
             "Truckers": "Truckers",
             "Weathered": "Weathered",
-            "Weight (lbs)": "Weight (lbs)"
+            "Weight (lbs)": "Weight (lbs)",
+            "status": "status",
+            "tickets": "tickets",
+            "options": "options",
+            "contract liquidations": "contract liquidations",
+            "liquidation": "liquidation"
         }
     },
     "directory": {

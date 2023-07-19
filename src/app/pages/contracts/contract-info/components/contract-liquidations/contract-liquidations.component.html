@@ -1,3 +1,37 @@
-<p>
-  contract-liquidations works!
-</p>
+
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <!-- <div class="headers">
+    <div class="cell">{{ t('tickets') | titlecase }}</div>
+    <div class="cell">{{ t('Date') | titlecase }}</div>
+    <div class="cell">{{ t('status') | titlecase }}</div>
+    <div class="cell">{{ t('Price ($/BU)') | titlecase }}</div>
+    <div class="cell">{{ t('options') | titlecase }}</div>
+  </div>
+  <div *ngFor="let item of [1,2,3,4,5]">
+    <div class="cell">{{ item }} tickets</div>
+    <div class="cell">{{ item }} date</div>
+    <div class="cell">{{ item }} status</div>
+    <div class="cell">{{ item }} price</div>
+    <div class="cell">{{ item }} options</div>
+  </div> -->
+  <ol class="collection">
+    <mat-card class="header-card">
+      <li class="row">
+        <div class="cell">{{ t('tickets') | titlecase }}</div>
+        <div class="cell">{{ t('Date') | titlecase }}</div>
+        <div class="cell">{{ t('status') | titlecase }}</div>
+        <div class="cell">{{ t('Price ($/BU)') | titlecase }}</div>
+        <div class="cell">{{ t('options') | titlecase }}</div>
+      </li>
+    </mat-card>
+    <mat-card class="body-card" *ngFor="let item of [1,2,3,4,5]">
+      <li class="row">
+        <div class="cell">{{ item }} tickets</div>
+        <div class="cell">{{ item }} date</div>
+        <div class="cell">{{ item }} status</div>
+        <div class="cell">{{ item }} price</div>
+        <div class="cell">{{ item }} options</div>
+      </li>
+    </mat-card>
+  </ol>
+</ng-container>

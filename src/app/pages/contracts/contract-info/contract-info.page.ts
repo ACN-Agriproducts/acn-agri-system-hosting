@@ -8,6 +8,7 @@ import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { DiscountTables } from '@shared/classes/discount-tables';
+import { ContractLiquidation } from '@shared/classes/contract-liquidation';
 
 @Component({
   selector: 'app-contract-info',
@@ -25,6 +26,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public showLiquidation: boolean = false;
   public ticketList: Ticket[];
   public type: string;
+  public liquidations: Promise<ContractLiquidation[]>;
   
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +44,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.currentCompany, contract.product.id);
+      this.liquidations = ContractLiquidation.getContractLiquidations(this.db, this.currentCompany, contract.ref.id);
       
       this.ready = true;
     });

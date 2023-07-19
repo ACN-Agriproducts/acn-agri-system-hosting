@@ -2,22 +2,21 @@
   <app-header-toolbar [titulo]="t('contract') + ' ' + currentContract?.id"></app-header-toolbar>
 
   <ion-content class="ion-padding">
-    <ng-container *ngIf="ready">
+    <div class="center-content" *ngIf="ready">
       <div class="flex-column">
-        <mat-toolbar class="flex-row">
-          <mat-checkbox [(ngModel)]="showLiquidation">Liquidation</mat-checkbox>
+        <mat-toolbar>
+          <mat-checkbox [(ngModel)]="showLiquidation">{{ t('liquidation') | titlecase }}</mat-checkbox>
         </mat-toolbar>
-        
         <ng-container *ngIf="!showLiquidation else liquidation">
           <div class="flex-row">
             <div id="form-and-liquidations">
               <app-contract-form *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
               <mat-card id="contract-liquidations">
                 <mat-card-header>
-                  <mat-card-subtitle>Contract Liquidations</mat-card-subtitle>
+                  <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <app-contract-liquidations></app-contract-liquidations>
+                  <app-contract-liquidations [liquidations]="liquidations | async"></app-contract-liquidations>
                 </mat-card-content>
               </mat-card>
             </div>
@@ -50,7 +49,7 @@
           </div>
         </ng-container>
       </div>
-    </ng-container>
+    </div>
   </ion-content>
 </ng-container>
 

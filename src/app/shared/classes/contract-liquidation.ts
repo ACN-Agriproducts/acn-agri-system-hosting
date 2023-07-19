@@ -1,8 +1,8 @@
-import { CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
+import { CollectionReference, DocumentData, DocumentReference, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
-import { Firestore, collection } from "@angular/fire/firestore";
+import { Firestore, collection, getDocs, query } from "@angular/fire/firestore";
 
 type LiquidationStatus = "pending" | "paid" | "cancelled";
 
@@ -53,6 +53,12 @@ export class ContractLiquidation extends FirebaseDocInterface {
 
     public static getCollectionReference(db: Firestore, company: string, contractRefId: string): CollectionReference<ContractLiquidation> {
         return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(ContractLiquidation.converter);
+    }
+
+    public static getContractLiquidations(db: Firestore, company: string, contractRefId: string, ...constraints: QueryConstraint[]): Promise<ContractLiquidation[]> {
+        const collectionRef = ContractLiquidation.getCollectionReference(db, company, contractRefId);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return getDocs(collectionQuery).then(result => result.docs.map(snap => snap.data()));
     }
 }
 
