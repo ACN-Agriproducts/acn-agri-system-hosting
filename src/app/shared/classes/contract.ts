@@ -255,7 +255,6 @@ export class Contract extends FirebaseDocInterface {
         this.companyInfo = data.companyInfo;
 
         this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
-        if(this.status == 'active') console.log(this.progress);
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
 

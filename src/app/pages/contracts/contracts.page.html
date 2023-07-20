@@ -133,7 +133,7 @@
                     <div 
                         (contextmenu)="openOptions($event)" 
                         class="grid-item item-table" 
-                        [class.progress]="contract.status == 'active'">
+                        [class.progress]="contract.status == 'active' && !contract.isOpen">
                         <ion-item lines="none ">
                             <section [hidden]="!exportMode">
                                 <mat-checkbox (change)="exportSelect($event.checked, contract)" color="primary"></mat-checkbox>
@@ -196,7 +196,7 @@
                         </ion-item>
                         <div 
                             class="progress-bar" 
-                            *ngIf="contract.status == 'active'" 
+                            *ngIf="contract.status == 'active' && !contract.isOpen" 
                             [style.width]="contract.progress + '%'"></div>
                     </div>
                 </div>
