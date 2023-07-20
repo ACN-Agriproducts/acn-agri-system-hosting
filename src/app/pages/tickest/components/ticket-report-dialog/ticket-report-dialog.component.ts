@@ -102,7 +102,7 @@ export class TicketReportDialogComponent implements OnInit {
           const ticket = this.productTicketLists[product][tIndex] as Ticket;
           const thisRow = workSheet.addRow({
             date: ticket.dateOut,
-            id: ticket.id,
+            id: ticket.displayId,
             clientName: ticket.clientName,
             contractID: ticket.contractID,
             tare: ticket.tare.getMassInUnit(this.session.getDefaultUnit()),

@@ -43,7 +43,7 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
 
     let index = 0;
     this.items.forEach((item) => {
-      weightTotal += newRows[index].quantity;
+      weightTotal += newRows[index]?.quantity ?? 0;
       newRows[index++] = {
         description: item.name,
         quantity: item.quantity,

@@ -21,9 +21,11 @@ export class Mass {
         ["CWT", .0220462]
     ]);
     
-    constructor(_amount: number, unit: units) {
+    constructor(_amount: number, unit: units, product?: Product | ProductInfo) {
         this.amount = _amount;
         this.defaultUnits = unit;
+
+        if(product) this.defineBushels(product);
     }
 
     get(): number {

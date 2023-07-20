@@ -1,0 +1,39 @@
+.ticket-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.arrow-right {
+    font-size: xxx-large;
+}
+
+.contract-container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    justify-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.percent-block {
+    display: flex;
+    justify-content: center;
+}
+
+mat-form-field {
+    width: 100px !important;
+}
+
+::ng-deep .mat-form-field-wrapper{
+    margin-bottom: -1.25em;
+}

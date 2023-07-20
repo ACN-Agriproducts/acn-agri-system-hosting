@@ -6,7 +6,7 @@
   <ion-item lines='none'><b>{{t('Net')}}</b></ion-item>
 </div>
 <div *ngFor="let ticket of ticketList" class='table-row'>
-  <ion-item lines='none'><b>{{ticket.id}}</b></ion-item>
+  <ion-item lines='none'><b>{{ticket.displayId}}</b></ion-item>
   <ion-item lines='none'>{{ticket.dateOut | date}}</ion-item>
   <ion-item lines='none'>{{ticket.gross.get() | number}}</ion-item>
   <ion-item lines='none'>{{ticket.tare.get() | number}}</ion-item>
