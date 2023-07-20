@@ -226,7 +226,7 @@ export class Contract extends FirebaseDocInterface {
         this.truckers = tempTruckerList;
         this.type = data.type;
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
-        this.isOpen = this.isOpen ?? false;
+        this.isOpen = data.isOpen ?? false;
 
         // NEW
         this.bankInfo = data.bankInfo;
@@ -263,6 +263,8 @@ export class Contract extends FirebaseDocInterface {
             email: null,
             phone: null,
         };
+
+        console.log(this);
     }
 
     public static converter = {
