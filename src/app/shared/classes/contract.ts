@@ -43,6 +43,7 @@ export class Contract extends FirebaseDocInterface {
     transport: string;
     truckers: TruckerInfo[];
     type: string;
+    isOpen: boolean;
 
     // NEW
     bankInfo: BankInfo[];
@@ -225,6 +226,7 @@ export class Contract extends FirebaseDocInterface {
         this.truckers = tempTruckerList;
         this.type = data.type;
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
+        this.isOpen = this.isOpen ?? false;
 
         // NEW
         this.bankInfo = data.bankInfo;
@@ -295,6 +297,7 @@ export class Contract extends FirebaseDocInterface {
                 tickets: data.tickets ?? [],
                 transport: data.transport ?? null,
                 truckers: data.truckers ?? [],
+                isOpen: data.isOpen ?? false,
 
                 // NEW
                 bankInfo: data.bankInfo ?? null,
