@@ -129,8 +129,11 @@
             <!-- (contextmenu)="openOptions($event)" -->
             <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
             <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
-                <div *ngFor="let contract of contractsPromise | async">
-                    <div (contextmenu)="openOptions($event)" class="grid-item item-table">
+                <div *ngFor="let contract of contractsPromise | async" class="item-wrapper">
+                    <div 
+                        (contextmenu)="openOptions($event)" 
+                        class="grid-item item-table" 
+                        [class.progress]="contract.status == 'active'">
                         <ion-item lines="none ">
                             <section [hidden]="!exportMode">
                                 <mat-checkbox (change)="exportSelect($event.checked, contract)" color="primary"></mat-checkbox>
@@ -191,6 +194,10 @@
                                 </ion-buttons>
                             </div>
                         </ion-item>
+                        <div 
+                            class="progress-bar" 
+                            *ngIf="contract.status == 'active'" 
+                            [style.width]="contract.progress + '%'"></div>
                     </div>
                 </div>
             <!-- </ion-virtual-scroll> -->
