@@ -46,6 +46,10 @@ export class NewUserPage implements OnInit {
           controlName: 'addDocument',
           icon: 'checkmark-done-outline'
         },
+        {
+          label: 'Split Ticket',
+          controlName: 'splitTicket',
+        }
       ]
     },
     {
@@ -266,7 +270,8 @@ export class NewUserPage implements OnInit {
         read: [false],
         voidTicketRequest: [false],
         voidTicketAccept: [false],
-        addDocument: [false]
+        addDocument: [false],
+        splitTicket: [false]
       }),
       inventory: this.fb.group({
         read: [false],

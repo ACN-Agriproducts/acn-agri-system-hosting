@@ -112,7 +112,7 @@
               </tr>
               <tr *ngFor="let ticket of trucker.getCheckedTickets()">
                 <td>{{ticket.ticket.dateOut | date: 'shortDate'}}</td>
-                <td>{{ticket.ticket.id}}</td>
+                <td>{{ticket.ticket.displayId}}</td>
                 <td>{{ticket.ticket.contractID}}</td>
                 <td>{{ticket.ticket.getNet().get()}}</td>
                 <td>{{ticket.freight | currency:'USD':'symbol-narrow':'0.3-3'}}</td>

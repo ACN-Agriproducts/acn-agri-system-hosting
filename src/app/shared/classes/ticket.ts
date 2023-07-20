@@ -27,6 +27,7 @@ export class Ticket extends FirebaseDocInterface{
     public grade: number;
     public gross: Mass;
     public id: number;
+    public displayId: string;
     public imageLinks: string[];
     public impurities: number;
     public in: boolean;
@@ -68,6 +69,8 @@ export class Ticket extends FirebaseDocInterface{
     public transportZipCode: string;
     public transportCaat: string;
 
+    public subId: string;
+
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
 
@@ -90,6 +93,7 @@ export class Ticket extends FirebaseDocInterface{
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
         this.id = data.id;
+        this.displayId = data.id + (data.subId ? "-" + data.subId : '')
         this.imageLinks = data.imageLinks;
         this.impurities = data.impurities;
         this.in = data.in;
@@ -129,6 +133,8 @@ export class Ticket extends FirebaseDocInterface{
         this.transportState = data.transportState;
         this.transportZipCode = data.transportZipCode;
         this.transportCaat = data.transportCaat;
+
+        this.subId = data.subId;
 
         this.net = this.gross.subtract(this.tare);
     }
@@ -190,6 +196,9 @@ export class Ticket extends FirebaseDocInterface{
                 transportState: data.weight,
                 transportZipCode: data.weight,
                 transportCaat: data.weight,
+
+                subId: data.subId,
+
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
@@ -208,7 +217,6 @@ export class Ticket extends FirebaseDocInterface{
     public getContract(db: Firestore): Promise<Contract> {
         const company = this.ref.parent.parent.parent.parent.id;
         const contractColRef = Contract.getCollectionReference(db, company);
-        console.log(this.contractID)
 
         return this.contractRef ? getDoc(this.contractRef).then(res => res.data()) 
             : getDocs(query(contractColRef, where('tickets', 'array-contains', this.ref), limit(1))).then(result => result.docs[0].data());
@@ -238,7 +246,8 @@ export class Ticket extends FirebaseDocInterface{
         const copy: any = {};
 
         Object.keys(this).forEach(key => {
-            copy[key] = this[key];
+            if(key == 'ref' || key == 'snapshot' || key == 'net') return;
+            copy[key] = this[key] instanceof Mass ? this[key].get() : this[key] ?? null;
         });
 
         return copy;
