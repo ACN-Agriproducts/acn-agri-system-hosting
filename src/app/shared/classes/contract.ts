@@ -263,8 +263,6 @@ export class Contract extends FirebaseDocInterface {
             email: null,
             phone: null,
         };
-
-        console.log(this);
     }
 
     public static converter = {

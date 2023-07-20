@@ -183,6 +183,7 @@ export class TicketReportDialogComponent implements OnInit {
           {name: "ShrinkWt", filterButton: true, totalsRowFunction: "sum"},
           {name: "Tons", filterButton: true, totalsRowFunction: "sum"},
           {name: "CCGE CERTIFICATE", filterButton: true},
+          {name: "Storage", filterButton: true}
           
         ],
         rows: []
@@ -204,7 +205,8 @@ export class TicketReportDialogComponent implements OnInit {
         [13, {key: "", void: ""}],
         [14, {key: "dryWeight", void: ""}],
         [15, {key: "mTons", void: ""}],
-        [16, {key: "CCGE", void: ""}]
+        [16, {key: "CCGE", void: ""}],
+        [17, {key: "tank", void: ""}]
       ]);
 
       ticketList.forEach((ticket, index) => {
@@ -213,11 +215,6 @@ export class TicketReportDialogComponent implements OnInit {
         map.forEach((val, col) => {
           row.push(ticket[ticket.void ? val.void : val.key] ?? "");
         });
-        if(!ticket.void) {
-          row[9] = (row[9] as Mass).getMassInUnit(this.session.getDefaultUnit());
-          row[10] = (row[10] as Mass).getMassInUnit(this.session.getDefaultUnit());
-          row[13] = (row[13] as Mass).getMassInUnit(this.session.getDefaultUnit());
-        }
 
         inTicketTable.addRow(row);
 
