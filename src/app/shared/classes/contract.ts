@@ -276,7 +276,7 @@ export class Contract extends FirebaseDocInterface {
                 clientName: data.clientName ?? null,
                 clientInfo: data.clientInfo ?? null,
                 clientTicketInfo: data.clientTicketInfo ?? null,
-                currentDelivered: data.currentDelivered.get() ?? null,
+                currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
                 delivery_dates: data.delivery_dates ?? null,
                 grade: data.grade ?? null,
