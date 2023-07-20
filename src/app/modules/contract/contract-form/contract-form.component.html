@@ -262,6 +262,27 @@
   </mat-form-field>
 </ng-template>
 
+<ng-template typeTemplate="quantity-field" let-data >
+  <div [ngClass]="data | getFieldClass">
+    <mat-checkbox [disabled]="contract.status != 'pending'" [(ngModel)]="contract.isOpen">{{data.prefix}}</mat-checkbox>
+    <div class="flex-field" *ngIf="!contract.isOpen">
+      <mat-form-field>
+        <mat-label>{{data.label}}</mat-label>
+        <input matInput [disabled]="" [(ngModel)]="contract.quantity.amount">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{data.suffix}}</mat-label>
+        <mat-select [(ngModel)]="contract.quantity.defaultUnits">
+          <mat-option value="lbs">Lbs</mat-option>
+          <mat-option value="mTon">mTon</mat-option>
+          <mat-option value="CWT">CWT</mat-option>
+          <mat-option value="bu">Bushels</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</ng-template>
+
 <ng-template typeTemplate="product-select" let-data>
  <mat-form-field [ngClass]="data | getFieldClass">
   <mat-label>{{data.label}}</mat-label>
