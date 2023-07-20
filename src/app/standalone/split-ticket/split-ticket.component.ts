@@ -53,7 +53,7 @@ export class SplitTicketComponent implements OnInit {
 
     // Get current ticket contract
     this.possibleContractsAsync = this.data.getContract(this.db).then(ticketContract => {
-      this.contract = ticketContract
+      this.contract = ticketContract;
       this.newTickets = [ this.newSplitTicket(), this.newSplitTicket() ];
       this.newTickets[0].net = this.data.net.getMassInUnit(this.defaultUnit);
       
@@ -70,7 +70,8 @@ export class SplitTicketComponent implements OnInit {
         this.session.getCompany(), 
         ticketContract.type,
         where('client', '==', ticketContract.client),
-        where('status', '==', 'active'));
+        where('status', '==', 'active'),
+        where('product', '==', ticketContract.product));
     });
     
     this.possibleContractsAsync.then(result => {
