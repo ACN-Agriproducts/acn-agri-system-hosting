@@ -366,3 +366,21 @@ section {
     overflow: visible;
   }
 }
+
+.progress {
+  ion-item {
+    --ion-item-background: transparent;
+  }
+}
+
+.item-wrapper {
+  position: relative;
+}
+
+.progress-bar {
+  position: absolute;
+  background: #eaf5ea;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}

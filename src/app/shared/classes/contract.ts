@@ -73,6 +73,8 @@ export class Contract extends FirebaseDocInterface {
         phone: string;
     }
 
+    progress: number; 
+
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
@@ -252,6 +254,9 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
 
+        this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
+        if(this.status == 'active') console.log(this.progress);
+
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
 
         if(this.product) {
@@ -323,7 +328,9 @@ export class Contract extends FirebaseDocInterface {
                 futurePriceBase: data.futurePriceBase.amount ?? null,
                 futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
                 companyInfo: data.companyInfo ?? null,
-                type: data.type ?? null
+                type: data.type ?? null,
+
+                progress: data.progress ?? null,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
