@@ -56,9 +56,9 @@
         <span [printableField]="'product'">{{ contractForm.product?.id }}</span><br>
         <div class='grid-3'>
           <div class='column-size-2'>
-            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'bu':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5' }}</span>
-            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}</span>
-            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ !contractForm.isOpen || contractForm.status == 'closed'? (contractForm.quantity | massInUnit:'bu':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5') : '-' }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ !contractForm.isOpen || contractForm.status == 'closed'? (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5') : '-' }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ !contractForm.isOpen || contractForm.status == 'closed'? (contractForm.quantity | massInUnit:'mTon':contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5') : '-' }}</span>
           </div>
           <div class='column-size-1'>
             <span>BUSHELS</span><br>
@@ -139,8 +139,8 @@
       <div class='column-size-2'>
         <div id='total'>
           <span><b>$</b></span>
-          <span><b>{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
-            (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2'  }}</b></span>
+          <span><b>{{ !contractForm.isOpen || contractForm.status == 'closed'? ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
+            (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2') : '-' }}</b></span>
         </div>
       </div>
     </div>
@@ -168,8 +168,8 @@
     
     <p>The Buyer is purchasing the following Goods from the Seller: <span [printableField]="'product'">{{ contractForm.product?.id }}</span>	</p>
     
-    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
-      (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2'  }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ !contractForm.isOpen || contractForm.status == 'closed'? ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
+      (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2') : '-' }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
     <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods: <br>
     •	<br>
