@@ -12,28 +12,28 @@
 }
 
 .body-card .row {
-    cursor: pointer;
+    // cursor: pointer;
     
-    &:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-        transition: opacity .3s;
-        opacity: 0;
-        z-index: 2;
-        pointer-events: none;
-    }
-    &:hover:before {
-        opacity: 1;
-    }
-    &:hover {
-        background-color: white;
-        transition: .2s;
-    }
+    // &:before {
+    //     content: "";
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     background-color: rgba(var(--ion-color-primary-rgb), 0.15);
+    //     transition: opacity .3s;
+    //     opacity: 0;
+    //     z-index: 2;
+    //     pointer-events: none;
+    // }
+    // &:hover:before {
+    //     opacity: 1;
+    // }
+    // &:hover {
+    //     background-color: white;
+    //     transition: .2s;
+    // }
 }
 
 .collection {
@@ -44,6 +44,15 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     font-size: 0.9em;
+
+    &.add-item {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin: 10px;
+        }
+    }
 }
 
 .cell {

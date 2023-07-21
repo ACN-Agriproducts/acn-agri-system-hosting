@@ -4,10 +4,10 @@
   <ion-content class="ion-padding">
     <div class="center-content" *ngIf="ready">
       <div class="flex-column">
-        <mat-toolbar>
+        <!-- <mat-toolbar>
           <mat-checkbox [(ngModel)]="showLiquidation">{{ t('liquidation') | titlecase }}</mat-checkbox>
-        </mat-toolbar>
-        <ng-container *ngIf="!showLiquidation else liquidation">
+        </mat-toolbar> -->
+        <!-- <ng-container *ngIf="!showLiquidation else liquidation"> -->
           <div class="flex-row">
             <div id="form-and-liquidations">
               <app-contract-form *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
@@ -16,18 +16,18 @@
                   <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <app-contract-liquidations [liquidations]="liquidations | async"></app-contract-liquidations>
+                  <app-contract-liquidations [liquidations]="liquidations"></app-contract-liquidations>
                 </mat-card-content>
               </mat-card>
             </div>
-            <mat-card id="printable-card">
+            <!-- <mat-card id="printable-card">
               <mat-card-header>
                 <mat-card-subtitle>{{t('contract document')}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <app-display-contract [contract]="currentContract"></app-display-contract>
               </mat-card-content>
-            </mat-card>
+            </mat-card> -->
           </div>
           <div class="flex-row list-content">
             <mat-card id="ticket-list">
@@ -47,16 +47,8 @@
               </mat-card-content>
             </mat-card>
           </div>
-        </ng-container>
+        <!-- </ng-container> -->
       </div>
     </div>
   </ion-content>
 </ng-container>
-
-<ng-template #liquidation>
-  <app-ticket-discount-table
-    [ticketList]="ticketList"
-    [contract]="currentContract"
-    [discountTables]="discountTables"
-  ></app-ticket-discount-table>
-</ng-template>

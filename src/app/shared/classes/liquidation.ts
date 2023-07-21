@@ -6,12 +6,12 @@ import { Firestore, collection, getDocs, query } from "@angular/fire/firestore";
 
 type LiquidationStatus = "pending" | "paid" | "cancelled";
 
-export class ContractLiquidation extends FirebaseDocInterface {
-    public ticketRefs: DocumentReference<Ticket>[];
-    public status: LiquidationStatus;
+export class Liquidation extends FirebaseDocInterface {
     public date: Date;
-    public proofOfPaymentRefs: string[];
-    public supplementalDocumentRefs: string[];
+    public proofOfPaymentLinks: string[];
+    public status: LiquidationStatus;
+    public supplementalDocLinks: string[];
+    public ticketRefs: DocumentReference<Ticket>[];
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -19,15 +19,17 @@ export class ContractLiquidation extends FirebaseDocInterface {
             snapshot = snapshotOrRef;
         }
 
-        super(snapshot, ContractLiquidation.converter);
+        super(snapshot, Liquidation.converter);
         const data = snapshot?.data();
 
         if (snapshotOrRef instanceof DocumentReference) {
             this.ref = snapshotOrRef;
             
-            this.ticketRefs = [];
-            this.status = "pending";
             this.date = new Date();
+            this.proofOfPaymentLinks = [];
+            this.status = "pending";
+            this.supplementalDocLinks = [];
+            this.ticketRefs = [];
 
             return;
         }
@@ -40,23 +42,26 @@ export class ContractLiquidation extends FirebaseDocInterface {
     }
 
     public static converter = {
-        toFirestore(data: ContractLiquidation): DocumentData {
+        toFirestore(data: Liquidation): DocumentData {
             return {
-                ticketRefs: data.ticketRefs,
+                date: data.date,
+                proofOfPaymentLinks: data.proofOfPaymentLinks,
                 status: data.status,
+                supplementalDocLinks: data.supplementalDocLinks,
+                ticketRefs: data.ticketRefs
             }
         },
-        fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): ContractLiquidation {
-            return new ContractLiquidation(snapshot);
+        fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Liquidation {
+            return new Liquidation(snapshot);
         }
     }
 
-    public static getCollectionReference(db: Firestore, company: string, contractRefId: string): CollectionReference<ContractLiquidation> {
-        return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(ContractLiquidation.converter);
+    public static getCollectionReference(db: Firestore, company: string, contractRefId: string): CollectionReference<Liquidation> {
+        return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(Liquidation.converter);
     }
 
-    public static getContractLiquidations(db: Firestore, company: string, contractRefId: string, ...constraints: QueryConstraint[]): Promise<ContractLiquidation[]> {
-        const collectionRef = ContractLiquidation.getCollectionReference(db, company, contractRefId);
+    public static getContractLiquidations(db: Firestore, company: string, contractRefId: string, ...constraints: QueryConstraint[]): Promise<Liquidation[]> {
+        const collectionRef = Liquidation.getCollectionReference(db, company, contractRefId);
         const collectionQuery = query(collectionRef, ...constraints);
         return getDocs(collectionQuery).then(result => result.docs.map(snap => snap.data()));
     }

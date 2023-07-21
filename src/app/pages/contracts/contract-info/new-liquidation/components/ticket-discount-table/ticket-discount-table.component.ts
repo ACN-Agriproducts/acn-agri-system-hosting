@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
-import { LiquidationTotals } from '@shared/classes/contract-liquidation';
+import { LiquidationTotals } from '@shared/classes/liquidation';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';

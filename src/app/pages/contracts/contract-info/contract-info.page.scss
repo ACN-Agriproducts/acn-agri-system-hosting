@@ -19,9 +19,8 @@ app-contract-liquidations {
 
 .flex-column {
     display: flex;
-    flex-flow: column nowrap;
+    flex-direction: column;
     gap: 10px;
-    width: 100%;
 }
 
 .flex-row {

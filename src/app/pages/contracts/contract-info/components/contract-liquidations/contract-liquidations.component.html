@@ -1,19 +1,13 @@
 
 <ng-container *transloco="let t, read: 'contracts.info'">
-  <!-- <div class="headers">
-    <div class="cell">{{ t('tickets') | titlecase }}</div>
-    <div class="cell">{{ t('Date') | titlecase }}</div>
-    <div class="cell">{{ t('status') | titlecase }}</div>
-    <div class="cell">{{ t('Price ($/BU)') | titlecase }}</div>
-    <div class="cell">{{ t('options') | titlecase }}</div>
-  </div>
-  <div *ngFor="let item of [1,2,3,4,5]">
-    <div class="cell">{{ item }} tickets</div>
-    <div class="cell">{{ item }} date</div>
-    <div class="cell">{{ item }} status</div>
-    <div class="cell">{{ item }} price</div>
-    <div class="cell">{{ item }} options</div>
-  </div> -->
+  <mat-card-actions [align]="'end'">
+    <button mat-button color="primary" routerLink="./new-liquidation">
+      <span><i>Add Liquidation</i></span>
+      &nbsp;
+      <mat-icon>add_box</mat-icon>
+    </button>
+  </mat-card-actions>
+
   <ol class="collection">
     <mat-card class="header-card">
       <li class="row">
@@ -24,13 +18,17 @@
         <div class="cell">{{ t('options') | titlecase }}</div>
       </li>
     </mat-card>
-    <mat-card class="body-card" *ngFor="let item of [1,2,3,4,5]">
+    <mat-card class="body-card" *ngFor="let item of liquidations">
       <li class="row">
         <div class="cell">{{ item }} tickets</div>
         <div class="cell">{{ item }} date</div>
         <div class="cell">{{ item }} status</div>
         <div class="cell">{{ item }} price</div>
-        <div class="cell">{{ item }} options</div>
+        <div class="cell options">
+          <button mat-icon-button>
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
       </li>
     </mat-card>
   </ol>

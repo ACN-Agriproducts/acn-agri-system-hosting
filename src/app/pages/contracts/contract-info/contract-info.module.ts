@@ -14,7 +14,6 @@ import { ContractLiquidationLongComponent, DiscountsPipe } from './components/co
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
-import { TicketDiscountTableComponent } from './components/ticket-discount-table/ticket-discount-table.component';
 import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
@@ -39,7 +38,6 @@ import { ContractLiquidationsComponent } from './components/contract-liquidation
     TruckerTableComponent,
     ContractLiquidationLongComponent,
     DisplayContractComponent,
-    TicketDiscountTableComponent,
     TruckersFormComponent,
     DiscountsPipe,
     ContractLiquidationsComponent,

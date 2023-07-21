@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: ContractInfoPage
+  },
+  {
+    path: 'new-liquidation',
+    loadChildren: () => import('./new-liquidation/new-liquidation.module').then( m => m.NewLiquidationPageModule)
   }
+
 ];
 
 @NgModule({
