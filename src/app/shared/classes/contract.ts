@@ -43,6 +43,7 @@ export class Contract extends FirebaseDocInterface {
     transport: string;
     truckers: TruckerInfo[];
     type: string;
+    isOpen: boolean;
 
     // NEW
     bankInfo: BankInfo[];
@@ -227,6 +228,7 @@ export class Contract extends FirebaseDocInterface {
         this.truckers = tempTruckerList;
         this.type = data.type;
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
+        this.isOpen = data.isOpen ?? false;
 
         // NEW
         this.bankInfo = data.bankInfo;
@@ -253,7 +255,6 @@ export class Contract extends FirebaseDocInterface {
         this.companyInfo = data.companyInfo;
 
         this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
-        if(this.status == 'active') console.log(this.progress);
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
 
@@ -277,7 +278,7 @@ export class Contract extends FirebaseDocInterface {
                 clientName: data.clientName ?? null,
                 clientInfo: data.clientInfo ?? null,
                 clientTicketInfo: data.clientTicketInfo ?? null,
-                currentDelivered: data.currentDelivered.get() ?? null,
+                currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
                 delivery_dates: data.delivery_dates ?? null,
                 grade: data.grade ?? null,
@@ -300,6 +301,7 @@ export class Contract extends FirebaseDocInterface {
                 tickets: data.tickets ?? [],
                 transport: data.transport ?? null,
                 truckers: data.truckers ?? [],
+                isOpen: data.isOpen ?? false,
 
                 // NEW
                 bankInfo: data.bankInfo ?? null,
