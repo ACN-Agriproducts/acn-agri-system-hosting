@@ -4,10 +4,6 @@
   <ion-content class="ion-padding">
     <div class="center-content" *ngIf="ready">
       <div class="flex-column">
-        <!-- <mat-toolbar>
-          <mat-checkbox [(ngModel)]="showLiquidation">{{ t('liquidation') | titlecase }}</mat-checkbox>
-        </mat-toolbar> -->
-        <!-- <ng-container *ngIf="!showLiquidation else liquidation"> -->
           <div class="flex-row">
             <div id="form-and-liquidations">
               <app-contract-form *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
@@ -16,7 +12,7 @@
                   <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <app-contract-liquidations [liquidations]="liquidations"></app-contract-liquidations>
+                  <app-liquidations [liquidations]="liquidations"></app-liquidations>
                 </mat-card-content>
               </mat-card>
             </div>

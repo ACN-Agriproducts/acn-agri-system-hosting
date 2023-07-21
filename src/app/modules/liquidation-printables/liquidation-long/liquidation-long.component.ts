@@ -6,11 +6,11 @@ import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/cl
 
 
 @Component({
-  selector: 'app-contract-liquidation-long',
-  templateUrl: './contract-liquidation-long.component.html',
-  styleUrls: ['./contract-liquidation-long.component.scss'],
+  selector: 'app-liquidation-long',
+  templateUrl: './liquidation-long.component.html',
+  styleUrls: ['./liquidation-long.component.scss'],
 })
-export class ContractLiquidationLongComponent implements OnInit {
+export class LiquidationLongComponent implements OnInit {
   @Input() contract: Contract;
   @Input() selectedTickets: TicketWithDiscounts[];
   @Input() totals: LiquidationTotals;

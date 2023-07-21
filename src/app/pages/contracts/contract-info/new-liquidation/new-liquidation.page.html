@@ -1,14 +1,12 @@
 
-
 <ng-container *transloco="let t, read: 'contracts.info'">
+  <app-header-toolbar [titulo]="t('new liquidation') | titlecase"></app-header-toolbar>
 
-  <app-header-toolbar [titulo]="t('new liquidation')"></app-header-toolbar>
-
-  <ion-content>
-    <!-- <app-ticket-discount-table
+  <ion-content class="ion-padding">
+    <app-ticket-discount-table *ngIf="ready"
       [ticketList]="ticketList"
       [contract]="contract"
       [discountTables]="discountTables"
-    ></app-ticket-discount-table> -->
+    ></app-ticket-discount-table>
   </ion-content>
 </ng-container>

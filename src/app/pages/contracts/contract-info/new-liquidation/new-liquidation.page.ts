@@ -12,11 +12,12 @@ import { Ticket } from '@shared/classes/ticket';
   styleUrls: ['./new-liquidation.page.scss'],
 })
 export class NewLiquidationPage implements OnInit {
-  public ticketList: Ticket[];
   public contract: Contract;
   public discountTables: DiscountTables;
-  public type: string;
   public id: string;
+  public ticketList: Ticket[];
+  public type: string;
+  public ready: boolean = false;
 
   constructor(
     private db: Firestore,
@@ -25,12 +26,15 @@ export class NewLiquidationPage implements OnInit {
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
-    console.log(this.type, this.id)
   }
 
   ngOnInit() {
-    // this.ticketList = Ticket.getTickets(this.db, this.session.getCompany(), this.session.getPlant())
-    // this.contract = Contract.getDoc(this.db, this.session.getCompany(), )
+    Contract.getDocById(this.db, this.session.getCompany(), this.type, this.id).then(async contract => {
+      this.contract = contract;
+      this.ticketList = await contract.getTickets();
+      this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
+      this.ready = true;
+    });
   }
 
 }

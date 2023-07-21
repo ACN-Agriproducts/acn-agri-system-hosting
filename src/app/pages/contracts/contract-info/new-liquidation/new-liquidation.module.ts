@@ -10,6 +10,7 @@ import { NewLiquidationPage } from './new-liquidation.page';
 import { CoreModule } from '@core/core.module';
 import { TicketDiscountTableComponent } from './components/ticket-discount-table/ticket-discount-table.component';
 import { NgxPrintModule } from 'ngx-print';
+import { LiquidationPrintablesModule } from 'src/app/modules/liquidation-printables/liquidation-printables.module';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { NgxPrintModule } from 'ngx-print';
     NewLiquidationPageRoutingModule,
     CoreModule,
     NgxPrintModule,
+    LiquidationPrintablesModule,
   ],
   declarations: [
     NewLiquidationPage,

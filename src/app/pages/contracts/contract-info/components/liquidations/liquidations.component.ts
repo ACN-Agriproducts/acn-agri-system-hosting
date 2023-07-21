@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Liquidation } from '@shared/classes/liquidation';
 
 @Component({
-  selector: 'app-contract-liquidations',
-  templateUrl: './contract-liquidations.component.html',
-  styleUrls: ['./contract-liquidations.component.scss'],
+  selector: 'app-liquidations',
+  templateUrl: './liquidations.component.html',
+  styleUrls: ['./liquidations.component.scss'],
 })
-export class ContractLiquidationsComponent implements OnInit {
+export class LiquidationsComponent implements OnInit {
   @Input() liquidations: Liquidation[];
 
   constructor() { }

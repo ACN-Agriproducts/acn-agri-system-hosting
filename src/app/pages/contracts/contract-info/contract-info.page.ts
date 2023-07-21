@@ -6,7 +6,6 @@ import { Ticket } from '@shared/classes/ticket';
 import { Firestore } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation } from '@shared/classes/liquidation';
 
 @Component({
@@ -17,10 +16,8 @@ import { Liquidation } from '@shared/classes/liquidation';
 export class ContractInfoPage implements OnInit, OnDestroy {
   public currentCompany: string;
   public currentContract: Contract;
-  public discountTables: DiscountTables;
   public id: string;
   public ready: boolean = false;
-  public showLiquidation: boolean = false;
   public ticketList: Ticket[];
   public type: string;
   public liquidations: Liquidation[];
@@ -40,9 +37,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
-      this.discountTables = await DiscountTables.getDiscountTables(this.db, this.currentCompany, contract.product.id);
-      this.liquidations = await Liquidation.getContractLiquidations(this.db, this.currentCompany, contract.ref.id);
-      
+      this.liquidations = await Liquidation.getLiquidations(this.db, this.currentCompany, contract.ref.id);      
       this.ready = true;
     });
   }

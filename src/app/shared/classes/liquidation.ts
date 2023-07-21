@@ -60,7 +60,7 @@ export class Liquidation extends FirebaseDocInterface {
         return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(Liquidation.converter);
     }
 
-    public static getContractLiquidations(db: Firestore, company: string, contractRefId: string, ...constraints: QueryConstraint[]): Promise<Liquidation[]> {
+    public static getLiquidations(db: Firestore, company: string, contractRefId: string, ...constraints: QueryConstraint[]): Promise<Liquidation[]> {
         const collectionRef = Liquidation.getCollectionReference(db, company, contractRefId);
         const collectionQuery = query(collectionRef, ...constraints);
         return getDocs(collectionQuery).then(result => result.docs.map(snap => snap.data()));

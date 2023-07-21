@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ContractLiquidationLongComponent } from './contract-liquidation-long.component';
+import { LiquidationLongComponent } from './liquidation-long.component';
 
-describe('ContractLiquidationLongComponent', () => {
-  let component: ContractLiquidationLongComponent;
-  let fixture: ComponentFixture<ContractLiquidationLongComponent>;
+describe('LiquidationLongComponent', () => {
+  let component: LiquidationLongComponent;
+  let fixture: ComponentFixture<LiquidationLongComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ContractLiquidationLongComponent ],
+      declarations: [ LiquidationLongComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ContractLiquidationLongComponent);
+    fixture = TestBed.createComponent(LiquidationLongComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

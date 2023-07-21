@@ -106,7 +106,8 @@
             "tickets": "tickets",
             "options": "options",
             "contract liquidations": "contract liquidations",
-            "liquidation": "liquidation"
+            "liquidation": "liquidation",
+            "new liquidation": "new liquidation"
         }
     },
     "directory": {

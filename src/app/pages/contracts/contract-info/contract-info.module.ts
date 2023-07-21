@@ -10,14 +10,13 @@ import { ContractInfoPage } from './contract-info.page';
 import { CoreModule } from '@core/core.module';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
-import { ContractLiquidationLongComponent, DiscountsPipe } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
 import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
-import { ContractLiquidationsComponent } from './components/contract-liquidations/contract-liquidations.component';
+import { LiquidationsComponent } from './components/liquidations/liquidations.component';
 
 @NgModule({
   imports: [
@@ -36,11 +35,9 @@ import { ContractLiquidationsComponent } from './components/contract-liquidation
     ContractInfoPage,
     TicketsTableComponent,
     TruckerTableComponent,
-    ContractLiquidationLongComponent,
     DisplayContractComponent,
     TruckersFormComponent,
-    DiscountsPipe,
-    ContractLiquidationsComponent,
+    LiquidationsComponent,
   ]
 })
 export class ContractInfoPageModule {}

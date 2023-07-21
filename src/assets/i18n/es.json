@@ -107,7 +107,8 @@
             "tickets": "boletas",
             "options": "opciones",
             "contract liquidations": "liquidaciones de contratos",
-            "liquidation": "liquidación"
+            "liquidation": "liquidación",
+            "new liquidation": "nuevo liquidación"
         }
     },
     "directory": {
