@@ -268,11 +268,21 @@
     <div class="flex-field" *ngIf="!contract.isOpen">
       <mat-form-field>
         <mat-label>{{data.label}}</mat-label>
-        <input matInput [disabled]="" [(ngModel)]="contract.quantity.amount">
+        <input 
+          matInput 
+          type="number" 
+          [(ngModel)]="contract.quantity.amount"
+          [disabled]="contract.status != 'pending'"
+          (focus)="selectedFieldEvent.emit('quantity.amount')"
+          (focusout)="selectedFieldEvent.emit(null)">
       </mat-form-field>
       <mat-form-field>
         <mat-label>{{data.suffix}}</mat-label>
-        <mat-select [(ngModel)]="contract.quantity.defaultUnits">
+        <mat-select 
+          [(ngModel)]="contract.quantity.defaultUnits"
+          [disabled]="contract.status != 'pending'"
+          (focus)="selectedFieldEvent.emit('quantity.defaultUnits')"
+          (focusout)="selectedFieldEvent.emit(null)">
           <mat-option value="lbs">Lbs</mat-option>
           <mat-option value="mTon">mTon</mat-option>
           <mat-option value="CWT">CWT</mat-option>

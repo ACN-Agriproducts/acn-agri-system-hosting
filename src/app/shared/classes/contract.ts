@@ -293,7 +293,7 @@ export class Contract extends FirebaseDocInterface {
                 priceUnit: data.price.unit ?? null,
                 product: data.product ?? null,
                 productInfo: data.productInfo ?? null,
-                quantity: data.quantity.get() ?? null,
+                quantity: data.quantity.get() ?? 0,
                 quantityUnits: data.quantity.defaultUnits ?? null,
                 seller_terms: data.seller_terms ?? null,
                 status: data.status ?? null,
