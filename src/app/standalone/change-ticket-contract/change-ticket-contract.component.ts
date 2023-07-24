@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { documentId, Firestore, where } from '@angular/fire/firestore';
+import { arrayRemove, arrayUnion, documentId, Firestore, increment, where, writeBatch } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreModule } from '@core/core.module';
@@ -56,7 +56,40 @@ export class ChangeTicketContractComponent implements OnInit {
     this.language = this.session.getLanguage();
   }
 
-  submit(): void {
+  async submit(): Promise<void> {
+    this.submitting = true;
+    const defaultUnits = this.session.getDefaultUnit();
 
+    const batch = writeBatch(this.db)
+    try {
+      batch.update(this.data.ref.withConverter(null), {
+        contractID: this.newContract.id,
+        contractRef: this.newContract.ref
+      });
+  
+      console.log(this.data.net.getMassInUnit(defaultUnits));
+  
+      batch.update(this.contract.ref.withConverter(null), {
+        currentDelivered: increment(-this.data.net.getMassInUnit(defaultUnits)),
+        loads: increment(-1),
+        tickets: arrayRemove(this.data.ref)
+      });
+  
+      batch.update(this.newContract.ref.withConverter(null), {
+        currentDelivered: increment(this.data.net.getMassInUnit(defaultUnits)),
+        loads: increment(1),
+        tickets: arrayUnion(this.data.ref)
+      });
+  
+      await batch.commit();
+
+      this.snack.open("Successfully changed ticket contract", "success");
+      this.dialogRef.close();
+    } 
+    catch (e) {
+      console.error(e);
+      this.snack.open("Error", 'error');
+      this.submitting = false;
+    }
   }
 }
