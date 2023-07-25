@@ -294,7 +294,7 @@ export class Contract extends FirebaseDocInterface {
                 product: data.product ?? null,
                 productInfo: data.productInfo ?? null,
                 quantity: data.quantity.get() ?? 0,
-                quantityUnits: data.quantity.defaultUnits ?? null,
+                quantityUnits: data.quantity.defaultUnits ?? FirebaseDocInterface.session.getDefaultUnit(),
                 seller_terms: data.seller_terms ?? null,
                 status: data.status ?? null,
                 tags: data.tags ?? [],
