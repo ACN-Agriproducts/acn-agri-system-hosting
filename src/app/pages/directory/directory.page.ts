@@ -3,7 +3,7 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { lastValueFrom, Subscription } from 'rxjs';
-import { collectionData, doc, Firestore, orderBy, query } from '@angular/fire/firestore';
+import { collectionData, doc, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
+import { Contract } from '@shared/classes/contract';
 
 @Component({
   selector: 'app-directory',
@@ -152,10 +153,12 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public searchResults = (): Contact[] => this.contacts?.filter(contact => contact?.name?.match(this.searchQuery)) ?? [];
 
-  public exportCurrent(): void {
+  public async exportCurrent(): Promise<void> {
+    const lastContact = await Promise.all(this.contacts.map(c => this.getLastContractDate(c)));
+
     const workbook = new Excel.Workbook();
     const workSheet = workbook.addWorksheet('Directory');
-    const directoryTable = workSheet.addTable({
+    workSheet.addTable({
       name: 'directory',
       ref: 'A1',
       headerRow: true,
@@ -178,8 +181,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
         {name: "Country", filterButton: true},
         {name: "RFC", filterButton: true},
         {name: "CAAT", filterButton: true},
+        {name: "Last Contract", filterButton: true},
       ],
-      rows: this.contacts.map(contact => [
+      rows: this.contacts.map((contact, index) => [
         contact.name,
         contact.tags.includes('client'),
         contact.tags.includes('trucker'),
@@ -191,7 +195,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
         contact.zipCode,
         contact.state,
         contact.rfc,
-        contact.caat
+        contact.caat,
+        lastContact[index]
       ])
     });
 
@@ -210,5 +215,18 @@ export class DirectoryPage implements OnInit, OnDestroy {
       window.URL.revokeObjectURL(url);
       a.remove();
     });
+  }
+
+  public async getLastContractDate(contact: Contact): Promise<Date> {
+    const result = await Contract.getContracts(this.db, this.currentCompany, null, 
+      where('client', '==', contact.ref),
+      orderBy('date', 'desc'),
+      limit(1));
+
+    if(result.length == 0) {
+      return null;
+    }
+
+    return result[0].date;
   }
 }
