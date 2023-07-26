@@ -167,6 +167,7 @@
         "Gross": "Bruto",
         "Tare": "Tara",
         "Net": "Neto",
-        "Loading more data": "Cargando mas informacion"
+        "Loading more data": "Cargando mas informacion",
+        "Export Contacts": "Exportar Contactos"
     }
 }
