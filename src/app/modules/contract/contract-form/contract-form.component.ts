@@ -77,7 +77,7 @@ export class ContractFormComponent implements OnInit {
 
           return 0;
         });
-      this.truckerList = this.contactList.filter(c => !c.isClient);
+      this.truckerList = this.contactList.filter(c => c.tags.includes('trucker'));
     });
 
     this.products$ = Product.getProductList(this.db, this.session.getCompany());

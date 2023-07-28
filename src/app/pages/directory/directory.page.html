@@ -5,9 +5,11 @@
 		<div class="content-header margin-inline">
 			<mat-form-field appearance="fill">
 				<mat-label>Type</mat-label>
-				<mat-select>
-					<mat-option>client</mat-option>
-					<mat-option>trucker</mat-option>
+				<mat-select [(ngModel)]="contactType" (ngModelChange)="updateList()">
+					<mat-option>None</mat-option>
+					<mat-option value="client">Client</mat-option>
+					<mat-option value="trucker">Trucker</mat-option>
+					<mat-option *ngFor="let option of (company | async)?.extraContactTypes" value="option">{{option | titlecase}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
