@@ -60,6 +60,14 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
     this.weightTotal = weightTotal;
     this.contentRows = newRows;
   }
+
+  getMTonsTotal(): number {
+    let total = 0;
+    this.items.forEach(item => {
+      total += item.quantity ?? 0;
+    });
+    return total;
+  }
 }
 
 interface Row {
