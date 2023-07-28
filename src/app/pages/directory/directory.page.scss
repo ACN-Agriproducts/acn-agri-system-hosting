@@ -1,6 +1,5 @@
 .content-header{
-    display: grid;
-    grid-template-columns: 1fr auto;
+    display: flex;
     column-gap: 12px;
 }
 

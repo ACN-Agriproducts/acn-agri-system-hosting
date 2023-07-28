@@ -3,13 +3,15 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { lastValueFrom, Subscription } from 'rxjs';
-import { collectionData, doc, Firestore, orderBy, query } from '@angular/fire/firestore';
+import { collectionData, doc, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 import { TranslocoService } from '@ngneat/transloco';
+import * as Excel from 'exceljs';
+import { Contract } from '@shared/classes/contract';
 
 @Component({
   selector: 'app-directory',
@@ -19,10 +21,12 @@ import { TranslocoService } from '@ngneat/transloco';
 export class DirectoryPage implements OnInit, OnDestroy {
 
   private currentSub: Subscription;
-  public contacts: any[]
-  public currentCompany: string
+  public contacts: Contact[];
+  public currentCompany: string;
   public searchQuery: RegExp;
-  public stringTest: string
+  public stringTest: string;
+
+  public permissions;
 
   constructor(
     private db: Firestore,
@@ -37,6 +41,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
+    this.permissions = this.session.getPermissions();
     this.updateList();
   }
 
@@ -147,4 +152,81 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   public searchResults = (): Contact[] => this.contacts?.filter(contact => contact?.name?.match(this.searchQuery)) ?? [];
+
+  public async exportCurrent(): Promise<void> {
+    const lastContact = await Promise.all(this.contacts.map(c => this.getLastContractDate(c)));
+
+    const workbook = new Excel.Workbook();
+    const workSheet = workbook.addWorksheet('Directory');
+    workSheet.addTable({
+      name: 'directory',
+      ref: 'A1',
+      headerRow: true,
+      totalsRow: false,
+      style: {
+        theme: "TableStyleMedium2",
+        showRowStripes: true,
+      },
+      columns: [
+        {name: "Name", filterButton: true},
+        {name: "isClient", filterButton: true},
+        {name: "isTrucker", filterButton: true},
+        {name: "Contact Name", filterButton: true},
+        {name: "Phone", filterButton: true},
+        {name: "Email", filterButton: true},
+        {name: "StreetAddress", filterButton: true},
+        {name: "City", filterButton: true},
+        {name: "ZipCode", filterButton: true},
+        {name: "State", filterButton: true},
+        {name: "Country", filterButton: true},
+        {name: "RFC", filterButton: true},
+        {name: "CAAT", filterButton: true},
+        {name: "Last Contract", filterButton: true},
+      ],
+      rows: this.contacts.map((contact, index) => [
+        contact.name,
+        contact.tags.includes('client'),
+        contact.tags.includes('trucker'),
+        contact.getPrimaryMetaContact()?.name,
+        contact.getPrimaryMetaContact()?.phone,
+        contact.getPrimaryMetaContact()?.email,
+        contact.streetAddress,
+        contact.city,
+        contact.zipCode,
+        contact.state,
+        contact.rfc,
+        contact.caat,
+        lastContact[index]
+      ])
+    });
+
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("style", "display: none");
+      a.href = url;
+      a.download = `${this.currentCompany}-DIRECTORY.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    });
+  }
+
+  public async getLastContractDate(contact: Contact): Promise<Date> {
+    const result = await Contract.getContracts(this.db, this.currentCompany, null, 
+      where('client', '==', contact.ref),
+      orderBy('date', 'desc'),
+      limit(1));
+
+    if(result.length == 0) {
+      return null;
+    }
+
+    return result[0].date;
+  }
 }
