@@ -3,6 +3,13 @@
 	
 	<ion-content class="ion-padding">
 		<div class="content-header margin-inline">
+			<mat-form-field appearance="fill">
+				<mat-label>Type</mat-label>
+				<mat-select>
+					<mat-option>client</mat-option>
+					<mat-option>trucker</mat-option>
+				</mat-select>
+			</mat-form-field>
 			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
 			<ion-button (click)="openNewContact()">
 				<ion-text slot="end">{{t('New Contact')}}</ion-text>
