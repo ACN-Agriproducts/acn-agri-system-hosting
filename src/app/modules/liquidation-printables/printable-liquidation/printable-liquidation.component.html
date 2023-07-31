@@ -1,3 +1,14 @@
-<p>
-  printable-liquidation works!
-</p>
+
+<ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
+
+<ng-template typeTemplate="liquidation-long">
+  <app-liquidation-long
+    [selectedTickets]="selectedTickets"
+    [contract]="contract" 
+    [totals]="totals"
+  ></app-liquidation-long>
+</ng-template>
+
+<ng-template #none>
+	<p>NONE</p>
+</ng-template>

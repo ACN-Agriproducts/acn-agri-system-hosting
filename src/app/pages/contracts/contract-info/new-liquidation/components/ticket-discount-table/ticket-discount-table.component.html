@@ -100,9 +100,10 @@
   >{{ t('print') | titlecase }}</button>
   <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
   
-  <app-liquidation-long id='ContractLiquidationLong' class="printable"
+  <app-printable-liquidation 
     [selectedTickets]="selectedTickets"
     [contract]="contract"
     [totals]="totals"
-  ></app-liquidation-long>
+    [version]="'liquidation-long'"
+  ></app-printable-liquidation>
 </ng-container>

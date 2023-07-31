@@ -3,11 +3,7 @@
     box-sizing: border-box;
 }
 
-app-ticket-discount-table {
-    width: 100%;
-}
-
-app-contract-liquidations {
+app-liquidation-table {
     overflow-y: scroll;
     max-height: min-content;
 }

@@ -16,7 +16,7 @@ import { SharedModule } from '@shared/shared.module';
 import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
-import { LiquidationsComponent } from './components/liquidations/liquidations.component';
+import { LiquidationTableComponent } from './components/liquidation-table/liquidation-table.component';
 
 @NgModule({
   imports: [
@@ -37,7 +37,7 @@ import { LiquidationsComponent } from './components/liquidations/liquidations.co
     TruckerTableComponent,
     DisplayContractComponent,
     TruckersFormComponent,
-    LiquidationsComponent,
+    LiquidationTableComponent,
   ]
 })
 export class ContractInfoPageModule {}

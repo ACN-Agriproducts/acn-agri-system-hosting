@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { LiquidationsComponent } from './liquidations.component';
+import { LiquidationTableComponent } from './liquidation-table.component';
 
-describe('LiquidationsComponent', () => {
-  let component: LiquidationsComponent;
-  let fixture: ComponentFixture<LiquidationsComponent>;
+describe('LiquidationTableComponent', () => {
+  let component: LiquidationTableComponent;
+  let fixture: ComponentFixture<LiquidationTableComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LiquidationsComponent ],
+      declarations: [ LiquidationTableComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(LiquidationsComponent);
+    fixture = TestBed.createComponent(LiquidationTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
