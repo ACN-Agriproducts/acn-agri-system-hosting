@@ -156,7 +156,8 @@ export class OptionsTicketComponent implements OnInit {
 
   public discounts(): void {
     this.dialog.open(DiscountsDialogComponent, {
-      data: this.ticket
+      data: this.ticket,
+      autoFocus: false
     });
 
     this.popoverController.dismiss();
