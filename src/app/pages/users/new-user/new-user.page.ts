@@ -49,6 +49,10 @@ export class NewUserPage implements OnInit {
         {
           label: 'Split Ticket',
           controlName: 'splitTicket',
+        },
+        {
+          label: 'Add Ticket Discounts',
+          controlName: 'setDiscounts'
         }
       ]
     },
