@@ -11,6 +11,7 @@ import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage
 import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
 import { ChangeTicketContractComponent } from 'src/app/standalone/change-ticket-contract/change-ticket-contract.component';
 import { DiscountsDialogComponent } from '../discounts-dialog/discounts-dialog.component';
+import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
 
 @Component({
   selector: 'app-options-ticket',
@@ -46,15 +47,15 @@ export class OptionsTicketComponent implements OnInit {
     }
   }
   public openDialog = async () => {
-    this.closePanel();
-    const modal = await this.modalController.create({
-      component: ModalTicketComponent,
-      cssClass: 'modal-dialog-ticket',
-      componentProps: {
-        ticket: this.ticket
-      }
+    this.dialog.open(TicketDialogComponent, {
+      data: this.ticket,
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
     });
-    return await modal.present();
+
+    this.popoverController.dismiss();
   }
   public openDialogAddPicture = async () => {
     this.closePanel();
