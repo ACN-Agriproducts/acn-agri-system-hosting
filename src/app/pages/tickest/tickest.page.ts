@@ -7,10 +7,8 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
-import * as _moment from 'moment';
 import { TableComponent } from './components/table/table.component';
 
-const moment = _moment;
 
 export const MY_FORMATS = {
   parse: {
@@ -42,7 +40,6 @@ export const MY_FORMATS = {
   ]
 })
 export class TickestPage implements OnInit {
-  public date: _moment.Moment = moment();
   public currentPlant: string = 'progreso';
   @ViewChild(TableComponent) ticketTable: TableComponent;
 
@@ -69,14 +66,5 @@ export class TickestPage implements OnInit {
       width: '350px',
       data: {currentPlant: this.currentPlant}
     });
-  }
-
-  setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
-    const ctrlValue = moment();
-    ctrlValue.month(normalizedMonthAndYear.month());
-    ctrlValue.year(normalizedMonthAndYear.year());
-    this.date = ctrlValue;
-    datepicker.close();
-    this.ticketTable.dateChangeFn(this.date.toDate());
   }
 }
