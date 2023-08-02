@@ -18,6 +18,7 @@ export class Company extends FirebaseDocInterface {
     defaultUnit: units;
     displayUnit: units;
     defaultLanguage: 'en' | 'es';
+    companyTags: string[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
@@ -33,6 +34,7 @@ export class Company extends FirebaseDocInterface {
         this.defaultUnit = data.defaultUnit;
         this.displayUnit = data.displayUnit;
         this.defaultLanguage = data.defaultLanguage;
+        this.companyTags = data.companyTags;
 
         this.contactList = [];
 
@@ -55,6 +57,7 @@ export class Company extends FirebaseDocInterface {
                 defaultUnit: data.defaultUnit,
                 displayUnit: data.displayUnit,
                 defaultLanguage: data.defaultLanguage,
+                companyTags: data.companyTags,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Company {

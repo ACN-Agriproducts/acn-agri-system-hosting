@@ -17,8 +17,10 @@
 						<mat-chip-list multiple [(ngModel)]="data.tags" name="tags">
 							<mat-chip value="client" #c="matChip" (click)="chipToggle(c, 'client')">Client</mat-chip>
 							<mat-chip value="trucker" #tc="matChip" (click)="chipToggle(tc, 'trucker')">Trucker</mat-chip>
+							<mat-spinner [diameter]="20" *ngIf="!otherTags"></mat-spinner>
+							<mat-chip *ngFor="let tag of otherTags" [value]="tag" #oc="matChip" (click)="chipToggle(oc, tag)">{{tag | titlecase}}</mat-chip>
 						</mat-chip-list>
-						<button mat-icon-button><mat-icon>add</mat-icon></button>
+						<button mat-icon-button (click)="newTagDialog()"><mat-icon>add</mat-icon></button>
 					</div>
 				</mat-grid-tile>
 	
