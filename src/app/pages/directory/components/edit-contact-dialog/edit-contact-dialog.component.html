@@ -4,7 +4,7 @@
 	<mat-dialog-content>
 		<form #contactForm="ngForm">
 			<mat-grid-list cols="12" rowHeight="70px" gutterSize="10px">
-				<mat-grid-tile colspan="8">
+				<mat-grid-tile colspan="12">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('Name')}}</mat-label>
 						<input matInput required [(ngModel)]="data.name" name="name">
@@ -12,14 +12,14 @@
 					</mat-form-field>
 				</mat-grid-tile>
 	
-				<mat-grid-tile colspan="4">
-					<mat-form-field appearance="fill">
-						<mat-label>{{t('Contact Type')}}</mat-label>
-						<mat-select [(ngModel)]="data.tags" multiple name="tags" required>
-							<mat-option value="client">{{t('Client')}}</mat-option>
-							<mat-option value="trucker">{{t('Trucker')}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+				<mat-grid-tile colspan="12">
+					<div class="chip-row">
+						<mat-chip-list multiple [(ngModel)]="data.tags" name="tags">
+							<mat-chip value="client" #c="matChip" (click)="chipToggle(c, 'client')">Client</mat-chip>
+							<mat-chip value="trucker" #tc="matChip" (click)="chipToggle(tc, 'trucker')">Trucker</mat-chip>
+						</mat-chip-list>
+						<button mat-icon-button><mat-icon>add</mat-icon></button>
+					</div>
 				</mat-grid-tile>
 	
 				<mat-grid-tile colspan="12">
