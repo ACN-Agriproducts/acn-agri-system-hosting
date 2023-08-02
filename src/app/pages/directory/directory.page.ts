@@ -148,10 +148,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
     });
   }
 
-  public archive(id: string): void {
-    
-  }
-
   public nav = (route: string): void => {
     this.navController.navigateForward(route, {
       replaceUrl: false
