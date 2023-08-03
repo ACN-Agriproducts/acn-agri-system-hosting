@@ -3,6 +3,11 @@
     box-sizing: border-box;
 }
 
+:host[data-scroll] .body {
+    overflow-y: scroll;
+    max-height: 400px;
+}
+
 .collection {
     margin: 0;
     padding: 0;

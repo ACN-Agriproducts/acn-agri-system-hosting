@@ -18,7 +18,7 @@
         <div class="cell options"></div>
       </li>
     </mat-card>
-    <ng-container *ngIf="liquidations.length!==0 else noItems">
+    <div class="body" *ngIf="liquidations.length!==0 else noItems">
       <mat-card class="body-card" *ngFor="let item of liquidations; let index = index">
         <li class="row">
           <div class="cell ticket-ids">
@@ -67,7 +67,7 @@
           </div>
         </li>
       </mat-card>
-    </ng-container>
+    </div>
     <ng-template #noItems>
       <div class="no-items"><i>No Items to Display</i></div>
     </ng-template>
