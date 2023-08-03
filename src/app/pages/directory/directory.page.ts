@@ -70,13 +70,13 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public openOptions = async (ev: any) => {
     ev.preventDefault();
-    const popover = await this.popoverController.create({
-      component: OptionsDirectoryComponent,
-      cssClass: 'my-custom-class',
-      event: ev,
-      translucent: true,
-    });
-    return await popover.present();
+    // const popover = await this.popoverController.create({
+    //   component: OptionsDirectoryComponent,
+    //   cssClass: 'my-custom-class',
+    //   event: ev,
+    //   translucent: true,
+    // });
+    // return await popover.present();
   }
 
   public openContactModal = async (index) => {
