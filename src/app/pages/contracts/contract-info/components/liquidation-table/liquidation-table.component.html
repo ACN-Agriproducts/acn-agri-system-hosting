@@ -1,7 +1,7 @@
 
 <ng-container *transloco="let t, read: 'contracts.info'">
   <mat-card-actions [align]="'end'">
-    <button mat-button color="primary" routerLink="./new-liquidation">
+    <button mat-button color="primary" routerLink="./set-liquidation">
       <span>Add Liquidation</span>
       &nbsp;
       <mat-icon>add_box</mat-icon>
@@ -22,10 +22,10 @@
       <mat-card class="body-card" *ngFor="let item of liquidations; let index = index">
         <li class="row">
           <div class="cell ticket-ids">
-            <span *ngFor="let ref of item.ticketRefs; let last = last">
-              <span>{{ ref | ticketData | async }}</span>
-              <span *ngIf="!last && (ref | ticketData | async)">,</span>
-            </span>
+            <i *ngFor="let ref of item.ticketRefs | ticketIds; let last = last">
+              <span>{{ ref | async }}</span>
+              <span *ngIf="!last && (ref | async)">,</span>
+            </i>
           </div>
           <div class="cell">{{ item.date | date }}</div>
           <div class="cell status">

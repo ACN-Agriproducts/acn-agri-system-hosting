@@ -13,11 +13,11 @@ import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tick
 import * as Excel from 'exceljs';
 
 @Component({
-  selector: 'app-new-liquidation',
-  templateUrl: './new-liquidation.page.html',
-  styleUrls: ['./new-liquidation.page.scss'],
+  selector: 'app-set-liquidation',
+  templateUrl: './set-liquidation.page.html',
+  styleUrls: ['./set-liquidation.page.scss'],
 })
-export class NewLiquidationPage implements OnInit {
+export class SetLiquidationPage implements OnInit {
   public contract: Contract;
   public discountTables: DiscountTables;
   public id: string;

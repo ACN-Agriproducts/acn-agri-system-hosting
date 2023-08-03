@@ -29,12 +29,12 @@ export class LiquidationTableComponent implements OnInit {
 }
 
 @Pipe({
-  name: 'ticketData'
+  name: 'ticketIds'
 })
-export class TicketDataPipe implements PipeTransform {
+export class TicketIdsPipe implements PipeTransform {
   
-  async transform(ticketRef: DocumentReference<Ticket>, ...args: any[]): Promise<number> {
-    return (await getDoc(ticketRef)).data().id;
+  transform(ticketRefs: DocumentReference<Ticket>[], ...args: any[]): Promise<number>[] {
+    return ticketRefs.map(async ref => (await getDoc(ref)).data().id)
   }
  
 }

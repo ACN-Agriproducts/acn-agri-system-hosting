@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { NewLiquidationPage } from './new-liquidation.page';
+import { SetLiquidationPage } from './set-liquidation.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: NewLiquidationPage
+    component: SetLiquidationPage
   }
 ];
 

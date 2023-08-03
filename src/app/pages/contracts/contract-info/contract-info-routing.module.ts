@@ -9,8 +9,8 @@ const routes: Routes = [
     component: ContractInfoPage
   },
   {
-    path: 'new-liquidation',
-    loadChildren: () => import('./new-liquidation/new-liquidation.module').then( m => m.NewLiquidationPageModule)
+    path: 'set-liquidation',
+    loadChildren: () => import('./set-liquidation/set-liquidation.module').then( m => m.NewLiquidationPageModule)
   }
 
 ];

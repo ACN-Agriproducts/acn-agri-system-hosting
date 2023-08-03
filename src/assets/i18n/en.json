@@ -107,7 +107,7 @@
             "options": "options",
             "contract liquidations": "contract liquidations",
             "liquidation": "liquidation",
-            "new liquidation": "new liquidation",
+            "set liquidation": "set liquidation",
             "submit": "submit"
         }
     },

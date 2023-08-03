@@ -108,7 +108,7 @@
             "options": "opciones",
             "contract liquidations": "liquidaciones de contratos",
             "liquidation": "liquidación",
-            "new liquidation": "nuevo liquidación",
+            "set liquidation": "establecer liquidación",
             "submit": "entregar"
         }
     },
