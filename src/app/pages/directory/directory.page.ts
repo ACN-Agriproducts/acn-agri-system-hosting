@@ -141,7 +141,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
       contact.tags = data.tags;
       contact.zipCode = data.zipCode;
 
-      this.snack.open(this.transloco.translate("contact-update-success"), "success");
+      this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
     })
     .catch(error => {
       this.snack.open(error, "error");

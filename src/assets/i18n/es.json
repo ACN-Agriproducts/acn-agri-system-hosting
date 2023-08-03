@@ -168,6 +168,8 @@
         "Tare": "Tara",
         "Net": "Neto",
         "Loading more data": "Cargando mas informacion",
-        "Export Contacts": "Exportar Contactos"
+        "Export Contacts": "Exportar Contactos",
+        "contact": "Contacto",
+        "Country": "Paiz"
     }
 }
