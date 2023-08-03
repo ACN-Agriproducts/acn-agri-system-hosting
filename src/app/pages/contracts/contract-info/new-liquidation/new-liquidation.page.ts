@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import { ActivatedRoute } from '@angular/router';
+import { Firestore, doc } from '@angular/fire/firestore';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
-import { LiquidationTotals } from '@shared/classes/liquidation';
+import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
 import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
@@ -23,6 +24,7 @@ export class NewLiquidationPage implements OnInit {
   public ticketList: Ticket[];
   public type: string;
   public ready: boolean = false;
+  public liquidation: Liquidation;
 
   public ticketDiscountList: TicketWithDiscounts[] = [];
   public selectedTickets: TicketWithDiscounts[] = [];
@@ -34,6 +36,8 @@ export class NewLiquidationPage implements OnInit {
     private route: ActivatedRoute,
     private selectedTicketsPipe: SelectedTicketsPipe,
     private transloco: TranslocoService,
+    private snack: SnackbarService,
+    private router: Router,
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
@@ -52,8 +56,10 @@ export class NewLiquidationPage implements OnInit {
         includeInReport: false
       }));
       
+      this.liquidation = new Liquidation(doc(Liquidation.getCollectionReference(this.db, this.session.getCompany(), this.id)))
       this.ready = true;
     });
+
   }
 
   ngOnDestroy() {
@@ -235,5 +241,20 @@ export class NewLiquidationPage implements OnInit {
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();
+  }
+
+  public async submit() {
+    console.log(this.liquidation)
+    this.liquidation.ticketRefs = this.selectedTickets.map(ticket => ticket.data.ref.withConverter(Ticket.converter));
+
+    this.liquidation.set().then(() => {
+      // throw 'Error'
+      this.snack.open("Liquidation successfully created", "success");
+      this.router.navigate([`dashboard/contracts/contract-info/${this.type}/${this.id}`]);
+    })
+    .catch(e => {
+      console.error(e);
+      this.snack.open("Error creating liquidation", "error");
+    });
   }
 }

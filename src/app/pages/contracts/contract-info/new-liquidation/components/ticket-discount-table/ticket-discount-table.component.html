@@ -84,26 +84,4 @@
       </ion-text>
     </div>
   </ion-card>
-  
-  <button mat-raised-button (click)="selectAllTickets(false)" [disabled]="selectedTickets.length === 0">Deselect All</button>
-  <button mat-raised-button (click)="selectAllTickets(true)" [disabled]="selectedTickets.length === ticketDiscountList.length">Select All</button>
-  <button mat-raised-button
-    [disabled]="selectedTickets.length === 0"
-    (click)="onDownloadLiquidation()"
-  >{{ t('download') | titlecase }}</button>
-  <button mat-raised-button
-    [disabled]="selectedTickets.length === 0"
-    ngxPrint
-    [useExistingCss]="true"
-    printSectionId="ContractLiquidationLong"
-    [printStyle]="{'@page' : { size: 'letter landscape' }}"
-  >{{ t('print') | titlecase }}</button>
-  <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
-  
-  <app-printable-liquidation 
-    [selectedTickets]="selectedTickets"
-    [contract]="contract"
-    [totals]="totals"
-    [version]="'liquidation-long'"
-  ></app-printable-liquidation>
 </ng-container>

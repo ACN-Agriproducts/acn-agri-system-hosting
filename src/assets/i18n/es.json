@@ -108,7 +108,8 @@
             "options": "opciones",
             "contract liquidations": "liquidaciones de contratos",
             "liquidation": "liquidación",
-            "new liquidation": "nuevo liquidación"
+            "new liquidation": "nuevo liquidación",
+            "submit": "entregar"
         }
     },
     "directory": {

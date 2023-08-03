@@ -1,5 +1,5 @@
 <ng-container *transloco="let t, read: 'contracts.info'">
-  <app-header-toolbar [titulo]="t('contract') + ' ' + currentContract?.id"></app-header-toolbar>
+  <app-header-toolbar [titulo]="t('contract') + ' ' + (currentContract?.id ?? '')"></app-header-toolbar>
 
   <ion-content class="ion-padding">
     <div class="center-content" *ngIf="ready">
@@ -16,6 +16,7 @@
                 </mat-card-content>
               </mat-card>
             </div>
+            <!-- FIGURE OUT WAY TO BETTER DISPLAY THIS... MAYBE AN ARROW TO SLIDE IT INTO VIEW?? -->
             <!-- <mat-card id="printable-card">
               <mat-card-header>
                 <mat-card-subtitle>{{t('contract document')}}</mat-card-subtitle>

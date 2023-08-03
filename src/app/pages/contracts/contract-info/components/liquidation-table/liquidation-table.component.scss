@@ -67,6 +67,10 @@
 
     display: flex;
     align-items: center;
+
+    &.ticket-ids {
+        flex-wrap: wrap;
+    }
 }
 
 .header-card {
@@ -128,3 +132,9 @@
 	color: var(--ion-color-danger);
 }
 
+.no-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3rem;
+}
