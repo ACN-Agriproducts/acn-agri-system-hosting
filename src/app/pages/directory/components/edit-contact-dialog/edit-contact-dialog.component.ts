@@ -106,7 +106,6 @@ export class PrimaryPipe implements PipeTransform {
     const primaryContact = list[index];
     list.splice(index, 1);
     list.unshift(primaryContact);
-    console.log(list);
     return list;
   }
 }
