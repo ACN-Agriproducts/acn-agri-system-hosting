@@ -1,10 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatChip } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
-import { Contact } from '@shared/classes/contact';
+import { Contact, MetaContact } from '@shared/classes/contact';
 import { lastValueFrom } from 'rxjs';
 
 @Component({
@@ -50,6 +50,31 @@ export class EditContactDialogComponent implements OnInit {
     else 
       this.data.tags.push(tag);
   }
+
+  createNewMetacontact(): void {
+    this.data.metacontacts.push({
+      email: null,
+      isPrimary: false,
+      name: null,
+      phone: null,
+    });
+  }
+
+  promoteToPrimary(contact: MetaContact) {
+    this.primaryMetaContact().isPrimary = false;
+    contact.isPrimary = true;
+  }
+
+  removeMetacontact(index: number) {
+    if(this.data.metacontacts.length <= 1) return;
+    const contact = this.data.metacontacts[index];
+    this.data.metacontacts.splice(index, 1);
+
+    // Make sure some contact is always primary
+    if(contact.isPrimary) {
+      this.data.metacontacts[0].isPrimary = true;
+    }
+  }
 }
 
 @Component({
@@ -70,4 +95,18 @@ export class EditContactDialogComponent implements OnInit {
 })
 export class AddNewTagDialogComponent {
   public tag: string;
+}
+
+@Pipe({
+  name: 'primary',
+})
+export class PrimaryPipe implements PipeTransform {
+  transform(list: any[], fieldName:string, ...args: any[]) {
+    const index = list.findIndex(c => c[fieldName]);
+    const primaryContact = list[index];
+    list.splice(index, 1);
+    list.unshift(primaryContact);
+    console.log(list);
+    return list;
+  }
 }

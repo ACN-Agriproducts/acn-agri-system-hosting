@@ -109,19 +109,35 @@
 					</mat-grid-tile>
 				</mat-grid-list>
 	
-				<mat-grid-list id="primary-metacontact" cols="9" rowHeight="70px" gutterSize="10px">
+				<mat-grid-list
+					id="primary-metacontact" 
+					cols="9" 
+					rowHeight="70px" 
+					gutterSize="10px" 
+					*ngFor="let contact of data.metacontacts | primary:'isPrimary':primaryMetaContact():data.metacontacts.length; let index = index; let last = last"
+					[class.underline]="!last">
 					<mat-grid-tile colspan="9">
+						<button 
+							mat-icon-button 
+							matTooltip="Make Primary" 
+							*ngIf="!contact.isPrimary"
+							(click)="promoteToPrimary(contact)"><mat-icon>publish</mat-icon></button>
 						<mat-form-field appearance="fill">
 							<mat-label>{{t('Name')}}</mat-label>
-							<input matInput [(ngModel)]="primaryMetaContact().name" name="primaryMetaContactName">
+							<input matInput [(ngModel)]="contact.name" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Name is')}} <strong>{{t('required')}}</strong></mat-error>
 						</mat-form-field>
+						<button 
+							mat-icon-button 
+							matTooltip="delete" 
+							*ngIf="data.metacontacts.length > 1"
+							(click)="removeMetacontact(index)"><mat-icon>delete</mat-icon></button>
 					</mat-grid-tile>
 	
 					<mat-grid-tile colspan="3">
 						<mat-form-field appearance="fill">
 							<mat-label>{{t('Phone Number')}}</mat-label>
-							<input matInput [(ngModel)]="primaryMetaContact().phone" name="phoneNumber">
+							<input matInput [(ngModel)]="contact.phone" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Phone number is')}} <strong>{{t('required')}}</strong></mat-error>
 						</mat-form-field>
 					</mat-grid-tile>
@@ -129,11 +145,13 @@
 					<mat-grid-tile colspan="6">
 						<mat-form-field appearance="fill">
 							<mat-label>{{t('Email')}}</mat-label>
-							<input matInput [(ngModel)]="primaryMetaContact().email" name="email">
+							<input matInput [(ngModel)]="contact.email" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Email is')}} <strong>{{t('required')}}</strong></mat-error>
 						</mat-form-field>
 					</mat-grid-tile>
 				</mat-grid-list>
+
+				<button mat-flat-button (click)="createNewMetacontact()" color="primary" id="new-metacontact-button">+ Add New</button>
 			</div>
 		</form>
 	</mat-dialog-content>

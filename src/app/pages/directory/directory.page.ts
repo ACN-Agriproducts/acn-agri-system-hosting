@@ -104,11 +104,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   public async edit(contact: Contact): Promise<void> {
-    const metaContacts = [];
+    const metacontacts = [];
     contact.metacontacts.forEach(metaContact => {
-      metaContacts.push({ ...metaContact });
+      metacontacts.push({ ...metaContact });
     });
-    const contactCopy = { ...contact, metaContacts: metaContacts };
+    const contactCopy = { ...contact, metacontacts: metacontacts };
 
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
@@ -124,7 +124,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     contact.update({
       caat: data.caat,
       city: data.city.toUpperCase(),
-      metaContacts: data.metacontacts,
+      metacontacts: data.metacontacts,
       name: data.name.toUpperCase(),
       state: data.state.toUpperCase(),
       streetAddress: data.streetAddress.toUpperCase(),
