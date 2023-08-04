@@ -2,11 +2,9 @@
   width: 100%;
 }
 .content-actions {
-  display: grid;
-  align-content: center;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  grid-template-columns: auto 1fr auto auto;
   column-gap: 15px;
 }
 #container {

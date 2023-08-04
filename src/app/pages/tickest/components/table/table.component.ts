@@ -10,6 +10,9 @@ import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
 import { Plant } from '@shared/classes/plant';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { MatDatepicker } from '@angular/material/datepicker';
+import * as _moment from 'moment';
+const moment = _moment;
 
 
 @Component({
@@ -25,7 +28,7 @@ export class TableComponent implements OnInit, OnDestroy {
   public currentCompany: string;
   public currentPlant: string;
   public inTicket: boolean = true;
-  private date: Date;
+  public date: Date;
   public ticketStep = 30;
 
   constructor(
@@ -45,11 +48,6 @@ export class TableComponent implements OnInit, OnDestroy {
 
       this.getTickets(new Date());
     });
-  }
-
-  public dateChangeFn(date: Date) {
-    console.log(date);
-    this.getTickets(date)
   }
 
   async getTickets(date: Date){
@@ -129,22 +127,13 @@ export class TableComponent implements OnInit, OnDestroy {
     return await modal.present();
   }
 
-  public loadInTickets() {
-    if(this.inTicket) {
-      return;
-    }
-
-    this.inTicket = true;
-    this.getTickets(this.date)
-  }
-
-  public loadOutTickets() {
-    if(!this.inTicket) {
-      return;
-    }
-
-    this.inTicket = false;
-    this.getTickets(this.date)
+  setMonthAndYear(normalizedMonthAndYear: _moment.Moment, datepicker: MatDatepicker<_moment.Moment>) {
+    const ctrlValue = moment();
+    ctrlValue.month(normalizedMonthAndYear.month());
+    ctrlValue.year(normalizedMonthAndYear.year());
+    this.date = ctrlValue.toDate();
+    datepicker.close();
+    this.getTickets(this.date);
   }
 
   ngOnDestroy(): void {
