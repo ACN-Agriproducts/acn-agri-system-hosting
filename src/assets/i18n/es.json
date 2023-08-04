@@ -170,6 +170,8 @@
         "Loading more data": "Cargando mas informacion",
         "Export Contacts": "Exportar Contactos",
         "contact": "Contacto",
-        "Country": "Paiz"
+        "Contracts": "Contratos",
+        "Country": "Paiz",
+        "Type": "Tipo"
     }
 }
