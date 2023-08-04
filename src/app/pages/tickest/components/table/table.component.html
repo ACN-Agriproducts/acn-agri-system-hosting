@@ -1,7 +1,24 @@
-<mat-button-toggle-group name='ticketType'>
-    <mat-button-toggle (click)='loadInTickets()'>In Tickets</mat-button-toggle>
-    <mat-button-toggle (click)='loadOutTickets()'>Out Tickets</mat-button-toggle>
-</mat-button-toggle-group>
+<div class="options-bar">
+    <div>
+        <mat-form-field appearance="outline">
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets(date)">
+                <mat-option [value]="true">In Tickets</mat-option>
+                <mat-option [value]="false">Out Tickets</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Month and Year</mat-label>
+            <input matInput [matDatepicker]="dp" [(ngModel)]="date">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp
+                            startView="multi-year"
+                            (monthSelected)="setMonthAndYear($event, dp)"
+                            panelClass="example-month-picker">
+            </mat-datepicker>
+        </mat-form-field>
+    </div>
+</div>
 
 <ion-card class="ion-no-margin ion-hide-sm-down">
     <div class="header-table ion-hide-sm-down">

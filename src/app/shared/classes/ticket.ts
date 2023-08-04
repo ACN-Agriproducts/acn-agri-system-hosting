@@ -70,6 +70,7 @@ export class Ticket extends FirebaseDocInterface{
     public transportCaat: string;
 
     public subId: string;
+    public moneyDiscounts: MoneyDiscounts;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
@@ -135,6 +136,7 @@ export class Ticket extends FirebaseDocInterface{
         this.transportCaat = data.transportCaat;
 
         this.subId = data.subId;
+        this.moneyDiscounts = data.moneyDiscounts ?? {};
 
         this.net = this.gross.subtract(this.tare);
     }
@@ -198,6 +200,7 @@ export class Ticket extends FirebaseDocInterface{
                 transportCaat: data.weight,
 
                 subId: data.subId,
+                moneyDiscounts: data.moneyDiscounts,
 
             }
         },
@@ -368,4 +371,8 @@ export class WeightDiscounts extends Discounts {
             this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
         }
     }
+}
+
+export interface MoneyDiscounts {
+    [discount: string]: number;
 }
