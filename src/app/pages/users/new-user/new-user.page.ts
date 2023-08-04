@@ -275,7 +275,8 @@ export class NewUserPage implements OnInit {
         voidTicketRequest: [false],
         voidTicketAccept: [false],
         addDocument: [false],
-        splitTicket: [false]
+        splitTicket: [false],
+        setDiscounts: [false],
       }),
       inventory: this.fb.group({
         read: [false],
