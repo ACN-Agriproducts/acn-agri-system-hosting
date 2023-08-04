@@ -115,8 +115,7 @@
         <th>Gross</th>
         <th>Net</th>
         <th>Moisture</th>
-        <th>Discount</th>
-        <th>Dry Weight</th>
+        <th>Plates</th>
       </tr>
       <tr *ngFor="let ticket of ticketList.value">
         <td>{{ticket.dateOut | date:'shortDate'}}</td>
@@ -126,10 +125,10 @@
         <td>{{ticket.tank}}</td>
         <td>{{ticket.tare | massInUnit:displayUnit}}</td>
         <td>{{ticket.gross | massInUnit:displayUnit}}</td>
-        <td>{{ticket.getNet() | massInUnit:displayUnit}}</td>
+        <td>{{ticket.net | massInUnit:displayUnit}}</td>
         <td>{{ticket.moisture | number:'0.1'}}</td>
-        <td>{{ticket.discount}}</td>
-        <td>{{ticket.dryWeight | massInUnit:displayUnit}}</td>
+        <td>{{ticket.plates}}</td>
+        
       </tr>
       <tr>
         <td></td>
@@ -141,8 +140,8 @@
         <td></td>
         <td>{{totals.products.net[ticketList.key] | massInUnit:displayUnit}}</td>
         <td></td>
-        <td>{{totals.products.net[ticketList.key].subtract(totals.products.dryWeight[ticketList.key]) | massInUnit:displayUnit}}</td>
-        <td>{{totals.products.dryWeight[ticketList.key] | massInUnit:displayUnit}}</td></tr>
+        <td></td>
+      </tr>
     </table>
 
     <app-printable-ticket
