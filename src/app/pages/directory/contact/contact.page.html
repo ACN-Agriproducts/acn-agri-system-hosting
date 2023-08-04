@@ -113,16 +113,13 @@
 					</ion-col>
 				</ion-row>
 	
-				<ng-template [ngIf]="purchaseContracts || salesContracts || tickets">
+				<ng-template [ngIf]="contracts || tickets">
 					<h4><span>{{t('Documents')}}</span></h4>
 	
 					<ion-row>
 						<ion-segment [value]="docsType" (ionChange)="changeDocuments($event)">
-							<ion-segment-button value="purchase" *ngIf="purchaseContracts">
-								<ion-label>{{t('Purchase Contracts')}}</ion-label>
-							</ion-segment-button>
-							<ion-segment-button value="sales" *ngIf="salesContracts">
-								<ion-label>{{t('Sales Contracts')}}</ion-label>
+							<ion-segment-button value="contracts" *ngIf="contracts">
+								<ion-label>{{t('Contracts')}}</ion-label>
 							</ion-segment-button>
 							<ion-segment-button value="tickets" *ngIf="tickets">
 								<ion-label>{{t('Tickets')}}</ion-label>
@@ -133,13 +130,14 @@
 					<ion-row>
 						<ion-col>
 							<ion-card>
-								<ng-template [ngIf]="docsType === 'purchase' || docsType === 'sales'">
+								<ng-template [ngIf]="docsType === 'contracts'">
 									<div class="table-row">
 										<span>{{t('ID')}}</span>
+										<span>{{t('Type')}}</span>
 										<span>{{t('Date')}}</span>
 										<span>{{t('Status')}}</span>
 										<span>{{t('Product')}}</span>
-										<span>{{t('Quantity')}}</span>
+										<span>{{t('Quantity') + " (" + displayUnit + ")"}}</span>
 										<span>{{t('Price')}}</span>
 										<span>{{t('Total')}}</span>
 									</div>
@@ -148,12 +146,13 @@
 										(click)="openContract(doc.ref.id)"
 									>
 										<span>{{ doc["id"] }}</span>
+										<span>{{ doc["type"] | titlecase }}</span>
 										<span>{{ doc["date"] | date }}</span>
 										<span><span class="status" [ngClass]="doc['status'].toLocaleLowerCase()">{{ doc["status"] }}</span></span>
 										<span>{{ doc["product"].id }}</span>
-										<span>{{ doc["quantity"] | massInUnit }}</span>
+										<span>{{ doc["quantity"] | massInUnit:displayUnit | number:'0.3' }}</span>
 										<span>{{ doc["pricePerBushel"] | currency: '$' }}</span>
-										<span>{{ ((doc["quantity"] | massInUnit) / doc["productInfo"].weight * doc["pricePerBushel"]) | currency }}</span>
+										<span>{{ ((doc["quantity"] | massInUnit:displayUnit) * doc["pricePerBushel"]) | currency }}</span>
 									</div>
 								</ng-template>
 								<ng-template [ngIf]="docsType === 'tickets'">
@@ -177,7 +176,7 @@
 										<span>{{ doc["productName"] }}</span>
 										<span>{{ doc["gross"] | massInUnit }}</span>
 										<span>{{ doc["tare"] | massInUnit }}</span>
-										<span>{{ doc["getNet"]() | massInUnit }}</span>
+										<span>{{ doc["net"] | massInUnit }}</span>
 										<span>--</span>
 									</div>
 								</ng-template>

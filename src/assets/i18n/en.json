@@ -167,6 +167,10 @@
         "Tare": "Tare",
         "Net": "Net",
         "Loading more data": "Loading more data",
-        "Export Contacts": "Export Contacts"
+        "Export Contacts": "Export Contacts",
+        "Contact": "Contact",
+        "Country": "Country",
+        "Contracts": "Contracts",
+        "Type": "Type"
     }
 }

@@ -201,7 +201,7 @@ export class Contact extends FirebaseDocInterface {
     }
 }
 
-interface MetaContact {
+export interface MetaContact {
     email: string;
     isPrimary: boolean;
     name: string;

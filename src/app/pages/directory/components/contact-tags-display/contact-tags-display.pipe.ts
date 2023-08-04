@@ -10,7 +10,7 @@ export class ContactTagsDisplayPipe implements PipeTransform {
   constructor(private transloco: TranslocoService) {}
 
   transform(contact: Contact, ...args: unknown[]): string {
-    return contact.getType().map(t => this.transloco.translate(`directory.${t}`)).join(' / ');
+    return contact.tags.map(t => t == 'client' || t == 'trucker' ? this.transloco.translate(`directory.${t}`) : t).join(' / ');
   }
 
 }

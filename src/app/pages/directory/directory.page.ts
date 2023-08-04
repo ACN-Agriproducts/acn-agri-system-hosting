@@ -3,7 +3,7 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { lastValueFrom, Subscription } from 'rxjs';
-import { collectionData, doc, Firestore, limit, orderBy, query, where } from '@angular/fire/firestore';
+import { collectionData, doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -12,6 +12,7 @@ import { EditContactDialogComponent } from './components/edit-contact-dialog/edi
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
 import { Contract } from '@shared/classes/contract';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'app-directory',
@@ -25,6 +26,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public currentCompany: string;
   public searchQuery: RegExp;
   public stringTest: string;
+  public contactType: string;
+  public company: Promise<Company>;
 
   public permissions;
 
@@ -42,6 +45,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
     this.permissions = this.session.getPermissions();
+    this.company = Company.getCompany(this.db, this.currentCompany);
     this.updateList();
   }
 
@@ -51,21 +55,28 @@ export class DirectoryPage implements OnInit, OnDestroy {
     }
   }
 
-  private updateList = async () => {
-    this.currentSub = collectionData(query(Contact.getCollectionReference(this.db, this.currentCompany), orderBy('name'))).subscribe(val => {
+  updateList = async () => {
+    console.log('trigger')
+    this.currentSub = collectionData(this.getQuery()).subscribe(val => {
       this.contacts = val;
     });
   }
 
+  private getQuery(): Query<Contact> {
+    let q = query(Contact.getCollectionReference(this.db, this.currentCompany));
+    if(this.contactType) q = query(q, where('tags', 'array-contains', this.contactType));
+    return query(q, orderBy('name', 'asc'));
+  }
+
   public openOptions = async (ev: any) => {
     ev.preventDefault();
-    const popover = await this.popoverController.create({
-      component: OptionsDirectoryComponent,
-      cssClass: 'my-custom-class',
-      event: ev,
-      translucent: true,
-    });
-    return await popover.present();
+    // const popover = await this.popoverController.create({
+    //   component: OptionsDirectoryComponent,
+    //   cssClass: 'my-custom-class',
+    //   event: ev,
+    //   translucent: true,
+    // });
+    // return await popover.present();
   }
 
   public openContactModal = async (index) => {
@@ -93,11 +104,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   public async edit(contact: Contact): Promise<void> {
-    const metaContacts = [];
+    const metacontacts = [];
     contact.metacontacts.forEach(metaContact => {
-      metaContacts.push({ ...metaContact });
+      metacontacts.push({ ...metaContact });
     });
-    const contactCopy = { ...contact, metaContacts: metaContacts };
+    const contactCopy = { ...contact, metacontacts: metacontacts };
 
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
@@ -113,7 +124,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     contact.update({
       caat: data.caat,
       city: data.city.toUpperCase(),
-      metaContacts: data.metacontacts,
+      metacontacts: data.metacontacts,
       name: data.name.toUpperCase(),
       state: data.state.toUpperCase(),
       streetAddress: data.streetAddress.toUpperCase(),
@@ -130,15 +141,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
       contact.tags = data.tags;
       contact.zipCode = data.zipCode;
 
-      this.snack.open(this.transloco.translate("contact-update-success"), "success");
+      this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
     })
     .catch(error => {
       this.snack.open(error, "error");
     });
-  }
-
-  public archive(id: string): void {
-    
   }
 
   public nav = (route: string): void => {

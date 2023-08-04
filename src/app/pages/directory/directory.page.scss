@@ -1,6 +1,18 @@
 .content-header{
     display: flex;
     column-gap: 12px;
+
+    mat-form-field {
+        width: auto;
+  
+        ::ng-deep .mat-form-field-wrapper{
+          margin-bottom: -1.25em;
+          
+          .mat-form-field-outline {
+            background-color: white;
+          }
+        }
+      }
 }
 
 .content-label{

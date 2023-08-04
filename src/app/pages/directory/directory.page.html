@@ -3,6 +3,15 @@
 	
 	<ion-content class="ion-padding">
 		<div class="content-header margin-inline">
+			<mat-form-field appearance="fill">
+				<mat-label>Type</mat-label>
+				<mat-select [(ngModel)]="contactType" (ngModelChange)="updateList()">
+					<mat-option>None</mat-option>
+					<mat-option value="client">Client</mat-option>
+					<mat-option value="trucker">Trucker</mat-option>
+					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option">{{option | titlecase}}</mat-option>
+				</mat-select>
+			</mat-form-field>
 			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
 			<ion-button (click)="openNewContact()">
 				<ion-text slot="end">{{t('New Contact')}}</ion-text>
@@ -32,9 +41,9 @@
 						<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 							<ion-icon name="create-outline"></ion-icon>
 						</ion-button>
-						<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
+						<!-- <ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
 							<ion-icon name="archive-outline"></ion-icon>
-						</ion-button>
+						</ion-button> -->
 					</ion-buttons>
 				</ion-item>
 			</div>
