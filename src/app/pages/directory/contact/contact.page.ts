@@ -8,6 +8,7 @@ import { IonInfiniteScroll, NavController } from '@ionic/angular';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { FirebaseDocInterface, Pagination } from '@shared/classes/FirebaseDocInterface';
+import { units } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
 import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
@@ -20,7 +21,8 @@ import { EditContactDialogComponent } from '../components/edit-contact-dialog/ed
 export class ContactPage implements OnInit {
 	@ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-	private docStep: number = 10;
+	private docStep: number = 20;
+	public displayUnit: units;
 	
 	public primaryContact: {
 		email: string;
@@ -30,8 +32,7 @@ export class ContactPage implements OnInit {
 	};
 	public infiniteScrollState: Map<string, boolean> = new Map(
 		[
-			["purchase", false],
-			["sales", false],
+			["contracts", false],
 			["tickets", false]
 		]
 	);
@@ -42,9 +43,8 @@ export class ContactPage implements OnInit {
 	public currentPlant: string;
 	public docsType: string;
 	public id: string;
-	public purchaseContracts: Pagination<FirebaseDocInterface>;
 	public ready: boolean = false;
-	public salesContracts: Pagination<FirebaseDocInterface>;
+	public contracts: Pagination<FirebaseDocInterface>;
 	public tickets: Pagination<FirebaseDocInterface>;
 
 	constructor(
@@ -60,6 +60,7 @@ export class ContactPage implements OnInit {
 		this.currentCompany = this.session.getCompany();
 		this.currentPlant = this.session.getPlant();
 		this.id = this.route.snapshot.paramMap.get('id');
+		this.displayUnit = this.session.getDisplayUnit();
 
 		Contact.getDoc(this.db, this.currentCompany, this.id)
 		.then(async contact => {
@@ -93,21 +94,10 @@ export class ContactPage implements OnInit {
 		if (await Contract.getContractCount(this.db, this.currentCompany, false, ...constraints) > 0) {
 			const contractQuery = query(Contract.getCollectionReference(
 				this.db,
-				this.currentCompany,
-				false
+				this.currentCompany
 			), ...constraints);
 
-			this.salesContracts = this.setPagination(this.salesContracts, contractQuery);
-		}
-
-		if (await Contract.getContractCount(this.db, this.currentCompany, true, ...constraints) > 0) {
-			const contractQuery = query(Contract.getCollectionReference(
-				this.db,
-				this.currentCompany,
-				true
-			), ...constraints);
-
-			this.purchaseContracts = this.setPagination(this.purchaseContracts, contractQuery);
+			this.contracts = this.setPagination(this.contracts, contractQuery);
 		}
 	}
 
@@ -152,15 +142,12 @@ export class ContactPage implements OnInit {
 	}
 
 	public getDocsType(): string {
-		return this.purchaseContracts ? "purchase" :
-			this.salesContracts ? "sales" :
+		return this.contracts ? "contracts" :
 			this.tickets ? "tickets" : "";
 	}
 
 	public getCurrentList(): Pagination<FirebaseDocInterface> {
-		if (this.docsType === "purchase") return this.purchaseContracts;
-		if (this.docsType === "sales") return this.salesContracts;
-		if (this.docsType === "tickets") return this.tickets;
+		return this[this.docsType];
 	}
 
 	public standardMetacontact = (metacontact: {
@@ -237,8 +224,7 @@ export class ContactPage implements OnInit {
 	}
 
 	ngOnDestroy(): void {
-		this.purchaseContracts?.end();
-		this.salesContracts?.end();
+		this.contracts?.end();
 		this.tickets?.end();
 	}
 }
