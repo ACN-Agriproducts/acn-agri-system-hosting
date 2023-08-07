@@ -44,11 +44,12 @@ export class ContractFormComponent implements OnInit {
   public newTicketContact: boolean = false;
   public exchangeRateSelect: string;
 
-  public useSameClientForTicket = true;
+  public useSameClientForTicket;
 
   private currentClient:Contact;
 
   @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TypeTemplateDirective>;
+  fieldChangeFuncs: Map<string, () => void>;
 
   constructor(
     private db: Firestore,
@@ -62,7 +63,8 @@ export class ContractFormComponent implements OnInit {
   ngOnInit() {
     this.settings$ = ContractSettings.getDocument(this.db, this.session.getCompany());
     this.contract.quantity ??= new Mass(null, null);
-
+    this.useSameClientForTicket = this.isNew ? true : this.contract?.clientInfo?.ref.id == this.contract?.clientTicketInfo?.ref.id;
+    
     Company.getCompany(this.db, this.session.getCompany()).then(val => {
       this.contactList = val.contactList.sort((a, b) =>{
           var nameA = a.name.toUpperCase()
@@ -115,6 +117,20 @@ export class ContractFormComponent implements OnInit {
     }
 
     this.futureOptions = tempFutureOptions;
+
+    this.fieldChangeFuncs = new Map<string, () => any>();
+    this.fieldChangeFuncs.set('grade', async () => {
+      if (!this.contract.product) return;
+      const product = (await this.products$).find(p => this.contract.product.id == p.ref.id);
+      if(!product) return;
+      this.contract.productInfo = product.getProductInfo(this.contract.grade);
+    });
+
+    this.fieldChangeFuncs.set('product', async () => {
+      const product = (await this.products$).find(p => this.contract.product.id == p.ref.id);
+      if(!this.contract.grade || !product) return;
+      this.contract.productInfo = product.getProductInfo(this.contract.grade);
+    });
   }
 
   openClientSelect() {
@@ -269,5 +285,10 @@ export class ContractFormComponent implements OnInit {
       this.snack.open('Error submitting contract', 'error');
       console.error(error);
     });
+  }
+
+  fieldChange(fieldName: string, nestedField: string) {
+    if(nestedField) fieldName = fieldName.concat('.', nestedField);
+    this.fieldChangeFuncs.get(fieldName)();
   }
 }

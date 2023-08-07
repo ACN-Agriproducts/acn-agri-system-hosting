@@ -64,7 +64,7 @@ export class Product extends FirebaseDocInterface {
         return this.ref.id;
     }
 
-    public getProductInfo(): ProductInfo {
+    public getProductInfo(grade: number = 2): ProductInfo {
         return {
             brokenGrain: this.brokenGrain ?? null,
             damagedGrain: this.damagedGrain ?? null,
