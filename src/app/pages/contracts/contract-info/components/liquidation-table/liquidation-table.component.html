@@ -38,11 +38,11 @@
             <mat-menu #pdfMenu="matMenu">
               <button mat-menu-item>
                 <mat-icon color="primary">insert_drive_file</mat-icon>
-                <span>Proof of Payment</span>
+                <span>{{ t("Proof of Payment") }}</span>
               </button>
               <button mat-menu-item>
                 <mat-icon color="primary">file_copy</mat-icon>
-                <span>Supplemental Documents</span>
+                <span>{{ t("Supplemental Documents") }}</span>
               </button>
             </mat-menu>
           </div>
@@ -53,15 +53,19 @@
             <mat-menu #menu="matMenu">
               <button mat-menu-item>
                 <mat-icon color="primary">open_in_new</mat-icon>
-                <span>View Document</span>
+                <span>{{ t("view") | titlecase }}</span>
               </button>
-              <button mat-menu-item>
+              <button mat-menu-item [routerLink]="['./set-liquidation/', item.ref.id]" *ngIf="item.status==='pending'">
                 <mat-icon color="primary">edit</mat-icon>
-                <span>Edit Document</span>
+                <span>{{ t("edit") | titlecase }}</span>
               </button>
-              <button mat-menu-item (click)="deleteLiquidation(index)">
-                <mat-icon color="warn">delete_forever</mat-icon>
-                <span>Delete Document</span>
+              <button mat-menu-item (click)="archive(index)">
+                <mat-icon color="warn">archive</mat-icon>
+                <span>{{ t("archive") | titlecase }}</span>
+              </button>
+              <button mat-menu-item (click)="cancel(index)" *ngIf="item.status!=='cancelled'">
+                <mat-icon color="warn">cancel</mat-icon>
+                <span>{{ t("cancel") | titlecase }}</span>
               </button>
             </mat-menu>
           </div>
@@ -69,7 +73,7 @@
       </mat-card>
     </div>
     <ng-template #noItems>
-      <div class="no-items"><i>No Items to Display</i></div>
+      <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
     </ng-template>
   </ol>
 </ng-container>

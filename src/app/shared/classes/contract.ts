@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, where } from "@angular/fire/firestore";
 import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -7,6 +7,7 @@ import { Price } from "./price";
 import { Product } from "./product";
 import { ContractSettings } from "./contract-settings";
 import { Ticket } from "./ticket";
+import { Liquidation } from "./liquidation";
 
 
 declare type contractType = string | boolean;
@@ -420,6 +421,19 @@ export class Contract extends FirebaseDocInterface {
         ])
 
         return `${this.productInfo.marketCode}${marketMonthCodes.get(this.futurePriceInfo.expirationMonth.getMonth())}${this.futurePriceInfo.expirationMonth.getFullYear() % 10}`
+    }
+
+    public getLiquidationsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Liquidation>) => void, 
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionRef = collection(this.ref, "liquidations").withConverter(Liquidation.converter);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public getLiquidationByRefId(refId: string): Promise<Liquidation> {
+        return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
     }
 
     public clearContactInfo(contactInfo: ContactInfo) {

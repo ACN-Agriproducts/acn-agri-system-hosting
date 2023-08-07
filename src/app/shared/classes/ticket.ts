@@ -114,7 +114,7 @@ export class Ticket extends FirebaseDocInterface{
         this.PPB = data.PPB;
         this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
-        this.status = data.status;
+        this.status = data.status ?? "none";
         this.tank = data.tank;
         this.tankId = data.tankId;
         this.tare = new Mass(data.tare, unit);

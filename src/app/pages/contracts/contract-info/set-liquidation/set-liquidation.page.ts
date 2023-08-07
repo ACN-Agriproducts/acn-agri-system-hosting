@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, doc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -25,6 +25,7 @@ export class SetLiquidationPage implements OnInit {
   public type: string;
   public ready: boolean = false;
   public liquidation: Liquidation;
+  public editRefId: string;
 
   public ticketDiscountList: TicketWithDiscounts[] = [];
   public selectedTickets: TicketWithDiscounts[] = [];
@@ -41,6 +42,7 @@ export class SetLiquidationPage implements OnInit {
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
+    this.editRefId = this.route.snapshot.paramMap.get('refId');
   }
 
   ngOnInit() {
@@ -55,11 +57,23 @@ export class SetLiquidationPage implements OnInit {
         weightDiscounts: new WeightDiscounts(ticket, this.discountTables),
         includeInReport: false
       }));
-      
-      this.liquidation = new Liquidation(doc(Liquidation.getCollectionReference(this.db, this.session.getCompany(), this.id)))
+
+      if (this.editRefId) {
+        this.liquidation = await contract.getLiquidationByRefId(this.editRefId);
+        const ticketRefIds = this.liquidation.ticketRefs.map(ticket => ticket.id)
+        this.ticketDiscountList.forEach(ticket => {
+          if (ticketRefIds.includes(ticket.data.ref.id)) {
+            ticket.includeInReport = true;
+          }
+        });
+        this.selectedTicketsChange();
+      }
+      else {
+        this.liquidation = new Liquidation(doc(Liquidation.getCollectionReference(this.db, this.session.getCompany(), this.id)));
+      }
+  
       this.ready = true;
     });
-
   }
 
   ngOnDestroy() {
@@ -244,17 +258,14 @@ export class SetLiquidationPage implements OnInit {
   }
 
   public async submit() {
-    console.log(this.liquidation)
     this.liquidation.ticketRefs = this.selectedTickets.map(ticket => ticket.data.ref.withConverter(Ticket.converter));
-
     this.liquidation.set().then(() => {
-      // throw 'Error'
-      this.snack.open("Liquidation successfully created", "success");
+      this.snack.open(`Liquidation successfully ${this.editRefId ? "edited" : "created"}`, "success");
       this.router.navigate([`dashboard/contracts/contract-info/${this.type}/${this.id}`]);
     })
     .catch(e => {
       console.error(e);
-      this.snack.open("Error creating liquidation", "error");
+      this.snack.open(`Error ${this.editRefId ? "editing" : "creating"} liquidation`, "success");
     });
   }
 }

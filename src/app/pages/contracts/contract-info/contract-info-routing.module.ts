@@ -10,6 +10,10 @@ const routes: Routes = [
   },
   {
     path: 'set-liquidation',
+    loadChildren: () => import('./set-liquidation/set-liquidation.module').then( m => m.NewLiquidationPageModule),
+  },
+  {
+    path: 'set-liquidation/:refId',
     loadChildren: () => import('./set-liquidation/set-liquidation.module').then( m => m.NewLiquidationPageModule)
   }
 

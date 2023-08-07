@@ -103,12 +103,20 @@
             "Weathered": "Weathered",
             "Weight (lbs)": "Weight (lbs)",
             "status": "status",
+            "Status": "Status",
             "tickets": "tickets",
             "options": "options",
             "contract liquidations": "contract liquidations",
             "liquidation": "liquidation",
             "set liquidation": "set liquidation",
-            "submit": "submit"
+            "submit": "submit",
+            "Proof of Payment": "Proof of Payment",
+            "Supplemental Documents": "Supplemental Documents",
+            "view": "view",
+            "edit": "edit",
+            "archive": "archive",
+            "cancel": "cancel",
+            "No Items to Display": "No Items to Display"
         }
     },
     "directory": {

@@ -4,6 +4,5 @@ table {
 
 .table-row {
   display: grid;
-
-  grid-template-columns: auto 1fr 90px 81px 81px auto;
+  grid-template-columns: auto auto 1fr repeat(3, 100px);
 }

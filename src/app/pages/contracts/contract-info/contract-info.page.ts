@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, onSnapshot } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
@@ -37,7 +37,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
-      this.liquidations = await Liquidation.getLiquidations(this.db, this.currentCompany, contract.ref.id);      
+      contract.getLiquidationsSnapshot(result => {
+        this.liquidations = result.docs.map(qds => qds.data());
+      });
+      
       this.ready = true;
     });
   }
