@@ -7,7 +7,7 @@
           <div class="flex-row">
             <div id="form-and-liquidations">
               <app-contract-form *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
-              <mat-card id="contract-liquidations">
+              <mat-card id="contract-liquidations" *ngIf="ticketList?.length > 0">
                 <mat-card-header>
                   <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
                 </mat-card-header>
@@ -27,12 +27,12 @@
             </mat-card> -->
           </div>
           <div class="flex-row list-content">
-            <mat-card id="ticket-list">
+            <mat-card id="ticket-list" *ngIf="ticketList?.length > 0">
               <mat-card-header>
                 <mat-card-subtitle>{{t("ticket list")}}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <app-tickets-table #ticketTable *ngIf="ticketList" [ticketList]="ticketList"></app-tickets-table>
+                <app-tickets-table #ticketTable [ticketList]="ticketList"></app-tickets-table>
               </mat-card-content>
             </mat-card>
             <mat-card id="trucker-list">
