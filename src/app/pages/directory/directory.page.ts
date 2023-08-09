@@ -57,7 +57,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   updateList = async () => {
-    console.log('trigger')
     this.contacts = collectionData(this.getQuery());
     this.searchResults = this.contacts?.pipe(
       map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
@@ -134,14 +133,14 @@ export class DirectoryPage implements OnInit, OnDestroy {
       zipCode: data.zipCode,
     })
     .then(() => {
-      contact.caat = data.caat;
-      contact.city = data.city?.toUpperCase() ?? null;
-      contact.metacontacts = data.metacontacts;
-      contact.name = data.name?.toUpperCase() ?? null;
-      contact.state = data.state?.toUpperCase() ?? null;
-      contact.streetAddress = data.streetAddress?.toUpperCase() ?? null;
-      contact.tags = data.tags;
-      contact.zipCode = data.zipCode;
+      // contact.caat = data.caat;
+      // contact.city = data.city?.toUpperCase() ?? null;
+      // contact.metacontacts = data.metacontacts;
+      // contact.name = data.name?.toUpperCase() ?? null;
+      // contact.state = data.state?.toUpperCase() ?? null;
+      // contact.streetAddress = data.streetAddress?.toUpperCase() ?? null;
+      // contact.tags = data.tags;
+      // contact.zipCode = data.zipCode;
 
       this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
     })
