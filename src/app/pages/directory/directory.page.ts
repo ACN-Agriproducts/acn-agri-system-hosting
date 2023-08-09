@@ -2,7 +2,7 @@ import { ModalController, NavController, PopoverController } from '@ionic/angula
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { lastValueFrom, Subscription } from 'rxjs';
+import { filter, lastValueFrom, map, Observable, Subscription } from 'rxjs';
 import { collectionData, doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -22,12 +22,13 @@ import { Company } from '@shared/classes/company';
 export class DirectoryPage implements OnInit, OnDestroy {
 
   private currentSub: Subscription;
-  public contacts: Contact[];
+  public contacts: Observable<Contact[]>;
   public currentCompany: string;
   public searchQuery: RegExp;
   public stringTest: string;
   public contactType: string;
   public company: Promise<Company>;
+  public searchResults: Observable<Contact[]>;
 
   public permissions;
 
@@ -56,10 +57,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   updateList = async () => {
-    console.log('trigger')
-    this.currentSub = collectionData(this.getQuery()).subscribe(val => {
-      this.contacts = val;
-    });
+    this.contacts = collectionData(this.getQuery());
+    this.searchResults = this.contacts?.pipe(
+      map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
+    );
   }
 
   private getQuery(): Query<Contact> {
@@ -85,7 +86,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
       cssClass: 'modal-contact',
       swipeToClose: true,
       componentProps: {
-        data: this.contacts[index]
+        data: (await lastValueFrom(this.contacts))[index]
       }
     });
     return await modal.present();
@@ -123,23 +124,23 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public updateContact(contact: Contact, data: Contact): void {
     contact.update({
       caat: data.caat,
-      city: data.city.toUpperCase(),
+      city: data.city?.toUpperCase() ?? null,
       metacontacts: data.metacontacts,
-      name: data.name.toUpperCase(),
-      state: data.state.toUpperCase(),
-      streetAddress: data.streetAddress.toUpperCase(),
+      name: data.name?.toUpperCase() ?? null,
+      state: data.state?.toUpperCase() ?? null,
+      streetAddress: data.streetAddress?.toUpperCase() ?? null,
       tags: data.tags,
       zipCode: data.zipCode,
     })
     .then(() => {
-      contact.caat = data.caat;
-      contact.city = data.city.toUpperCase();
-      contact.metacontacts = data.metacontacts;
-      contact.name = data.name.toUpperCase();
-      contact.state = data.state.toUpperCase();
-      contact.streetAddress = data.streetAddress.toUpperCase();
-      contact.tags = data.tags;
-      contact.zipCode = data.zipCode;
+      // contact.caat = data.caat;
+      // contact.city = data.city?.toUpperCase() ?? null;
+      // contact.metacontacts = data.metacontacts;
+      // contact.name = data.name?.toUpperCase() ?? null;
+      // contact.state = data.state?.toUpperCase() ?? null;
+      // contact.streetAddress = data.streetAddress?.toUpperCase() ?? null;
+      // contact.tags = data.tags;
+      // contact.zipCode = data.zipCode;
 
       this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
     })
@@ -156,12 +157,14 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public search(event: any): void {
     this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
+    this.searchResults = this.contacts?.pipe(
+      map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
+    );
   }
 
-  public searchResults = (): Contact[] => this.contacts?.filter(contact => contact?.name?.match(this.searchQuery)) ?? [];
-
   public async exportCurrent(): Promise<void> {
-    const lastContact = await Promise.all(this.contacts.map(c => this.getLastContractDate(c)));
+    const contacts = await lastValueFrom(this.contacts)
+    const lastContact = await Promise.all(contacts.map(c => this.getLastContractDate(c)));
 
     const workbook = new Excel.Workbook();
     const workSheet = workbook.addWorksheet('Directory');
@@ -190,7 +193,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
         {name: "CAAT", filterButton: true},
         {name: "Last Contract", filterButton: true},
       ],
-      rows: this.contacts.map((contact, index) => [
+      rows: contacts.map((contact, index) => [
         contact.name,
         contact.tags.includes('client'),
         contact.tags.includes('trucker'),

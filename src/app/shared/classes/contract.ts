@@ -175,6 +175,7 @@ export class Contract extends FirebaseDocInterface {
             this.loads = 0;
             this.status = 'pending';
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
+            this.grade = 2;
 
             return;
         }
