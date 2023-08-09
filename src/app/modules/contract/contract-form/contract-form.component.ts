@@ -119,18 +119,6 @@ export class ContractFormComponent implements OnInit {
     this.futureOptions = tempFutureOptions;
 
     this.fieldChangeFuncs = new Map<string, () => any>();
-    this.fieldChangeFuncs.set('grade', async () => {
-      if (!this.contract.product) return;
-      const product = (await this.products$).find(p => this.contract.product.id == p.ref.id);
-      if(!product) return;
-      this.contract.productInfo = product.getProductInfo(this.contract.grade);
-    });
-
-    this.fieldChangeFuncs.set('product', async () => {
-      const product = (await this.products$).find(p => this.contract.product.id == p.ref.id);
-      if(!this.contract.grade || !product) return;
-      this.contract.productInfo = product.getProductInfo(this.contract.grade);
-    });
   }
 
   openClientSelect() {
@@ -223,7 +211,7 @@ export class ContractFormComponent implements OnInit {
   async productChange() {
     const product = (await this.products$).find(p => p.ref.id == this.contract.product.id);
     this.contract.productInfo = product.getProductInfo();
-    this.contract.quantity.defineBushels(this.contract.productInfo);    
+    this.contract.quantity.defineBushels(this.contract.productInfo);
   }
 
   async plantSelectChange() {
@@ -287,8 +275,9 @@ export class ContractFormComponent implements OnInit {
     });
   }
 
+  // Will not be used this time, but will keep just in case
   fieldChange(fieldName: string, nestedField: string) {
     if(nestedField) fieldName = fieldName.concat('.', nestedField);
-    this.fieldChangeFuncs.get(fieldName)();
+    if(this.fieldChangeFuncs.has(fieldName)) this.fieldChangeFuncs.get(fieldName)();
   }
 }
