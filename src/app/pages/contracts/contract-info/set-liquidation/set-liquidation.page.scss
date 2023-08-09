@@ -42,3 +42,9 @@ button {
 	right: 30px;
 	z-index: 3;
 }
+
+.disabled {
+    color: rgba(0, 0, 0, 0.26);
+    cursor: default;
+    pointer-events: none;
+}

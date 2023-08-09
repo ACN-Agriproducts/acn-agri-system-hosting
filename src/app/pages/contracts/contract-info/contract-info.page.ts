@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 
-import { Firestore, onSnapshot, orderBy } from '@angular/fire/firestore';
+import { Firestore, Unsubscribe, onSnapshot, orderBy } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
@@ -21,6 +21,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketList: Ticket[];
   public type: string;
   public liquidations: Liquidation[];
+  public unsub: Unsubscribe;
   
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +38,8 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
-      contract.getLiquidationsSnapshot(result => {
+      
+      this.unsub = contract.getLiquidationsSnapshot(result => {
         this.liquidations = result.docs.map(qds => qds.data());
       }, orderBy('date', 'asc'));
       
@@ -45,5 +47,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.unsub();
+  }
 }

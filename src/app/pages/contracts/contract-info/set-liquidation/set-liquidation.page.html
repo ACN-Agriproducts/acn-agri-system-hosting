@@ -24,10 +24,10 @@
           <ion-text>{{ t('Weathered') | titlecase }}</ion-text>
           <ion-text>{{ t('Inspection') | titlecase }}</ion-text>
         </div>
-        <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
+        <div [class.even]="odd" class="table-row" [class.disabled]="ticket.data.status==='pending'&&!editingTickets?.includes(ticket)" *ngFor="let ticket of ticketDiscountList; let odd = odd">
           <ion-text>
             <mat-checkbox [(ngModel)]="ticket.includeInReport" (change)="selectedTicketsChange()"
-            [disabled]="ticket.data.status==='pending' && !editTickets?.includes(ticket) "></mat-checkbox>
+            [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
           </ion-text>
           <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
           <ion-text>{{ticket.data.id}}<span *ngIf="ticket.data.subId">-{{ticket.data.subId}}</span></ion-text>
@@ -43,7 +43,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
-                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -55,7 +55,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
-                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -67,7 +67,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
-                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -79,7 +79,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
-                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -91,7 +91,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
-                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -100,8 +100,8 @@
       </ion-card>
       
       <div class="action-bar">
-        <button mat-raised-button (click)="selectAllTickets(false)" [disabled]="selectedTickets.length === 0">Deselect All</button>
-        <button mat-raised-button (click)="selectAllTickets(true)" [disabled]="selectedTickets.length === ticketDiscountList.length">Select All</button>
+        <button mat-raised-button (click)="selectAllTickets(false)">Deselect All</button>
+        <button mat-raised-button (click)="selectAllTickets(true)">Select All</button>
         <button mat-raised-button
           [disabled]="selectedTickets.length === 0"
           (click)="onDownloadLiquidation()"

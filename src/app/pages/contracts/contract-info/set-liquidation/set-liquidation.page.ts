@@ -27,8 +27,8 @@ export class SetLiquidationPage implements OnInit {
   public ticketDiscountList: TicketWithDiscounts[] = [];
   public selectedTickets: TicketWithDiscounts[] = [];
   public totals: LiquidationTotals = new LiquidationTotals();
-  public editRefId: string;
-  public editTickets: TicketWithDiscounts[];
+  public editingRefId: string;
+  public editingTickets: TicketWithDiscounts[];
 
   constructor(
     private db: Firestore,
@@ -41,7 +41,7 @@ export class SetLiquidationPage implements OnInit {
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
-    this.editRefId = this.route.snapshot.paramMap.get('refId');
+    this.editingRefId = this.route.snapshot.paramMap.get('refId');
   }
 
   ngOnInit() {
@@ -56,12 +56,11 @@ export class SetLiquidationPage implements OnInit {
         includeInReport: false
       }));
 
-      if (this.editRefId) {
-        this.liquidation = await contract.getLiquidationByRefId(this.editRefId);
-        const ticketRefIds = this.liquidation.ticketRefs.map(ticket => ticket.id);
-        this.editTickets = this.ticketDiscountList.filter(ticket => ticketRefIds.includes(ticket.data.ref.id));
-
-        this.editTickets.forEach(ticket => ticket.includeInReport = true);
+      if (this.editingRefId) {
+        this.liquidation = await contract.getLiquidationByRefId(this.editingRefId);
+        this.editingTickets = this.ticketDiscountList.filter(ticket => {
+          return ticket.includeInReport = this.liquidation.ticketRefs.map(t => t.id).includes(ticket.data.ref.id);
+        });
         this.selectedTicketsChange();
       }
       else {
@@ -78,8 +77,11 @@ export class SetLiquidationPage implements OnInit {
   }
 
   public selectAllTickets(select: boolean): void {
+    if (select && this.selectedTickets.length === this.ticketDiscountList.length) return;
+    if (!select && this.selectedTickets.length === 0) return;
+
     this.ticketDiscountList.forEach(ticket => {
-      if (ticket.data.status !== "pending" || this.editTickets?.includes(ticket)) ticket.includeInReport = select;
+      if (ticket.data.status !== "pending" || this.editingTickets?.includes(ticket)) ticket.includeInReport = select;
     });
     this.selectedTicketsChange();
   }
@@ -259,12 +261,12 @@ export class SetLiquidationPage implements OnInit {
   public async submit() {
     this.liquidation.ticketRefs = this.selectedTickets.map(ticket => ticket.data.ref.withConverter(Ticket.converter));
     this.liquidation.set().then(() => {
-      this.snack.open(`Liquidation successfully ${this.editRefId ? "edited" : "created"}`, "success");
+      this.snack.open(`Liquidation successfully ${this.editingRefId ? "edited" : "created"}`, "success");
       this.router.navigate([`dashboard/contracts/contract-info/${this.type}/${this.id}`]);
     })
     .catch(e => {
       console.error(e);
-      this.snack.open(`Error ${this.editRefId ? "editing" : "creating"} liquidation`, "success");
+      this.snack.open(`Error ${this.editingRefId ? "editing" : "creating"} liquidation`, "success");
     });
   }
 }
