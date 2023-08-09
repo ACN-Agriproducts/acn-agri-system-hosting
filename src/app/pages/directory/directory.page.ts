@@ -123,21 +123,21 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public updateContact(contact: Contact, data: Contact): void {
     contact.update({
       caat: data.caat,
-      city: data.city.toUpperCase(),
+      city: data.city?.toUpperCase() ?? null,
       metacontacts: data.metacontacts,
-      name: data.name.toUpperCase(),
-      state: data.state.toUpperCase(),
-      streetAddress: data.streetAddress.toUpperCase(),
+      name: data.name?.toUpperCase() ?? null,
+      state: data.state?.toUpperCase() ?? null,
+      streetAddress: data.streetAddress?.toUpperCase() ?? null,
       tags: data.tags,
       zipCode: data.zipCode,
     })
     .then(() => {
       contact.caat = data.caat;
-      contact.city = data.city.toUpperCase();
+      contact.city = data.city?.toUpperCase() ?? null;
       contact.metacontacts = data.metacontacts;
-      contact.name = data.name.toUpperCase();
-      contact.state = data.state.toUpperCase();
-      contact.streetAddress = data.streetAddress.toUpperCase();
+      contact.name = data.name?.toUpperCase() ?? null;
+      contact.state = data.state?.toUpperCase() ?? null;
+      contact.streetAddress = data.streetAddress?.toUpperCase() ?? null;
       contact.tags = data.tags;
       contact.zipCode = data.zipCode;
 
