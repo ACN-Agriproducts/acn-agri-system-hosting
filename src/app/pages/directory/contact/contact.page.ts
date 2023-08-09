@@ -177,21 +177,21 @@ export class ContactPage implements OnInit {
 	public updateContact(data: Contact): void {
 		this.contact.update({
 			caat: data.caat,
-			city: data.city.toUpperCase(),
+			city: data.city?.toUpperCase() ?? null,
 			metacontacts: data.metacontacts,
-			name: data.name.toUpperCase(),
-			state: data.state.toUpperCase(),
-			streetAddress: data.streetAddress.toUpperCase(),
+			name: data.name?.toUpperCase() ?? null,
+			state: data.state?.toUpperCase() ?? null,
+			streetAddress: data.streetAddress?.toUpperCase() ?? null,
 			tags: data.tags,
 			zipCode: data.zipCode,
 		})
 		.then(() => {
 			this.contact.caat = data.caat;
-			this.contact.city = data.city.toUpperCase();
+			this.contact.city = data.city?.toUpperCase();
 			this.contact.metacontacts = data.metacontacts;
-			this.contact.name = data.name.toUpperCase();
-			this.contact.state = data.state.toUpperCase();
-			this.contact.streetAddress = data.streetAddress.toUpperCase();
+			this.contact.name = data.name?.toUpperCase();
+			this.contact.state = data.state?.toUpperCase();
+			this.contact.streetAddress = data.streetAddress?.toUpperCase();
 			this.contact.tags = data.tags;
 			this.contact.zipCode = data.zipCode;
 
