@@ -21,15 +21,14 @@ export class SetLiquidationPage implements OnInit {
   public contract: Contract;
   public discountTables: DiscountTables;
   public id: string;
-  public ticketList: Ticket[];
   public type: string;
   public ready: boolean = false;
   public liquidation: Liquidation;
-  public editRefId: string;
-
   public ticketDiscountList: TicketWithDiscounts[] = [];
   public selectedTickets: TicketWithDiscounts[] = [];
   public totals: LiquidationTotals = new LiquidationTotals();
+  public editRefId: string;
+  public editTickets: TicketWithDiscounts[];
 
   constructor(
     private db: Firestore,
@@ -48,10 +47,9 @@ export class SetLiquidationPage implements OnInit {
   ngOnInit() {
     Contract.getDocById(this.db, this.session.getCompany(), this.type, this.id).then(async contract => {
       this.contract = contract;
-      this.ticketList = await contract.getTickets();
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
-      this.ticketDiscountList = this.ticketList.map(ticket => ({
+      this.ticketDiscountList = (await contract.getTickets()).map(ticket => ({
         data: ticket,
         priceDiscounts: new PriceDiscounts(),
         weightDiscounts: new WeightDiscounts(ticket, this.discountTables),
@@ -60,12 +58,10 @@ export class SetLiquidationPage implements OnInit {
 
       if (this.editRefId) {
         this.liquidation = await contract.getLiquidationByRefId(this.editRefId);
-        const ticketRefIds = this.liquidation.ticketRefs.map(ticket => ticket.id)
-        this.ticketDiscountList.forEach(ticket => {
-          if (ticketRefIds.includes(ticket.data.ref.id)) {
-            ticket.includeInReport = true;
-          }
-        });
+        const ticketRefIds = this.liquidation.ticketRefs.map(ticket => ticket.id);
+        this.editTickets = this.ticketDiscountList.filter(ticket => ticketRefIds.includes(ticket.data.ref.id));
+
+        this.editTickets.forEach(ticket => ticket.includeInReport = true);
         this.selectedTicketsChange();
       }
       else {
@@ -78,10 +74,13 @@ export class SetLiquidationPage implements OnInit {
 
   ngOnDestroy() {
     delete this.totals;
+    delete this.liquidation;
   }
 
-  public selectAllTickets(selectAll: boolean): void {
-    this.ticketDiscountList.forEach(ticket => ticket.includeInReport = selectAll ? true : false);
+  public selectAllTickets(select: boolean): void {
+    this.ticketDiscountList.forEach(ticket => {
+      if (ticket.data.status !== "pending" || this.editTickets?.includes(ticket)) ticket.includeInReport = select;
+    });
     this.selectedTicketsChange();
   }
 

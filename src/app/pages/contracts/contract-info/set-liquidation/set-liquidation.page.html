@@ -26,7 +26,8 @@
         </div>
         <div [class.even]="odd" class="table-row" *ngFor="let ticket of ticketDiscountList; let odd = odd">
           <ion-text>
-            <mat-checkbox [(ngModel)]="ticket.includeInReport" (change)="selectedTicketsChange()"></mat-checkbox>
+            <mat-checkbox [(ngModel)]="ticket.includeInReport" (change)="selectedTicketsChange()"
+            [disabled]="ticket.data.status==='pending' && !editTickets?.includes(ticket) "></mat-checkbox>
           </ion-text>
           <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
           <ion-text>{{ticket.data.id}}<span *ngIf="ticket.data.subId">-{{ticket.data.subId}}</span></ion-text>
@@ -42,6 +43,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
+                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -53,6 +55,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
+                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -64,6 +67,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
+                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -75,6 +79,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
+                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -86,6 +91,7 @@
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
+                [readonly]="ticket.data.status==='pending' && !editTickets?.includes(ticket)"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
