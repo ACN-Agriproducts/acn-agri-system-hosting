@@ -12,6 +12,7 @@ import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-tick
 import { ChangeTicketContractComponent } from 'src/app/standalone/change-ticket-contract/change-ticket-contract.component';
 import { DiscountsDialogComponent } from '../discounts-dialog/discounts-dialog.component';
 import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-options-ticket',
@@ -112,6 +113,7 @@ export class OptionsTicketComponent implements OnInit {
               updateDoc.void = true;
               updateDoc.voidRequest = false;
               updateDoc.voidAcceptor = this.userName;
+              updateDoc.voidDate = serverTimestamp();
 
               if(!this.ticket.voidRequest) {
                 updateDoc.voidReason = data.voidReason;
