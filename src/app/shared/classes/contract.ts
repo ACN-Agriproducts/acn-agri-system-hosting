@@ -268,6 +268,10 @@ export class Contract extends FirebaseDocInterface {
             email: null,
             phone: null,
         };
+
+        this.futurePriceInfo.expirationMonth ??= null;
+        this.futurePriceInfo.priceSetPeriodBegin ??= null;
+        this.futurePriceInfo.priceSetPeriodEnd ??= null;
     }
 
     public static converter = {
