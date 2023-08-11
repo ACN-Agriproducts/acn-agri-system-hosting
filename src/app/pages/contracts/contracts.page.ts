@@ -239,10 +239,10 @@ export class ContractsPage implements AfterViewInit {
         {name: "Date", filterButton: true},
         {name: "Status", filterButton: true},
         {name: "Product", filterButton: true},
-        {name: "Delivered (lbs)", filterButton: true},
-        {name: "Quantity (lbs)", filterButton: true}, 
-        {name: "Price ($/bu)", filterButton: true},
-        {name: "Price ($/lbs)", filterButton: true}
+        {name: `Delivered (${this.displayUnit})`, filterButton: true},
+        {name: `Quantity (${this.displayUnit})`, filterButton: true}, 
+        {name: `Price ($/bu)`, filterButton: true},
+        {name: `Price ($/${this.displayUnit})`, filterButton: true}
       ],
       rows:[]
     });
@@ -255,10 +255,10 @@ export class ContractsPage implements AfterViewInit {
         contract.date,
         contract.status.toString(),
         contract.product.id,
-        contract.currentDelivered.getMassInUnit('lbs'),
-        contract.quantity.getMassInUnit('lbs'),
+        contract.currentDelivered.getMassInUnit(this.displayUnit),
+        contract.quantity.getMassInUnit(this.displayUnit),
         contract.pricePerBushel,
-        contract.price.getPricePerUnit('lbs', contract.quantity)
+        contract.price.getPricePerUnit(this.displayUnit, contract.quantity)
       ]);
     });
     contractsTable.commit();

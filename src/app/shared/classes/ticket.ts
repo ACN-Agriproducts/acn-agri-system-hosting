@@ -53,6 +53,7 @@ export class Ticket extends FirebaseDocInterface{
     public voidReason: string;
     public voidRequest: boolean;
     public voidRequester: string;
+    public voidDate: Date;
     public weight: number;
 
     public contractRef: DocumentReference<Contract>;
@@ -119,6 +120,7 @@ export class Ticket extends FirebaseDocInterface{
         this.voidReason = data.voidReason;
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
+        this.voidDate = data.voidDate?.toDate() ?? null;
         this.weight = data.weight;
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
@@ -183,6 +185,7 @@ export class Ticket extends FirebaseDocInterface{
                 voidReason: data.voidReason,
                 voidRequest: data.voidRequest,
                 voidRquester: data.voidRequester,
+                voidDate: data.voidDate ?? null,
                 weight: data.weight,
 
                 contractRef: data.contractRef,
