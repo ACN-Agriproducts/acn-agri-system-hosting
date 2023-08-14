@@ -30,6 +30,7 @@
         <b>BROKER</b><br>
         <b>BROKER NUMBER</b><br>
         <b>FREIGHT PRICE</b><br>
+        <b>INCOTERMS</b><br>
       </div>
       <div class='column-size-3' *ngIf="contractForm.date">
         <b><span [printableField]="'id'">{{ contractForm.id || 0 }}</span>-{{ contractForm.date.getFullYear() % 100 }}</b><br>
