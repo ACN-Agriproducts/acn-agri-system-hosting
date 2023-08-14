@@ -24,7 +24,12 @@
           <ion-text>{{ t('Weathered') | titlecase }}</ion-text>
           <ion-text>{{ t('Inspection') | titlecase }}</ion-text>
         </div>
-        <div [class.even]="odd" class="table-row" [class.disabled]="ticket.data.status==='pending'&&!editingTickets?.includes(ticket)" *ngFor="let ticket of ticketDiscountList; let odd = odd">
+        <div 
+          class="table-row" 
+          [class.even]="odd" 
+          [class.disabled]="ticket.data.status==='pending'&&!editingTickets?.includes(ticket)" 
+          *ngFor="let ticket of ticketDiscountList; let odd = odd"
+        >
           <ion-text>
             <mat-checkbox [(ngModel)]="ticket.includeInReport" (change)="selectedTicketsChange()"
             [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
@@ -99,24 +104,31 @@
         </div>
       </ion-card>
       
-      <div class="action-bar">
-        <button mat-raised-button (click)="selectAllTickets(false)">Deselect All</button>
-        <button mat-raised-button (click)="selectAllTickets(true)">Select All</button>
-        <button mat-raised-button
-          [disabled]="selectedTickets.length === 0"
-          (click)="onDownloadLiquidation()"
-        >{{ t('download') | titlecase }}</button>
-        <button mat-raised-button
-          [disabled]="selectedTickets.length === 0"
-          ngxPrint
-          [useExistingCss]="true"
-          printSectionId="ContractLiquidationLong"
-          [printStyle]="{'@page' : { size: 'letter landscape' }}"
-        >{{ t('print') | titlecase }}</button>
-        <span *ngIf="selectedTickets.length !== 0" class="selected-tickets-count">( {{ selectedTickets.length }} Selected )</span>
-        <button mat-raised-button (click)="submit()" [disabled]="selectedTickets.length === 0">
-          {{ t('submit') | titlecase }}
-        </button>
+      <div class="actions">
+        <div class="action-bar">
+          <button mat-raised-button disableRipple>
+            <mat-checkbox (change)="selectAllTickets($event.checked)">{{ t('select all') | titlecase }}</mat-checkbox>
+          </button>
+          <span class="selected-tickets-count" *ngIf="selectedTickets.length !== 0" >
+            ( {{ selectedTickets.length }} Selected )
+          </span>
+        </div>
+        <div class="action-bar">
+          <button mat-raised-button
+            [disabled]="selectedTickets.length === 0"
+            (click)="onDownloadLiquidation()"
+          >{{ t('download') | titlecase }}</button>
+          <button mat-raised-button
+            [disabled]="selectedTickets.length === 0"
+            ngxPrint
+            [useExistingCss]="true"
+            printSectionId="ContractLiquidationLong"
+            [printStyle]="{'@page' : { size: 'letter landscape' }}"
+          >{{ t('print') | titlecase }}</button>
+          <button mat-raised-button (click)="submit()" [disabled]="selectedTickets.length === 0">
+            {{ t('submit') | titlecase }}
+          </button>
+        </div>
       </div>
       
       <app-printable-liquidation id="ContractLiquidationLong"

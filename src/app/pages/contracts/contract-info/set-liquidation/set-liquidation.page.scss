@@ -26,14 +26,11 @@ ion-text {
     background-color: var(--ion-color-step-5);
 }
 
-button {
-    margin: 10px;
-}
-
 .selected-tickets-count {
     color: gray;
     font-size: 0.9em;
     font-style: italic;
+    align-self: center;
 }
 
 .loading-spinner {
@@ -47,4 +44,16 @@ button {
     color: rgba(0, 0, 0, 0.26);
     cursor: default;
     pointer-events: none;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.action-bar {
+    display: flex;
+    gap: 10px;
+    margin: 10px;
 }

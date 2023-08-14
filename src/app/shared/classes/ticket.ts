@@ -4,11 +4,12 @@ import { Injectable } from "@angular/core";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
-import { Contract } from "./contract";
+import { Contract, ProductInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Mass } from "./mass";
+import { Mass, units } from "./mass";
 import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
+import { Product } from "./product";
 
 type TicketStatus = "none" | "pending" | "paid";
 
@@ -126,7 +127,9 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
-        this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
+        this.weightDiscounts = data.weightDiscounts;
+        // this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
+        // console.log(this.weightDiscounts)
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
@@ -324,6 +327,10 @@ export class Ticket extends FirebaseDocInterface{
 
         return ticketSnapshot.data().count;
     }
+
+    public getWeightDiscounts(discountTables: DiscountTables) {
+        this.weightDiscounts.getDiscounts(this, discountTables);
+    }
 }
 
 
@@ -334,10 +341,15 @@ export declare type TicketWithDiscounts = {
     includeInReport: boolean
 };
 
+export declare type ReportTicket = Ticket & { inReport: boolean };
+
 abstract class Discounts {
     constructor(data?: Discounts) {
         if (!data) return;
-        Object.keys(this).forEach(key => this[key] = data[key]);
+        Object.keys(this).forEach(key => {
+            console.log(key)
+            this[key] = data[key];
+        });
     }
 
     public abstract total(): number;
@@ -366,14 +378,49 @@ export class WeightDiscounts extends Discounts {
     weight: Mass = new Mass(0, null);
     impurities: Mass = new Mass(0, null);
 
-    constructor(ticket?: Ticket, discountTables?: DiscountTables) {
-        super();
+    // brokenGrain: Mass;
+    // damagedGrain: Mass;
+    // dryWeight: Mass;
+    // dryWeightPercent: Mass;
+    // foreignMatter: Mass;
+    // moisture: Mass;
+    // PPB: Mass;
+    // weight: Mass;
+    // impurities: Mass;
 
-        if (!ticket || !discountTables) return;
+    // CONTINUE ON MAKING WEIGHTDISCOUNTS ABLE TO BE CONSTRUCTED WITH PREVIOUS WEIGHTDISCOUNTS
+    // AND ALLOW POPULATION OF DATA USING TICKET AND DISCOUNT TABLES
+    constructor(data?: any) {
+        super(data);
+        // if (data) {
+        //     this.brokenGrain = new Mass(data.brokenGrain, null);
+        //     this.damagedGrain = new Mass(0, null);
+        //     this.dryWeight = new Mass(0, null);
+        //     this.dryWeightPercent = new Mass(0, null);
+        //     this.foreignMatter = new Mass(0, null);
+        //     this.moisture = new Mass(0, null);
+        //     this.PPB = new Mass(0, null);
+        //     this.weight = new Mass(0, null);
+        //     this.impurities = new Mass(0, null);
+        // }
 
-        for (const key of Object.keys(this)) {
+        // this.brokenGrain = new Mass(0, null);
+        // this.damagedGrain = new Mass(0, null);
+        // this.dryWeight = new Mass(0, null);
+        // this.dryWeightPercent = new Mass(0, null);
+        // this.foreignMatter = new Mass(0, null);
+        // this.moisture = new Mass(0, null);
+        // this.PPB = new Mass(0, null);
+        // this.weight = new Mass(0, null);
+        // this.impurities = new Mass(0, null);
+     }
+
+    async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
+         for (const key of Object.keys(this)) {
             const table = discountTables.tables.find(table => table.fieldName === key);
             const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
+            
+            // console.log(discountTables.ref.parent.parent.id);
             this[key].defaultUnits = ticket.net.getUnit();
             this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
         }

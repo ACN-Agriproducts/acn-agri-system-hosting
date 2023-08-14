@@ -1,7 +1,7 @@
 import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { CollectionReference, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
-import { Firestore, collection, getDocs, limit, orderBy, query, where } from "@angular/fire/firestore";
+import { Firestore, collection, doc, getDoc, getDocs, limit, orderBy, query, where } from "@angular/fire/firestore";
 
 export class DiscountTables extends FirebaseDocInterface {
     date: Date;
@@ -48,13 +48,9 @@ export class DiscountTables extends FirebaseDocInterface {
     }
 
     public static getDiscountTables(db: Firestore, company: string, product: string, date?: Date): Promise<DiscountTables> {
-        return getDocs(query(
-            DiscountTables.getCollectionReference(db, company, product), 
-            date ? where('date', '==', date) : orderBy('date', 'desc'),
-            limit(1)
-        )).then(result => {
-            return result.docs[0]?.data();
-        });
+        const collectionRef = DiscountTables.getCollectionReference(db, company, product);
+        const collectionQuery = query(collectionRef, date ? where('date', '==', date) : orderBy('date', 'desc'), limit(1));
+        return getDocs(collectionQuery).then(result => result.docs[0]?.data());
     }
 }
 

@@ -7,7 +7,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
-import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
+import { PriceDiscounts, ReportTicket, Ticket, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
 import * as Excel from 'exceljs';
@@ -24,11 +24,12 @@ export class SetLiquidationPage implements OnInit {
   public type: string;
   public ready: boolean = false;
   public liquidation: Liquidation;
-  public ticketDiscountList: TicketWithDiscounts[] = [];
-  public selectedTickets: TicketWithDiscounts[] = [];
   public totals: LiquidationTotals = new LiquidationTotals();
   public editingRefId: string;
+
   public editingTickets: TicketWithDiscounts[];
+  public ticketDiscountList: TicketWithDiscounts[] = [];
+  public selectedTickets: TicketWithDiscounts[] = [];
 
   constructor(
     private db: Firestore,
@@ -49,12 +50,28 @@ export class SetLiquidationPage implements OnInit {
       this.contract = contract;
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
-      this.ticketDiscountList = (await contract.getTickets()).map(ticket => ({
-        data: ticket,
-        priceDiscounts: new PriceDiscounts(),
-        weightDiscounts: new WeightDiscounts(ticket, this.discountTables),
-        includeInReport: false
-      }));
+      this.ticketDiscountList = (await contract.getTickets()).map(ticket => {
+        return {
+          data: ticket,
+          priceDiscounts: new PriceDiscounts(),
+          weightDiscounts: new WeightDiscounts(),
+          includeInReport: false
+        }
+      });
+
+      // this.tickets = await contract.getTickets();
+      // this.tickets.forEach(ticket => {
+      //   console.log(ticket)
+      // });
+
+      // WORK ON GETTING INREPORT PROP WITH TICKET WITHOUT MAKING NEW TYPE???
+      // this.tickets2 = (await contract.getTickets()).map(ticket => {
+      //   return {
+      //     ...ticket,
+      //     inReport: false
+      //   }
+      // })
+      
 
       if (this.editingRefId) {
         this.liquidation = await contract.getLiquidationByRefId(this.editingRefId);

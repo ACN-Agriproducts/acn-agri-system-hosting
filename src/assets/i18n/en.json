@@ -116,7 +116,9 @@
             "edit": "edit",
             "archive": "archive",
             "cancel": "cancel",
-            "No Items to Display": "No Items to Display"
+            "No Items to Display": "No Items to Display",
+            "new liquidation": "new liquidation",
+            "select all": "select all"
         }
     },
     "directory": {

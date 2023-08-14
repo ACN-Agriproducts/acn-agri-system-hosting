@@ -117,7 +117,9 @@
             "edit": "editar",
             "archive": "archivar",
             "cancel": "cancelar",
-            "No Items to Display": "No Hay Documentos Para Mostrar"
+            "No Items to Display": "No Hay Documentos Para Mostrar",
+            "new liquidation": "nuevo liquidación",
+            "select all": "seleccionar todos"
         }
     },
     "directory": {
