@@ -27,7 +27,6 @@
         <b>CONTRACT DATE</b><br>
         <b>CUSTOMER NO.</b><br>
         <b>PAYMENT TERMS</b><br>
-        <b>CHECK</b><br>
         <b>BROKER</b><br>
         <b>BROKER NUMBER</b><br>
         <b>FREIGHT PRICE</b><br>
@@ -42,6 +41,9 @@
         <br>
         <br>
         <br>
+        <br>
+        <br>
+        {{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}<br>
       </div>
     </div>
   </div>
