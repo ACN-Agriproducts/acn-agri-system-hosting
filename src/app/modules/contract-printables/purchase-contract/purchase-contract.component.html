@@ -27,10 +27,10 @@
         <b>CONTRACT DATE</b><br>
         <b>CUSTOMER NO.</b><br>
         <b>PAYMENT TERMS</b><br>
-        <b>CHECK</b><br>
         <b>BROKER</b><br>
         <b>BROKER NUMBER</b><br>
         <b>FREIGHT PRICE</b><br>
+        <b>INCOTERMS</b><br>
       </div>
       <div class='column-size-3' *ngIf="contractForm.date">
         <b><span [printableField]="'id'">{{ contractForm.id || 0 }}</span>-{{ contractForm.date.getFullYear() % 100 }}</b><br>
@@ -42,6 +42,9 @@
         <br>
         <br>
         <br>
+        <br>
+        <br>
+        {{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}<br>
       </div>
     </div>
   </div>
