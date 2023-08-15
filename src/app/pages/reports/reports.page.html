@@ -1,7 +1,14 @@
 <app-header-toolbar titulo="Reports"></app-header-toolbar>
 
 <ion-content>
-  <ion-row>
-    <app-card-button size="4" routerLink="/dashboard/reports/trucker-reports"></app-card-button>
-  </ion-row>
+  <div class="grid">
+    <app-card-button 
+      icon="car-outline"
+      text="Transport"
+      routerLink="/dashboard/reports/trucker-reports"></app-card-button>
+    <app-card-button 
+      icon="newspaper-outline" 
+      text="Contracts"
+      routerLink="/dashboard/reports/trucker-reports"></app-card-button>
+  </div>
 </ion-content>

@@ -9,4 +9,11 @@ h1 {
 mat-card-content {
     display: flex;
     align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+}
+
+mat-card {
+    height: 100%;
 }
