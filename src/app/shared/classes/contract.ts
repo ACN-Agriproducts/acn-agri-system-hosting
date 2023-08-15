@@ -73,6 +73,9 @@ export class Contract extends FirebaseDocInterface {
         phone: string;
     }
 
+    deliveredHistory: {
+        [date: string]: number
+    };
     progress: number; 
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
