@@ -260,6 +260,8 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
 
+        this.deliveredHistory = data.deliveredHistory;
+
         this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
@@ -341,6 +343,7 @@ export class Contract extends FirebaseDocInterface {
                 futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
                 companyInfo: data.companyInfo ?? null,
                 type: data.type ?? null,
+                deliveredHistory: data.deliveredHistory ?? null,
 
                 progress: data.progress ?? null,
             }
