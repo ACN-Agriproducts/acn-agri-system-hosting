@@ -236,6 +236,7 @@ export class Contract extends FirebaseDocInterface {
         this.bankInfo = data.bankInfo;
         this.cargoDelays = data.cargoDelays;
         this.contractOwner = data.contractOwner;
+        this.contractExecutive = data.contractExecutive;
         this.currency = data.currency;
         this.deliveryPlants = data.deliveryPlants;
         this.deliveryType = data.deliveryType;
@@ -315,6 +316,7 @@ export class Contract extends FirebaseDocInterface {
                 bankInfo: data.bankInfo ?? null,
                 cargoDelays: data.cargoDelays ?? null,
                 contractOwner: data.contractOwner ?? null,
+                contractExecutive: data.contractExecutive ?? null,
                 currency: data.currency ?? null,
                 deliveryPlants: data.deliveryPlants ?? null,
                 deliveryType: data.deliveryType ?? null,
