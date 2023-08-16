@@ -13,6 +13,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
 import { Contract } from '@shared/classes/contract';
 import { Company } from '@shared/classes/company';
+import { TruckerFieldsDialog } from './trucker-fields.dialog/trucker-fields.dialog';
 
 @Component({
   selector: 'app-directory',
@@ -238,5 +239,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
     }
 
     return result[0].date;
+  }
+
+  public editTransportField(contact: Contact) {
+    const dialogRef = this.dialog.open(TruckerFieldsDialog, {
+      data: contact
+    });
   }
 }

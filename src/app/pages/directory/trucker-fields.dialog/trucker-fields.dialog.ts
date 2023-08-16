@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Contact } from '@shared/classes/contact';
 
 @Component({
   selector: 'app-trucker-fields.dialog',
@@ -7,8 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TruckerFieldsDialog implements OnInit {
 
-  constructor() { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public contact: Contact,
+    private db: Firestore,
+    private session: SessionInfo
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.contact.destinations ??= [];
+  }
 
 }

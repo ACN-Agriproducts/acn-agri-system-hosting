@@ -38,6 +38,9 @@
 					</ion-label>
 					<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact().phone ?? "" }}</ion-label>
 					<ion-buttons class="ion-hide-sm-down" slot="end">
+						<ion-button color="primary" *ngIf="contact.tags.includes('trucker')" (click)="$event.stopPropagation(); editTransportField(contact)">
+							<ion-icon name="car-outline"></ion-icon>
+						</ion-button>
 						<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 							<ion-icon name="create-outline"></ion-icon>
 						</ion-button>
