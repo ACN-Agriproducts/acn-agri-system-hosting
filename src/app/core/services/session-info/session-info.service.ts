@@ -93,9 +93,7 @@ export class SessionInfo {
     await Promise.all(localPromises);
 
     // Get missing values from db if logged in
-    if(!this.auth.currentUser) {
-      return;
-    }
+    if(!this.auth.currentUser) return;
 
     dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
       if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
@@ -108,8 +106,8 @@ export class SessionInfo {
 
     if(!this.companyUnit || !this.companyDisplayUnit) {
       dbPromises.company = Company.getCompany(this.db, this.company).then(company => {
-        this.companyUnit = company.defaultUnit;
-        this.companyDisplayUnit = company.displayUnit;
+        this.set("companyUnit", company.defaultUnit);
+        this.set("companyDisplayUnit", company.displayUnit);
 
         return company;
       });
