@@ -73,4 +73,10 @@ export class User extends FirebaseDocInterface {
             return val.data();
         });
     }
+
+    public static getUserPermissions(db: Firestore, userID: string, company: string): Promise<any> {
+        return getDoc(doc(collection(db, 'users', userID, company))).then(val => {
+            return val.data();
+        });
+    }
 }

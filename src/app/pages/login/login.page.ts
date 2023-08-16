@@ -56,8 +56,14 @@ export class LoginPage implements OnInit, OnDestroy {
 
           const companyDoc = Company.getCompany(this.db, val.worksAt[0]).then(async company => {
             this.session.set('companyUnit', company.defaultUnit);
-            const plants = await Plant.getPlantList(this.db, company.ref.id);
-            this.session.set('currentPlant', plants[0].ref.id);
+
+            if(perDoc?.admin || perDoc?.tickets?.read || perDoc?.inventory?.read){
+              const plants = await Plant.getPlantList(this.db, company.ref.id);
+              this.session.set('currentPlant', plants[0].ref.id);
+            }
+            else {
+              this.session.set('currentPlant', null);
+            }
           });
 
           this.session.set('user', {

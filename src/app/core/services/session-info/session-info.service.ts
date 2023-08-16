@@ -128,7 +128,7 @@ export class SessionInfo {
     return Promise.all([...localPromises, ...Object.values(dbPromises)]).then(() => {});
   }
 
-  public loadNewCompany(companyName: string): Promise<any> {
+  public async loadNewCompany(companyName: string): Promise<any> {
     this.set('currentCompany', companyName);
     const promises = [];
 
@@ -137,14 +137,14 @@ export class SessionInfo {
       this.set('companyUnit', companyDoc.defaultUnit);
     }));
 
-    promises.push(getDocs(Plant.getCollectionReference(this.db, companyName).withConverter(null)).then(async plants => {
-      await this.set('currentPlant', plants.docs[0]?.ref.id ?? "")
-
-      return plants;
-    }));
-
-    promises.push(getDoc(doc(User.getDocumentReference(this.db, this.user.uid), 'companies', companyName)).then(permissionsDoc => {
+    promises.push(getDoc(doc(User.getDocumentReference(this.db, this.user.uid), 'companies', companyName)).then(async permissionsDoc => {
       this.user.currentPermissions = permissionsDoc.get('permissions');
+      await this.set('user', this.user);
+
+      if(this.user.currentPermissions?.admin || this.user.currentPermissions?.tickets?.read || this.user.currentPermissions?.inventory?.read){
+        const plants = await getDocs(Plant.getCollectionReference(this.db, companyName).withConverter(null));
+        await this.set('currentPlant', plants.docs[0]?.ref.id ?? "");
+      }
     }));
 
     return Promise.all(promises);
