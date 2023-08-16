@@ -56,7 +56,6 @@ export class SessionInfo {
 
     promises.push(companyPromise = this.localStorage.get('currentCompany').then(val => {
       return this.company = val;
-      
     }).then(async company => {
       if(!company) return;
       let unit = await this.localStorage.get('companyUnit');
@@ -80,12 +79,23 @@ export class SessionInfo {
       console.error(error);
     }));
 
-    promises.push(this.localStorage.get('currentPlant').then(val => {
+    promises.push(this.localStorage.get('currentPlant').then(async val => {
       this.plant = val;
+      
+      if(!this.plant) {
+        companyDoc ??= Company.getCompany(this.db, await this.localStorage.get('currentCompany'));
+        const plants = await (await companyDoc).getPlants();
+        this.plant = plants[0].ref.id;
+      }
     }));
 
-    promises.push(userPromise = this.localStorage.get('user').then(val => {
+    promises.push(userPromise = this.localStorage.get('user').then(async val => {
       this.user = val;
+
+      const companyName = await this.localStorage.get('currentCompany');
+      getDoc(doc(User.getDocumentReference(this.db, this.user.uid), 'companies', companyName)).then(permissionsDoc => {
+        this.user.currentPermissions = permissionsDoc.get('permissions');
+      })
     }));
 
     promises.push(this.localStorage.get('userUnit').then(val => {
