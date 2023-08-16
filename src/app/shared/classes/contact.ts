@@ -35,6 +35,7 @@ export class Contact extends FirebaseDocInterface {
             this.bankInfo = [];
             this.caat = snapshot.caat;
             this.city = snapshot.city;
+            this.destinations = [];
             this.name = snapshot.name;
             this.state = snapshot.state;
             this.country = snapshot.country;

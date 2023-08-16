@@ -17,7 +17,7 @@ export abstract class FirebaseDocInterface {
     }
 
     public update(data: any): Promise<void> {
-        return updateDoc(this.ref, data)
+        return updateDoc(this.ref.withConverter(null), data)
     }
 
     public delete(): Promise<void> {
