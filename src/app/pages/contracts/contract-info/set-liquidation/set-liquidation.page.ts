@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -7,7 +7,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
-import { PriceDiscounts, ReportTicket, Ticket, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
+import { PriceDiscounts, ReportTicket, Ticket, WeightDiscounts } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
 import * as Excel from 'exceljs';
@@ -27,9 +27,9 @@ export class SetLiquidationPage implements OnInit {
   public totals: LiquidationTotals = new LiquidationTotals();
   public editingRefId: string;
 
-  public editingTickets: TicketWithDiscounts[];
-  public ticketDiscountList: TicketWithDiscounts[] = [];
-  public selectedTickets: TicketWithDiscounts[] = [];
+  public editingTickets: ReportTicket[];
+  public ticketDiscountList: ReportTicket[] = [];
+  public selectedTickets: ReportTicket[] = [];
 
   constructor(
     private db: Firestore,
@@ -50,33 +50,22 @@ export class SetLiquidationPage implements OnInit {
       this.contract = contract;
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
+      if ((this.discountTables?.tables.length ?? 0) <= 0) {
+        this.snack.open("Warning: No Discount Tables Were Found", "warn");
+      }
+
       this.ticketDiscountList = (await contract.getTickets()).map(ticket => {
+        ticket.getWeightDiscounts(this.discountTables);
         return {
           data: ticket,
-          priceDiscounts: new PriceDiscounts(),
-          weightDiscounts: new WeightDiscounts(),
-          includeInReport: false
+          inReport: false
         }
       });
-
-      // this.tickets = await contract.getTickets();
-      // this.tickets.forEach(ticket => {
-      //   console.log(ticket)
-      // });
-
-      // WORK ON GETTING INREPORT PROP WITH TICKET WITHOUT MAKING NEW TYPE???
-      // this.tickets2 = (await contract.getTickets()).map(ticket => {
-      //   return {
-      //     ...ticket,
-      //     inReport: false
-      //   }
-      // })
-      
 
       if (this.editingRefId) {
         this.liquidation = await contract.getLiquidationByRefId(this.editingRefId);
         this.editingTickets = this.ticketDiscountList.filter(ticket => {
-          return ticket.includeInReport = this.liquidation.ticketRefs.map(t => t.id).includes(ticket.data.ref.id);
+          return ticket.inReport = this.liquidation.ticketRefs.map(t => t.id).includes(ticket.data.ref.id);
         });
         this.selectedTicketsChange();
       }
@@ -98,7 +87,7 @@ export class SetLiquidationPage implements OnInit {
     if (!select && this.selectedTickets.length === 0) return;
 
     this.ticketDiscountList.forEach(ticket => {
-      if (ticket.data.status !== "pending" || this.editingTickets?.includes(ticket)) ticket.includeInReport = select;
+      if (ticket.data.status !== "pending" || this.editingTickets?.includes(ticket)) ticket.inReport = select;
     });
     this.selectedTicketsChange();
   }
@@ -191,9 +180,9 @@ export class SetLiquidationPage implements OnInit {
     worksheet.getRow(2).border = { bottom: { style: 'thick'} };
 
     // populating worksheet columns
-    this.selectedTicketsPipe.transform(this.ticketDiscountList).forEach(ticket => {
+    this.selectedTickets.forEach(ticket => {
       const net = ticket.data.gross.getMassInUnit("lbs") - ticket.data.tare.getMassInUnit("lbs");
-      const adjustedWeight = net - ticket.weightDiscounts.total();
+      const adjustedWeight = net - ticket.data.weightDiscounts.total();
       const total = (this.contract.price.getPricePerUnit("lbs", this.contract.quantity) * adjustedWeight);
       
       worksheet.addRow({
@@ -202,16 +191,16 @@ export class SetLiquidationPage implements OnInit {
         tare: ticket.data.tare.getMassInUnit("lbs"),
         net: net,
         moisture: ticket.data.moisture,
-        moistureCwt: ticket.weightDiscounts.moisture.getMassInUnit("CWT"),
+        moistureCwt: ticket.data.weightDiscounts.moisture?.getMassInUnit("CWT") ?? 0,
         dryWeightPercent: ticket.data.dryWeightPercent,
-        dryCwt: ticket.weightDiscounts.dryWeight.getMassInUnit("CWT"),
+        dryCwt: ticket.data.weightDiscounts.dryWeight?.getMassInUnit("CWT") ?? 0,
         damage: ticket.data.damagedGrain,
-        damageCwt: ticket.weightDiscounts.damagedGrain.getMassInUnit("CWT"),
+        damageCwt: ticket.data.weightDiscounts.damagedGrain?.getMassInUnit("CWT") ?? 0,
         adjustedWeight: adjustedWeight,
         pricePerBushel: this.contract.price.getPricePerUnit("bu", this.contract.quantity),
         total: total,
-        ...ticket.priceDiscounts,
-        netToPay: total - ticket.priceDiscounts.total()
+        ...ticket.data.priceDiscounts,
+        netToPay: total - ticket.data.priceDiscounts.total()
       });
     });
 
@@ -242,7 +231,7 @@ export class SetLiquidationPage implements OnInit {
     this.toDownload(workbook);
   }
 
-  public addColumnTotal(worksheet: Excel.Worksheet, colKeys: string[]): void {
+  private addColumnTotal(worksheet: Excel.Worksheet, colKeys: string[]): void {
     const totalRow = worksheet.addRow(["Totals:"]);
     const row = totalRow.number;
 
@@ -257,7 +246,7 @@ export class SetLiquidationPage implements OnInit {
     totalRow.border = { top: { style: 'thick' } };
   }
 
-  public async toDownload (workbook: Excel.Workbook): Promise<void> {
+  private async toDownload (workbook: Excel.Workbook): Promise<void> {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -275,9 +264,14 @@ export class SetLiquidationPage implements OnInit {
     a.remove();
   }
 
-  public async submit() {
+  public submit() {
     this.liquidation.ticketRefs = this.selectedTickets.map(ticket => ticket.data.ref.withConverter(Ticket.converter));
     this.liquidation.set().then(() => {
+      this.ticketDiscountList.forEach(ticket => {
+        ticket.data.update({
+          weightDiscounts: ticket.data.weightDiscounts.getRawData()
+        });
+      });
       this.snack.open(`Liquidation successfully ${this.editingRefId ? "edited" : "created"}`, "success");
       this.router.navigate([`dashboard/contracts/contract-info/${this.type}/${this.id}`]);
     })

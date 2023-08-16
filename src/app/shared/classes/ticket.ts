@@ -98,7 +98,7 @@ export class Ticket extends FirebaseDocInterface{
         this.foreignMatter = data.foreignMatter;
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
-        this.id = data.id;
+        this.id = data.id; 
         this.displayId = data.id + (data.subId ? "-" + data.subId : '')
         this.imageLinks = data.imageLinks;
         this.impurities = data.impurities;
@@ -127,9 +127,7 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
         this.weight = data.weight;
-        this.weightDiscounts = data.weightDiscounts;
-        // this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
-        // console.log(this.weightDiscounts)
+        this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
@@ -333,23 +331,15 @@ export class Ticket extends FirebaseDocInterface{
     }
 }
 
-
-export declare type TicketWithDiscounts = {
-    data: Ticket, 
-    weightDiscounts: WeightDiscounts, 
-    priceDiscounts: PriceDiscounts, 
-    includeInReport: boolean
-};
-
-export declare type ReportTicket = Ticket & { inReport: boolean };
+export declare type ReportTicket = {
+    data: Ticket,
+    inReport: boolean
+}
 
 abstract class Discounts {
     constructor(data?: Discounts) {
         if (!data) return;
-        Object.keys(this).forEach(key => {
-            console.log(key)
-            this[key] = data[key];
-        });
+        Object.keys(data).forEach(key => this[key] = data[key]);
     }
 
     public abstract total(): number;
@@ -362,71 +352,104 @@ export class PriceDiscounts extends Discounts {
     public weathered: number = 0;
     public inspection: number = 0;
 
-    total() {
+    constructor(data?: Discounts) {
+        super(data);
+    }
+
+    public total() {
         return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
     }
 }
 
+// export class WeightDiscounts extends Discounts {
+//     brokenGrain: Mass | null = null;
+//     damagedGrain: Mass | null = null;
+//     dryWeight: Mass | null = null;
+//     dryWeightPercent: Mass | null = null;
+//     foreignMatter: Mass | null = null;
+//     moisture: Mass | null = null;
+//     PPB: Mass | null = null;
+//     weight: Mass | null = null;
+//     impurities: Mass | null = null;
+
+//     constructor(data?: any) {
+//         super();
+//         console.log("Data: ", data)
+//         for (const key of Object.keys(this)) {
+//             this[key] = data ? new Mass(data[key].amount, data[key].defaultUnits) : new Mass(0, null);
+//         }
+//         console.log("This: ", this)
+//      }
+
+//     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
+//         for (const key of Object.keys(this)) {
+//             const mass = this[key] as Mass;
+//             const table = discountTables.tables?.find(table => table.fieldName === key);
+//             const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
+
+//             mass.defaultUnits = ticket.net.getUnit();
+//             mass.amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
+//             mass.defineBushels((await getDoc(discountTables.ref.parent.parent.withConverter(Product.converter))).data());
+//         }
+//     }
+
+//     public getRawData() {
+//         const rawData = {};
+//         for (const key of Object.keys(this)) {
+//             rawData[key] = (this[key] as Mass).getRawData();
+//         }
+//         return rawData;
+//     }
+
+//     public total() {
+//         return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
+//     }
+// }
+
 export class WeightDiscounts extends Discounts {
-    brokenGrain: Mass = new Mass(0, null);
-    damagedGrain: Mass = new Mass(0, null);
-    dryWeight: Mass = new Mass(0, null);
-    dryWeightPercent: Mass = new Mass(0, null);
-    foreignMatter: Mass = new Mass(0, null);
-    moisture: Mass = new Mass(0, null);
-    PPB: Mass = new Mass(0, null);
-    weight: Mass = new Mass(0, null);
-    impurities: Mass = new Mass(0, null);
+    brokenGrain: Mass;
+    damagedGrain: Mass;
+    dryWeight: Mass;
+    dryWeightPercent: Mass;
+    foreignMatter: Mass;
+    moisture: Mass;
+    PPB: Mass;
+    weight: Mass;
+    impurities: Mass;
 
-    // brokenGrain: Mass;
-    // damagedGrain: Mass;
-    // dryWeight: Mass;
-    // dryWeightPercent: Mass;
-    // foreignMatter: Mass;
-    // moisture: Mass;
-    // PPB: Mass;
-    // weight: Mass;
-    // impurities: Mass;
-
-    // CONTINUE ON MAKING WEIGHTDISCOUNTS ABLE TO BE CONSTRUCTED WITH PREVIOUS WEIGHTDISCOUNTS
-    // AND ALLOW POPULATION OF DATA USING TICKET AND DISCOUNT TABLES
     constructor(data?: any) {
-        super(data);
-        // if (data) {
-        //     this.brokenGrain = new Mass(data.brokenGrain, null);
-        //     this.damagedGrain = new Mass(0, null);
-        //     this.dryWeight = new Mass(0, null);
-        //     this.dryWeightPercent = new Mass(0, null);
-        //     this.foreignMatter = new Mass(0, null);
-        //     this.moisture = new Mass(0, null);
-        //     this.PPB = new Mass(0, null);
-        //     this.weight = new Mass(0, null);
-        //     this.impurities = new Mass(0, null);
-        // }
-
-        // this.brokenGrain = new Mass(0, null);
-        // this.damagedGrain = new Mass(0, null);
-        // this.dryWeight = new Mass(0, null);
-        // this.dryWeightPercent = new Mass(0, null);
-        // this.foreignMatter = new Mass(0, null);
-        // this.moisture = new Mass(0, null);
-        // this.PPB = new Mass(0, null);
-        // this.weight = new Mass(0, null);
-        // this.impurities = new Mass(0, null);
+        super();
+        // console.log("Data: ", data)
+        if (!data) return;
+        for (const key of Object.keys(data)) {
+            this[key] = new Mass(data[key].amount, data[key].defaultUnits);
+        }
+        // console.log("This: ", this);
      }
 
-    async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
-         for (const key of Object.keys(this)) {
-            const table = discountTables.tables.find(table => table.fieldName === key);
-            const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
-            
-            // console.log(discountTables.ref.parent.parent.id);
-            this[key].defaultUnits = ticket.net.getUnit();
-            this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
+    public async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
+        for (const table of discountTables.tables) {
+            const key = table.fieldName;
+            const valueRange = table.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
+
+            this[key] = new Mass(
+                (valueRange?.discount ?? 0) * ticket.net.get() / 100,
+                ticket.net.getUnit(),
+                (await getDoc(discountTables.ref.parent.parent.withConverter(Product.converter))).data()
+            );
         }
+        // console.log(this)
     }
 
-    total() {
+    public getRawData() {
+        const rawData = {};
+        for (const key of Object.keys(this)) {
+            rawData[key] = (this[key] as Mass).getRawData();
+        }
+        return rawData;
+    }
+
+    public total() {
         return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
     }
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { Contract } from '@shared/classes/contract';
 import { LiquidationTotals } from '@shared/classes/liquidation';
-import { TicketWithDiscounts } from '@shared/classes/ticket';
+import { ReportTicket } from '@shared/classes/ticket';
 import { BehaviorSubject, Observable, filter, map } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ export class PrintableLiquidationComponent implements OnInit {
   @Input("version") set version(newVersion: string) {
     this.version$.next(newVersion);
   }
-  @Input() selectedTickets: TicketWithDiscounts[];
+  @Input() selectedTickets: ReportTicket[];
   @Input() contract: Contract;
   @Input() totals: LiquidationTotals;
 

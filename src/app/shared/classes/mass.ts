@@ -62,4 +62,11 @@ export class Mass {
     static getUnitFullName(unit: units): string {
         return unitNameMap.get(unit);
     }
+
+    getRawData() {
+        return {
+            defaultUnits: this.defaultUnits,
+            amount: this.amount
+        }
+    }
 }

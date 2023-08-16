@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
 import { LiquidationTotals } from '@shared/classes/liquidation';
-import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/classes/ticket';
+import { PriceDiscounts, ReportTicket, WeightDiscounts } from '@shared/classes/ticket';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { PriceDiscounts, TicketWithDiscounts, WeightDiscounts } from '@shared/cl
 })
 export class LiquidationLongComponent implements OnInit {
   @Input() contract: Contract;
-  @Input() selectedTickets: TicketWithDiscounts[];
+  @Input() selectedTickets: ReportTicket[];
   @Input() totals: LiquidationTotals;
 
   public date: Date = new Date();

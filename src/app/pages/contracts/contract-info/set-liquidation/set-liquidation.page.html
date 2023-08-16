@@ -31,7 +31,7 @@
           *ngFor="let ticket of ticketDiscountList; let odd = odd"
         >
           <ion-text>
-            <mat-checkbox [(ngModel)]="ticket.includeInReport" (change)="selectedTicketsChange()"
+            <mat-checkbox [(ngModel)]="ticket.inReport" (change)="selectedTicketsChange()"
             [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
           </ion-text>
           <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
@@ -44,7 +44,7 @@
           <ion-text>
             <mat-form-field>
               <input matInput
-                [(ngModel)]="ticket.priceDiscounts.infested"
+                [(ngModel)]="ticket.data.priceDiscounts.infested"
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
@@ -56,7 +56,7 @@
           <ion-text>
             <mat-form-field>
               <input matInput
-                [(ngModel)]="ticket.priceDiscounts.musty"
+                [(ngModel)]="ticket.data.priceDiscounts.musty"
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
@@ -68,7 +68,7 @@
           <ion-text>
             <mat-form-field>
               <input matInput
-                [(ngModel)]="ticket.priceDiscounts.sour"
+                [(ngModel)]="ticket.data.priceDiscounts.sour"
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
@@ -80,7 +80,7 @@
           <ion-text>
             <mat-form-field>
               <input matInput
-                [(ngModel)]="ticket.priceDiscounts.weathered"
+                [(ngModel)]="ticket.data.priceDiscounts.weathered"
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
@@ -92,7 +92,7 @@
           <ion-text>
             <mat-form-field>
               <input matInput
-                [(ngModel)]="ticket.priceDiscounts.inspection"
+                [(ngModel)]="ticket.data.priceDiscounts.inspection"
                 (change)="selectedTicketsChange()"
                 type="number"
                 min="0"
