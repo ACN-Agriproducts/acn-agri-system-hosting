@@ -52,9 +52,10 @@ export class LoginPage implements OnInit, OnDestroy {
       if(user) {
         try{
           const val = await User.getUser(this.db, user.uid);
-          const compDoc = await val.getPermissions(val.worksAt[0]);
+          const perDoc = await val.getPermissions(val.worksAt[0]);
 
-          Company.getCompany(this.db, val.worksAt[0]).then(async company => {
+          const companyDoc = Company.getCompany(this.db, val.worksAt[0]).then(async company => {
+            this.session.set('companyUnit', company.defaultUnit);
             const plants = await Plant.getPlantList(this.db, company.ref.id);
             this.session.set('currentPlant', plants[0].ref.id);
           });
@@ -65,11 +66,12 @@ export class LoginPage implements OnInit, OnDestroy {
             refreshToken: user.refreshToken, 
             name: val.name,
             worksAt: val['worksAt'],
-            currentPermissions: compDoc
+            currentPermissions: perDoc
           });
           
           this.session.set('currentCompany', val['worksAt'][0])
 
+          await companyDoc;
           this.navController.navigateForward('/dashboard/home');
           this.loadingController.dismiss();
           
