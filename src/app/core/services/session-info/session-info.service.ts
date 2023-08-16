@@ -90,40 +90,42 @@ export class SessionInfo {
       this.language = val;
     }));
 
-    await Promise.all(localPromises);
-
     // Get missing values from db if logged in
-    if(!this.auth.currentUser) return;
+    const unsubAuth = this.auth.onAuthStateChanged(user => {
+      if(!user) return;
 
-    dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
-      if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
-      this.plant = plants[0].ref.id;
-
-      return plants;
+      dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
+        if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
+        this.plant = plants[0].ref.id;
+  
+        return plants;
+      });
+  
+      //dbPromises.user = User.getUser(this.db, this.user.uid); // Add user unit
+  
+      if(!this.companyUnit || !this.companyDisplayUnit) {
+        dbPromises.company = Company.getCompany(this.db, this.company).then(company => {
+          this.set("companyUnit", company.defaultUnit);
+          this.set("companyDisplayUnit", company.displayUnit);
+  
+          return company;
+        });
+      }
+  
+      if(!this.language) {
+        (dbPromises.user ?? User.getUser(this.db, this.user.uid)).then(async user => {
+          this.language = user.language 
+            || (await (dbPromises.company ?? Company.getCompany(this.db, this.company)))?.defaultLanguage
+            || 'es';
+  
+          this.transloco.setActiveLang(this.language);
+        });
+      }
     });
 
-    //dbPromises.user = User.getUser(this.db, this.user.uid); // Add user unit
+    
 
-    if(!this.companyUnit || !this.companyDisplayUnit) {
-      dbPromises.company = Company.getCompany(this.db, this.company).then(company => {
-        this.set("companyUnit", company.defaultUnit);
-        this.set("companyDisplayUnit", company.displayUnit);
-
-        return company;
-      });
-    }
-
-    if(!this.language) {
-      (dbPromises.user ?? User.getUser(this.db, this.user.uid)).then(async user => {
-        this.language = user.language 
-          || (await (dbPromises.company ?? Company.getCompany(this.db, this.company)))?.defaultLanguage
-          || 'es';
-
-        this.transloco.setActiveLang(this.language);
-      });
-    }
-
-    return Promise.all([...localPromises, ...Object.values(dbPromises)]).then(() => {});
+    return Promise.all(localPromises).then(() => {});
   }
 
   public async loadNewCompany(companyName: string): Promise<any> {
