@@ -12,6 +12,7 @@ import { OptionsDirectoryComponent } from './components/options-directory/option
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { AddNewTagDialogComponent, EditContactDialogComponent, PrimaryPipe } from './components/edit-contact-dialog/edit-contact-dialog.component';
 import { ContactTagsDisplayPipe } from './components/contact-tags-display/contact-tags-display.pipe';
+import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { ContactTagsDisplayPipe } from './components/contact-tags-display/contac
     ShowContactModalComponent,
     EditContactDialogComponent,
     AddNewTagDialogComponent,
-    PrimaryPipe
+    PrimaryPipe,
+    TruckerFieldsDialog
   ]
 })
 export class DirectoryPageModule {}
