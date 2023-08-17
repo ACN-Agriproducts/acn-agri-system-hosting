@@ -14,6 +14,7 @@ import * as Excel from 'exceljs';
 import { Contract } from '@shared/classes/contract';
 import { Company } from '@shared/classes/company';
 import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
+import { Pagination } from '@shared/classes/FirebaseDocInterface';
 
 @Component({
   selector: 'app-directory',
@@ -21,14 +22,12 @@ import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-
   styleUrls: ['./directory.page.scss'],
 })
 export class DirectoryPage implements OnInit, OnDestroy {
-
   private currentSub: Subscription;
-  public contacts: Observable<Contact[]>;
+  public contactsPagination: Pagination<Contact>;
   public currentCompany: string;
   public searchQuery: RegExp;
   public contactType: string;
   public company: Promise<Company>;
-  public searchResults: Observable<Contact[]>;
 
   public permissions;
 
@@ -57,10 +56,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   updateList = async () => {
-    this.contacts = collectionData(this.getQuery());
-    this.searchResults = this.contacts?.pipe(
-      map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
-    );
+    this.contactsPagination = new Pagination(this.getQuery(), 1000);
   }
 
   private getQuery(): Query<Contact> {
@@ -71,25 +67,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public openOptions = async (ev: any) => {
     ev.preventDefault();
-    // const popover = await this.popoverController.create({
-    //   component: OptionsDirectoryComponent,
-    //   cssClass: 'my-custom-class',
-    //   event: ev,
-    //   translucent: true,
-    // });
-    // return await popover.present();
-  }
-
-  public openContactModal = async (index) => {
-    const modal = await this.modalController.create({
-      component: ShowContactModalComponent,
-      cssClass: 'modal-contact',
-      swipeToClose: true,
-      componentProps: {
-        data: (await lastValueFrom(this.contacts))[index]
-      }
-    });
-    return await modal.present();
   }
 
   public async openNewContact(){
@@ -133,14 +110,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
       zipCode: data.zipCode,
     })
     .then(() => {
-      // contact.caat = data.caat;
-      // contact.city = data.city?.toUpperCase() ?? null;
-      // contact.metacontacts = data.metacontacts;
-      // contact.name = data.name?.toUpperCase() ?? null;
-      // contact.state = data.state?.toUpperCase() ?? null;
-      // contact.streetAddress = data.streetAddress?.toUpperCase() ?? null;
-      // contact.tags = data.tags;
-      // contact.zipCode = data.zipCode;
 
       this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
     })
@@ -157,13 +126,12 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public search(event: any): void {
     this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
-    this.searchResults = this.contacts?.pipe(
-      map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
-    );
   }
 
+  public searchResults = (): Contact[] => this.contactsPagination.list?.filter(contact => contact?.name?.match(this.searchQuery)) ?? [];
+
   public async exportCurrent(): Promise<void> {
-    const contacts = await lastValueFrom(this.contacts)
+    const contacts = this.contactsPagination.list;
     const lastContact = await Promise.all(contacts.map(c => this.getLastContractDate(c)));
 
     const workbook = new Excel.Workbook();

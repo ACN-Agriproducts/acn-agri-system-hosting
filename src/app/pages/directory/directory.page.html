@@ -21,9 +21,9 @@
 			</ion-button>
 		</div>
 		<ion-card>
-			<div class="content-subtitle">{{t('Contacts')}} ({{ (searchResults | async)?.length ?? 0 }})</div>
+			<div class="content-subtitle">{{t('Contacts')}} ({{ searchResults()?.length ?? 0 }})</div>
 			<div class="content-item" (contextmenu)="openOptions($event)"
-				*ngFor="let contact of searchResults | async; let i = index">
+				*ngFor="let contact of searchResults(); let i = index">
 				<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
 					<ion-avatar slot="start">
 						<img src="../../../assets/avatar.svg">
