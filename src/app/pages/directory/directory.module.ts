@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { DirectoryPageRoutingModule } from './directory-routing.module';
 
-import { DirectoryPage } from './directory.page';
+import { DirectoryPage, SearchPipe } from './directory.page';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
 import { AddNewTagDialogComponent, EditContactDialogComponent, PrimaryPipe } from './components/edit-contact-dialog/edit-contact-dialog.component';
@@ -31,7 +31,8 @@ import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-
     EditContactDialogComponent,
     AddNewTagDialogComponent,
     PrimaryPipe,
-    TruckerFieldsDialog
+    TruckerFieldsDialog,
+    SearchPipe
   ]
 })
 export class DirectoryPageModule {}

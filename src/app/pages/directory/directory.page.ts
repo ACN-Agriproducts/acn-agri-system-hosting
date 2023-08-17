@@ -1,6 +1,6 @@
 import { ModalController, NavController, PopoverController } from '@ionic/angular';
 import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
 import { filter, lastValueFrom, map, Observable, Subscription } from 'rxjs';
 import { collectionData, doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
@@ -27,7 +27,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public currentCompany: string;
   public searchQuery: RegExp;
   public contactType: string;
+  public deliveryCity: string;
   public company: Promise<Company>;
+  public arrayChangeFlag: number;
 
   public permissions;
 
@@ -56,7 +58,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   updateList = async () => {
-    this.contactsPagination = new Pagination(this.getQuery(), 1000);
+    this.arrayChangeFlag = 0; // Will update when list gets any updates
+    this.contactsPagination = new Pagination(this.getQuery(), 1000, () => {
+      this.arrayChangeFlag++;
+    });
   }
 
   private getQuery(): Query<Contact> {
@@ -128,7 +133,14 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
   }
 
-  public searchResults = (): Contact[] => this.contactsPagination.list?.filter(contact => contact?.name?.match(this.searchQuery)) ?? [];
+  public searchResults(list: Contact[], searchQuery: RegExp, contactType: string, deliveryCity: string): Contact[] {
+    let result = list?.filter(contact => contact?.name?.match(searchQuery)) ?? [];
+    if(contactType == "trucker" && deliveryCity) {
+      const destinationQuery = new RegExp('^' + deliveryCity.trim().toUpperCase() + '.*', 'i')
+      result = result.filter(contact => contact?.destinations?.some(d => d.toUpperCase().match(destinationQuery)))
+    }
+    return result;
+  }
 
   public async exportCurrent(): Promise<void> {
     const contacts = this.contactsPagination.list;
@@ -212,5 +224,21 @@ export class DirectoryPage implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(TruckerFieldsDialog, {
       data: contact
     });
+  }
+}
+
+@Pipe({
+  name: 'search',
+})
+
+export class SearchPipe implements PipeTransform {
+  transform(
+    value: Contact[], 
+    searchFunc: (list: Contact[], searchQuery: RegExp, contactType: string, deliveryCity: string) => Contact[], 
+    searchQuery: RegExp, 
+    contactType: string,  
+    deliveryCity: string,
+    ...other: any): any {
+    return searchFunc(value, searchQuery, contactType, deliveryCity);
   }
 }

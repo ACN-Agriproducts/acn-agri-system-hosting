@@ -12,6 +12,10 @@
 					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option">{{option | titlecase}}</mat-option>
 				</mat-select>
 			</mat-form-field>
+			<mat-form-field appearance="fill" *ngIf="contactType">
+				<mat-label>City</mat-label>
+				<input matInput [(ngModel)]="deliveryCity" />
+			</mat-form-field>
 			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
 			<ion-button (click)="openNewContact()">
 				<ion-text slot="end">{{t('New Contact')}}</ion-text>
@@ -21,9 +25,9 @@
 			</ion-button>
 		</div>
 		<ion-card>
-			<div class="content-subtitle">{{t('Contacts')}} ({{ searchResults()?.length ?? 0 }})</div>
+			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag)?.length ?? 0 }})</div>
 			<div class="content-item" (contextmenu)="openOptions($event)"
-				*ngFor="let contact of searchResults(); let i = index">
+				*ngFor="let contact of (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag); let i = index">
 				<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
 					<ion-avatar slot="start">
 						<img src="../../../assets/avatar.svg">
