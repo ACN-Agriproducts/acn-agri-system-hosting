@@ -26,7 +26,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public contacts: Observable<Contact[]>;
   public currentCompany: string;
   public searchQuery: RegExp;
-  public stringTest: string;
   public contactType: string;
   public company: Promise<Company>;
   public searchResults: Observable<Contact[]>;
