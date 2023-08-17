@@ -1,9 +1,7 @@
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
-import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
+import { NavController } from '@ionic/angular';
 import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { filter, lastValueFrom, map, Observable, Subscription } from 'rxjs';
-import { collectionData, doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { lastValueFrom, Subscription } from 'rxjs';
+import { doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -36,9 +34,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   constructor(
     private db: Firestore,
     private dialog: MatDialog,
-    private modalController: ModalController,
     private navController: NavController,
-    private popoverController: PopoverController,
     private session: SessionInfo,
     private snack: SnackbarService,
     private transloco: TranslocoService
