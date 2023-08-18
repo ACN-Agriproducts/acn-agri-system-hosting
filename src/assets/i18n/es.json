@@ -109,9 +109,9 @@
         "contact-update-success": "Contrato actualizado exitosamente",
         "Directory": "Directorio",
         "Contacts": "Contactos",
-        "trucker": "camionero",
+        "trucker": "linea fletera",
         "client": "cliente",
-        "Trucker": "Camionero",
+        "Trucker": "Linea Fletera",
         "Client": "Cliente",
         "New Contact": "Nuevo Contacto",
         "Name": "Nombre",
@@ -172,6 +172,9 @@
         "contact": "Contacto",
         "Contracts": "Contratos",
         "Country": "Paiz",
-        "Type": "Tipo"
+        "Type": "Tipo",
+        "Destinations": "Destinos",
+        "Add New": "Agregar Nuevo",
+        "Destination": "Destino"
     }
 }

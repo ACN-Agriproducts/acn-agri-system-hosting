@@ -1,19 +1,21 @@
-<h2 mat-dialog-title>Destinations</h2>
-<mat-dialog-content>
-  <div class="table-row" *ngFor="let destination of contact.destinations; let index = index; trackBy: trackIndex">
-    <mat-form-field >
-      <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="contact.destinations[index]">
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id | uppercase">{{plant.ref.id | uppercase}}</mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <button mat-icon-button color="warn" (click)="remove(index)">
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
-  <button mat-flat-button (click)="newDestination()">+ Add New</button>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
-  <button mat-flat-button (click)="submit()" [disabled]="submitting" color="primary">Submit</button>
-</mat-dialog-actions>
+<ng-container *transloco="let t, read: 'directory'">
+  <h2 mat-dialog-title>{{t('Destinations')}}</h2>
+  <mat-dialog-content>
+    <div class="table-row" *ngFor="let destination of contact.destinations; let index = index; trackBy: trackIndex">
+      <mat-form-field >
+        <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="contact.destinations[index]">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let plant of plants$ | async" [value]="plant.ref.id | uppercase">{{plant.ref.id | uppercase}}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <button mat-icon-button color="warn" (click)="remove(index)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <button mat-flat-button (click)="newDestination()">+ {{t('Add New')}}</button>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button mat-dialog-close color="warn">{{t('Cancel')}}</button>
+    <button mat-flat-button (click)="submit()" [disabled]="submitting" color="primary">{{t('Submit')}}</button>
+  </mat-dialog-actions>
+</ng-container>
