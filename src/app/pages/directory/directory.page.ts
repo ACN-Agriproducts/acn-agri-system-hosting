@@ -1,9 +1,7 @@
-import { ModalController, NavController, PopoverController } from '@ionic/angular';
-import { ShowContactModalComponent } from './components/show-contact-modal/show-contact-modal.component';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { OptionsDirectoryComponent } from './components/options-directory/options-directory.component';
-import { filter, lastValueFrom, map, Observable, Subscription } from 'rxjs';
-import { collectionData, doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { NavController } from '@ionic/angular';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { lastValueFrom, Subscription } from 'rxjs';
+import { doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -13,6 +11,8 @@ import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
 import { Contract } from '@shared/classes/contract';
 import { Company } from '@shared/classes/company';
+import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
+import { Pagination } from '@shared/classes/FirebaseDocInterface';
 
 @Component({
   selector: 'app-directory',
@@ -20,24 +20,21 @@ import { Company } from '@shared/classes/company';
   styleUrls: ['./directory.page.scss'],
 })
 export class DirectoryPage implements OnInit, OnDestroy {
-
   private currentSub: Subscription;
-  public contacts: Observable<Contact[]>;
+  public contactsPagination: Pagination<Contact>;
   public currentCompany: string;
   public searchQuery: RegExp;
-  public stringTest: string;
   public contactType: string;
+  public deliveryCity: string;
   public company: Promise<Company>;
-  public searchResults: Observable<Contact[]>;
+  public arrayChangeFlag: number;
 
   public permissions;
 
   constructor(
     private db: Firestore,
     private dialog: MatDialog,
-    private modalController: ModalController,
     private navController: NavController,
-    private popoverController: PopoverController,
     private session: SessionInfo,
     private snack: SnackbarService,
     private transloco: TranslocoService
@@ -57,10 +54,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   updateList = async () => {
-    this.contacts = collectionData(this.getQuery());
-    this.searchResults = this.contacts?.pipe(
-      map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
-    );
+    this.arrayChangeFlag = 0; // Will update when list gets any updates
+    this.contactsPagination = new Pagination(this.getQuery(), 1000, () => {
+      this.arrayChangeFlag++;
+    });
   }
 
   private getQuery(): Query<Contact> {
@@ -71,25 +68,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public openOptions = async (ev: any) => {
     ev.preventDefault();
-    // const popover = await this.popoverController.create({
-    //   component: OptionsDirectoryComponent,
-    //   cssClass: 'my-custom-class',
-    //   event: ev,
-    //   translucent: true,
-    // });
-    // return await popover.present();
-  }
-
-  public openContactModal = async (index) => {
-    const modal = await this.modalController.create({
-      component: ShowContactModalComponent,
-      cssClass: 'modal-contact',
-      swipeToClose: true,
-      componentProps: {
-        data: (await lastValueFrom(this.contacts))[index]
-      }
-    });
-    return await modal.present();
   }
 
   public async openNewContact(){
@@ -133,14 +111,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
       zipCode: data.zipCode,
     })
     .then(() => {
-      // contact.caat = data.caat;
-      // contact.city = data.city?.toUpperCase() ?? null;
-      // contact.metacontacts = data.metacontacts;
-      // contact.name = data.name?.toUpperCase() ?? null;
-      // contact.state = data.state?.toUpperCase() ?? null;
-      // contact.streetAddress = data.streetAddress?.toUpperCase() ?? null;
-      // contact.tags = data.tags;
-      // contact.zipCode = data.zipCode;
 
       this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
     })
@@ -157,14 +127,50 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public search(event: any): void {
     this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
-    this.searchResults = this.contacts?.pipe(
-      map((contacts: Contact[]) => contacts.filter(contact => contact?.name?.match(this.searchQuery)))
-    );
+  }
+
+  public searchResults(list: Contact[], searchQuery: RegExp, contactType: string, deliveryCity: string): Contact[] {
+    let result = list?.filter(contact => contact?.name?.match(searchQuery)) ?? [];
+    if(contactType == "trucker" && deliveryCity) {
+      const destinationQuery = new RegExp('^' + deliveryCity.trim().toUpperCase() + '.*', 'i')
+      result = result.filter(contact => contact?.destinations?.some(d => d.toUpperCase().match(destinationQuery)))
+    }
+    return result;
   }
 
   public async exportCurrent(): Promise<void> {
-    const contacts = await lastValueFrom(this.contacts)
-    const lastContact = await Promise.all(contacts.map(c => this.getLastContractDate(c)));
+    const contacts = this.contactsPagination.list;
+    const contracts = await Contract.getContracts(this.db, this.session.getCompany());
+    const contactContractsInfo: {
+      lastContract: Date;
+      CornAmmount22: number;
+      SorghumAmmount22: number;
+      CornAmmount23: number;
+      SorghumAmmount23: number;
+      hasPurchaseContract: boolean;
+    }[] = [];
+    const initDate = new Date(2000, 1, 1);
+
+    contacts.forEach(contact => {
+      const contactContracts = contracts.filter(c => c.client.id == contact.ref.id && (c.type == 'purchase' || c.tags?.includes('purchase')));
+      
+      contactContractsInfo.push({
+        lastContract: contactContracts.map(c => c.date).reduce((a, b) => a > b ? a : b, new Date(2000, 1, 1)),
+        CornAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == 'Yellow Corn')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        SorghumAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == 'Sorghum')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        CornAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == 'Yellow Corn')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        SorghumAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == 'Sorghum')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        hasPurchaseContract: contactContracts.some(c => c.type == 'purchase' || c.tags?.includes('purchase'))
+      });
+    });
 
     const workbook = new Excel.Workbook();
     const workSheet = workbook.addWorksheet('Directory');
@@ -181,6 +187,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
         {name: "Name", filterButton: true},
         {name: "isClient", filterButton: true},
         {name: "isTrucker", filterButton: true},
+        {name: "Has Purchsae", filterButton: true},
         {name: "Contact Name", filterButton: true},
         {name: "Phone", filterButton: true},
         {name: "Email", filterButton: true},
@@ -192,11 +199,16 @@ export class DirectoryPage implements OnInit, OnDestroy {
         {name: "RFC", filterButton: true},
         {name: "CAAT", filterButton: true},
         {name: "Last Contract", filterButton: true},
+        {name: "Yellow Corn 22", filterButton: true},
+        {name: "Sorgum 22", filterButton: true},
+        {name: "Yellow Corn 23", filterButton: true},
+        {name: "Sorgum 23", filterButton: true},
       ],
       rows: contacts.map((contact, index) => [
         contact.name,
         contact.tags.includes('client'),
         contact.tags.includes('trucker'),
+        contactContractsInfo[index].hasPurchaseContract,
         contact.getPrimaryMetaContact()?.name,
         contact.getPrimaryMetaContact()?.phone,
         contact.getPrimaryMetaContact()?.email,
@@ -204,9 +216,14 @@ export class DirectoryPage implements OnInit, OnDestroy {
         contact.city,
         contact.zipCode,
         contact.state,
+        contact.country,
         contact.rfc,
         contact.caat,
-        lastContact[index]
+        initDate.getTime() == contactContractsInfo[index].lastContract.getTime() ? '-' : contactContractsInfo[index].lastContract,
+        contactContractsInfo[index].CornAmmount22 == 0? '-' : contactContractsInfo[index].CornAmmount22,
+        contactContractsInfo[index].SorghumAmmount22 == 0? '-' : contactContractsInfo[index].SorghumAmmount22,
+        contactContractsInfo[index].CornAmmount23 == 0? '-' : contactContractsInfo[index].CornAmmount23,
+        contactContractsInfo[index].SorghumAmmount23 == 0? '-' : contactContractsInfo[index].SorghumAmmount23,
       ])
     });
 
@@ -238,5 +255,27 @@ export class DirectoryPage implements OnInit, OnDestroy {
     }
 
     return result[0].date;
+  }
+
+  public editTransportField(contact: Contact) {
+    const dialogRef = this.dialog.open(TruckerFieldsDialog, {
+      data: contact
+    });
+  }
+}
+
+@Pipe({
+  name: 'search',
+})
+
+export class SearchPipe implements PipeTransform {
+  transform(
+    value: Contact[], 
+    searchFunc: (list: Contact[], searchQuery: RegExp, contactType: string, deliveryCity: string) => Contact[], 
+    searchQuery: RegExp, 
+    contactType: string,  
+    deliveryCity: string,
+    ...other: any): any {
+    return searchFunc(value, searchQuery, contactType, deliveryCity);
   }
 }

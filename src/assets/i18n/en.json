@@ -171,6 +171,9 @@
         "Contact": "Contact",
         "Country": "Country",
         "Contracts": "Contracts",
-        "Type": "Type"
+        "Type": "Type",
+        "Destinations": "Destinations",
+        "Add New": "Add New",
+        "Destination": "Destination"
     }
 }
