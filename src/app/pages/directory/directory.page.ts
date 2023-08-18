@@ -147,26 +147,28 @@ export class DirectoryPage implements OnInit, OnDestroy {
       SorghumAmmount22: number;
       CornAmmount23: number;
       SorghumAmmount23: number;
+      hasPurchaseContract: boolean;
     }[] = [];
     const initDate = new Date(2000, 1, 1);
 
     contacts.forEach(contact => {
-      const contactContracts = contracts.filter(c => c.client.id == contact.ref.id);
+      const contactContracts = contracts.filter(c => c.client.id == contact.ref.id && (c.type == 'purchase' || c.tags?.includes('purchase')));
       
       contactContractsInfo.push({
         lastContract: contactContracts.map(c => c.date).reduce((a, b) => a > b ? a : b, new Date(2000, 1, 1)),
-        CornAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == "Yellow Corn")
-                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+        CornAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == 'Yellow Corn')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
                           .reduce((a, b) => a + b, 0),
-        SorghumAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == "Sorghum")
-                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+        SorghumAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == 'Sorghum')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
                           .reduce((a, b) => a + b, 0),
-        CornAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == "Yellow Corn")
-                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+        CornAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == 'Yellow Corn')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
                           .reduce((a, b) => a + b, 0),
-        SorghumAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == "Sorghum")
-                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
-                          .reduce((a, b) => a + b, 0)
+        SorghumAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == 'Sorghum')
+                          .map(c => c.status == 'closed' ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        hasPurchaseContract: contactContracts.some(c => c.type == 'purchase' || c.tags?.includes('purchase'))
       });
     });
 
@@ -185,6 +187,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
         {name: "Name", filterButton: true},
         {name: "isClient", filterButton: true},
         {name: "isTrucker", filterButton: true},
+        {name: "Has Purchsae", filterButton: true},
         {name: "Contact Name", filterButton: true},
         {name: "Phone", filterButton: true},
         {name: "Email", filterButton: true},
@@ -205,6 +208,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
         contact.name,
         contact.tags.includes('client'),
         contact.tags.includes('trucker'),
+        contactContractsInfo[index].hasPurchaseContract,
         contact.getPrimaryMetaContact()?.name,
         contact.getPrimaryMetaContact()?.phone,
         contact.getPrimaryMetaContact()?.email,
