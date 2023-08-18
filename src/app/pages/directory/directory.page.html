@@ -15,6 +15,9 @@
 			<mat-form-field appearance="fill" *ngIf="contactType">
 				<mat-label>City</mat-label>
 				<input matInput [(ngModel)]="deliveryCity" />
+				<button *ngIf="deliveryCity" matSuffix mat-icon-button aria-label="Clear" (click)="deliveryCity=''">
+					<mat-icon>close</mat-icon>
+				  </button>
 			</mat-form-field>
 			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
 			<ion-button (click)="openNewContact()">
