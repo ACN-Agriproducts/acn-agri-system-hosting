@@ -47,7 +47,7 @@ export class SystemSettingsComponent implements OnInit {
     this.session.set('defaultLanguage', this.language);
 
     const userRef = User.getDocumentReference(this.db, this.session.getUser().uid);
-    updateDoc(userRef, {
+    updateDoc(userRef.withConverter(null), {
       language: this.language,
     });
   }

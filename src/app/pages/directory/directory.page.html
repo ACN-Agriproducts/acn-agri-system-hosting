@@ -4,26 +4,33 @@
 	<ion-content class="ion-padding">
 		<div class="content-header margin-inline">
 			<mat-form-field appearance="fill">
-				<mat-label>Type</mat-label>
+				<mat-label>{{t('Type')}}</mat-label>
 				<mat-select [(ngModel)]="contactType" (ngModelChange)="updateList()">
 					<mat-option>None</mat-option>
-					<mat-option value="client">Client</mat-option>
-					<mat-option value="trucker">Trucker</mat-option>
+					<mat-option value="client">{{t('Client')}}</mat-option>
+					<mat-option value="trucker">{{t('Trucker')}}</mat-option>
 					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option">{{option | titlecase}}</mat-option>
 				</mat-select>
+			</mat-form-field>
+			<mat-form-field appearance="fill" *ngIf="contactType">
+				<mat-label>{{t('Destination')}}</mat-label>
+				<input matInput [(ngModel)]="deliveryCity" />
+				<button *ngIf="deliveryCity" matSuffix mat-icon-button aria-label="Clear" (click)="deliveryCity=''">
+					<mat-icon>close</mat-icon>
+				  </button>
 			</mat-form-field>
 			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
 			<ion-button (click)="openNewContact()">
 				<ion-text slot="end">{{t('New Contact')}}</ion-text>
 			</ion-button>
-			<ion-button (click)="exportCurrent()" *ngIf="permissions.developer">
+			<!-- <ion-button (click)="exportCurrent()" *ngIf="permissions.developer">
 				<ion-text slot="end">{{t('Export Contacts')}}</ion-text>
-			</ion-button>
+			</ion-button> -->
 		</div>
 		<ion-card>
-			<div class="content-subtitle">{{t('Contacts')}} ({{ (searchResults | async)?.length ?? 0 }})</div>
+			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag)?.length ?? 0 }})</div>
 			<div class="content-item" (contextmenu)="openOptions($event)"
-				*ngFor="let contact of searchResults | async; let i = index">
+				*ngFor="let contact of (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag); let i = index">
 				<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
 					<ion-avatar slot="start">
 						<img src="../../../assets/avatar.svg">
@@ -38,6 +45,9 @@
 					</ion-label>
 					<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact().phone ?? "" }}</ion-label>
 					<ion-buttons class="ion-hide-sm-down" slot="end">
+						<ion-button color="primary" *ngIf="contact.tags.includes('trucker')" (click)="$event.stopPropagation(); editTransportField(contact)">
+							<ion-icon name="car-outline"></ion-icon>
+						</ion-button>
 						<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 							<ion-icon name="create-outline"></ion-icon>
 						</ion-button>

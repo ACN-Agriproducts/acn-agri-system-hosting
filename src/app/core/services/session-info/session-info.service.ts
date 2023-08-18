@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { doc, Firestore, getDoc, where } from '@angular/fire/firestore';
+import { Auth, authState } from '@angular/fire/auth';
+import { doc, Firestore, getDoc, getDocs, QuerySnapshot, where } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { TranslocoService } from '@ngneat/transloco';
 import { Company } from '@shared/classes/company';
 import { FirebaseDocInterface } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
+import { Plant } from '@shared/classes/plant';
 import { User } from '@shared/classes/user';
 
 export interface UserInterface {
@@ -18,7 +20,7 @@ export interface UserInterface {
 }
 
 declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit' | 'companyDisplayUnit' | 'defaultLanguage';
-declare type langOpts = 'en' | 'es';
+export declare type langOpts = 'en' | 'es';
 
 @Injectable({
   providedIn: 'root'
@@ -38,87 +40,111 @@ export class SessionInfo {
     private localStorage: Storage,
     private db: Firestore,
     private transloco: TranslocoService,
+    private auth: Auth
   ) { 
     this.keyMap= new Map<keyOpts, string>();
     this.keyMap.set('currentCompany', 'company');
     this.keyMap.set('currentPlant', 'plant');
     this.keyMap.set('user', 'user');
     this.keyMap.set('companyUnit', 'companyUnit');
-    this.keyMap.set('userUnit', 'userUnit');
+    this.keyMap.set('userUnit', 'userUnit');  // get from user doc
     this.keyMap.set('companyDisplayUnit', 'companyDisplayUnit');
-    this.keyMap.set('defaultLanguage', 'defaultLanguage');
+    this.keyMap.set('defaultLanguage', 'defaultLanguage');  // get from user or company
   }
 
-  public load(): Promise<void> {
-    const promises = [];
-    let companyPromise, userPromise;
-    let companyDoc: Promise<Company>;
+  public async load(): Promise<void> {
+    const localPromises = [];
+    const dbPromises: {
+      plants?: Promise<QuerySnapshot>,
+      company?: Promise<Company>,
+      user?: Promise<User>
+    } = {};
+    FirebaseDocInterface.session = this;
 
-    promises.push(companyPromise = this.localStorage.get('currentCompany').then(val => {
+    // Get all locally stored values
+    localPromises.push(this.localStorage.get('currentCompany').then(val => {
       return this.company = val;
-      
-    }).then(async company => {
-      if(!company) return;
-      let unit = await this.localStorage.get('companyUnit');
-      if(!unit) {
-        companyDoc = Company.getCompany(this.db, company);
-        unit = (await companyDoc).defaultUnit;
-        this.localStorage.set('userUnit', (await companyDoc).defaultUnit);
-      }
-
-      let companyDisplayUnit = await this.localStorage.get('companyDisplayUnit');
-      if(!companyDisplayUnit) {
-        companyDoc ??= Company.getCompany(this.db, company);
-        companyDisplayUnit = (await companyDoc).displayUnit;
-        this.localStorage.set('companyDisplayUnit', (await companyDoc).displayUnit);
-      }
-
-      this.companyUnit = unit;
-      this.companyDisplayUnit = companyDisplayUnit;
-      return this.company;
-    }).catch(error => {
-      console.error(error);
+    }));
+    
+    localPromises.push(this.localStorage.get('currentPlant').then(val => {
+      return this.plant = val;
     }));
 
-    promises.push(this.localStorage.get('currentPlant').then(val => {
-      this.plant = val;
-    }));
-
-    promises.push(userPromise = this.localStorage.get('user').then(val => {
+    localPromises.push(this.localStorage.get('user').then(async val => {
       this.user = val;
     }));
 
-    promises.push(this.localStorage.get('userUnit').then(val => {
+    localPromises.push(this.localStorage.get('companyUnit').then(async val => {
+      this.companyUnit = val;
+    }));
+
+    localPromises.push(this.localStorage.get('userUnit').then(async val => {
       this.userUnit = val;
     }));
 
-    promises.push(this.localStorage.get('defaultLanguage').then(async val => {
-      this.language = val 
-        || (await userPromise)?.defaultLanguage 
-        || (await companyPromise ? (await (companyDoc ??= Company.getCompany(this.db, await companyPromise))).defaultLanguage : null)
-        || 'es';
-      this.transloco.setActiveLang(this.language);
+    localPromises.push(this.localStorage.get('companyDisplayUnit').then(async val => {
+      this.companyDisplayUnit = val;
     }));
 
-    FirebaseDocInterface.session = this;
-    return Promise.all(promises).then(() => {});
+    localPromises.push(this.localStorage.get('defaultLanguage').then(async val => {
+      this.language = val;
+    }));
+
+    // Get missing values from db if logged in
+    const unsubAuth = this.auth.onAuthStateChanged(user => {
+      if(!user) return;
+
+      dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
+        if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
+        this.plant = plants[0].ref.id;
+  
+        return plants;
+      });
+  
+      //dbPromises.user = User.getUser(this.db, this.user.uid); // Add user unit
+  
+      if(!this.companyUnit || !this.companyDisplayUnit) {
+        dbPromises.company = Company.getCompany(this.db, this.company).then(company => {
+          this.set("companyUnit", company.defaultUnit);
+          this.set("companyDisplayUnit", company.displayUnit);
+  
+          return company;
+        });
+      }
+  
+      if(!this.language) {
+        (dbPromises.user ?? User.getUser(this.db, this.user.uid)).then(async user => {
+          this.language = user.language 
+            || (await (dbPromises.company ?? Company.getCompany(this.db, this.company)))?.defaultLanguage
+            || 'es';
+  
+          this.transloco.setActiveLang(this.language);
+        });
+      }
+    });
+
+    
+
+    return Promise.all(localPromises).then(() => {});
   }
 
-  public loadNewCompany(companyName: string): Promise<any> {
+  public async loadNewCompany(companyName: string): Promise<any> {
     this.set('currentCompany', companyName);
     const promises = [];
 
     promises.push(Company.getCompany(this.db, companyName).then(companyDoc => {
-      companyDoc.getPlants().then(plants => {
-        this.set('currentPlant', plants[0]);
-      });
-
       this.set('companyDisplayUnit', companyDoc.displayUnit);
       this.set('companyUnit', companyDoc.defaultUnit);
     }));
 
-    promises.push(getDoc(doc(User.getDocumentReference(this.db, this.user.uid), 'companies', companyName)).then(permissionsDoc => {
+    promises.push(getDoc(doc(User.getDocumentReference(this.db, this.user.uid), 'companies', companyName)).then(async permissionsDoc => {
       this.user.currentPermissions = permissionsDoc.get('permissions');
+      await this.set('user', this.user);
+
+      if(this.user.currentPermissions?.admin || this.user.currentPermissions?.tickets?.read || this.user.currentPermissions?.inventory?.read){
+        const plants = await getDocs(Plant.getCollectionReference(this.db, companyName).withConverter(null));
+        await this.set('currentPlant', plants.docs[0]?.ref.id ?? "");
+      }
     }));
 
     return Promise.all(promises);

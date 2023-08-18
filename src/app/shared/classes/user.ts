@@ -1,5 +1,6 @@
 import { doc, DocumentData, DocumentReference, Firestore, getDoc, QueryDocumentSnapshot, SnapshotOptions, collection } from "@angular/fire/firestore";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
+import { langOpts } from "@core/services/session-info/session-info.service";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 
 export class User extends FirebaseDocInterface {
@@ -11,7 +12,7 @@ export class User extends FirebaseDocInterface {
     pictureURL: string;
     pictureRef: string;
     worksAt: string[];
-    language: string;
+    language: langOpts;
 
     constructor(snapshotOrData: QueryDocumentSnapshot<any> | any) {
         super(snapshotOrData, User.converter);
@@ -69,6 +70,12 @@ export class User extends FirebaseDocInterface {
 
     public static getUser(db: Firestore, userID: string): Promise<User> {
         return getDoc(this.getDocumentReference(db, userID)).then(val => {
+            return val.data();
+        });
+    }
+
+    public static getUserPermissions(db: Firestore, userID: string, company: string): Promise<any> {
+        return getDoc(doc(collection(db, 'users', userID, company))).then(val => {
             return val.data();
         });
     }
