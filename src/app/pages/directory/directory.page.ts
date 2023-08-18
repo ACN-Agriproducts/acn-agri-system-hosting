@@ -140,7 +140,35 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public async exportCurrent(): Promise<void> {
     const contacts = this.contactsPagination.list;
-    const lastContact = await Promise.all(contacts.map(c => this.getLastContractDate(c)));
+    const contracts = await Contract.getContracts(this.db, this.session.getCompany());
+    const contactContractsInfo: {
+      lastContract: Date;
+      CornAmmount22: number;
+      SorghumAmmount22: number;
+      CornAmmount23: number;
+      SorghumAmmount23: number;
+    }[] = [];
+    const initDate = new Date(2000, 1, 1);
+
+    contacts.forEach(contact => {
+      const contactContracts = contracts.filter(c => c.client.id == contact.ref.id);
+      
+      contactContractsInfo.push({
+        lastContract: contactContracts.map(c => c.date).reduce((a, b) => a > b ? a : b, new Date(2000, 1, 1)),
+        CornAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == "Yellow Corn")
+                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        SorghumAmmount22: contactContracts.filter(c => c.date.getFullYear() == 2022 && c.product.id == "Sorghum")
+                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        CornAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == "Yellow Corn")
+                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0),
+        SorghumAmmount23: contactContracts.filter(c => c.date.getFullYear() == 2023 && c.product.id == "Sorghum")
+                          .map(c => c.status == "closed" ? c.currentDelivered.getMassInUnit('mTon') : Math.max(c.currentDelivered.getMassInUnit('mTon'), c.quantity.getMassInUnit('mTon')))
+                          .reduce((a, b) => a + b, 0)
+      });
+    });
 
     const workbook = new Excel.Workbook();
     const workSheet = workbook.addWorksheet('Directory');
@@ -168,6 +196,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
         {name: "RFC", filterButton: true},
         {name: "CAAT", filterButton: true},
         {name: "Last Contract", filterButton: true},
+        {name: "Yellow Corn 22", filterButton: true},
+        {name: "Sorgum 22", filterButton: true},
+        {name: "Yellow Corn 23", filterButton: true},
+        {name: "Sorgum 23", filterButton: true},
       ],
       rows: contacts.map((contact, index) => [
         contact.name,
@@ -180,9 +212,14 @@ export class DirectoryPage implements OnInit, OnDestroy {
         contact.city,
         contact.zipCode,
         contact.state,
+        contact.country,
         contact.rfc,
         contact.caat,
-        lastContact[index]
+        initDate.getTime() == contactContractsInfo[index].lastContract.getTime() ? '-' : contactContractsInfo[index].lastContract,
+        contactContractsInfo[index].CornAmmount22 == 0? '-' : contactContractsInfo[index].CornAmmount22,
+        contactContractsInfo[index].SorghumAmmount22 == 0? '-' : contactContractsInfo[index].SorghumAmmount22,
+        contactContractsInfo[index].CornAmmount23 == 0? '-' : contactContractsInfo[index].CornAmmount23,
+        contactContractsInfo[index].SorghumAmmount23 == 0? '-' : contactContractsInfo[index].SorghumAmmount23,
       ])
     });
 
