@@ -31,7 +31,7 @@
           *ngFor="let ticket of ticketDiscountList; let odd = odd"
         >
           <ion-text>
-            <mat-checkbox [(ngModel)]="ticket.inReport" (change)="selectedTicketsChange()"
+            <mat-checkbox [(ngModel)]="ticket.inReport" (ngModelChange)="selectedTicketsChange()"
             [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
           </ion-text>
           <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
@@ -107,9 +107,14 @@
       <div class="actions">
         <div class="action-bar">
           <button mat-raised-button disableRipple>
-            <mat-checkbox (change)="selectAllTickets($event.checked)">{{ t('select all') | titlecase }}</mat-checkbox>
+            <mat-checkbox 
+              [checked]="allSelected" 
+              (change)="selectAllTickets($event.checked)"
+              [indeterminate]="!allSelected && selectedTickets.length > 0"
+            >{{ t('select all') | titlecase }}
+            </mat-checkbox>
           </button>
-          <span class="selected-tickets-count" *ngIf="selectedTickets.length !== 0" >
+          <span class="selected-tickets-count" *ngIf="selectedTickets.length > 0" >
             ( {{ selectedTickets.length }} Selected )
           </span>
         </div>

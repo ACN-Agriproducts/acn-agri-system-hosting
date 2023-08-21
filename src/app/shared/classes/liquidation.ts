@@ -93,17 +93,15 @@ export class Liquidation extends FirebaseDocInterface {
         return onSnapshot(collectionQuery, onNext);
     }
 
-    public static getLiquidationByRefId(
+    public static async getLiquidationByRefId(
         db: Firestore, 
         company: string, 
         contractRefId: string, 
         refId: string
     ): Promise<Liquidation> {
-        return getDoc(doc(db, `companies/${company}/contracts/${contractRefId}/liquidations/${refId}`)
-        .withConverter(Liquidation.converter)).then(result => {
-            console.log(result)
-            return result.data();
-        });
+        const liquidationDoc = await getDoc(doc(db, `companies/${company}/contracts/${contractRefId}/liquidations/${refId}`)
+        .withConverter(Liquidation.converter));
+        return liquidationDoc.data();
     }
 }
 
@@ -125,10 +123,6 @@ export class LiquidationTotals {
             this.tare += ticket.data.tare.get();
             this.net += ticket.data.net.get();
 
-            // for (const key of Object.keys(this.weightDiscounts)) {
-            //     this.weightDiscounts[key].defaultUnits = ticket.data.net.getUnit();
-            //     this.weightDiscounts[key].amount += ticket.data.weightDiscounts[key].amount;
-            // }
             for (const key of Object.keys(ticket.data.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.data.net.getUnit(), contract.productInfo);
                 this.weightDiscounts[key].amount += ticket.data.weightDiscounts[key].amount;

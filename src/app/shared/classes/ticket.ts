@@ -361,50 +361,17 @@ export class PriceDiscounts extends Discounts {
     }
 }
 
-// export class WeightDiscounts extends Discounts {
-//     brokenGrain: Mass | null = null;
-//     damagedGrain: Mass | null = null;
-//     dryWeight: Mass | null = null;
-//     dryWeightPercent: Mass | null = null;
-//     foreignMatter: Mass | null = null;
-//     moisture: Mass | null = null;
-//     PPB: Mass | null = null;
-//     weight: Mass | null = null;
-//     impurities: Mass | null = null;
-
-//     constructor(data?: any) {
-//         super();
-//         console.log("Data: ", data)
-//         for (const key of Object.keys(this)) {
-//             this[key] = data ? new Mass(data[key].amount, data[key].defaultUnits) : new Mass(0, null);
-//         }
-//         console.log("This: ", this)
-//      }
-
-//     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
-//         for (const key of Object.keys(this)) {
-//             const mass = this[key] as Mass;
-//             const table = discountTables.tables?.find(table => table.fieldName === key);
-//             const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
-
-//             mass.defaultUnits = ticket.net.getUnit();
-//             mass.amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
-//             mass.defineBushels((await getDoc(discountTables.ref.parent.parent.withConverter(Product.converter))).data());
-//         }
-//     }
-
-//     public getRawData() {
-//         const rawData = {};
-//         for (const key of Object.keys(this)) {
-//             rawData[key] = (this[key] as Mass).getRawData();
-//         }
-//         return rawData;
-//     }
-
-//     public total() {
-//         return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
-//     }
-// }
+export const WEIGHTDISCOUNTFIELDS = [
+    "brokenGrain",
+    "damagedGrain",
+    "dryWeight",
+    "dryWeightPercent",
+    "foreignMatter",
+    "moisture",
+    "PPB",
+    "weight",
+    "impurities",
+];
 
 export class WeightDiscounts extends Discounts {
     brokenGrain: Mass;
@@ -419,26 +386,21 @@ export class WeightDiscounts extends Discounts {
 
     constructor(data?: any) {
         super();
-        // console.log("Data: ", data)
         if (!data) return;
         for (const key of Object.keys(data)) {
             this[key] = new Mass(data[key].amount, data[key].defaultUnits);
         }
-        // console.log("This: ", this);
      }
 
     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
-        for (const table of discountTables.tables) {
+        for (const table of (discountTables?.tables ?? [])) {
             const key = table.fieldName;
-            const valueRange = table.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
+            const rowData = table.data.find(row => ticket[key] > row.low && ticket[key] < row.high);
 
-            this[key] = new Mass(
-                (valueRange?.discount ?? 0) * ticket.net.get() / 100,
-                ticket.net.getUnit(),
-                (await getDoc(discountTables.ref.parent.parent.withConverter(Product.converter))).data()
-            );
+            this[key] ??= new Mass(0, null);
+            this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;
+            this[key].defaultUnits = ticket.net.getUnit();
         }
-        // console.log(this)
     }
 
     public getRawData() {
@@ -447,6 +409,12 @@ export class WeightDiscounts extends Discounts {
             rawData[key] = (this[key] as Mass).getRawData();
         }
         return rawData;
+    }
+
+    public defineBushels(product: Product | ProductInfo) {
+        Object.keys(this).forEach(key => {
+            this[key].defineBushels(product);
+        });
     }
 
     public total() {

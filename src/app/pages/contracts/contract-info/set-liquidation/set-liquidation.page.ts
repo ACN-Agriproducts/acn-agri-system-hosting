@@ -26,6 +26,7 @@ export class SetLiquidationPage implements OnInit {
   public liquidation: Liquidation;
   public totals: LiquidationTotals = new LiquidationTotals();
   public editingRefId: string;
+  public allSelected: boolean = false;
 
   public editingTickets: ReportTicket[];
   public ticketDiscountList: ReportTicket[] = [];
@@ -56,6 +57,7 @@ export class SetLiquidationPage implements OnInit {
 
       this.ticketDiscountList = (await contract.getTickets()).map(ticket => {
         ticket.getWeightDiscounts(this.discountTables);
+        ticket.weightDiscounts.defineBushels(contract.productInfo);
         return {
           data: ticket,
           inReport: false
@@ -64,9 +66,8 @@ export class SetLiquidationPage implements OnInit {
 
       if (this.editingRefId) {
         this.liquidation = await contract.getLiquidationByRefId(this.editingRefId);
-        this.editingTickets = this.ticketDiscountList.filter(ticket => {
-          return ticket.inReport = this.liquidation.ticketRefs.map(t => t.id).includes(ticket.data.ref.id);
-        });
+        const editingTicketIds = this.liquidation.ticketRefs.map(t => t.id);
+        this.editingTickets = this.ticketDiscountList.filter(t => t.inReport = editingTicketIds.includes(t.data.ref.id));
         this.selectedTicketsChange();
       }
       else {
@@ -83,11 +84,8 @@ export class SetLiquidationPage implements OnInit {
   }
 
   public selectAllTickets(select: boolean): void {
-    if (select && this.selectedTickets.length === this.ticketDiscountList.length) return;
-    if (!select && this.selectedTickets.length === 0) return;
-
-    this.ticketDiscountList.forEach(ticket => {
-      if (ticket.data.status !== "pending" || this.editingTickets?.includes(ticket)) ticket.inReport = select;
+    this.ticketDiscountList.forEach(t => {
+      if (t.data.status !== "pending" || this.editingTickets?.includes(t)) t.inReport = select;
     });
     this.selectedTicketsChange();
   }
@@ -95,6 +93,7 @@ export class SetLiquidationPage implements OnInit {
   public selectedTicketsChange(): void {
     this.selectedTickets = this.selectedTicketsPipe.transform(this.ticketDiscountList);
     this.totals = new LiquidationTotals(this.selectedTickets, this.contract);
+    this.allSelected = this.selectedTickets.length === this.ticketDiscountList.filter(t => t.data.status !== "pending" || this.editingTickets?.includes(t)).length;
   }
 
   public async onDownloadLiquidation(): Promise<void> {
