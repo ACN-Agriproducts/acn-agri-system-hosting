@@ -25,6 +25,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
     product: string;
     quantity: Mass;
   };
+  @Input() incoterm: string;
 
   @Input("documentName") set documentName(newName: string) {
     this.version$.next(newName);
@@ -72,6 +73,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.exportInfo = this.invoice.exportInfo;
       data.isExportInvoice = this.invoice.isExportInvoice
       this.docName = this.invoice.printableDocumentName;
+      data.incoterm = this.invoice.incoterm;
     }
     else {
       data.seller = this.seller;
@@ -83,6 +85,7 @@ export class PrintableInvoiceComponent implements OnInit, AfterViewInit, OnChang
       data.exportInfo = this.exportInfo;
       data.isExportInvoice = this.isExportInvoice
       this.docName = this.documentName;
+      data.incoterm = this.incoterm;
     }
 
     this.invoiceData = data;

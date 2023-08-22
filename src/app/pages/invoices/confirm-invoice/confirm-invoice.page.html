@@ -142,6 +142,7 @@
                   <mat-form-field appearance="fill">
                     <mat-label>Incoterm:</mat-label>
                     <mat-select [(ngModel)]="invoice.incoterm">
+                      <mat-option value="">None</mat-option>
                       <mat-option value="DAP">Delivery at Place</mat-option>
                       <mat-option value="EXW">EX Works</mat-option>
                       <mat-option value="FOB">Free On Board</mat-option>
@@ -210,6 +211,7 @@
         [total]="invoice.total"
         [isExportInvoice]="invoice.isExportInvoice"
         [exportInfo]="invoice.exportInfo"
+        [incoterm]="invoice.incoterm"
         [documentName]="invoice.printableDocumentName"
       ></app-printable-invoice>
 
