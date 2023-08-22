@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatChip } from '@angular/material/chips';
-import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Company } from '@shared/classes/company';
 import { Contact, MetaContact } from '@shared/classes/contact';
 import { lastValueFrom } from 'rxjs';
 
@@ -14,45 +13,40 @@ import { lastValueFrom } from 'rxjs';
 })
 export class EditContactDialogComponent implements OnInit {
   public contactType: string | null;
-  public otherTags: string[];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: Contact,
-    private dialog: MatDialog,
-    private db: Firestore,
-    private session: SessionInfo
+    @Inject(MAT_DIALOG_DATA) public data: {contact: Contact, otherTags: string[]},
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    Company.getCompany(this.db, this.session.getCompany()).then(company => {
-      this.otherTags = company.companyTags;
-    });
+
   }
 
   public primaryMetaContact(): any {
-    return this.data.metacontacts.find(metacontact => metacontact.isPrimary);
+    return this.data.contact.metacontacts.find(metacontact => metacontact.isPrimary);
   }
 
   public newTagDialog(): any {
     const dialogRef = this.dialog.open(AddNewTagDialogComponent);
     lastValueFrom(dialogRef.afterClosed()).then(result => {
-      if(!result || result == 'client' || result == 'trucker' || this.otherTags.includes(result)) return;
-      this.otherTags.push(result);
-      this.data.tags.push(result);
+      if(!result || result == 'client' || result == 'trucker' || this.data.otherTags.includes(result)) return;
+      this.data.otherTags.push(result);
+      this.data.contact.tags.push(result);
     });
   }
 
   chipToggle(chip: MatChip, tag: string): void {
     chip.toggleSelected();
 
-    if(this.data.tags.includes(tag)) 
-      this.data.tags.splice(this.data.tags.findIndex(t => t == tag), 1);
+    if(this.data.contact.tags.includes(tag)) 
+      this.data.contact.tags.splice(this.data.contact.tags.findIndex(t => t == tag), 1);
     else 
-      this.data.tags.push(tag);
+      this.data.contact.tags.push(tag);
   }
 
   createNewMetacontact(): void {
-    this.data.metacontacts.push({
+    this.data.contact.metacontacts.push({
       email: null,
       isPrimary: false,
       name: null,
@@ -66,13 +60,13 @@ export class EditContactDialogComponent implements OnInit {
   }
 
   removeMetacontact(index: number) {
-    if(this.data.metacontacts.length <= 1) return;
-    const contact = this.data.metacontacts[index];
-    this.data.metacontacts.splice(index, 1);
+    if(this.data.contact.metacontacts.length <= 1) return;
+    const contact = this.data.contact.metacontacts[index];
+    this.data.contact.metacontacts.splice(index, 1);
 
     // Make sure some contact is always primary
     if(contact.isPrimary) {
-      this.data.metacontacts[0].isPrimary = true;
+      this.data.contact.metacontacts[0].isPrimary = true;
     }
   }
 }
