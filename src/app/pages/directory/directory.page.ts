@@ -75,7 +75,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
-      data: newContact
+      data: {contact: newContact, otherTags: (await this.company).companyTags}
     });
 
     if (await lastValueFrom(dialogRef.afterClosed()) == null) return;
@@ -91,7 +91,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
     const dialogRef = this.dialog.open(EditContactDialogComponent, {
       autoFocus: false,
-      data: contactCopy,
+      data: {contact: contactCopy, otherTags: (await this.company).companyTags},
     });
     const newContactData = await lastValueFrom(dialogRef.afterClosed());
     if (newContactData == null) return;
