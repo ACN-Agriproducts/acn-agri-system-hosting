@@ -12,7 +12,7 @@
 					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option">{{option | titlecase}}</mat-option>
 				</mat-select>
 			</mat-form-field>
-			<mat-form-field appearance="fill" *ngIf="contactType">
+			<mat-form-field appearance="fill" *ngIf="contactType == 'trucker'">
 				<mat-label>{{t('Destination')}}</mat-label>
 				<input matInput [(ngModel)]="deliveryCity" />
 				<button *ngIf="deliveryCity" matSuffix mat-icon-button aria-label="Clear" (click)="deliveryCity=''">
