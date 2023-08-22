@@ -135,7 +135,8 @@ export class ConfirmInvoicePage implements OnInit {
         product: null,
         quantity: totalWeight,
       },
-      printableDocumentName: "Document two"
+      printableDocumentName: "Document two",
+      incoterm: null,
     }
   }
 
@@ -295,6 +296,7 @@ interface invoiceInterface {
       quantity: Mass;
   }
   printableDocumentName: string;
+  incoterm: string;
 }
 
 interface TicketGroup {
