@@ -31,7 +31,6 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.id, this.incoterm);
     this.setRows();
   }
 
