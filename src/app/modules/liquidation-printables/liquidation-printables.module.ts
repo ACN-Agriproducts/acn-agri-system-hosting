@@ -4,8 +4,6 @@ import { DiscountsPipe, LiquidationLongComponent, PriceDiscountsPipe, WeightDisc
 import { PrintableLiquidationComponent } from './printable-liquidation.component';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from "../../shared/shared.module";
-import { LiquidationLongUnitsComponent } from './liquidation-long-units/liquidation-long-units.component';
-
 
 
 @NgModule({
@@ -15,7 +13,6 @@ import { LiquidationLongUnitsComponent } from './liquidation-long-units/liquidat
         DiscountsPipe,
         WeightDiscountsPipe,
         PriceDiscountsPipe,
-        LiquidationLongUnitsComponent,
     ],
     exports: [
         PrintableLiquidationComponent,
