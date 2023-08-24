@@ -189,6 +189,14 @@
         "Gross": "Gross",
         "Tare": "Tare",
         "Net": "Net",
-        "Loading more data": "Loading more data"
+        "Loading more data": "Loading more data",
+        "Export Contacts": "Export Contacts",
+        "Contact": "Contact",
+        "Country": "Country",
+        "Contracts": "Contracts",
+        "Type": "Type",
+        "Destinations": "Destinations",
+        "Add New": "Add New",
+        "Destination": "Destination"
     }
 }

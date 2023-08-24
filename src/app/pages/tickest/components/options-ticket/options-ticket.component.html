@@ -8,7 +8,7 @@
     Add picture
     <ion-icon slot="end" name="images-outline"></ion-icon>
   </ion-item>
-  <ion-item button>
+  <ion-item button (click)="discounts()">
     Discounts
     <ion-icon slot="end" name="cash-outline"></ion-icon>
   </ion-item>
@@ -24,7 +24,7 @@
     Split Ticket
     <ion-icon slot="end" name="duplicate-outline"></ion-icon>
   </ion-item>
-  <ion-item button (click)="changeTicketContract()" hidden> <!-- TODO Not complete -->
+  <ion-item button (click)="changeTicketContract()" *ngIf="!ticket.void && (userPermissions?.admin || userPermissions?.changeContract)">
     Change Ticket Contract
     <ion-icon slot="end" name="documents-outline"></ion-icon>
   </ion-item>

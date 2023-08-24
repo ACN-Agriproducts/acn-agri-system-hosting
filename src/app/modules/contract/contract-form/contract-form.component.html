@@ -104,6 +104,7 @@
     <mat-select 
       *ngSwitchCase="'select'" 
       [(ngModel)]="contract[data.fieldName]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName)"
       (focusout)="selectedFieldEvent.emit(null)">
@@ -117,6 +118,7 @@
       matInput 
       [matDatepicker]="picker" 
       [(ngModel)]="contract[data.fieldName]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName)"
       (focusout)="selectedFieldEvent.emit(null)">
@@ -127,6 +129,7 @@
       matInput
       [(ngModel)]="contract[data.fieldName]"
       *ngSwitchCase="'textarea'"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName)"
       (focusout)="selectedFieldEvent.emit(null)"
@@ -136,6 +139,7 @@
       matInput 
       *ngSwitchCase="'number'"
       [(ngModel)]="contract[data.fieldName]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       type="number"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName)"
@@ -145,6 +149,7 @@
       matInput 
       *ngSwitchDefault 
       [(ngModel)]="contract[data.fieldName]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [type]="data.primitiveType"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName)"
@@ -161,6 +166,7 @@
     <mat-select 
       *ngSwitchCase="'select'" 
       [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
       (focusout)="selectedFieldEvent.emit(null)">
@@ -174,6 +180,7 @@
       matInput 
       [matDatepicker]="picker" 
       [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
       (focusout)="selectedFieldEvent.emit(null)">
@@ -183,6 +190,7 @@
     <textarea
       matInput
       [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       *ngSwitchCase="'textarea'"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
@@ -193,6 +201,7 @@
       matInput 
       *ngSwitchCase="'number'"
       [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       type="number"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
@@ -202,6 +211,7 @@
       matInput 
       *ngSwitchDefault 
       [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
       [type]="data.primitiveType"
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
@@ -260,6 +270,37 @@
       *ngSwitchDefault 
       [type]="data.primitiveType">
   </mat-form-field>
+</ng-template>
+
+<ng-template typeTemplate="quantity-field" let-data >
+  <div [ngClass]="data | getFieldClass">
+    <mat-checkbox [disabled]="contract.status != 'pending'" [(ngModel)]="contract.isOpen">{{data.prefix}}</mat-checkbox>
+    <div class="flex-field" *ngIf="!contract.isOpen">
+      <mat-form-field>
+        <mat-label>{{data.label}}</mat-label>
+        <input 
+          matInput 
+          type="number" 
+          [(ngModel)]="contract.quantity.amount"
+          [disabled]="contract.status != 'pending'"
+          (focus)="selectedFieldEvent.emit('quantity.amount')"
+          (focusout)="selectedFieldEvent.emit(null)">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{data.suffix}}</mat-label>
+        <mat-select 
+          [(ngModel)]="contract.quantity.defaultUnits"
+          [disabled]="contract.status != 'pending'"
+          (focus)="selectedFieldEvent.emit('quantity.defaultUnits')"
+          (focusout)="selectedFieldEvent.emit(null)">
+          <mat-option value="lbs">Lbs</mat-option>
+          <mat-option value="mTon">mTon</mat-option>
+          <mat-option value="CWT">CWT</mat-option>
+          <mat-option value="bu">Bushels</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
 </ng-template>
 
 <ng-template typeTemplate="product-select" let-data>

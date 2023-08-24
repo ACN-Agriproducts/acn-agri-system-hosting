@@ -10,6 +10,9 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage/fix-ticket-storage.component';
 import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
 import { ChangeTicketContractComponent } from 'src/app/standalone/change-ticket-contract/change-ticket-contract.component';
+import { DiscountsDialogComponent } from '../discounts-dialog/discounts-dialog.component';
+import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
+import { serverTimestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-options-ticket',
@@ -45,15 +48,15 @@ export class OptionsTicketComponent implements OnInit {
     }
   }
   public openDialog = async () => {
-    this.closePanel();
-    const modal = await this.modalController.create({
-      component: ModalTicketComponent,
-      cssClass: 'modal-dialog-ticket',
-      componentProps: {
-        ticket: this.ticket
-      }
+    this.dialog.open(TicketDialogComponent, {
+      data: this.ticket,
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
     });
-    return await modal.present();
+
+    this.popoverController.dismiss();
   }
   public openDialogAddPicture = async () => {
     this.closePanel();
@@ -110,6 +113,7 @@ export class OptionsTicketComponent implements OnInit {
               updateDoc.void = true;
               updateDoc.voidRequest = false;
               updateDoc.voidAcceptor = this.userName;
+              updateDoc.voidDate = serverTimestamp();
 
               if(!this.ticket.voidRequest) {
                 updateDoc.voidReason = data.voidReason;
@@ -148,6 +152,15 @@ export class OptionsTicketComponent implements OnInit {
   public changeTicketContract(): void {
     this.dialog.open(ChangeTicketContractComponent, {
       data: this.ticket
+    });
+
+    this.popoverController.dismiss();
+  }
+
+  public discounts(): void {
+    this.dialog.open(DiscountsDialogComponent, {
+      data: this.ticket,
+      autoFocus: false
     });
 
     this.popoverController.dismiss();

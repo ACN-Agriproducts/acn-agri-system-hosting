@@ -44,12 +44,12 @@ export class FixTicketStorageComponent implements OnInit {
     plant.inventory.forEach((inv, index) => {
       updateDoc.push(inv.getRawData());
       if(inv.name == this.chosenInv.name) {
-        updateDoc[index].current += this.data.dryWeight.get() * (this.data.in? 1 : -1)
+        updateDoc[index].current += this.data.net.get() * (this.data.in? 1 : -1)
 
         changes.push({
           type: `Ticket storage fix`,
           tank: inv.name,
-          amount: this.data.dryWeight.get() * (this.data.in? 1 : -1)
+          amount: this.data.net.get() * (this.data.in? 1 : -1)
         })
       }
     });

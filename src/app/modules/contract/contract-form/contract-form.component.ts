@@ -44,11 +44,12 @@ export class ContractFormComponent implements OnInit {
   public newTicketContact: boolean = false;
   public exchangeRateSelect: string;
 
-  public useSameClientForTicket = true;
+  public useSameClientForTicket;
 
   private currentClient:Contact;
 
   @ViewChildren(TypeTemplateDirective) public versionTemplates: QueryList<TypeTemplateDirective>;
+  fieldChangeFuncs: Map<string, () => void>;
 
   constructor(
     private db: Firestore,
@@ -62,7 +63,8 @@ export class ContractFormComponent implements OnInit {
   ngOnInit() {
     this.settings$ = ContractSettings.getDocument(this.db, this.session.getCompany());
     this.contract.quantity ??= new Mass(null, null);
-
+    this.useSameClientForTicket = this.isNew ? true : this.contract?.clientInfo?.ref.id == this.contract?.clientTicketInfo?.ref.id;
+    
     Company.getCompany(this.db, this.session.getCompany()).then(val => {
       this.contactList = val.contactList.sort((a, b) =>{
           var nameA = a.name.toUpperCase()
@@ -77,7 +79,7 @@ export class ContractFormComponent implements OnInit {
 
           return 0;
         });
-      this.truckerList = this.contactList.filter(c => !c.isClient);
+      this.truckerList = this.contactList.filter(c => c.tags.includes('trucker'));
     });
 
     this.products$ = Product.getProductList(this.db, this.session.getCompany());
@@ -115,6 +117,8 @@ export class ContractFormComponent implements OnInit {
     }
 
     this.futureOptions = tempFutureOptions;
+
+    this.fieldChangeFuncs = new Map<string, () => any>();
   }
 
   openClientSelect() {
@@ -207,7 +211,7 @@ export class ContractFormComponent implements OnInit {
   async productChange() {
     const product = (await this.products$).find(p => p.ref.id == this.contract.product.id);
     this.contract.productInfo = product.getProductInfo();
-    this.contract.quantity.defineBushels(this.contract.productInfo);    
+    this.contract.quantity.defineBushels(this.contract.productInfo);
   }
 
   async plantSelectChange() {
@@ -269,5 +273,11 @@ export class ContractFormComponent implements OnInit {
       this.snack.open('Error submitting contract', 'error');
       console.error(error);
     });
+  }
+
+  // Will not be used this time, but will keep just in case
+  fieldChange(fieldName: string, nestedField: string) {
+    if(nestedField) fieldName = fieldName.concat('.', nestedField);
+    if(this.fieldChangeFuncs.has(fieldName)) this.fieldChangeFuncs.get(fieldName)();
   }
 }

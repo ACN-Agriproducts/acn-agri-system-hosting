@@ -7,6 +7,7 @@ export class Contact extends FirebaseDocInterface {
     public _curp: string;
     public caat: string;
     public city: string;
+    public destinations: string[];
     public metacontacts: MetaContact[];
     public name: string;
     public rfc: string;
@@ -34,6 +35,7 @@ export class Contact extends FirebaseDocInterface {
             this.bankInfo = [];
             this.caat = snapshot.caat;
             this.city = snapshot.city;
+            this.destinations = [];
             this.name = snapshot.name;
             this.state = snapshot.state;
             this.country = snapshot.country;
@@ -63,6 +65,7 @@ export class Contact extends FirebaseDocInterface {
             this.bankInfo = [];
             this.caat = null;
             this.city = null;
+            this.destinations = [];
             this.name = null;
             this.state = null;
             this.country = null;
@@ -83,6 +86,7 @@ export class Contact extends FirebaseDocInterface {
             this._curp = data._curp;
             this.caat = data.caat;
             this.city = data.city;
+            this.destinations = data.destinations;
             this.metacontacts = [];
             this.name = data.name;
             this.rfc = data.rfc;
@@ -107,6 +111,7 @@ export class Contact extends FirebaseDocInterface {
                 _curp: data._curp,
                 caat: data.caat,
                 city: data.city,
+                destinations: data.destinations,
                 metacontacts: data.metacontacts,
                 name: data.name,
                 rfc: data.rfc,
@@ -201,7 +206,7 @@ export class Contact extends FirebaseDocInterface {
     }
 }
 
-interface MetaContact {
+export interface MetaContact {
     email: string;
     isPrimary: boolean;
     name: string;

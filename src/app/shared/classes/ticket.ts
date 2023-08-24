@@ -58,6 +58,7 @@ export class Ticket extends FirebaseDocInterface{
     public voidReason: string;
     public voidRequest: boolean;
     public voidRequester: string;
+    public voidDate: Date;
     public weight: number;
     public weightDiscounts: WeightDiscounts;
 
@@ -76,6 +77,7 @@ export class Ticket extends FirebaseDocInterface{
     public transportCaat: string;
 
     public subId: string;
+    public moneyDiscounts: MoneyDiscounts;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Ticket.converter);
@@ -126,6 +128,7 @@ export class Ticket extends FirebaseDocInterface{
         this.voidReason = data.voidReason;
         this.voidRequest = data.voidRequest;
         this.voidRequester = data.voidRequester;
+        this.voidDate = data.voidDate?.toDate() ?? null;
         this.weight = data.weight;
         this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
 
@@ -144,6 +147,7 @@ export class Ticket extends FirebaseDocInterface{
         this.transportCaat = data.transportCaat;
 
         this.subId = data.subId;
+        this.moneyDiscounts = data.moneyDiscounts ?? {};
 
         this.net = this.gross.subtract(this.tare);
     }
@@ -192,6 +196,7 @@ export class Ticket extends FirebaseDocInterface{
                 voidReason: data.voidReason,
                 voidRequest: data.voidRequest,
                 voidRquester: data.voidRequester,
+                voidDate: data.voidDate ?? null,
                 weight: data.weight,
                 weightDiscounts: data.weightDiscounts,
 
@@ -210,6 +215,7 @@ export class Ticket extends FirebaseDocInterface{
                 transportCaat: data.weight,
 
                 subId: data.subId,
+                moneyDiscounts: data.moneyDiscounts,
 
             }
         },
@@ -443,4 +449,8 @@ export class WeightDiscounts {
             (this[key] as Mass).defineBushels(product);
         });
     }
+}
+
+export interface MoneyDiscounts {
+    [discount: string]: number;
 }

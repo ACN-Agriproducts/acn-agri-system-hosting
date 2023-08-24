@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+  <button 
+  mat-icon-button 
+  ngxPrint
+  [useExistingCss]="true"
+  printSectionId="printable">
+    <mat-icon>print</mat-icon>
+  </button>
+  <button mat-icon-button [mat-dialog-close]>
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<app-document-wrapper>
+  <mat-spinner *ngIf="!contract"></mat-spinner>
+  <app-printable-ticket *ngIf="contract"
+    id="printable"
+    [ticket]="ticket"
+    [contract]="contract"
+    [transport]="transport"
+    [client]="client"
+  ></app-printable-ticket>
+</app-document-wrapper>

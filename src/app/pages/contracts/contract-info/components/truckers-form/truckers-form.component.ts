@@ -32,7 +32,7 @@ export class TruckersFormComponent implements OnInit {
 
   ngOnInit() {
     Company.getCompany(this.db, this.session.getCompany()).then(company => {
-      this.contactList = company.contactList.filter(c => !c.isClient).sort((a, b) =>{
+      this.contactList = company.contactList.filter(c => c.tags.includes('trucker')).sort((a, b) =>{
         var nameA = a.name.toUpperCase()
         var nameB = b.name.toUpperCase()
 

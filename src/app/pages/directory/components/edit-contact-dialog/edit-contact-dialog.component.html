@@ -4,28 +4,29 @@
 	<mat-dialog-content>
 		<form #contactForm="ngForm">
 			<mat-grid-list cols="12" rowHeight="70px" gutterSize="10px">
-				<mat-grid-tile colspan="8">
+				<mat-grid-tile colspan="12">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('Name')}}</mat-label>
-						<input matInput required [(ngModel)]="data.name" name="name">
+						<input matInput required [(ngModel)]="data.contact.name" name="name">
 						<mat-error>{{t('Name is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
 	
-				<mat-grid-tile colspan="4">
-					<mat-form-field appearance="fill">
-						<mat-label>{{t('Contact Type')}}</mat-label>
-						<mat-select [(ngModel)]="data.tags" multiple name="tags" required>
-							<mat-option value="client">{{t('Client')}}</mat-option>
-							<mat-option value="trucker">{{t('Trucker')}}</mat-option>
-						</mat-select>
-					</mat-form-field>
+				<mat-grid-tile colspan="12">
+					<div class="chip-row">
+						<mat-chip-list multiple [(ngModel)]="data.contact.tags" name="tags">
+							<mat-chip value="client" #c="matChip" (click)="chipToggle(c, 'client')">{{t('Client')}}</mat-chip>
+							<mat-chip value="trucker" #tc="matChip" (click)="chipToggle(tc, 'trucker')">{{t('Trucker')}}</mat-chip>
+							<mat-chip *ngFor="let tag of data.otherTags" [value]="tag" #oc="matChip" (click)="chipToggle(oc, tag)">{{tag | titlecase}}</mat-chip>
+						</mat-chip-list>
+						<button mat-icon-button (click)="newTagDialog()"><mat-icon>add</mat-icon></button>
+					</div>
 				</mat-grid-tile>
 	
 				<mat-grid-tile colspan="12">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('Street Address')}}</mat-label>
-						<input matInput [(ngModel)]="data.streetAddress" name="streetAddress">
+						<input matInput [(ngModel)]="data.contact.streetAddress" name="streetAddress">
 						<mat-error>{{t('Street Address is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
@@ -33,7 +34,7 @@
 				<mat-grid-tile colspan="4">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('City')}}</mat-label>
-						<input matInput [(ngModel)]="data.city" name="city">
+						<input matInput [(ngModel)]="data.contact.city" name="city">
 						<mat-error>{{t('City is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
@@ -41,7 +42,7 @@
 				<mat-grid-tile colspan="4">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('State')}}</mat-label>
-						<input matInput [(ngModel)]="data.state" name="state">
+						<input matInput [(ngModel)]="data.contact.state" name="state">
 						<mat-error>{{t('State is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
@@ -49,7 +50,7 @@
 				<mat-grid-tile colspan="2">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('Zip Code')}}</mat-label>
-						<input matInput [(ngModel)]="data.zipCode" name="zipCode">
+						<input matInput [(ngModel)]="data.contact.zipCode" name="zipCode">
 						<mat-error>{{t('Zip code is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
@@ -57,15 +58,15 @@
 				<mat-grid-tile colspan="2">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('Country')}}</mat-label>
-						<input matInput [(ngModel)]="data.country" name="country">
+						<input matInput [(ngModel)]="data.contact.country" name="country">
 						<mat-error>{{t('Country is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
 	
-				<mat-grid-tile colspan="12" *ngIf="data.tags | includes:'trucker'">
+				<mat-grid-tile colspan="12" *ngIf="data.contact.tags | includes:'trucker'">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('CAAT')}}</mat-label>
-						<input matInput [(ngModel)]="data.caat" name="caat">
+						<input matInput [(ngModel)]="data.contact.caat" name="caat">
 						<mat-error>{{t('CAAT is')}} <strong>{{t('required')}}</strong></mat-error>
 					</mat-form-field>
 				</mat-grid-tile>
@@ -73,28 +74,28 @@
 				<mat-grid-tile colspan="6">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('RFC')}}</mat-label>
-						<input matInput [(ngModel)]="data.rfc" name="rfc">
+						<input matInput [(ngModel)]="data.contact.rfc" name="rfc">
 					</mat-form-field>
 				</mat-grid-tile>
 	
 				<mat-grid-tile colspan="6">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('CURP')}}</mat-label>
-						<input matInput [(ngModel)]="data._curp" name="curp">
+						<input matInput [(ngModel)]="data.contact._curp" name="curp">
 					</mat-form-field>
 				</mat-grid-tile>
 	
 				<!-- <mat-grid-tile colspan="6">
 					<mat-form-field appearance="fill">
 						<mat-label>Notarial Act</mat-label>
-						<input matInput [(ngModel)]="data.notarialAct" name="rfc">
+						<input matInput [(ngModel)]="data.contact.notarialAct" name="rfc">
 					</mat-form-field>
 				</mat-grid-tile>
 	
 				<mat-grid-tile colspan="6">
 					<mat-form-field appearance="fill">
 						<mat-label>RFC</mat-label>
-						<input matInput [(ngModel)]="data.rfc" name="rfc">
+						<input matInput [(ngModel)]="data.contact.rfc" name="rfc">
 					</mat-form-field>
 				</mat-grid-tile> -->
 	
@@ -107,19 +108,35 @@
 					</mat-grid-tile>
 				</mat-grid-list>
 	
-				<mat-grid-list id="primary-metacontact" cols="9" rowHeight="70px" gutterSize="10px">
+				<mat-grid-list
+					id="primary-metacontact" 
+					cols="9" 
+					rowHeight="70px" 
+					gutterSize="10px" 
+					*ngFor="let contact of data.contact.metacontacts | primary:'isPrimary':primaryMetaContact():data.contact.metacontacts.length; let index = index; let last = last"
+					[class.underline]="!last">
 					<mat-grid-tile colspan="9">
+						<button 
+							mat-icon-button 
+							matTooltip="Make Primary" 
+							*ngIf="!contact.isPrimary"
+							(click)="promoteToPrimary(contact)"><mat-icon>publish</mat-icon></button>
 						<mat-form-field appearance="fill">
 							<mat-label>{{t('Name')}}</mat-label>
-							<input matInput [(ngModel)]="primaryMetaContact().name" name="primaryMetaContactName">
+							<input matInput [(ngModel)]="contact.name" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Name is')}} <strong>{{t('required')}}</strong></mat-error>
 						</mat-form-field>
+						<button 
+							mat-icon-button 
+							matTooltip="delete" 
+							*ngIf="data.contact.metacontacts.length > 1"
+							(click)="removeMetacontact(index)"><mat-icon>delete</mat-icon></button>
 					</mat-grid-tile>
 	
 					<mat-grid-tile colspan="3">
 						<mat-form-field appearance="fill">
 							<mat-label>{{t('Phone Number')}}</mat-label>
-							<input matInput [(ngModel)]="primaryMetaContact().phone" name="phoneNumber">
+							<input matInput [(ngModel)]="contact.phone" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Phone number is')}} <strong>{{t('required')}}</strong></mat-error>
 						</mat-form-field>
 					</mat-grid-tile>
@@ -127,17 +144,19 @@
 					<mat-grid-tile colspan="6">
 						<mat-form-field appearance="fill">
 							<mat-label>{{t('Email')}}</mat-label>
-							<input matInput [(ngModel)]="primaryMetaContact().email" name="email">
+							<input matInput [(ngModel)]="contact.email" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Email is')}} <strong>{{t('required')}}</strong></mat-error>
 						</mat-form-field>
 					</mat-grid-tile>
 				</mat-grid-list>
+
+				<button mat-flat-button (click)="createNewMetacontact()" color="primary" id="new-metacontact-button">+ Add New</button>
 			</div>
 		</form>
 	</mat-dialog-content>
 	
 	<mat-dialog-actions class="action-bar">
 		<button mat-button color="primary" [mat-dialog-close]="null">{{t('Cancel')}}</button>
-		<button mat-button color="primary" [mat-dialog-close]="data" [disabled]="contactForm.invalid">{{t('Save')}}</button>
+		<button mat-button color="primary" [mat-dialog-close]="data.contact" [disabled]="contactForm.invalid">{{t('Save')}}</button>
 	</mat-dialog-actions>
 </ng-container>

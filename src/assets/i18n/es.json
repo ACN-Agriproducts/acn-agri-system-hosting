@@ -132,9 +132,9 @@
         "contact-update-success": "Contrato actualizado exitosamente",
         "Directory": "Directorio",
         "Contacts": "Contactos",
-        "trucker": "camionero",
+        "trucker": "linea fletera",
         "client": "cliente",
-        "Trucker": "Camionero",
+        "Trucker": "Linea Fletera",
         "Client": "Cliente",
         "New Contact": "Nuevo Contacto",
         "Name": "Nombre",
@@ -164,7 +164,7 @@
         "Phone number is": "El numero telefonico es",
         "Email": "Email",
         "Email is": "El email es",
-        "Cancel": "Cancelasr",
+        "Cancel": "Cancelar",
         "Save": "Guardar",
         "Open": "Abrir",
         "Edit": "Editar",
@@ -190,6 +190,14 @@
         "Gross": "Bruto",
         "Tare": "Tara",
         "Net": "Neto",
-        "Loading more data": "Cargando mas informacion"
+        "Loading more data": "Cargando mas informacion",
+        "Export Contacts": "Exportar Contactos",
+        "contact": "Contacto",
+        "Contracts": "Contratos",
+        "Country": "Paiz",
+        "Type": "Tipo",
+        "Destinations": "Destinos",
+        "Add New": "Agregar Nuevo",
+        "Destination": "Destino"
     }
 }

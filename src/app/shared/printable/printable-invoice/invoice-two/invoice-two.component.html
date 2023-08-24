@@ -18,6 +18,7 @@
           <div>{{buyer.other}}</div>
         </div>
       </div>
+      <div *ngIf="incoterm"><span class="title">Incoterm:</span>{{incoterm}}</div>
     </div>
   </div>
   <table class="content">
@@ -66,7 +67,7 @@
         <td class="bold" [class.space]="!isExportInvoice" colspan="3">PRODUCT: {{exportInfo.product | uppercase}}</td>
       </tr>
       <tr>
-        <td class="bold" [class.space]="!isExportInvoice" colspan="2">METRIC TONS: {{ exportInfo ? (exportInfo.quantity | massInUnit:'mTon' | number:"0.3-3") : "null"}}</td>
+        <td class="bold" [class.space]="!isExportInvoice" colspan="2">METRIC TONS: {{ exportInfo ? (getMTonsTotal() | number:"0.3-3") : "null"}}</td>
         <td class="border-top border-left"></td>
       </tr>
       <tr>

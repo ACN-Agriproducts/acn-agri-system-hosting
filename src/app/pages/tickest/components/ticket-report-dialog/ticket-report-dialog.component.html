@@ -26,6 +26,15 @@
       </mat-radio-group>
     </div>
     <div>
+      <label>Report Units</label>
+      <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
+        <mat-radio-button value="lbs">lbs</mat-radio-button>
+        <mat-radio-button value="kg">kg</mat-radio-button>
+        <mat-radio-button value="mTon">mTon</mat-radio-button>
+        <mat-radio-button value="bu">bu</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
       <mat-form-field>
         <mat-date-range-input [rangePicker]="picker">
           <input matStartDate placeholder="Start date" [(ngModel)]="beginDate" [disabled]="reportGenerated">
@@ -45,6 +54,15 @@
         <mat-radio-button [value]="false">Sales Contract</mat-radio-button>
       </mat-radio-group>
     </div>
+    <div>
+      <label>Report Units</label>
+      <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
+        <mat-radio-button value="lbs">lbs</mat-radio-button>
+        <mat-radio-button value="kg">kg</mat-radio-button>
+        <mat-radio-button value="mTon">mTon</mat-radio-button>
+        <mat-radio-button value="bu">bu</mat-radio-button>
+      </mat-radio-group>
+    </div>
     <mat-form-field>
       <mat-label>Contract ID</mat-label>
       <input matInput type="number" [(ngModel)]="contractId" [disabled]="reportGenerated">
@@ -57,6 +75,15 @@
       <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
         <mat-radio-button [value]="true">In Tickets</mat-radio-button>
         <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <div>
+      <label>Report Units</label>
+      <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
+        <mat-radio-button value="lbs">lbs</mat-radio-button>
+        <mat-radio-button value="kg">kg</mat-radio-button>
+        <mat-radio-button value="mTon">mTon</mat-radio-button>
+        <mat-radio-button value="bu">bu</mat-radio-button>
       </mat-radio-group>
     </div>
     <div>
@@ -111,12 +138,11 @@
         <th>Client</th>
         <th>Contract</th>
         <th>Tank</th>
-        <th>Tare</th>
         <th>Gross</th>
+        <th>Tare</th>
         <th>Net</th>
         <th>Moisture</th>
-        <th>Discount</th>
-        <th>Dry Weight</th>
+        <th>Plates</th>
       </tr>
       <tr *ngFor="let ticket of ticketList.value">
         <td>{{ticket.dateOut | date:'shortDate'}}</td>
@@ -124,12 +150,12 @@
         <td>{{ticket.clientName}}</td>
         <td>{{ticket.contractID}}</td>
         <td>{{ticket.tank}}</td>
-        <td>{{ticket.tare | massInUnit:displayUnit}}</td>
         <td>{{ticket.gross | massInUnit:displayUnit}}</td>
-        <td>{{ticket.getNet() | massInUnit:displayUnit}}</td>
+        <td>{{ticket.tare | massInUnit:displayUnit}}</td>
+        <td>{{ticket.net | massInUnit:displayUnit}}</td>
         <td>{{ticket.moisture | number:'0.1'}}</td>
-        <td>{{ticket.discount}}</td>
-        <td>{{ticket.dryWeight | massInUnit:displayUnit}}</td>
+        <td>{{ticket.plates}}</td>
+        
       </tr>
       <tr>
         <td></td>
@@ -141,8 +167,8 @@
         <td></td>
         <td>{{totals.products.net[ticketList.key] | massInUnit:displayUnit}}</td>
         <td></td>
-        <td>{{totals.products.net[ticketList.key].subtract(totals.products.dryWeight[ticketList.key]) | massInUnit:displayUnit}}</td>
-        <td>{{totals.products.dryWeight[ticketList.key] | massInUnit:displayUnit}}</td></tr>
+        <td></td>
+      </tr>
     </table>
 
     <app-printable-ticket

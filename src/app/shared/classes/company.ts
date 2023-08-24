@@ -8,6 +8,7 @@ import { Plant } from "./plant";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];
+    extraContactTypes: string[];
     createdAt: Date;
     employees: DocumentReference;
     name: string;
@@ -17,12 +18,14 @@ export class Company extends FirebaseDocInterface {
     defaultUnit: units;
     displayUnit: units;
     defaultLanguage: 'en' | 'es';
+    companyTags: string[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
         const data = snapshot.data();
 
         this.createdAt =  data.createdAt;
+        this.extraContactTypes = data.extraContactTypes ?? [];
         this.employees =  data.employees;
         this.name =  data.name;
         this.nextInvoice = data.nextInvoice;
@@ -31,6 +34,7 @@ export class Company extends FirebaseDocInterface {
         this.defaultUnit = data.defaultUnit;
         this.displayUnit = data.displayUnit;
         this.defaultLanguage = data.defaultLanguage;
+        this.companyTags = data.companyTags;
 
         this.contactList = [];
 
@@ -43,6 +47,7 @@ export class Company extends FirebaseDocInterface {
         toFirestore(data: Company): DocumentData {
             return {
                 contactList: data.contactList,
+                extraContactTypes: data.extraContactTypes,
                 createdAt: data.createdAt,
                 employees: data.employees,
                 name: data.name,
@@ -52,6 +57,7 @@ export class Company extends FirebaseDocInterface {
                 defaultUnit: data.defaultUnit,
                 displayUnit: data.displayUnit,
                 defaultLanguage: data.defaultLanguage,
+                companyTags: data.companyTags,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Company {
@@ -98,12 +104,12 @@ export class Company extends FirebaseDocInterface {
 
 export class CompanyContact {
     id: string;
-    isClient: boolean;
+    tags: string[];
     name: string;
 
     constructor(data: any) {
         this.id = data.id;
-        this.isClient = data.isClient;
+        this.tags = data.tags;
         this.name = data.name;
     }
 }

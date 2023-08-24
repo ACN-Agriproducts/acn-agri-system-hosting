@@ -155,3 +155,17 @@ ion-fab {
   background-color: rgba(var(--ion-color-warning-rgb), 0.15);
   color: var(--ion-color-warning);
 }
+
+.options-bar {
+  display: flex;
+
+  &>* {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: white;
+    border-radius: 5px;
+  }
+}

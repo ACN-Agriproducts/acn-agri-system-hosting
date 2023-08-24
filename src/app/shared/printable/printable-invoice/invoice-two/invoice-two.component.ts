@@ -22,6 +22,7 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
     product: string;
     quantity: Mass;
   };
+  @Input() incoterm: string;
 
   public contentRows: Row[];
   public readonly rowLength = 28;
@@ -59,6 +60,14 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
 
     this.weightTotal = weightTotal;
     this.contentRows = newRows;
+  }
+
+  getMTonsTotal(): number {
+    let total = 0;
+    this.items.forEach(item => {
+      total += item.quantity ?? 0;
+    });
+    return total;
   }
 }
 

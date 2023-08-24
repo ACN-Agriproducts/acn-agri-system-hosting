@@ -21,6 +21,7 @@ import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
+import { DiscountsDialogComponent } from './components/discounts-dialog/discounts-dialog.component';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-tick
     ModalTicketComponent,
     ShowDetailsComponent,
     OptionsTicketComponent,
-    TicketReportDialogComponent
+    TicketReportDialogComponent,
+    DiscountsDialogComponent
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

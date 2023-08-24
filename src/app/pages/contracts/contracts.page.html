@@ -129,8 +129,11 @@
             <!-- (contextmenu)="openOptions($event)" -->
             <!-- <ion-virtual-scroll approxItemHeight="320px" [items]="dataList"> -->
             <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
-                <div *ngFor="let contract of contractsPromise | async">
-                    <div (contextmenu)="openOptions($event)" class="grid-item item-table">
+                <div *ngFor="let contract of contractsPromise | async" class="item-wrapper">
+                    <div 
+                        (contextmenu)="openOptions($event)" 
+                        class="grid-item item-table" 
+                        [class.progress]="contract.status == 'active' && !contract.isOpen">
                         <ion-item lines="none ">
                             <section [hidden]="!exportMode">
                                 <mat-checkbox (change)="exportSelect($event.checked, contract)" color="primary"></mat-checkbox>
@@ -140,8 +143,13 @@
                         <ion-item lines="none">
                             <ion-text color="primary" class="item-text-customer">
                                 {{
-                                contract.clientName ?? contract.clientInfo.name | titlecase | slice:0:25
+                                contract.clientName ?? contract.clientInfo.name | titlecase
                                 }}
+                                <i *ngIf="contract.client.id != contract.clientTicketInfo?.ref.id">
+                                    {{
+                                        ": " + contract.clientTicketInfo.name | titlecase
+                                    }}
+                                </i>
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -169,7 +177,7 @@
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getQuantityTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.quantity | massDisplay:2:displayUnit}}
+                                {{!contract.isOpen || contract.status == 'closed' ? (contract.quantity | massDisplay:2:displayUnit) : '-'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -179,7 +187,7 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{(contract.quantity | massInUnit: displayUnit) * (contract.price | pricePerUnit: displayUnit:contract.quantity) | currency}}
+                                {{ !contract.isOpen || contract.status == 'closed' ? ((contract.quantity | massInUnit: displayUnit) * (contract.price | pricePerUnit: displayUnit:contract.quantity) | currency) : '-'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none" class="ion-hide-md-down">
@@ -191,6 +199,10 @@
                                 </ion-buttons>
                             </div>
                         </ion-item>
+                        <div 
+                            class="progress-bar" 
+                            *ngIf="contract.status == 'active' && !contract.isOpen" 
+                            [style.width]="contract.progress + '%'"></div>
                     </div>
                 </div>
             <!-- </ion-virtual-scroll> -->

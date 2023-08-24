@@ -1,6 +1,54 @@
-<div>
+<h2 mat-dialog-title>Change Contract</h2>
+<mat-dialog-content>
   <mat-form-field>
-    <mat-label>Number</mat-label>
-    <input matInput type="number" />
+    <mat-label>New Contract</mat-label>
+    <mat-select [(ngModel)]="newContract">
+      <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract">{{contract.id}}</mat-option>
+    </mat-select>
   </mat-form-field>
-</div>
+  <div class="contract-container" *ngIf="contract">
+    <mat-card class="contract-card">
+      <div><b>Contract {{contract.id}}</b></div>
+      <div class="card-row"><span>Current:</span><span>{{contract.currentDelivered | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="percent-block">{{(contract.currentDelivered | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+      <mat-progress-bar mode="determinate" [value]="(contract.currentDelivered | massInUnit:displayUnit) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+    </mat-card>
+    <span class="arrow-right">&#8594;</span>
+    <mat-card class="contract-card">
+      <div><b>Contract {{contract.id}}</b></div>
+      <div class="card-row"><span>Current:</span><span>{{contract.currentDelivered.subtract(data.net) | massInUnit:displayUnit:contract.currentDelivered.amount | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="card-row"><span>Quantity:</span><span>{{contract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+      <div class="percent-block">{{(contract.currentDelivered.subtract(data.net) | massInUnit:displayUnit:contract.currentDelivered.amount) / (contract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+      <mat-progress-bar mode="determinate" [value]="(contract.currentDelivered.subtract(data.net) | massInUnit:displayUnit:contract.currentDelivered.amount) / (contract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+    </mat-card>
+    <ng-container *ngIf="newContract">
+      <mat-card class="contract-card">
+        <div><b>Contract {{newContract.id}}</b></div>
+        <div class="card-row"><span>Current:</span><span>{{newContract.currentDelivered | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="card-row"><span>Quantity:</span><span>{{newContract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="percent-block">{{(newContract.currentDelivered | massInUnit:displayUnit) / (newContract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+        <mat-progress-bar mode="determinate" [value]="(newContract.currentDelivered | massInUnit:displayUnit) / (newContract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+      </mat-card>
+      <span class="arrow-right">&#8594;</span>
+      <mat-card class="contract-card">
+        <div><b>Contract {{newContract.id}}</b></div>
+        <div class="card-row"><span>Current:</span><span>{{newContract.currentDelivered.add(data.net) | massInUnit:displayUnit:newContract.currentDelivered.amount | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="card-row"><span>Quantity:</span><span>{{newContract.quantity | massInUnit:displayUnit | number:'1.2-2':language}} {{displayUnit}}</span></div>
+        <div class="percent-block">{{(newContract.currentDelivered.add(data.net) | massInUnit:displayUnit:newContract.currentDelivered.amount) / (newContract.quantity | massInUnit:displayUnit) * 100 | number:'1.1-1':language}}%</div>
+        <mat-progress-bar mode="determinate" [value]="(newContract.currentDelivered.add(data.net) | massInUnit:displayUnit:newContract.currentDelivered.amount) / (newContract.quantity | massInUnit:displayUnit) * 100"></mat-progress-bar>
+      </mat-card>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [disabled]="!newContract" (click)="submit()">Submit</button>
+  <ng-container *ngIf="submitting">
+    <mat-spinner [diameter]="16"></mat-spinner>
+  </ng-container>
+</mat-dialog-actions>
+
+<ng-template #loading let-diameter>
+  <mat-spinner [diameter]="64"></mat-spinner>
+</ng-template>

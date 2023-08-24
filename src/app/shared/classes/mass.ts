@@ -23,7 +23,7 @@ export class Mass {
         ["CWT", .0220462],
     ]);
     
-    constructor(_amount: number, unit: units, product?: Product | ProductInfo) {
+    constructor(_amount: number, unit: units, product?: Product | ProductInfo | number) {
         this.amount = _amount;
         this.defaultUnits = unit;
 
@@ -49,16 +49,17 @@ export class Mass {
 
     add(addend: Mass): Mass {
         const amount = this.get() + addend.getMassInUnit(this.defaultUnits);
-        return new Mass(amount, this.defaultUnits);
+        return new Mass(amount, this.defaultUnits, this.conversions.get('bu'));
     }
 
     subtract(subtrahend: Mass): Mass {
         const amount = this.get() - subtrahend.getMassInUnit(this.defaultUnits);
-        return new Mass(amount, this.defaultUnits);
+        return new Mass(amount, this.defaultUnits, this.conversions.get('bu'));
     }
 
-    defineBushels(product: Product | ProductInfo): void {
-        this.conversions.set("bu", this.conversions.get("lbs") / product?.weight);
+    defineBushels(product: Product | ProductInfo | number): void {
+        if(typeof product == 'number') this.conversions.set("bu", product);
+        else this.conversions.set("bu", this.conversions.get("lbs") / product?.weight);
     }
 
     static getUnitFullName(unit: units): string {

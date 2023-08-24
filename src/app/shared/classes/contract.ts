@@ -44,6 +44,7 @@ export class Contract extends FirebaseDocInterface {
     transport: string;
     truckers: TruckerInfo[];
     type: string;
+    isOpen: boolean;
 
     // NEW
     bankInfo: BankInfo[];
@@ -72,6 +73,8 @@ export class Contract extends FirebaseDocInterface {
         email: string;
         phone: string;
     }
+
+    progress: number; 
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -173,6 +176,7 @@ export class Contract extends FirebaseDocInterface {
             this.loads = 0;
             this.status = 'pending';
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
+            this.grade = 2;
 
             return;
         }
@@ -198,6 +202,7 @@ export class Contract extends FirebaseDocInterface {
         this.base = data.base;
         this.client = data.client.withConverter(Contact.converter);
         this.clientInfo = data.clientInfo;
+        if(data?.clientInfo?.notarialActDate) this.clientInfo.notarialActDate = data.clientInfo.notarialActDate.toDate();
         this.clientName = data.clientName;
         this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = new Mass(data.currentDelivered ?? 0, FirebaseDocInterface.session.getDefaultUnit());
@@ -226,11 +231,13 @@ export class Contract extends FirebaseDocInterface {
         this.truckers = tempTruckerList;
         this.type = data.type;
         this.pricePerBushel = data.pricePerBushel || this.price.getPricePerUnit("bu", this.quantity);
+        this.isOpen = data.isOpen ?? false;
 
         // NEW
         this.bankInfo = data.bankInfo;
         this.cargoDelays = data.cargoDelays;
         this.contractOwner = data.contractOwner;
+        this.contractExecutive = data.contractExecutive;
         this.currency = data.currency;
         this.deliveryPlants = data.deliveryPlants;
         this.deliveryType = data.deliveryType;
@@ -251,6 +258,8 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
 
+        this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
+
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
 
         if(this.product) {
@@ -262,6 +271,12 @@ export class Contract extends FirebaseDocInterface {
             email: null,
             phone: null,
         };
+
+        if(this.futurePriceInfo) {
+            this.futurePriceInfo.expirationMonth ??= null;
+            this.futurePriceInfo.priceSetPeriodBegin ??= null;
+            this.futurePriceInfo.priceSetPeriodEnd ??= null;
+        }
     }
 
     public static converter = {
@@ -273,7 +288,7 @@ export class Contract extends FirebaseDocInterface {
                 clientName: data.clientName ?? null,
                 clientInfo: data.clientInfo ?? null,
                 clientTicketInfo: data.clientTicketInfo ?? null,
-                currentDelivered: data.currentDelivered.get() ?? null,
+                currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
                 delivery_dates: data.delivery_dates ?? null,
                 grade: data.grade ?? null,
@@ -288,19 +303,21 @@ export class Contract extends FirebaseDocInterface {
                 priceUnit: data.price.unit ?? null,
                 product: data.product ?? null,
                 productInfo: data.productInfo ?? null,
-                quantity: data.quantity.get() ?? null,
-                quantityUnits: data.quantity.defaultUnits ?? null,
+                quantity: data.quantity.get() ?? 0,
+                quantityUnits: data.quantity.defaultUnits ?? FirebaseDocInterface.session.getDefaultUnit(),
                 seller_terms: data.seller_terms ?? null,
                 status: data.status ?? null,
                 tags: data.tags ?? [],
                 tickets: data.tickets ?? [],
                 transport: data.transport ?? null,
                 truckers: data.truckers ?? [],
+                isOpen: data.isOpen ?? false,
 
                 // NEW
                 bankInfo: data.bankInfo ?? null,
                 cargoDelays: data.cargoDelays ?? null,
                 contractOwner: data.contractOwner ?? null,
+                contractExecutive: data.contractExecutive ?? null,
                 currency: data.currency ?? null,
                 deliveryPlants: data.deliveryPlants ?? null,
                 deliveryType: data.deliveryType ?? null,
@@ -321,7 +338,9 @@ export class Contract extends FirebaseDocInterface {
                 futurePriceBase: data.futurePriceBase.amount ?? null,
                 futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
                 companyInfo: data.companyInfo ?? null,
-                type: data.type ?? null
+                type: data.type ?? null,
+
+                progress: data.progress ?? null,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {

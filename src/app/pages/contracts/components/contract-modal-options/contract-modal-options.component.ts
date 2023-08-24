@@ -99,6 +99,12 @@ export class ContractModalOptionsComponent implements OnInit {
       quantityUnits: this.contract.quantity.defaultUnits
     };
 
+    // Set open contracts quantity equal to current quantity when closed
+    if(this.contract.isOpen) {
+      requiredFieldData.quantity = this.contract.currentDelivered.amount;
+      requiredFieldData.quantityUnits = this.contract.currentDelivered.defaultUnits;
+    }
+
     let newFieldData;
     if (Object.entries(requiredFieldData).some(([key, value]) => (value ?? 0) === 0)) {
       const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
