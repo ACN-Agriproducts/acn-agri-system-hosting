@@ -329,6 +329,15 @@ export class Ticket extends FirebaseDocInterface{
     public getWeightDiscounts(discountTables: DiscountTables) {
         this.weightDiscounts.getDiscounts(this, discountTables);
     }
+
+    public defineBushels(product: Product | ProductInfo) {
+        Object.keys(this).forEach(key => {
+            if (this[key] instanceof Mass) {
+                (this[key] as Mass).defineBushels(product);
+            }
+        });
+        this.weightDiscounts.defineBushels(product);
+    }
 }
 
 export declare type ReportTicket = {
@@ -336,24 +345,16 @@ export declare type ReportTicket = {
     inReport: boolean
 }
 
-abstract class Discounts {
-    constructor(data?: Discounts) {
-        if (!data) return;
-        Object.keys(data).forEach(key => this[key] = data[key]);
-    }
-
-    public abstract total(): number;
-}
-
-export class PriceDiscounts extends Discounts {
+export class PriceDiscounts {
     public infested: number = 0;
     public musty: number = 0;
     public sour: number = 0;
     public weathered: number = 0;
     public inspection: number = 0;
 
-    constructor(data?: Discounts) {
-        super(data);
+    constructor(data?: any) {
+        if (!data) return;
+        Object.keys(data).forEach(key => this[key] = data[key]);
     }
 
     public total() {
@@ -361,7 +362,28 @@ export class PriceDiscounts extends Discounts {
     }
 }
 
-export const WEIGHTDISCOUNTFIELDS = [
+const MASS_FIELDS_AND_NAMES = [
+    ["brokenGrain", "broken grain"],
+    ["damagedGrain", "damage"],
+    ["dryWeight", "drying"],
+    ["dryWeightPercent", "dry weight percent"],
+    ["foreignMatter", "foreign matter"],
+    ["gross", "gross"],
+    ["impurities", "impurities"],
+    ["infested", "infested"],
+    ["inspection", "inspection"],
+    ["moisture", "moisture"],
+    ["musty", "musty"],
+    ["net", "net"],
+    ["original_weight", "original weight"],
+    ["PPB", "PPB"],
+    ["sour", "sour"],
+    ["tare", "tare"],
+    ["weathered", "weathered"],
+    ["weight", "weight"],
+];
+
+export const WEIGHT_DISCOUNT_FIELDS = [
     "brokenGrain",
     "damagedGrain",
     "dryWeight",
@@ -369,11 +391,10 @@ export const WEIGHTDISCOUNTFIELDS = [
     "foreignMatter",
     "moisture",
     "PPB",
-    "weight",
     "impurities",
 ];
 
-export class WeightDiscounts extends Discounts {
+export class WeightDiscounts {
     brokenGrain: Mass;
     damagedGrain: Mass;
     dryWeight: Mass;
@@ -381,18 +402,16 @@ export class WeightDiscounts extends Discounts {
     foreignMatter: Mass;
     moisture: Mass;
     PPB: Mass;
-    weight: Mass;
     impurities: Mass;
 
     constructor(data?: any) {
-        super();
         if (!data) return;
         for (const key of Object.keys(data)) {
             this[key] = new Mass(data[key].amount, data[key].defaultUnits);
         }
-     }
+    }
 
-    public async getDiscounts(ticket: Ticket, discountTables: DiscountTables) {
+    public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
         for (const table of (discountTables?.tables ?? [])) {
             const key = table.fieldName;
             const rowData = table.data.find(row => ticket[key] > row.low && ticket[key] < row.high);
@@ -403,7 +422,15 @@ export class WeightDiscounts extends Discounts {
         }
     }
 
-    public getRawData() {
+    public total(): number {
+        return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
+    }
+
+    public totalInUnits(unit: units): Mass {
+        return Object.values(this).reduce((total: Mass, currentValue: Mass) => total.add(currentValue), new Mass(0, "lbs"));
+    }
+
+    public getRawData(): any {
         const rawData = {};
         for (const key of Object.keys(this)) {
             rawData[key] = (this[key] as Mass).getRawData();
@@ -411,13 +438,9 @@ export class WeightDiscounts extends Discounts {
         return rawData;
     }
 
-    public defineBushels(product: Product | ProductInfo) {
+    public defineBushels(product: Product | ProductInfo): void {
         Object.keys(this).forEach(key => {
-            this[key].defineBushels(product);
+            (this[key] as Mass).defineBushels(product);
         });
-    }
-
-    public total() {
-        return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
     }
 }

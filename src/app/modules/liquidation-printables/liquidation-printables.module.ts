@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DiscountsPipe, LiquidationLongComponent } from './liquidation-long/liquidation-long.component';
-import { PrintableLiquidationComponent } from './printable-liquidation/printable-liquidation.component';
+import { DiscountsPipe, LiquidationLongComponent, PriceDiscountsPipe, WeightDiscountsPipe } from './liquidation-long/liquidation-long.component';
+import { PrintableLiquidationComponent } from './printable-liquidation.component';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from "../../shared/shared.module";
+import { LiquidationLongUnitsComponent } from './liquidation-long-units/liquidation-long-units.component';
 
 
 
@@ -12,6 +13,9 @@ import { SharedModule } from "../../shared/shared.module";
         PrintableLiquidationComponent,
         LiquidationLongComponent,
         DiscountsPipe,
+        WeightDiscountsPipe,
+        PriceDiscountsPipe,
+        LiquidationLongUnitsComponent,
     ],
     exports: [
         PrintableLiquidationComponent,

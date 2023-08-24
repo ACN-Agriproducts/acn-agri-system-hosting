@@ -119,7 +119,13 @@
             "cancel": "cancelar",
             "No Items to Display": "No Hay Documentos Para Mostrar",
             "new liquidation": "nuevo liquidación",
-            "select all": "seleccionar todos"
+            "select all": "seleccionar todos",
+            "Weight": "Peso",
+            "weight": "peso",
+            "Adjusted Weight": "Peso Ajustado",
+            "adjusted weight": "peso ajustado",
+            "Price": "Precio",
+            "price": "precio"
         }
     },
     "directory": {

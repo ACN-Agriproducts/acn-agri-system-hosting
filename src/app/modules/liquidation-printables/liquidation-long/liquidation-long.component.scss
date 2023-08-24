@@ -113,4 +113,32 @@ table {
     * {
         print-color-adjust: exact;
     }
+
+    .unit-select {
+        display: none;
+    }
+    .unit-label {
+        display: block !important;
+    }
+}
+
+.unit-select {
+    .mat-form-field {
+        font-weight: bold;
+        transform: translate(0, 1.5px);
+    }
+    .mat-input-underline {
+        display: none !important;
+    }
+}
+
+.header-units {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.unit-label {
+    display: none;
 }

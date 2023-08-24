@@ -2,6 +2,8 @@ import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
 import { LiquidationTotals } from '@shared/classes/liquidation';
+import { Mass, UNIT_LIST, units } from '@shared/classes/mass';
+import { Price } from '@shared/classes/price';
 import { PriceDiscounts, ReportTicket, WeightDiscounts } from '@shared/classes/ticket';
 
 
@@ -17,6 +19,25 @@ export class LiquidationLongComponent implements OnInit {
 
   public date: Date = new Date();
   public language: string;
+  readonly units = UNIT_LIST;
+
+  // public colUnits: Map<string, units> = new Map<string, units>([
+  //   ["Weight", "lbs"],
+  //   ["Moisture", "CWT"],
+  //   ["Drying", "CWT"],
+  //   ["Damage", "CWT"],
+  //   ["Adjusted Weight", "lbs"],
+  //   ["Price", "bu"],
+  // ]);
+
+  public colUnits: Map<string, units> = new Map<string, units>([
+    ["weight", "lbs"],
+    ["moisture", "CWT"],
+    ["dryWeightPercent", "CWT"],
+    ["damagedGrain", "CWT"],
+    ["adjustedWeight", "lbs"],
+    ["price", "bu"],
+  ]);
 
   constructor(
     private session: SessionInfo
@@ -26,8 +47,16 @@ export class LiquidationLongComponent implements OnInit {
     this.language = this.session.getLanguage();
   }
 
+  ngOnChange() {
+    console.log("NG CHANGES HAPPENED")
+  }
+
   ngOnDestroy() {
     delete this.date;
+  }
+
+  test() {
+    console.log(this.selectedTickets)
   }
 }
 
@@ -37,6 +66,28 @@ export class LiquidationLongComponent implements OnInit {
 export class DiscountsPipe implements PipeTransform {
 
   transform(discounts: WeightDiscounts | PriceDiscounts, ...args: any): number {
+    return discounts.total();
+  }
+
+}
+
+@Pipe({
+  name: 'weightDiscounts'
+})
+export class WeightDiscountsPipe implements PipeTransform {
+
+  transform(discounts: WeightDiscounts, unit: units): Mass {
+    return discounts.totalInUnits(unit);
+  }
+
+}
+
+@Pipe({
+  name: 'priceDiscounts'
+})
+export class PriceDiscountsPipe implements PipeTransform {
+
+  transform(discounts: PriceDiscounts, ...args: any): Price {
     return discounts.total();
   }
 

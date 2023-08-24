@@ -118,7 +118,13 @@
             "cancel": "cancel",
             "No Items to Display": "No Items to Display",
             "new liquidation": "new liquidation",
-            "select all": "select all"
+            "select all": "select all",
+            "Weight": "Weight",
+            "weight": "weight",
+            "Adjusted Weight": "Adjusted Weight",
+            "adjusted weight": "adjusted weight",
+            "Price": "Price",
+            "price": "price"
         }
     },
     "directory": {

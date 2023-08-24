@@ -1,8 +1,10 @@
 import { ProductInfo } from "./contract";
 import { Product } from "./product";
 
-export declare type units = "lbs" | "kg" | "mTon" | "CWT" | "bu";
-const unitNameMap: Map<units, string> = new Map<units, string>([
+export const UNIT_LIST = ["lbs", "kg", "mTon", "CWT", "bu"] as const;
+export declare type units = typeof UNIT_LIST[number];
+
+const unitNameMap: Map<string, string> = new Map<string, string>([
     ["lbs", "pounds"],
     ["kg", "kilograms"],
     ["mTon", "metric tons"],
@@ -18,7 +20,7 @@ export class Mass {
         ["lbs", 2.20462],
         ["kg", 1],
         ["mTon", .001],
-        ["CWT", .0220462]
+        ["CWT", .0220462],
     ]);
     
     constructor(_amount: number, unit: units, product?: Product | ProductInfo) {

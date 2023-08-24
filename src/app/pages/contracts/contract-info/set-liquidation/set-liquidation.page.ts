@@ -57,7 +57,7 @@ export class SetLiquidationPage implements OnInit {
 
       this.ticketDiscountList = (await contract.getTickets()).map(ticket => {
         ticket.getWeightDiscounts(this.discountTables);
-        ticket.weightDiscounts.defineBushels(contract.productInfo);
+        ticket.defineBushels(contract.productInfo);
         return {
           data: ticket,
           inReport: false
