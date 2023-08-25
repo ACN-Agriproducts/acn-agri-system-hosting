@@ -203,7 +203,7 @@
         <div class="contract-info-row">
             <div>CALIDAD GARANTIZADA:</div>
 			<div *ngIf="utils.isNumber(contractForm?.grade)">Grado: U.S. <span [printableField]="'grade'" >{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
-			<div *ngIf="!utils.isNumber(contractForm?.grade)"><span [printableField]="'grade'" >{{contractForm?.grade || 'X'}}</span></div>
+			<div *ngIf="!utils.isNumber(contractForm?.grade)"><span [printableField]="'grade'" >{{contractForm?.grade | as:'string' | selectFieldDisplay:contractType:'grade'}}</span></div>
         </div>
         <div class="contract-info-row">
             <div>HUMEDAD MÁXIMA:</div>
