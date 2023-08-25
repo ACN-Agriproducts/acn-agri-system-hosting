@@ -34,7 +34,7 @@ export class Contract extends FirebaseDocInterface {
     formOfPayment: string;
     futurePriceBase: Price;
     futurePriceInfo: FuturePriceInfo;
-    grade: number;
+    grade: number | string;
     guarantee: number;
     id: number;
     isOpen: boolean;
