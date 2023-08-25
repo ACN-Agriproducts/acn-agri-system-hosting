@@ -59,6 +59,11 @@ export class Contract extends FirebaseDocInterface {
     seller_terms: string;
     shrinkage: string;
     status: status;
+    statusDates: {
+        active: Date,
+        closed: Date,
+        cancelled: Date,
+    }
     storageAndFumigation: string;
     tags: string[];
     termsOfPayment: string;
@@ -159,6 +164,13 @@ export class Contract extends FirebaseDocInterface {
                 begin: null,
                 end: null
             };
+
+            this.statusDates = {
+                active: null,
+                closed: null,
+                cancelled: null,
+            }
+
             this.plants = [];
             this.deliveryPlants = [];
 
@@ -253,6 +265,12 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
 
+        this.statusDates = data.statusDates ?? {
+            active: null,
+            closed: null,
+            cancelled: null,
+        }
+
         this.deliveredHistory = data.deliveredHistory;
 
         this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
@@ -280,63 +298,66 @@ export class Contract extends FirebaseDocInterface {
         toFirestore(data: Contract): DocumentData {
             return {
                 aflatoxin: data.aflatoxin ?? null,
+                bankInfo: data.bankInfo ?? null,
                 base: data.base ?? null,
+                cargoDelays: data.cargoDelays ?? null,
                 client: data.client ?? null,
-                clientName: data.clientName ?? null,
                 clientInfo: data.clientInfo ?? null,
+                clientName: data.clientName ?? null,
                 clientTicketInfo: data.clientTicketInfo ?? null,
+                companyInfo: data.companyInfo ?? null,
+                contractExecutive: data.contractExecutive ?? null,
+                contractOwner: data.contractOwner ?? null,
+                currency: data.currency ?? null,
                 currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
+                deliveredHistory: data.deliveredHistory ?? null,
                 delivery_dates: data.delivery_dates ?? null,
+                deliveryPlants: data.deliveryPlants ?? null,
+                deliveryType: data.deliveryType ?? null,
+                formOfPayment: data.formOfPayment ?? null,
+                futurePriceBase: data.futurePriceBase.amount ?? null,
+                futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
+                futurePriceInfo: data.futurePriceInfo ?? null,
                 grade: data.grade ?? null,
+                guarantee: data.guarantee ?? null,
                 id: data.id ?? null,
+                isOpen: data.isOpen ?? false,
+                loadConditions: data.loadConditions ?? null,
+                loadDelays: data.loadDelays ?? null,
                 loads: data.loads ?? null,
+                loadType: data.loadType ?? null,
                 market_price: data.market_price ?? null,
+                paymentDelays: data.paymentDelays ?? null,
                 paymentTerms: data.paymentTerms.get() ?? null,
+                paymentWithdrawal: data.paymentWithdrawal ?? null,
                 pdfReference: data.pdfReference ?? null,
                 plants: data.plants ?? null,
-                pricePerBushel: data.pricePerBushel ?? null,
+                prepaid: data.prepaid ?? null,
                 price: data.price.amount ?? null,
+                pricePerBushel: data.pricePerBushel ?? null,
                 priceUnit: data.price.unit ?? null,
                 product: data.product ?? null,
                 productInfo: data.productInfo ?? null,
                 quantity: data.quantity.get() ?? 0,
+                quantityErrorPercentage: data.quantityErrorPercentage ?? null,
                 quantityUnits: data.quantity.defaultUnits ?? FirebaseDocInterface.session.getDefaultUnit(),
                 seller_terms: data.seller_terms ?? null,
+                shrinkage: data.shrinkage ?? null,
                 status: data.status ?? null,
+                statusDates: data.statusDates ?? {
+                    active: null,
+                    closed: null,
+                    cancelled: null,
+                },
+                storageAndFumigation: data.storageAndFumigation ?? null,
                 tags: data.tags ?? [],
+                termsOfPayment: data.termsOfPayment ?? null,
                 tickets: data.tickets ?? [],
                 transport: data.transport ?? null,
-                truckers: data.truckers ?? [],
-                isOpen: data.isOpen ?? false,
-
-                // NEW
-                bankInfo: data.bankInfo ?? null,
-                cargoDelays: data.cargoDelays ?? null,
-                contractOwner: data.contractOwner ?? null,
-                contractExecutive: data.contractExecutive ?? null,
-                currency: data.currency ?? null,
-                deliveryPlants: data.deliveryPlants ?? null,
-                deliveryType: data.deliveryType ?? null,
-                formOfPayment: data.formOfPayment ?? null,
-                futurePriceInfo: data.futurePriceInfo ?? null,
-                guarantee: data.guarantee ?? null,
-                loadConditions: data.loadConditions ?? null,
-                loadDelays: data.loadDelays ?? null,
-                loadType: data.loadType ?? null,
-                paymentDelays: data.paymentDelays ?? null,
-                paymentWithdrawal: data.paymentWithdrawal ?? null,
-                prepaid: data.prepaid ?? null,
-                shrinkage: data.shrinkage ?? null,
-                storageAndFumigation: data.storageAndFumigation ?? null,
                 transportInsurance: data.transportInsurance ?? null,
-                quantityErrorPercentage: data.quantityErrorPercentage ?? null,
-                termsOfPayment: data.termsOfPayment ?? null,
-                futurePriceBase: data.futurePriceBase.amount ?? null,
-                futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
-                companyInfo: data.companyInfo ?? null,
+                truckers: data.truckers ?? [],
                 type: data.type ?? null,
-                deliveredHistory: data.deliveredHistory ?? null,
 
                 progress: data.progress ?? null,
             }
