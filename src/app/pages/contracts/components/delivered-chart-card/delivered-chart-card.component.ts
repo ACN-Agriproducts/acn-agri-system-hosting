@@ -1,6 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
+import { Mass } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
 import { FilterContractsPipe } from '@shared/pipes/filter-contracts.pipe';
 
@@ -18,17 +20,14 @@ export class DeliveredChartCardComponent implements OnInit {
     domain: ["#FFBC04", "#4D8C4A"]
   };
 
-  private ticketList: Ticket[];
   
   constructor(
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private session: SessionInfo,
   ) { }
 
   ngOnInit() {
-    this.contract.getTickets().then(result => {
-      this.ticketList = result;
-      this.buildTableData();
-    });
+    this.buildTableData();
   }
 
   buildTableData() {
@@ -55,24 +54,16 @@ export class DeliveredChartCardComponent implements OnInit {
       series: []
     }
 
-    const ticketList = this.ticketList.sort((a,b) => a.dateOut.getTime() - b.dateOut.getTime());
+    // Get and sort delivery history
+    ticketData.series = Object.entries(this.contract.deliveredHistory).map(e => {return {name: e[0], value: new Mass(e[1], this.session.getDefaultUnit()).getMassInUnit('mTon')}});
+    ticketData.series.sort((a, b) => this.parseDateString(a.name).getTime() - this.parseDateString(b.name).getTime())
+    console.log(this.contract.deliveredHistory, ticketData.series);
 
-    // Get data for day changes
-    ticketList.forEach(ticket => {
-      const name = this.datePipe.transform(ticket.dateOut, 'YY MMM d');
-
-      let series = ticketData.series.find(s => s.name == name);
-      if(!series) {
-        series = {name, value: 0};
-        ticketData.series.push(series);
-      }
-      series.value += ticket.getNet().getMassInUnit('mTon');
-    });
 
     // Get start and end dates at midnight
     const trendLineStartDate = this.contract.delivery_dates.begin;
     const trendLineEndDate = this.contract.delivery_dates.end;
-    const ticketLineStart = ticketList[0]?.dateOut ?? new Date();
+    const ticketLineStart = ticketData?.[0] ? this.parseDateString(ticketData[0]) : new Date();
     const ticketLineEnd = new Date();
     trendLineStartDate.setHours(0, 0, 0, 0);
     trendLineEndDate.setHours(0, 0, 0, 0);
@@ -132,6 +123,10 @@ export class DeliveredChartCardComponent implements OnInit {
 
     // Assign data to chart
     this.chartData = [LineDataTrend, lineDataReal];
+  }
+
+  parseDateString(date: string): Date {
+    return new Date(Math.floor(this.contract.date.getFullYear() / 100) + date);
   }
 }
 
