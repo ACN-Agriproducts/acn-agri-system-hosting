@@ -14,68 +14,61 @@ declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
+    bankInfo: BankInfo[];
     base: number;
     buyer_terms: number;
+    cargoDelays: string;
     client:  DocumentReference<Contact>;
     clientInfo: ContactInfo;
     clientName: string;
     clientTicketInfo: ContactInfo;
+    companyInfo: { email: string; phone: string; }
+    contractExecutive: Exectuive;
+    contractOwner: string;
+    currency: string;
     currentDelivered: Mass;
     date: Date;
     delivery_dates: DeliveryDates;
+    deliveryPlants: string[];
+    deliveryType: string;
+    formOfPayment: string;
+    futurePriceBase: Price;
+    futurePriceInfo: FuturePriceInfo;
     grade: number;
+    guarantee: number;
     id: number;
+    isOpen: boolean;
+    loadConditions: string;
+    loadDelays: string;
     loads: number;
+    loadType: string;
     market_price: number;
+    paymentDelays: { applies: boolean, x: number, y: number };
     paymentTerms: PaymentTerms;
+    paymentWithdrawal: string;
     pdfReference: string;
     plants: string[];
+    prepaid: number | string;
     price: Price;
     pricePerBushel: number;
     printableFormat: string;
     product: DocumentReference<Product | DocumentData>;
     productInfo: ProductInfo;
     quantity: Mass;
+    quantityErrorPercentage: number;
     seller_terms: string;
+    shrinkage: string;
     status: status;
+    storageAndFumigation: string;
     tags: string[];
+    termsOfPayment: string;
     tickets: DocumentReference<Ticket>[];
     transport: string;
+    transportInsurance: string;
     truckers: TruckerInfo[];
     type: string;
-    isOpen: boolean;
 
-    // NEW
-    bankInfo: BankInfo[];
-    cargoDelays: string;
-    contractOwner: string;
-    contractExecutive: Exectuive;
-    currency: string;
-    deliveryPlants: string[];
-    deliveryType: string;
-    formOfPayment: string;
-    termsOfPayment: string;
-    futurePriceInfo: FuturePriceInfo;
-    guarantee: number;
-    loadConditions: string;
-    loadDelays: string;
-    loadType: string;
-    paymentDelays: { applies: boolean, x: number, y: number };
-    paymentWithdrawal: string;
-    prepaid: number | string;
-    shrinkage: string;
-    storageAndFumigation: string;
-    transportInsurance: string;
-    quantityErrorPercentage: number;
-    futurePriceBase: Price;
-    companyInfo: {
-        email: string;
-        phone: string;
-    }
-
-    deliveredHistory: {
-        [date: string]: number
-    };
+    deliveredHistory: { [date: string]: number };
     progress: number; 
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
