@@ -177,7 +177,7 @@
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getQuantityTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{!contract.isOpen || contract.status == 'closed' ? (contract.quantity | massDisplay:2:displayUnit) : '-'}}
+                                {{!contract.isOpen || contract.status == 'closed' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">

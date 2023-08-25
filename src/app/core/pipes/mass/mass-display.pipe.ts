@@ -6,7 +6,7 @@ import { Mass, units } from '@shared/classes/mass';
 })
 export class MassDisplayPipe implements PipeTransform {
 
-  transform(value: Mass, decimalDigits: number = 2, unit?: units): unknown {
+  transform(value: Mass, decimalDigits: number = 2, unit?: units, ...others: any[]): unknown {
     unit ??= value.defaultUnits;
     return `${value.getMassInUnit(unit).toFixed(decimalDigits)} ${unit}`;
   }
