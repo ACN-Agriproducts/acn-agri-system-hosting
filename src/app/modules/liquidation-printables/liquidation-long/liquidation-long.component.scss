@@ -123,9 +123,10 @@ table {
 }
 
 .unit-select {
+    min-width: 170px;
+    // max-width: 50px;
     .mat-form-field {
         font-weight: bold;
-        transform: translate(0, 1.5px);
     }
     .mat-input-underline {
         display: none !important;

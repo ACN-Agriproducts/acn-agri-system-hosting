@@ -21,19 +21,10 @@ export class LiquidationLongComponent implements OnInit {
   public language: string;
   readonly units = UNIT_LIST;
 
-  // public colUnits: Map<string, units> = new Map<string, units>([
-  //   ["Weight", "lbs"],
-  //   ["Moisture", "CWT"],
-  //   ["Drying", "CWT"],
-  //   ["Damage", "CWT"],
-  //   ["Adjusted Weight", "lbs"],
-  //   ["Price", "bu"],
-  // ]);
-
   public colUnits: Map<string, units> = new Map<string, units>([
     ["weight", "lbs"],
     ["moisture", "CWT"],
-    ["dryWeightPercent", "CWT"],
+    ["dryWeight", "CWT"],
     ["damagedGrain", "CWT"],
     ["adjustedWeight", "lbs"],
     ["price", "bu"],
@@ -45,10 +36,6 @@ export class LiquidationLongComponent implements OnInit {
 
   ngOnInit() {
     this.language = this.session.getLanguage();
-  }
-
-  ngOnChange() {
-    console.log("NG CHANGES HAPPENED")
   }
 
   ngOnDestroy() {
