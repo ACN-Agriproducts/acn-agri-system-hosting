@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, serverTimestamp, SnapshotOptions, where } from "@angular/fire/firestore";
 import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -477,6 +477,21 @@ export class Contract extends FirebaseDocInterface {
         contactInfo.notarialAct = null;
         contactInfo.notarialActDate = null;
 
+    }
+
+    public changeStatus(newStatus: status): Promise<void> {
+        const updateDoc = {status: newStatus};
+        const oldStatus = this.status;
+
+        if(this.status != 'closed' && newStatus != 'pending') {
+            updateDoc[`statusDates.${newStatus}`] = serverTimestamp();
+        }
+
+        this.status = newStatus;
+        const promise = this.update(updateDoc);
+        promise.catch(() => this.status = oldStatus);
+
+        return promise;
     }
 
     public static getCollectionReference(db: Firestore, company: string, contractType?: contractType): CollectionReference<Contract> {
