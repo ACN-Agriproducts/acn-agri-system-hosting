@@ -18,6 +18,7 @@ export class Invoice extends FirebaseDocInterface {
         product: string;
         quantity: Mass;
     }
+    public incoterm: string;
 
     public printableDocumentName: string;
 
@@ -42,6 +43,7 @@ export class Invoice extends FirebaseDocInterface {
             product: data.exportInfo.product,
             quantity: new Mass(data.exportInfo.quantity, FirebaseDocInterface.session.getDefaultUnit())
         } : null;
+        this.incoterm = data.incoterm;
 
         data.items.forEach(element => {
             this.items.push(new item(element));
@@ -65,7 +67,8 @@ export class Invoice extends FirebaseDocInterface {
                 exportInfo: data.exportInfo ? {
                     product: data.exportInfo.product,
                     quantity: data.exportInfo.quantity.get()
-                } : null
+                } : null,
+                incoterm: data.incoterm ?? null
             }
 
             data.items.forEach(item => {

@@ -22,6 +22,7 @@ export class InvoiceTwoComponent implements OnInit, OnChanges {
     product: string;
     quantity: Mass;
   };
+  @Input() incoterm: string;
 
   public contentRows: Row[];
   public readonly rowLength = 28;
