@@ -7,6 +7,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
+import { units } from '@shared/classes/mass';
 import { PriceDiscounts, ReportTicket, Ticket, WeightDiscounts } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
@@ -31,6 +32,15 @@ export class SetLiquidationPage implements OnInit {
   public editingTickets: ReportTicket[];
   public ticketDiscountList: ReportTicket[] = [];
   public selectedTickets: ReportTicket[] = [];
+
+  public colUnits: Map<string, units> = new Map<string, units>([
+    ["weight", "lbs"],
+    ["moisture", "CWT"],
+    ["dryWeight", "CWT"],
+    ["damagedGrain", "CWT"],
+    ["adjustedWeight", "lbs"],
+    ["price", "bu"],
+  ]);
 
   constructor(
     private db: Firestore,
@@ -105,16 +115,16 @@ export class SetLiquidationPage implements OnInit {
       { header: this.transloco.translate("contracts.info.Inbound Date"), key: 'dateIn' },
       { header: this.transloco.translate("contracts.info.Ticket #"), key: 'id' },
       { header: this.transloco.translate("contracts.info.Contract"), key: 'contractID' },
-      { header: this.transloco.translate("contracts.info.Gross"), key: 'gross' },
-      { header: this.transloco.translate("contracts.info.Tare"), key: 'tare' },
-      { header: this.transloco.translate("contracts.info.Net"), key: 'net' },
+      { header: this.transloco.translate("contracts.info.Gross"), key: 'gross', style: { numFmt: '0.000' } },
+      { header: this.transloco.translate("contracts.info.Tare"), key: 'tare', style: { numFmt: '0.000' } },
+      { header: this.transloco.translate("contracts.info.Net"), key: 'net', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'moisture' },
-      { header: this.transloco.translate("contracts.info.CWT"), key: 'moistureCwt' },
+      { header: this.colUnits.get('moisture').toUpperCase(), key: 'moistureWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'dryWeightPercent' },
-      { header: this.transloco.translate("contracts.info.CWT"), key: 'dryCwt' },
+      { header: this.colUnits.get('dryWeight').toUpperCase(), key: 'dryWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'damage' },
-      { header: this.transloco.translate("contracts.info.CWT"), key: 'damageCwt' },
-      { header: this.transloco.translate("contracts.info.Adjusted Weight (lbs)"), key: 'adjustedWeight' },
+      { header: this.colUnits.get('damagedGrain').toUpperCase(), key: 'damagedGrain', style: { numFmt: '0.000' } },
+      { header: this.transloco.translate("contracts.info.Adjusted Weight") + `(${this.colUnits.get('adjustedWeight').toUpperCase()})`, key: 'adjustedWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.Price ($/BU)"), key: 'pricePerBushel', style: { numFmt: '0.0000' } },
       { 
         header: this.transloco.translate("contracts.info.Total ($)"), 
@@ -162,7 +172,7 @@ export class SetLiquidationPage implements OnInit {
     ];
 
     let rowValues = [];
-    rowValues[4] = this.transloco.translate("contracts.info.Weight (lbs)");
+    rowValues[4] = this.transloco.translate("contracts.info.Weight") + ` (${this.colUnits.get('weight').toUpperCase()})`;
     rowValues[7] = this.transloco.translate("contracts.info.Moisture");
     rowValues[9] = this.transloco.translate("contracts.info.Drying");
     rowValues[11] = this.transloco.translate("contracts.info.Damage");
@@ -180,23 +190,23 @@ export class SetLiquidationPage implements OnInit {
 
     // populating worksheet columns
     this.selectedTickets.forEach(ticket => {
-      const net = ticket.data.gross.getMassInUnit("lbs") - ticket.data.tare.getMassInUnit("lbs");
-      const adjustedWeight = net - ticket.data.weightDiscounts.total();
-      const total = (this.contract.price.getPricePerUnit("lbs", this.contract.quantity) * adjustedWeight);
+      const net = ticket.data.gross.getMassInUnit(this.colUnits.get('weight')) - ticket.data.tare.getMassInUnit(this.colUnits.get('weight'));
+      const adjustedWeight = net - ticket.data.weightDiscounts.totalMass().get();
+      const total = (this.contract.price.getPricePerUnit(this.colUnits.get('price'), this.contract.quantity) * adjustedWeight);
       
       worksheet.addRow({
         ...ticket.data,
-        gross: ticket.data.gross.getMassInUnit("lbs"),
-        tare: ticket.data.tare.getMassInUnit("lbs"),
+        gross: ticket.data.gross.getMassInUnit(this.colUnits.get('weight')),
+        tare: ticket.data.tare.getMassInUnit(this.colUnits.get('weight')),
         net: net,
         moisture: ticket.data.moisture,
-        moistureCwt: ticket.data.weightDiscounts.moisture?.getMassInUnit("CWT") ?? 0,
+        moistureWeight: ticket.data.weightDiscounts.moisture?.getMassInUnit(this.colUnits.get('moisture')) ?? 0,
         dryWeightPercent: ticket.data.dryWeightPercent,
-        dryCwt: ticket.data.weightDiscounts.dryWeight?.getMassInUnit("CWT") ?? 0,
+        dryWeight: ticket.data.weightDiscounts.dryWeight?.getMassInUnit(this.colUnits.get('dryWeight')) ?? 0,
         damage: ticket.data.damagedGrain,
-        damageCwt: ticket.data.weightDiscounts.damagedGrain?.getMassInUnit("CWT") ?? 0,
+        damagedGrain: ticket.data.weightDiscounts.damagedGrain?.getMassInUnit(this.colUnits.get('damagedGrain')) ?? 0,
         adjustedWeight: adjustedWeight,
-        pricePerBushel: this.contract.price.getPricePerUnit("bu", this.contract.quantity),
+        pricePerBushel: this.contract.price.getPricePerUnit(this.colUnits.get('price'), this.contract.quantity),
         total: total,
         ...ticket.data.priceDiscounts,
         netToPay: total - ticket.data.priceDiscounts.total()
@@ -214,9 +224,9 @@ export class SetLiquidationPage implements OnInit {
       'gross',
       'tare',
       'net',
-      'moistureCwt',
-      'dryCwt',
-      'damageCwt',
+      'moistureWeight',
+      'dryWeight',
+      'damagedGrain',
       'adjustedWeight',
       'total',
       'infested',

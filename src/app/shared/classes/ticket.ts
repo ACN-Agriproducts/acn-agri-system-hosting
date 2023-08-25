@@ -363,7 +363,7 @@ export class PriceDiscounts {
         Object.keys(data).forEach(key => this[key] = data[key]);
     }
 
-    public total() {
+    public total(): number {
         return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
     }
 }

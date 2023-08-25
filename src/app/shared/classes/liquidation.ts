@@ -111,8 +111,8 @@ export class LiquidationTotals {
     public tare: Mass;
     public net: Mass;
     public adjustedWeight: Mass;
-    public beforeFinalDiscounts: number;
-    public netToPay: number;
+    public beforeFinalDiscounts: number = 0;
+    public netToPay: number = 0;
     public weightDiscounts: WeightDiscounts = new WeightDiscounts();
     public priceDiscounts: PriceDiscounts = new PriceDiscounts();
 
@@ -121,8 +121,6 @@ export class LiquidationTotals {
 
         this.gross = this.tare = this.net = this.adjustedWeight = new Mass(0, "lbs", contract.productInfo);
         tickets.forEach(ticket => {
-            console.log(ticket)
-
             this.gross = this.gross.add(ticket.data.gross);
             this.tare = this.tare.add(ticket.data.tare);
             this.net = this.net.add(ticket.data.net);

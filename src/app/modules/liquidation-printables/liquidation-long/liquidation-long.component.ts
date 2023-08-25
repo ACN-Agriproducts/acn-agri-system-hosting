@@ -16,19 +16,20 @@ export class LiquidationLongComponent implements OnInit {
   @Input() contract: Contract;
   @Input() selectedTickets: ReportTicket[];
   @Input() totals: LiquidationTotals;
+  @Input() colUnits: Map<string, units>;
 
   public date: Date = new Date();
   public language: string;
   readonly units = UNIT_LIST;
 
-  public colUnits: Map<string, units> = new Map<string, units>([
-    ["weight", "lbs"],
-    ["moisture", "CWT"],
-    ["dryWeight", "CWT"],
-    ["damagedGrain", "CWT"],
-    ["adjustedWeight", "lbs"],
-    ["price", "bu"],
-  ]);
+  // public colUnits: Map<string, units> = new Map<string, units>([
+  //   ["weight", "lbs"],
+  //   ["moisture", "CWT"],
+  //   ["dryWeight", "CWT"],
+  //   ["damagedGrain", "CWT"],
+  //   ["adjustedWeight", "lbs"],
+  //   ["price", "bu"],
+  // ]);
 
   constructor(
     private session: SessionInfo
@@ -65,13 +66,13 @@ export class WeightDiscountsPipe implements PipeTransform {
 
 }
 
-@Pipe({
-  name: 'priceDiscounts'
-})
-export class PriceDiscountsPipe implements PipeTransform {
+// @Pipe({
+//   name: 'priceDiscounts'
+// })
+// export class PriceDiscountsPipe implements PipeTransform {
 
-  transform(discounts: PriceDiscounts, ...args: any): Price {
-    return discounts.total();
-  }
+//   transform(discounts: PriceDiscounts, ...args: any): Price {
+//     return discounts.total();
+//   }
 
-}
+// }
