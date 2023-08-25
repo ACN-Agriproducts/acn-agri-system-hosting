@@ -54,10 +54,6 @@ export class LiquidationLongComponent implements OnInit {
   ngOnDestroy() {
     delete this.date;
   }
-
-  test() {
-    console.log(this.selectedTickets)
-  }
 }
 
 @Pipe({
@@ -76,8 +72,8 @@ export class DiscountsPipe implements PipeTransform {
 })
 export class WeightDiscountsPipe implements PipeTransform {
 
-  transform(discounts: WeightDiscounts, unit: units): Mass {
-    return discounts.totalInUnits(unit);
+  transform(discounts: WeightDiscounts): Mass {
+    return discounts.totalMass();
   }
 
 }

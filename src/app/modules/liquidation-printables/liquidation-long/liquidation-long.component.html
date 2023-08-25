@@ -81,11 +81,17 @@
             <th>{{ t('Tare') | uppercase }}</th>
             <th>{{ t('Net') | uppercase }}</th>
             <th>{{ t('%') }}</th>
-            <th>{{ t('CWT') }}</th>
+            <th>
+                <ng-container *ngTemplateOutlet="headerUnits; context: { fieldname: 'moisture' }"></ng-container>
+            </th>
             <th>{{ t('%') }}</th>
-            <th>{{ t('CWT') }}</th>
+            <th>
+                <ng-container *ngTemplateOutlet="headerUnits; context: { fieldname: 'dryWeightPercent' }"></ng-container>
+            </th>
             <th>{{ t('%') }}</th>
-            <th>{{ t('CWT') }}</th>
+            <th>
+                <ng-container *ngTemplateOutlet="headerUnits; context: { fieldname: 'damagedGrain' }"></ng-container>
+            </th>
         </tr>
         <tr *ngFor="let ticket of selectedTickets; even as even">
             <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.data.dateIn | date:'shortDate' }}</td>
@@ -94,12 +100,12 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.tare | massInUnit:colUnits.get('weight') | number:'1.0-4' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.net | massInUnit:colUnits.get('weight') | number:'1.0-4' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture ?? 0 | number:'1.1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.moisture | massInUnit:'CWT' | number:'1.0-4' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.moisture | massInUnit:colUnits.get('moisture') | number:'1.0-4' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeightPercent ?? 0 | number:'1.1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.dryWeightPercent | massInUnit:'CWT' | number:'1.0-4' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.dryWeightPercent | massInUnit:colUnits.get('dryWeightPercent') | number:'1.0-4' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.damagedGrain ?? 0 | number:'1.1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.damagedGrain | massInUnit:'CWT' | number:'1.0-4' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.net | massInUnit:colUnits.get('adjustedWeight')) - (ticket.data.weightDiscounts | discounts) | number:'1.0-4' }}</td> <!-- ADJUSTED WEIGHT -->
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.damagedGrain | massInUnit:colUnits.get('damagedGrain') | number:'1.0-4' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.net | massInUnit:colUnits.get('adjustedWeight')) - (ticket.data.weightDiscounts | weightDiscounts| massInUnit:colUnits.get('adjustedWeight')) | number:'1.0-4' }}</td> <!-- ADJUSTED WEIGHT -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (contract.price | pricePerUnit:colUnits.get('price'):contract.quantity) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
             <td [class.odd]='!even' [class.even]='even' class='right' 
                 *ngIf="totals.priceDiscounts.infested 
@@ -163,7 +169,7 @@
                     <mat-form-field [style.max-width.%]="25">
                     <mat-select
                         [value]="colUnits.get(fieldname)"
-                        (valueChange)="colUnits.set(fieldname, $event); test()"
+                        (valueChange)="colUnits.set(fieldname, $event)"
                     >
                         <mat-option *ngFor="let unit of units" [value]="unit">
                             {{ (isPrice ? ("$/" + unit) : unit) | uppercase }}

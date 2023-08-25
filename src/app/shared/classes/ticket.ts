@@ -432,8 +432,10 @@ export class WeightDiscounts {
         return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
     }
 
-    public totalInUnits(unit: units): Mass {
-        return Object.values(this).reduce((total: Mass, currentValue: Mass) => total.add(currentValue), new Mass(0, "lbs"));
+    public totalMass(): Mass {
+        const mass = new Mass(0, "lbs");
+        mass.defineBushels(Object.values(this).find(v => v != null).conversions.get('bu'));
+        return Object.values(this).reduce((total: Mass, currentValue: Mass) => total.add(currentValue), mass);
     }
 
     public getRawData(): any {
