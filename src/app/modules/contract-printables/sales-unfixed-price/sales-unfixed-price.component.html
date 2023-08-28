@@ -219,7 +219,7 @@
 		</div>
 		<div class="contract-info-row">
 			<div>HUMEDAD MÁXIMA:</div>
-			<div [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
+			<div [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') + '%' : "NO APLICA"}}</div>
 		</div>
 		<div class="contract-info-row">
 			<div>FORMA DE ENTREGA:</div>
