@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Firestore, doc, getDoc, updateDoc } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -7,11 +8,14 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
-import { units } from '@shared/classes/mass';
+import { UNIT_LIST, units } from '@shared/classes/mass';
 import { PriceDiscounts, ReportTicket, Ticket, WeightDiscounts } from '@shared/classes/ticket';
+import { PrintableDialogComponent } from '@shared/components/printable-dialog/printable-dialog.component';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
+import { InvoiceDialogComponent } from '@shared/printable/printable-invoice/invoice-dialog/invoice-dialog.component';
 
 import * as Excel from 'exceljs';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-set-liquidation',
@@ -19,6 +23,8 @@ import * as Excel from 'exceljs';
   styleUrls: ['./set-liquidation.page.scss'],
 })
 export class SetLiquidationPage implements OnInit {
+  @ViewChild('printableDialog') printableDialog: TemplateRef<any>;
+
   public contract: Contract;
   public discountTables: DiscountTables;
   public id: string;
@@ -42,6 +48,13 @@ export class SetLiquidationPage implements OnInit {
     ["price", "bu"],
   ]);
 
+  public printableFormats = {
+    "Liquidation Long": "liquidation-long",
+  };
+  public selectedFormat: string;
+
+  readonly units = UNIT_LIST;
+
   constructor(
     private db: Firestore,
     private session: SessionInfo,
@@ -50,6 +63,7 @@ export class SetLiquidationPage implements OnInit {
     private transloco: TranslocoService,
     private snack: SnackbarService,
     private router: Router,
+    private dialog: MatDialog
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
@@ -273,7 +287,9 @@ export class SetLiquidationPage implements OnInit {
     a.remove();
   }
 
-  public submit() {
+  public async submit(): Promise<void> {
+    await this.openLiquidation();
+
     this.liquidation.ticketRefs = this.selectedTickets.map(ticket => ticket.data.ref.withConverter(Ticket.converter));
     this.liquidation.set().then(() => {
       this.ticketDiscountList.forEach(ticket => {
@@ -287,6 +303,24 @@ export class SetLiquidationPage implements OnInit {
     .catch(e => {
       console.error(e);
       this.snack.open(`Error ${this.editingRefId ? "editing" : "creating"} liquidation`, "success");
+    });
+  }
+
+  public async openLiquidation(): Promise<void> {
+    const dialog = this.dialog.open(this.printableDialog, {
+        panelClass: "borderless-dialog",
+        minWidth: "80%",
+        maxWidth: "100%",
+        height: "75vh"
+      }
+    );
+
+    return lastValueFrom(dialog.afterClosed());
+  }
+
+  public setUnits(units: units): void {
+    [...this.colUnits.keys()].forEach(key => {
+      this.colUnits.set(key, units);
     });
   }
 }

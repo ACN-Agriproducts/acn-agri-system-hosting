@@ -11,20 +11,22 @@ import { CoreModule } from '@core/core.module';
 import { TicketDiscountTableComponent } from '../set-liquidation/components/ticket-discount-table/ticket-discount-table.component';
 import { NgxPrintModule } from 'ngx-print';
 import { LiquidationPrintablesModule } from 'src/app/modules/liquidation-printables/liquidation-printables.module';
+import { SharedModule } from "../../../../shared/shared.module";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    NewLiquidationPageRoutingModule,
-    CoreModule,
-    NgxPrintModule,
-    LiquidationPrintablesModule,
-  ],
-  declarations: [
-    SetLiquidationPage,
-    TicketDiscountTableComponent,
-  ]
+    declarations: [
+        SetLiquidationPage,
+        TicketDiscountTableComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        NewLiquidationPageRoutingModule,
+        CoreModule,
+        NgxPrintModule,
+        LiquidationPrintablesModule,
+        SharedModule,
+    ]
 })
-export class NewLiquidationPageModule {}
+export class SetLiquidationPageModule {}

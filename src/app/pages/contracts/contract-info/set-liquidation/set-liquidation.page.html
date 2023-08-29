@@ -121,28 +121,41 @@
         <div class="action-bar">
           <button mat-raised-button
             [disabled]="selectedTickets.length === 0"
-            (click)="onDownloadLiquidation()"
-          >{{ t('download') | titlecase }}</button>
-          <button mat-raised-button
-            [disabled]="selectedTickets.length === 0"
-            ngxPrint
-            [useExistingCss]="true"
-            printSectionId="ContractLiquidationLong"
-            [printStyle]="{'@page' : { size: 'letter landscape' }}"
-          >{{ t('print') | titlecase }}</button>
+            (click)="openLiquidation()"
+          >{{ t('preview') | titlecase }}</button>
           <button mat-raised-button (click)="submit()" [disabled]="selectedTickets.length === 0">
             {{ t('submit') | titlecase }}
           </button>
         </div>
       </div>
-      
-      <app-printable-liquidation id="ContractLiquidationLong"
-        [selectedTickets]="selectedTickets"
-        [contract]="contract"
-        [totals]="totals"
-        [version]="'liquidation-long'"
-        [colUnits]="colUnits"
-      ></app-printable-liquidation>
+
+      <ng-template #printableDialog>
+        <app-printable-dialog 
+          (save)="onDownloadLiquidation()" 
+          [printStyle]="{'@page' : { size: 'letter landscape' }}"
+        >
+          <ng-container ngProjectAs="buttons">
+            <button mat-icon-button (click)="onDownloadLiquidation()">
+              <mat-icon>save_alt</mat-icon>
+            </button>
+            <button mat-stroked-button [matMenuTriggerFor]="unitsMenu">{{ t('units') | titlecase }}</button>
+            <mat-menu #unitsMenu>
+              <button mat-menu-item *ngFor="let unit of units" (click)="setUnits(unit)">{{ unit | uppercase }}</button>
+            </mat-menu>
+            <button mat-stroked-button [matMenuTriggerFor]="typeMenu">{{ t('format') | titlecase }}</button>
+            <mat-menu #typeMenu>
+              <button mat-menu-item *ngFor="let format of printableFormats | keyvalue" (click)="selectedFormat=format.value">{{ format.key }}</button>
+            </mat-menu>
+          </ng-container>
+          <app-printable-liquidation id="printable"
+            [selectedTickets]="selectedTickets"
+            [contract]="contract"
+            [totals]="totals"
+            [format]="selectedFormat"
+            [colUnits]="colUnits"
+          ></app-printable-liquidation>
+        </app-printable-dialog>
+      </ng-template>
     </ng-container>
   </ion-content>
 </ng-container>

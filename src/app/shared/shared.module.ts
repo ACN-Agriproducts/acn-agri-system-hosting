@@ -27,6 +27,7 @@ import { PrintableProductionOrderComponent } from './printable/printable-product
 import { ProductionOrderDefaultComponent } from './printable/printable-production-order/production-order-default/production-order-default.component';
 import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
 import { pricerPerUnitPipe } from './classes/price';
+import { PrintableDialogComponent } from './components/printable-dialog/printable-dialog.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { pricerPerUnitPipe } from './classes/price';
     PrintableProductionOrderComponent,
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
-    pricerPerUnitPipe
+    pricerPerUnitPipe,
+    PrintableDialogComponent,
   ],
   declarations: [
     ToolbarComponent,
@@ -80,6 +82,7 @@ import { pricerPerUnitPipe } from './classes/price';
     ProductionOrderDefaultComponent,
     LocalInventoryPipe,
     pricerPerUnitPipe,
+    PrintableDialogComponent,
   ]
 })
 export class SharedModule {}

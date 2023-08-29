@@ -1,0 +1,17 @@
+
+* {
+    box-sizing: border-box;
+}
+
+@media not print {
+    .portrait {
+        height: 11in;
+        width: 8.5in;
+        padding: 0.75in;
+    }
+    .landscape {
+        height: 8.5in;
+        width: 11in;
+        padding: 0.75in;
+    }
+}

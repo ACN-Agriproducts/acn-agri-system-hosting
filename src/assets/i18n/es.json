@@ -113,7 +113,6 @@
             "submit": "entregar",
             "Proof of Payment": "Prueba de Pago",
             "Supplemental Documents": "Documentos Complementarios",
-            "view": "ver",
             "edit": "editar",
             "archive": "archivar",
             "cancel": "cancelar",
@@ -125,7 +124,17 @@
             "Adjusted Weight": "Peso Ajustado",
             "adjusted weight": "peso ajustado",
             "Price": "Precio",
-            "price": "precio"
+            "price": "precio",
+            "Generate": "Generar",
+            "generate": "generar",
+            "View": "Ver",
+            "view": "ver",
+            "Preview": "Vista Previa",
+            "preview": "vista previa",
+            "Units": "Unidades",
+            "units": "unidades",
+            "Format": "Formato",
+            "format": "formato"
         }
     },
     "directory": {

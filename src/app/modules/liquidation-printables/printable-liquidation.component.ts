@@ -14,19 +14,18 @@ import { BehaviorSubject, Observable, filter, map } from 'rxjs';
 export class PrintableLiquidationComponent implements OnInit {
   @ViewChildren(TypeTemplateDirective) private versionTemplates: QueryList<TypeTemplateDirective>;
 
-  @Input("version") set version(newVersion: string) {
-    this.version$.next(newVersion);
+  @Input("format") set format(newVersion: string) {
+    this.format$.next(newVersion);
   }
   @Input() selectedTickets: ReportTicket[];
   @Input() contract: Contract;
   @Input() totals: LiquidationTotals;
   @Input() colUnits: Map<string, units>;
 
-
-  public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
-  public template$: Observable<TemplateRef<any>> = this.version$.pipe(
+  public format$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  public template$: Observable<TemplateRef<any>> = this.format$.pipe(
     filter(() => !!this.versionTemplates),
-    map(version => this.versionTemplates.find(template => template.typeTemplate === (version))?.templateRef)
+    map(format => this.versionTemplates.find(template => template.typeTemplate === (format))?.templateRef)
   );
 
   constructor() { }
@@ -36,6 +35,6 @@ export class PrintableLiquidationComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.version$.next(this.version$.getValue());
+    this.format$.next(this.format$.getValue());
   }
 }
