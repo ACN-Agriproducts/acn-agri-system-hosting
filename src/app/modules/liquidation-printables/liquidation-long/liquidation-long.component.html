@@ -100,11 +100,11 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.tare | massInUnit:colUnits.get('weight') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.net | massInUnit:colUnits.get('weight') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.moisture ?? 0 | number:'1.1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.moisture | massInUnit:colUnits.get('moisture') | number:'1.0-4' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.moisture | massInUnit:colUnits.get('moisture') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.dryWeightPercent ?? 0 | number:'1.1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.dryWeightPercent | massInUnit:colUnits.get('dryWeight') | number:'1.0-4' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.dryWeightPercent | massInUnit:colUnits.get('dryWeight') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.damagedGrain ?? 0 | number:'1.1' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.damagedGrain | massInUnit:colUnits.get('damagedGrain') | number:'1.0-4' }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.data.weightDiscounts.damagedGrain | massInUnit:colUnits.get('damagedGrain') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.data.net | massInUnit:colUnits.get('adjustedWeight')) - (ticket.data.weightDiscounts | weightDiscounts| massInUnit:colUnits.get('adjustedWeight')) | number:'1.0-3' }}</td> <!-- ADJUSTED WEIGHT -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (contract.price | pricePerUnit:colUnits.get('price'):contract.quantity) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
             <td [class.odd]='!even' [class.even]='even' class='right' 
@@ -138,11 +138,11 @@
             <td class='total-row right'>{{ totals.tare | massInUnit:colUnits.get('weight') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ totals.net | massInUnit:colUnits.get('weight') | number:'1.0-3' }}</td>
             <td class='total-row right'></td>
-            <td class='total-row right'>{{ totals.weightDiscounts.moisture | massInUnit:colUnits.get('moisture') | number:'1.0-4' }}</td>
+            <td class='total-row right'>{{ totals.weightDiscounts.moisture | massInUnit:colUnits.get('moisture') | number:'1.0-3' }}</td>
             <td class='total-row right'></td>
-            <td class='total-row right'>{{ totals.weightDiscounts.dryWeight | massInUnit:colUnits.get('dryWeight') | number:'1.0-4' }}</td>
+            <td class='total-row right'>{{ totals.weightDiscounts.dryWeight | massInUnit:colUnits.get('dryWeight') | number:'1.0-3' }}</td>
             <td class='total-row right'></td>
-            <td class='total-row right'>{{ totals.weightDiscounts.damagedGrain | massInUnit:colUnits.get('damagedGrain') | number:'1.0-4' }}</td>
+            <td class='total-row right'>{{ totals.weightDiscounts.damagedGrain | massInUnit:colUnits.get('damagedGrain') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ totals.adjustedWeight | massInUnit:colUnits.get('adjustedWeight') | number:'1.0-3' }} </td>
             <td class='total-row right'></td>
             <td class='total-row right' 
