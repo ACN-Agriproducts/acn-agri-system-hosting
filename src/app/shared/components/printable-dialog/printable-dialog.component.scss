@@ -15,19 +15,18 @@ mat-toolbar {
     }
 }
 
-app-document-wrapper {
-    flex: 1 0;
-    
+.printable-wrapper {
     display: flex;
-    flex-direction: column;
-    height: calc(100% - 40px);
+    justify-content: center;
+    background-color: gray;
+    box-shadow: 2px 2px rgba($color: #000000, $alpha: 0.2);
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    overflow-y: auto;
+    flex: 1; // ==> flex: 1 1 0%;
 
-    ::ng-deep {
-        *{}
-
-        > div {
-            overflow-y: auto;
-            flex-grow: 1;
-        }
+    &>* {
+        flex: 0 0 auto; // auto means look at my height and width
     }
 }

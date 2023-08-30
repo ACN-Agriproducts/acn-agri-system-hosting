@@ -51,7 +51,7 @@ export class SetLiquidationPage implements OnInit {
   public printableFormats = {
     "Liquidation Long": "liquidation-long",
   };
-  public selectedFormat: string;
+  public selectedFormat: string = this.printableFormats["Liquidation Long"];
 
   readonly units = UNIT_LIST;
 
