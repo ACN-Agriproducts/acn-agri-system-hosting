@@ -346,11 +346,6 @@ export class Ticket extends FirebaseDocInterface{
     }
 }
 
-export declare type ReportTicket = {
-    data: Ticket,
-    inReport: boolean
-}
-
 export class PriceDiscounts {
     public infested: number = 0;
     public musty: number = 0;

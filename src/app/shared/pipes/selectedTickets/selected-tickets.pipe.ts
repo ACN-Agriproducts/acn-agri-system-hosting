@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ReportTicket } from '@shared/classes/ticket';
+import { ReportTicket } from '@shared/classes/liquidation';
 
 @Pipe({
   name: 'selectedTickets',

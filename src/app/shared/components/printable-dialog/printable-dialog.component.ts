@@ -9,10 +9,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class PrintableDialogComponent implements OnInit {
   @Input() printStyle: any;
 
-  constructor(
-    // public dialogRef: MatDialogRef<PrintableDialogComponent>,
-    // @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+  constructor() {}
 
   ngOnInit() {}
 

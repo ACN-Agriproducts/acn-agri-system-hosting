@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { Contract } from '@shared/classes/contract';
-import { LiquidationTotals } from '@shared/classes/liquidation';
+import { ReportTicket, LiquidationTotals } from '@shared/classes/liquidation';
 import { units } from '@shared/classes/mass';
-import { ReportTicket } from '@shared/classes/ticket';
 import { BehaviorSubject, Observable, filter, map } from 'rxjs';
+import { LiquidationDialogData } from './liquidation-dialog/liquidation-dialog.component';
 
 @Component({
   selector: 'app-printable-liquidation',
@@ -17,10 +17,7 @@ export class PrintableLiquidationComponent implements OnInit {
   @Input("format") set format(newVersion: string) {
     this.format$.next(newVersion);
   }
-  @Input() selectedTickets: ReportTicket[];
-  @Input() contract: Contract;
-  @Input() totals: LiquidationTotals;
-  @Input() colUnits: Map<string, units>;
+  @Input() data: LiquidationDialogData;
 
   public format$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   public template$: Observable<TemplateRef<any>> = this.format$.pipe(

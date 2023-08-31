@@ -1,10 +1,11 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
-import { LiquidationTotals } from '@shared/classes/liquidation';
+import { LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
 import { Mass, UNIT_LIST, units } from '@shared/classes/mass';
 import { Price } from '@shared/classes/price';
-import { PriceDiscounts, ReportTicket, WeightDiscounts } from '@shared/classes/ticket';
+import { PriceDiscounts, WeightDiscounts } from '@shared/classes/ticket';
+import { LiquidationDialogData } from '../liquidation-dialog/liquidation-dialog.component';
 
 
 @Component({
@@ -13,23 +14,12 @@ import { PriceDiscounts, ReportTicket, WeightDiscounts } from '@shared/classes/t
   styleUrls: ['./liquidation-long.component.scss'],
 })
 export class LiquidationLongComponent implements OnInit {
-  @Input() contract: Contract;
-  @Input() selectedTickets: ReportTicket[];
-  @Input() totals: LiquidationTotals;
-  @Input() colUnits: Map<string, units>;
+  @Input() data: LiquidationDialogData;
 
   public date: Date = new Date();
   public language: string;
-  readonly units = UNIT_LIST;
 
-  // public colUnits: Map<string, units> = new Map<string, units>([
-  //   ["weight", "lbs"],
-  //   ["moisture", "CWT"],
-  //   ["dryWeight", "CWT"],
-  //   ["damagedGrain", "CWT"],
-  //   ["adjustedWeight", "lbs"],
-  //   ["price", "bu"],
-  // ]);
+  readonly units = UNIT_LIST;
 
   constructor(
     private session: SessionInfo

@@ -1,11 +1,15 @@
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { PriceDiscounts, ReportTicket, Ticket, WeightDiscounts } from "./ticket";
+import { PriceDiscounts, Ticket, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
 import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe } from "@angular/fire/firestore";
 import { Mass } from "./mass";
-import { Price } from "./price";
 
 type LiquidationStatus = "pending" | "paid" | "cancelled";
+
+export declare type ReportTicket = {
+    data: TicketInfo,
+    inReport: boolean
+}
 
 export class Liquidation extends FirebaseDocInterface {
     public date: Date;
@@ -13,6 +17,7 @@ export class Liquidation extends FirebaseDocInterface {
     public status: LiquidationStatus;
     public supplementalDocLinks: string[];
     public ticketRefs: DocumentReference<Ticket>[];
+    public ticketInfo: TicketInfo[];
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -104,6 +109,28 @@ export class Liquidation extends FirebaseDocInterface {
         .withConverter(Liquidation.converter));
         return liquidationDoc.data();
     }
+
+    public static getTicketInfo(ticket: Ticket): TicketInfo {
+        if (ticket == null) return;
+        return {
+            damagedGrain: ticket.damagedGrain ?? 0,
+            dateIn: ticket.dateIn,
+            dateOut: ticket.dateOut,
+            displayId: ticket.displayId,
+            dryWeightPercent: ticket.dryWeightPercent ?? 0,
+            gross: ticket.gross ?? new Mass(0, "lbs"),
+            id: ticket.id,
+            moisture: ticket.moisture ?? 0,
+            net: ticket.net ?? new Mass(0, "lbs"),
+            priceDiscounts: ticket.priceDiscounts ?? new PriceDiscounts(),
+            ref: ticket.ref.withConverter(Ticket.converter),
+            status: ticket.status,
+            subId: ticket.subId,
+            tare: ticket.tare ?? new Mass(0, "lbs"),
+            weight: ticket.weight,
+            weightDiscounts: ticket.weightDiscounts ?? new WeightDiscounts(),
+        };
+    }
 }
 
 export class LiquidationTotals {
@@ -141,4 +168,23 @@ export class LiquidationTotals {
             this.netToPay += tempBeforeFinalDiscounts - ticket.data.priceDiscounts.total();
         });
     }
+}
+
+interface TicketInfo {
+    damagedGrain: number;
+    dateIn: Date;
+    dateOut: Date;
+    displayId: string;
+    dryWeightPercent: number;
+    gross: Mass;
+    id: number;
+    moisture: number;
+    net: Mass;
+    priceDiscounts: PriceDiscounts;
+    ref: DocumentReference<Ticket>;
+    status: string;
+    subId: string;
+    tare: Mass;
+    weight: number;
+    weightDiscounts: WeightDiscounts;
 }

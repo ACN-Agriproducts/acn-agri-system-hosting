@@ -47,6 +47,10 @@ export class LiquidationTableComponent implements OnInit {
     }
   }
 
+  public openLiquidation(liquidation: Liquidation) {
+    
+  }
+
 }
 
 @Pipe({
