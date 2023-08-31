@@ -39,6 +39,10 @@ export class PrintableContractUtilitiesService {
 
     return field?.selectOptions?.find(option => option.value == value);
   }
+
+  isNumber(value: any) {
+    return typeof value == 'number';
+  }
 }
 
 @Pipe({

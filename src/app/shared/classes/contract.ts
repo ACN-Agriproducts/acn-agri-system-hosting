@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, serverTimestamp, SnapshotOptions, Unsubscribe, where } from "@angular/fire/firestore";
 import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -15,65 +15,66 @@ declare type ContractStatus = 'pending' | 'active' | 'closed' | 'cancelled' | 'p
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
+    bankInfo: BankInfo[];
     base: number;
     buyer_terms: number;
+    cargoDelays: string;
     client:  DocumentReference<Contact>;
     clientInfo: ContactInfo;
     clientName: string;
     clientTicketInfo: ContactInfo;
+    companyInfo: { email: string; phone: string; }
+    contractExecutive: Exectuive;
+    contractOwner: string;
+    currency: string;
     currentDelivered: Mass;
     date: Date;
     delivery_dates: DeliveryDates;
-    grade: number;
+    deliveryPlants: string[];
+    deliveryType: string;
+    formOfPayment: string;
+    futurePriceBase: Price;
+    futurePriceInfo: FuturePriceInfo;
+    grade: number | string;
+    guarantee: number;
     id: number;
+    isOpen: boolean;
+    loadConditions: string;
+    loadDelays: string;
     loads: number;
+    loadType: string;
     market_price: number;
+    paymentDelays: { applies: boolean, x: number, y: number };
     paymentTerms: PaymentTerms;
+    paymentWithdrawal: string;
     pdfReference: string;
     plants: string[];
+    prepaid: number | string;
     price: Price;
     pricePerBushel: number;
     printableFormat: string;
     product: DocumentReference<Product | DocumentData>;
     productInfo: ProductInfo;
     quantity: Mass;
+    quantityErrorPercentage: number;
     seller_terms: string;
+    shrinkage: string;
     status: ContractStatus;
+    statusDates: {
+        active: Date,
+        closed: Date,
+        cancelled: Date,
+    }
+    storageAndFumigation: string;
     tags: string[];
+    termsOfPayment: string;
     tickets: DocumentReference<Ticket>[];
     transport: string;
+    transportInsurance: string;
     truckers: TruckerInfo[];
     type: string;
-    isOpen: boolean;
 
-    // NEW
-    bankInfo: BankInfo[];
-    cargoDelays: string;
-    contractOwner: string;
-    contractExecutive: Exectuive;
-    currency: string;
-    deliveryPlants: string[];
-    deliveryType: string;
-    formOfPayment: string;
-    termsOfPayment: string;
-    futurePriceInfo: FuturePriceInfo;
-    guarantee: number;
-    loadConditions: string;
-    loadDelays: string;
-    loadType: string;
-    paymentDelays: { applies: boolean, x: number, y: number };
-    paymentWithdrawal: string;
-    prepaid: number | string;
-    shrinkage: string;
-    storageAndFumigation: string;
-    transportInsurance: string;
-    quantityErrorPercentage: number;
-    futurePriceBase: Price;
-    companyInfo: {
-        email: string;
-        phone: string;
-    }
-
+    deliveredHistory: { [date: string]: number };
     progress: number; 
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
@@ -164,6 +165,13 @@ export class Contract extends FirebaseDocInterface {
                 begin: null,
                 end: null
             };
+
+            this.statusDates = {
+                active: null,
+                closed: null,
+                cancelled: null,
+            }
+
             this.plants = [];
             this.deliveryPlants = [];
 
@@ -258,6 +266,14 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
 
+        this.statusDates = data.statusDates ?? {
+            active: null,
+            closed: null,
+            cancelled: null,
+        }
+
+        this.deliveredHistory = data.deliveredHistory;
+
         this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
 
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
@@ -283,61 +299,65 @@ export class Contract extends FirebaseDocInterface {
         toFirestore(data: Contract): DocumentData {
             return {
                 aflatoxin: data.aflatoxin ?? null,
+                bankInfo: data.bankInfo ?? null,
                 base: data.base ?? null,
+                cargoDelays: data.cargoDelays ?? null,
                 client: data.client ?? null,
-                clientName: data.clientName ?? null,
                 clientInfo: data.clientInfo ?? null,
+                clientName: data.clientName ?? null,
                 clientTicketInfo: data.clientTicketInfo ?? null,
+                companyInfo: data.companyInfo ?? null,
+                contractExecutive: data.contractExecutive ?? null,
+                contractOwner: data.contractOwner ?? null,
+                currency: data.currency ?? null,
                 currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
+                deliveredHistory: data.deliveredHistory ?? null,
                 delivery_dates: data.delivery_dates ?? null,
+                deliveryPlants: data.deliveryPlants ?? null,
+                deliveryType: data.deliveryType ?? null,
+                formOfPayment: data.formOfPayment ?? null,
+                futurePriceBase: data.futurePriceBase.amount ?? null,
+                futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
+                futurePriceInfo: data.futurePriceInfo ?? null,
                 grade: data.grade ?? null,
+                guarantee: data.guarantee ?? null,
                 id: data.id ?? null,
+                isOpen: data.isOpen ?? false,
+                loadConditions: data.loadConditions ?? null,
+                loadDelays: data.loadDelays ?? null,
                 loads: data.loads ?? null,
+                loadType: data.loadType ?? null,
                 market_price: data.market_price ?? null,
+                paymentDelays: data.paymentDelays ?? null,
                 paymentTerms: data.paymentTerms.get() ?? null,
+                paymentWithdrawal: data.paymentWithdrawal ?? null,
                 pdfReference: data.pdfReference ?? null,
                 plants: data.plants ?? null,
-                pricePerBushel: data.pricePerBushel ?? null,
+                prepaid: data.prepaid ?? null,
                 price: data.price.amount ?? null,
+                pricePerBushel: data.pricePerBushel ?? null,
                 priceUnit: data.price.unit ?? null,
                 product: data.product ?? null,
                 productInfo: data.productInfo ?? null,
                 quantity: data.quantity.get() ?? 0,
+                quantityErrorPercentage: data.quantityErrorPercentage ?? null,
                 quantityUnits: data.quantity.defaultUnits ?? FirebaseDocInterface.session.getDefaultUnit(),
                 seller_terms: data.seller_terms ?? null,
+                shrinkage: data.shrinkage ?? null,
                 status: data.status ?? null,
+                statusDates: data.statusDates ?? {
+                    active: null,
+                    closed: null,
+                    cancelled: null,
+                },
+                storageAndFumigation: data.storageAndFumigation ?? null,
                 tags: data.tags ?? [],
+                termsOfPayment: data.termsOfPayment ?? null,
                 tickets: data.tickets ?? [],
                 transport: data.transport ?? null,
-                truckers: data.truckers ?? [],
-                isOpen: data.isOpen ?? false,
-
-                // NEW
-                bankInfo: data.bankInfo ?? null,
-                cargoDelays: data.cargoDelays ?? null,
-                contractOwner: data.contractOwner ?? null,
-                contractExecutive: data.contractExecutive ?? null,
-                currency: data.currency ?? null,
-                deliveryPlants: data.deliveryPlants ?? null,
-                deliveryType: data.deliveryType ?? null,
-                formOfPayment: data.formOfPayment ?? null,
-                futurePriceInfo: data.futurePriceInfo ?? null,
-                guarantee: data.guarantee ?? null,
-                loadConditions: data.loadConditions ?? null,
-                loadDelays: data.loadDelays ?? null,
-                loadType: data.loadType ?? null,
-                paymentDelays: data.paymentDelays ?? null,
-                paymentWithdrawal: data.paymentWithdrawal ?? null,
-                prepaid: data.prepaid ?? null,
-                shrinkage: data.shrinkage ?? null,
-                storageAndFumigation: data.storageAndFumigation ?? null,
                 transportInsurance: data.transportInsurance ?? null,
-                quantityErrorPercentage: data.quantityErrorPercentage ?? null,
-                termsOfPayment: data.termsOfPayment ?? null,
-                futurePriceBase: data.futurePriceBase.amount ?? null,
-                futurePriceBaseUnit: data.futurePriceBase.unit ?? null,
-                companyInfo: data.companyInfo ?? null,
+                truckers: data.truckers ?? [],
                 type: data.type ?? null,
 
                 progress: data.progress ?? null,
@@ -471,6 +491,21 @@ export class Contract extends FirebaseDocInterface {
         contactInfo.notarialAct = null;
         contactInfo.notarialActDate = null;
 
+    }
+
+    public changeStatus(newStatus: ContractStatus): Promise<void> {
+        const updateDoc = {status: newStatus};
+        const oldStatus = this.status;
+
+        if(this.status != 'closed' && newStatus != 'pending') {
+            updateDoc[`statusDates.${newStatus}`] = serverTimestamp();
+        }
+
+        this.status = newStatus;
+        const promise = this.update(updateDoc);
+        promise.catch(() => this.status = oldStatus);
+
+        return promise;
     }
 
     public static getCollectionReference(db: Firestore, company: string, contractType?: contractType): CollectionReference<Contract> {

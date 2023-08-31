@@ -66,7 +66,7 @@
 		<br>
 		<b>SEGUNDA. &#8211; CALIDAD.</b> - Las muestras serán tomadas en el momento y lugar de descarga, mismas que serán identificadas y resguardadas. En caso de tener alguna diferencia respecto a la calidad del “PRODUCTO” las “PARTES” acuerdan sujetarse a un análisis de un tercero para definir dicha calidad, sometiéndose a los resultados. El "VENDEDOR” se compromete a entregar el “PRODUCTO” al “COMPRADOR” dentro de los parámetros y especificaciones convenidos que se muestran a continuación:
         <div class="product-info">
-            <div class="product-info-item">Humedad:<br><span [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}</span>%<br>maximo</div>
+            <div class="product-info-item">Humedad:<br><span [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') + "%" : "NO APLICA"}}</span><br>maximo</div>
             <div class="product-info-item">Impurezas:<br><span [printableField]="'productInfo.impurities'">{{ contractForm?.productInfo?.impurities ? (contractForm?.productInfo?.impurities | number:'.1') : "XX.X"}}</span>%<br>máximo</div>
             <div class="product-info-item">Grano dañado:<br><span [printableField]="'productInfo.damagedGrain'">{{ contractForm?.productInfo?.damagedGrain ? (contractForm?.productInfo?.damagedGrain | number:'.1') : "XX.X"}}</span>%<br>máximo</div>
             <div class="product-info-item">Grano quebrado:<br><span [printableField]="'productInfo.brokenGrain'">{{ contractForm?.productInfo?.brokenGrain ? (contractForm?.productInfo?.brokenGrain | number:'.1') : "XX.X"}}</span>%<br>máximo.</div>
@@ -179,11 +179,12 @@
         </div>
         <div class="contract-info-row">
             <div>CALIDAD GARANTIZADA:</div>
-			<div>Grado: U.S. <span [printableField]="'grade'">{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
+			<div *ngIf="utils.isNumber(contractForm?.grade)">Grado: U.S. <span [printableField]="'grade'" >{{contractForm?.grade || 'X'}}</span> OFICIAL</div>
+			<div *ngIf="!utils.isNumber(contractForm?.grade)"><span [printableField]="'grade'" >{{contractForm?.grade | as:'string' | selectFieldDisplay:contractType:'grade' | async}}</span></div>
         </div>
         <div class="contract-info-row">
             <div>HUMEDAD MÁXIMA:</div>
-			<div [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') : "XX.X"}}%</div>
+			<div [printableField]="'productInfo.moisture'">{{ contractForm?.productInfo?.moisture ? (contractForm?.productInfo?.moisture | number:'.1') + '%' : "NO APLICA"}}</div>
         </div>
         <div class="contract-info-row">
             <div>FORMA DE ENTREGA:</div>

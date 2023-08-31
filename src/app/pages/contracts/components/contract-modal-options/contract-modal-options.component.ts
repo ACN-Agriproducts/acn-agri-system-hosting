@@ -44,15 +44,10 @@ export class ContractModalOptionsComponent implements OnInit {
       return;
     }
 
-    const oldStatus = this.contract.status;
-    this.contract.status = 'active';
-    updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
-      status: "active"
-    }).then(() => {
+    this.contract.changeStatus('active').then(() => {
       this.snack.open("Contract status updated", "success");
     }).catch(error => {
       console.error(error);
-      this.contract.status = oldStatus;
       this.snack.open("Error updating status", "error");
     });
   }
@@ -91,69 +86,27 @@ export class ContractModalOptionsComponent implements OnInit {
       return;
     }
 
-    const requiredFieldData = {
-      marketPrice: this.contract.market_price,
-      price: this.contract.price.amount,
-      priceUnit: this.contract.price.unit,
-      quantity: this.contract.quantity.amount,
-      quantityUnits: this.contract.quantity.defaultUnits
-    };
+    if(this.contract.isOpen) await this.fixFields(true);
 
-    // Set open contracts quantity equal to current quantity when closed
-    if(this.contract.isOpen) {
-      requiredFieldData.quantity = this.contract.currentDelivered.amount;
-      requiredFieldData.quantityUnits = this.contract.currentDelivered.defaultUnits;
-    }
-
-    let newFieldData;
-    if (Object.entries(requiredFieldData).some(([key, value]) => (value ?? 0) === 0)) {
-      const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
-        data: requiredFieldData,
-        autoFocus: false
-      });
-      newFieldData = await lastValueFrom(dialogRef.afterClosed());
-      if (newFieldData == null) return;
-    }
-
-    this.contract.status = 'closed';
-    updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
-      status: "closed",
-      market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
-      price: newFieldData?.price ?? requiredFieldData.price,
-      priceUnit: newFieldData?.priceUnit ?? requiredFieldData.priceUnit,
-      quantity: newFieldData?.quantity ?? requiredFieldData.quantity,
-      quantityUnits: newFieldData?.quantityUnits ?? requiredFieldData.quantityUnits
-    })
-    .then(() => {
+    this.contract.changeStatus('closed').then(() => {
       this.snack.open("Contract Successfully Closed", "success");
-      this.contract.market_price = requiredFieldData.marketPrice;
-      this.contract.price.amount = requiredFieldData.price;
-      this.contract.price.unit = requiredFieldData.priceUnit;
-      this.contract.quantity.amount = requiredFieldData.quantity;
-      this.contract.quantity.defaultUnits = requiredFieldData.quantityUnits;
     })
     .catch(error => {
       console.error(error);
-      this.contract.status = 'active';
       this.snack.open("Error updating status", "error");
     });
   }
 
   public async reopen() {
-    const oldStatus = this.contract.status;
-    this.contract.status = 'active';
-    updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
-      status: "active"
-    }).then(() => {
+    this.contract.changeStatus('active').then(() => {
       this.snack.open("Contract status updated", "success");
     }).catch(error => {
       console.error(error);
-      this.contract.status = oldStatus;
       this.snack.open("Error updating status", "error");
     });
   }
 
-  public async fixFields() {
+  public async fixFields(isClosing: boolean = false): Promise<void> {
     const requiredFieldData = {
       marketPrice: this.contract.market_price,
       price: this.contract.price.amount,
@@ -161,6 +114,11 @@ export class ContractModalOptionsComponent implements OnInit {
       quantity: this.contract.quantity.amount,
       quantityUnits: this.contract.quantity.defaultUnits
     };
+
+    if(this.contract.isOpen && isClosing) {
+      requiredFieldData.quantity = this.contract.currentDelivered.amount;
+      requiredFieldData.quantityUnits = this.contract.currentDelivered.defaultUnits;
+    }
 
     let newFieldData;
     const dialogRef = this.dialog.open(CloseContractFieldsDialogComponent, {
@@ -170,7 +128,6 @@ export class ContractModalOptionsComponent implements OnInit {
     newFieldData = await lastValueFrom(dialogRef.afterClosed());
     if (newFieldData == null) return;
 
-    this.contract.status = 'closed';
     updateDoc(Contract.getDocRef(this.db, this.currentCompany, this.isPurchase, this.contractId).withConverter(null), {
       market_price: newFieldData?.marketPrice ?? requiredFieldData.marketPrice,
       price: newFieldData?.price ?? requiredFieldData.price,
@@ -188,7 +145,6 @@ export class ContractModalOptionsComponent implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.contract.status = 'active';
       this.snack.open("Error updating status", "error");
     });
   }
