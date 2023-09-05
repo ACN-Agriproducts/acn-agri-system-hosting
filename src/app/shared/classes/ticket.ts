@@ -361,6 +361,10 @@ export class PriceDiscounts {
     public total(): number {
         return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
     }
+
+    public getRawData() {
+        return { ...this };
+    }
 }
 
 const MASS_FIELDS_AND_NAMES = [

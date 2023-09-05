@@ -12,7 +12,7 @@
                   <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
-                  <app-liquidation-table [liquidations]="liquidations" data-scroll></app-liquidation-table>
+                  <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" data-scroll></app-liquidation-table>
                 </mat-card-content>
               </mat-card>
             </div>

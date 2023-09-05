@@ -2,9 +2,9 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation, LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
@@ -12,7 +12,6 @@ import { UNIT_LIST, units } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
-import * as Excel from 'exceljs';
 import { lastValueFrom } from 'rxjs';
 import { LiquidationDialogComponent } from 'src/app/modules/liquidation-printables/liquidation-dialog/liquidation-dialog.component';
 
@@ -22,8 +21,6 @@ import { LiquidationDialogComponent } from 'src/app/modules/liquidation-printabl
   styleUrls: ['./set-liquidation.page.scss'],
 })
 export class SetLiquidationPage implements OnInit {
-  @ViewChild('printableDialog') printableDialog: TemplateRef<any>;
-
   public contract: Contract;
   public discountTables: DiscountTables;
   public id: string;
@@ -38,15 +35,6 @@ export class SetLiquidationPage implements OnInit {
   public tickets: ReportTicket[] = [];
   public selectedTickets: ReportTicket[] = [];
 
-  public displayUnits: Map<string, units> = new Map<string, units>([
-    ["weight", "lbs"],
-    ["moisture", "CWT"],
-    ["dryWeight", "CWT"],
-    ["damagedGrain", "CWT"],
-    ["adjustedWeight", "lbs"],
-    ["price", "bu"],
-  ]);
-
   readonly units = UNIT_LIST;
 
   constructor(
@@ -54,10 +42,10 @@ export class SetLiquidationPage implements OnInit {
     private session: SessionInfo,
     private route: ActivatedRoute,
     private selectedTicketsPipe: SelectedTicketsPipe,
-    private transloco: TranslocoService,
     private snack: SnackbarService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private confirm: ConfirmationDialogService,
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
@@ -110,17 +98,21 @@ export class SetLiquidationPage implements OnInit {
 
   public selectedTicketsChange(): void {
     this.selectedTickets = this.selectedTicketsPipe.transform(this.tickets);
-    this.totals = new LiquidationTotals(this.selectedTickets, this.contract);
+    this.totals = new LiquidationTotals(this.selectedTickets.map(t => t.data), this.contract);
     this.allSelected = this.selectedTickets.length === this.tickets.filter(t => t.data.status !== "pending" || this.editingTickets?.includes(t)).length;
   }
 
   public async submit(): Promise<void> {
     await this.openLiquidation();
+    if (!await this.confirm.openDialog("submit this liquidation")) return;
+ 
+    this.liquidation.ticketRefs = this.selectedTickets.map(t => t.data.ref.withConverter(Ticket.converter));
+    this.liquidation.tickets = this.selectedTickets.map(t => t.data);
 
-    this.liquidation.ticketRefs = this.selectedTickets.map(ticket => ticket.data.ref.withConverter(Ticket.converter));
     this.liquidation.set().then(() => {
       this.tickets.forEach(ticket => {
         updateDoc(ticket.data.ref, {
+          priceDiscounts: ticket.data.priceDiscounts.getRawData(),
           weightDiscounts: ticket.data.weightDiscounts.getRawData()
         });
       });
@@ -139,7 +131,6 @@ export class SetLiquidationPage implements OnInit {
         selectedTickets: this.selectedTickets,
         contract: this.contract,
         totals: this.totals,
-        displayUnits: this.displayUnits,
       },
       panelClass: "borderless-dialog",
       minWidth: "80%",

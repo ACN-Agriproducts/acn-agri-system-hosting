@@ -2,7 +2,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { PriceDiscounts, Ticket, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
 import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe } from "@angular/fire/firestore";
-import { Mass } from "./mass";
+import { Mass, units } from "./mass";
 
 type LiquidationStatus = "pending" | "paid" | "cancelled";
 
@@ -17,7 +17,7 @@ export class Liquidation extends FirebaseDocInterface {
     public status: LiquidationStatus;
     public supplementalDocLinks: string[];
     public ticketRefs: DocumentReference<Ticket>[];
-    public ticketInfo: TicketInfo[];
+    public tickets: TicketInfo[];
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -36,6 +36,7 @@ export class Liquidation extends FirebaseDocInterface {
             this.status = "pending";
             this.supplementalDocLinks = [];
             this.ticketRefs = [];
+            this.tickets = [];
 
             return;
         }
@@ -47,16 +48,28 @@ export class Liquidation extends FirebaseDocInterface {
         this.status = data.status;
         this.supplementalDocLinks = data.supplementalDocLinks;
         this.ticketRefs = data.ticketRefs;
+        this.tickets = data.tickets;
     }
 
     public static converter = {
         toFirestore(data: Liquidation): DocumentData {
+            const rawTickets = data.tickets.map(t => {
+                const rawData = { ...t };
+                Object.keys(t).forEach(key => {
+                    if (t[key] instanceof Mass || t[key] instanceof WeightDiscounts || t[key] instanceof PriceDiscounts) {
+                        rawData[key] = t[key].getRawData();
+                    }
+                })
+                return rawData;
+            });
+
             return {
                 date: data.date,
                 proofOfPaymentLinks: data.proofOfPaymentLinks,
                 status: data.status,
                 supplementalDocLinks: data.supplementalDocLinks,
-                ticketRefs: data.ticketRefs
+                ticketRefs: data.ticketRefs,
+                tickets: rawTickets
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Liquidation {
@@ -125,7 +138,7 @@ export class Liquidation extends FirebaseDocInterface {
             priceDiscounts: ticket.priceDiscounts ?? new PriceDiscounts(),
             ref: ticket.ref.withConverter(Ticket.converter),
             status: ticket.status,
-            subId: ticket.subId,
+            subId: ticket.subId ?? "",
             tare: ticket.tare ?? new Mass(0, "lbs"),
             weight: ticket.weight,
             weightDiscounts: ticket.weightDiscounts ?? new WeightDiscounts(),
@@ -143,34 +156,34 @@ export class LiquidationTotals {
     public weightDiscounts: WeightDiscounts = new WeightDiscounts();
     public priceDiscounts: PriceDiscounts = new PriceDiscounts();
 
-    constructor(tickets?: ReportTicket[], contract?: Contract) {
+    constructor(tickets?: TicketInfo[], contract?: Contract) {
         if (!tickets || !contract) return;
 
         this.gross = this.tare = this.net = this.adjustedWeight = new Mass(0, "lbs", contract.productInfo);
         tickets.forEach(ticket => {
-            this.gross = this.gross.add(ticket.data.gross);
-            this.tare = this.tare.add(ticket.data.tare);
-            this.net = this.net.add(ticket.data.net);
+            this.gross = this.gross.add(ticket.gross);
+            this.tare = this.tare.add(ticket.tare);
+            this.net = this.net.add(ticket.net);
 
-            for (const key of Object.keys(ticket.data.weightDiscounts)) {
-                this.weightDiscounts[key] ??= new Mass(0, ticket.data.net.getUnit(), contract.productInfo);
-                this.weightDiscounts[key].amount += ticket.data.weightDiscounts[key].amount;
+            for (const key of Object.keys(ticket.weightDiscounts)) {
+                this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);
+                this.weightDiscounts[key].amount += ticket.weightDiscounts[key].amount;
             }
-            const tempAdjustedWeight = ticket.data.net.subtract(ticket.data.weightDiscounts.totalMass());
+            const tempAdjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
             this.adjustedWeight = this.adjustedWeight.add(tempAdjustedWeight);
 
-            const tempBeforeFinalDiscounts = contract.price.getPricePerUnit(ticket.data.net.getUnit(), contract.quantity) * tempAdjustedWeight.get();
+            const tempBeforeFinalDiscounts = contract.price.getPricePerUnit(ticket.net.getUnit(), contract.quantity) * tempAdjustedWeight.get();
             this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
 
             for (const key of Object.keys(this.priceDiscounts)) {
-                this.priceDiscounts[key] += ticket.data.priceDiscounts[key];
+                this.priceDiscounts[key] += ticket.priceDiscounts[key];
             }
-            this.netToPay += tempBeforeFinalDiscounts - ticket.data.priceDiscounts.total();
+            this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
         });
     }
 }
 
-interface TicketInfo {
+export interface TicketInfo {
     damagedGrain: number;
     dateIn: Date;
     dateOut: Date;

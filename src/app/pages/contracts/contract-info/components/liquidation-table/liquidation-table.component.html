@@ -22,9 +22,13 @@
       <mat-card class="body-card" *ngFor="let item of liquidations; let index = index">
         <li class="row">
           <div class="cell ticket-ids">
-            <i *ngFor="let ref of item.ticketRefs | ticketIds; let last = last">
-              <span>{{ ref | async }}</span>
-              <span *ngIf="!last && (ref | async)">,</span>
+            <!-- <i *ngFor="let id of item.ticketRefs | ticketIds; let last = last">
+              <span>{{ id | async }}</span>
+              <span *ngIf="!last && (id | async)">,</span>
+            </i> -->
+            <i *ngFor="let id of item.tickets | ticketIds; let last = last">
+              <span>{{ id }}</span>
+              <span *ngIf="!last">,&nbsp;</span>
             </i>
           </div>
           <div class="cell">{{ item.date | date }}</div>
@@ -59,13 +63,13 @@
                 <mat-icon color="primary">edit</mat-icon>
                 <span>{{ t("edit") | titlecase }}</span>
               </button>
-              <button mat-menu-item (click)="archive(index)">
-                <mat-icon color="warn">archive</mat-icon>
-                <span>{{ t("archive") | titlecase }}</span>
-              </button>
               <button mat-menu-item (click)="cancel(index)" *ngIf="item.status!=='cancelled'">
                 <mat-icon color="warn">cancel</mat-icon>
                 <span>{{ t("cancel") | titlecase }}</span>
+              </button>
+              <button mat-menu-item (click)="archive(index)">
+                <mat-icon color="warn">archive</mat-icon>
+                <span>{{ t("archive") | titlecase }}</span>
               </button>
             </mat-menu>
           </div>

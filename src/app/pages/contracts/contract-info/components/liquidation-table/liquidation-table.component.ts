@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { getDoc } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Liquidation } from '@shared/classes/liquidation';
-import { Ticket } from '@shared/classes/ticket';
-import { DocumentReference } from 'firebase/firestore';
+import { Contract } from '@shared/classes/contract';
+import { Liquidation, LiquidationTotals, TicketInfo } from '@shared/classes/liquidation';
+import { LiquidationDialogComponent } from 'src/app/modules/liquidation-printables/liquidation-dialog/liquidation-dialog.component';
 
 @Component({
   selector: 'app-liquidation-table',
@@ -13,10 +13,12 @@ import { DocumentReference } from 'firebase/firestore';
 })
 export class LiquidationTableComponent implements OnInit {
   @Input() liquidations: Liquidation[];
+  @Input() contract: Contract;
 
   constructor(
     private confirm: ConfirmationDialogService,
     private snack: SnackbarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {}
@@ -48,7 +50,17 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public openLiquidation(liquidation: Liquidation) {
-    
+    const dialog = this.dialog.open(LiquidationDialogComponent, {
+      data: {
+        selectedTickets: liquidation.tickets,
+        contract: this.contract,
+        totals: new LiquidationTotals(liquidation.tickets, this.contract),
+      },
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
+    });
   }
 
 }
@@ -58,8 +70,12 @@ export class LiquidationTableComponent implements OnInit {
 })
 export class TicketIdsPipe implements PipeTransform {
   
-  transform(ticketRefs: DocumentReference<Ticket>[], ...args: any[]): Promise<number>[] {
-    return ticketRefs.map(async ref => (await getDoc(ref)).data().id)
+  // transform(ticketRefs: DocumentReference<Ticket>[], ...args: any[]): Promise<number>[] {
+  //   return ticketRefs.map(async ref => (await getDoc(ref)).data().id)
+  // }
+
+  transform(tickets: TicketInfo[], ...args: any[]): number[] {
+    return tickets.map(ticket => ticket.id);
   }
  
 }
