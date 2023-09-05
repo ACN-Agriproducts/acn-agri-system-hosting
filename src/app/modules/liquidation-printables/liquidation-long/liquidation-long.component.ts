@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
-import { LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
+import { DEFAULT_DISPLAY_UNITS, LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
 import { Mass, UNIT_LIST, units } from '@shared/classes/mass';
 import { Price } from '@shared/classes/price';
 import { PriceDiscounts, WeightDiscounts } from '@shared/classes/ticket';
@@ -27,6 +27,7 @@ export class LiquidationLongComponent implements OnInit {
 
   ngOnInit() {
     this.language = this.session.getLanguage();
+    this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
   }
 
   ngOnDestroy() {

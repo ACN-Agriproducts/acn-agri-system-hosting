@@ -3,14 +3,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
-import { LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
+import { DEFAULT_DISPLAY_UNITS, LiquidationTotals, ReportTicket, TicketInfo } from '@shared/classes/liquidation';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 import { PrintableDialogComponent } from '@shared/components/printable-dialog/printable-dialog.component';
 
 import * as Excel from 'exceljs';
 
 export interface LiquidationDialogData {
-  selectedTickets: ReportTicket[];
+  selectedTickets: TicketInfo[];
   contract: Contract;
   totals: LiquidationTotals;
   displayUnits?: Map<string, units>;
@@ -28,15 +28,6 @@ export class LiquidationDialogComponent implements OnInit {
   };
   public selectedFormat: string = this.printableFormats["Liquidation Long"];
 
-  public displayUnits: Map<string, units> = new Map<string, units>([
-    ["weight", "lbs"],
-    ["moisture", "CWT"],
-    ["dryWeight", "CWT"],
-    ["damagedGrain", "CWT"],
-    ["adjustedWeight", "lbs"],
-    ["price", "bu"],
-  ]);
-
   readonly units = UNIT_LIST;
 
   constructor(
@@ -47,7 +38,7 @@ export class LiquidationDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.data.displayUnits = this.displayUnits;
+    this.data.displayUnits = new Map<string, units>(DEFAULT_DISPLAY_UNITS);
   }
 
   public async onDownloadLiquidation(): Promise<void> {
@@ -63,12 +54,12 @@ export class LiquidationDialogComponent implements OnInit {
       { header: this.transloco.translate("contracts.info.Tare"), key: 'tare', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.Net"), key: 'net', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'moisture' },
-      { header: this.displayUnits.get('moisture').toUpperCase(), key: 'moistureWeight', style: { numFmt: '0.000' } },
+      { header: this.data.displayUnits.get('moisture').toUpperCase(), key: 'moistureWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'dryWeightPercent' },
-      { header: this.displayUnits.get('dryWeight').toUpperCase(), key: 'dryWeight', style: { numFmt: '0.000' } },
+      { header: this.data.displayUnits.get('dryWeight').toUpperCase(), key: 'dryWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'damage' },
-      { header: this.displayUnits.get('damagedGrain').toUpperCase(), key: 'damagedGrain', style: { numFmt: '0.000' } },
-      { header: this.transloco.translate("contracts.info.Adjusted Weight") + `(${this.displayUnits.get('adjustedWeight').toUpperCase()})`, key: 'adjustedWeight', style: { numFmt: '0.000' } },
+      { header: this.data.displayUnits.get('damagedGrain').toUpperCase(), key: 'damagedGrain', style: { numFmt: '0.000' } },
+      { header: this.transloco.translate("contracts.info.Adjusted Weight") + `(${this.data.displayUnits.get('adjustedWeight').toUpperCase()})`, key: 'adjustedWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.Price ($/BU)"), key: 'pricePerBushel', style: { numFmt: '0.0000' } },
       { 
         header: this.transloco.translate("contracts.info.Total ($)"), 
@@ -116,7 +107,7 @@ export class LiquidationDialogComponent implements OnInit {
     ];
 
     let rowValues = [];
-    rowValues[4] = this.transloco.translate("contracts.info.Weight") + ` (${this.displayUnits.get('weight').toUpperCase()})`;
+    rowValues[4] = this.transloco.translate("contracts.info.Weight") + ` (${this.data.displayUnits.get('weight').toUpperCase()})`;
     rowValues[7] = this.transloco.translate("contracts.info.Moisture");
     rowValues[9] = this.transloco.translate("contracts.info.Drying");
     rowValues[11] = this.transloco.translate("contracts.info.Damage");
@@ -134,26 +125,26 @@ export class LiquidationDialogComponent implements OnInit {
 
     // populating worksheet columns
     this.data.selectedTickets.forEach(ticket => {
-      const net = ticket.data.gross.getMassInUnit(this.displayUnits.get('weight')) - ticket.data.tare.getMassInUnit(this.displayUnits.get('weight'));
-      const adjustedWeight = net - ticket.data.weightDiscounts.totalMass().get();
-      const total = (this.data.contract.price.getPricePerUnit(this.displayUnits.get('price'), this.data.contract.quantity) * adjustedWeight);
+      const net = ticket.gross.getMassInUnit(this.data.displayUnits.get('weight')) - ticket.tare.getMassInUnit(this.data.displayUnits.get('weight'));
+      const adjustedWeight = net - ticket.weightDiscounts.totalMass().get();
+      const total = (this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) * adjustedWeight);
       
       worksheet.addRow({
-        ...ticket.data,
-        gross: ticket.data.gross.getMassInUnit(this.displayUnits.get('weight')),
-        tare: ticket.data.tare.getMassInUnit(this.displayUnits.get('weight')),
+        ...ticket,
+        gross: ticket.gross.getMassInUnit(this.data.displayUnits.get('weight')),
+        tare: ticket.tare.getMassInUnit(this.data.displayUnits.get('weight')),
         net: net,
-        moisture: ticket.data.moisture,
-        moistureWeight: ticket.data.weightDiscounts.moisture?.getMassInUnit(this.displayUnits.get('moisture')) ?? 0,
-        dryWeightPercent: ticket.data.dryWeightPercent,
-        dryWeight: ticket.data.weightDiscounts.dryWeight?.getMassInUnit(this.displayUnits.get('dryWeight')) ?? 0,
-        damage: ticket.data.damagedGrain,
-        damagedGrain: ticket.data.weightDiscounts.damagedGrain?.getMassInUnit(this.displayUnits.get('damagedGrain')) ?? 0,
+        moisture: ticket.moisture,
+        moistureWeight: ticket.weightDiscounts.moisture?.getMassInUnit(this.data.displayUnits.get('moisture')) ?? 0,
+        dryWeightPercent: ticket.dryWeightPercent,
+        dryWeight: ticket.weightDiscounts.dryWeight?.getMassInUnit(this.data.displayUnits.get('dryWeight')) ?? 0,
+        damage: ticket.damagedGrain,
+        damagedGrain: ticket.weightDiscounts.damagedGrain?.getMassInUnit(this.data.displayUnits.get('damagedGrain')) ?? 0,
         adjustedWeight: adjustedWeight,
-        pricePerBushel: this.data.contract.price.getPricePerUnit(this.displayUnits.get('price'), this.data.contract.quantity),
+        pricePerBushel: this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
         total: total,
-        ...ticket.data.priceDiscounts,
-        netToPay: total - ticket.data.priceDiscounts.total()
+        ...ticket.priceDiscounts,
+        netToPay: total - ticket.priceDiscounts.total()
       });
     });
 
@@ -218,8 +209,8 @@ export class LiquidationDialogComponent implements OnInit {
   }
 
   public setUnits(units: units): void {
-    [...this.displayUnits.keys()].forEach(key => {
-      this.displayUnits.set(key, units);
+    [...this.data.displayUnits.keys()].forEach(key => {
+      this.data.displayUnits.set(key, units);
     });
   }
 

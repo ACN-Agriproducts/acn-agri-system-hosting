@@ -128,7 +128,7 @@ export class SetLiquidationPage implements OnInit {
   public async openLiquidation(): Promise<void> {
     const dialog = this.dialog.open(LiquidationDialogComponent, {
       data: {
-        selectedTickets: this.selectedTickets,
+        selectedTickets: this.selectedTickets.map(t => t.data),
         contract: this.contract,
         totals: this.totals,
       },

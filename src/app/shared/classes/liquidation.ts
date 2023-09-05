@@ -11,6 +11,15 @@ export declare type ReportTicket = {
     inReport: boolean
 }
 
+export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
+    ["weight", "lbs"],
+    ["moisture", "CWT"],
+    ["dryWeight", "CWT"],
+    ["damagedGrain", "CWT"],
+    ["adjustedWeight", "lbs"],
+    ["price", "bu"],
+]);
+
 export class Liquidation extends FirebaseDocInterface {
     public date: Date;
     public proofOfPaymentLinks: string[];
@@ -48,7 +57,24 @@ export class Liquidation extends FirebaseDocInterface {
         this.status = data.status;
         this.supplementalDocLinks = data.supplementalDocLinks;
         this.ticketRefs = data.ticketRefs;
-        this.tickets = data.tickets;
+        this.tickets = data.tickets.map(ticket => ({
+            damagedGrain: ticket.damagedGrain,
+            dateIn: ticket.dateIn.toDate(),
+            dateOut: ticket.dateOut.toDate(),
+            displayId: ticket.displayId,
+            dryWeightPercent: ticket.dryWeightPercent,
+            gross: new Mass(ticket.gross.amount, ticket.gross.defaultUnits),
+            id: ticket.id,
+            moisture: ticket.moisture,
+            net: new Mass(ticket.net.amount, ticket.net.defaultUnits),
+            priceDiscounts: new PriceDiscounts(ticket.priceDiscounts),
+            ref: ticket.ref.withConverter(Ticket.converter),
+            status: ticket.status,
+            subId: ticket.subId ?? "",
+            tare: new Mass(ticket.tare.amount, ticket.tare.defaultUnits),
+            weight: ticket.weight,
+            weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
+        }));
     }
 
     public static converter = {
@@ -125,23 +151,24 @@ export class Liquidation extends FirebaseDocInterface {
 
     public static getTicketInfo(ticket: Ticket): TicketInfo {
         if (ticket == null) return;
+
         return {
             damagedGrain: ticket.damagedGrain ?? 0,
             dateIn: ticket.dateIn,
             dateOut: ticket.dateOut,
             displayId: ticket.displayId,
             dryWeightPercent: ticket.dryWeightPercent ?? 0,
-            gross: ticket.gross ?? new Mass(0, "lbs"),
+            gross: ticket.gross,
             id: ticket.id,
             moisture: ticket.moisture ?? 0,
-            net: ticket.net ?? new Mass(0, "lbs"),
-            priceDiscounts: ticket.priceDiscounts ?? new PriceDiscounts(),
+            net: ticket.net,
+            priceDiscounts: ticket.priceDiscounts,
             ref: ticket.ref.withConverter(Ticket.converter),
             status: ticket.status,
             subId: ticket.subId ?? "",
-            tare: ticket.tare ?? new Mass(0, "lbs"),
+            tare: ticket.tare,
             weight: ticket.weight,
-            weightDiscounts: ticket.weightDiscounts ?? new WeightDiscounts(),
+            weightDiscounts: ticket.weightDiscounts,
         };
     }
 }
@@ -159,7 +186,7 @@ export class LiquidationTotals {
     constructor(tickets?: TicketInfo[], contract?: Contract) {
         if (!tickets || !contract) return;
 
-        this.gross = this.tare = this.net = this.adjustedWeight = new Mass(0, "lbs", contract.productInfo);
+        this.gross = this.tare = this.net = this.adjustedWeight = new Mass(0, FirebaseDocInterface.session.getDefaultUnit(), contract.productInfo);
         tickets.forEach(ticket => {
             this.gross = this.gross.add(ticket.gross);
             this.tare = this.tare.add(ticket.tare);
