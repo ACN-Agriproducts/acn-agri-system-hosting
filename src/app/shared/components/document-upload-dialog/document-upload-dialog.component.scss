@@ -1,0 +1,179 @@
+
+* {
+	box-sizing: border-box;
+}
+
+mat-dialog-content {
+	display: flex;
+	height: 650px;
+	min-width: 700px;
+}
+
+mat-tab-group, 
+mat-tab-label {
+	width: 100%;
+}
+
+.tab-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	padding: 30px;
+	gap: 30px;
+}
+
+.dropzone {
+	width: 100%;
+	min-height: 350px;
+	background-color: var(--ion-color-light);
+	border-radius: 12px;
+	padding: 20px;
+	flex-flow: column nowrap;
+	justify-content: center;
+
+	&:hover {
+		filter: brightness(0.98);
+	}
+
+	ngx-dropzone-label {
+		h3 {
+			margin: 0;
+			padding: 0;
+			font-size: 1.1em;
+			font-weight: 500;
+		}
+	
+		p {
+			font-size: 0.85em;
+		}
+	}
+
+	ngx-dropzone-preview,
+	ngx-dropzone-image-preview {
+		ngx-dropzone-label { 
+			width: 100%;
+			min-width: 150px;
+		}
+	}
+
+	ngx-dropzone-image-preview {
+		position: absolute;
+		align-self: flex-end;
+		transform: translateY(50px);
+	}
+
+	&.modified-preview ngx-dropzone-preview {
+		position: relative;
+		display: flex;
+		border-radius: 12px !important;
+		background: 
+			linear-gradient(70deg, 
+				#325C2A 15%, 
+				#437b40 40%, 
+				#4d8c4a 60%, 
+				#579e55, 
+				#61ad5e, 
+				#76b975 90%
+			);
+
+		ngx-dropzone-label {
+			color: var(--ion-color-primary-contrast);
+			font-weight: 500;
+		}
+
+		&:hover, &:focus {
+			filter: brightness(0.92);
+		}
+	}
+
+	.custom-preview,
+	.file {
+		height: 100%;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: center;
+		justify-content: center;
+	}
+	.custom-preview .file-label {
+		margin: 5px 0;
+		overflow-wrap: anywhere;
+	}
+
+	button.remove {
+		align-self: flex-end;
+		translate: 40px;
+
+		&:hover mat-icon {
+			color: rgb(200, 0, 0);
+		}
+	}
+}
+
+mat-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.document-name-submit {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	width: 100%;
+}
+
+.remove-document {
+	mat-icon {
+		font-size: 1rem;
+	}
+}
+
+::ng-deep {
+	.mat-tab-label:has(.add-button) {
+		min-width: 0;
+		width: min-content;
+		position: sticky;
+	}
+
+	.mat-tab-label-content:has(.remove-button) {
+		gap: 5px;
+	}
+
+	ngx-dropzone-preview,
+	ngx-dropzone-image-preview {
+		&:hover ngx-dropzone-remove-badge:hover {
+			background: rgb(200, 0, 0);
+		}
+	}
+
+	.mat-tab-body-wrapper {
+		height: 100%;
+	}
+
+	.mat-form-field-appearance-outline .mat-form-field-outline {
+		background-color: var(--ion-color-light);
+		color: #717386;
+	}
+
+	.mat-form-field-suffix:has(button) {
+		align-self: center;
+	}
+}
+
+// .hover-overlay {
+// 	position: relative;
+// 	&::before {
+// 		position: absolute;
+// 		content: "";
+// 		top: 0;
+// 		left: 0;
+// 		width: 100%;
+// 		height: 100%;
+// 		z-index: 15;
+// 		background-color: gray;
+// 		opacity: 0;
+// 	}
+// 	&:hover::before {
+// 		opacity: .4;
+// 	}
+// }

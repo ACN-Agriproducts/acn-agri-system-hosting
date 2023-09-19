@@ -1,9 +1,14 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { Liquidation, LiquidationTotals, TicketInfo } from '@shared/classes/liquidation';
+import { DocumentUploadDialogComponent, DialogUploadData } from '@shared/components/document-upload-dialog/document-upload-dialog.component';
+import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
+import { lastValueFrom } from 'rxjs';
 import { LiquidationDialogComponent } from 'src/app/modules/liquidation-printables/liquidation-dialog/liquidation-dialog.component';
 
 @Component({
@@ -18,7 +23,9 @@ export class LiquidationTableComponent implements OnInit {
   constructor(
     private confirm: ConfirmationDialogService,
     private snack: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private session: SessionInfo,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {}
@@ -34,19 +41,17 @@ export class LiquidationTableComponent implements OnInit {
     console.log("archive")
   }
 
-  public async cancel(index: number) {
-    if (await this.confirm.openDialog("cancel this liquidation?")) {
-      const liquidation = this.liquidations[index];
+  public async cancel(liquidation: Liquidation) {
+    if (!await this.confirm.openDialog("cancel this liquidation?")) return;
 
-      liquidation.update({ status: "cancelled" })
-      .then(() => {
-        liquidation.status = "cancelled";
-        this.snack.open("Liquidation Cancelled");
-      }).catch(e => {
-        console.error(e);
-        this.snack.open("Error: Liquidation not Cancelled", "error");
-      });
-    }
+    liquidation.update({ status: "cancelled" })
+    .then(() => {
+      liquidation.status = "cancelled";
+      this.snack.open("Liquidation Cancelled");
+    }).catch(e => {
+      console.error(e);
+      this.snack.open("Error: Liquidation not Cancelled", "error");
+    });
   }
 
   public openLiquidation(liquidation: Liquidation) {
@@ -61,6 +66,29 @@ export class LiquidationTableComponent implements OnInit {
       maxWidth: "100%",
       height: "75vh"
     });
+  }
+
+  public async uploadDocuments(liquidation: Liquidation, isProof: boolean) {
+    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.date.toLocaleDateString().replace(/\/+/g, "-")}`;
+    const docs = (isProof ? liquidation.proofOfPaymentDocs : liquidation.supplementalDocs).map(doc => ({ ...doc, dropFile: null }));
+
+    const dialogData: DialogUploadData = {
+      docType: isProof ? this.transloco.translate("contracts.info.Proof of Payment") : this.transloco.translate("contracts.info.Supplemental"),
+      // files: isProof ? [...liquidation.proofOfPaymentDocs] : [...liquidation.supplementalDocs],
+      files: docs,
+      uploadable: liquidation.status !== 'cancelled',
+      locationRef
+    };
+
+    const dialogRef = this.dialog.open(DocumentUploadDialogComponent, {
+      data: dialogData,
+      autoFocus: false
+    });
+    const updateData = await lastValueFrom(dialogRef.afterClosed());
+    console.log(updateData)
+    if (updateData == null) return;
+    
+    console.log("UPDATE LIQUIDATION WITH NEW DOCUMENTS")
   }
 
 }

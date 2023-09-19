@@ -28,6 +28,7 @@ import { ProductionOrderDefaultComponent } from './printable/printable-productio
 import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe';
 import { pricerPerUnitPipe } from './classes/price';
 import { PrintableDialogComponent } from './components/printable-dialog/printable-dialog.component';
+import { DocumentUploadDialogComponent } from './components/document-upload-dialog/document-upload-dialog.component';
 
 @NgModule({
   imports: [
@@ -83,6 +84,7 @@ import { PrintableDialogComponent } from './components/printable-dialog/printabl
     LocalInventoryPipe,
     pricerPerUnitPipe,
     PrintableDialogComponent,
+    DocumentUploadDialogComponent,
   ]
 })
 export class SharedModule {}

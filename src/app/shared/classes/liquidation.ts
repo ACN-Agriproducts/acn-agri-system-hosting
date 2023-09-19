@@ -3,12 +3,45 @@ import { PriceDiscounts, Ticket, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
 import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe } from "@angular/fire/firestore";
 import { Mass, units } from "./mass";
+import { SafeResourceUrl } from "@angular/platform-browser";
 
 type LiquidationStatus = "pending" | "paid" | "cancelled";
 
 export declare type ReportTicket = {
     data: TicketInfo,
     inReport: boolean
+}
+
+export interface TicketInfo {
+    damagedGrain: number;
+    dateIn: Date;
+    dateOut: Date;
+    displayId: string;
+    dryWeightPercent: number;
+    gross: Mass;
+    id: number;
+    moisture: number;
+    net: Mass;
+    priceDiscounts: PriceDiscounts;
+    ref: DocumentReference<Ticket>;
+    status: string;
+    subId: string;
+    tare: Mass;
+    weight: number;
+    weightDiscounts: WeightDiscounts;
+}
+
+export interface FileStorageInfo {
+    ref: string;
+    name: string;
+    source: SafeResourceUrl;
+    // dropFile: File;
+}
+
+export interface FileStorageInfo {
+    ref: string;
+    name: string;
+    source: SafeResourceUrl;
 }
 
 export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
@@ -22,9 +55,9 @@ export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>(
 
 export class Liquidation extends FirebaseDocInterface {
     public date: Date;
-    public proofOfPaymentLinks: string[];
+    public proofOfPaymentDocs: FileStorageInfo[];
     public status: LiquidationStatus;
-    public supplementalDocLinks: string[];
+    public supplementalDocs: FileStorageInfo[];
     public ticketRefs: DocumentReference<Ticket>[];
     public tickets: TicketInfo[];
 
@@ -41,9 +74,9 @@ export class Liquidation extends FirebaseDocInterface {
             this.ref = snapshotOrRef;
             
             this.date = new Date();
-            this.proofOfPaymentLinks = [];
+            this.proofOfPaymentDocs = [];
             this.status = "pending";
-            this.supplementalDocLinks = [];
+            this.supplementalDocs = [];
             this.ticketRefs = [];
             this.tickets = [];
 
@@ -53,9 +86,9 @@ export class Liquidation extends FirebaseDocInterface {
         if (data == undefined) return;
 
         this.date = data.date.toDate();
-        this.proofOfPaymentLinks = data.proofOfPaymentLinks;
+        this.proofOfPaymentDocs = data.proofOfPaymentDocs;
         this.status = data.status;
-        this.supplementalDocLinks = data.supplementalDocLinks;
+        this.supplementalDocs = data.supplementalDocs;
         this.ticketRefs = data.ticketRefs;
         this.tickets = data.tickets.map(ticket => ({
             damagedGrain: ticket.damagedGrain,
@@ -91,9 +124,9 @@ export class Liquidation extends FirebaseDocInterface {
 
             return {
                 date: data.date,
-                proofOfPaymentLinks: data.proofOfPaymentLinks,
+                proofOfPaymentDocs: data.proofOfPaymentDocs,
                 status: data.status,
-                supplementalDocLinks: data.supplementalDocLinks,
+                supplementalDocs: data.supplementalDocs,
                 ticketRefs: data.ticketRefs,
                 tickets: rawTickets
             }
@@ -208,23 +241,4 @@ export class LiquidationTotals {
             this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
         });
     }
-}
-
-export interface TicketInfo {
-    damagedGrain: number;
-    dateIn: Date;
-    dateOut: Date;
-    displayId: string;
-    dryWeightPercent: number;
-    gross: Mass;
-    id: number;
-    moisture: number;
-    net: Mass;
-    priceDiscounts: PriceDiscounts;
-    ref: DocumentReference<Ticket>;
-    status: string;
-    subId: string;
-    tare: Mass;
-    weight: number;
-    weightDiscounts: WeightDiscounts;
 }
