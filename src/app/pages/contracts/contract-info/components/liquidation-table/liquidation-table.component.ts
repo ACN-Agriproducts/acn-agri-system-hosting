@@ -69,7 +69,7 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async uploadDocuments(liquidation: Liquidation, isProof: boolean) {
-    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.date.toLocaleDateString().replace(/\/+/g, "-")}`;
+    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.date.toLocaleDateString().replace(/\/+/g, "-")}_`;
     const docs = (isProof ? liquidation.proofOfPaymentDocs : liquidation.supplementalDocs).map(doc => ({ ...doc, dropFile: null }));
 
     const dialogData: DialogUploadData = {

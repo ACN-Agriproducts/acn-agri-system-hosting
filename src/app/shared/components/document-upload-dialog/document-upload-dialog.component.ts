@@ -40,12 +40,10 @@ export class DocumentUploadDialogComponent implements OnInit {
       return;
     }
 
-    this.fileNamePrefix = this.data.docType.toLocaleLowerCase().split(" ").join("-");
+    this.fileNamePrefix = this.data.docType.toLocaleLowerCase().replace(/\s+/g, "-");
     this.data.files.forEach(file => this.getDocumentUrl(file));
 
     if (this.data.files.length <= 0) this.addDocument();
-
-    
   }
 
   ngOnDestroy() {
@@ -65,9 +63,7 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public onSelect(event: any, file: DropFileStorageInfo): void {
     file.dropFile = event.addedFiles[0];
-    console.log(file.dropFile.type)
     this.loadSource(file);
-    console.log(file.source)
   }
 
   public onRemove(file: DropFileStorageInfo): void {
@@ -75,15 +71,21 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public confirm(): void {
-    console.log("CONFIRM")
-    this.dialogRef.close(this.data.files);
+    this.dialogRef.close(this.data.files.map(file => {
+      this.uploadDocument(file);
+      return {
+        ref: file.ref,
+        name: file.name,
+        source: file.source
+      }
+    }));
   }
 
   public uploadDocument(file: DropFileStorageInfo) {
     uploadBytes(ref(this.storage, file.ref), file.dropFile)
     .then(uploadRef => {
-      console.log(uploadRef.ref.fullPath)
-      // file.ref = ref(this.storage, file.ref).fullPath;
+      // console.log(uploadRef.ref.fullPath)
+      file.ref = uploadRef.ref.fullPath;
     })
     .catch(error => {
       this.snack.open(error, 'error');
@@ -110,7 +112,9 @@ export class DocumentUploadDialogComponent implements OnInit {
     return this.data.files.some(file => !(file.dropFile || file.source));
   }
 
-  // CONTINUE WORKING ON OBJECT VIEW OF PDF/IMAGE/DOCUMENT AND DON'T FORGET THE WATERMARK FOR THE DIALOG
+  // DON'T FORGET THE WATERMARK FOR THE DIALOG
+
+  // WORK ON DISPLAYING THE ALREADY SAVED DOCUMENTS IN THE LIQUIDATION
 
   public loadSource(file: DropFileStorageInfo) {
     this.reader.onload = () => {
@@ -121,6 +125,11 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public checkIfMsDoc(type: string) {
     return type.replace("application/", "").startsWith("vnd.openxmlformats-officedocument");
+  }
+
+  public changeName(file: DropFileStorageInfo, name: string) {
+    file.name = name;
+    file.ref = this.data.locationRef + name.replace(/\s+/g, "-");
   }
 
 }

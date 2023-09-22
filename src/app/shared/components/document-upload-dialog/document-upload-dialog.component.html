@@ -22,7 +22,7 @@
 					<div class="document-name-submit">
 						<mat-form-field appearance="outline">
 							<mat-label>File Name</mat-label>
-							<input matInput [(ngModel)]="file.name">
+							<input matInput [ngModel]="file.name" (ngModelChange)="changeName(file, $event)">
 							<button mat-flat-button matSuffix color="primary" (click)="loadSource(file)" [disabled]="!file.dropFile">{{ t('Upload') }}</button>
 						</mat-form-field>
 					</div>
