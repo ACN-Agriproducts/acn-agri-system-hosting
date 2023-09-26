@@ -9,11 +9,12 @@ import { PrintableDialogComponent } from '@shared/components/printable-dialog/pr
 
 import * as Excel from 'exceljs';
 
-export interface LiquidationDialogData {
+export interface LiquidationPrintableData {
   selectedTickets: TicketInfo[];
   contract: Contract;
   totals: LiquidationTotals;
   displayUnits?: Map<string, units>;
+  cancelled: boolean;
 }
 
 @Component({
@@ -32,13 +33,13 @@ export class LiquidationDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<PrintableDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: LiquidationDialogData,
+    @Inject(MAT_DIALOG_DATA) public data: LiquidationPrintableData,
     private transloco: TranslocoService,
     private snack: SnackbarService,
   ) {}
 
   ngOnInit() {
-    this.data.displayUnits = new Map<string, units>(DEFAULT_DISPLAY_UNITS);
+    this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
   }
 
   public async onDownloadLiquidation(): Promise<void> {

@@ -5,7 +5,7 @@ import { DEFAULT_DISPLAY_UNITS, LiquidationTotals, ReportTicket } from '@shared/
 import { Mass, UNIT_LIST, units } from '@shared/classes/mass';
 import { Price } from '@shared/classes/price';
 import { PriceDiscounts, WeightDiscounts } from '@shared/classes/ticket';
-import { LiquidationDialogData } from '../liquidation-dialog/liquidation-dialog.component';
+import { LiquidationPrintableData } from '../liquidation-dialog/liquidation-dialog.component';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { LiquidationDialogData } from '../liquidation-dialog/liquidation-dialog.
   styleUrls: ['./liquidation-long.component.scss'],
 })
 export class LiquidationLongComponent implements OnInit {
-  @Input() data: LiquidationDialogData;
+  @Input() data: LiquidationPrintableData;
 
   public date: Date = new Date();
   public language: string;

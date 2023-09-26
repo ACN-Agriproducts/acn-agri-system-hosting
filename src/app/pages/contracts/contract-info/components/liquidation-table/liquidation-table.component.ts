@@ -37,8 +37,10 @@ export class LiquidationTableComponent implements OnInit {
     }
   }
 
-  public archive(index: number) {
+  public archive(liquidation: Liquidation) {
+    // CHECK IF THEY CAN ONLY ARCHIVE WHEN THE LIQUIDATION IS CANCELLED OR PAID
     console.log("archive")
+    liquidation.archived = true;
   }
 
   public async cancel(liquidation: Liquidation) {
@@ -60,6 +62,7 @@ export class LiquidationTableComponent implements OnInit {
         selectedTickets: liquidation.tickets,
         contract: this.contract,
         totals: new LiquidationTotals(liquidation.tickets, this.contract),
+        cancelled: liquidation.status === 'cancelled'
       },
       panelClass: "borderless-dialog",
       minWidth: "80%",
@@ -86,7 +89,7 @@ export class LiquidationTableComponent implements OnInit {
     });
     const updateData = await lastValueFrom(dialogRef.afterClosed());
     console.log(updateData)
-    if (updateData == null) return;
+    if (!updateData) return;
     
     console.log("UPDATE LIQUIDATION WITH NEW DOCUMENTS")
   }

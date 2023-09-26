@@ -60,6 +60,7 @@ export class Liquidation extends FirebaseDocInterface {
     public supplementalDocs: FileStorageInfo[];
     public ticketRefs: DocumentReference<Ticket>[];
     public tickets: TicketInfo[];
+    public archived: boolean = false;
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -108,6 +109,7 @@ export class Liquidation extends FirebaseDocInterface {
             weight: ticket.weight,
             weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
         }));
+        this.archived = data.archived;
     }
 
     public static converter = {
@@ -128,7 +130,8 @@ export class Liquidation extends FirebaseDocInterface {
                 status: data.status,
                 supplementalDocs: data.supplementalDocs,
                 ticketRefs: data.ticketRefs,
-                tickets: rawTickets
+                tickets: rawTickets,
+                archived: data.archived
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Liquidation {

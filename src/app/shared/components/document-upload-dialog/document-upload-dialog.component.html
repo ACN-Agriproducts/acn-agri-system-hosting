@@ -31,7 +31,7 @@
 		</mat-tab-group>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-button color="primary" [mat-dialog-close]="null">{{ t('Close') }}</button>
+		<button mat-button color="primary" mat-dialog-close>{{ t('Close') }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
 			[disabled]="checkFiles()"

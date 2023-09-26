@@ -4,7 +4,7 @@ import { Contract } from '@shared/classes/contract';
 import { ReportTicket, LiquidationTotals } from '@shared/classes/liquidation';
 import { units } from '@shared/classes/mass';
 import { BehaviorSubject, Observable, filter, map } from 'rxjs';
-import { LiquidationDialogData } from './liquidation-dialog/liquidation-dialog.component';
+import { LiquidationPrintableData } from './liquidation-dialog/liquidation-dialog.component';
 
 @Component({
   selector: 'app-printable-liquidation',
@@ -17,7 +17,7 @@ export class PrintableLiquidationComponent implements OnInit {
   @Input("format") set format(newVersion: string) {
     this.format$.next(newVersion);
   }
-  @Input() data: LiquidationDialogData;
+  @Input() data: LiquidationPrintableData;
 
   public format$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   public template$: Observable<TemplateRef<any>> = this.format$.pipe(

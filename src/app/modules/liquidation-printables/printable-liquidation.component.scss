@@ -3,6 +3,22 @@
     box-sizing: border-box;
 }
 
+:host > .watermark:before {
+    content: "CANCELLED";
+    font-size: 100px;
+    color: gray;
+    opacity: 0.2;
+    text-align: center;
+    position: relative;
+    display: block;
+    transform: rotate(-45deg);
+    align-self: center;
+    justify-self: center;
+    top: 50%;
+    letter-spacing: 10px;
+    font-weight: 500;
+}
+
 @media not print {
     .portrait {
         height: 11in;

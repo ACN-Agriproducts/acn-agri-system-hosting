@@ -19,32 +19,32 @@
       </li>
     </mat-card>
     <div class="body" *ngIf="liquidations?.length!==0 else noItems">
-      <mat-card class="body-card" *ngFor="let item of liquidations; let index = index">
+      <mat-card class="body-card" *ngFor="let liquidation of liquidations; let index = index">
         <li class="row">
           <div class="cell ticket-ids">
-            <!-- <i *ngFor="let id of item.ticketRefs | ticketIds; let last = last">
+            <!-- <i *ngFor="let id of liquidation.ticketRefs | ticketIds; let last = last">
               <span>{{ id | async }}</span>
               <span *ngIf="!last && (id | async)">,</span>
             </i> -->
-            <i *ngFor="let id of item.tickets | ticketIds; let last = last">
+            <i *ngFor="let id of liquidation.tickets | ticketIds; let last = last">
               <span>{{ id }}</span>
               <span *ngIf="!last">,&nbsp;</span>
             </i>
           </div>
-          <div class="cell">{{ item.date | date }}</div>
+          <div class="cell">{{ liquidation.date | date }}</div>
           <div class="cell status">
-            <div class="status-text" [class]="item.status">{{ item.status }}</div>
+            <div class="status-text" [class]="liquidation.status">{{ liquidation.status }}</div>
           </div>
           <div class="cell options">
             <button mat-icon-button [matMenuTriggerFor]="pdfMenu">
-              <mat-icon [color]="item.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'">cloud_upload</mat-icon>
+              <mat-icon [color]="liquidation.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'">cloud_upload</mat-icon>
             </button>
             <mat-menu #pdfMenu="matMenu">
-              <button mat-menu-item (click)="uploadDocuments(item, true)">
+              <button mat-menu-item (click)="uploadDocuments(liquidation, true)">
                 <mat-icon color="primary">insert_drive_file</mat-icon>
                 <span>{{ t("Proof of Payment") }} {{ t("Documents") }}</span>
               </button>
-              <button mat-menu-item (click)="uploadDocuments(item, false)">
+              <button mat-menu-item (click)="uploadDocuments(liquidation, false)">
                 <mat-icon color="primary">file_copy</mat-icon>
                 <span>{{ t("Supplemental") }} {{ t("Documents") }}</span>
               </button>
@@ -55,19 +55,19 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="openLiquidation(item)">
+              <button mat-menu-item (click)="openLiquidation(liquidation)">
                 <mat-icon color="primary">open_in_new</mat-icon>
                 <span>{{ t("view") | titlecase }}</span>
               </button>
-              <button mat-menu-item [routerLink]="['./set-liquidation/', item.ref.id]" *ngIf="item.status==='pending'">
+              <button mat-menu-item [routerLink]="['./set-liquidation/', liquidation.ref.id]" *ngIf="liquidation.status==='pending'">
                 <mat-icon color="primary">edit</mat-icon>
                 <span>{{ t("edit") | titlecase }}</span>
               </button>
-              <button mat-menu-item (click)="cancel(item)" *ngIf="item.status!=='cancelled'">
+              <button mat-menu-item (click)="cancel(liquidation)" *ngIf="liquidation.status!=='cancelled'">
                 <mat-icon color="warn">cancel</mat-icon>
                 <span>{{ t("cancel") | titlecase }}</span>
               </button>
-              <button mat-menu-item (click)="archive(index)">
+              <button mat-menu-item (click)="archive(liquidation)">
                 <mat-icon color="warn">archive</mat-icon>
                 <span>{{ t("archive") | titlecase }}</span>
               </button>

@@ -84,7 +84,6 @@ export class DocumentUploadDialogComponent implements OnInit {
   public uploadDocument(file: DropFileStorageInfo) {
     uploadBytes(ref(this.storage, file.ref), file.dropFile)
     .then(uploadRef => {
-      // console.log(uploadRef.ref.fullPath)
       file.ref = uploadRef.ref.fullPath;
     })
     .catch(error => {
@@ -112,9 +111,7 @@ export class DocumentUploadDialogComponent implements OnInit {
     return this.data.files.some(file => !(file.dropFile || file.source));
   }
 
-  // DON'T FORGET THE WATERMARK FOR THE DIALOG
-
-  // WORK ON DISPLAYING THE ALREADY SAVED DOCUMENTS IN THE LIQUIDATION
+  // WORK ON DISPLAYING THE ALREADY SAVED DOCUMENTS IN THE LIQUIDATION ON DIALOG OPEN
 
   public loadSource(file: DropFileStorageInfo) {
     this.reader.onload = () => {
