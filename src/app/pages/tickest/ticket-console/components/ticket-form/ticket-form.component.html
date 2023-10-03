@@ -1,3 +1,125 @@
-<p>
-  ticket-form works!
-</p>
+<div class="form-wrapper">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Contract Info</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Contract</mat-label>
+        <mat-select>
+          <mat-option>1569: Test Contract</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Product</mat-label>
+        <input matInput readonly>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Grade</mat-label>
+        <input matInput type="number">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Origin</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Transport Info</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Transport</mat-label>
+        <mat-select>
+          <mat-option>Valley Drivers</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Vehicle</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Plates</mat-label>
+        <input matInput type="number">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Driver</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Weight Info</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="fill" class="weight-field">
+        <mat-label>Gross</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="weight-field">
+        <mat-label>Tare</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill" class="net-field">
+        <mat-label>Net</mat-label>
+        <input matInput type="number">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Discount W:</mat-label>
+        <input matInput type="text" readonly>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>m. Ton</mat-label>
+        <input matInput type="text" readonly>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Grain Info</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Moisture</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Weight</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Plague</mat-label>
+        <input matInput type="number">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>PPB</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Lot</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Original Ticket #</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Original Ticket W.</mat-label>
+        <input matInput type="text">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Comments</mat-label>
+        <textarea matInput></textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</div>
