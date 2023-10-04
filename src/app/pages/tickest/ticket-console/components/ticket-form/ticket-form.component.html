@@ -8,7 +8,9 @@
       <mat-form-field appearance="fill">
         <mat-label>Contract</mat-label>
         <mat-select>
-          <mat-option>1569: Test Contract</mat-option>
+          <mat-option *ngFor="let contract of openContracts" [value]="contract.ref.id">
+            {{contract.id + ": " + contract.clientName}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
@@ -35,7 +37,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Transport</mat-label>
         <mat-select>
-          <mat-option>Valley Drivers</mat-option>
+          <mat-option *ngFor="let transport of transportList">{{transport.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">

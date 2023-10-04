@@ -1,5 +1,7 @@
 <app-header-toolbar titulo="Ticket Console"></app-header-toolbar>
 
 <ion-content>
-  <app-ticket-form></app-ticket-form>
+  <app-ticket-form
+    [openContracts]="openContracts"
+    [transportList]="transportList | async"></app-ticket-form>
 </ion-content>

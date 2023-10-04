@@ -1,0 +1,15 @@
+.form-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+
+    margin: 2rem;
+    gap: 1rem;
+}
+
+.weight-field {
+    font-size: large;
+}
+
+.net-field {
+    font-size: x-large;
+}
