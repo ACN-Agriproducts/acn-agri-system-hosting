@@ -34,14 +34,8 @@ export interface TicketInfo {
 export interface FileStorageInfo {
     ref: string;
     name: string;
-    source: SafeResourceUrl;
+    // source: SafeResourceUrl;
     // dropFile: File;
-}
-
-export interface FileStorageInfo {
-    ref: string;
-    name: string;
-    source: SafeResourceUrl;
 }
 
 export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([

@@ -2,15 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Storage, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage';
+import { Storage, deleteObject, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage';
 import { FileStorageInfo } from '@shared/classes/liquidation';
 import { TranslocoService } from '@ngneat/transloco';
 
-type DropFileStorageInfo = FileStorageInfo & { dropFile: File };
+type DropFileStorageInfo = FileStorageInfo & { source: SafeResourceUrl, dropFile: File };
 
 export interface DialogUploadData {
   docType: string;
-  files: DropFileStorageInfo[];
+  readonly files: DropFileStorageInfo[];
   uploadable: boolean;
   locationRef: string;
 }
@@ -24,6 +24,8 @@ export class DocumentUploadDialogComponent implements OnInit {
   public fileNamePrefix: string;
   public selected: number = 0;
   public reader: FileReader = new FileReader();
+  public startingFiles: DropFileStorageInfo[] = [];
+  public count: number = this.data.files.length;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogUploadData,
@@ -41,9 +43,12 @@ export class DocumentUploadDialogComponent implements OnInit {
     }
 
     this.fileNamePrefix = this.data.docType.toLocaleLowerCase().replace(/\s+/g, "-");
-    this.data.files.forEach(file => this.getDocumentUrl(file));
+    this.data.locationRef += `/${this.fileNamePrefix}`;
 
-    if (this.data.files.length <= 0) this.addDocument();
+    this.data.files.forEach(file => this.getDocumentUrl(file));
+    this.startingFiles = [...this.data.files];
+
+    if (this.data.files.length <= 0 && this.data.uploadable) this.addDocument();
   }
 
   ngOnDestroy() {
@@ -56,8 +61,9 @@ export class DocumentUploadDialogComponent implements OnInit {
       file.source = this.sanitizer.bypassSecurityTrustResourceUrl(res) ?? null;
       if (file.source == null) throw `The resource "${file.name}" could not be secured for use.`;
     })
-    .catch(error => {
-      this.snack.open(error, 'error');
+    .catch(e => {
+      console.error(e);
+      this.snack.open(e, 'error');
     });
   }
 
@@ -71,18 +77,23 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public confirm(): void {
+    this.startingFiles.forEach(file => {
+      if (!this.data.files.includes(file)) {
+        deleteObject(ref(this.storage, file.ref));
+      }
+    });
+
     this.dialogRef.close(this.data.files.map(file => {
-      this.uploadDocument(file);
+      if (!this.startingFiles.includes(file) && file.dropFile) this.uploadDocument(file);
       return {
         ref: file.ref,
         name: file.name,
-        source: file.source
       }
     }));
   }
 
-  public uploadDocument(file: DropFileStorageInfo) {
-    uploadBytes(ref(this.storage, file.ref), file.dropFile)
+  public async uploadDocument(file: DropFileStorageInfo) {
+    uploadBytes(ref(this.storage, file.ref), file.dropFile, )
     .then(uploadRef => {
       file.ref = uploadRef.ref.fullPath;
     })
@@ -92,26 +103,25 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public addDocument() {
-    const count = this.data.files.length + 1;
-
     this.data.files.push({
-      name: `${this.data.docType} (${this.transloco.translate("contracts.table.New")})`,
-      ref: this.data.locationRef + this.fileNamePrefix + count,
+      name: `${this.data.docType} (${++this.count})`,
+      ref: `${this.data.locationRef}(${this.count})`,
       source: null,
       dropFile: null
     });
-    this.selected = this.data.files.length;
+    this.selected = this.data.files.length - 1;
   }
 
-  public removeDocument(index: number) {
+  public async removeDocument(index: number) {
     this.data.files.splice(index, 1);
+    if (this.selected === this.data.files.length) {
+      this.selected -= 1;
+    }
   }
 
   public checkFiles() {
     return this.data.files.some(file => !(file.dropFile || file.source));
   }
-
-  // WORK ON DISPLAYING THE ALREADY SAVED DOCUMENTS IN THE LIQUIDATION ON DIALOG OPEN
 
   public loadSource(file: DropFileStorageInfo) {
     this.reader.onload = () => {
@@ -126,7 +136,7 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public changeName(file: DropFileStorageInfo, name: string) {
     file.name = name;
-    file.ref = this.data.locationRef + name.replace(/\s+/g, "-");
+    file.ref = `${this.data.locationRef}_${name.replace(/\s+/g, "-")}`
   }
 
 }

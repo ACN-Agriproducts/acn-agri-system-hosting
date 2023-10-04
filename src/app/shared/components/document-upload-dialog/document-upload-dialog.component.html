@@ -2,31 +2,32 @@
 <ng-container *transloco="let t, read: 'contracts.info'">
 	<h2 mat-dialog-title>{{ data.docType }} {{ t('Documents') }}</h2>
 	<mat-dialog-content>
-		<mat-tab-group [(selectedIndex)]="selected" preserveContent="true">
-				<mat-tab disabled>
-				<ng-template mat-tab-label>
-					<button mat-icon-button class="add-button" color="primary" (click)="addDocument()">
-						<mat-icon>add</mat-icon>
-					</button>
-				</ng-template>
-			</mat-tab>
-			<mat-tab *ngFor="let file of data.files; let index = index">
+		<mat-tab-group [(selectedIndex)]="selected" [preserveContent]="true">
+			<mat-tab *ngFor="let file of data.files; let index = index; let count = count">
 				<ng-template mat-tab-label>
 					<span>{{ file.name ?? "File " + index }}</span>
-					<button mat-icon-button class="remove-document" (click)="removeDocument(index)" *ngIf="data.files.length > 1">
+					<button mat-icon-button *ngIf="data.uploadable && count>1" class="remove-document" (click)="removeDocument(index); $event.stopPropagation()">
 						<mat-icon>close</mat-icon>
 					</button>
 				</ng-template>
 				<div class="tab-content">
-					<ng-container *ngTemplateOutlet="upload; context { $implicit: file }"></ng-container>
-					<div class="document-name-submit">
+					<div class="document">
+						<ng-container *ngTemplateOutlet="!file.source && data.uploadable ? upload : fullView; context { $implicit: file }"></ng-container>
+					</div>
+					<div class="document-name" *ngIf="data.uploadable">
 						<mat-form-field appearance="outline">
 							<mat-label>File Name</mat-label>
 							<input matInput [ngModel]="file.name" (ngModelChange)="changeName(file, $event)">
-							<button mat-flat-button matSuffix color="primary" (click)="loadSource(file)" [disabled]="!file.dropFile">{{ t('Upload') }}</button>
 						</mat-form-field>
 					</div>
 				</div>
+			</mat-tab>
+			<mat-tab disabled *ngIf="data.uploadable">
+				<ng-template mat-tab-label>
+					<button mat-icon-button class="add-button" color="primary" (click)="addDocument(); $event.stopPropagation()">
+						<mat-icon>add</mat-icon>
+					</button>
+				</ng-template>
 			</mat-tab>
 		</mat-tab-group>
 	</mat-dialog-content>
@@ -34,32 +35,15 @@
 		<button mat-button color="primary" mat-dialog-close>{{ t('Close') }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
-			[disabled]="checkFiles()"
 			(click)="confirm()"
 		>
 			{{ t('Confirm') }}
 		</button>
 	</mat-dialog-actions>
 
-	<!-- TEMPLATES -->
 	
+	<!-- TEMPLATES -->
 	<ng-template #upload let-file>
-		<!-- <ngx-dropzone class="dropzone modified-preview" (change)="onSelect($event, file)">
-			<ngx-dropzone-label>
-				<mat-icon>cloud_upload</mat-icon>
-				<h3>{{ t('Upload') }} {{ data.docType }} {{ t('Document') }}(s)</h3>
-				<p>{{ t('Simply drag and drop or click here to choose a file') }}.</p>
-			</ngx-dropzone-label>
-			<ngx-dropzone-preview
-				*ngIf="file.dropFile"
-				[file]="file.dropFile"
-				[removable]="true"
-				(removed)="onRemove(file)"
-			>
-				<ngx-dropzone-label>{{ file.dropFile.name }} {{ file.dropFile.type }}</ngx-dropzone-label>
-			</ngx-dropzone-preview>
-		</ngx-dropzone> -->
-
 		<ngx-dropzone class="dropzone" (change)="onSelect($event, file)">
 			<ngx-dropzone-label *ngIf="!file.source else preview">
 				<mat-icon>cloud_upload</mat-icon>
@@ -76,7 +60,7 @@
 						>
 							<mat-icon>cancel</mat-icon>
 						</button>
-						<ng-container *ngTemplateOutlet="file.dropFile.type.startsWith('image') ? imgView : defaultView; context { $implicit: file }"></ng-container>
+						<ng-container *ngTemplateOutlet="file.dropFile.type.startsWith('image') ? imgView : dropzoneView; context { $implicit: file }"></ng-container>
 					</div>
 					<ngx-dropzone-label class="file-label">{{ file.dropFile.name }} ({{ file.dropFile.type }})</ngx-dropzone-label>
 				</div>
@@ -84,16 +68,21 @@
 		</ngx-dropzone>
 	</ng-template>
 
-	<ng-template #defaultView let-file>
-		<object [type]="file.dropFile.type" [data]="file.source">
+	<ng-template #fullView let-file>
+		<object *ngIf="file.source" [data]="file.source" width="100%" height="100%">
 			<!-- <ngx-dropzone-label>
 				Download: <a [href]="file.source">{{ file.dropFile.name }} {{ file.dropFile.type }}</a>
 			</ngx-dropzone-label> -->
 		</object>
+		<!-- <ng-container *ngTemplateOutlet="f"></ng-container> -->
 	</ng-template>
 
-	<ng-template #iframeView let-file>
-		<iframe [src]="file.source" width="100%" height="100%"></iframe>
+	<ng-template #objectView let-file>
+		<object *ngIf="file.source" [data]="file.source" width="100%" height="100%"></object>
+	</ng-template>
+
+	<ng-template #dropzoneView let-file>
+		<object *ngIf="file.source" [data]="file.source"></object>
 	</ng-template>
 	
 	<ng-template #msView let-file>

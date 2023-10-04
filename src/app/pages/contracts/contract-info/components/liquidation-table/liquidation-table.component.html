@@ -67,7 +67,7 @@
                 <mat-icon color="warn">cancel</mat-icon>
                 <span>{{ t("cancel") | titlecase }}</span>
               </button>
-              <button mat-menu-item (click)="archive(liquidation)">
+              <button mat-menu-item (click)="archive(liquidation)" *ngIf="liquidation.status!=='pending'">
                 <mat-icon color="warn">archive</mat-icon>
                 <span>{{ t("archive") | titlecase }}</span>
               </button>

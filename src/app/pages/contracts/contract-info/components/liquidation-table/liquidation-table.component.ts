@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { updateDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -7,7 +8,6 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { Liquidation, LiquidationTotals, TicketInfo } from '@shared/classes/liquidation';
 import { DocumentUploadDialogComponent, DialogUploadData } from '@shared/components/document-upload-dialog/document-upload-dialog.component';
-import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { LiquidationDialogComponent } from 'src/app/modules/liquidation-printables/liquidation-dialog/liquidation-dialog.component';
 
@@ -38,8 +38,6 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public archive(liquidation: Liquidation) {
-    // CHECK IF THEY CAN ONLY ARCHIVE WHEN THE LIQUIDATION IS CANCELLED OR PAID
-    console.log("archive")
     liquidation.archived = true;
   }
 
@@ -72,14 +70,17 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async uploadDocuments(liquidation: Liquidation, isProof: boolean) {
-    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.date.toLocaleDateString().replace(/\/+/g, "-")}_`;
-    const docs = (isProof ? liquidation.proofOfPaymentDocs : liquidation.supplementalDocs).map(doc => ({ ...doc, dropFile: null }));
+    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}`;
+    const uploadable = liquidation.status !== 'cancelled';
 
     const dialogData: DialogUploadData = {
-      docType: isProof ? this.transloco.translate("contracts.info.Proof of Payment") : this.transloco.translate("contracts.info.Supplemental"),
-      // files: isProof ? [...liquidation.proofOfPaymentDocs] : [...liquidation.supplementalDocs],
-      files: docs,
-      uploadable: liquidation.status !== 'cancelled',
+      docType: isProof ? 
+        this.transloco.translate("contracts.info.Proof of Payment") : 
+        this.transloco.translate("contracts.info.Supplemental"),
+      files: liquidation[isProof ? 'proofOfPaymentDocs' : 'supplementalDocs'].map(doc => 
+        ({ ...doc, source: null, dropFile: null })
+      ),
+      uploadable: uploadable,
       locationRef
     };
 
@@ -88,10 +89,18 @@ export class LiquidationTableComponent implements OnInit {
       autoFocus: false
     });
     const updateData = await lastValueFrom(dialogRef.afterClosed());
-    console.log(updateData)
-    if (!updateData) return;
+    if (!updateData || !uploadable) return;
     
-    console.log("UPDATE LIQUIDATION WITH NEW DOCUMENTS")
+    updateDoc(liquidation.ref, {
+      [isProof ? 'proofOfPaymentDocs' : 'supplementalDocs']: updateData
+    })
+    .then(() => {
+      this.snack.open("Successfully updated Liquidation", "success");
+    })
+    .catch(e => {
+      console.error(e);
+      this.snack.open("Failed to update Liquidation", "error");
+    });
   }
 
 }
