@@ -22,10 +22,6 @@
       <mat-card class="body-card" *ngFor="let liquidation of liquidations; let index = index">
         <li class="row">
           <div class="cell ticket-ids">
-            <!-- <i *ngFor="let id of liquidation.ticketRefs | ticketIds; let last = last">
-              <span>{{ id | async }}</span>
-              <span *ngIf="!last && (id | async)">,</span>
-            </i> -->
             <i *ngFor="let id of liquidation.tickets | ticketIds; let last = last">
               <span>{{ id }}</span>
               <span *ngIf="!last">,&nbsp;</span>

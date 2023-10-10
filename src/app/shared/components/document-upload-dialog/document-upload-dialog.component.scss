@@ -135,6 +135,11 @@ mat-dialog-actions {
 	}
 }
 
+.remove-file {
+	top: -50px;
+	left: 5px;
+}
+
 ::ng-deep {
 	.mat-tab-label:has(.add-button) {
 		min-width: 0;

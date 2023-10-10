@@ -3,21 +3,29 @@
 	<h2 mat-dialog-title>{{ data.docType }} {{ t('Documents') }}</h2>
 	<mat-dialog-content>
 		<mat-tab-group [(selectedIndex)]="selected" [preserveContent]="true">
-			<mat-tab *ngFor="let file of data.files; let index = index; let count = count">
+			<mat-tab *ngFor="let file of data.files; let index = index">
 				<ng-template mat-tab-label>
 					<span>{{ file.name ?? "File " + index }}</span>
-					<button mat-icon-button *ngIf="data.uploadable && count>1" class="remove-document" (click)="removeDocument(index); $event.stopPropagation()">
+					<button mat-icon-button 
+						*ngIf="data.uploadable" 
+						class="remove-document" 
+						(click)="removeDocument(index); $event.stopPropagation()"
+					>
 						<mat-icon>close</mat-icon>
 					</button>
 				</ng-template>
 				<div class="tab-content">
 					<div class="document">
-						<ng-container *ngTemplateOutlet="!file.source && data.uploadable ? upload : fullView; context { $implicit: file }"></ng-container>
+						<ng-container *ngTemplateOutlet="!file.url && data.uploadable ? upload : fullView; context { $implicit: file }"></ng-container>
+						<button mat-icon-button class="remove-file" color="warn" (click)="onRemove(file)">
+							<mat-icon>delete</mat-icon>
+						</button>				
 					</div>
 					<div class="document-name" *ngIf="data.uploadable">
 						<mat-form-field appearance="outline">
-							<mat-label>File Name</mat-label>
-							<input matInput [ngModel]="file.name" (ngModelChange)="changeName(file, $event)">
+							<mat-label>Document Name</mat-label>
+							<!-- <input matInput [ngModel]="file.name" (ngModelChange)="changeName(file, $event)"> -->
+							<input matInput [(ngModel)]="file.name">
 						</mat-form-field>
 					</div>
 				</div>
@@ -35,6 +43,7 @@
 		<button mat-button color="primary" mat-dialog-close>{{ t('Close') }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
+			[disabled]="checkFiles()"
 			(click)="confirm()"
 		>
 			{{ t('Confirm') }}
@@ -45,7 +54,7 @@
 	<!-- TEMPLATES -->
 	<ng-template #upload let-file>
 		<ngx-dropzone class="dropzone" (change)="onSelect($event, file)">
-			<ngx-dropzone-label *ngIf="!file.source else preview">
+			<ngx-dropzone-label *ngIf="!file.url else preview">
 				<mat-icon>cloud_upload</mat-icon>
 				<h3>{{ t('Upload') }} {{ data.docType }} {{ t('Document') }}(s)</h3>
 				<p>{{ t('Simply drag and drop or click here to choose a file') }}.</p>
@@ -69,28 +78,23 @@
 	</ng-template>
 
 	<ng-template #fullView let-file>
-		<object *ngIf="file.source" [data]="file.source" width="100%" height="100%">
-			<!-- <ngx-dropzone-label>
-				Download: <a [href]="file.source">{{ file.dropFile.name }} {{ file.dropFile.type }}</a>
-			</ngx-dropzone-label> -->
-		</object>
-		<!-- <ng-container *ngTemplateOutlet="f"></ng-container> -->
+		<object *ngIf="file.url" [data]="file.url" width="100%" height="100%"></object>
 	</ng-template>
 
 	<ng-template #objectView let-file>
-		<object *ngIf="file.source" [data]="file.source" width="100%" height="100%"></object>
+		<object *ngIf="file.url" [data]="file.url" width="100%" height="100%"></object>
 	</ng-template>
 
 	<ng-template #dropzoneView let-file>
-		<object *ngIf="file.source" [data]="file.source"></object>
+		<object *ngIf="file.url" [data]="file.url"></object>
 	</ng-template>
 	
 	<ng-template #msView let-file>
-		<iframe src="https://view.officeapps.live.com/op/embed.aspx?src={{ file.source }}" width="100%" height="100%"></iframe>
+		<iframe src="https://view.officeapps.live.com/op/embed.aspx?src={{ file.url }}" width="100%" height="100%"></iframe>
 	</ng-template>
 	
 	<ng-template #imgView let-file>
-		<img [src]="file.source" height="75%">
+		<img [src]="file.url" height="75%">
 	</ng-template>
 </ng-container>
 

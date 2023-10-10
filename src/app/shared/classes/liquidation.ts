@@ -1,7 +1,7 @@
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { PriceDiscounts, Ticket, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
-import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe } from "@angular/fire/firestore";
+import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, Timestamp } from "@angular/fire/firestore";
 import { Mass, units } from "./mass";
 import { SafeResourceUrl } from "@angular/platform-browser";
 
@@ -32,10 +32,8 @@ export interface TicketInfo {
 }
 
 export interface FileStorageInfo {
-    ref: string;
     name: string;
-    // source: SafeResourceUrl;
-    // dropFile: File;
+    ref: string;
 }
 
 export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([

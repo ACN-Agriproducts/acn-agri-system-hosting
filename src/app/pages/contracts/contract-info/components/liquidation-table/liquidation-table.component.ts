@@ -70,18 +70,23 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async uploadDocuments(liquidation: Liquidation, isProof: boolean) {
+    const docType = isProof ?
+      this.transloco.translate("contracts.info.Proof of Payment") : 
+      this.transloco.translate("contracts.info.Supplemental");
+
     let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}`;
+    locationRef += `/${docType.toLocaleLowerCase().replace(/\s+/g, "-")}`;
+      
+    const files = liquidation[isProof ? 'proofOfPaymentDocs' : 'supplementalDocs'].map(doc => 
+      ({ ...doc, url: null, dropFile: null, new: false })
+    );
     const uploadable = liquidation.status !== 'cancelled';
 
     const dialogData: DialogUploadData = {
-      docType: isProof ? 
-        this.transloco.translate("contracts.info.Proof of Payment") : 
-        this.transloco.translate("contracts.info.Supplemental"),
-      files: liquidation[isProof ? 'proofOfPaymentDocs' : 'supplementalDocs'].map(doc => 
-        ({ ...doc, source: null, dropFile: null })
-      ),
-      uploadable: uploadable,
-      locationRef
+      docType,
+      locationRef,
+      files,
+      uploadable
     };
 
     const dialogRef = this.dialog.open(DocumentUploadDialogComponent, {
@@ -109,10 +114,6 @@ export class LiquidationTableComponent implements OnInit {
   name: 'ticketIds'
 })
 export class TicketIdsPipe implements PipeTransform {
-  
-  // transform(ticketRefs: DocumentReference<Ticket>[], ...args: any[]): Promise<number>[] {
-  //   return ticketRefs.map(async ref => (await getDoc(ref)).data().id)
-  // }
 
   transform(tickets: TicketInfo[], ...args: any[]): number[] {
     return tickets.map(ticket => ticket.id);
