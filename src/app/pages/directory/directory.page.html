@@ -23,9 +23,9 @@
 			<ion-button (click)="openNewContact()">
 				<ion-text slot="end">{{t('New Contact')}}</ion-text>
 			</ion-button>
-			<!-- <ion-button (click)="exportCurrent()" *ngIf="permissions.developer">
+			<ion-button (click)="exportTruckerReport()" *ngIf="permissions.developer">
 				<ion-text slot="end">{{t('Export Contacts')}}</ion-text>
-			</ion-button> -->
+			</ion-button>
 		</div>
 		<ion-card>
 			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag)?.length ?? 0 }})</div>

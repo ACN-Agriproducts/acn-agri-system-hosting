@@ -13,6 +13,7 @@ import { Contract } from '@shared/classes/contract';
 import { Company } from '@shared/classes/company';
 import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-directory',
@@ -255,6 +256,65 @@ export class DirectoryPage implements OnInit, OnDestroy {
     }
 
     return result[0].date;
+  }
+
+  public async exportTruckerReport(): Promise<void> {
+    const contacts = this.contactsPagination.list.filter(c => c.tags.includes('trucker'));
+    const tickets = await Ticket.getTickets(this.db, this.session.getCompany(), 'progreso', where('in', '==', true));
+    const sheetInfo: any[] = [];
+
+    console.log(contacts);
+    console.log(tickets);
+
+    contacts.forEach(contact => {
+      const info: any = {}
+      const cTickets = tickets.filter(t => t.truckerId == contact.ref.id);
+
+      info.name = contact.name;
+      info.quantity = cTickets.length;
+      info.lastTicket = new Date(Math.max(...cTickets.map(t => t.dateOut.getTime())));
+
+      sheetInfo.push(info);
+    });
+
+    const workbook = new Excel.Workbook();
+    const workSheet = workbook.addWorksheet('Directory');
+    workSheet.addTable({
+      name: 'directory',
+      ref: 'A1',
+      headerRow: true,
+      totalsRow: false,
+      style: {
+        theme: "TableStyleMedium2",
+        showRowStripes: true,
+      },
+      columns: [
+        {name: "Name", filterButton: true},
+        {name: "Quantity", filterButton: true},
+        {name: "Last Ticket", filterButton: true},
+      ],
+      rows: sheetInfo.map((info) => [
+        info.name,
+        info.quantity,
+        info.lastTicket,
+      ])
+    });
+
+    workbook.xlsx.writeBuffer().then((data) => {
+      const blob = new Blob([data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      });
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("style", "display: none");
+      a.href = url;
+      a.download = `${this.currentCompany}-DIRECTORY.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    });
   }
 
   public editTransportField(contact: Contact) {
