@@ -10,7 +10,6 @@ import { Mass } from "./mass";
 import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
 
-@Injectable()
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
     public clientName: string;
@@ -73,12 +72,22 @@ export class Ticket extends FirebaseDocInterface{
     public subId: string;
     public moneyDiscounts: MoneyDiscounts;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+    constructor(snapshot: QueryDocumentSnapshot<any>);
+    constructor(ref: DocumentReference<any>);
+    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
+        let snapshot;
+        if(snapshotOrRef instanceof QueryDocumentSnapshot) {
+            snapshot = snapshotOrRef
+        }
+        
         super(snapshot, Ticket.converter);
-
+        const data = snapshot?.data();
         const unit = FirebaseDocInterface.session.getDefaultUnit();
 
-        const data = snapshot.data();
+        if(snapshotOrRef instanceof DocumentReference) {
+            this.ref = snapshotOrRef;
+            return;
+        }
 
         this.brokenGrain = data.brokenGrain;
         this.clientName = data.clientName;
@@ -318,6 +327,13 @@ export class Ticket extends FirebaseDocInterface{
         const ticketSnapshot = await getCountFromServer(ticketCollQuery);
 
         return ticketSnapshot.data().count;
+    }
+
+    public static async getActiveTickets(db: Firestore, company: string, plant: string): Promise<Ticket[]> {
+        const ticketQuery = Ticket.getCollectionReference(db, company, plant, where('status', '==', 'pending'));
+        return getDocs(ticketQuery).then(result => {
+            return result.docs.map(t => t.data()).sort((a,b) => b.dateIn.getTime() - a.dateIn.getTime());
+        });
     }
 }
 

@@ -63,7 +63,7 @@
     <mat-card-content>
       <mat-form-field appearance="fill" class="weight-field">
         <mat-label>Gross</mat-label>
-        <input matInput type="text">
+        <input matInput type="number" [(ngModel)]="ticket.gross">
       </mat-form-field>
       <mat-form-field appearance="fill" class="weight-field">
         <mat-label>Tare</mat-label>

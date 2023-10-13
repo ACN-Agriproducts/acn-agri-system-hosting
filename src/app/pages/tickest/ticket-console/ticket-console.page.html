@@ -1,7 +1,19 @@
 <app-header-toolbar titulo="Ticket Console"></app-header-toolbar>
 
 <ion-content>
+  <mat-toolbar class="console-bar">
+    <button mat-icon-button (click)="indexChange(-1)"><mat-icon>west</mat-icon></button>
+    <button mat-icon-button (click)="newTicketButton()"><mat-icon>note_add</mat-icon></button>
+    <span>{{ticketIndex + 1}}/{{tickets?.length}}</span>
+    <button mat-icon-button><mat-icon>print</mat-icon></button>
+    <button mat-icon-button (click)="indexChange(1)"><mat-icon>east</mat-icon></button>
+  </mat-toolbar>
+  <ng-container *ngIf="tickets" [ngTemplateOutlet]="tickets[ticketIndex] | ticketSelector:ticketTemplates:ticketTemplates.length"></ng-container>
+</ion-content>
+
+<ng-template [ticketTemplate]="ticket" *ngFor="let ticket of tickets">
   <app-ticket-form
+    [ticket]="ticket"
     [openContracts]="openContracts"
     [transportList]="transportList | async"></app-ticket-form>
-</ion-content>
+</ng-template>
