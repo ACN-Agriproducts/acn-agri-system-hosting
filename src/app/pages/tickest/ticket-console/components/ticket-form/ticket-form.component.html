@@ -8,7 +8,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Contract</mat-label>
         <mat-select>
-          <mat-option *ngFor="let contract of openContracts" [value]="contract.ref.id">
+          <mat-option *ngFor="let contract of selectableContracts | async" [value]="contract.ref.id">
             {{contract.id + ": " + contract.clientName}}
           </mat-option>
         </mat-select>

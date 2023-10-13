@@ -1,12 +1,12 @@
 import { Component, OnInit, Pipe, PipeTransform, QueryList, TemplateRef, ViewChildren } from '@angular/core';
-import { collection, doc, Firestore, query, where } from '@angular/fire/firestore';
+import { collection, collectionData, doc, Firestore, onSnapshot, query, where } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
 import { orderBy } from 'firebase/firestore';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { TicketTemplateDirective } from './ticket-template-directive.directive';
 
 @Component({
@@ -16,7 +16,7 @@ import { TicketTemplateDirective } from './ticket-template-directive.directive';
 })
 export class TicketConsolePage implements OnInit {
   tickets: Ticket[];
-  openContracts: Contract[] = [];
+  openContracts: Observable<Contract[]>;
   transportList: Promise<Contact[]>;
   ticketIndex: number = 0;
 
@@ -29,10 +29,9 @@ export class TicketConsolePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    Contract.onSnapshot(
+    this.openContracts = collectionData(
       query(Contract.getCollectionReference(this.db, this.session.getCompany()),
-        where('status', '==', 'active'), where('plants', 'array-contains', this.session.getPlant()), orderBy('id', 'asc')),
-      this.openContracts);
+        where('status', '==', 'active'), where('plants', 'array-contains', this.session.getPlant()), orderBy('id', 'asc')))
 
     this.transportList = Contact.getList(this.db, this.session.getCompany(), where('tags', 'array-contains', 'trucker'));
     Ticket.getActiveTickets(this.db, this.session.getCompany(), this.session.getPlant()).then(result => this.tickets = result);
