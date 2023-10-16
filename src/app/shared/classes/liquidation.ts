@@ -34,6 +34,7 @@ export interface TicketInfo {
 export interface FileStorageInfo {
     name: string;
     ref: string;
+    contentType: string;
 }
 
 export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([

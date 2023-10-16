@@ -2,14 +2,14 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Storage, deleteObject, getBytes, getDownloadURL, ref, uploadBytes } from '@angular/fire/storage';
+import { Storage, deleteObject, getDownloadURL, getMetadata, ref, uploadBytes } from '@angular/fire/storage';
 import { FileStorageInfo } from '@shared/classes/liquidation';
 import { TranslocoService } from '@ngneat/transloco';
 
 type DropFileStorageInfo = FileStorageInfo & { 
   url: SafeResourceUrl, 
-  dropFile: File,
-  new: boolean
+  dropfile: File,
+  contentType: string;
 };
 
 export interface DialogUploadData {
@@ -59,8 +59,11 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public getDocumentUrl(file: DropFileStorageInfo) {
     getDownloadURL(ref(this.storage, file.ref))
-    .then(res => {
-      file.url = this.sanitizer.bypassSecurityTrustResourceUrl(res) ?? null;
+    .then(async res => {
+      console.log(res)
+      file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
+      file.url = this.sanitizer.bypassSecurityTrustResourceUrl(res);
+      console.log(file.url)
       if (file.url == null) throw `The resource "${file.name}" could not be secured for use.`;
     })
     .catch(e => {
@@ -70,12 +73,12 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public onSelect(event: any, file: DropFileStorageInfo): void {
-    file.dropFile = event.addedFiles[0];
-    this.loadUrl(file);
+    file.dropfile = event.addedFiles[0];
+    this.readFileUrl(file);
   }
 
   public onRemove(file: DropFileStorageInfo): void {
-    file.dropFile = file.url = null;
+    file.dropfile = file.url = null;
   }
 
   public confirm(): void {
@@ -86,7 +89,7 @@ export class DocumentUploadDialogComponent implements OnInit {
     });
 
     this.dialogRef.close(this.data.files.map(file => {
-      if (file.dropFile) {
+      if (file.dropfile) {
         this.uploadDocument(file);
       }
       return {
@@ -97,7 +100,7 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public async uploadDocument(file: DropFileStorageInfo) {
-    uploadBytes(ref(this.storage, file.ref), file.dropFile)
+    uploadBytes(ref(this.storage, file.ref), file.dropfile)
     .then(uploadRef => {
       file.ref = uploadRef.ref.fullPath;
     })
@@ -114,8 +117,8 @@ export class DocumentUploadDialogComponent implements OnInit {
       // ref: `${this.data.locationRef}/${this.fileName}(${this.count})`,
       ref: `${this.data.locationRef}/${name}${this.count}`,
       url: null,
-      dropFile: null,
-      new: true
+      dropfile: null,
+      contentType: null
     });
     this.selected = this.data.files.length - 1;
   }
@@ -128,23 +131,29 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public checkFiles() {
-    return this.data.files.some(file => !(file.dropFile || file.url));
+    return this.data.files.some(file => !(file.dropfile || file.url));
   }
 
-  public loadUrl(file: DropFileStorageInfo) {
-    this.reader.onload = () => {
+  public readFileUrl(file: DropFileStorageInfo) {
+    this.reader.onload = async () => {
+      file.contentType = file.dropfile.type;
       file.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.reader.result as string);
     }
-    this.reader.readAsDataURL(file.dropFile);
+    this.reader.readAsDataURL(file.dropfile);
   }
 
   public checkIfMsDoc(type: string) {
-    return type.replace("application/", "").startsWith("vnd.openxmlformats-officedocument");
+    return type?.replace("application/", "").startsWith("vnd.openxmlformats-officedocument");
   }
 
-  public changeName(file: DropFileStorageInfo, name: string) {
-    file.name = name;
-    // file.ref = `${this.data.locationRef}/${name.replace(/\s+/g, "-")}`;
-  }
+  // public async getUrlData(file: DropFileStorageInfo, rawUrl: string) {
+  //   file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
+  //   if (this.checkIfMsDoc(file.contentType)) {
+  //     file.url = this.sanitizer.bypassSecurityTrustResourceUrl(`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURI(rawUrl)}`);
+  //   }
+  //   else {
+  //     file.url = this.sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
+  //   }
+  // }
 
 }

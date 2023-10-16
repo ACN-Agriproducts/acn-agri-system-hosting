@@ -5,9 +5,10 @@
 
 mat-dialog-content {
 	display: flex;
-	height: 650px;
+	height: 700px;
+	width: 45vw;
+	max-width: 850px;
 	min-width: 700px;
-	max-width: 700px;
 }
 
 mat-tab-group, 
@@ -15,24 +16,15 @@ mat-tab-label {
 	width: 100%;
 }
 
-.tab-content {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	padding: 30px;
-	gap: 30px;
-	max-height: 600px;
-}
-
 .document {
-	width: 100%;
-	height: 350px;
+	position: relative;
+	overflow-wrap: anywhere;
+	flex: 0 0 370px;
+	max-height: 370px;
 }
 
 .dropzone {
-	width: 100%;
-	min-height: 350px;
+	height: 100%;
 	background-color: var(--ion-color-light);
 	border-radius: 12px;
 	padding: 20px;
@@ -118,15 +110,8 @@ mat-tab-label {
 }
 
 mat-dialog-actions {
-    display: flex;
-    justify-content: space-between;
-}
-
-.document-name {
-	display: flex;
-	align-items: center;
-	gap: 20px;
-	width: 100%;
+    // display: flex;
+    // justify-content: space-between;
 }
 
 .remove-document {
@@ -136,19 +121,33 @@ mat-dialog-actions {
 }
 
 .remove-file {
-	top: -50px;
-	left: 5px;
+	bottom: 10px;
+	left: 10px;
+	position: absolute;
+}
+
+.preview {
+	height: 100%;
+	max-height: inherit;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+	img {
+		height: 100%;
+	}
 }
 
 ::ng-deep {
-	.mat-tab-label:has(.add-button) {
+	.mat-tab-label:has(.add-document) {
 		min-width: 0;
 		width: min-content;
 		position: sticky;
 	}
 
-	.mat-tab-label-content:has(.remove-button) {
-		gap: 5px;
+	.mat-tab-label-content:has(.remove-document) {
+		gap: 10px;
 	}
 
 	ngx-dropzone-preview,
@@ -158,10 +157,6 @@ mat-dialog-actions {
 		}
 	}
 
-	.mat-tab-body-wrapper {
-		height: 100%;
-	}
-
 	.mat-form-field-appearance-outline .mat-form-field-outline {
 		background-color: var(--ion-color-light);
 		color: #717386;
@@ -169,5 +164,13 @@ mat-dialog-actions {
 
 	.mat-form-field-suffix:has(button) {
 		align-self: center;
+	}
+
+	.mat-tab-body-content {
+		display: flex;
+		flex-direction: column;
+		padding: 30px;
+		gap: 30px;
+		height: auto !important;
 	}
 }

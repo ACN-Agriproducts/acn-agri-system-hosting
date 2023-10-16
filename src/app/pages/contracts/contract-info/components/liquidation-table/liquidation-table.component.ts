@@ -78,7 +78,7 @@ export class LiquidationTableComponent implements OnInit {
     locationRef += `/${docType.toLocaleLowerCase().replace(/\s+/g, "-")}`;
       
     const files = liquidation[isProof ? 'proofOfPaymentDocs' : 'supplementalDocs'].map(doc => 
-      ({ ...doc, url: null, dropFile: null, new: false })
+      ({ ...doc, url: null, dropfile: null, contentType: null })
     );
     const uploadable = liquidation.status !== 'cancelled';
 
