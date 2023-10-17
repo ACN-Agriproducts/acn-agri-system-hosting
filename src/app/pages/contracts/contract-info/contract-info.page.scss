@@ -3,45 +3,39 @@
     box-sizing: border-box;
 }
 
-// ::ng-deep div.wrapper {
-//     max-height: 1075px;
-//     overflow-y: scroll;
-// }
+.flex-content {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-flow: row wrap;
+}
 
-.flex-column {
+.contract-tables {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 1rem;
 }
 
-.flex-row {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 10px;
-    justify-content: center;
-
-    #form-and-liquidations {
-        flex: 1 1 470px;
-        max-width: 945px;
-    }
-
-    &.list-content {
-        & > * {
-            height: min-content;
-        }
-        #ticket-list {
-            flex: 1 1 470px;
-            max-width: 945px;
-        }
-        #trucker-list {
-            flex: 1 1 945px;
-            max-width: 945px;
-        }
-    }
+.info-section {
+    display: grid;
+    gap: 1rem;
+    flex: 1 1 640px;
+    max-width: 945px; // ABOUT THE WIDTH OF THE PRINTABLE CONTRACT
+    // max-width: max-content;
 }
 
-.center-content {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+#printable-contract {
+    max-height: max-content;
+}
+
+::ng-deep {
+    div.wrapper {
+        overflow: auto;
+    }
+
+    app-printable-contract {
+        > * {
+            width: fit-content;
+        }
+    }
 }
