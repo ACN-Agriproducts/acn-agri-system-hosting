@@ -56,7 +56,7 @@ export class TicketConsolePage implements OnInit {
     let newIndex = this.ticketIndex + num;
 
     if(newIndex >= this.tickets.length) newIndex = this.tickets.length - 1;
-    if(newIndex < 0) newIndex == 0;
+    if(newIndex < 0) newIndex = 0;
 
     this.ticketIndex = newIndex;
   }
