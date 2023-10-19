@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
+import { DiscountTables } from '@shared/classes/discount-tables';
+import { Product } from '@shared/classes/product';
 import { Ticket } from '@shared/classes/ticket';
 import { orderBy } from 'firebase/firestore';
 import { lastValueFrom, Observable } from 'rxjs';
@@ -18,6 +20,8 @@ export class TicketConsolePage implements OnInit {
   tickets: Ticket[];
   openContracts: Observable<Contract[]>;
   transportList: Promise<Contact[]>;
+  discountTables: {[product: string]: DiscountTables};
+
   ticketIndex: number = 0;
 
   @ViewChildren(TicketTemplateDirective) public ticketTemplates: QueryList<TicketTemplateDirective>;
@@ -35,6 +39,15 @@ export class TicketConsolePage implements OnInit {
 
     this.transportList = Contact.getList(this.db, this.session.getCompany(), where('tags', 'array-contains', 'trucker'));
     Ticket.getActiveTickets(this.db, this.session.getCompany(), this.session.getPlant()).then(result => this.tickets = result);
+
+    Product.getProductList(this.db, this.session.getCompany()).then(async list => {
+      const tables = await Promise.all(list.map(p => p.getDiscountTables()));
+
+      this.discountTables = {};
+      for(let i = 0; i < list.length; i++) {
+        this.discountTables[list[i].ref.id] = tables[i];
+      }
+    });
   }
 
   async newTicketButton() {

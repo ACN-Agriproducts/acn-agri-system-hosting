@@ -86,9 +86,10 @@ export class Ticket extends FirebaseDocInterface{
 
         if(snapshotOrRef instanceof DocumentReference) {
             this.ref = snapshotOrRef;
-            this.gross = new Mass(null, null);
-            this.tare = new Mass(null, null);
-            this.net = new Mass(null, null);
+            this.gross = new Mass(null, unit);
+            this.tare = new Mass(null, unit);
+            this.net = new Mass(null, unit);
+            this.dryWeight = new Mass(null, unit);
             return;
         }
 

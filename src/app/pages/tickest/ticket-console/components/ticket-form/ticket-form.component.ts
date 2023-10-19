@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
-import { Ticket } from '@shared/classes/ticket';
+import { DiscountTables } from '@shared/classes/discount-tables';
+import { Ticket, WeightDiscounts } from '@shared/classes/ticket';
 import { firstValueFrom, map, Observable } from 'rxjs';
 
 @Component({
@@ -13,6 +14,7 @@ export class TicketFormComponent implements OnInit {
   @Input() ticket: Ticket;
   @Input() openContracts: Observable<Contract[]>;
   @Input() transportList: Contact[];
+  @Input() discountTables: {[product: string]: DiscountTables};
 
   public selectableContracts: Observable<Contract[]>;
   public selectableTransport: Contact[];
@@ -62,5 +64,19 @@ export class TicketFormComponent implements OnInit {
     const contract = contracts.find(c => c.ref.id == this.contractId);
 
     this.selectableTransport = this.transportList.filter(t => contract.truckers.some(ti => ti.trucker.id == t.ref.id));
+  }
+
+  calcNetWeight() {
+    if(!this.ticket.gross.amount || !this.ticket.tare.amount) return;
+    
+    this.ticket.net.amount = this.ticket.gross.amount - this.ticket.tare.amount;
+    this.calcDiscount();
+  }
+
+  calcDiscount() {
+    if(!this.ticket.gross.amount || !this.ticket.tare.amount || !this.contractId) return;
+
+    const discounts = new WeightDiscounts(this.ticket, this.discountTables[this.ticket.productName]);
+    console.log(this.discountTables[this.ticket.productName], discounts);
   }
 }

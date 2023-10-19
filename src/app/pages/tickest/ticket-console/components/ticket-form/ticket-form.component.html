@@ -73,15 +73,15 @@
     <mat-card-content>
       <mat-form-field appearance="fill" class="weight-field">
         <mat-label>Gross</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.gross.amount">
+        <input matInput type="number" [(ngModel)]="ticket.gross.amount" (ngModelChange)="calcNetWeight()">
       </mat-form-field>
       <mat-form-field appearance="fill" class="weight-field">
         <mat-label>Tare</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.tare.amount">
+        <input matInput type="number" [(ngModel)]="ticket.tare.amount" (ngModelChange)="calcNetWeight()">
       </mat-form-field>
       <mat-form-field appearance="fill" class="net-field">
         <mat-label>Net</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.net.amount">
+        <input matInput type="number" [(ngModel)]="ticket.net.amount" readonly>
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Discount W:</mat-label>
@@ -89,7 +89,7 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>m. Ton</mat-label>
-        <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon'" readonly>
+        <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.3'" readonly>
       </mat-form-field>
     </mat-card-content>
   </mat-card>
@@ -102,11 +102,11 @@
     <mat-card-content>
       <mat-form-field appearance="fill">
         <mat-label>Moisture</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.moisture">
+        <input matInput type="number" [(ngModel)]="ticket.moisture" (ngModelChange)="calcDiscount()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Weight</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.weight">
+        <input matInput type="number" [(ngModel)]="ticket.weight" (ngModelChange)="calcDiscount()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Plague</mat-label>
