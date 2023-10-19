@@ -5,6 +5,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
+import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { Ticket } from '@shared/classes/ticket';
 import { orderBy } from 'firebase/firestore';
@@ -21,6 +22,7 @@ export class TicketConsolePage implements OnInit {
   openContracts: Observable<Contract[]>;
   transportList: Promise<Contact[]>;
   discountTables: {[product: string]: DiscountTables};
+  plant: Promise<Plant>;
 
   ticketIndex: number = 0;
 
@@ -53,6 +55,9 @@ export class TicketConsolePage implements OnInit {
         this.discountTables[list[i].ref.id] = tables[i];
       }
     });
+
+    // Get inventory info
+    this.plant = Plant.getPlant(this.db, this.session.getCompany(), this.session.getPlant());
   }
 
   async newTicketButton() {

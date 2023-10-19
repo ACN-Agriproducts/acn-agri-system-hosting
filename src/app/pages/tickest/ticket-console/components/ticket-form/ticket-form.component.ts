@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
+import { Plant } from '@shared/classes/plant';
 import { Ticket, WeightDiscounts } from '@shared/classes/ticket';
 import { firstValueFrom, map, Observable } from 'rxjs';
 
@@ -15,12 +16,13 @@ export class TicketFormComponent implements OnInit {
   @Input() openContracts: Observable<Contract[]>;
   @Input() transportList: Contact[];
   @Input() discountTables: {[product: string]: DiscountTables};
+  @Input() plant: Promise<Plant>;
 
   public selectableContracts: Observable<Contract[]>;
   public selectableTransport: Contact[];
 
-  // Form fields
   public contractId: string;
+  public currentContract: Contract;
 
   constructor( ) { }
 
@@ -40,19 +42,19 @@ export class TicketFormComponent implements OnInit {
 
   async contractChange() { 
     const contracts = await firstValueFrom(this.selectableContracts);
-    const contract = contracts.find(c => c.ref.id == this.contractId);
+    this.currentContract = contracts.find(c => c.ref.id == this.contractId);
 
-    this.ticket.contractID = contract.id;
-    this.ticket.contractRef = contract.ref.withConverter(Contract.converter);
-    this.ticket.PPB = contract.aflatoxin;
-    this.ticket.productName = contract.product.id;
-    this.ticket.grade = Number(contract.grade);
+    this.ticket.contractID = this.currentContract.id;
+    this.ticket.contractRef = this.currentContract.ref.withConverter(Contract.converter);
+    this.ticket.PPB = this.currentContract.aflatoxin;
+    this.ticket.productName = this.currentContract.product.id;
+    this.ticket.grade = Number(this.currentContract.grade);
 
-    this.ticket.clientCity = contract.clientTicketInfo.city;
-    this.ticket.clientName = contract.clientTicketInfo.name;
-    this.ticket.clientState = contract.clientTicketInfo.state;
-    this.ticket.clientStreetAddress = contract.clientTicketInfo.streetAddress;
-    this.ticket.clientZipCode = contract.clientTicketInfo.zipCode;
+    this.ticket.clientCity = this.currentContract.clientTicketInfo.city;
+    this.ticket.clientName = this.currentContract.clientTicketInfo.name;
+    this.ticket.clientState = this.currentContract.clientTicketInfo.state;
+    this.ticket.clientStreetAddress = this.currentContract.clientTicketInfo.streetAddress;
+    this.ticket.clientZipCode = this.currentContract.clientTicketInfo.zipCode;
 
     this.loadTransport()
   }
@@ -84,5 +86,9 @@ export class TicketFormComponent implements OnInit {
     }
 
     this.ticket.dryWeight = newDryWeight;
+  }
+
+  async tankChange() {
+    this.ticket.tankId = (await this.plant).inventoryNames.findIndex(tank => tank == this.ticket.tank);
   }
 }

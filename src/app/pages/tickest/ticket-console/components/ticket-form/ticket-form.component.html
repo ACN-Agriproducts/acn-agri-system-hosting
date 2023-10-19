@@ -65,7 +65,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
+  <mat-card id="weights-card">
     <mat-card-header>
       <mat-card-subtitle>Weight Info</mat-card-subtitle>
     </mat-card-header>
@@ -94,7 +94,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card>
+  <mat-card id="grain-info-card">
     <mat-card-header>
       <mat-card-subtitle>Grain Info</mat-card-subtitle>
     </mat-card-header>
@@ -132,6 +132,28 @@
         <mat-label>Comments</mat-label>
         <textarea matInput [(ngModel)]="ticket.comment"></textarea>
       </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>Tank</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-radio-group [(ngModel)]="ticket.tank" (ngModelChange)="tankChange()">
+        <mat-radio-button
+          class="tanks-radio-group"
+          *ngFor="let tank of (plant | async)?.inventory"
+          [value]="tank.name"
+          [disabled]="tank.product.id == 'none' || tank.product.id == ticket.productName">
+          <div class="radio-button-label">
+            <span>{{tank.name}}</span>
+            <span>{{tank.product.id}}</span>
+            <span></span>
+          </div>
+        </mat-radio-button>
+      </mat-radio-group>
     </mat-card-content>
   </mat-card>
 </div>

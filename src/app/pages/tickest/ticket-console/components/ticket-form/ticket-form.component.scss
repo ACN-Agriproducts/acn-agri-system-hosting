@@ -17,3 +17,24 @@
 .flex-row {
     display: flex;
 }
+
+#weights-card {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+#grain-info-card {
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+
+.tanks-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.radio-button-label {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 2fr;
+}
