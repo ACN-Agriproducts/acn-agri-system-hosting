@@ -1,7 +1,9 @@
 import { ProductInfo } from "./contract";
 import { Product } from "./product";
 
-export declare type units = "lbs" | "kg" | "mTon" | "CWT" | "bu" | "tn";
+export const UNIT_LIST = ["lbs", "kg", "mTon", "CWT", "bu", "tn"] as const;
+export declare type units = typeof UNIT_LIST[number];
+
 const unitNameMap: Map<units, string> = new Map<units, string>([
     ["lbs", "pounds"],
     ["kg", "kilograms"],
@@ -64,5 +66,12 @@ export class Mass {
 
     static getUnitFullName(unit: units): string {
         return unitNameMap.get(unit);
+    }
+
+    getRawData() {
+        return {
+            defaultUnits: this.defaultUnits,
+            amount: this.amount
+        }
     }
 }

@@ -4,11 +4,14 @@ import { Injectable } from "@angular/core";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
 import { Contact } from "./contact";
-import { Contract } from "./contract";
+import { Contract, ProductInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Mass } from "./mass";
+import { Mass, units } from "./mass";
 import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
+import { Product } from "./product";
+
+type TicketStatus = "none" | "pending" | "paid";
 
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
@@ -41,7 +44,9 @@ export class Ticket extends FirebaseDocInterface{
     public plague: string;
     public plates: string;
     public PPB: number;
+    public priceDiscounts: PriceDiscounts;
     public productName: string;
+    public status: TicketStatus;
     public tank: string;
     public tankId: number;
     public tare: Mass;
@@ -54,6 +59,7 @@ export class Ticket extends FirebaseDocInterface{
     public voidRequester: string;
     public voidDate: Date;
     public weight: number;
+    public weightDiscounts: WeightDiscounts;
 
     public contractRef: DocumentReference<Contract>;
 
@@ -107,7 +113,7 @@ export class Ticket extends FirebaseDocInterface{
         this.foreignMatter = data.foreignMatter;
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
-        this.id = data.id;
+        this.id = data.id; 
         this.displayId = data.id + (data.subId ? "-" + data.subId : '')
         this.imageLinks = data.imageLinks;
         this.impurities = data.impurities;
@@ -122,7 +128,9 @@ export class Ticket extends FirebaseDocInterface{
         this.plague = data.plague;
         this.plates = data.plates;
         this.PPB = data.PPB;
+        this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
+        this.status = data.status ?? "none";
         this.tank = data.tank;
         this.tankId = data.tankId;
         this.tare = new Mass(data.tare, unit);
@@ -135,6 +143,7 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequester = data.voidRequester;
         this.voidDate = data.voidDate?.toDate() ?? null;
         this.weight = data.weight;
+        this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
@@ -187,7 +196,9 @@ export class Ticket extends FirebaseDocInterface{
                 plague: data.plague,
                 plates: data.plates,
                 PPB: data.PPB,
+                priceDiscounts: data.priceDiscounts,
                 productName: data.productName,
+                status: data.status,
                 tank: data.tank,
                 tankId: data.tankId,
                 tare: data.tare.get(),
@@ -200,6 +211,7 @@ export class Ticket extends FirebaseDocInterface{
                 voidRquester: data.voidRequester,
                 voidDate: data.voidDate ?? null,
                 weight: data.weight,
+                weightDiscounts: data.weightDiscounts,
 
                 contractRef: data.contractRef,
 
@@ -339,60 +351,125 @@ export class Ticket extends FirebaseDocInterface{
             return result.docs.map(t => t.data()).sort((a,b) => b.dateIn.getTime() - a.dateIn.getTime());
         });
     }
-}
 
 
-export declare type TicketWithDiscounts = {
-    data: Ticket, 
-    weightDiscounts: WeightDiscounts, 
-    priceDiscounts: PriceDiscounts, 
-    includeInReport: boolean
-};
-
-class Discounts {
-    constructor(data?: Discounts) {
-        if (!data) return;
-        Object.keys(this).forEach(key => this[key] = data[key]);
+    public getWeightDiscounts(discountTables: DiscountTables) {
+        this.weightDiscounts.getDiscounts(this, discountTables);
     }
 
-    public total(): number {
-        if (this instanceof WeightDiscounts) {
-            return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
-        }
-        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
+    public defineBushels(product: Product | ProductInfo) {
+        Object.keys(this).forEach(key => {
+            if (this[key] instanceof Mass) {
+                (this[key] as Mass).defineBushels(product);
+            }
+        });
+        this.weightDiscounts.defineBushels(product);
     }
 }
 
-export class PriceDiscounts extends Discounts {
+export class PriceDiscounts {
     public infested: number = 0;
     public musty: number = 0;
     public sour: number = 0;
     public weathered: number = 0;
     public inspection: number = 0;
+
+    constructor(data?: any) {
+        if (!data) return;
+        Object.keys(data).forEach(key => this[key] = data[key]);
+    }
+
+    public total(): number {
+        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
+    }
+
+    public getRawData() {
+        return { ...this };
+    }
 }
 
-export class WeightDiscounts extends Discounts {
-    brokenGrain: Mass = new Mass(0, null);
-    damagedGrain: Mass = new Mass(0, null);
-    dryWeight: Mass = new Mass(0, null);
-    dryWeightPercent: Mass = new Mass(0, null);
-    foreignMatter: Mass = new Mass(0, null);
-    moisture: Mass = new Mass(0, null);
-    PPB: Mass = new Mass(0, null);
-    weight: Mass = new Mass(0, null);
-    impurities: Mass = new Mass(0, null);
+const MASS_FIELDS_AND_NAMES = [
+    ["brokenGrain", "broken grain"],
+    ["damagedGrain", "damage"],
+    ["dryWeight", "drying"],
+    ["dryWeightPercent", "dry weight percent"],
+    ["foreignMatter", "foreign matter"],
+    ["gross", "gross"],
+    ["impurities", "impurities"],
+    ["infested", "infested"],
+    ["inspection", "inspection"],
+    ["moisture", "moisture"],
+    ["musty", "musty"],
+    ["net", "net"],
+    ["original_weight", "original weight"],
+    ["PPB", "PPB"],
+    ["sour", "sour"],
+    ["tare", "tare"],
+    ["weathered", "weathered"],
+    ["weight", "weight"],
+];
 
-    constructor(ticket?: Ticket, discountTables?: DiscountTables) {
-        super();
+export const WEIGHT_DISCOUNT_FIELDS = [
+    "brokenGrain",
+    "damagedGrain",
+    "dryWeight",
+    "dryWeightPercent",
+    "foreignMatter",
+    "moisture",
+    "PPB",
+    "impurities",
+];
 
-        if (!ticket || !discountTables) return;
+export class WeightDiscounts {
+    brokenGrain: Mass;
+    damagedGrain: Mass;
+    dryWeight: Mass;
+    dryWeightPercent: Mass;
+    foreignMatter: Mass;
+    moisture: Mass;
+    PPB: Mass;
+    impurities: Mass;
 
-        for (const key of Object.keys(this)) {
-            const table = discountTables.tables.find(table => table.fieldName === key);
-            const valueRange = table?.data.find(item => ticket[key] > item.low && ticket[key] < item.high);
-            this[key].defaultUnits = ticket.net.getUnit();
-            this[key].amount = (valueRange?.discount ?? 0) * ticket.net.get() / 100;
+    constructor(data?: any) {
+        if (!data) return;
+        for (const key of Object.keys(data)) {
+            this[key] = new Mass(data[key].amount, data[key].defaultUnits);
         }
+    }
+
+    public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
+        for (const table of (discountTables?.tables ?? [])) {
+            const key = table.fieldName;
+            const rowData = table.data.find(row => ticket[key] > row.low && ticket[key] < row.high);
+
+            this[key] ??= new Mass(0, null);
+            this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;
+            this[key].defaultUnits = ticket.net.getUnit();
+        }
+    }
+
+    public total(): number {
+        return Object.values(this).reduce((total, currentValue) => total + currentValue.get(), 0);
+    }
+
+    public totalMass(): Mass {
+        const mass = new Mass(0, "lbs");
+        mass.defineBushels(Object.values(this).find(v => v != null).conversions.get('bu'));
+        return Object.values(this).reduce((total: Mass, currentValue: Mass) => total.add(currentValue), mass);
+    }
+
+    public getRawData(): any {
+        const rawData = {};
+        for (const key of Object.keys(this)) {
+            rawData[key] = (this[key] as Mass).getRawData();
+        }
+        return rawData;
+    }
+
+    public defineBushels(product: Product | ProductInfo): void {
+        Object.keys(this).forEach(key => {
+            (this[key] as Mass).defineBushels(product);
+        });
     }
 }
 

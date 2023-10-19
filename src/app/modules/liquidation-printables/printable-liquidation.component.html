@@ -1,0 +1,10 @@
+
+<ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
+
+<ng-template typeTemplate="liquidation-long">
+  <app-liquidation-long class="landscape" [class.watermark]="data.cancelled" [data]="data"></app-liquidation-long>
+</ng-template>
+
+<ng-template #none>
+  <i>No Content to Display</i>
+</ng-template>

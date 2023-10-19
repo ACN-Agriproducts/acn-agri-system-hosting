@@ -1,9 +1,10 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, doc, getDoc, collectionData } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, doc, getDoc, collectionData, QueryConstraint, query, limit, orderBy, where } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { ProductInfo } from "./contract";
 import { DiscountTables } from "./discount-tables";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
+import { DiscountTables } from "./discount-tables";
 
 export class Product extends FirebaseDocInterface {
     public brokenGrain: number;
@@ -105,5 +106,17 @@ export class Product extends FirebaseDocInterface {
 
     public static getCollectionSnapshot(db: Firestore, company: string): Observable<Product[]> {
         return collectionData(Product.getCollectionReference(db, company));
+    }
+
+    public getDiscountTablesCollection() {
+        return collection(this.ref, "discounts").withConverter(DiscountTables.converter);
+    }
+
+    public getDiscountTables(date?: Date): Promise<DiscountTables> {
+        const collectionQuery = query(
+            collection(this.ref, "discounts").withConverter(DiscountTables.converter),
+            date ? where('date', '==', date) : orderBy('date', 'desc'), limit(1)
+        );
+        return getDocs(collectionQuery).then(result => result.docs[0]?.data());
     }
 }

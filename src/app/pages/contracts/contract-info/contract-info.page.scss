@@ -1,17 +1,41 @@
-.flex-row {
-    display: flex;
-    flex-wrap: wrap;
 
-    .info-card {
-        flex: 1 0 475px;
-    }
-
-    #printable-card {
-        flex: 0 0 auto;
-    }
+* {
+    box-sizing: border-box;
 }
 
-app-display-contract {
-    transform-origin: 0 0;
-    transform: scale(.2);
+.flex-content {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-flow: row wrap;
+}
+
+.contract-tables {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-section {
+    display: grid;
+    gap: 1rem;
+    flex: 1 1 640px;
+    max-width: 945px; // ABOUT THE WIDTH OF THE PRINTABLE CONTRACT
+    // max-width: max-content;
+}
+
+#printable-contract {
+    max-height: max-content;
+}
+
+::ng-deep {
+    div.wrapper {
+        overflow: auto;
+    }
+
+    app-printable-contract {
+        > * {
+            width: fit-content;
+        }
+    }
 }

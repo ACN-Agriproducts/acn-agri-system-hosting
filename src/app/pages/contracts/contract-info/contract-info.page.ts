@@ -1,13 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContractLiquidationLongComponent } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, Unsubscribe, onSnapshot, orderBy } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { DiscountTables } from '@shared/classes/discount-tables';
+import { Liquidation } from '@shared/classes/liquidation';
 
 @Component({
   selector: 'app-contract-info',
@@ -15,16 +14,14 @@ import { DiscountTables } from '@shared/classes/discount-tables';
   styleUrls: ['./contract-info.page.scss'],
 })
 export class ContractInfoPage implements OnInit, OnDestroy {
-  @ViewChild(ContractLiquidationLongComponent) printableLiquidation: ContractLiquidationLongComponent;
-
   public currentCompany: string;
   public currentContract: Contract;
-  public discountTables: DiscountTables;
   public id: string;
   public ready: boolean = false;
-  public showLiquidation: boolean = false;
   public ticketList: Ticket[];
   public type: string;
+  public liquidations: Liquidation[];
+  public unsub: Unsubscribe;
   
   constructor(
     private route: ActivatedRoute,
@@ -34,18 +31,23 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     ) { }
 
   ngOnInit() {
-    this.id = this.route.snapshot.paramMap.get('id');
     this.type = this.route.snapshot.paramMap.get('type');
+    this.id = this.route.snapshot.paramMap.get('id');
     this.currentCompany = this.session.getCompany();
 
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
-      this.discountTables = await DiscountTables.getDiscountTables(this.db, this.currentCompany, contract.product.id);
+      
+      this.unsub = contract.getLiquidationsSnapshot(result => {
+        this.liquidations = result.docs.map(qds => qds.data());
+      }, orderBy('date', 'asc'));
       
       this.ready = true;
     });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.unsub();
+  }
 }
