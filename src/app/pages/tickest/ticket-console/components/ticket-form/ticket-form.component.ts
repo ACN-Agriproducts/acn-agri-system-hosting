@@ -76,7 +76,13 @@ export class TicketFormComponent implements OnInit {
   calcDiscount() {
     if(!this.ticket.gross.amount || !this.ticket.tare.amount || !this.contractId) return;
 
-    const discounts = new WeightDiscounts(this.ticket, this.discountTables[this.ticket.productName]);
-    console.log(this.discountTables[this.ticket.productName], discounts);
+    this.ticket.getWeightDiscounts(this.discountTables[this.ticket.productName]);
+
+    let newDryWeight = this.ticket.net;    
+    for(const mass of Object.values(this.ticket.weightDiscounts)) {
+      newDryWeight = newDryWeight.subtract(mass);
+    }
+
+    this.ticket.dryWeight = newDryWeight;
   }
 }

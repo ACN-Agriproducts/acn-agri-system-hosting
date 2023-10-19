@@ -96,6 +96,8 @@ export class Ticket extends FirebaseDocInterface{
             this.tare = new Mass(null, unit);
             this.net = new Mass(null, unit);
             this.dryWeight = new Mass(null, unit);
+            this.weightDiscounts = new WeightDiscounts();
+
             return;
         }
 
@@ -440,7 +442,7 @@ export class WeightDiscounts {
     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
         for (const table of (discountTables?.tables ?? [])) {
             const key = table.fieldName;
-            const rowData = table.data.find(row => ticket[key] > row.low && ticket[key] < row.high);
+            const rowData = table.data.find(row => ticket[key] >= row.low && ticket[key] <= row.high);
 
             this[key] ??= new Mass(0, null);
             this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;

@@ -33,13 +33,18 @@ export class TicketConsolePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Get open contracts with snapshot
     this.openContracts = collectionData(
       query(Contract.getCollectionReference(this.db, this.session.getCompany()),
         where('status', '==', 'active'), where('plants', 'array-contains', this.session.getPlant()), orderBy('id', 'asc')))
 
+    // Get transport list
     this.transportList = Contact.getList(this.db, this.session.getCompany(), where('tags', 'array-contains', 'trucker'));
+
+    // Get active tickets
     Ticket.getActiveTickets(this.db, this.session.getCompany(), this.session.getPlant()).then(result => this.tickets = result);
 
+    // Get product discount tables
     Product.getProductList(this.db, this.session.getCompany()).then(async list => {
       const tables = await Promise.all(list.map(p => p.getDiscountTables()));
 

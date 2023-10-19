@@ -4,7 +4,6 @@ import { ProductInfo } from "./contract";
 import { DiscountTables } from "./discount-tables";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
-import { DiscountTables } from "./discount-tables";
 
 export class Product extends FirebaseDocInterface {
     public brokenGrain: number;
@@ -78,10 +77,6 @@ export class Product extends FirebaseDocInterface {
             marketCode: this.marketCode ?? null,
             productCode: this.productCode ?? '',
         };
-    }
-
-    public getDiscountTables(): Promise<DiscountTables> {
-        return DiscountTables.getDiscountTables(this.ref.firestore, this.ref.parent.parent.id, this.ref.id);
     }
 
     public static getCollectionReference(db: Firestore, company: string): CollectionReference<Product> {
