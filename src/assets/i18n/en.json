@@ -66,7 +66,6 @@
             "archive": "archive",
             "cancel": "cancel",
             "contract document": "Contract Document",
-            "contract liquidations": "contract liquidations",
             "contract": "Contract",
             "Contract": "Contract",
             "CWT": "CWT",
@@ -103,6 +102,8 @@
             "new liquidation": "new liquidation",
             "No Items to Display": "No Items to Display",
             "options": "options",
+            "payments": "payments",
+            "Payments": "Payments",
             "preview": "preview",
             "Preview": "Preview",
             "Price ($/BU)": "Price ($/BU)",
@@ -150,7 +151,9 @@
             "Confirm": "Confirm",
             "confirm": "confirm",
             "Add": "Add",
-            "add": "add"
+            "add": "add",
+            "liquidations": "liquidations",
+            "Liquidations": "Liquidations"
         }
     },
     "directory": {

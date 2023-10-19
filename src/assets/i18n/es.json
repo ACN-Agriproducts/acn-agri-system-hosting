@@ -66,7 +66,6 @@
             "archive": "archivar",
             "cancel": "cancelar",
             "contract document": "Documento de Contrato",
-            "contract liquidations": "liquidaciones de contratos",
             "contract": "Contrato",
             "Contract": "Contrato",
             "CWT": "CWT",
@@ -103,6 +102,8 @@
             "new liquidation": "nuevo liquidación",
             "No Items to Display": "No Hay Documentos Para Mostrar",
             "options": "opciones",
+            "payments": "payments",
+            "Payments": "Payments",
             "Peso Vol.": "Peso Vol.",
             "preview": "vista previa",
             "Preview": "Vista Previa",
@@ -151,7 +152,9 @@
             "Confirm": "Confirmar",
             "confirm": "confirmar",
             "Add": "Agregar",
-            "add": "agregar"
+            "add": "agregar",
+            "liquidations": "liquidaciones",
+            "Liquidations": "Liquidaciones"
         }
     },
     "directory": {

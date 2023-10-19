@@ -1,0 +1,33 @@
+
+<ng-container *transloco="let t; read: 'contracts.info'">
+  <ol class="collection">
+    <mat-card class="header-card">
+      <li class="row">
+        <div class="cell">Liquidation</div>
+        <div class="cell">Type</div>
+        <div class="cell">Amount</div>
+        <div class="cell button">Proof of Payment</div>
+      </li>
+    </mat-card>
+    <mat-card class="body-card" *ngIf="true else noItems">
+      <li class="row" *ngFor="let payment of testData; let index = index">
+        <div class="cell">{{ payment.liquidation }}</div>
+        <div class="cell">{{ payment.type }}</div>
+        <div class="cell">{{ payment.amount }}</div>
+        <div class="cell button">
+          <button mat-icon-button [color]="payment.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+      </li>
+    </mat-card>
+  </ol>
+
+  <ng-template #noItems templateRef="">
+    <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
+  </ng-template>
+
+  <ng-template #button>
+    <button mat-icon-button [color]=""></button>
+  </ng-template>
+</ng-container>

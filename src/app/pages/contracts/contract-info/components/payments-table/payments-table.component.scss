@@ -17,33 +17,6 @@
     mat-card { padding: unset }
 }
 
-
-// USED FOR GREEN HOVER EFFECT
-// .body-card .row {
-    // cursor: pointer;
-    
-    // &:before {
-    //     content: "";
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     width: 100%;
-    //     height: 100%;
-    //     background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-    //     transition: opacity .3s;
-    //     opacity: 0;
-    //     z-index: 2;
-    //     pointer-events: none;
-    // }
-    // &:hover:before {
-    //     opacity: 1;
-    // }
-    // &:hover {
-    //     background-color: white;
-    //     transition: .2s;
-    // }
-// }
-
 .row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
@@ -63,17 +36,18 @@
     padding: 15px;
 
     &.button {
-        padding: 0;
         justify-content: center;
     }
-
-    max-width: 100%;
 
     display: flex;
     align-items: center;
 
     &.ticket-ids {
         flex-wrap: wrap;
+    }
+
+    &.num {
+        justify-content: end;
     }
 }
 
@@ -88,7 +62,7 @@
 
 .body-card {
     > :nth-child(odd) {
-        background-color: var(--ion-color-light);   
+        background-color: var(--ion-color-light);
     }
 
     mat-form-field {
@@ -97,6 +71,10 @@
 
     mat-icon[cdkDragHandle] {
         cursor: move;
+    }
+
+    .cell.button {
+        padding: 0;
     }
 }
 
@@ -138,3 +116,5 @@
 button.mat-menu-item {
     min-width: 150px;
 }
+
+

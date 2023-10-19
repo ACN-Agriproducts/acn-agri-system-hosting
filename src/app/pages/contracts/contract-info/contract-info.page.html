@@ -8,18 +8,18 @@
         <div class="contract-tables">
           <mat-card *ngIf="ticketList?.length > 0">
             <mat-card-header>
-              <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ t('Liquidations') }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" data-scroll></app-liquidation-table>
+              <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" scroll></app-liquidation-table>
             </mat-card-content>
           </mat-card>
           <mat-card *ngIf="ticketList?.length > 0">
             <mat-card-header>
-              <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ t('Payments') }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" data-scroll></app-liquidation-table>
+              <app-payments-table scroll></app-payments-table>
             </mat-card-content>
           </mat-card>
         </div>
