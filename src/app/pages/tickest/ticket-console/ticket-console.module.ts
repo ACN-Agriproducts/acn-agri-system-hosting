@@ -10,6 +10,7 @@ import { NewTicketDialog, TicketConsolePage, TicketSelectorPipe } from './ticket
 import { CoreModule } from '@core/core.module';
 import { TicketFormComponent } from './components/ticket-form/ticket-form.component';
 import { TicketTemplateDirective } from './ticket-template-directive.directive';
+import { ContractModule } from 'src/app/modules/contract/contract.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { TicketTemplateDirective } from './ticket-template-directive.directive';
     IonicModule,
     TicketConsolePageRoutingModule,
     CoreModule,
+    ContractModule
   ],
   declarations: [
     TicketConsolePage, 

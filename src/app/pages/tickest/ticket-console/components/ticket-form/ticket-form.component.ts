@@ -15,6 +15,7 @@ export class TicketFormComponent implements OnInit {
   @Input() transportList: Contact[];
 
   public selectableContracts: Observable<Contract[]>;
+  public selectableTransport: Contact[];
 
   // Form fields
   public contractId: string;
@@ -32,10 +33,10 @@ export class TicketFormComponent implements OnInit {
     );
 
     this.contractId = this.ticket?.contractRef?.id ?? null;
+    this.loadTransport();
   }
 
-  async contractChange(event: string) { 
-    this.contractId = event;
+  async contractChange() { 
     const contracts = await firstValueFrom(this.selectableContracts);
     const contract = contracts.find(c => c.ref.id == this.contractId);
 
@@ -50,6 +51,16 @@ export class TicketFormComponent implements OnInit {
     this.ticket.clientState = contract.clientTicketInfo.state;
     this.ticket.clientStreetAddress = contract.clientTicketInfo.streetAddress;
     this.ticket.clientZipCode = contract.clientTicketInfo.zipCode;
+
+    this.loadTransport()
   }
 
+  async loadTransport() {
+    if(this.contractId == null) return;
+
+    const contracts = await firstValueFrom(this.selectableContracts);
+    const contract = contracts.find(c => c.ref.id == this.contractId);
+
+    this.selectableTransport = this.transportList.filter(t => contract.truckers.some(ti => ti.trucker.id == t.ref.id));
+  }
 }

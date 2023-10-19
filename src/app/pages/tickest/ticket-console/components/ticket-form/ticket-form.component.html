@@ -7,7 +7,7 @@
     <mat-card-content>
         <mat-form-field appearance="fill">
         <mat-label>Contract</mat-label>
-        <mat-select [ngModel]="contractId" (ngModelChange)="contractChange($event)">
+        <mat-select [(ngModel)]="contractId" (ngModelChange)="contractChange()">
           <mat-option *ngFor="let contract of selectableContracts | async" [value]="contract.ref.id">
             {{contract.id + ": " + contract.clientName}}
           </mat-option>
@@ -34,23 +34,33 @@
     </mat-card-header>
 
     <mat-card-content>
-      <mat-form-field appearance="fill">
+      <span class="flex-row">
+        <mat-form-field appearance="fill">
         <mat-label>Transport</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let transport of transportList">{{transport.name}}</mat-option>
+        <mat-select 
+          [(ngModel)]="ticket.truckerId"
+          [disabled]="!contractId">
+          <mat-option 
+            *ngFor="let transport of selectableTransport"
+            [value]="transport.ref.id"
+            >{{transport.name}}
+          </mat-option>
         </mat-select>
       </mat-form-field>
+      <button mat-button>+</button>
+      </span>
+      
       <mat-form-field appearance="fill">
         <mat-label>Vehicle</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" [(ngModel)]="ticket.vehicleID">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Plates</mat-label>
-        <input matInput type="number">
+        <input matInput type="text" [(ngModel)]="ticket.plates">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Driver</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" [(ngModel)]="ticket.driver">
       </mat-form-field>
     </mat-card-content>
   </mat-card>
@@ -63,23 +73,23 @@
     <mat-card-content>
       <mat-form-field appearance="fill" class="weight-field">
         <mat-label>Gross</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.gross">
+        <input matInput type="number" [(ngModel)]="ticket.gross.amount">
       </mat-form-field>
       <mat-form-field appearance="fill" class="weight-field">
         <mat-label>Tare</mat-label>
-        <input matInput type="text">
+        <input matInput type="number" [(ngModel)]="ticket.tare.amount">
       </mat-form-field>
       <mat-form-field appearance="fill" class="net-field">
         <mat-label>Net</mat-label>
-        <input matInput type="number">
+        <input matInput type="number" [(ngModel)]="ticket.net.amount">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Discount W:</mat-label>
-        <input matInput type="text" readonly>
+        <input matInput type="number" [(ngModel)]="ticket.dryWeight" readonly >
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>m. Ton</mat-label>
-        <input matInput type="text" readonly>
+        <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon'" readonly>
       </mat-form-field>
     </mat-card-content>
   </mat-card>
@@ -92,35 +102,35 @@
     <mat-card-content>
       <mat-form-field appearance="fill">
         <mat-label>Moisture</mat-label>
-        <input matInput type="text">
+        <input matInput type="number" [(ngModel)]="ticket.moisture">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Weight</mat-label>
-        <input matInput type="text">
+        <input matInput type="number" [(ngModel)]="ticket.weight">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Plague</mat-label>
-        <input matInput type="number">
+        <input matInput type="text" [(ngModel)]="ticket.plague">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>PPB</mat-label>
-        <input matInput type="text">
+        <input matInput type="number" [(ngModel)]="ticket.PPB">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Lot</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" [(ngModel)]="ticket.lot">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Original Ticket #</mat-label>
-        <input matInput type="text">
+        <input matInput type="text" [(ngModel)]="ticket.original_ticket">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Original Ticket W.</mat-label>
-        <input matInput type="text">
+        <input matInput type="number" [(ngModel)]="ticket.original_weight">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Comments</mat-label>
-        <textarea matInput></textarea>
+        <textarea matInput [(ngModel)]="ticket.comment"></textarea>
       </mat-form-field>
     </mat-card-content>
   </mat-card>
