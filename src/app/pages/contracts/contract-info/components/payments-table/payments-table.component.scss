@@ -36,7 +36,7 @@
     padding: 15px;
 
     &.button {
-        justify-content: center;
+        // justify-content: center;
     }
 
     display: flex;
@@ -47,7 +47,7 @@
     }
 
     &.num {
-        justify-content: end;
+        // justify-content: end;
     }
 }
 
@@ -74,7 +74,8 @@
     }
 
     .cell.button {
-        padding: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 }
 

@@ -3,18 +3,11 @@ import { Component, OnInit } from '@angular/core';
 declare type PaymentType = "pre-paid" | "post-paid";
 declare type TableDataType = "numerical" | "button" | "text";
 
-interface TableField {
+type TableField = {
+  key: string
   header: string,
   dataType?: string,
-  icon?: string,
-}
-
-type TableFields = {
-  [key: string]: {
-    header: string,
-    dataType?: string,
-    icon?: string
-  }
+  icon?: string
 }
 
 @Component({
@@ -61,6 +54,28 @@ export class PaymentsTableComponent implements OnInit {
       liquidation: 23,
       proofOfPayment: []
     },
+  ];
+
+  public arrayTableFields: TableField[] = [
+    {
+      key: "liquidation",
+      header: "Liquidation"
+    },
+    {
+      key: "type",
+      header: "Type"
+    },
+    {
+      key: "amount",
+      header: "Amount",
+      dataType: "num"
+    },
+    {
+      key: "proofOfPaymentDocs",
+      header: "Proof of Payment",
+      dataType: "button",
+      icon: "cloud_upload"
+    }
   ];
 
   constructor() { }

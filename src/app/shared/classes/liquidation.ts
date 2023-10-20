@@ -12,31 +12,6 @@ export declare type ReportTicket = {
     inReport: boolean
 }
 
-export interface TicketInfo {
-    damagedGrain: number;
-    dateIn: Date;
-    dateOut: Date;
-    displayId: string;
-    dryWeightPercent: number;
-    gross: Mass;
-    id: number;
-    moisture: number;
-    net: Mass;
-    priceDiscounts: PriceDiscounts;
-    ref: DocumentReference<Ticket>;
-    status: string;
-    subId: string;
-    tare: Mass;
-    weight: number;
-    weightDiscounts: WeightDiscounts;
-}
-
-export interface FileStorageInfo {
-    name: string;
-    ref: string;
-    contentType: string;
-}
-
 export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
     ["weight", "lbs"],
     ["moisture", "CWT"],
@@ -237,4 +212,29 @@ export class LiquidationTotals {
             this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
         });
     }
+}
+
+export interface TicketInfo {
+    damagedGrain: number;
+    dateIn: Date;
+    dateOut: Date;
+    displayId: string;
+    dryWeightPercent: number;
+    gross: Mass;
+    id: number;
+    moisture: number;
+    net: Mass;
+    priceDiscounts: PriceDiscounts;
+    ref: DocumentReference<Ticket>;
+    status: string;
+    subId: string;
+    tare: Mass;
+    weight: number;
+    weightDiscounts: WeightDiscounts;
+}
+
+export interface FileStorageInfo {
+    name: string;
+    ref: string;
+    contentType: string;
 }
