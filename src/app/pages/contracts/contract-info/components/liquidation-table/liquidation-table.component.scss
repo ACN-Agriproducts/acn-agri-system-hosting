@@ -63,7 +63,6 @@
     padding: 15px;
 
     &.button {
-        padding: 0;
         justify-content: center;
     }
 
@@ -75,6 +74,8 @@
     &.ticket-ids {
         flex-wrap: wrap;
     }
+
+    text-align: center;
 }
 
 .header-card {
@@ -97,6 +98,11 @@
 
     mat-icon[cdkDragHandle] {
         cursor: move;
+    }
+
+    .cell.button {
+        padding-top: 0;
+        padding-bottom: 0;
     }
 }
 

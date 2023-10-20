@@ -69,15 +69,13 @@ export class LiquidationTableComponent implements OnInit {
     });
   }
 
-  public async uploadDocuments(liquidation: Liquidation, isProof: boolean) {
-    const docType = isProof ?
-      this.transloco.translate("contracts.info.Proof of Payment") : 
-      this.transloco.translate("contracts.info.Supplemental");
+  public async uploadDocuments(liquidation: Liquidation) {
+    const docType = this.transloco.translate("contracts.info.Supplemental");
 
     let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}`;
     locationRef += `/${docType.toLocaleLowerCase().replace(/\s+/g, "-")}`;
       
-    const files = liquidation[isProof ? 'proofOfPaymentDocs' : 'supplementalDocs'].map(doc => 
+    const files = liquidation.supplementalDocs.map(doc => 
       ({ ...doc, url: null, dropfile: null, contentType: null })
     );
     const uploadable = liquidation.status !== 'cancelled';
@@ -97,7 +95,7 @@ export class LiquidationTableComponent implements OnInit {
     if (!updateData || !uploadable) return;
     
     updateDoc(liquidation.ref, {
-      [isProof ? 'proofOfPaymentDocs' : 'supplementalDocs']: updateData
+      supplementalDocs: updateData
     })
     .then(() => {
       this.snack.open("Successfully updated Liquidation", "success");

@@ -21,7 +21,6 @@ export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>(
 
 export class Liquidation extends FirebaseDocInterface {
     public date: Date;
-    public proofOfPaymentDocs: FileStorageInfo[];
     public status: Status;
     public supplementalDocs: FileStorageInfo[];
     public ticketRefs: DocumentReference<Ticket>[];
@@ -41,7 +40,6 @@ export class Liquidation extends FirebaseDocInterface {
             this.ref = snapshotOrRef;
             
             this.date = new Date();
-            this.proofOfPaymentDocs = [];
             this.status = "pending";
             this.supplementalDocs = [];
             this.ticketRefs = [];
@@ -53,7 +51,6 @@ export class Liquidation extends FirebaseDocInterface {
         if (data == undefined) return;
 
         this.date = data.date.toDate();
-        this.proofOfPaymentDocs = data.proofOfPaymentDocs;
         this.status = data.status;
         this.supplementalDocs = data.supplementalDocs;
         this.ticketRefs = data.ticketRefs;
@@ -92,7 +89,6 @@ export class Liquidation extends FirebaseDocInterface {
 
             return {
                 date: data.date,
-                proofOfPaymentDocs: data.proofOfPaymentDocs,
                 status: data.status,
                 supplementalDocs: data.supplementalDocs,
                 ticketRefs: data.ticketRefs,

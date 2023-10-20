@@ -14,8 +14,8 @@
         <div class="cell">{{ t('tickets') | titlecase }}</div>
         <div class="cell">{{ t('Date') | titlecase }}</div>
         <div class="cell">{{ t('status') | titlecase }}</div>
-        <div class="cell options"></div>
-        <div class="cell options"></div>
+        <div class="cell button">{{ t("Supplemental") }} {{ t("Documents") }}</div>
+        <div class="cell button"></div>
       </li>
     </mat-card>
     <mat-card class="body-card" *ngIf="liquidations?.length!==0 else noItems">
@@ -31,19 +31,12 @@
           <div class="status-text" [class]="liquidation.status">{{ liquidation.status }}</div>
         </div>
         <div class="cell button">
-          <button mat-icon-button [matMenuTriggerFor]="pdfMenu">
-            <mat-icon [color]="liquidation.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'">cloud_upload</mat-icon>
+          <button mat-icon-button 
+            [color]="liquidation.supplementalDocs?.length > 0 ? 'primary' : 'accent'"
+            (click)="uploadDocuments(liquidation)"
+          >
+            <mat-icon>cloud_upload</mat-icon>
           </button>
-          <mat-menu #pdfMenu="matMenu">
-            <button mat-menu-item (click)="uploadDocuments(liquidation, true)">
-              <mat-icon color="primary">insert_drive_file</mat-icon>
-              <span>{{ t("Proof of Payment") }} {{ t("Documents") }}</span>
-            </button>
-            <button mat-menu-item (click)="uploadDocuments(liquidation, false)">
-              <mat-icon color="primary">file_copy</mat-icon>
-              <span>{{ t("Supplemental") }} {{ t("Documents") }}</span>
-            </button>
-          </mat-menu>
         </div>
         <div class="cell button">
           <button mat-icon-button [matMenuTriggerFor]="menu">
