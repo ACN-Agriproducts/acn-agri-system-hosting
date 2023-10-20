@@ -2,6 +2,7 @@ import { Component, OnInit, Pipe, PipeTransform, QueryList, TemplateRef, ViewChi
 import { collection, collectionData, doc, Firestore, limit, onSnapshot, query, where } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
@@ -20,9 +21,10 @@ import { TicketTemplateDirective } from './ticket-template-directive.directive';
 export class TicketConsolePage implements OnInit {
   tickets: Ticket[];
   openContracts: Observable<Contract[]>;
-  transportList: Promise<Contact[]>;
   discountTables: {[product: string]: DiscountTables};
   plant: Promise<Plant>;
+  companyDoc: Promise<Company>;
+  transportList: CompanyContact[];
 
   ticketIndex: number = 0;
 
@@ -40,8 +42,11 @@ export class TicketConsolePage implements OnInit {
       query(Contract.getCollectionReference(this.db, this.session.getCompany()),
         where('status', '==', 'active'), where('plants', 'array-contains', this.session.getPlant()), orderBy('id', 'asc')))
 
-    // Get transport list
-    this.transportList = Contact.getList(this.db, this.session.getCompany(), where('tags', 'array-contains', 'trucker'));
+    // Get company doc
+    this.companyDoc = Company.getCompany(this.db, this.session.getCompany());
+    this.companyDoc.then(company => {
+      this.transportList = company.contactList.filter(t => t.tags.some(tag => tag == 'trucker'))
+    });
 
     // Get active tickets
     Ticket.getActiveTickets(this.db, this.session.getCompany(), this.session.getPlant()).then(result => this.tickets = result);

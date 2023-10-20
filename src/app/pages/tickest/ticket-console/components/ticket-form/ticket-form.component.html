@@ -53,12 +53,17 @@
           [disabled]="!contractId">
           <mat-option 
             *ngFor="let transport of selectableTransport"
-            [value]="transport.ref.id"
+            [value]="transport.id"
             >{{transport.name}}
           </mat-option>
         </mat-select>
+        <button 
+          mat-icon-button matSuffix 
+          [disabled]="!contractId"
+          (click)="addTransport(); $event.stopPropagation()">
+          <mat-icon>add</mat-icon>
+        </button>
       </mat-form-field>
-      <button mat-button>+</button>
       </span>
       
       <mat-form-field appearance="fill">

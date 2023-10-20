@@ -1,10 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Plant } from '@shared/classes/plant';
 import { Ticket, WeightDiscounts } from '@shared/classes/ticket';
 import { firstValueFrom, map, Observable } from 'rxjs';
+import { SelectClientComponent } from 'src/app/modules/contract/select-client/select-client.component';
 
 @Component({
   selector: 'app-ticket-form',
@@ -14,17 +17,17 @@ import { firstValueFrom, map, Observable } from 'rxjs';
 export class TicketFormComponent implements OnInit {
   @Input() ticket: Ticket;
   @Input() openContracts: Observable<Contract[]>;
-  @Input() transportList: Contact[];
+  @Input() transportList: CompanyContact[];
   @Input() discountTables: {[product: string]: DiscountTables};
   @Input() plant: Promise<Plant>;
 
   public selectableContracts: Observable<Contract[]>;
-  public selectableTransport: Contact[];
+  public selectableTransport: CompanyContact[];
 
   public contractId: string;
   public currentContract: Contract;
 
-  constructor( ) { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
     // Filter contracts
@@ -65,7 +68,7 @@ export class TicketFormComponent implements OnInit {
     const contracts = await firstValueFrom(this.selectableContracts);
     const contract = contracts.find(c => c.ref.id == this.contractId);
 
-    this.selectableTransport = this.transportList.filter(t => contract.truckers.some(ti => ti.trucker.id == t.ref.id));
+    this.selectableTransport = this.transportList.filter(t => contract.truckers.some(ti => ti.trucker.id == t.id));
   }
 
   calcNetWeight() {
@@ -90,5 +93,11 @@ export class TicketFormComponent implements OnInit {
 
   async tankChange() {
     this.ticket.tankId = (await this.plant).inventoryNames.findIndex(tank => tank == this.ticket.tank);
+  }
+
+  async addTransport() {
+    this.dialog.open(SelectClientComponent, {
+      data: this.transportList.filter(t => !this.selectableTransport.some(st => st.id == t.id))
+    })
   }
 }
