@@ -3,11 +3,9 @@ import { PriceDiscounts, Ticket, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
 import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, Timestamp } from "@angular/fire/firestore";
 import { Mass, units } from "./mass";
-import { SafeResourceUrl } from "@angular/platform-browser";
+import { Status } from "./company";
 
-type LiquidationStatus = "pending" | "paid" | "cancelled";
-
-export declare type ReportTicket = {
+export type ReportTicket = {
     data: TicketInfo,
     inReport: boolean
 }
@@ -24,7 +22,7 @@ export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>(
 export class Liquidation extends FirebaseDocInterface {
     public date: Date;
     public proofOfPaymentDocs: FileStorageInfo[];
-    public status: LiquidationStatus;
+    public status: Status;
     public supplementalDocs: FileStorageInfo[];
     public ticketRefs: DocumentReference<Ticket>[];
     public tickets: TicketInfo[];
@@ -142,7 +140,7 @@ export class Liquidation extends FirebaseDocInterface {
         return onSnapshot(collectionQuery, onNext);
     }
 
-    public static async getLiquidationByRefId(
+    public static async getLiquidationByContractId(
         db: Firestore, 
         company: string, 
         contractRefId: string, 

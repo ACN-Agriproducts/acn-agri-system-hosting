@@ -6,6 +6,8 @@ import { Observable } from "rxjs";
 import { units } from "./mass";
 import { Plant } from "./plant";
 
+export type Status = "pending" | "active" | "closed" | "cancelled" | "paid";
+
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];
     extraContactTypes: string[];

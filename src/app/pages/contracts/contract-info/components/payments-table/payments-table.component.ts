@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-declare type PaymentType = "pre-paid" | "post-paid";
 declare type TableDataType = "numerical" | "button" | "text";
 
 type TableField = {
