@@ -1,3 +1,14 @@
+<div class="form-header">
+  <mat-card class="info-card">
+    <mat-card-title>ID: {{ticket?.id}}</mat-card-title>
+  </mat-card>
+  <mat-card class="info-card">
+    <mat-card-subtitle>Date in: {{ticket?.dateIn | date}}</mat-card-subtitle>
+  </mat-card>
+  <mat-card class="info-card">
+    <mat-card-title>Type: {{ticket?.type | uppercase}}</mat-card-title>
+  </mat-card>
+</div>
 <div class="form-wrapper">
   <mat-card>
     <mat-card-header>

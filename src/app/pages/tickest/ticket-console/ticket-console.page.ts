@@ -1,5 +1,5 @@
 import { Component, OnInit, Pipe, PipeTransform, QueryList, TemplateRef, ViewChildren } from '@angular/core';
-import { collection, collectionData, doc, Firestore, onSnapshot, query, where } from '@angular/fire/firestore';
+import { collection, collectionData, doc, Firestore, limit, onSnapshot, query, where } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
@@ -66,10 +66,16 @@ export class TicketConsolePage implements OnInit {
     
     if(result === undefined) return;
 
+    const isIn = result == 'in' ? 
+                    true : result == "out" ? 
+                      false : null;
+    const lastTicket = Ticket.getTickets(this.db, this.session.getCompany(), this.session.getPlant(), where('in', '==', isIn), orderBy('id', 'desc'), limit(1));
     const newTicket = new Ticket(
       doc(collection(this.db, `companies/${this.session.getCompany()}/plants/${this.session.getPlant()}/tickets`)).withConverter(Ticket.converter)
     );
-    newTicket.in = result;
+    newTicket.in = isIn;
+    newTicket.type = result;
+    newTicket.id = (await lastTicket)[0].id + 1;
 
     this.tickets.push(newTicket);
     this.ticketIndex = this.tickets.length - 1;

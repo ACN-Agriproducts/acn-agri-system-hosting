@@ -1,6 +1,7 @@
 <h1 mat-dialog-title>New Ticket</h1>
 <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="undefined">Cancel</button>
-    <button mat-button [mat-dialog-close]="true">IN</button>
-    <button mat-button [mat-dialog-close]="false">OUT</button>
+    <button mat-button mat-dialog-close="in">IN</button>
+    <button mat-button mat-dialog-close="out">OUT</button>
+    <button mat-button mat-dialog-close="service">SERVICE</button>
 </div>

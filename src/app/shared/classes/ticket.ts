@@ -11,7 +11,8 @@ import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
 import { Product } from "./product";
 
-type TicketStatus = "none" | "pending" | "paid";
+type TicketStatus = "none" | "active" | "pending" | "paid";
+type TicketType = "in" | "out" | "service";
 
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
@@ -77,6 +78,7 @@ export class Ticket extends FirebaseDocInterface{
 
     public subId: string;
     public moneyDiscounts: MoneyDiscounts;
+    public type: TicketType;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -97,6 +99,7 @@ export class Ticket extends FirebaseDocInterface{
             this.net = new Mass(null, unit);
             this.dryWeight = new Mass(null, unit);
             this.weightDiscounts = new WeightDiscounts();
+            this.dateIn = new Date();
 
             return;
         }

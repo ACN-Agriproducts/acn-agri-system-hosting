@@ -35,6 +35,13 @@
 }
 
 .radio-button-label {
+    width: 100%;
     display: grid;
     grid-template-columns: 1.5fr 1fr 2fr;
+}
+
+.form-header {
+    display: flex;
+    margin: 0px 20px;
+    justify-content: space-between;
 }
