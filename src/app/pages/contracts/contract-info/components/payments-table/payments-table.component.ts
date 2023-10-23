@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-declare type TableDataType = "numerical" | "button" | "text";
+type TableDataType = "num" | "button" | "text";
 
 type TableField = {
   key: string
   header: string,
-  dataType?: string,
+  dataType?: TableDataType,
   icon?: string
 }
 

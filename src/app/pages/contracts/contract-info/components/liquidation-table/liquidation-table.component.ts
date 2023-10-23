@@ -20,6 +20,8 @@ export class LiquidationTableComponent implements OnInit {
   @Input() liquidations: Liquidation[];
   @Input() contract: Contract;
 
+  public permissions: any;
+
   constructor(
     private confirm: ConfirmationDialogService,
     private snack: SnackbarService,
@@ -28,7 +30,9 @@ export class LiquidationTableComponent implements OnInit {
     private transloco: TranslocoService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.permissions = this.session.getPermissions();
+  }
 
   public async remove(index: number) {
     if (await this.confirm.openDialog("delete this liquidation")) {

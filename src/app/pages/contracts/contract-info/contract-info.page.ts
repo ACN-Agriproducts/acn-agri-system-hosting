@@ -7,6 +7,7 @@ import { Firestore, Unsubscribe, onSnapshot, orderBy } from '@angular/fire/fires
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
+import { Payment } from '@shared/classes/payment';
 
 @Component({
   selector: 'app-contract-info',
@@ -21,7 +22,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public ticketList: Ticket[];
   public type: string;
   public liquidations: Liquidation[];
-  public unsub: Unsubscribe;
+  public payments: Payment[];
+  public unsubs: Unsubscribe[];
+  public permissions: any;
   
   constructor(
     private route: ActivatedRoute,
@@ -34,20 +37,26 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
     this.currentCompany = this.session.getCompany();
+    this.permissions = this.session.getPermissions();
 
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
       
-      this.unsub = contract.getLiquidationsSnapshot(result => {
-        this.liquidations = result.docs.map(qds => qds.data());
-      }, orderBy('date', 'asc'));
+      this.unsubs = [
+        contract.getLiquidationsSnapshot(result => {
+          this.liquidations = result.docs.map(qds => qds.data());
+        }, orderBy('date', 'asc')),
+        Payment.getPaymentsSnapshot(this.db, this.currentCompany, result => {
+          this.payments = result.docs.map(qds => qds.data());
+        }, orderBy('date', 'asc'))
+      ];
       
       this.ready = true;
     });
   }
 
   ngOnDestroy() {
-    this.unsub();
+    this.unsubs.forEach(unsub => unsub());
   }
 }

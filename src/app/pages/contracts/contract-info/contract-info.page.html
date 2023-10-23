@@ -6,7 +6,7 @@
       <div class="info-section">
         <app-contract-form id="contract-form" *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
         <div class="contract-tables">
-          <mat-card *ngIf="ticketList?.length > 0">
+          <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.liquidations?.read)">
             <mat-card-header>
               <mat-card-subtitle>{{ t('Liquidations') }}</mat-card-subtitle>
             </mat-card-header>
@@ -14,7 +14,7 @@
               <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" scroll></app-liquidation-table>
             </mat-card-content>
           </mat-card>
-          <mat-card *ngIf="ticketList?.length > 0">
+          <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.payments?.read)">
             <mat-card-header>
               <mat-card-subtitle>{{ t('Payments') }}</mat-card-subtitle>
             </mat-card-header>
