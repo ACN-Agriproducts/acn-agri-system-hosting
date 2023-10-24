@@ -37,6 +37,7 @@
         <input matInput type="text" [(ngModel)]="ticket.origin">
       </mat-form-field>
     </mat-card-content>
+    <mat-progress-bar *ngIf="currentContract" mode="determinate" [value]="currentContract.progress"></mat-progress-bar>
   </mat-card>
   
   <mat-card>

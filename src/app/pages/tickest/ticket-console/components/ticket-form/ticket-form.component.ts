@@ -1,12 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { arrayUnion, Firestore } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
-import { Contract } from '@shared/classes/contract';
+import { Contract, TruckerInfo } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Plant } from '@shared/classes/plant';
 import { Ticket, WeightDiscounts } from '@shared/classes/ticket';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { firstValueFrom, lastValueFrom, map, Observable } from 'rxjs';
 import { SelectClientComponent } from 'src/app/modules/contract/select-client/select-client.component';
 
 @Component({
@@ -27,7 +29,11 @@ export class TicketFormComponent implements OnInit {
   public contractId: string;
   public currentContract: Contract;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(
+    public dialog: MatDialog,
+    public db: Firestore,
+    public session: SessionInfo
+  ) { }
 
   ngOnInit() {
     // Filter contracts
@@ -96,8 +102,18 @@ export class TicketFormComponent implements OnInit {
   }
 
   async addTransport() {
-    this.dialog.open(SelectClientComponent, {
+    const dialogRef = this.dialog.open(SelectClientComponent, {
       data: this.transportList.filter(t => !this.selectableTransport.some(st => st.id == t.id))
-    })
+    });
+
+    const newTransport = await lastValueFrom(dialogRef.afterClosed()) as [CompanyContact];
+    const truckerInfo: TruckerInfo = {
+      trucker: Contact.getDocReference(this.db, this.session.getCompany(), newTransport[0].id),
+      freight: 0,
+    };
+
+    this.currentContract.truckers.push(truckerInfo);
+    this.selectableTransport = this.transportList.filter(t => this.currentContract.truckers.some(ti => ti.trucker.id == t.id));
+    this.currentContract.update(truckerInfo);
   }
 }
