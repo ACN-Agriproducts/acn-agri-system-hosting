@@ -154,7 +154,9 @@
             "Add": "Agregar",
             "add": "agregar",
             "liquidations": "liquidaciones",
-            "Liquidations": "Liquidaciones"
+            "Liquidations": "Liquidaciones",
+            "new payment": "nuevo pago",
+            "New Payment": "Nuevo Pago"
         }
     },
     "directory": {

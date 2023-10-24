@@ -22,8 +22,8 @@
           </button>
         </div> -->
         
-        <div class="cell" *ngFor="let field of arrayTableFields" class="{{ field.dataType }}">
-          <ng-container *ngTemplateOutlet="field.dataType | templateRef; context: { $implicit: field }"></ng-container>
+        <div class="cell" *ngFor="let field of arrayTableFields" [class]="field.dataType">
+          <ng-container *ngTemplateOutlet="field.dataType | templateRef; context: { $implicit: field, data: testData, index: index }"></ng-container>
           {{ payment[field.key] }}
         </div>
       </li>
@@ -34,8 +34,12 @@
     <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
   </ng-template>
 
-  <ng-template templateRef="button" let-field>
-    <button mat-icon-button [color]="'accent'">
+  <ng-template templateRef="text" let-field let-data="data">
+    {{ data[field.key] }}
+  </ng-template>
+
+  <ng-template templateRef="button" let-field let-data="data">
+    <button mat-icon-button [color]="'accent'" (click)="field.action(data)">
       <mat-icon>{{ field.icon }}</mat-icon>
     </button>
   </ng-template>

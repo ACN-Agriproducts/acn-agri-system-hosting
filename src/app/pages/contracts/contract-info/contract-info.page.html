@@ -13,14 +13,28 @@
             <mat-card-content>
               <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" scroll></app-liquidation-table>
             </mat-card-content>
+            <mat-card-actions [align]="'end'">
+              <button mat-button 
+                color="primary" 
+                routerLink="./set-liquidation" 
+                *ngIf="permissions?.admin || permissions?.liquidations?.create"
+              >
+                <span>{{ t('new liquidation') | titlecase }}</span>&nbsp;<mat-icon>add_box</mat-icon>
+              </button>
+            </mat-card-actions>
           </mat-card>
           <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.payments?.read)">
             <mat-card-header>
               <mat-card-subtitle>{{ t('Payments') }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <app-payments-table scroll></app-payments-table>
+              <app-payments-table [payments]="payments" scroll></app-payments-table>
             </mat-card-content>
+            <mat-card-actions [align]="'end'">
+              <button mat-button color="primary">
+                <span>{{ t('New Payment') }}</span>&nbsp;<mat-icon>add_box</mat-icon>
+              </button>
+            </mat-card-actions>
           </mat-card>
         </div>
         <mat-card id="ticket-list" *ngIf="ticketList?.length > 0">

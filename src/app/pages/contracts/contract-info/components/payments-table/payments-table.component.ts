@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Payment } from '@shared/classes/payment';
 
 type TableDataType = "num" | "button" | "text";
 
@@ -6,7 +7,8 @@ type TableField = {
   key: string
   header: string,
   dataType?: TableDataType,
-  icon?: string
+  icon?: string,
+  action?: (params?: any) => any
 }
 
 @Component({
@@ -15,43 +17,44 @@ type TableField = {
   styleUrls: ['./payments-table.component.scss'],
 })
 export class PaymentsTableComponent implements OnInit {
+  @Input() payments: Payment[];
 
   public testData = [
     {
-      type: "pre-paid",
+      type: "prepay",
       amount: 500,
       liquidation: 23,
       proofOfPaymentDocs: []
     },
     {
-      type: "pre-paid",
+      type: "prepay",
       amount: 500,
       liquidation: 23,
       proofOfPaymentDocs: []
     },
     {
-      type: "pre-paid",
+      type: "prepay",
       amount: 500,
       liquidation: 23,
       proofOfPaymentDocs: []
     },
     {
-      type: "pre-paid",
+      type: "prepay",
       amount: 500,
       liquidation: 23,
       proofOfPaymentDocs: []
     },
     {
-      type: "pre-paid",
+      type: "prepay",
       amount: 500,
       liquidation: 23,
       proofOfPaymentDocs: []
     },
     {
-      type: "pre-paid",
+      type: "prepay",
       amount: 500,
       liquidation: 23,
-      proofOfPayment: []
+      proofOfPaymentDocs: []
     },
   ];
 
@@ -73,12 +76,14 @@ export class PaymentsTableComponent implements OnInit {
       key: "proofOfPaymentDocs",
       header: "Proof of Payment",
       dataType: "button",
-      icon: "cloud_upload"
+      icon: "cloud_upload",
+      
     }
   ];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {}
-
+  ngOnInit() {
+    console.log(this.payments)
+  }
 }

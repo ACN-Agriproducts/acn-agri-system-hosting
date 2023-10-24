@@ -153,7 +153,9 @@
             "Add": "Add",
             "add": "add",
             "liquidations": "liquidations",
-            "Liquidations": "Liquidations"
+            "Liquidations": "Liquidations",
+            "new payment": "new payment",
+            "New Payment": "New Payment"
         }
     },
     "directory": {

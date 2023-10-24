@@ -8,6 +8,7 @@ import { Product } from "./product";
 import { ContractSettings } from "./contract-settings";
 import { Ticket } from "./ticket";
 import { Liquidation } from "./liquidation";
+import { Payment } from "./payment";
 
 
 declare type contractType = string | boolean;
@@ -462,19 +463,6 @@ export class Contract extends FirebaseDocInterface {
         return `${this.productInfo.marketCode}${marketMonthCodes.get(this.futurePriceInfo.expirationMonth.getMonth())}${this.futurePriceInfo.expirationMonth.getFullYear() % 10}`
     }
 
-    public getLiquidationsSnapshot(
-        onNext: (snapshot: QuerySnapshot<Liquidation>) => void, 
-        ...constraints: QueryConstraint[]
-    ): Unsubscribe {
-        const collectionRef = collection(this.ref, "liquidations").withConverter(Liquidation.converter);
-        const collectionQuery = query(collectionRef, ...constraints);
-        return onSnapshot(collectionQuery, onNext);
-    }
-
-    public getLiquidationByRefId(refId: string): Promise<Liquidation> {
-        return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
-    }
-
     public clearContactInfo(contactInfo: ContactInfo) {
         contactInfo.caat = null;
         contactInfo.city = null;
@@ -606,6 +594,31 @@ export class Contract extends FirebaseDocInterface {
         }
 
         return contractType;
+    }
+
+    public getLiquidationsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Liquidation>) => void, 
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionRef = collection(this.ref, "liquidations").withConverter(Liquidation.converter);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public getLiquidationByRefId(refId: string): Promise<Liquidation> {
+        return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
+    }
+
+    public getPaymentsCollection(): CollectionReference {
+        return collection(this.ref, "payments").withConverter(Payment.converter);
+    }
+
+    public getPaymentsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Payment>) => void,
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionQuery = query(this.getPaymentsCollection(), ...constraints);
+        return onSnapshot(collectionQuery, onNext);
     }
 }
 

@@ -3,11 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 
-import { Firestore, Unsubscribe, onSnapshot, orderBy } from '@angular/fire/firestore';
+import { Firestore, Unsubscribe, doc, onSnapshot, orderBy } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
 import { Payment } from '@shared/classes/payment';
+import { MatDialog } from '@angular/material/dialog';
+// import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
 
 @Component({
   selector: 'app-contract-info',
@@ -31,6 +33,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     private db: Firestore,
     private snack: SnackbarService,
     private session: SessionInfo,
+    private dialog: MatDialog,
     ) { }
 
   ngOnInit() {
@@ -47,8 +50,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
         contract.getLiquidationsSnapshot(result => {
           this.liquidations = result.docs.map(qds => qds.data());
         }, orderBy('date', 'asc')),
-        Payment.getPaymentsSnapshot(this.db, this.currentCompany, result => {
+        contract.getPaymentsSnapshot(result => {
           this.payments = result.docs.map(qds => qds.data());
+          console.log(this.payments)
         }, orderBy('date', 'asc'))
       ];
       
@@ -58,5 +62,17 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unsubs.forEach(unsub => unsub());
+  }
+
+  addPayment(payments: Payment[]) {
+    console.log("ADD PAYMENT")
+    console.log(payments)
+
+    const newPayment = new Payment(doc(this.currentContract.getPaymentsCollection()));
+    console.log(newPayment)
+
+    // this.dialog.open(SetPaymentDialogComponent, {
+    //   data: 
+    // });
   }
 }
