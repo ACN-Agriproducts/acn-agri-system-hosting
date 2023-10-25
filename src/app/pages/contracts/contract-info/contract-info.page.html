@@ -31,7 +31,7 @@
               <app-payments-table [payments]="payments" scroll></app-payments-table>
             </mat-card-content>
             <mat-card-actions [align]="'end'">
-              <button mat-button color="primary">
+              <button mat-button color="primary" (click)="addPayment()">
                 <span>{{ t('New Payment') }}</span>&nbsp;<mat-icon>add_box</mat-icon>
               </button>
             </mat-card-actions>

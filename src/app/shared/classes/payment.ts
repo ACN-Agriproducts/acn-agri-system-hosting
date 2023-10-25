@@ -18,7 +18,6 @@ export class Payment extends FirebaseDocInterface {
     public proofOfPaymentDocs: FileStorageInfo[];
     public status: Status;
     public type: PaymentType;
-    // FIGURE OUT HOW TO ORGANIZE PAYMENT DOCS IN RELATION TO WHAT THEY REFER TO (WHAT OTHER DOC IS BEING PAID)
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;

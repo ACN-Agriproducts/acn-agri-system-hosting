@@ -7,39 +7,53 @@
         <div class="cell">Type</div>
         <div class="cell">Amount</div>
         <div class="cell button">Proof of Payment</div> -->
-
-        <div class="cell" *ngFor="let field of arrayTableFields" class="{{ field.dataType }}">{{ field.header }}</div>
+        <div class="cell" *ngFor="let field of arrayTableFields" [class]="field.dataType">
+          {{ t(field.header) | titlecase }}
+        </div>
       </li>
     </mat-card>
     <mat-card class="body-card" *ngIf="true else noItems">
-      <li class="row" *ngFor="let payment of testData; let index = index">
-        <!-- <div class="cell">{{ payment.liquidation }}</div>
-        <div class="cell">{{ payment.type }}</div>
-        <div class="cell">{{ payment.amount }}</div>
+      <li class="row" *ngFor="let item of testData; let index = index">
+        <!-- <div class="cell">{{ item.liquidation }}</div>
+        <div class="cell">{{ item.type }}</div>
+        <div class="cell">{{ item.amount }}</div>
         <div class="cell button">
-          <button mat-icon-button [color]="payment.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'">
+          <button mat-icon-button [color]="item.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'">
             <mat-icon>cloud_upload</mat-icon>
           </button>
         </div> -->
-        
         <div class="cell" *ngFor="let field of arrayTableFields" [class]="field.dataType">
-          <ng-container *ngTemplateOutlet="field.dataType | templateRef; context: { $implicit: field, data: testData, index: index }"></ng-container>
-          {{ payment[field.key] }}
+          <ng-container 
+            *ngTemplateOutlet="
+              field.dataType | templateRef; 
+              context: { $implicit: field, items: testData, index }
+            "
+          ></ng-container>
         </div>
       </li>
     </mat-card>
   </ol>
 
+  <!-- TEMPLATES -->
+
   <ng-template #noItems>
     <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
   </ng-template>
 
-  <ng-template templateRef="text" let-field let-data="data">
-    {{ data[field.key] }}
+  <ng-template templateRef="text" let-field let-items="items" let-index="index">
+    {{ items[index][field.key] | titlecase }}
   </ng-template>
 
-  <ng-template templateRef="button" let-field let-data="data">
-    <button mat-icon-button [color]="'accent'" (click)="field.action(data)">
+  <ng-template templateRef="text-translate" let-field let-items="items" let-index="index">
+    {{ t(items[index][field.key]) | titlecase }}
+  </ng-template>
+
+  <ng-template templateRef="num" let-field let-items="items" let-index="index">
+    {{ items[index][field.key] | number }}
+  </ng-template>
+
+  <ng-template templateRef="button" let-field let-items="items" let-index="index">
+    <button mat-icon-button [color]="'accent'" (click)="field.action?.(items, index)">
       <mat-icon>{{ field.icon }}</mat-icon>
     </button>
   </ng-template>

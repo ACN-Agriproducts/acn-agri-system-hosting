@@ -18,6 +18,7 @@ import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
 import { LiquidationTableComponent, TicketIdsPipe } from './components/liquidation-table/liquidation-table.component';
 import { PaymentsTableComponent } from './components/payments-table/payments-table.component';
+import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { PaymentsTableComponent } from './components/payments-table/payments-tab
     TruckersFormComponent,
     LiquidationTableComponent,
     TicketIdsPipe,
-    PaymentsTableComponent
+    PaymentsTableComponent,
+    SetPaymentDialogComponent
   ]
 })
 export class ContractInfoPageModule {}

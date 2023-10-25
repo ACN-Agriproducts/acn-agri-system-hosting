@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Payment } from '@shared/classes/payment';
 
-type TableDataType = "num" | "button" | "text";
+type TableDataType = "num" | "button" | "text" | "text-translate";
 
 type TableField = {
   key: string
   header: string,
   dataType?: TableDataType,
   icon?: string,
-  action?: (params?: any) => any
+  action?: (...params: any) => any
 }
 
 @Component({
@@ -23,37 +23,37 @@ export class PaymentsTableComponent implements OnInit {
     {
       type: "prepay",
       amount: 500,
-      liquidation: 23,
+      liquidation: [23].toString(),
       proofOfPaymentDocs: []
     },
     {
       type: "prepay",
       amount: 500,
-      liquidation: 23,
+      liquidation: [23].toString(),
       proofOfPaymentDocs: []
     },
     {
       type: "prepay",
       amount: 500,
-      liquidation: 23,
+      liquidation: [23].toString(),
       proofOfPaymentDocs: []
     },
     {
       type: "prepay",
       amount: 500,
-      liquidation: 23,
+      liquidation: [23].toString(),
       proofOfPaymentDocs: []
     },
     {
       type: "prepay",
       amount: 500,
-      liquidation: 23,
+      liquidation: [23].toString(),
       proofOfPaymentDocs: []
     },
     {
       type: "prepay",
       amount: 500,
-      liquidation: 23,
+      liquidation: [23].toString(),
       proofOfPaymentDocs: []
     },
   ];
@@ -61,11 +61,13 @@ export class PaymentsTableComponent implements OnInit {
   public arrayTableFields: TableField[] = [
     {
       key: "liquidation",
-      header: "Liquidation"
+      header: "Liquidation(s)",
+      dataType: "text"
     },
     {
       key: "type",
-      header: "Type"
+      header: "Type",
+      dataType: "text-translate"
     },
     {
       key: "amount",
@@ -77,7 +79,7 @@ export class PaymentsTableComponent implements OnInit {
       header: "Proof of Payment",
       dataType: "button",
       icon: "cloud_upload",
-      
+      action: this.test
     }
   ];
 
@@ -85,5 +87,11 @@ export class PaymentsTableComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.payments)
+  }
+
+  test(items?, index?) {
+    console.log("TEST")
+
+    if (items && index != null) console.log(items, index)
   }
 }

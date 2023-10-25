@@ -155,7 +155,15 @@
             "liquidations": "liquidations",
             "Liquidations": "Liquidations",
             "new payment": "new payment",
-            "New Payment": "New Payment"
+            "New Payment": "New Payment",
+            "prepay": "prepay",
+            "Prepay": "Prepay",
+            "liquidation(s)": "liquidation(s)",
+            "Liquidation(s)": "Liquidation(s)",
+            "type": "type",
+            "Type": "Type",
+            "amount": "amount",
+            "Amount": "Amount"
         }
     },
     "directory": {

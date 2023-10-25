@@ -9,7 +9,8 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
 import { Payment } from '@shared/classes/payment';
 import { MatDialog } from '@angular/material/dialog';
-// import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
+import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contract-info',
@@ -64,15 +65,19 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.unsubs.forEach(unsub => unsub());
   }
 
-  addPayment(payments: Payment[]) {
-    console.log("ADD PAYMENT")
-    console.log(payments)
+  async addPayment() {
+    console.log(this.payments)
 
     const newPayment = new Payment(doc(this.currentContract.getPaymentsCollection()));
     console.log(newPayment)
 
-    // this.dialog.open(SetPaymentDialogComponent, {
-    //   data: 
-    // });
+    const dialogRef = this.dialog.open(SetPaymentDialogComponent, {
+      data: newPayment
+    });
+
+    const result = await lastValueFrom(dialogRef.afterClosed());
+    console.log(result)
+
+    // await newPayment.set();
   }
 }

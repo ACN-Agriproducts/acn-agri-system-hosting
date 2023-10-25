@@ -156,7 +156,15 @@
             "liquidations": "liquidaciones",
             "Liquidations": "Liquidaciones",
             "new payment": "nuevo pago",
-            "New Payment": "Nuevo Pago"
+            "New Payment": "Nuevo Pago",
+            "prepay": "pagar por adelantado",
+            "Prepay": "Pagar por Adelantado",
+            "liquidation(s)": "liquidacion(es)",
+            "Liquidation(s)": "Liquidacion(es)",
+            "type": "tipo",
+            "Type": "Tipo",
+            "amount": "cantidad",
+            "Amount": "Cantidad"
         }
     },
     "directory": {
