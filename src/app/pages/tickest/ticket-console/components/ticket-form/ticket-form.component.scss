@@ -37,6 +37,7 @@
 .radio-button-label {
     width: 100%;
     display: grid;
+    gap: 0.2rem;
     grid-template-columns: 1.5fr 1fr 2fr;
 }
 
@@ -44,4 +45,12 @@
     display: flex;
     margin: 0px 20px;
     justify-content: space-between;
+}
+
+.percentage-text {
+    text-align: center;
+}
+ 
+::ng-deep .mat-radio-label-content {
+    width: 100%;
 }
