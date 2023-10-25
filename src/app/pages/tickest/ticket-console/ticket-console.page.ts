@@ -84,6 +84,7 @@ export class TicketConsolePage implements OnInit {
 
     this.tickets.push(newTicket);
     this.ticketIndex = this.tickets.length - 1;
+    newTicket.set();
   }
 
   indexChange(num: number) { 
@@ -93,6 +94,10 @@ export class TicketConsolePage implements OnInit {
     if(newIndex < 0) newIndex = 0;
 
     this.ticketIndex = newIndex;
+  }
+
+  async print() {
+    console.log(this.tickets[this.ticketIndex]);
   }
 }
 

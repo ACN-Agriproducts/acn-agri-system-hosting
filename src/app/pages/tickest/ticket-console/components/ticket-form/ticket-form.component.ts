@@ -46,7 +46,7 @@ export class TicketFormComponent implements OnInit {
     );
 
     this.contractId = this.ticket?.contractRef?.id ?? null;
-    this.loadTransport();
+    this.contractChange();
   }
 
   async contractChange() { 
@@ -66,6 +66,7 @@ export class TicketFormComponent implements OnInit {
     this.ticket.clientZipCode = this.currentContract.clientTicketInfo.zipCode;
 
     this.loadTransport()
+    this.saveTicket();
   }
 
   async loadTransport() {
@@ -95,10 +96,12 @@ export class TicketFormComponent implements OnInit {
     }
 
     this.ticket.dryWeight = newDryWeight;
+    this.saveTicket();
   }
 
   async tankChange() {
     this.ticket.tankId = (await this.plant).inventoryNames.findIndex(tank => tank == this.ticket.tank);
+    this.saveTicket();
   }
 
   async addTransport() {
@@ -142,5 +145,12 @@ export class TicketFormComponent implements OnInit {
     this.ticket.transportState = contact.state;
     this.ticket.transportStreetAddress = contact.streetAddress;
     this.ticket.transportZipCode = contact.zipCode;
+
+    this.saveTicket();
+  }
+
+  saveTicket() {
+    console.log("Save!")
+    this.ticket.set();
   }
 }

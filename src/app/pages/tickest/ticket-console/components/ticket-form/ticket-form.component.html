@@ -30,11 +30,11 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Grade</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.grade">
+        <input matInput type="number" [(ngModel)]="ticket.grade" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Origin</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.origin">
+        <input matInput type="text" [(ngModel)]="ticket.origin" (ngModelChange)="saveTicket()">
       </mat-form-field>
     </mat-card-content>
     <div *ngIf="currentContract">
@@ -76,15 +76,15 @@
       
       <mat-form-field appearance="fill">
         <mat-label>Vehicle</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.vehicleID">
+        <input matInput type="text" [(ngModel)]="ticket.vehicleID" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Plates</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.plates">
+        <input matInput type="text" [(ngModel)]="ticket.plates" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Driver</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.driver">
+        <input matInput type="text" [(ngModel)]="ticket.driver" (ngModelChange)="saveTicket()">
       </mat-form-field>
     </mat-card-content>
   </mat-card>
@@ -134,27 +134,27 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Plague</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.plague">
+        <input matInput type="text" [(ngModel)]="ticket.plague" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>PPB</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.PPB">
+        <input matInput type="number" [(ngModel)]="ticket.PPB" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Lot</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.lot">
+        <input matInput type="text" [(ngModel)]="ticket.lot" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Original Ticket #</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.original_ticket">
+        <input matInput type="text" [(ngModel)]="ticket.original_ticket" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Original Ticket W.</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.original_weight">
+        <input matInput type="number" [(ngModel)]="ticket.original_weight" (ngModelChange)="saveTicket()">
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Comments</mat-label>
-        <textarea matInput [(ngModel)]="ticket.comment"></textarea>
+        <textarea matInput [(ngModel)]="ticket.comment" (ngModelChange)="saveTicket()"></textarea>
       </mat-form-field>
     </mat-card-content>
   </mat-card>

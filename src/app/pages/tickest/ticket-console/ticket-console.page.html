@@ -15,6 +15,7 @@
     <span>{{ticketIndex + 1}}/{{tickets?.length}}</span>
     <button 
       mat-icon-button
+      (click)="print()"
       [disabled]="!tickets?.[ticketIndex]">
       <mat-icon>print</mat-icon></button>
     <button 

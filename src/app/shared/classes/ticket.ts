@@ -1,5 +1,5 @@
 
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer, where, limit } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer, where, limit, orderBy } from "@angular/fire/firestore";
 import { Injectable } from "@angular/core";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
@@ -100,6 +100,7 @@ export class Ticket extends FirebaseDocInterface{
             this.dryWeight = new Mass(null, unit);
             this.weightDiscounts = new WeightDiscounts();
             this.dateIn = new Date();
+            this.status = "pending";
 
             return;
         }
@@ -110,7 +111,7 @@ export class Ticket extends FirebaseDocInterface{
         this.contractID = data.contractID;
         this.damagedGrain = data.damagedGrain;
         this.dateIn = data.dateIn.toDate();
-        this.dateOut = data.dateOut.toDate();
+        this.dateOut = data.dateOut?.toDate();
         this.discount = data.discount;
         this.driver = data.driver;
         this.dryWeight = new Mass(data.dryWeight, unit);
@@ -173,67 +174,67 @@ export class Ticket extends FirebaseDocInterface{
     public static converter = {
         toFirestore(data: Ticket): DocumentData {
             return {
-                brokenGrain: data.brokenGrain,
-                clientName: data.clientName,
-                comment: data.comment,
-                contractID: data.contractID,
-                damagedGrain: data.damagedGrain,
-                dateIn: data.dateIn,
-                dateOut: data.dateOut,
-                discount: data.discount,
-                driver: data.driver,
-                dryWeight: data.dryWeight.get(),
-                dryWeightPercent: data.dryWeightPercent,
-                foreignMatter: data.foreignMatter,
-                grade: data.grade,
-                gross: data.gross.get(),
-                id: data.id,
-                imageLinks: data.imageLinks,
-                impurities: data.impurities,
-                in: data.in,
-                lot: data.lot,
-                moisture: data.moisture,
-                needsAttention: data.needsAttention,
-                origin: data.origin,
-                original_ticket: data.original_ticket,
-                original_weight: data.original_weight.get(),
-                pdfLink: data.pdfLink,
-                plague: data.plague,
-                plates: data.plates,
-                PPB: data.PPB,
-                priceDiscounts: data.priceDiscounts,
-                productName: data.productName,
-                status: data.status,
-                tank: data.tank,
-                tankId: data.tankId,
-                tare: data.tare.get(),
-                truckerId: data.truckerId,
-                vehicleID: data.vehicleID,
-                void: data.void,
-                voidAcceptor: data.voidAcceptor,
-                voidReason: data.voidReason,
-                voidRequest: data.voidRequest,
-                voidRquester: data.voidRequester,
+                brokenGrain: data.brokenGrain ?? null,
+                clientName: data.clientName ?? null,
+                comment: data.comment ?? null,
+                contractID: data.contractID ?? null,
+                damagedGrain: data.damagedGrain ?? null,
+                dateIn: data.dateIn ?? null,
+                dateOut: data.dateOut ?? null,
+                discount: data.discount ?? null,
+                driver: data.driver ?? null,
+                dryWeight: data.dryWeight?.get() ?? null,
+                dryWeightPercent: data.dryWeightPercent ?? null,
+                foreignMatter: data.foreignMatter ?? null,
+                grade: data.grade ?? null,
+                gross: data.gross?.get() ?? null,
+                id: data.id ?? null,
+                imageLinks: data.imageLinks ?? null,
+                impurities: data.impurities ?? null,
+                in: data.in ?? null,
+                lot: data.lot ?? null,
+                moisture: data.moisture ?? null,
+                needsAttention: data.needsAttention ?? null,
+                origin: data.origin ?? null,
+                original_ticket: data.original_ticket ?? null,
+                original_weight: data.original_weight?.get() ?? null,
+                pdfLink: data.pdfLink ?? null,
+                plague: data.plague ?? null,
+                plates: data.plates ?? null,
+                PPB: data.PPB ?? null,
+                //priceDiscounts: data.priceDiscounts ?? null,
+                productName: data.productName ?? null,
+                status: data.status ?? null,
+                tank: data.tank ?? null,
+                tankId: data.tankId ?? null,
+                tare: data.tare?.get() ?? null,
+                truckerId: data.truckerId ?? null,
+                vehicleID: data.vehicleID ?? null,
+                void: data.void ?? null,
+                voidAcceptor: data.voidAcceptor ?? null,
+                voidReason: data.voidReason ?? null,
+                voidRequest: data.voidRequest ?? null,
+                voidRquester: data.voidRequester ?? null,
                 voidDate: data.voidDate ?? null,
-                weight: data.weight,
-                weightDiscounts: data.weightDiscounts,
+                weight: data.weight ?? null,
+                //weightDiscounts: data.weightDiscounts ?? null,
 
-                contractRef: data.contractRef,
+                contractRef: data.contractRef ?? null,
 
-                clientStreetAddress: data.weight,
-                clientCity: data.weight,
-                clientState: data.weight,
-                clientZipCode: data.weight,
+                clientStreetAddress: data.weight ?? null,
+                clientCity: data.weight ?? null,
+                clientState: data.weight ?? null,
+                clientZipCode: data.weight ?? null,
                 
-                transportName: data.weight,
-                transportStreetAddress: data.weight,
-                transportCity: data.weight,
-                transportState: data.weight,
-                transportZipCode: data.weight,
-                transportCaat: data.weight,
+                transportName: data.weight ?? null,
+                transportStreetAddress: data.weight ?? null,
+                transportCity: data.weight ?? null,
+                transportState: data.weight ?? null,
+                transportZipCode: data.weight ?? null,
+                transportCaat: data.weight ?? null,
 
-                subId: data.subId,
-                moneyDiscounts: data.moneyDiscounts,
+                subId: data.subId ?? null,
+                moneyDiscounts: data.moneyDiscounts ?? null,
 
             }
         },
@@ -353,7 +354,7 @@ export class Ticket extends FirebaseDocInterface{
     public static async getActiveTickets(db: Firestore, company: string, plant: string): Promise<Ticket[]> {
         const ticketQuery = Ticket.getCollectionReference(db, company, plant, where('status', '==', 'pending'));
         return getDocs(ticketQuery).then(result => {
-            return result.docs.map(t => t.data()).sort((a,b) => b.dateIn.getTime() - a.dateIn.getTime());
+            return result.docs.map(t => t.data()).sort((a,b) => a.dateIn.getTime() - b.dateIn.getTime());
         });
     }
 
