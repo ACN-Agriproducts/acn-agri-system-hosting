@@ -14,10 +14,16 @@
       <mat-icon>note_add</mat-icon></button>
     <span>{{ticketIndex + 1}}/{{tickets?.length}}</span>
     <button 
-      mat-icon-button
+      mat-icon-button  
       (click)="print()"
       [disabled]="!tickets?.[ticketIndex]">
       <mat-icon>print</mat-icon></button>
+    <button 
+      hidden
+      #printButton
+      ngxPrint
+      [printSectionId]="'ticket-' + ticketIndex"
+      [useExistingCss]="true"></button>
     <button 
       mat-icon-button
       [disabled]="!tickets || ticketIndex == tickets.length - 1" 
@@ -32,3 +38,10 @@
     [discountTables]="discountTables"
     [plant]="plant"></app-ticket-form>
 </ion-content>
+
+<div class="tickets-section">
+  <app-printable-ticket 
+    *ngFor="let ticket of tickets; let index = index" 
+    [id]="'ticket-' + index"
+    [ticket]="ticket"></app-printable-ticket>
+</div>

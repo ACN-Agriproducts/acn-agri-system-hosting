@@ -46,24 +46,29 @@ export class TicketFormComponent implements OnInit {
     );
 
     this.contractId = this.ticket?.contractRef?.id ?? null;
-    this.contractChange();
+
+    firstValueFrom(this.selectableContracts).then(contracts => {
+      this.currentContract = contracts.find(c => c.ref.id == this.contractId);  
+    });
+
+    this.loadTransport();
   }
 
   async contractChange() { 
     const contracts = await firstValueFrom(this.selectableContracts);
     this.currentContract = contracts.find(c => c.ref.id == this.contractId);
 
-    this.ticket.contractID = this.currentContract.id;
-    this.ticket.contractRef = this.currentContract.ref.withConverter(Contract.converter);
-    this.ticket.PPB = this.currentContract.aflatoxin;
-    this.ticket.productName = this.currentContract.product.id;
-    this.ticket.grade = Number(this.currentContract.grade);
+    this.ticket.contractID = this.currentContract?.id;
+    this.ticket.contractRef = this.currentContract?.ref.withConverter(Contract.converter);
+    this.ticket.PPB = this.currentContract?.aflatoxin;
+    this.ticket.productName = this.currentContract?.product.id;
+    this.ticket.grade = Number(this.currentContract?.grade);
 
-    this.ticket.clientCity = this.currentContract.clientTicketInfo.city;
-    this.ticket.clientName = this.currentContract.clientTicketInfo.name;
-    this.ticket.clientState = this.currentContract.clientTicketInfo.state;
-    this.ticket.clientStreetAddress = this.currentContract.clientTicketInfo.streetAddress;
-    this.ticket.clientZipCode = this.currentContract.clientTicketInfo.zipCode;
+    this.ticket.clientCity = this.currentContract?.clientTicketInfo?.city;
+    this.ticket.clientName = this.currentContract?.clientTicketInfo?.name;
+    this.ticket.clientState = this.currentContract?.clientTicketInfo?.state;
+    this.ticket.clientStreetAddress = this.currentContract?.clientTicketInfo?.streetAddress;
+    this.ticket.clientZipCode = this.currentContract?.clientTicketInfo?.zipCode;
 
     this.loadTransport()
     this.saveTicket();
@@ -139,12 +144,12 @@ export class TicketFormComponent implements OnInit {
 
   async truckerChange() {
     const contact = await Contact.getDoc(this.db, this.session.getCompany(), this.ticket.truckerId);
-    this.ticket.transportCaat = contact.caat;
-    this.ticket.transportCity = contact.city;
-    this.ticket.transportName = contact.name;
-    this.ticket.transportState = contact.state;
-    this.ticket.transportStreetAddress = contact.streetAddress;
-    this.ticket.transportZipCode = contact.zipCode;
+    this.ticket.transportCaat = contact?.caat;
+    this.ticket.transportCity = contact?.city;
+    this.ticket.transportName = contact?.name;
+    this.ticket.transportState = contact?.state;
+    this.ticket.transportStreetAddress = contact?.streetAddress;
+    this.ticket.transportZipCode = contact?.zipCode;
 
     this.saveTicket();
   }

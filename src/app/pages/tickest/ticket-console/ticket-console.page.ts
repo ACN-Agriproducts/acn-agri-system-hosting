@@ -1,4 +1,4 @@
-import { Component, OnInit, Pipe, PipeTransform, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, Pipe, PipeTransform, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { collection, collectionData, doc, Firestore, limit, onSnapshot, query, where } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -29,6 +29,7 @@ export class TicketConsolePage implements OnInit {
   ticketIndex: number = 0;
 
   @ViewChildren(TicketTemplateDirective) public ticketTemplates: QueryList<TicketTemplateDirective>;
+  @ViewChild('printButton') public printButton: ElementRef; 
 
   constructor(
     private session: SessionInfo,
@@ -97,7 +98,18 @@ export class TicketConsolePage implements OnInit {
   }
 
   async print() {
-    console.log(this.tickets[this.ticketIndex]);
+    this.tickets[this.ticketIndex].dateOut = new Date();
+    setTimeout(() => {
+      this.printButton.nativeElement.click();
+      this.submit();
+    }, 20);
+  }
+
+  submit() {
+    this.tickets[this.ticketIndex].status = 'active';
+    this.tickets[this.ticketIndex].set();
+    this.tickets.splice(this.ticketIndex, 1);
+    this.indexChange(0)
   }
 }
 

@@ -99,6 +99,7 @@ export class Ticket extends FirebaseDocInterface{
             this.net = new Mass(null, unit);
             this.dryWeight = new Mass(null, unit);
             this.weightDiscounts = new WeightDiscounts();
+            this.original_weight = new Mass(null, unit);
             this.dateIn = new Date();
             this.status = "pending";
 
@@ -222,17 +223,17 @@ export class Ticket extends FirebaseDocInterface{
 
                 contractRef: data.contractRef ?? null,
 
-                clientStreetAddress: data.weight ?? null,
-                clientCity: data.weight ?? null,
-                clientState: data.weight ?? null,
-                clientZipCode: data.weight ?? null,
+                clientStreetAddress: data.clientStreetAddress ?? null,
+                clientCity: data.clientCity ?? null,
+                clientState: data.clientState ?? null,
+                clientZipCode: data.clientZipCode ?? null,
                 
-                transportName: data.weight ?? null,
-                transportStreetAddress: data.weight ?? null,
-                transportCity: data.weight ?? null,
-                transportState: data.weight ?? null,
-                transportZipCode: data.weight ?? null,
-                transportCaat: data.weight ?? null,
+                transportName: data.transportName ?? null,
+                transportStreetAddress: data.transportStreetAddress ?? null,
+                transportCity: data.transportCity ?? null,
+                transportState: data.transportState ?? null,
+                transportZipCode: data.transportZipCode ?? null,
+                transportCaat: data.transportCaat ?? null,
 
                 subId: data.subId ?? null,
                 moneyDiscounts: data.moneyDiscounts ?? null,
