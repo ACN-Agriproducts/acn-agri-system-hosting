@@ -103,10 +103,23 @@ export class TicketFormComponent implements OnInit {
 
   async addTransport() {
     const dialogRef = this.dialog.open(SelectClientComponent, {
-      data: this.transportList.filter(t => !this.selectableTransport.some(st => st.id == t.id))
+      data: this.transportList.filter(t => !this.selectableTransport.some(st => st.id == t.id)).sort((a, b) => {
+        const nameA = a.name.toUpperCase();
+        const nameB = b.name.toUpperCase();
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+      
+        return 0;
+      })
     });
 
     const newTransport = await lastValueFrom(dialogRef.afterClosed()) as [CompanyContact];
+    if(!newTransport) return;
+
     const truckerInfo: TruckerInfo = {
       trucker: Contact.getDocReference(this.db, this.session.getCompany(), newTransport[0].id),
       freight: 0,
@@ -114,6 +127,20 @@ export class TicketFormComponent implements OnInit {
 
     this.currentContract.truckers.push(truckerInfo);
     this.selectableTransport = this.transportList.filter(t => this.currentContract.truckers.some(ti => ti.trucker.id == t.id));
-    this.currentContract.update(truckerInfo);
+    this.ticket.truckerId = truckerInfo.trucker.id;
+    this.truckerChange();
+    this.currentContract.update({
+      truckers: arrayUnion(truckerInfo)
+    });
+  }
+
+  async truckerChange() {
+    const contact = await Contact.getDoc(this.db, this.session.getCompany(), this.ticket.truckerId);
+    this.ticket.transportCaat = contact.caat;
+    this.ticket.transportCity = contact.city;
+    this.ticket.transportName = contact.name;
+    this.ticket.transportState = contact.state;
+    this.ticket.transportStreetAddress = contact.streetAddress;
+    this.ticket.transportZipCode = contact.zipCode;
   }
 }

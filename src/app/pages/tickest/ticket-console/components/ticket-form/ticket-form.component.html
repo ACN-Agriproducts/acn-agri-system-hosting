@@ -51,6 +51,7 @@
         <mat-label>Transport</mat-label>
         <mat-select 
           [(ngModel)]="ticket.truckerId"
+          (ngModelChange)="truckerChange()"
           [disabled]="!contractId">
           <mat-option 
             *ngFor="let transport of selectableTransport"
