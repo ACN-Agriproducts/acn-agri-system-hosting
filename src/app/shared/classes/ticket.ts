@@ -167,6 +167,7 @@ export class Ticket extends FirebaseDocInterface{
 
         this.subId = data.subId;
         this.moneyDiscounts = data.moneyDiscounts ?? {};
+        this.type = data.type ?? data.in ? 'in' : 'out';
 
         this.net = this.gross.subtract(this.tare);
     }
@@ -235,6 +236,7 @@ export class Ticket extends FirebaseDocInterface{
 
                 subId: data.subId ?? null,
                 moneyDiscounts: data.moneyDiscounts ?? null,
+                type: data.type ?? null,
 
             }
         },
