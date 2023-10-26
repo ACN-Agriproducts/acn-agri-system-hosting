@@ -11,7 +11,6 @@ import { Product } from '@shared/classes/product';
 import { Ticket } from '@shared/classes/ticket';
 import { orderBy } from 'firebase/firestore';
 import { lastValueFrom, Observable } from 'rxjs';
-import { TicketTemplateDirective } from './ticket-template-directive.directive';
 
 @Component({
   selector: 'app-ticket-console',
@@ -28,7 +27,6 @@ export class TicketConsolePage implements OnInit {
 
   ticketIndex: number = 0;
 
-  @ViewChildren(TicketTemplateDirective) public ticketTemplates: QueryList<TicketTemplateDirective>;
   @ViewChild('printButton') public printButton: ElementRef; 
 
   constructor(
@@ -109,7 +107,7 @@ export class TicketConsolePage implements OnInit {
     this.tickets[this.ticketIndex].status = 'closed';
     this.tickets[this.ticketIndex].set();
     this.tickets.splice(this.ticketIndex, 1);
-    this.indexChange(0)
+    this.indexChange(0);
   }
 }
 
@@ -119,13 +117,4 @@ export class TicketConsolePage implements OnInit {
 })
 export class NewTicketDialog {
   constructor() {}
-}
-
-@Pipe({
-  name: 'ticketSelector'
-})
-export class TicketSelectorPipe implements PipeTransform {
-  transform(value: Ticket, list: QueryList<TicketTemplateDirective>, ...args: unknown[]): TemplateRef<any> {
-    return list.find(item => item.ticketTemplate == value)?.templateRef;
-  }
 }
