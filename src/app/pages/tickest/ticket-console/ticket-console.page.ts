@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Pipe, PipeTransform, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, Pipe, PipeTransform, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { collection, collectionData, doc, Firestore, limit, onSnapshot, query, where } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -11,13 +11,14 @@ import { Product } from '@shared/classes/product';
 import { Ticket } from '@shared/classes/ticket';
 import { orderBy } from 'firebase/firestore';
 import { lastValueFrom, Observable } from 'rxjs';
+import { TicketFormComponent } from './components/ticket-form/ticket-form.component';
 
 @Component({
   selector: 'app-ticket-console',
   templateUrl: './ticket-console.page.html',
   styleUrls: ['./ticket-console.page.scss'],
 })
-export class TicketConsolePage implements OnInit {
+export class TicketConsolePage implements OnInit, OnDestroy {
   tickets: Ticket[];
   openContracts: Observable<Contract[]>;
   discountTables: {[product: string]: DiscountTables};
@@ -27,6 +28,7 @@ export class TicketConsolePage implements OnInit {
 
   ticketIndex: number = 0;
 
+  @ViewChildren(TicketFormComponent) ticketForms: QueryList<TicketFormComponent>;
   @ViewChild('printButton') public printButton: ElementRef; 
 
   constructor(
@@ -104,10 +106,16 @@ export class TicketConsolePage implements OnInit {
   }
 
   submit() {
-    this.tickets[this.ticketIndex].status = 'closed';
-    this.tickets[this.ticketIndex].set();
-    this.tickets.splice(this.ticketIndex, 1);
-    this.indexChange(0);
+    this.tickets[this.ticketIndex].status = 'closed'; // Set ticket as closed
+    clearTimeout(this.ticketForms.find(form => form.ticket == this.tickets[this.ticketIndex]).saveTimeout); // Clear save timer if there is any
+    this.tickets[this.ticketIndex].set(); // Save ticket
+    this.tickets.splice(this.ticketIndex, 1); // Remove from list
+    this.indexChange(0); // Make sure index is within bounds
+  }
+
+  ngOnDestroy(): void {
+    this.ticketForms.forEach(form => clearTimeout(form.saveTimeout));
+    this.tickets.forEach(ticket => ticket.set());
   }
 }
 
