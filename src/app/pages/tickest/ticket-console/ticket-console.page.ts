@@ -1,9 +1,8 @@
-import { Component, ElementRef, OnInit, OnDestroy, Pipe, PipeTransform, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { collection, collectionData, doc, Firestore, limit, onSnapshot, query, where } from '@angular/fire/firestore';
+import { Component, ElementRef, OnInit, OnDestroy, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { collection, collectionData, doc, Firestore, limit, query, where } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company, CompanyContact } from '@shared/classes/company';
-import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Plant } from '@shared/classes/plant';
