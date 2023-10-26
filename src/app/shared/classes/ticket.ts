@@ -64,6 +64,7 @@ export class Ticket extends FirebaseDocInterface{
 
     public contractRef: DocumentReference<Contract>;
 
+    public clientRef: DocumentReference<Contact>;
     public clientStreetAddress: string;
     public clientCity: string;
     public clientState: string;
@@ -154,6 +155,7 @@ export class Ticket extends FirebaseDocInterface{
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
+        this.clientRef = data.clientRef;
         this.clientStreetAddress = data.clientStreetAddress;
         this.clientCity = data.clientCity;
         this.clientState = data.clientState;
@@ -223,6 +225,7 @@ export class Ticket extends FirebaseDocInterface{
 
                 contractRef: data.contractRef ?? null,
 
+                clientRef: data.clientRef ?? null,
                 clientStreetAddress: data.clientStreetAddress ?? null,
                 clientCity: data.clientCity ?? null,
                 clientState: data.clientState ?? null,

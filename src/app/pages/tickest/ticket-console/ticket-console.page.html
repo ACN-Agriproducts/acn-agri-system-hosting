@@ -16,7 +16,7 @@
     <button 
       mat-icon-button  
       (click)="print()"
-      [disabled]="!tickets?.[ticketIndex]">
+      [disabled]="!tickets?.[ticketIndex] || !currentTicketValid()">
       <mat-icon>print</mat-icon></button>
     <button 
       hidden

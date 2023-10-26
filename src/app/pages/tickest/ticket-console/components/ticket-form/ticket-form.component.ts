@@ -66,6 +66,7 @@ export class TicketFormComponent implements OnInit {
     this.ticket.productName = this.currentContract?.product.id;
     this.ticket.grade = Number(this.currentContract?.grade);
 
+    this.ticket.clientRef = this.currentContract?.client;
     this.ticket.clientCity = this.currentContract?.clientTicketInfo?.city;
     this.ticket.clientName = this.currentContract?.clientTicketInfo?.name;
     this.ticket.clientState = this.currentContract?.clientTicketInfo?.state;

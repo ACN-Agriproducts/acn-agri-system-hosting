@@ -96,6 +96,13 @@ export class TicketConsolePage implements OnInit, OnDestroy {
     this.ticketIndex = newIndex;
   }
 
+  currentTicketValid(): boolean {
+    const ticket = this.tickets?.[this.ticketIndex];
+    if(!ticket) return false;
+
+    return !!ticket.contractRef && !!ticket.driver && !!ticket.gross.amount && !!ticket.tare.amount && !!ticket.moisture && !!ticket.weight && !!ticket.tank;
+  }
+
   async print() {
     this.tickets[this.ticketIndex].dateOut = new Date();
     setTimeout(() => {
@@ -110,7 +117,7 @@ export class TicketConsolePage implements OnInit, OnDestroy {
     this.tickets[this.ticketIndex].set(); // Save ticket
     this.tickets.splice(this.ticketIndex, 1); // Remove from list
     this.indexChange(0); // Make sure index is within bounds
-  }
+      }
 
   ngOnDestroy(): void {
     this.ticketForms.forEach(form => clearTimeout(form.saveTimeout));
