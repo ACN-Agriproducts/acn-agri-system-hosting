@@ -7,11 +7,7 @@ const routes: Routes = [
   {
     path: '',
     component: TickestPage
-  },  {
-    path: 'ticket-console',
-    loadChildren: () => import('./ticket-console/ticket-console.module').then( m => m.TicketConsolePageModule)
   }
-
 ];
 
 @NgModule({

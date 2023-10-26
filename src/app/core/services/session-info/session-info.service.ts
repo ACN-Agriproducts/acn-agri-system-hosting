@@ -166,6 +166,7 @@ export class SessionInfo {
   }
 
   public getPlant(): string {
+    if(this.user?.currentPermissions.isScale) return this.user?.currentPermissions.scalePlant;
     return this.plant;
   }
 
