@@ -29,6 +29,8 @@ export class TicketFormComponent implements OnInit {
   public contractId: string;
   public currentContract: Contract;
 
+  public saveTimeout: NodeJS.Timeout;
+
   constructor(
     public dialog: MatDialog,
     public db: Firestore,
@@ -155,7 +157,7 @@ export class TicketFormComponent implements OnInit {
   }
 
   saveTicket() {
-    console.log("Save!")
-    this.ticket.set();
+    clearTimeout(this.saveTimeout);
+    this.saveTimeout = setTimeout(() => this.ticket.set(), 5000);
   }
 }

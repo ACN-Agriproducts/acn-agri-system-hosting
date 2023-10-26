@@ -11,7 +11,7 @@ import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
 import { Product } from "./product";
 
-type TicketStatus = "none" | "active" | "pending" | "paid";
+type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
 type TicketType = "in" | "out" | "service";
 
 export class Ticket extends FirebaseDocInterface{
@@ -137,7 +137,7 @@ export class Ticket extends FirebaseDocInterface{
         this.PPB = data.PPB;
         this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
-        this.status = data.status ?? "none";
+        this.status = data.status ?? "closed";
         this.tank = data.tank;
         this.tankId = data.tankId;
         this.tare = new Mass(data.tare, unit);

@@ -32,10 +32,10 @@
       <div class='info'>{{ticket.vehicleID}}</div>
       <div class='info'>{{ticket.plates}}</div>
       <div class='transport-info info'>
-        <div>{{ticket.transportName ?? transport.name}}</div>
-        <div>{{ticket.transportStreetAddress ?? transport.streetAddress}}</div>
-        <div>{{ticket.transportCity ?? transport.city}} {{ticket.transportState ?? transport.state}} {{ticket.transportZipCode ?? transport.zipCode}}</div>
-        <div>{{ticket.transportCaat ?? transport.caat}}</div>
+        <div>{{ticket?.transportName ?? transport?.name}}</div>
+        <div>{{ticket?.transportStreetAddress ?? transport?.streetAddress}}</div>
+        <div>{{ticket?.transportCity ?? transport?.city}} {{ticket?.transportState ?? transport?.state}} {{ticket?.transportZipCode ?? transport?.zipCode}}</div>
+        <div>{{ticket?.transportCaat ?? transport?.caat}}</div>
       </div>
       <span class='label' id='driver'>Vehicle Driver</span>
       <span class='label'>Tare WT</span>
@@ -51,9 +51,9 @@
       <span>ID: </span>
     </div>
     <div id='customer-info'>
-      <div>{{ ticket.clientName ?? client.name}}</div>
-      <div>{{ ticket.clientStreetAddress ?? client.streetAddress}}</div>
-      <div>{{ ticket.clientCity ?? client.city}} {{ ticket.clientState ?? client.state}} {{ ticket.clientZipCode ?? client.zipCode}}</div>
+      <div>{{ ticket?.clientName ?? client?.name}}</div>
+      <div>{{ ticket?.clientStreetAddress ?? client?.streetAddress}}</div>
+      <div>{{ ticket?.clientCity ?? client?.city}} {{ ticket?.clientState ?? client?.state}} {{ ticket?.clientZipCode ?? client?.zipCode}}</div>
     </div>
   </div>
   <!-- Ticket Info Block -->
@@ -124,13 +124,13 @@
       <div class='value'>{{ticket.tank}}</div>
 
       <div class='label weight' id='gross'>Gross</div>
-      <div class='value weight' id='gross'>{{ticket.gross | massInUnit}}</div>
+      <div class='value weight' id='gross'>{{ticket.gross | massInUnit:null:ticket.gross.amount}}</div>
       <div class='label weight' id='tare'>Tare</div>
-      <div class='value weight' id='tare'>{{ticket.tare | massInUnit}}</div>
+      <div class='value weight' id='tare'>{{ticket.tare | massInUnit:null:ticket.tare.amount}}</div>
       <div class='label weight' id='net'>Net</div>
-      <div class='value weight' id='net'>{{ticket.net | massInUnit}}</div>
+      <div class='value weight' id='net'>{{ticket.net | massInUnit:null:ticket.net.amount}}</div>
       <div class='label weight' id='mtons'>Metric Tons</div>
-      <div class='value weight' id='mtons'>{{ticket.getNet() | massInUnit:'mTon' | number:'1.3-3'}}</div>
+      <div class='value weight' id='mtons'>{{ticket.net | massInUnit:'mTon':ticket.net.amount | number:'1.3-3'}}</div>
     </div>
 
     <p><b>UNITED STATES WAREHOUSE ACT, GRAIN INSPECTION CERTIFICATE</b></p>

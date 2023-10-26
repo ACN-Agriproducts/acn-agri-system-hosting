@@ -106,7 +106,7 @@ export class TicketConsolePage implements OnInit {
   }
 
   submit() {
-    this.tickets[this.ticketIndex].status = 'active';
+    this.tickets[this.ticketIndex].status = 'closed';
     this.tickets[this.ticketIndex].set();
     this.tickets.splice(this.ticketIndex, 1);
     this.indexChange(0)
