@@ -164,8 +164,8 @@
                     <!-- <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text> -->
                     <ion-text class="item-text-md item-ticket">Contract: {{item.contractID}}</ion-text>
                     <ion-text class="item-text-md item-ticket">TestWt: {{item.weight}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Tare: {{item.tare.get()}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Net: {{item.getNet().get()}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Tare: {{item.tare | massInUnit}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Net: {{item.net | massInUnit}}</ion-text>
                     <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
                 </div>
             </ion-item>
@@ -184,17 +184,17 @@
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.gross.get()}}</ion-text>
+                <ion-text>{{item.gross | massInUnit}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.tare.get()}}</ion-text>
+                <ion-text>{{item.tare | massInUnit}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.getNet().get()}}</ion-text>
+                <ion-text>{{item.net | massInUnit}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content item-action" size="1">
@@ -226,9 +226,9 @@
                     <li>Product: <b>{{item.productName}}</b></li>
                     <li>Moisture: <b>{{item.moisture}}</b></li>
                     <li>Test Wt: <b>{{item.weight}}</b></li>
-                    <li>Gross: <b>{{item.gross.get()}}</b></li>
-                    <li>Tare: <b>{{item.tare.get()}}</b></li>
-                    <li>Net: <b>{{item.getNet().get()}}</b></li>
+                    <li>Gross: <b>{{item.gross | massInUnit}}</b></li>
+                    <li>Tare: <b>{{item.tare | massInUnit}}</b></li>
+                    <li>Net: <b>{{item.net | massInUnit}}</b></li>
                 </ul>
             </ion-label>
         </ion-item>
@@ -392,8 +392,8 @@
                     <!-- <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text> -->
                     <ion-text class="item-text-md item-ticket">Contract: {{item.contractID}}</ion-text>
                     <ion-text class="item-text-md item-ticket">TestWt: {{item.weight}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Tare: {{item.tare.get()}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Net: {{item.getNet().get()}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Tare: {{item.tare | massInUnit}}</ion-text>
+                    <ion-text class="item-text-md item-ticket">Net: {{item.net | massInUnit}}</ion-text>
                     <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
                 </div>
             </ion-item>
@@ -412,17 +412,17 @@
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.gross.get()}}</ion-text>
+                <ion-text>{{item.gross | massInUnit}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.tare.get()}}</ion-text>
+                <ion-text>{{item.tare | massInUnit}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content ion-hide-md-down" size="1">
             <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.getNet().get()}}</ion-text>
+                <ion-text>{{item.net | massInUnit}}</ion-text>
             </ion-item>
         </div>
         <div class="item-content item-action" size="1">
@@ -454,9 +454,9 @@
                     <li>Product: <b>{{item.productName}}</b></li>
                     <li>Moisture: <b>{{item.moisture}}</b></li>
                     <li>Test Wt: <b>{{item.weight}}</b></li>
-                    <li>Gross: <b>{{item.gross.get()}}</b></li>
-                    <li>Tare: <b>{{item.tare.get()}}</b></li>
-                    <li>Net: <b>{{item.getNet().get()}}</b></li>
+                    <li>Gross: <b>{{item.gross | massInUnit}}</b></li>
+                    <li>Tare: <b>{{item.tare | massInUnit}}</b></li>
+                    <li>Net: <b>{{item.net | massInUnit}}</b></li>
                 </ul>
             </ion-label>
         </ion-item>
