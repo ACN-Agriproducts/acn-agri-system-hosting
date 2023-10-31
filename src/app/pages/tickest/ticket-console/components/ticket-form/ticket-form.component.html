@@ -1,183 +1,185 @@
-<div class="form-header">
-  <mat-card class="info-card">
-    <mat-card-title>ID: {{ticket?.id}}</mat-card-title>
-  </mat-card>
-  <mat-card class="info-card">
-    <mat-card-subtitle>Date in: {{ticket?.dateIn | date}}</mat-card-subtitle>
-  </mat-card>
-  <mat-card class="info-card">
-    <mat-card-title>Type: {{ticket?.type | uppercase}}</mat-card-title>
-  </mat-card>
-</div>
-<div class="form-wrapper">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-subtitle>Contract Info</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-        <mat-form-field appearance="fill">
-        <mat-label>Contract</mat-label>
-        <mat-select [(ngModel)]="contractId" (ngModelChange)="contractChange()">
-          <mat-option *ngFor="let contract of selectableContracts | async" [value]="contract.ref.id">
-            {{contract.id + ": " + contract.clientName}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Product</mat-label>
-        <input matInput readonly [(ngModel)]="ticket.productName">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Grade</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.grade" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Origin</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.origin" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-    </mat-card-content>
-    <div *ngIf="currentContract">
-      <span>{{currentContract.currentDelivered | massInUnit:'mTon' | number:'0.3'}} mTon</span>
-      <span *ngIf="!currentContract.isOpen">/{{currentContract.quantity | massInUnit:'mTon' | number:'0.3'}} mTon</span>
-      <div class="percentage-text" *ngIf="!currentContract.isOpen">{{currentContract.progress | number:'0.1'}}%</div>
-      <mat-progress-bar *ngIf="!currentContract.isOpen" mode="determinate" [value]="currentContract.progress"></mat-progress-bar>
-    </div>
-    
-  </mat-card>
+<ng-container *transloco="let t, read: 'tickets.console'">
+  <div class="form-header">
+    <mat-card class="info-card">
+      <mat-card-title>ID: {{ticket?.id}}</mat-card-title>
+    </mat-card>
+    <mat-card class="info-card">
+      <mat-card-subtitle>{{t('Date in')}}: {{ticket?.dateIn | date}}</mat-card-subtitle>
+    </mat-card>
+    <mat-card class="info-card">
+      <mat-card-title>{{t('Type')}}: {{t(ticket?.type) | uppercase}}</mat-card-title>
+    </mat-card>
+  </div>
+  <div class="form-wrapper">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-subtitle>{{t('Contract Info')}}</mat-card-subtitle>
+      </mat-card-header>
   
-  <mat-card>
-    <mat-card-header>
-      <mat-card-subtitle>Transport Info</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <span class="flex-row">
+      <mat-card-content>
+          <mat-form-field appearance="fill">
+          <mat-label>{{t('Contract')}}</mat-label>
+          <mat-select [(ngModel)]="contractId" (ngModelChange)="contractChange()">
+            <mat-option *ngFor="let contract of selectableContracts | async" [value]="contract.ref.id">
+              {{contract.id + ": " + contract.clientName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field appearance="fill">
-        <mat-label>Transport</mat-label>
-        <mat-select 
-          [(ngModel)]="ticket.truckerId"
-          (ngModelChange)="truckerChange()"
-          [disabled]="!contractId">
-          <mat-option 
-            *ngFor="let transport of selectableTransport"
-            [value]="transport.id"
-            >{{transport.name}}
-          </mat-option>
-        </mat-select>
-        <button 
-          mat-icon-button matSuffix 
-          [disabled]="!contractId"
-          (click)="addTransport(); $event.stopPropagation()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-form-field>
-      </span>
-      
-      <mat-form-field appearance="fill">
-        <mat-label>Vehicle</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.vehicleID" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Plates</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.plates" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Driver</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.driver" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card id="weights-card">
-    <mat-card-header>
-      <mat-card-subtitle>Weight Info</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-form-field appearance="fill" class="weight-field">
-        <mat-label>Gross</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.gross.amount" (ngModelChange)="calcNetWeight()">
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="weight-field">
-        <mat-label>Tare</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.tare.amount" (ngModelChange)="calcNetWeight()">
-      </mat-form-field>
-      <mat-form-field appearance="fill" class="net-field">
-        <mat-label>Net</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.net.amount" readonly>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Discount W:</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.dryWeight.amount" readonly >
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>m. Ton</mat-label>
-        <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.3'" readonly>
-      </mat-form-field>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card id="grain-info-card">
-    <mat-card-header>
-      <mat-card-subtitle>Grain Info</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-form-field appearance="fill">
-        <mat-label>Moisture</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.moisture" (ngModelChange)="calcDiscount()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Weight</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.weight" (ngModelChange)="calcDiscount()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Plague</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.plague" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>PPB</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.PPB" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Lot</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.lot" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Original Ticket #</mat-label>
-        <input matInput type="text" [(ngModel)]="ticket.original_ticket" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Original Ticket W.</mat-label>
-        <input matInput type="number" [(ngModel)]="ticket.original_weight.amount" (ngModelChange)="saveTicket()">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Comments</mat-label>
-        <textarea matInput [(ngModel)]="ticket.comment" (ngModelChange)="saveTicket()"></textarea>
-      </mat-form-field>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card>
-    <mat-card-header>
-      <mat-card-subtitle>Tank</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <mat-radio-group [(ngModel)]="ticket.tank" (ngModelChange)="tankChange()">
-        <mat-radio-button
-          class="tanks-radio-group"
-          *ngFor="let tank of (plant | async)?.inventory"
-          [value]="tank.name"
-          [disabled]="tank.product.id != 'none' && tank.product.id != ticket.productName">
-          <div class="radio-button-label">
-            <span>{{tank.name}}</span>
-            <span>{{tank.product.id}}</span>
-            <span></span>
-          </div>
-        </mat-radio-button>
-      </mat-radio-group>
-    </mat-card-content>
-  </mat-card>
-</div>
+          <mat-label>{{t('Product')}}</mat-label>
+          <input matInput readonly [(ngModel)]="ticket.productName">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Grade')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.grade" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Origin')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.origin" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+      </mat-card-content>
+      <div *ngIf="currentContract">
+        <span>{{currentContract.currentDelivered | massInUnit:'mTon' | number:'0.3'}} {{t('mTon')}}</span>
+        <span *ngIf="!currentContract.isOpen">/{{currentContract.quantity | massInUnit:'mTon' | number:'0.3'}} {{t('mTon')}}</span>
+        <div class="percentage-text" *ngIf="!currentContract.isOpen">{{currentContract.progress | number:'0.1'}}%</div>
+        <mat-progress-bar *ngIf="!currentContract.isOpen" mode="determinate" [value]="currentContract.progress"></mat-progress-bar>
+      </div>
+  
+    </mat-card>
+  
+    <mat-card>
+      <mat-card-header>
+        <mat-card-subtitle>{{t('Transport Info')}}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <span class="flex-row">
+          <mat-form-field appearance="fill">
+          <mat-label>{{t('Transport')}}</mat-label>
+          <mat-select
+            [(ngModel)]="ticket.truckerId"
+            (ngModelChange)="truckerChange()"
+            [disabled]="!contractId">
+            <mat-option
+              *ngFor="let transport of selectableTransport"
+              [value]="transport.id"
+              >{{transport.name}}
+            </mat-option>
+          </mat-select>
+          <button
+            mat-icon-button matSuffix
+            [disabled]="!contractId"
+            (click)="addTransport(); $event.stopPropagation()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-form-field>
+        </span>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Vehicle')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.vehicleID" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Plates')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.plates" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Driver')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.driver" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card id="weights-card">
+      <mat-card-header>
+        <mat-card-subtitle>{{t('Weight Info')}}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="weight-field">
+          <mat-label>{{t('Gross')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.gross.amount" (ngModelChange)="calcNetWeight()">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="weight-field">
+          <mat-label>{{t('Tare')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.tare.amount" (ngModelChange)="calcNetWeight()">
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="net-field">
+          <mat-label>{{t('Net')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.net.amount" readonly>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Discount W')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.dryWeight.amount" readonly >
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('m. Ton')}}</mat-label>
+          <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.3'" readonly>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card id="grain-info-card">
+      <mat-card-header>
+        <mat-card-subtitle>{{t('Grain Info')}}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Moisture')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.moisture" (ngModelChange)="calcDiscount()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Weight')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.weight" (ngModelChange)="calcDiscount()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Plague')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.plague" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('PPB')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.PPB" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Lot')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.lot" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Original Ticket #')}}</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.original_ticket" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Original Ticket W.')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.original_weight.amount" (ngModelChange)="saveTicket()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('Comments')}}</mat-label>
+          <textarea matInput [(ngModel)]="ticket.comment" (ngModelChange)="saveTicket()"></textarea>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  
+    <mat-card>
+      <mat-card-header>
+        <mat-card-subtitle>{{t('Tank')}}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <mat-radio-group [(ngModel)]="ticket.tank" (ngModelChange)="tankChange()">
+          <mat-radio-button
+            class="tanks-radio-group"
+            *ngFor="let tank of (plant | async)?.inventory"
+            [value]="tank.name"
+            [disabled]="tank.product.id != 'none' && tank.product.id != ticket.productName">
+            <div class="radio-button-label">
+              <span>{{tank.name}}</span>
+              <span>{{tank.product.id}}</span>
+              <span></span>
+            </div>
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container>

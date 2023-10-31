@@ -224,5 +224,42 @@
         "Destinations": "Destinations",
         "Add New": "Add New",
         "Destination": "Destination"
+    },
+    "tickets": {
+        "console": {
+            "Ticket Console": "Ticket Console",
+            "Date in": "Date in",
+            "Type": "Type",
+            "in": "in",
+            "out": "out",
+            "service": "service",
+            "Contract Info": "Contract Info",
+            "Contract": "Contract",
+            "Product": "Product",
+            "Grade": "Grade",
+            "Origin": "Origin",
+            "mTon": "mTon",
+            "Transport Info": "Transport Info",
+            "Transport": "Transport",
+            "Vehicle": "Vehicle",
+            "Plates": "Plates",
+            "Driver": "Driver",
+            "Weight Info": "Weight Info",
+            "Gross": "Gross",
+            "Tare": "Tare",
+            "Net": "Net",
+            "Discount W": "Discount W",
+            "m. Ton": "m. Ton",
+            "Grain Info": "Grain Info",
+            "Moisture": "Moisture",
+            "Weight": "Weight",
+            "Plague": "Plague",
+            "PPB": "PPB",
+            "Lot": "Lot",
+            "Original Ticket #": "Original Ticket #",
+            "Original Ticket W.": "Original Ticket W.",
+            "Comments": "Comments",
+            "Tank": "Tank"
+        }
     }
 }
