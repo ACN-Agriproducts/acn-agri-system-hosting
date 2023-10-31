@@ -6,12 +6,13 @@ import { OptionsTicketComponent } from './../options-ticket/options-ticket.compo
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { Ticket } from '@shared/classes/ticket';
-import { Firestore, limit, orderBy, where } from '@angular/fire/firestore';
+import { Firestore, limit, onSnapshot, orderBy, where } from '@angular/fire/firestore';
 import { Plant } from '@shared/classes/plant';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
+import { Observable } from 'rxjs';
 const moment = _moment;
 
 
@@ -23,6 +24,7 @@ const moment = _moment;
 export class TableComponent implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
+  public scaleTickets: Ticket[];
   public paginator: Pagination<Ticket>;
   public plantList: Plant[] = [];
   public currentCompany: string;
@@ -51,6 +53,10 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   async getTickets(date: Date){
+    onSnapshot(Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), where('status', '==', 'pending'), where('in', '==', this.inTicket)), next => {
+      this.scaleTickets = next.docs.sort((a, b) => a.data().id - b.data().id).map(t => t.data());
+    });
+
     this.infiniteScroll.disabled = false;
     this.date = date;
 
