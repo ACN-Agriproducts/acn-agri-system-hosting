@@ -163,7 +163,22 @@
             "type": "type",
             "Type": "Type",
             "amount": "amount",
-            "Amount": "Amount"
+            "Amount": "Amount",
+            "default": "default",
+            "Default": "Default",
+            "notes": "notes",
+            "Notes": "Notes",
+            "payment method": "payment method",
+            "Payment Method": "Payment Method",
+            "account name": "account name",
+            "Account Name": "Account Name",
+            "Set Payment": "Set Payment",
+            "Required": "Required",
+            "No Liquidations Available": "No Liquidations Available",
+            "No Liquidations Selected": "No Liquidations Selected",
+            "Must Meet Selected Amount": "Must Meet Selected Amount",
+            "check": "check",
+            "wire": "wire"
         }
     },
     "directory": {

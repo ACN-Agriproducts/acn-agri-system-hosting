@@ -76,7 +76,12 @@ export class Contract extends FirebaseDocInterface {
     type: string;
 
     deliveredHistory: { [date: string]: number };
-    progress: number; 
+    progress: number;
+
+    // LIQUIDATIONS AND PAYMENTS
+    outstanding: number; // or outstandingLiquidations or liquidationsOutstanding
+    paymentsMade: number; // or currentPaymentAmount
+    toBeDelivered: Mass; // or outstandingGrain or grainOutstanding
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);

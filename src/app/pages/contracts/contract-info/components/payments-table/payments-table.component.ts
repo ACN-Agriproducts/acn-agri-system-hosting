@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Payment } from '@shared/classes/payment';
 
+// TYPES THAT REUSABLE TABLE WOULD USE
 type TableDataType = "num" | "button" | "text" | "text-translate";
-
 type TableField = {
   key: string
   header: string,
@@ -19,50 +20,11 @@ type TableField = {
 export class PaymentsTableComponent implements OnInit {
   @Input() payments: Payment[];
 
-  public testData = [
+  public permissions: any;
+  public paymentsTableFields: TableField[] = [
     {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-  ];
-
-  public arrayTableFields: TableField[] = [
-    {
-      key: "liquidation",
+      key: "paidDocumentRefs",
       header: "Liquidation(s)",
-      dataType: "text"
     },
     {
       key: "type",
@@ -83,15 +45,25 @@ export class PaymentsTableComponent implements OnInit {
     }
   ];
 
-  constructor() {}
+  // PROPERTIES FOR SIMULATING A REUSABLE TABLE
+  public data: any[];
+  public tableFields: TableField[];
+  
+  constructor(
+    private session: SessionInfo
+  ) {}
 
   ngOnInit() {
-    console.log(this.payments)
+    this.tableFields = this.paymentsTableFields;
+    this.permissions = this.session.getPermissions();
+  }
+
+  ngOnChanges() {
+    this.data = this.payments;
   }
 
   test(items?, index?) {
     console.log("TEST")
-
     if (items && index != null) console.log(items, index)
   }
 }

@@ -164,7 +164,22 @@
             "type": "tipo",
             "Type": "Tipo",
             "amount": "cantidad",
-            "Amount": "Cantidad"
+            "Amount": "Cantidad",
+            "default": "predeterminado",
+            "Default": "Predeterminado",
+            "notes": "notas",
+            "Notes": "Notas",
+            "payment method": "método de pago",
+            "Payment Method": "Método de Pago",
+            "account name": "nombre de la cuenta",
+            "Account Name": "Nombre de la Cuenta",
+            "Set Payment": "Establecer Pago",
+            "Required": "Necesario",
+            "No Liquidations Available": "No Hay Liquidaciones Disponibles",
+            "No Liquidations Selected": "No Hay Liquidaciones Seleccionada",
+            "Must Meet Selected Amount": "Debe Cumplir la Cantidad Seleccionada",
+            "check": "cheque",
+            "wire": "wire"
         }
     },
     "directory": {

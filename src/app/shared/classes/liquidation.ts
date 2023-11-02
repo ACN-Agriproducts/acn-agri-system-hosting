@@ -26,6 +26,14 @@ export class Liquidation extends FirebaseDocInterface {
     public ticketRefs: DocumentReference<Ticket>[];
     public tickets: TicketInfo[];
     public archived: boolean = false;
+    public total: number;
+    
+    public amountPaid: number; // A LIQUIDATION MIGHT NOT GET PAID ALL AT ONCE
+
+    // FOLLOWING VALUES WILL BE USED TO HELP CALCULATE LIQUIDATION VALUES/TOTALS
+    public productInfo: any; // TODO
+    public price: number; // TODO
+    public quantity: number; // TODO
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -44,6 +52,7 @@ export class Liquidation extends FirebaseDocInterface {
             this.supplementalDocs = [];
             this.ticketRefs = [];
             this.tickets = [];
+            this.total = 0;
 
             return;
         }
@@ -105,30 +114,21 @@ export class Liquidation extends FirebaseDocInterface {
         return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(Liquidation.converter);
     }
 
-    public static getCollectionQuery(
-        db: Firestore, 
-        company: string, 
-        contractRefId: string, 
+    public static getCollectionQuery(db: Firestore, company: string, contractRefId: string, 
         ...constraints: QueryConstraint[]
     ): Query<Liquidation> {
         const collectionRef = Liquidation.getCollectionReference(db, company, contractRefId);
         return query(collectionRef, ...constraints);
     }
 
-    public static getLiquidations(
-        db: Firestore, 
-        company: string, 
-        contractRefId: string, 
+    public static getLiquidations(db: Firestore, company: string, contractRefId: string, 
         ...constraints: QueryConstraint[]
     ): Promise<Liquidation[]> {
         const collectionQuery = Liquidation.getCollectionQuery(db, company, contractRefId, ...constraints);
         return getDocs(collectionQuery).then(result => result.docs.map(qds => qds.data()));
     }
 
-    public static getLiquidationsSnapshot(
-        db: Firestore, 
-        company: string, 
-        contractRefId: string, 
+    public static getLiquidationsSnapshot(db: Firestore, company: string, contractRefId: string, 
         onNext: (snapshot: QuerySnapshot<Liquidation>) => void,
         ...constraints: QueryConstraint[]
     ): Unsubscribe {
@@ -136,10 +136,7 @@ export class Liquidation extends FirebaseDocInterface {
         return onSnapshot(collectionQuery, onNext);
     }
 
-    public static async getLiquidationByContractId(
-        db: Firestore, 
-        company: string, 
-        contractRefId: string, 
+    public static async getLiquidationByContractId(db: Firestore, company: string, contractRefId: string, 
         refId: string
     ): Promise<Liquidation> {
         const liquidationDoc = await getDoc(doc(db, `companies/${company}/contracts/${contractRefId}/liquidations/${refId}`)
@@ -168,6 +165,10 @@ export class Liquidation extends FirebaseDocInterface {
             weight: ticket.weight,
             weightDiscounts: ticket.weightDiscounts,
         };
+    }
+
+    public getTotal(contract: Contract): void {
+        this.total = (new LiquidationTotals(this.tickets, contract)).netToPay;
     }
 }
 
@@ -226,6 +227,8 @@ export interface TicketInfo {
     weight: number;
     weightDiscounts: WeightDiscounts;
 }
+
+
 
 export interface FileStorageInfo {
     name: string;

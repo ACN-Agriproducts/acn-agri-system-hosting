@@ -7,13 +7,13 @@
         <div class="cell">Type</div>
         <div class="cell">Amount</div>
         <div class="cell button">Proof of Payment</div> -->
-        <div class="cell" *ngFor="let field of arrayTableFields" [class]="field.dataType">
+        <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
           {{ t(field.header) | titlecase }}
         </div>
       </li>
     </mat-card>
-    <mat-card class="body-card" *ngIf="true else noItems">
-      <li class="row" *ngFor="let item of testData; let index = index">
+    <mat-card class="body-card" *ngIf="data?.length > 0 else noItems">
+      <li class="row" *ngFor="let item of data; let index = index">
         <!-- <div class="cell">{{ item.liquidation }}</div>
         <div class="cell">{{ item.type }}</div>
         <div class="cell">{{ item.amount }}</div>
@@ -22,11 +22,11 @@
             <mat-icon>cloud_upload</mat-icon>
           </button>
         </div> -->
-        <div class="cell" *ngFor="let field of arrayTableFields" [class]="field.dataType">
+        <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
           <ng-container 
             *ngTemplateOutlet="
-              field.dataType | templateRef; 
-              context: { $implicit: field, items: testData, index }
+              (field.dataType ?? 'default') | templateRef; 
+              context: { $implicit: field, items: data, index }
             "
           ></ng-container>
         </div>
@@ -38,6 +38,10 @@
 
   <ng-template #noItems>
     <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
+  </ng-template>
+
+  <ng-template templateRef="default" let-field let-items="items" let-index="index">
+    {{ items[index][field.key] }}
   </ng-template>
 
   <ng-template templateRef="text" let-field let-items="items" let-index="index">

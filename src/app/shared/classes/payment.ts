@@ -3,21 +3,22 @@ import { Status } from "./company";
 import { FileStorageInfo } from "./liquidation";
 import { Firestore, collection, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, where } from "@angular/fire/firestore";
 
-type PaymentType = "prepay" | "default";
+export const PAYMENT_TYPES = ["default", "prepay"];
+export const PAYMENT_METHODS = ["wire", "check"];
 
 export class Payment extends FirebaseDocInterface {
     public accountName: string;
     public amount: number;
     public date: Date;
     public notes: string;
-    public paidDocumentAmounts: {
+    public paidDocumentRefs: {
         ref: DocumentReference,
         amount: number
     }[];
-    public paidDocumentRefs: DocumentReference[];
     public proofOfPaymentDocs: FileStorageInfo[];
     public status: Status;
-    public type: PaymentType;
+    public type: typeof PAYMENT_TYPES[number];
+    public paymentMethod: typeof PAYMENT_METHODS[number];
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -31,15 +32,15 @@ export class Payment extends FirebaseDocInterface {
         if (snapshotOrRef instanceof DocumentReference) {
             this.ref = snapshotOrRef;
 
-            this.accountName = "";
-            this.amount = 0;
-            this.date = new Date();
-            this.notes = "";
-            this.paidDocumentAmounts = [];
+            this.accountName = null;
+            this.amount = null;
+            this.date = null;
+            this.notes = null;
             this.paidDocumentRefs = [];
             this.proofOfPaymentDocs = [];
             this.status = "pending";
-            this.type = "default";
+            this.type = null;
+            this.paymentMethod = null;
 
             return;
         }
@@ -50,11 +51,11 @@ export class Payment extends FirebaseDocInterface {
         this.amount = data.amount;
         this.date = data.date.toDate();
         this.notes = data.notes;
-        this.paidDocumentAmounts = data.paidDocumentAmounts;
         this.paidDocumentRefs = data.paidDocumentRefs;
         this.proofOfPaymentDocs = data.proofOfPaymentDocs;
         this.status = data.status;
         this.type = data.type;
+        this.paymentMethod = data.paymentMethod;
     }
 
     public static converter = {
@@ -64,17 +65,55 @@ export class Payment extends FirebaseDocInterface {
                 amount: data.amount,
                 date: data.date,
                 notes: data.notes,
-                paidDocumentAmounts: data.paidDocumentAmounts,
                 paidDocumentRefs: data.paidDocumentRefs,
                 proofOfPaymentDocs: data.proofOfPaymentDocs,
                 status: data.status,
-                type: data.type
+                type: data.type,
+                paymentMethod: data.paymentMethod
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Payment {
             return new Payment(snapshot);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     // public static getCollectionReference(db: Firestore, company: string): CollectionReference<Payment> {
     //     return collection(db, `companies/${company}/payments`).withConverter(Payment.converter);

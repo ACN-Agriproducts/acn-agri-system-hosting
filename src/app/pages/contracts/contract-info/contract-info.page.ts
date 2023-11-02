@@ -26,8 +26,47 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public type: string;
   public liquidations: Liquidation[];
   public payments: Payment[];
-  public unsubs: Unsubscribe[];
+  public unsubs: Unsubscribe[] = [];
   public permissions: any;
+
+  readonly testData = [
+    {
+      type: "prepay",
+      amount: 500,
+      liquidation: [23].toString(),
+      proofOfPaymentDocs: []
+    },
+    {
+      type: "prepay",
+      amount: 500,
+      liquidation: [23].toString(),
+      proofOfPaymentDocs: []
+    },
+    {
+      type: "prepay",
+      amount: 500,
+      liquidation: [23].toString(),
+      proofOfPaymentDocs: []
+    },
+    {
+      type: "prepay",
+      amount: 500,
+      liquidation: [23].toString(),
+      proofOfPaymentDocs: []
+    },
+    {
+      type: "prepay",
+      amount: 500,
+      liquidation: [23].toString(),
+      proofOfPaymentDocs: []
+    },
+    {
+      type: "prepay",
+      amount: 500,
+      liquidation: [23].toString(),
+      proofOfPaymentDocs: []
+    },
+  ];
   
   constructor(
     private route: ActivatedRoute,
@@ -46,16 +85,18 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
       this.currentContract = contract;
       this.ticketList = await contract.getTickets();
-      
-      this.unsubs = [
-        contract.getLiquidationsSnapshot(result => {
-          this.liquidations = result.docs.map(qds => qds.data());
-        }, orderBy('date', 'asc')),
-        contract.getPaymentsSnapshot(result => {
-          this.payments = result.docs.map(qds => qds.data());
-          console.log(this.payments)
-        }, orderBy('date', 'asc'))
-      ];
+
+      this.unsubs.push(contract.getLiquidationsSnapshot(result => {
+        this.liquidations = result.docs.map(qds => {
+          const liquidation = qds.data();
+          liquidation.getTotal(contract);
+          return liquidation;
+        });
+      }, orderBy('date', 'asc')));
+
+      this.unsubs.push(contract.getPaymentsSnapshot(result => {
+        this.payments = result.docs.map(qds => qds.data());
+      }, orderBy('date', 'asc')));
       
       this.ready = true;
     });
@@ -66,18 +107,33 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   async addPayment() {
-    console.log(this.payments)
-
     const newPayment = new Payment(doc(this.currentContract.getPaymentsCollection()));
-    console.log(newPayment)
 
     const dialogRef = this.dialog.open(SetPaymentDialogComponent, {
-      data: newPayment
+      data: {
+        payment: newPayment,
+        liquidations: this.liquidations.filter(l => l.status === "pending")
+        // .map(l => ({
+        //   ref: l.ref,
+        //   total: l.total,
+        //   date: l.date
+        // }))
+        ,
+        // contract: this.currentContract
+      },
+      minWidth: "550px"
     });
 
     const result = await lastValueFrom(dialogRef.afterClosed());
-    console.log(result)
+    if (!result) return;
 
-    // await newPayment.set();
+    
+    newPayment.set().then(() => {
+      console.log(newPayment)
+      this.snack.open("Payment Set", "success");
+    }).catch(e => {
+      console.error(e);
+      this.snack.open("Failed to Set Payment", "error");
+    });
   }
 }
