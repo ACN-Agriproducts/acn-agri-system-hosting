@@ -178,7 +178,9 @@
             "No Liquidations Selected": "No Liquidations Selected",
             "Must Meet Selected Amount": "Must Meet Selected Amount",
             "check": "check",
-            "wire": "wire"
+            "wire": "wire",
+            "method": "method",
+            "Method": "Method"
         }
     },
     "directory": {

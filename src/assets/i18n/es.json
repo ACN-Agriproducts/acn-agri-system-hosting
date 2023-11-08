@@ -179,7 +179,9 @@
             "No Liquidations Selected": "No Hay Liquidaciones Seleccionada",
             "Must Meet Selected Amount": "Debe Cumplir la Cantidad Seleccionada",
             "check": "cheque",
-            "wire": "wire"
+            "wire": "wire",
+            "method": "método",
+            "Method": "Método"
         }
     },
     "directory": {

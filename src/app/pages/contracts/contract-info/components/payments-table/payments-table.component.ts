@@ -1,15 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Payment } from '@shared/classes/payment';
+import { SetPaymentDialogComponent } from '../set-payment-dialog/set-payment-dialog.component';
+import { Liquidation } from '@shared/classes/liquidation';
+import { lastValueFrom } from 'rxjs';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 // TYPES THAT REUSABLE TABLE WOULD USE
-type TableDataType = "num" | "button" | "text" | "text-translate";
-type TableField = {
-  key: string
-  header: string,
+type TableDataType = "number" | "button" | "text" | "text-translate" | "date" | "nested" | "array";
+export type TableField = {
+  header?: string,
   dataType?: TableDataType,
+  key?: string
   icon?: string,
-  action?: (...params: any) => any
+  iconColor?: string,
+  action?: (...params: any) => any,
+  arrayType?: TableDataType,
+  nestedType?: TableDataType,
+  nestedKey?: string,
 }
 
 @Component({
@@ -19,12 +28,22 @@ type TableField = {
 })
 export class PaymentsTableComponent implements OnInit {
   @Input() payments: Payment[];
+  @Input() liquidations: Liquidation[];
 
   public permissions: any;
   public paymentsTableFields: TableField[] = [
     {
       key: "paidDocumentRefs",
       header: "Liquidation(s)",
+      dataType: "array",
+      arrayType: "nested",
+      nestedType: "number",
+      nestedKey: "index",
+    },
+    {
+      key: "date",
+      header: "Date",
+      dataType: "date"
     },
     {
       key: "type",
@@ -32,25 +51,33 @@ export class PaymentsTableComponent implements OnInit {
       dataType: "text-translate"
     },
     {
+      key: "paymentMethod",
+      header: "method",
+      dataType: "text-translate"
+    },
+    {
       key: "amount",
       header: "Amount",
-      dataType: "num"
+      dataType: "number"
     },
     {
       key: "proofOfPaymentDocs",
       header: "Proof of Payment",
       dataType: "button",
       icon: "cloud_upload",
+      iconColor: "accent",
       action: this.test
     }
   ];
 
-  // PROPERTIES FOR SIMULATING A REUSABLE TABLE
+  // INPUTS/PROPERTIES FOR SIMULATING A REUSABLE TABLE
   public data: any[];
   public tableFields: TableField[];
   
   constructor(
-    private session: SessionInfo
+    private session: SessionInfo,
+    private dialog: MatDialog,
+    private snack: SnackbarService,
   ) {}
 
   ngOnInit() {
@@ -62,8 +89,63 @@ export class PaymentsTableComponent implements OnInit {
     this.data = this.payments;
   }
 
-  test(items?, index?) {
+  test(item) {
     console.log("TEST")
-    if (items && index != null) console.log(items, index)
+    if (item != null) console.log(item)
   }
+
+  async openPayment(payment: Payment) {
+    this.dialog.open(SetPaymentDialogComponent, {
+      data: {
+        payment: { ...payment },
+        liquidations: this.liquidations.filter(l => l.status === "pending"),
+        readonly: true
+      },
+      minWidth: "650px"
+    });
+  }
+
+  async editPayment(payment: Payment) {
+    const dialogRef = this.dialog.open(SetPaymentDialogComponent, {
+      data: {
+        payment: {
+          type: payment.type,
+          date: payment.date,
+          accountName: payment.accountName,
+          paymentMethod: payment.paymentMethod,
+          amount: payment.amount,
+          paidDocumentRefs: payment.paidDocumentRefs,
+          notes: payment.notes
+        },
+        liquidations: this.liquidations.filter(l => l.status === "pending"),
+        readonly: false
+      },
+      minWidth: "650px"
+    });
+
+    const result = await lastValueFrom(dialogRef.afterClosed());
+    if (!result) return;
+    
+    payment.update({ ...result }).then(() => {
+      this.snack.open("Payment Set", "success");
+    }).catch(e => {
+      console.error(e);
+      this.snack.open("Failed to Set Payment", "error");
+    });
+  }
+
+  cancelPayment(payment: Payment) {
+    payment.update({ status: "cancelled" }).then(() => {
+      console.log(payment)
+      this.snack.open("Payment Cancelled", "success");
+    }).catch(e => {
+      console.error(e);
+      this.snack.open("Failed to Cancel Payment", "error");
+    });
+  }
+
+  archivePayment(payment: Payment) {
+
+  }
+  
 }

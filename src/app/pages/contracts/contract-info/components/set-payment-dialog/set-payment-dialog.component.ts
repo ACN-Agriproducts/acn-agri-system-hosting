@@ -1,9 +1,9 @@
-import { Component, Directive, Inject, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormGroup, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import { Component, Directive, Inject, Input, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormGroup, NG_VALIDATORS, NgForm, ValidationErrors, Validator } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Contract } from '@shared/classes/contract';
 import { Liquidation } from '@shared/classes/liquidation';
-import { PAYMENT_METHODS, PAYMENT_TYPES, Payment } from '@shared/classes/payment';
+import { PAYMENT_METHODS, PAYMENT_TYPES, PaidDocument, Payment } from '@shared/classes/payment';
 
 @Component({
   selector: 'app-set-payment-dialog',
@@ -16,40 +16,36 @@ export class SetPaymentDialogComponent implements OnInit {
 
   public selectedTotal: number = 0;
   public difference: number = 0;
-
-
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SetPaymentDialogData,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-
+    this.data.readonly ??= true;
   }
 
   test() {
     console.log(this.data.payment)
-    console.log(this.selectedTotal, this.difference)
   }
 
-  setAmounts() {
-    this.selectedTotal = this.data.payment.paidDocumentRefs.reduce((prev, current) => prev + current.amount, 0);
+  amountChange(value: any) {
+    this.data.payment.amount = value == null ? value : +value.toFixed(3);
     this.difference = this.data.payment.amount - this.selectedTotal;
   }
 
-  reset() {
+  paidDocumentsChange() {
+    this.selectedTotal = this.data.payment.paidDocumentRefs?.reduce((prev, current) => prev + current.amount, 0);
+    this.amountChange(this.selectedTotal === 0 ? null : this.selectedTotal);
+  }
+
+  resetSelection() {
     this.data.payment.paidDocumentRefs = [];
     this.selectedTotal = this.difference = 0;
   }
 
 }
-
-interface SetPaymentDialogData {
-  payment: Payment;
-  liquidations: Liquidation[];
-  contract?: Contract;
-}
-
 
 @Directive({
   selector: '[paymentType]',
@@ -63,7 +59,12 @@ export class PaymentTypeDirective implements Validator {
   @Input('paymentType') liquidationsCount: number;
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return control.value === 'default' && !(this.liquidationsCount > 0) ? { noLiquidations: true } : null;
+    if (control.value === "default") {
+      return !(this.liquidationsCount > 0) ? { noLiquidations: true } : null;
+    }
+    if (control.value === "prepay") {
+      return this.liquidationsCount > 0 ? { liquidationsExist: true } : null;
+    }
   }
 }
 
@@ -82,7 +83,21 @@ export class PaymentLiquidationsSelectedDirective implements Validator {
     const typeCtrl = formGroup.controls[this.liquidationsSelected[0]];
     const paidDocumentsCtrl = formGroup.controls[this.liquidationsSelected[1]];
 
-    typeCtrl?.setErrors(typeCtrl?.value === 'default' && !(paidDocumentsCtrl?.value?.length > 0) ? { noLiquidationsSelected: true} : null);
+    paidDocumentsCtrl?.setErrors(typeCtrl?.value === 'default' && !(paidDocumentsCtrl?.value?.length > 0) ? { noLiquidationsSelected: true} : null);
     return null;
   }
+}
+
+interface SetPaymentDialogData {
+  payment: Payment | {
+    type: string;
+    date: Date;
+    accountName: string;
+    paymentMethod: string;
+    amount: number;
+    paidDocumentRefs: PaidDocument[];
+    notes: string;
+  };
+  liquidations: Liquidation[];
+  readonly?: boolean;
 }

@@ -11,10 +11,7 @@ export class Payment extends FirebaseDocInterface {
     public amount: number;
     public date: Date;
     public notes: string;
-    public paidDocumentRefs: {
-        ref: DocumentReference,
-        amount: number
-    }[];
+    public paidDocumentRefs: PaidDocument[];
     public proofOfPaymentDocs: FileStorageInfo[];
     public status: Status;
     public type: typeof PAYMENT_TYPES[number];
@@ -77,44 +74,6 @@ export class Payment extends FirebaseDocInterface {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
     // public static getCollectionReference(db: Firestore, company: string): CollectionReference<Payment> {
     //     return collection(db, `companies/${company}/payments`).withConverter(Payment.converter);
     // }
@@ -146,4 +105,10 @@ export class Payment extends FirebaseDocInterface {
     //     const collectionQuery = Payment.getCollectionQuery(db, company, ...constraints);
     //     return onSnapshot(collectionQuery, onNext);
     // }
+}
+
+export interface PaidDocument {
+    ref: DocumentReference;
+    amount: number;
+    id: string;
 }

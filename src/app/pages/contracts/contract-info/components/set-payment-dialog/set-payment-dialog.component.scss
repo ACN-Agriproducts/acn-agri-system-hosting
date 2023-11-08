@@ -26,7 +26,7 @@ mat-list-option {
 }
 
 mat-selection-list {
-    padding: 0 0 20px;
+    padding: 0;
 }
 
 form {
@@ -37,7 +37,6 @@ form {
 .pay-difference {
     display: flex;
     justify-content: space-evenly;
-    // padding-bottom: 1em;
     font-weight: 500;
 
     .symbol {
@@ -66,15 +65,46 @@ form {
     display: flex;
     flex-direction: column;
     gap: 1em;
-    padding: 1em 0;
+    padding: 0 0 1em; // or padding: 1em 0;
     margin: 0 0 1em;
+}
 
-    // border: 2px solid var(--ion-color-primary);
-    // border-radius: 10px;
-    // background-color: var(--ion-color-light);
+.select-all {
+    align-self: end;
+    padding: 0 16px;
+}
 
-    .select-all {
-        align-self: end;
-        padding: 0 16px;
+.selection {
+    overflow-y: auto;
+    max-height: 150px;
+    padding: 0;
+
+    &.valid {
+        border: 1.5px solid var(--ion-color-primary);
+        border-radius: 2px;
+    }
+    &.invalid {
+        border: 1.5px solid var(--ion-color-danger);
+        border-radius: 2px;
     }
 }
+
+.selection-error {
+    padding: 1em 1em 0;
+    opacity: 0;
+    transform: translateY(-1em);
+    transition: all 200ms ease-out;
+
+    &.show {
+        opacity: 1;
+        transform: translateY(0);
+        transition: all 200ms ease-in;
+    }
+}
+
+fieldset {
+    display: block;
+    margin: unset;
+    padding: unset;
+    border: unset;
+  }

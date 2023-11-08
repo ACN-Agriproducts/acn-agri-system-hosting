@@ -22,14 +22,14 @@
     grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     font-size: 0.9em;
 
-    &.add-item {
-        display: flex;
-        justify-content: flex-end;
+    // &.add-item {
+    //     display: flex;
+    //     justify-content: flex-end;
 
-        button {
-            margin: 10px;
-        }
-    }
+    //     button {
+    //         margin: 10px;
+    //     }
+    // }
 }
 
 .cell {
@@ -47,10 +47,6 @@
     }
 
     text-align: center;
-
-    &.num {
-        // justify-content: end;
-    }
 }
 
 .header-card {

@@ -28,45 +28,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public payments: Payment[];
   public unsubs: Unsubscribe[] = [];
   public permissions: any;
-
-  readonly testData = [
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-    {
-      type: "prepay",
-      amount: 500,
-      liquidation: [23].toString(),
-      proofOfPaymentDocs: []
-    },
-  ];
   
   constructor(
     private route: ActivatedRoute,
@@ -107,29 +68,19 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   }
 
   async addPayment() {
-    const newPayment = new Payment(doc(this.currentContract.getPaymentsCollection()));
-
     const dialogRef = this.dialog.open(SetPaymentDialogComponent, {
       data: {
-        payment: newPayment,
-        liquidations: this.liquidations.filter(l => l.status === "pending")
-        // .map(l => ({
-        //   ref: l.ref,
-        //   total: l.total,
-        //   date: l.date
-        // }))
-        ,
-        // contract: this.currentContract
+        payment: new Payment(doc(this.currentContract.getPaymentsCollection())),
+        liquidations: this.liquidations.filter(l => l.status === "pending"),
+        readonly: false
       },
-      minWidth: "550px"
+      minWidth: "650px"
     });
 
     const result = await lastValueFrom(dialogRef.afterClosed());
     if (!result) return;
-
     
-    newPayment.set().then(() => {
-      console.log(newPayment)
+    result.set().then(() => {
       this.snack.open("Payment Set", "success");
     }).catch(e => {
       console.error(e);
