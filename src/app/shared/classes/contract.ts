@@ -29,6 +29,7 @@ export class Contract extends FirebaseDocInterface {
     currency: string;
     currentDelivered: Mass;
     date: Date;
+    default_freight: number;
     delivery_dates: DeliveryDates;
     deliveryPlants: string[];
     deliveryType: string;
@@ -247,6 +248,7 @@ export class Contract extends FirebaseDocInterface {
         this.contractOwner = data.contractOwner;
         this.contractExecutive = data.contractExecutive;
         this.currency = data.currency;
+        this.default_freight = data.default_freight
         this.deliveryPlants = data.deliveryPlants;
         this.deliveryType = data.deliveryType;
         this.formOfPayment = data.formOfPayment;
@@ -312,6 +314,7 @@ export class Contract extends FirebaseDocInterface {
                 currency: data.currency ?? null,
                 currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
+                default_freight: data.default_freight ?? null,
                 deliveredHistory: data.deliveredHistory ?? null,
                 delivery_dates: data.delivery_dates ?? null,
                 deliveryPlants: data.deliveryPlants ?? null,
