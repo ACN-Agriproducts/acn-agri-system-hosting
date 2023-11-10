@@ -116,7 +116,7 @@ export interface FormField {
     type: string;
     width: number;
     class: string;
-    primitiveType?: "number" | "text" | "textarea" | "select";
+    primitiveType?: "number" | "text" | "textarea" | "select" | "autocomplete";
     selectOptions?: SelectOption[];
     suffix: string;
     prefix: string;
