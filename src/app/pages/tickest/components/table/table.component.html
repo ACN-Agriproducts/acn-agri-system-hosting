@@ -2,12 +2,19 @@
     <div>
         <mat-form-field appearance="outline">
             <mat-label>Type</mat-label>
-            <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets(date)">
+            <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
                 <mat-option [value]="true">In Tickets</mat-option>
                 <mat-option [value]="false">Out Tickets</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
+            <mat-label>Sort</mat-label>
+            <mat-select [(ngModel)]="sort" (selectionChange)="getTickets()">
+                <mat-option value="date">Date</mat-option>
+                <mat-option value="id">ID</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="sort == 'date'">
             <mat-label>Month and Year</mat-label>
             <input matInput [matDatepicker]="dp" [(ngModel)]="date">
             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
@@ -16,6 +23,12 @@
                             (monthSelected)="setMonthAndYear($event, dp)"
                             panelClass="example-month-picker">
             </mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="sort == 'id'">
+            <mat-label>Range</mat-label>
+            <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
+                <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
+            </mat-select>
         </mat-form-field>
     </div>
 </div>

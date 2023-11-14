@@ -15,6 +15,7 @@ import * as _moment from 'moment';
 import { Observable } from 'rxjs';
 const moment = _moment;
 
+declare type sortOptions = 'id' | 'date';
 
 @Component({
   selector: 'app-table',
@@ -32,6 +33,10 @@ export class TableComponent implements OnInit, OnDestroy {
   public inTicket: boolean = true;
   public date: Date;
   public ticketStep = 30;
+  public sort: sortOptions = 'date';
+
+  public idRangeList: number[];
+  public ticketRangeUpper: number;
 
   constructor(
     private popoverController: PopoverController,
@@ -47,21 +52,39 @@ export class TableComponent implements OnInit, OnDestroy {
 
     Plant.getPlantList(this.db, this.currentCompany).then(val => {
       this.plantList = val;
+      this.date = new Date();
 
-      this.getTickets(new Date());
+      this.getTickets();
     });
   }
 
-  async getTickets(date: Date){
+  async getTickets(){
     onSnapshot(Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), where('status', '==', 'pending'), where('in', '==', this.inTicket)), next => {
       this.scaleTickets = next.docs.sort((a, b) => a.data().id - b.data().id).map(t => t.data());
     });
 
-    this.infiniteScroll.disabled = false;
-    this.date = date;
+    const lastIdPromise = Ticket.getTickets(this.db, this.session.getCompany(), this.session.getPlant(), where('in', '==', this.inTicket), orderBy('id', 'desc'), limit(1));
+    const lastId = (await lastIdPromise)[0].id;
+    this.ticketRangeUpper = Math.floor(lastId / 100) + 1;
+    this.idRangeList = Array(this.ticketRangeUpper).fill(0).map((x, i) => this.ticketRangeUpper - i);
 
-    let startDate: Date = new Date(date.valueOf());
-    let endDate: Date = new Date(date.valueOf());
+    switch(this.sort) {
+      case 'date': {
+        this.ticketDateSort();
+        break;
+      }
+      case 'id': {
+        this.ticketIdSort();
+        break;
+      }
+    }
+  }
+
+  async ticketDateSort() {
+    this.infiniteScroll.disabled = false;
+
+    let startDate: Date = new Date(this.date.valueOf());
+    let endDate: Date = new Date(this.date.valueOf());
 
     startDate.setDate(1);
     endDate.setMonth(endDate.getMonth() + 1);
@@ -69,7 +92,7 @@ export class TableComponent implements OnInit, OnDestroy {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    const colRef = Ticket.getCollectionReference(this.db, this.currentCompany, this.currentPlant, 
+    const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(),
       where("in", "==", this.inTicket),
       where("dateOut", ">=", startDate),
       where("dateOut", "<=", endDate),
@@ -77,6 +100,19 @@ export class TableComponent implements OnInit, OnDestroy {
 
     if(this.paginator) this.paginator.end();
     this.paginator = new Pagination(colRef, this.ticketStep);
+  }
+
+  async ticketIdSort() {
+    this.infiniteScroll.disabled = true;
+
+    const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), 
+      where('in', '==', this.inTicket),
+      where('id', '<', this.ticketRangeUpper * 100), 
+      where('id', '>=', (this.ticketRangeUpper - 1) * 100), 
+      orderBy('id', 'desc'));
+
+    if(this.paginator) this.paginator.end();
+    this.paginator = new Pagination(colRef, 1000);
   }
 
   async infiniteTickets(event):Promise<void> {
@@ -139,7 +175,7 @@ export class TableComponent implements OnInit, OnDestroy {
     ctrlValue.year(normalizedMonthAndYear.year());
     this.date = ctrlValue.toDate();
     datepicker.close();
-    this.getTickets(this.date);
+    this.ticketDateSort();
   }
 
   ngOnDestroy(): void {
