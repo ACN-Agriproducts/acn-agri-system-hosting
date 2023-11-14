@@ -24,7 +24,7 @@ export class SelectClientComponent implements OnInit {
     this.clientsList = this.data;
     
     const permissions = this.session.getPermissions();
-    this.canCreateUser = permissions.admin || permissions.directory.addContact;
+    this.canCreateUser = permissions.admin || permissions.directory?.addContact;
   }
 
   onSearchFieldChange(event) {
