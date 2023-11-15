@@ -93,10 +93,10 @@ export class TableComponent implements OnInit, OnDestroy {
     endDate.setHours(23,59,59,59);
 
     const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(),
-      where("in", "==", this.inTicket),
-      where("dateOut", ">=", startDate),
-      where("dateOut", "<=", endDate),
-      orderBy("dateOut", "desc"));
+      where('in', '==', this.inTicket),
+      where('dateOut', '>=', startDate),
+      where('dateOut', '<=', endDate),
+      orderBy('dateOut', 'desc'));
 
     if(this.paginator) this.paginator.end();
     this.paginator = new Pagination(colRef, this.ticketStep);
