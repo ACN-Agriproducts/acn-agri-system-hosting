@@ -102,9 +102,7 @@ form {
     }
 }
 
-fieldset {
-    display: block;
-    margin: unset;
-    padding: unset;
-    border: unset;
-  }
+mat-dialog-actions {
+    display: flex;
+    justify-content: space-between;
+}

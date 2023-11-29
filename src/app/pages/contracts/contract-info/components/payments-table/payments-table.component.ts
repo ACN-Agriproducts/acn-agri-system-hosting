@@ -33,23 +33,22 @@ export class PaymentsTableComponent implements OnInit {
   public permissions: any;
   public paymentsTableFields: TableField[] = [
     {
-      key: "paidDocumentRefs",
+      key: "paidDocuments",
       header: "Liquidation(s)",
       dataType: "array",
       arrayType: "nested",
-      nestedType: "number",
-      nestedKey: "index",
+      nestedKey: "id"
     },
     {
       key: "date",
       header: "Date",
       dataType: "date"
     },
-    {
-      key: "type",
-      header: "Type",
-      dataType: "text-translate"
-    },
+    // {
+    //   key: "type",
+    //   header: "Type",
+    //   dataType: "text-translate"
+    // },
     {
       key: "paymentMethod",
       header: "method",
@@ -98,7 +97,7 @@ export class PaymentsTableComponent implements OnInit {
     this.dialog.open(SetPaymentDialogComponent, {
       data: {
         payment: { ...payment },
-        liquidations: this.liquidations.filter(l => l.status === "pending"),
+        liquidations: this.liquidations,
         readonly: true
       },
       minWidth: "650px"
@@ -114,16 +113,16 @@ export class PaymentsTableComponent implements OnInit {
           accountName: payment.accountName,
           paymentMethod: payment.paymentMethod,
           amount: payment.amount,
-          paidDocumentRefs: payment.paidDocumentRefs,
+          paidDocuments: payment.paidDocuments,
           notes: payment.notes
         },
-        liquidations: this.liquidations.filter(l => l.status === "pending"),
+        liquidations: this.liquidations,
         readonly: false
       },
       minWidth: "650px"
     });
 
-    const result = await lastValueFrom(dialogRef.afterClosed());
+    const result: Payment = await lastValueFrom(dialogRef.afterClosed());
     if (!result) return;
     
     payment.update({ ...result }).then(() => {
@@ -137,7 +136,7 @@ export class PaymentsTableComponent implements OnInit {
   cancelPayment(payment: Payment) {
     payment.update({ status: "cancelled" }).then(() => {
       console.log(payment)
-      this.snack.open("Payment Cancelled", "success");
+      this.snack.open("Payment Cancelled");
     }).catch(e => {
       console.error(e);
       this.snack.open("Failed to Cancel Payment", "error");

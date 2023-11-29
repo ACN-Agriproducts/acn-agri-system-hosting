@@ -180,7 +180,9 @@
             "check": "check",
             "wire": "wire",
             "method": "method",
-            "Method": "Method"
+            "Method": "Method",
+            "invalid amount": "Invalid Amount",
+            "Liquidations Available": "Liquidations Available"
         }
     },
     "directory": {

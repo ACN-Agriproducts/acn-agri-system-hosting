@@ -11,7 +11,7 @@ export class Payment extends FirebaseDocInterface {
     public amount: number;
     public date: Date;
     public notes: string;
-    public paidDocumentRefs: PaidDocument[];
+    public paidDocuments: PaidDocument[];
     public proofOfPaymentDocs: FileStorageInfo[];
     public status: Status;
     public type: typeof PAYMENT_TYPES[number];
@@ -33,7 +33,7 @@ export class Payment extends FirebaseDocInterface {
             this.amount = null;
             this.date = null;
             this.notes = null;
-            this.paidDocumentRefs = [];
+            this.paidDocuments = [];
             this.proofOfPaymentDocs = [];
             this.status = "pending";
             this.type = null;
@@ -48,7 +48,7 @@ export class Payment extends FirebaseDocInterface {
         this.amount = data.amount;
         this.date = data.date.toDate();
         this.notes = data.notes;
-        this.paidDocumentRefs = data.paidDocumentRefs;
+        this.paidDocuments = data.paidDocuments;
         this.proofOfPaymentDocs = data.proofOfPaymentDocs;
         this.status = data.status;
         this.type = data.type;
@@ -62,7 +62,7 @@ export class Payment extends FirebaseDocInterface {
                 amount: data.amount,
                 date: data.date,
                 notes: data.notes,
-                paidDocumentRefs: data.paidDocumentRefs,
+                paidDocuments: data.paidDocuments,
                 proofOfPaymentDocs: data.proofOfPaymentDocs,
                 status: data.status,
                 type: data.type,
@@ -110,5 +110,5 @@ export class Payment extends FirebaseDocInterface {
 export interface PaidDocument {
     ref: DocumentReference;
     amount: number;
-    id: string;
+    id: number | string;
 }

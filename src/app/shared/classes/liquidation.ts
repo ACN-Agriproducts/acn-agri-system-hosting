@@ -4,6 +4,7 @@ import { Contract } from "./contract";
 import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, Timestamp } from "@angular/fire/firestore";
 import { Mass, units } from "./mass";
 import { Status } from "./company";
+import { Price } from "./price";
 
 export type ReportTicket = {
     data: TicketInfo,
@@ -25,15 +26,17 @@ export class Liquidation extends FirebaseDocInterface {
     public supplementalDocs: FileStorageInfo[];
     public ticketRefs: DocumentReference<Ticket>[];
     public tickets: TicketInfo[];
-    public archived: boolean = false;
-    public total: number;
+    public archived: boolean;
     
-    public amountPaid: number; // A LIQUIDATION MIGHT NOT GET PAID ALL AT ONCE
+    public total: number;
+    public amountPaid: number;
+
+    public id: string;
 
     // FOLLOWING VALUES WILL BE USED TO HELP CALCULATE LIQUIDATION VALUES/TOTALS
     public productInfo: any; // TODO
-    public price: number; // TODO
-    public quantity: number; // TODO
+    public price: Price; // TODO
+    public quantity: Mass; // TODO
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
@@ -53,6 +56,8 @@ export class Liquidation extends FirebaseDocInterface {
             this.ticketRefs = [];
             this.tickets = [];
             this.total = 0;
+            this.archived = false;
+            this.amountPaid = 0;
 
             return;
         }
@@ -82,6 +87,8 @@ export class Liquidation extends FirebaseDocInterface {
             weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
         }));
         this.archived = data.archived;
+        this.amountPaid = data.amountPaid;
+        this.total = data.total;
     }
 
     public static converter = {
@@ -102,7 +109,9 @@ export class Liquidation extends FirebaseDocInterface {
                 supplementalDocs: data.supplementalDocs,
                 ticketRefs: data.ticketRefs,
                 tickets: rawTickets,
-                archived: data.archived
+                archived: data.archived,
+                amountPaid: data.amountPaid,
+                total: data.total
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Liquidation {
@@ -168,7 +177,7 @@ export class Liquidation extends FirebaseDocInterface {
     }
 
     public getTotal(contract: Contract): void {
-        this.total = (new LiquidationTotals(this.tickets, contract)).netToPay;
+        this.total = +(new LiquidationTotals(this.tickets, contract)).netToPay.toFixed(3);
     }
 }
 

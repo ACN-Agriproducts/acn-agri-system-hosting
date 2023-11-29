@@ -109,6 +109,8 @@ export class SetLiquidationPage implements OnInit {
     this.liquidation.ticketRefs = this.selectedTickets.map(t => t.data.ref.withConverter(Ticket.converter));
     this.liquidation.tickets = this.selectedTickets.map(t => t.data);
 
+    this.liquidation.getTotal(this.contract); // TO SAVE THE LIQUIDATION TOTAL VALUE
+
     this.liquidation.set().then(() => {
       this.tickets.forEach(ticket => {
         updateDoc(ticket.data.ref, {

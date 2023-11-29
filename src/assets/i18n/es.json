@@ -181,7 +181,9 @@
             "check": "cheque",
             "wire": "wire",
             "method": "método",
-            "Method": "Método"
+            "Method": "Método",
+            "Invalid Amount": "Cantidad Inválido",
+            "Liquidations Available": "Liquidaciones Disponibles"
         }
     },
     "directory": {

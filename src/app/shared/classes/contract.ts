@@ -79,9 +79,9 @@ export class Contract extends FirebaseDocInterface {
     progress: number;
 
     // LIQUIDATIONS AND PAYMENTS
-    outstanding: number; // or outstandingLiquidations or liquidationsOutstanding
-    paymentsMade: number; // or currentPaymentAmount
-    toBeDelivered: Mass; // or outstandingGrain or grainOutstanding
+    outstandingLiquidations: number; // or outstanding
+    paymentsMade: number;
+    outstandingGrain: Mass; // or toBeDelivered
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -192,6 +192,8 @@ export class Contract extends FirebaseDocInterface {
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
             this.grade = 2;
 
+            this.paymentsMade = 0;
+
             return;
         }
 
@@ -299,6 +301,8 @@ export class Contract extends FirebaseDocInterface {
             this.futurePriceInfo.priceSetPeriodBegin ??= null;
             this.futurePriceInfo.priceSetPeriodEnd ??= null;
         }
+
+        this.paymentsMade = data.paymentsMade;
     }
 
     public static converter = {
@@ -367,6 +371,8 @@ export class Contract extends FirebaseDocInterface {
                 type: data.type ?? null,
 
                 progress: data.progress ?? null,
+
+                paymentsMade: data.paymentsMade,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 
-import { Firestore, Unsubscribe, doc, onSnapshot, orderBy } from '@angular/fire/firestore';
+import { Firestore, Unsubscribe, doc, onSnapshot, orderBy, updateDoc } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
@@ -71,13 +71,13 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(SetPaymentDialogComponent, {
       data: {
         payment: new Payment(doc(this.currentContract.getPaymentsCollection())),
-        liquidations: this.liquidations.filter(l => l.status === "pending"),
+        liquidations: this.liquidations,
         readonly: false
       },
       minWidth: "650px"
     });
 
-    const result = await lastValueFrom(dialogRef.afterClosed());
+    const result: Payment = await lastValueFrom(dialogRef.afterClosed());
     if (!result) return;
     
     result.set().then(() => {
@@ -86,5 +86,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       console.error(e);
       this.snack.open("Failed to Set Payment", "error");
     });
+
+    // ALL LIQUIDATION.STATUS FROM "PENDING" ==> "PAID" WHEN PAYMENT.STATUS CHANGES FROM "PENDING" ==> "PAID"
   }
 }

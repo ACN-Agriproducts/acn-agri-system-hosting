@@ -46,7 +46,7 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async cancel(liquidation: Liquidation) {
-    if (!await this.confirm.openDialog("cancel this liquidation?")) return;
+    if (!await this.confirm.openDialog("cancel this liquidation")) return;
 
     liquidation.update({ status: "cancelled" })
     .then(() => {
@@ -54,7 +54,7 @@ export class LiquidationTableComponent implements OnInit {
       this.snack.open("Liquidation Cancelled");
     }).catch(e => {
       console.error(e);
-      this.snack.open("Error: Liquidation not Cancelled", "error");
+      this.snack.open("Failed to Cancel Liquidation", "error");
     });
   }
 
@@ -102,11 +102,11 @@ export class LiquidationTableComponent implements OnInit {
       supplementalDocs: updateData
     })
     .then(() => {
-      this.snack.open("Successfully updated Liquidation", "success");
+      this.snack.open("Successfully Updated Liquidation", "success");
     })
     .catch(e => {
       console.error(e);
-      this.snack.open("Failed to update Liquidation", "error");
+      this.snack.open("Failed to Update Liquidation", "error");
     });
   }
 

@@ -3,6 +3,7 @@
   <ol class="collection">
     <mat-card class="header-card">
       <li class="row">
+        <!-- <div class="cell">{{ t("Liquidation(s)") }}</div> -->
         <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
           <ng-container *ngIf="field.header">{{ t(field.header) | titlecase }}</ng-container>
         </div>
@@ -10,7 +11,12 @@
       </li>
     </mat-card>
     <mat-card class="body-card" *ngIf="data?.length > 0 else noItems">
-      <li class="row" *ngFor="let item of data; let index = index">
+      <li class="row {{ item.status }}" *ngFor="let item of data; let index = index">
+        <!-- <div class="cell">
+          <span *ngFor="let paidDocument of (data | as:payments[0]).paidDocuments; let last = last">
+            {{ paidDocument.ref }}
+          </span>
+        </div> -->
         <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
           <ng-container 
             *ngTemplateOutlet="
