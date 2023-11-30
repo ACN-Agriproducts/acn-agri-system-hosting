@@ -23,7 +23,6 @@ export class SetPaymentDialogComponent implements OnInit {
   public selectedTotal: number = 0;
   public difference: number = 0;
   public selectedLiquidations: (Liquidation | SetPaymentLiquidation)[] = [];
-  // public liquidations: SetPaymentLiquidation[];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: SetPaymentDialogData,
@@ -77,7 +76,6 @@ export class SetPaymentDialogComponent implements OnInit {
       if (pay <= 0) return;
 
       const outstanding = liq.total - liq.amountPaid;
-
       const amountToPay = pay >= outstanding ? outstanding : pay;
       pay -= amountToPay;
 

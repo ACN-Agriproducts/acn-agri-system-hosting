@@ -44,11 +44,6 @@ export class PaymentsTableComponent implements OnInit {
       header: "Date",
       dataType: "date"
     },
-    // {
-    //   key: "type",
-    //   header: "Type",
-    //   dataType: "text-translate"
-    // },
     {
       key: "paymentMethod",
       header: "method",

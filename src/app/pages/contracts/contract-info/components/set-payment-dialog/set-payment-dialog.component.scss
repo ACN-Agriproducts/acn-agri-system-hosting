@@ -23,6 +23,10 @@ mat-list-option {
     .mat-form-field-wrapper {
         padding: 0 !important;
     }
+
+    &.cancelled {
+        background-color: rgba(var(--ion-color-danger-rgb), 0.15) !important;
+    }
 }
 
 mat-selection-list {

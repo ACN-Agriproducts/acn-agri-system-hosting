@@ -14,7 +14,7 @@
       <li class="row {{ item.status }}" *ngFor="let item of data; let index = index">
         <!-- <div class="cell">
           <span *ngFor="let paidDocument of (data | as:payments[0]).paidDocuments; let last = last">
-            {{ paidDocument.ref }}
+            {{ paidDocument.ref.id }}
           </span>
         </div> -->
         <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
@@ -96,13 +96,15 @@
 
   <ng-template templateRef="array" let-field let-item="item">
     <i *ngIf="!(item.length > 0)">N/A</i>
-    <i *ngFor="let arrayItem of item; let last = last">
-      <ng-container *ngTemplateOutlet="
-        (field.arrayType ?? 'default') | templateRef; 
-        context { $implicit: field, item: arrayItem }
-        "
-      ></ng-container>
-      <span *ngIf="!last">,&nbsp;</span>
+    <i>
+      <ng-container *ngFor="let arrayItem of item; let last = last">
+        <ng-container *ngTemplateOutlet="
+          (field.arrayType ?? 'default') | templateRef;
+          context { $implicit: field, item: arrayItem }
+          "
+        ></ng-container>
+        <ng-container *ngIf="!last">,&nbsp;</ng-container>
+      </ng-container>
     </i>
   </ng-template>
 

@@ -66,6 +66,7 @@
           {{ t('Select All') }}
         </mat-checkbox> -->
         <div>
+          <!-- <mat-card class="selection"> -->
           <mat-card class="selection"
             [class.valid]="paymentForm.controls['paidDocuments']?.dirty && !paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected"
             [class.invalid]="paymentForm.controls['paidDocuments']?.dirty && paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected"
@@ -76,12 +77,12 @@
               (ngModelChange)="paidDocumentsChange()"
               name="paidDocuments"
               [disabled]="data.readonly"
-              [availableSelection]="data.liquidations"
             >
               <mat-list-option #option *ngFor="let liq of data.liquidations; let index = index"
                 [value]="liq"
                 labelPosition="after"
                 [disabled]="(liq.status !== 'pending' || (liq.total - liq.amountPaid) === 0) && !(liq | as:SETPAYMENTLIQUIDATION).selected"
+                [class.cancelled]="liq.status==='cancelled'"
               >
                 <div class="display-liquidation">
                   <span>{{ index + 1 }}</span>
