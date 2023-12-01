@@ -3,15 +3,15 @@
   <ol class="collection">
     <mat-card class="header-card">
       <li class="row">
-        <!-- <div class="cell">{{ t("Liquidation(s)") }}</div> -->
         <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
           <ng-container *ngIf="field.header">{{ t(field.header) | titlecase }}</ng-container>
         </div>
+        <div class="cell">{{ t("Proof of Payment") }}</div>
         <div class="cell"></div>
       </li>
     </mat-card>
     <mat-card class="body-card" *ngIf="data?.length > 0 else noItems">
-      <li class="row {{ item.status }}" *ngFor="let item of data; let index = index">
+      <li class="row" [class]="item.status" *ngFor="let item of data; let index = index">
         <!-- <div class="cell">
           <span *ngFor="let paidDocument of (data | as:payments[0]).paidDocuments; let last = last">
             {{ paidDocument.ref.id }}
@@ -24,6 +24,14 @@
               context: { $implicit: field, item: item[field.key] }
             "
           ></ng-container>
+        </div>
+        <div class="cell button">
+          <button mat-icon-button 
+            [color]="item.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'" 
+            (click)="uploadProof(item)"
+          >
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
         </div>
         <div class="cell button">
           <button mat-icon-button [matMenuTriggerFor]="menu">

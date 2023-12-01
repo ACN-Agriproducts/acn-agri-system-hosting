@@ -6,6 +6,9 @@ import { SetPaymentDialogComponent } from '../set-payment-dialog/set-payment-dia
 import { Liquidation } from '@shared/classes/liquidation';
 import { lastValueFrom } from 'rxjs';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { DialogUploadData, DocumentUploadDialogComponent } from '@shared/components/document-upload-dialog/document-upload-dialog.component';
+import { updateDoc } from '@angular/fire/firestore';
+import { TranslocoService } from '@ngneat/transloco';
 
 // TYPES THAT REUSABLE TABLE WOULD USE
 type TableDataType = "number" | "button" | "text" | "text-translate" | "date" | "nested" | "array";
@@ -29,6 +32,7 @@ export type TableField = {
 export class PaymentsTableComponent implements OnInit {
   @Input() payments: Payment[];
   @Input() liquidations: Liquidation[];
+  @Input() contractId: number;
 
   public permissions: any;
   public paymentsTableFields: TableField[] = [
@@ -54,14 +58,14 @@ export class PaymentsTableComponent implements OnInit {
       header: "Amount",
       dataType: "number"
     },
-    {
-      key: "proofOfPaymentDocs",
-      header: "Proof of Payment",
-      dataType: "button",
-      icon: "cloud_upload",
-      iconColor: "accent",
-      action: this.test
-    }
+    // {
+    //   key: "proofOfPaymentDocs",
+    //   header: "Proof of Payment",
+    //   dataType: "button",
+    //   icon: "cloud_upload",
+    //   iconColor: "accent",
+    //   action: this.uploadProof
+    // }
   ];
 
   // INPUTS/PROPERTIES FOR SIMULATING A REUSABLE TABLE
@@ -72,6 +76,7 @@ export class PaymentsTableComponent implements OnInit {
     private session: SessionInfo,
     private dialog: MatDialog,
     private snack: SnackbarService,
+    private transloco: TranslocoService
   ) {}
 
   ngOnInit() {
@@ -139,7 +144,35 @@ export class PaymentsTableComponent implements OnInit {
   }
 
   archivePayment(payment: Payment) {
+    // TODO
+  }
 
+  async uploadProof(payment: Payment) {
+    const dialogData: DialogUploadData = {
+      docType: this.transloco.translate("contracts.info.Proof of Payment"),
+      locationRef: `/companies/${this.session.getCompany()}/contracts/${this.contractId}/payments/${payment.ref.id}/proofs-of-payment`,
+      files: payment.proofOfPaymentDocs.map(doc => ({ ...doc, url: null, dropfile: null, contentType: null })),
+      uploadable: payment.status !== "cancelled"
+    };
+
+    const dialogRef = this.dialog.open(DocumentUploadDialogComponent, {
+      data: dialogData,
+      autoFocus: false
+    });
+    const updateData = await lastValueFrom(dialogRef.afterClosed());
+    if (!updateData || !dialogData.uploadable) return;
+
+    updateDoc(payment.ref, {
+      proofOfPaymentDocs: updateData,
+      status: "paid"
+    })
+    .then(() => {
+      this.snack.open("Successfully Updated Payment", "success");
+    })
+    .catch(e => {
+      console.error(e);
+      this.snack.open("Failed to Update Payment", "error");
+    });
   }
   
 }

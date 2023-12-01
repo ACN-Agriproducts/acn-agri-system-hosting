@@ -74,18 +74,13 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async uploadDocuments(liquidation: Liquidation) {
-    const docType = this.transloco.translate("contracts.info.Supplemental");
-
-    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}`;
-    locationRef += `/${docType.toLocaleLowerCase().replace(/\s+/g, "-")}`;
-      
-    const files = liquidation.supplementalDocs.map(doc => 
-      ({ ...doc, url: null, dropfile: null, contentType: null })
-    );
+    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}/supplemental-documents`;
+    
+    const files = liquidation.supplementalDocs.map(doc => ({ ...doc, url: null, dropfile: null, contentType: null }));
     const uploadable = liquidation.status !== 'cancelled';
 
     const dialogData: DialogUploadData = {
-      docType,
+      docType: this.transloco.translate("contracts.info.Supplemental"),
       locationRef,
       files,
       uploadable

@@ -28,7 +28,7 @@
               <mat-card-subtitle>{{ t('Payments') }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
-              <app-payments-table [payments]="payments" [liquidations]="liquidations" scroll></app-payments-table>
+              <app-payments-table [payments]="payments" [liquidations]="liquidations" [contractId]="currentContract.id" scroll></app-payments-table>
             </mat-card-content>
             <mat-card-actions [align]="'end'">
               <button mat-button color="primary" (click)="addPayment()">

@@ -50,11 +50,6 @@ export class SetPaymentDialogComponent implements OnInit {
     });
   }
 
-  test() {
-    console.log(this.data)
-    console.log(this.paidDocuments?.nativeElement?.selectedOptions)
-  }
-
   amountChange(value: any) {
     this.data.payment.amount = value;
     this.difference = this.data.payment.amount - this.selectedTotal;
