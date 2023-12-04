@@ -109,4 +109,9 @@ button.mat-menu-item {
     min-width: 150px;
 }
 
-
+.array {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: start;
+    gap: 10px;
+}

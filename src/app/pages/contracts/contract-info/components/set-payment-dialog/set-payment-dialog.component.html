@@ -14,7 +14,7 @@
             name="type"
             [validPaymentType]="data.liquidations.length"
             required
-            [disabled]="data.readonly"
+            [readonly]="data.readonly"
           >
             <mat-option *ngFor="let paymentType of PAYMENT_TYPES" [value]="paymentType">{{ t(paymentType) | titlecase }}</mat-option>
           </mat-select>
@@ -22,7 +22,7 @@
         </mat-form-field> -->
         <mat-form-field appearance="fill">
           <mat-label>{{ t('Date') }}</mat-label>
-          <input matInput [(ngModel)]="data.payment.date" [matDatepicker]="picker" name="date" required [disabled]="data.readonly">
+          <input matInput [(ngModel)]="data.payment.date" [matDatepicker]="picker" name="date" required [readonly]="data.readonly">
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
@@ -32,12 +32,13 @@
       <div class="form-field-row">
         <mat-form-field appearance="fill">
           <mat-label>{{ t('Account Name') }}</mat-label>
-          <input matInput [(ngModel)]="data.payment.accountName" name="accountName" required [disabled]="data.readonly">
+          <input matInput [(ngModel)]="data.payment.accountName" name="accountName" required [readonly]="data.readonly">
           <mat-error>{{t ('Required') }}</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" #select>
           <mat-label>{{ t('Payment Method') }}</mat-label>
-          <mat-select [(ngModel)]="data.payment.paymentMethod" name="method" required [disabled]="data.readonly">
+          <input matInput *ngIf="data.readonly" [readonly]="true" [value]="data.payment.paymentMethod | titlecase">
+          <mat-select [(ngModel)]="data.payment.paymentMethod" name="method" required *ngIf="!data.readonly">
             <mat-option *ngFor="let method of PAYMENT_METHODS" [value]="method">{{ t(method) | titlecase }}</mat-option>
           </mat-select>
           <mat-error>{{t ('Required') }}</mat-error>
@@ -51,12 +52,11 @@
           type="number"
           name="amount"
           required
-          [disabled]="data.readonly"
+          [readonly]="data.readonly"
         >
         <span matPrefix>$&nbsp;</span>
         <mat-error *ngIf="paymentForm.controls['amount']?.errors?.required">{{ t('Required') }}</mat-error>
       </mat-form-field>
-      <!-- <div class="select-liquidations" *ngIf="data.payment.type==='default' && data.liquidations.length > 0"> -->
       <div class="select-liquidations" *ngIf="data.liquidations.length > 0">
         <!-- <mat-checkbox class="select-all"
           (change)="$event.checked ? paidDocuments.selectAll() : paidDocuments.deselectAll()"
@@ -66,7 +66,6 @@
           {{ t('Select All') }}
         </mat-checkbox> -->
         <div>
-          <!-- <mat-card class="selection"> -->
           <mat-card class="selection"
             [class.valid]="paymentForm.controls['paidDocuments']?.dirty && !paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected"
             [class.invalid]="paymentForm.controls['paidDocuments']?.dirty && paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected"
@@ -107,7 +106,7 @@
       </div>
       <mat-form-field appearance="fill" class="notes">
         <mat-label>{{ t('Notes') }}</mat-label>
-        <textarea matInput [(ngModel)]="data.payment.notes" name="notes" [disabled]="data.readonly"></textarea>
+        <textarea matInput [(ngModel)]="data.payment.notes" name="notes" [readonly]="data.readonly"></textarea>
       </mat-form-field>
     </form>
   </mat-dialog-content>

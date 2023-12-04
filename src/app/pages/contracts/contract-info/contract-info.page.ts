@@ -86,7 +86,5 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       console.error(e);
       this.snack.open("Failed to Set Payment", "error");
     });
-
-    // ALL LIQUIDATION.STATUS FROM "PENDING" ==> "PAID" WHEN PAYMENT.STATUS CHANGES FROM "PENDING" ==> "PAID"
   }
 }

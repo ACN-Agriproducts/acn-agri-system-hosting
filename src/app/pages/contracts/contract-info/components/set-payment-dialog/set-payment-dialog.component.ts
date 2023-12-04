@@ -1,11 +1,10 @@
 import { Component, Directive, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormGroup, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList } from '@angular/material/list';
 import { Status } from '@shared/classes/company';
 import { Liquidation, TicketInfo } from '@shared/classes/liquidation';
 import { PAYMENT_METHODS, PAYMENT_TYPES, PaidDocument, Payment } from '@shared/classes/payment';
-import { Ticket } from '@shared/classes/ticket';
 import { DocumentReference } from 'firebase/firestore';
 
 @Component({
@@ -16,7 +15,7 @@ import { DocumentReference } from 'firebase/firestore';
 export class SetPaymentDialogComponent implements OnInit {
   @ViewChild('paidDocuments') paidDocuments: ElementRef<MatSelectionList>;
 
-  readonly PAYMENT_TYPES = PAYMENT_TYPES;
+  // readonly PAYMENT_TYPES = PAYMENT_TYPES;
   readonly PAYMENT_METHODS = PAYMENT_METHODS;
   readonly SETPAYMENTLIQUIDATION: SetPaymentLiquidation;
 
@@ -106,7 +105,8 @@ interface SetPaymentLiquidation {
   date: Date;
   ref: DocumentReference;
   selected: boolean;
-  tickets: TicketInfo[]
+  tickets: TicketInfo[],
+  id: number;
 }
 
 @Directive({

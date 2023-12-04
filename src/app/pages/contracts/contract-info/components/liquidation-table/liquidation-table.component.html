@@ -3,7 +3,7 @@
   <ol class="collection">
     <mat-card class="header-card">
       <li class="row">
-        <div class="cell">#</div>
+        <!-- <div class="cell">#</div> -->
         <div class="cell">{{ t('tickets') | titlecase }}</div>
         <div class="cell">{{ t('Date') | titlecase }}</div>
         <div class="cell">{{ t('status') | titlecase }}</div>
@@ -15,7 +15,7 @@
     </mat-card>
     <mat-card class="body-card" *ngIf="liquidations?.length!==0 else noItems">
       <li class="row" *ngFor="let liquidation of liquidations; let index = index">
-        <div class="cell">{{ index + 1 }}</div>
+        <!-- <div class="cell">{{ (index + 'A') | titlecase }}</div> -->
         <div class="cell ticket-ids">
           <i *ngFor="let id of liquidation.tickets | ticketIds; let last = last">
             <span>{{ id }}</span>
