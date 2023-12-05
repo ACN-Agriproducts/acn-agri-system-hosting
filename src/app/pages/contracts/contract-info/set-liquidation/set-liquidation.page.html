@@ -27,7 +27,7 @@
         <div 
           class="table-row body" 
           [class.even]="odd" 
-          [class.disabled]="ticket.data.status==='pending'&&!editingTickets?.includes(ticket)" 
+          [class.disabled]="(ticket.data.status==='pending' || ticket.data.status==='paid')&&!editingTickets?.includes(ticket)" 
           *ngFor="let ticket of tickets; let odd = odd"
           (click)="checkbox.toggle(); $event.stopPropagation()"
         >

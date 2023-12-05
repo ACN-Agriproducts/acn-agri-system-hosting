@@ -173,6 +173,7 @@ export class Liquidation extends FirebaseDocInterface {
             tare: ticket.tare,
             weight: ticket.weight,
             weightDiscounts: ticket.weightDiscounts,
+            original_weight: ticket.original_weight
         };
     }
 
@@ -198,7 +199,7 @@ export class LiquidationTotals {
         tickets.forEach(ticket => {
             this.gross = this.gross.add(ticket.gross);
             this.tare = this.tare.add(ticket.tare);
-            this.net = this.net.add(ticket.net);
+            this.net = this.net.add(contract.paymentTerms.origin === "client-scale" && contract.type === "purchase" ? ticket.original_weight : ticket.net);
 
             for (const key of Object.keys(ticket.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);
@@ -235,6 +236,7 @@ export interface TicketInfo {
     tare: Mass;
     weight: number;
     weightDiscounts: WeightDiscounts;
+    original_weight: Mass;
 }
 
 
