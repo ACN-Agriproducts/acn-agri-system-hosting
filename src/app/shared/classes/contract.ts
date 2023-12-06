@@ -79,7 +79,7 @@ export class Contract extends FirebaseDocInterface {
     progress: number;
 
     // LIQUIDATIONS AND PAYMENTS
-    outstandingLiquidations: number; // or outstanding
+    outstanding: number; // or outstandingLiquidations
     paymentsMade: number;
     outstandingGrain: Mass; // or toBeDelivered
 

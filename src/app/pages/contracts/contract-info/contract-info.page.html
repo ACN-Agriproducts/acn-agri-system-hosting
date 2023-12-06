@@ -2,6 +2,14 @@
   <app-header-toolbar [titulo]="t('contract') + ' ' + (currentContract?.id ?? '')"></app-header-toolbar>
 
   <ion-content class="ion-padding">
+    <button mat-icon-button 
+      id="open-contract-button" 
+      color="primary" 
+      (click)="openContract()" 
+      matTooltip="Open Contract"
+    >
+      <mat-icon>open_in_new</mat-icon>
+    </button>
     <div class="flex-content" *ngIf="ready">
       <div class="info-section">
         <app-contract-form id="contract-form" *ngIf="currentContract" [contract]="currentContract"></app-contract-form>

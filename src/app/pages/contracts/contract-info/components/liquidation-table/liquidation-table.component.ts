@@ -59,7 +59,7 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public openLiquidation(liquidation: Liquidation) {
-    const dialog = this.dialog.open(LiquidationDialogComponent, {
+    this.dialog.open(LiquidationDialogComponent, {
       data: {
         selectedTickets: liquidation.tickets,
         contract: this.contract,

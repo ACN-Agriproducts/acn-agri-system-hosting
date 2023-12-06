@@ -11,6 +11,7 @@ import { Payment } from '@shared/classes/payment';
 import { MatDialog } from '@angular/material/dialog';
 import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
 import { lastValueFrom } from 'rxjs';
+import { ContractDialogComponent } from 'src/app/modules/contract-printables/contract-dialog/contract-dialog.component';
 
 @Component({
   selector: 'app-contract-info',
@@ -85,6 +86,16 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     }).catch(e => {
       console.error(e);
       this.snack.open("Failed to Set Payment", "error");
+    });
+  }
+
+  openContract() {
+    this.dialog.open(ContractDialogComponent, {
+      data: this.currentContract,
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
     });
   }
 }
