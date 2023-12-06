@@ -94,7 +94,7 @@ export class Ticket extends FirebaseDocInterface{
         this.dateIn = data.dateIn.toDate();
         this.dateOut = data.dateOut.toDate();
         this.discount = data.discount;
-        this.driver = data.driver;
+        this.driver = data.driver ?? '';
         this.dryWeight = new Mass(data.dryWeight, unit);
         this.dryWeightPercent = data.dryWeightPercent;
         this.foreignMatter = data.foreignMatter;

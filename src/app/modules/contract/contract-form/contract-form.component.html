@@ -147,6 +147,22 @@
 
     <input 
       matInput 
+      *ngSwitchCase="'autocomplete'"
+      [(ngModel)]="contract[data.fieldName]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
+      type="text"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName)"
+      (focusout)="selectedFieldEvent.emit(null)"
+      [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.label">
+        {{option.label}}
+      </mat-option>
+    </mat-autocomplete>
+      
+    <input 
+      matInput 
       *ngSwitchDefault 
       [(ngModel)]="contract[data.fieldName]"
       (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
@@ -206,6 +222,22 @@
       [disabled]="contract.status != 'pending'"
       (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
       (focusout)="selectedFieldEvent.emit(null)">
+
+    <input 
+      matInput 
+      *ngSwitchCase="'autocomplete'"
+      [(ngModel)]="contract[data.fieldName][data.nestedField]"
+      (ngModelChange)="fieldChange(data.fieldName, data.nestedField)"
+      type="text"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit(data.fieldName + '.' + data.nestedField)"
+      (focusout)="selectedFieldEvent.emit(null)"
+      [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of data.selectOptions" [value]="option.label">
+        {{option.label}}
+      </mat-option>
+    </mat-autocomplete>
 
     <input 
       matInput 
