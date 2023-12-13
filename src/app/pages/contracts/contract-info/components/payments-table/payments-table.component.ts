@@ -164,7 +164,7 @@ export class PaymentsTableComponent implements OnInit {
 
     updateDoc(payment.ref, {
       proofOfPaymentDocs: updateData,
-      status: "paid"
+      status: updateData.length > 0 ? "paid" : "pending"
     })
     .then(() => {
       this.snack.open("Successfully Updated Payment", "success");

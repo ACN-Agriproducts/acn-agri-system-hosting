@@ -182,7 +182,9 @@
             "method": "method",
             "Method": "Method",
             "invalid amount": "Invalid Amount",
-            "Liquidations Available": "Liquidations Available"
+            "Liquidations Available": "Liquidations Available",
+            "View Contract": "View Contract",
+            "Grain": "Grain"
         }
     },
     "directory": {

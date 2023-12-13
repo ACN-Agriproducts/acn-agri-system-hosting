@@ -102,8 +102,8 @@
             "new liquidation": "nuevo liquidación",
             "No Items to Display": "No Hay Documentos Para Mostrar",
             "options": "opciones",
-            "payments": "payments",
-            "Payments": "Payments",
+            "payments": "pagos",
+            "Payments": "Pagos",
             "Peso Vol.": "Peso Vol.",
             "preview": "vista previa",
             "Preview": "Vista Previa",
@@ -183,7 +183,9 @@
             "method": "método",
             "Method": "Método",
             "Invalid Amount": "Cantidad Inválido",
-            "Liquidations Available": "Liquidaciones Disponibles"
+            "Liquidations Available": "Liquidaciones Disponibles",
+            "View Contract": "Ver Contrato",
+            "Grain": "Grano"
         }
     },
     "directory": {

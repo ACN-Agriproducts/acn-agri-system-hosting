@@ -6,7 +6,7 @@
       id="open-contract-button" 
       color="primary" 
       (click)="openContract()" 
-      matTooltip="Open Contract"
+      [matTooltip]="t('View Contract')"
     >
       <mat-icon>open_in_new</mat-icon>
     </button>
@@ -61,6 +61,7 @@
             <app-truckers-form [contract]="currentContract"></app-truckers-form>
           </mat-card-content>
         </mat-card>
+        <app-contract-chart-card [contractChartData]="contractChartData"></app-contract-chart-card>
       </div>
       <mat-card id="printable-contract">
         <mat-card-header>

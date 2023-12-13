@@ -19,6 +19,8 @@ import { ContractPrintablesModule } from 'src/app/modules/contract-printables/co
 import { LiquidationTableComponent, TicketIdsPipe } from './components/liquidation-table/liquidation-table.component';
 import { PaymentsTableComponent } from './components/payments-table/payments-table.component';
 import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './components/set-payment-dialog/set-payment-dialog.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ContractChartCardComponent } from './components/contract-chart-card/contract-chart-card.component';
 
 @NgModule({
   imports: [
@@ -32,6 +34,7 @@ import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './com
     ReactiveFormsModule,
     ContractModule,
     ContractPrintablesModule,
+    NgxChartsModule
   ],
   declarations: [
     ContractInfoPage,
@@ -43,7 +46,8 @@ import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './com
     TicketIdsPipe,
     PaymentsTableComponent,
     SetPaymentDialogComponent,
-    ValidPaymentSelectionDirective
+    ValidPaymentSelectionDirective,
+    ContractChartCardComponent
   ]
 })
 export class ContractInfoPageModule {}

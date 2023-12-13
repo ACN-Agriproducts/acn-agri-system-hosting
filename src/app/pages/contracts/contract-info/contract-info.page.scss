@@ -28,6 +28,10 @@
     max-height: max-content;
 }
 
+app-contract-chart-card {
+    max-height: 300px;
+}
+
 ::ng-deep {
     div.wrapper {
         overflow: auto;

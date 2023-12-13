@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Contract } from "@shared/classes/contract";
 import { Ticket } from '@shared/classes/ticket';
 
-import { Firestore, Unsubscribe, doc, onSnapshot, orderBy, updateDoc } from '@angular/fire/firestore';
+import { Firestore, Unsubscribe, doc, orderBy } from '@angular/fire/firestore';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { ContractDialogComponent } from 'src/app/modules/contract-printables/contract-dialog/contract-dialog.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-contract-info',
@@ -29,13 +30,15 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public payments: Payment[];
   public unsubs: Unsubscribe[] = [];
   public permissions: any;
-  
+  public contractChartData: any;
+
   constructor(
     private route: ActivatedRoute,
     private db: Firestore,
     private snack: SnackbarService,
     private session: SessionInfo,
     private dialog: MatDialog,
+    private transloco: TranslocoService
     ) { }
 
   ngOnInit() {
@@ -44,24 +47,49 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.currentCompany = this.session.getCompany();
     this.permissions = this.session.getPermissions();
 
-    Contract.getDocById(this.db, this.currentCompany, this.type == 'purchase', this.id).then(async contract => {
-      this.currentContract = contract;
-      this.ticketList = await contract.getTickets();
+    // Contract.getDocById(this.db, this.currentCompany, this.id).then(async contract => {
+    //   this.currentContract = contract;
+    //   this.ticketList = await contract.getTickets();
 
-      this.unsubs.push(contract.getLiquidationsSnapshot(result => {
+    //   this.unsubs.push(contract.getLiquidationsSnapshot(result => {
+    //     this.liquidations = result.docs.map(qds => {
+    //       const liquidation = qds.data();
+    //       liquidation.getTotal(contract);
+    //       return liquidation;
+    //     });
+    //   }, orderBy('date', 'asc')));
+
+    //   this.unsubs.push(contract.getPaymentsSnapshot(result => {
+    //     this.payments = result.docs.map(qds => qds.data());
+    //   }, orderBy('date', 'asc')));
+
+    //   this.ready = true;
+    // });
+
+    this.unsubs.push(Contract.getSnapshotById(this.db, this.currentCompany, this.id, async doc => {
+      this.currentContract = doc.data();
+      this.ticketList = await this.currentContract.getTickets();
+
+      this.unsubs.push(this.currentContract.getLiquidationsSnapshot(result => {
         this.liquidations = result.docs.map(qds => {
           const liquidation = qds.data();
-          liquidation.getTotal(contract);
+          liquidation.getTotal(this.currentContract);
           return liquidation;
         });
       }, orderBy('date', 'asc')));
-
-      this.unsubs.push(contract.getPaymentsSnapshot(result => {
+  
+      this.unsubs.push(this.currentContract.getPaymentsSnapshot(result => {
         this.payments = result.docs.map(qds => qds.data());
       }, orderBy('date', 'asc')));
-      
+
+      this.contractChartData = [
+        this.currentContract.liquidations, 
+        this.currentContract.paymentsMade, 
+        (this.currentContract.quantity.getMassInUnit("bu") - this.currentContract.currentDelivered.getMassInUnit("bu")) * this.currentContract.pricePerBushel
+      ];
+
       this.ready = true;
-    });
+    }));
   }
 
   ngOnDestroy() {
@@ -98,4 +126,5 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       height: "75vh"
     });
   }
+  
 }

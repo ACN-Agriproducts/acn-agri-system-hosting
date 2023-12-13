@@ -80,9 +80,9 @@ export class Contract extends FirebaseDocInterface {
     progress: number;
 
     // LIQUIDATIONS AND PAYMENTS
-    outstanding: number; // or outstandingLiquidations
+    liquidations: number;
     paymentsMade: number;
-    outstandingGrain: Mass; // or toBeDelivered
+    // toBeDelivered: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -193,7 +193,9 @@ export class Contract extends FirebaseDocInterface {
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
             this.grade = 2;
 
+            this.liquidations = 0;
             this.paymentsMade = 0;
+            // this.toBeDelivered = 0;
 
             return;
         }
@@ -304,7 +306,11 @@ export class Contract extends FirebaseDocInterface {
             this.futurePriceInfo.priceSetPeriodEnd ??= null;
         }
 
-        this.paymentsMade = data.paymentsMade;
+        this.liquidations = data.liquidations ?? 0;
+        this.paymentsMade = data.paymentsMade ?? 0;
+        
+        // FIGURE OUT WHERE this.currentDelivered IS CHANGED TO KNOW WHERE TO ADJUST TOBEDELIVERED ???
+        // this.toBeDelivered = data.toBeDelivered ?? (((this.quantity.getMassInUnit("bu") || 0) - (this.currentDelivered.getMassInUnit("bu") || 0)) * this.pricePerBushel);
     }
 
     public static converter = {
@@ -375,7 +381,9 @@ export class Contract extends FirebaseDocInterface {
 
                 progress: data.progress ?? null,
 
+                liquidations: data.liquidations,
                 paymentsMade: data.paymentsMade,
+                // toBeDelivered: data.toBeDelivered,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -525,8 +533,8 @@ export class Contract extends FirebaseDocInterface {
             });
     }
 
-    public static getDocById(db: Firestore, company: string, contractType: contractType, contractId: string): Promise<Contract> {
-        const docRef = doc(Contract.getCollectionReference(db, company, contractType), contractId)
+    public static getDocById(db: Firestore, company: string, contractId: string): Promise<Contract> {
+        const docRef = doc(Contract.getCollectionReference(db, company), contractId)
         return getDoc(docRef).then(result => {
             return result.data();
         });
@@ -633,6 +641,13 @@ export class Contract extends FirebaseDocInterface {
     ): Unsubscribe {
         const collectionQuery = query(this.getPaymentsCollection(), ...constraints);
         return onSnapshot(collectionQuery, onNext);
+    }
+
+    public static getSnapshotById(db: Firestore, company: string, contractId: string, 
+        onNext: (snapshot: DocumentSnapshot<Contract>) => void
+    ): Unsubscribe {
+        const docRef = doc(Contract.getCollectionReference(db, company), contractId)
+        return onSnapshot(docRef, onNext);
     }
 }
 

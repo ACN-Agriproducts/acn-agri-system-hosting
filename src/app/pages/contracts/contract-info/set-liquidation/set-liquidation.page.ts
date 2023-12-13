@@ -53,7 +53,7 @@ export class SetLiquidationPage implements OnInit {
   }
 
   ngOnInit() {
-    Contract.getDocById(this.db, this.session.getCompany(), this.type, this.id).then(async contract => {
+    Contract.getDocById(this.db, this.session.getCompany(), this.id).then(async contract => {
       this.contract = contract;
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
