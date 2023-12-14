@@ -83,9 +83,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       }, orderBy('date', 'asc')));
 
       this.contractChartData = [
+        (this.currentContract.quantity.getMassInUnit("bu") - this.currentContract.currentDelivered.getMassInUnit("bu")) * this.currentContract.pricePerBushel, 
         this.currentContract.liquidations, 
-        this.currentContract.paymentsMade, 
-        (this.currentContract.quantity.getMassInUnit("bu") - this.currentContract.currentDelivered.getMassInUnit("bu")) * this.currentContract.pricePerBushel
+        this.currentContract.paymentsMade
       ];
 
       this.ready = true;

@@ -13,3 +13,17 @@
     ></ngx-charts-bar-horizontal>
   </mat-card-content>
 </mat-card>
+
+<mat-card id="contract-chart">
+  <mat-card-content>
+    <ngx-charts-bar-horizontal-stacked
+      [results]="chartDataMulti"
+      [customColors]="stackedCustomColors"
+      [xAxis]="true"
+      [yAxis]="true"
+      xAxisLabel="$"
+      [showXAxisLabel]="true"
+      [barPadding]="50"
+    ></ngx-charts-bar-horizontal-stacked>
+  </mat-card-content>
+</mat-card>

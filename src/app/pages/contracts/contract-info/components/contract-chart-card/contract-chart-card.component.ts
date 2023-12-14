@@ -7,14 +7,31 @@ import { TranslocoService } from '@ngneat/transloco';
   styleUrls: ['./contract-chart-card.component.scss'],
 })
 export class ContractChartCardComponent implements OnInit {
-  @Input() contractChartData: any;
+  @Input() data: any;
 
   public colorScheme: any = {
-    domain: ["#FFBC04", "#61ad5e", "#437b40"]
+    domain: [
+      "#FFBC04", 
+      "#61ad5e", 
+      "#437b40"
+    ]
   };
   public chartData: {
     name: string,
     value: number
+  }[];
+
+  public stackedCustomColors: any = [
+    { name: "Paid", value: "#437b40" },
+    { name: "Pending", value: "#FFBC04" },
+    { name: "To Be Delivered", value: "#437b40" }
+  ];
+  public chartDataMulti: {
+    name: string,
+    series: {
+      name: string,
+      value: number
+    }[]
   }[];
 
 
@@ -23,28 +40,51 @@ export class ContractChartCardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.buildChartData(this.contractChartData);
+    this.buildChartData(this.data);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.buildChartData(this.contractChartData);
+    this.buildChartData(this.data);
   }
 
   buildChartData(data: any) {
     this.chartData = [
       {
-        name: this.transloco.translate("contracts.info.Liquidations"),
+        name: this.transloco.translate("contracts.info.Grain"),
         value: data[0],
       },
       {
-        name: this.transloco.translate("contracts.info.Payments"),
+        name: this.transloco.translate("contracts.info.Liquidations"),
         value: data[1]
       },
       {
-        name: this.transloco.translate("contracts.info.Grain"),
+        name: this.transloco.translate("contracts.info.Payments"),
         value: data[2]
       }
     ];
+
+    this.chartDataMulti = [
+      {
+        name: this.transloco.translate("contracts.info.Grain"),
+        series: [
+          { name: "To Be Delivered", value: data[0] },
+        ]
+      },
+      {
+        name: this.transloco.translate("contracts.info.Liquidations"),
+        series: [
+          { name: "Paid", value: 2500 },
+          { name: "Pending", value: data[1] }
+        ]
+      },
+      {
+        name: this.transloco.translate("contracts.info.Payments"),
+        series: [
+          { name: "Paid", value: 3000 },
+          { name: "Pending", value: data[2] }
+        ]
+      },
+    ]
   }
 
 }
