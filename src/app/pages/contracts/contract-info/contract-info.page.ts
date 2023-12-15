@@ -77,8 +77,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       
       this.contractChartData = {
         toBeDelivered: (this.currentContract.quantity.getMassInUnit("bu") - this.currentContract.currentDelivered.getMassInUnit("bu")) * this.currentContract.pricePerBushel, 
-        totalLiquidations: this.currentContract.totalLiquidations, 
-        totalPayments: this.currentContract.totalPayments,
         totalPaidLiquidations: 0,
         totalPendingLiquidations: 0,
         totalPaidPayments: 0,
