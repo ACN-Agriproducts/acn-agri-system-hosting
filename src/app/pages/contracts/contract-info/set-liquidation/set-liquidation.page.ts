@@ -58,7 +58,11 @@ export class SetLiquidationPage implements OnInit {
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
       if ((this.discountTables?.tables.length ?? 0) <= 0) {
-        this.snack.open("Warning: No Discount Tables Were Found", "warn");
+        this.snack.open("Warning: No Discount Tables Found", "warn");
+      }
+
+      if ((this.contract.price?.amount ?? 0) <= 0) {
+        this.snack.open("Warning: No Price for Contract Found", "warn");
       }
 
       this.tickets = (await contract.getTickets()).map(ticket => {
