@@ -16,11 +16,6 @@ export class ContractChartCardComponent implements OnInit {
       "#437b40"
     ]
   };
-  public chartData: {
-    name: string,
-    value: number
-  }[];
-
   public stackedCustomColors: any = [
     { name: "Paid", value: "#437b40" },
     { name: "Pending", value: "#FFBC04" },
@@ -48,43 +43,28 @@ export class ContractChartCardComponent implements OnInit {
   }
 
   buildChartData(data: any) {
-    this.chartData = [
-      {
-        name: this.transloco.translate("contracts.info.Grain"),
-        value: data[0],
-      },
-      {
-        name: this.transloco.translate("contracts.info.Liquidations"),
-        value: data[1]
-      },
-      {
-        name: this.transloco.translate("contracts.info.Payments"),
-        value: data[2]
-      }
-    ];
-
     this.chartDataMulti = [
       {
         name: this.transloco.translate("contracts.info.Grain"),
         series: [
-          { name: "To Be Delivered", value: data[0] },
+          { name: "To Be Delivered", value: data.toBeDelivered },
         ]
       },
       {
         name: this.transloco.translate("contracts.info.Liquidations"),
         series: [
-          { name: "Paid", value: 2500 },
-          { name: "Pending", value: data[1] }
+          { name: "Paid", value: data.totalPaidLiquidations },
+          { name: "Pending", value: data.totalPendingLiquidations }
         ]
       },
       {
         name: this.transloco.translate("contracts.info.Payments"),
         series: [
-          { name: "Paid", value: 3000 },
-          { name: "Pending", value: data[2] }
+          { name: "Paid", value: data.totalPaidPayments },
+          { name: "Pending", value: data.totalPendingPayments }
         ]
-      },
-    ]
+      }
+    ];
   }
 
 }

@@ -80,8 +80,8 @@ export class Contract extends FirebaseDocInterface {
     progress: number;
 
     // LIQUIDATIONS AND PAYMENTS
-    liquidations: number;
-    paymentsMade: number;
+    totalLiquidations: number;
+    totalPayments: number;
     // toBeDelivered: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
@@ -193,8 +193,8 @@ export class Contract extends FirebaseDocInterface {
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
             this.grade = 2;
 
-            this.liquidations = 0;
-            this.paymentsMade = 0;
+            this.totalLiquidations = 0;
+            this.totalPayments = 0;
             // this.toBeDelivered = 0;
 
             return;
@@ -306,8 +306,8 @@ export class Contract extends FirebaseDocInterface {
             this.futurePriceInfo.priceSetPeriodEnd ??= null;
         }
 
-        this.liquidations = data.liquidations ?? 0;
-        this.paymentsMade = data.paymentsMade ?? 0;
+        this.totalLiquidations = data.totalLiquidations ?? 0;
+        this.totalPayments = data.totalPayments ?? 0;
         
         // FIGURE OUT WHERE this.currentDelivered IS CHANGED TO KNOW WHERE TO ADJUST TOBEDELIVERED ???
         // this.toBeDelivered = data.toBeDelivered ?? (((this.quantity.getMassInUnit("bu") || 0) - (this.currentDelivered.getMassInUnit("bu") || 0)) * this.pricePerBushel);
@@ -381,8 +381,8 @@ export class Contract extends FirebaseDocInterface {
 
                 progress: data.progress ?? null,
 
-                liquidations: data.liquidations,
-                paymentsMade: data.paymentsMade,
+                totalLiquidations: data.totalLiquidations,
+                totalPayments: data.totalPayments,
                 // toBeDelivered: data.toBeDelivered,
             }
         },

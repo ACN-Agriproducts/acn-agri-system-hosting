@@ -1,21 +1,6 @@
 
 <mat-card id="contract-chart">
   <mat-card-content>
-    <ngx-charts-bar-horizontal
-      [results]="chartData"
-      [xAxis]="true"
-      [yAxis]="true"
-      xAxisLabel="$"
-      [showXAxisLabel]="true"
-      [scheme]="colorScheme"
-      [barPadding]="50"
-      [roundEdges]="false"
-    ></ngx-charts-bar-horizontal>
-  </mat-card-content>
-</mat-card>
-
-<mat-card id="contract-chart">
-  <mat-card-content>
     <ngx-charts-bar-horizontal-stacked
       [results]="chartDataMulti"
       [customColors]="stackedCustomColors"
@@ -24,6 +9,7 @@
       xAxisLabel="$"
       [showXAxisLabel]="true"
       [barPadding]="50"
+      [showDataLabel]="true"
     ></ngx-charts-bar-horizontal-stacked>
   </mat-card-content>
 </mat-card>

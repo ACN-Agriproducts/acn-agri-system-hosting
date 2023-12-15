@@ -3,3 +3,7 @@
     max-height: 300px;
     max-width: 945px;
 }
+
+svg:not(:root) {
+    overflow: none;
+}
