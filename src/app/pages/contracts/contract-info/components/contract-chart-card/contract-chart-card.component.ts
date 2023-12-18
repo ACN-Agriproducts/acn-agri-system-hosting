@@ -39,6 +39,7 @@ export class ContractChartCardComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log(changes)
     this.buildChartData(this.data);
   }
 

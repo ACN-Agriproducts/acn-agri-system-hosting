@@ -1,7 +1,12 @@
 
-#contract-chart mat-card-content {
+:host {
+    height: fit-content;
+}
+
+mat-card.contract-chart mat-card-content {
     max-height: 300px;
-    max-width: 945px;
+    max-width: 925px;
+    min-width: 500px;
 }
 
 svg:not(:root) {
