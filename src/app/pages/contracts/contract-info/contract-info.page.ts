@@ -28,14 +28,9 @@ export class ContractInfoPage implements OnInit, OnDestroy {
   public type: string;
   public liquidations: Liquidation[];
   public payments: Payment[];
-  public contractUnsub: Unsubscribe;
   public unsubs: Unsubscribe[] = [];
   public permissions: any;
   public contractChartData: any;
-  public totalPaidLiquidations: number = 0;
-  public totalPendingLiquidations: number = 0;
-  public totalPaidPayments: number = 0;
-  public totalPendingPayments: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,25 +46,6 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.id = this.route.snapshot.paramMap.get('id');
     this.currentCompany = this.session.getCompany();
     this.permissions = this.session.getPermissions();
-
-    // Contract.getDocById(this.db, this.currentCompany, this.id).then(async contract => {
-    //   this.currentContract = contract;
-    //   this.ticketList = await contract.getTickets();
-
-    //   this.unsubs.push(contract.getLiquidationsSnapshot(result => {
-    //     this.liquidations = result.docs.map(qds => {
-    //       const liquidation = qds.data();
-    //       liquidation.getTotal(contract);
-    //       return liquidation;
-    //     });
-    //   }, orderBy('date', 'asc')));
-
-    //   this.unsubs.push(contract.getPaymentsSnapshot(result => {
-    //     this.payments = result.docs.map(qds => qds.data());
-    //   }, orderBy('date', 'asc')));
-
-    //   this.ready = true;
-    // });
 
     this.unsubs.push(Contract.getSnapshotById(this.db, this.currentCompany, this.id, async doc => {
       this.currentContract = doc.data();

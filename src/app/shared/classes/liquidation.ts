@@ -123,17 +123,10 @@ export class Liquidation extends FirebaseDocInterface {
         return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(Liquidation.converter);
     }
 
-    public static getCollectionQuery(db: Firestore, company: string, contractRefId: string, 
-        ...constraints: QueryConstraint[]
-    ): Query<Liquidation> {
-        const collectionRef = Liquidation.getCollectionReference(db, company, contractRefId);
-        return query(collectionRef, ...constraints);
-    }
-
     public static getLiquidations(db: Firestore, company: string, contractRefId: string, 
         ...constraints: QueryConstraint[]
     ): Promise<Liquidation[]> {
-        const collectionQuery = Liquidation.getCollectionQuery(db, company, contractRefId, ...constraints);
+        const collectionQuery = query(Liquidation.getCollectionReference(db, company, contractRefId), ...constraints);
         return getDocs(collectionQuery).then(result => result.docs.map(qds => qds.data()));
     }
 
@@ -141,7 +134,7 @@ export class Liquidation extends FirebaseDocInterface {
         onNext: (snapshot: QuerySnapshot<Liquidation>) => void,
         ...constraints: QueryConstraint[]
     ): Unsubscribe {
-        const collectionQuery = Liquidation.getCollectionQuery(db, company, contractRefId, ...constraints);
+        const collectionQuery = query(Liquidation.getCollectionReference(db, company, contractRefId), ...constraints);
         return onSnapshot(collectionQuery, onNext);
     }
 
