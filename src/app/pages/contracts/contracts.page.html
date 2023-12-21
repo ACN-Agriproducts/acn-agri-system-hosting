@@ -182,12 +182,12 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{contract.price | pricePerUnit:null:contract.quantity | currency:'$'}}
+                                {{ ((contract.price | pricePerUnit:null:contract.quantity | currency:'$') ?? '-') + " / " + contract.price.unit }}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{ !contract.isOpen || contract.status == 'closed' ? ((contract.quantity | massInUnit: displayUnit) * (contract.price | pricePerUnit: displayUnit:contract.quantity) | currency) : '-'}}
+                                {{ !contract.isOpen || contract.status == 'closed' ? ((contract.quantity | massInUnit:contract.price.unit) * (contract.price | pricePerUnit:null:contract.quantity) | currency) : '-'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none" class="ion-hide-md-down">

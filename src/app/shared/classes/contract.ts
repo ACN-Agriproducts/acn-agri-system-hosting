@@ -79,10 +79,8 @@ export class Contract extends FirebaseDocInterface {
     deliveredHistory: { [date: string]: number };
     progress: number;
 
-    // LIQUIDATIONS AND PAYMENTS
     totalLiquidations: number;
     totalPayments: number;
-    // toBeDelivered: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -195,7 +193,6 @@ export class Contract extends FirebaseDocInterface {
 
             this.totalLiquidations = 0;
             this.totalPayments = 0;
-            // this.toBeDelivered = 0;
 
             return;
         }
@@ -307,10 +304,7 @@ export class Contract extends FirebaseDocInterface {
         }
 
         this.totalLiquidations = data.totalLiquidations ?? 0;
-        this.totalPayments = data.totalPayments ?? 0;
-        
-        // FIGURE OUT WHERE this.currentDelivered IS CHANGED TO KNOW WHERE TO ADJUST TOBEDELIVERED ???
-        // this.toBeDelivered = data.toBeDelivered ?? (((this.quantity.getMassInUnit("bu") || 0) - (this.currentDelivered.getMassInUnit("bu") || 0)) * this.pricePerBushel);
+        this.totalPayments = data.totalPayments ?? 0;        
     }
 
     public static converter = {
