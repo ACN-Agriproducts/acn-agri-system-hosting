@@ -181,8 +181,10 @@
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
-                            <ion-text class="item-text-price" color="dark">
-                                {{ ((contract.price | pricePerUnit:null:contract.quantity | currency:'$') ?? '-') + " / " + contract.price.unit }}
+                            <ion-text class="item-text-price" color="dark"
+                                [matTooltip]="getPriceTooltip(contract)"
+                                matTooltipClass="multiline-tooltip">
+                                {{ ((contract.price | pricePerUnit:null:contract.quantity | currency:'$') || '-') + " / " + contract.price.unit }}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
