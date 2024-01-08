@@ -1,11 +1,14 @@
 <app-header-toolbar titulo="Treasury"></app-header-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-    <div class="content-title" >
+    <div class="content-title">
         <ion-searchbar ></ion-searchbar>
         <ion-button >
             <!-- <ion-icon name="person-add-outline" slot="start"></ion-icon> -->
             <ion-text slot="end">New order</ion-text>
+        </ion-button>
+        <ion-button routerLink="./accounts">
+            <ion-text slot="end">Accounts</ion-text>
         </ion-button>
     </div>
     <app-table-treasury></app-table-treasury>

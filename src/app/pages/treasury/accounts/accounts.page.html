@@ -1,0 +1,14 @@
+<ion-header *transloco="let t, read: 'treasury.accounts'">
+  <app-header-toolbar [titulo]="t('Accounts')"></app-header-toolbar>
+</ion-header>
+
+<!-- KEEP WORKING ON WHERE TO PUT THE ACCOUNTS PAGE... MAKE A BIG CARD ICON/BUTTON LIKE IN REPORTS PAGE??? -->
+
+<ion-content>
+  <ion-button (click)="createAccount()">
+    <ion-text slot="end">New Account</ion-text>
+  </ion-button>
+  <ion-card *ngFor="let account of accounts | async">
+    <ion-text>{{ account.accountNumber || "No Number" }}</ion-text>
+  </ion-card>
+</ion-content>

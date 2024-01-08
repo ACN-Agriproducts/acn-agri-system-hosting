@@ -175,5 +175,12 @@
         "Destinations": "Destinations",
         "Add New": "Add New",
         "Destination": "Destination"
+    },
+    "treasury": {
+        "Treasury": "Treasury",
+        "accounts": {
+            "Accounts": "Accounts",
+            "Account": "Account"
+        }
     }
 }

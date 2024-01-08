@@ -176,5 +176,12 @@
         "Destinations": "Destinos",
         "Add New": "Agregar Nuevo",
         "Destination": "Destino"
+    },
+    "treasury": {
+        "Treasury": "Tesoreria",
+        "accounts": {
+            "Accounts": "Cuentas",
+            "Account": "Cuenta"
+        }
     }
 }
