@@ -12,6 +12,7 @@ import { PurchaseContractComponent } from './purchase-contract/purchase-contract
 import { ContractIdPipe, CurrencySplitPipe, ExchangeRateFieldPipe, NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable-contract-utilities.service';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { ContractDialogComponent } from './contract-dialog/contract-dialog.component';
 
 
 
@@ -31,7 +32,8 @@ import { SharedModule } from '@shared/shared.module';
     ExchangeRateFieldPipe,
     CurrencySplitPipe,
     FocusedFieldDirective,
-    ContractIdPipe
+    ContractIdPipe,
+    ContractDialogComponent
   ],
   exports: [
     PrintableContractComponent

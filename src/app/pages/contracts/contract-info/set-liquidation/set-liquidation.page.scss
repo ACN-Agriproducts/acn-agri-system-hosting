@@ -1,0 +1,76 @@
+div.table-row {
+    display: grid;
+    grid-template-columns: 6% 8% 6% 6% 6% 6% 6% 6% 10% 10% 10% 10% 10%;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.header {
+    font-weight: bold;
+    background-color: var(--ion-color-primary-light);
+    color: var(--ion-color-primary);
+    min-height: 3rem;
+}
+
+mat-form-field {
+    width: 80%;
+}
+
+ion-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.even {
+    background-color: var(--ion-color-light);
+}
+
+.selected-tickets-count {
+    color: gray;
+    font-size: 0.9em;
+    font-style: italic;
+    align-self: center;
+}
+
+.loading-spinner {
+	position: fixed;
+	bottom: 40px;
+	right: 30px;
+	z-index: 3;
+}
+
+.disabled {
+    color: rgba(0, 0, 0, 0.26);
+    cursor: default;
+    pointer-events: none;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.action-bar {
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+}
+
+.checkbox {
+    pointer-events: none;
+}
+
+.body {
+    min-height: 4rem;
+    position: relative;
+
+    .ripple-div-test {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+}

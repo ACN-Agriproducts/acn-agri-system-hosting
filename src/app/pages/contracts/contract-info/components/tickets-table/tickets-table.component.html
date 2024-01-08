@@ -1,6 +1,7 @@
 <div class='table-row' *transloco="let t, read: 'contracts.info'">
   <ion-item lines='none'><b>{{t('ID')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Date')}}</b></ion-item>
+  <ion-item lines='none'><b>{{t('Status')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Gross')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Tare')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Net')}}</b></ion-item>
@@ -8,6 +9,7 @@
 <div *ngFor="let ticket of ticketList" class='table-row'>
   <ion-item lines='none'><b>{{ticket.displayId}}</b></ion-item>
   <ion-item lines='none'>{{ticket.dateOut | date}}</ion-item>
+  <ion-item lines='none'>{{ ticket.status | titlecase }}</ion-item>
   <ion-item lines='none'>{{ticket.gross.get() | number}}</ion-item>
   <ion-item lines='none'>{{ticket.tare.get() | number}}</ion-item>
   <ion-item lines='none'>{{ticket.getNet().get() | number}}</ion-item>

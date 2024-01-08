@@ -4,6 +4,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
+export interface UploadDialogData {
+  docType: string;
+  hasDoc: boolean;
+  pdfRef: string;
+  uploadable: boolean;
+}
+
 @Component({
   selector: 'app-upload-document-dialog',
   templateUrl: './upload-document-dialog.component.html',
@@ -64,11 +71,4 @@ export class UploadDocumentDialogComponent implements OnInit {
       this.snack.open(error, 'error');
     });
   }
-}
-
-export interface UploadDialogData {
-  docType: string;
-  hasDoc: boolean;
-  pdfRef: string;
-  uploadable: boolean;
 }

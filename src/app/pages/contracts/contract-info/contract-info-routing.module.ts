@@ -7,7 +7,16 @@ const routes: Routes = [
   {
     path: '',
     component: ContractInfoPage
+  },
+  {
+    path: 'set-liquidation',
+    loadChildren: () => import('./set-liquidation/set-liquidation.module').then( m => m.SetLiquidationPageModule),
+  },
+  {
+    path: 'set-liquidation/:refId',
+    loadChildren: () => import('./set-liquidation/set-liquidation.module').then( m => m.SetLiquidationPageModule)
   }
+
 ];
 
 @NgModule({

@@ -1,0 +1,20 @@
+<mat-toolbar color="primary">
+  <div class="actions">
+    <button mat-icon-button 
+      ngxPrint
+      printSectionId="printable"
+      [useExistingCss]="true"
+      [printStyle]="printStyle"
+    >
+      <mat-icon>print</mat-icon>
+    </button>
+    <ng-content select="buttons"></ng-content>
+  </div>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="printable-wrapper">
+  <ng-content></ng-content>
+</div>
