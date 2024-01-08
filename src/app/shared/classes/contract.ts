@@ -1,4 +1,4 @@
-import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, serverTimestamp, SnapshotOptions, where } from "@angular/fire/firestore";
+import { collection, CollectionReference, doc, DocumentData, DocumentReference, DocumentSnapshot, Firestore, getCountFromServer, getDoc, getDocs, limit, onSnapshot, Query, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, serverTimestamp, SnapshotOptions, Unsubscribe, where } from "@angular/fire/firestore";
 import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -6,11 +6,13 @@ import { Mass } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
 import { ContractSettings } from "./contract-settings";
-import { PriceDiscounts, Ticket, TicketWithDiscounts, WeightDiscounts } from "./ticket";
+import { Ticket } from "./ticket";
+import { Liquidation } from "./liquidation";
+import { Payment } from "./payment";
 
 
 declare type contractType = string | boolean;
-declare type status = 'pending' | 'active' | 'closed' | 'cancelled';
+declare type ContractStatus = 'pending' | 'active' | 'closed' | 'cancelled' | 'paid';
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
@@ -28,6 +30,7 @@ export class Contract extends FirebaseDocInterface {
     currency: string;
     currentDelivered: Mass;
     date: Date;
+    default_freight: number;
     delivery_dates: DeliveryDates;
     deliveryPlants: string[];
     deliveryType: string;
@@ -58,7 +61,7 @@ export class Contract extends FirebaseDocInterface {
     quantityErrorPercentage: number;
     seller_terms: string;
     shrinkage: string;
-    status: status;
+    status: ContractStatus;
     statusDates: {
         active: Date,
         closed: Date,
@@ -74,14 +77,17 @@ export class Contract extends FirebaseDocInterface {
     type: string;
 
     deliveredHistory: { [date: string]: number };
-    progress: number; 
+    progress: number;
+
+    totalLiquidations: number;
+    totalPayments: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
-            snapshot = snapshotOrRef
+            snapshot = snapshotOrRef;
         }
         
         super(snapshot, Contract.converter);
@@ -185,6 +191,9 @@ export class Contract extends FirebaseDocInterface {
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
             this.grade = 2;
 
+            this.totalLiquidations = 0;
+            this.totalPayments = 0;
+
             return;
         }
 
@@ -246,6 +255,7 @@ export class Contract extends FirebaseDocInterface {
         this.contractOwner = data.contractOwner;
         this.contractExecutive = data.contractExecutive;
         this.currency = data.currency;
+        this.default_freight = data.default_freight
         this.deliveryPlants = data.deliveryPlants;
         this.deliveryType = data.deliveryType;
         this.formOfPayment = data.formOfPayment;
@@ -292,6 +302,9 @@ export class Contract extends FirebaseDocInterface {
             this.futurePriceInfo.priceSetPeriodBegin ??= null;
             this.futurePriceInfo.priceSetPeriodEnd ??= null;
         }
+
+        this.totalLiquidations = data.totalLiquidations ?? 0;
+        this.totalPayments = data.totalPayments ?? 0;        
     }
 
     public static converter = {
@@ -311,6 +324,7 @@ export class Contract extends FirebaseDocInterface {
                 currency: data.currency ?? null,
                 currentDelivered: data.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) ?? null,
                 date: data.date ?? null,
+                default_freight: data.default_freight ?? null,
                 deliveredHistory: data.deliveredHistory ?? null,
                 delivery_dates: data.delivery_dates ?? null,
                 deliveryPlants: data.deliveryPlants ?? null,
@@ -360,6 +374,10 @@ export class Contract extends FirebaseDocInterface {
                 type: data.type ?? null,
 
                 progress: data.progress ?? null,
+
+                totalLiquidations: data.totalLiquidations,
+                totalPayments: data.totalPayments,
+                // toBeDelivered: data.toBeDelivered,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -479,7 +497,7 @@ export class Contract extends FirebaseDocInterface {
 
     }
 
-    public changeStatus(newStatus: status): Promise<void> {
+    public changeStatus(newStatus: ContractStatus): Promise<void> {
         const updateDoc = {status: newStatus};
         const oldStatus = this.status;
 
@@ -509,8 +527,8 @@ export class Contract extends FirebaseDocInterface {
             });
     }
 
-    public static getDocById(db: Firestore, company: string, contractType: contractType, contractId: string): Promise<Contract> {
-        const docRef = doc(Contract.getCollectionReference(db, company, contractType), contractId)
+    public static getDocById(db: Firestore, company: string, contractId: string): Promise<Contract> {
+        const docRef = doc(Contract.getCollectionReference(db, company), contractId)
         return getDoc(docRef).then(result => {
             return result.data();
         });
@@ -518,10 +536,6 @@ export class Contract extends FirebaseDocInterface {
 
     public static getDocRef(db: Firestore, company: string, contractType: contractType, contractId: string): DocumentReference<Contract> {
         return doc(Contract.getCollectionReference(db, company, contractType), contractId);
-    }
-
-    public static getStatusEnum(): typeof status {
-        return status;
     }
 
     public static onSnapshot(ref: CollectionReference<Contract> | Query<Contract>, list: Contract[], onNext: (snapshot: QuerySnapshot<Contract>) => void = () => {}) {
@@ -596,6 +610,38 @@ export class Contract extends FirebaseDocInterface {
         }
 
         return contractType;
+    }
+
+    public getLiquidationsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Liquidation>) => void, 
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionRef = collection(this.ref, "liquidations").withConverter(Liquidation.converter);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public getLiquidationByRefId(refId: string): Promise<Liquidation> {
+        return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
+    }
+
+    public getPaymentsCollection(): CollectionReference {
+        return collection(this.ref, "payments").withConverter(Payment.converter);
+    }
+
+    public getPaymentsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Payment>) => void,
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionQuery = query(this.getPaymentsCollection(), ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public static getSnapshotById(db: Firestore, company: string, contractId: string, 
+        onNext: (snapshot: DocumentSnapshot<Contract>) => void
+    ): Unsubscribe {
+        const docRef = doc(Contract.getCollectionReference(db, company), contractId)
+        return onSnapshot(docRef, onNext);
     }
 }
 
@@ -687,40 +733,3 @@ export interface Exectuive {
     name: string,
     ref: DocumentReference
 }
-
-export class LiquidationTotals {
-    public gross: number = 0;
-    public tare: number = 0;
-    public net: number = 0;
-    public adjustedWeight: number = 0;
-    public beforeFinalDiscounts: number = 0;
-    public netToPay: number = 0;
-    public weightDiscounts: WeightDiscounts = new WeightDiscounts();
-    public priceDiscounts: PriceDiscounts = new PriceDiscounts();
-
-    constructor(tickets?: TicketWithDiscounts[], contract?: Contract) {
-        if (!tickets || !contract) return;
-
-        tickets.forEach(ticket => {
-            this.gross += ticket.data.gross.get();
-            this.tare += ticket.data.tare.get();
-            this.net += ticket.data.net.get();
-
-            for (const key of Object.keys(this.weightDiscounts)) {
-                this.weightDiscounts[key].defaultUnits = ticket.data.net.getUnit();
-                this.weightDiscounts[key].amount += ticket.weightDiscounts[key].amount;
-            }
-            const tempAdjustedWeight = ticket.data.net.get() - ticket.weightDiscounts.total();
-            this.adjustedWeight += tempAdjustedWeight;
-
-            const tempBeforeFinalDiscounts = contract.price.getPricePerUnit("lbs", contract.quantity) * tempAdjustedWeight;
-            this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
-
-            for (const key of Object.keys(this.priceDiscounts)) {
-                this.priceDiscounts[key] += ticket.priceDiscounts[key];
-            }
-            this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
-        });
-    }
-}
-

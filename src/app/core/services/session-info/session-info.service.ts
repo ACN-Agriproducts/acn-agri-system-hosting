@@ -94,7 +94,9 @@ export class SessionInfo {
     const unsubAuth = this.auth.onAuthStateChanged(user => {
       if(!user) return;
 
-      dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
+      if(this.getPermissions().isScale) this.plant = this.getPermissions().scalePlant;
+
+      else dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
         if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
         this.plant = plants[0].ref.id;
   

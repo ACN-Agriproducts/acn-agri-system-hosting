@@ -17,6 +17,8 @@ export class Price {
      * @returns price per unit ($/unit)
      */
     public getPricePerUnit(priceUnit: units, mass: Mass = new Mass(null, null)): number {
+        if (this.unit === priceUnit) return this.amount;
+
         const unitConversion = mass.conversions.get(priceUnit) / mass.conversions.get(this.unit);
         return this.amount / unitConversion;
     }

@@ -10,14 +10,17 @@ import { ContractInfoPage } from './contract-info.page';
 import { CoreModule } from '@core/core.module';
 import { TicketsTableComponent } from './components/tickets-table/tickets-table.component';
 import { TruckerTableComponent } from './components/trucker-table/trucker-table.component';
-import { ContractLiquidationLongComponent, DiscountsPipe } from './components/contract-liquidation-long/contract-liquidation-long.component';
 import { NgxPrintModule } from 'ngx-print';
 import { DisplayContractComponent } from './components/display-contract/display-contract.component';
 import { SharedModule } from '@shared/shared.module';
-import { TicketDiscountTableComponent } from './components/ticket-discount-table/ticket-discount-table.component';
 import { TruckersFormComponent } from './components/truckers-form/truckers-form.component';
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
+import { LiquidationTableComponent, TicketIdsPipe } from './components/liquidation-table/liquidation-table.component';
+import { PaymentsTableComponent } from './components/payments-table/payments-table.component';
+import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './components/set-payment-dialog/set-payment-dialog.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ContractChartCardComponent } from './components/contract-chart-card/contract-chart-card.component';
 
 @NgModule({
   imports: [
@@ -31,16 +34,20 @@ import { ContractPrintablesModule } from 'src/app/modules/contract-printables/co
     ReactiveFormsModule,
     ContractModule,
     ContractPrintablesModule,
+    NgxChartsModule
   ],
   declarations: [
     ContractInfoPage,
     TicketsTableComponent,
     TruckerTableComponent,
-    ContractLiquidationLongComponent,
     DisplayContractComponent,
-    TicketDiscountTableComponent,
     TruckersFormComponent,
-    DiscountsPipe,
+    LiquidationTableComponent,
+    TicketIdsPipe,
+    PaymentsTableComponent,
+    SetPaymentDialogComponent,
+    ValidPaymentSelectionDirective,
+    ContractChartCardComponent
   ]
 })
 export class ContractInfoPageModule {}

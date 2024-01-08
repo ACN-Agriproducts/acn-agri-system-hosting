@@ -1,0 +1,74 @@
+
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <ol class="collection">
+    <mat-card class="header-card">
+      <li class="row">
+        <!-- <div class="cell">#</div> -->
+        <div class="cell">{{ t('tickets') | titlecase }}</div>
+        <div class="cell">{{ t('Date') | titlecase }}</div>
+        <div class="cell">{{ t('status') | titlecase }}</div>
+        <div class="cell button" *ngIf="permissions?.admin || permissions?.liquidations?.create">
+          {{ t("Supplemental") }} {{ t("Documents") }}
+        </div>
+        <div class="cell button"></div>
+      </li>
+    </mat-card>
+    <mat-card class="body-card" *ngIf="liquidations?.length!==0 else noItems">
+      <li class="row" *ngFor="let liquidation of liquidations; let index = index">
+        <!-- <div class="cell">{{ (index + 'A') | titlecase }}</div> -->
+        <div class="cell ticket-ids">
+          <i *ngFor="let id of liquidation.tickets | ticketIds; let last = last">
+            <span>{{ id }}</span>
+            <span *ngIf="!last">,&nbsp;</span>
+          </i>
+        </div>
+        <div class="cell">{{ liquidation.date | date }}</div>
+        <div class="cell">
+          <div class="status-text" [class]="liquidation.status">{{ liquidation.status }}</div>
+        </div>
+        <div class="cell button">
+          <button mat-icon-button 
+            [color]="liquidation.supplementalDocs?.length > 0 ? 'primary' : 'accent'"
+            (click)="uploadDocuments(liquidation)"
+            *ngIf="permissions?.admin || permissions?.liquidations?.create"
+          >
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+        <div class="cell button">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openLiquidation(liquidation)">
+              <mat-icon color="primary">open_in_new</mat-icon>
+              <span>{{ t("view") | titlecase }}</span>
+            </button>
+            <button mat-menu-item 
+              [routerLink]="['./set-liquidation/', liquidation.ref.id]" 
+              *ngIf="liquidation.status==='pending' && (permissions?.admin || permissions?.liquidations?.create)"
+            >
+              <mat-icon color="primary">edit</mat-icon>
+              <span>{{ t("edit") | titlecase }}</span>
+            </button>
+            <button mat-menu-item 
+              (click)="cancel(liquidation)" 
+              *ngIf="liquidation.status!=='cancelled' && (permissions?.admin || permissions?.liquidations?.cancel)"
+            >
+              <mat-icon color="warn">cancel</mat-icon>
+              <span>{{ t("cancel") | titlecase }}</span>
+            </button>
+            <button mat-menu-item (click)="archive(liquidation)" *ngIf="liquidation.status!=='pending'">
+              <mat-icon color="warn">archive</mat-icon>
+              <span>{{ t("archive") | titlecase }}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </li>
+    </mat-card>
+  </ol>
+  
+  <ng-template #noItems>
+    <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
+  </ng-template>
+</ng-container>

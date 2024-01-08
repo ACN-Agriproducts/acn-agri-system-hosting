@@ -4,11 +4,12 @@ $lightlightgray: rgb(230, 230, 230);
 :host {
     display: block;
     height: auto; //203.2mm;
-    width: 10in; //266.7mm;
     background-color: white;
+    margin: 1em;
+    
+    // width: 10in; //266.7mm;
     // outline: black solid 1px;
     // padding: 12.7mm;
-    margin: 1em;
     // box-shadow: -0.5em 0.5em 0.25em gray;
 }
 
@@ -113,4 +114,33 @@ table {
     * {
         print-color-adjust: exact;
     }
+
+    .unit-select {
+        display: none;
+    }
+    .unit-label {
+        display: block !important;
+    }
+}
+
+.unit-select {
+    min-width: 170px;
+    // max-width: 50px;
+    .mat-form-field {
+        font-weight: bold;
+    }
+    .mat-input-underline {
+        display: none !important;
+    }
+}
+
+.header-units {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.unit-label {
+    display: none;
 }

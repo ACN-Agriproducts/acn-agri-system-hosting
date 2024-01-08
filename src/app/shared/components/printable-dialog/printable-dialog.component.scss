@@ -1,0 +1,32 @@
+
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+
+    .actions {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+.printable-wrapper {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(165, 165, 165);
+    box-shadow: 2px 2px rgba($color: #000000, $alpha: 0.2);
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    overflow-y: auto;
+    flex: 1; // ==> flex: 1 1 0%;
+
+    &>* {
+        flex: 0 0 auto; // auto means look at my height and width
+    }
+}

@@ -1,0 +1,117 @@
+
+<ng-container *transloco="let t; read: 'contracts.info'">
+  <ol class="collection">
+    <mat-card class="header-card">
+      <li class="row">
+        <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
+          <ng-container *ngIf="field.header">{{ t(field.header) | titlecase }}</ng-container>
+        </div>
+        <div class="cell">{{ t("Proof of Payment") }}</div>
+        <div class="cell"></div>
+      </li>
+    </mat-card>
+    <mat-card class="body-card" *ngIf="data?.length > 0 else noItems">
+      <li class="row" [class]="item.status" *ngFor="let item of data; let index = index">
+        <div class="cell" *ngFor="let field of tableFields" [class]="field.dataType">
+          <ng-container 
+            *ngTemplateOutlet="
+              (field.dataType ?? 'default') | templateRef; 
+              context: { $implicit: field, item: item[field.key] }
+            "
+          ></ng-container>
+        </div>
+        <div class="cell button">
+          <button mat-icon-button 
+            [color]="item.proofOfPaymentDocs?.length > 0 ? 'primary' : 'accent'" 
+            (click)="uploadProof(item)"
+          >
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+        <div class="cell button">
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openPayment(item)">
+              <mat-icon color="primary">open_in_new</mat-icon>
+              <span>{{ t("view") | titlecase }}</span>
+            </button>
+            <button mat-menu-item 
+              *ngIf="item.status==='pending' && (permissions?.admin || permissions?.liquidations?.create)"
+              (click)="editPayment(item)"
+            >
+              <mat-icon color="primary">edit</mat-icon>
+              <span>{{ t("edit") | titlecase }}</span>
+            </button>
+            <button mat-menu-item 
+              (click)="cancelPayment(item)" 
+              *ngIf="item.status!=='cancelled' && (permissions?.admin || permissions?.liquidations?.cancel)"
+            >
+              <mat-icon color="warn">cancel</mat-icon>
+              <span>{{ t("cancel") | titlecase }}</span>
+            </button>
+            <button mat-menu-item (click)="archivePayment(item)" *ngIf="item.status!=='pending'">
+              <mat-icon color="warn">archive</mat-icon>
+              <span>{{ t("archive") | titlecase }}</span>
+            </button>
+          </mat-menu>      
+        </div>
+      </li>
+    </mat-card>
+  </ol>
+
+  <!-- TEMPLATES -->
+
+  <ng-template #noItems>
+    <div class="no-items"><i>{{ t('No Items to Display') }}</i></div>
+  </ng-template>
+
+  <ng-template #nA>N/A</ng-template>
+
+  <ng-template templateRef="default" let-field let-item="item">
+    <span>{{ item }}</span>
+  </ng-template>
+
+  <ng-template templateRef="text" let-field let-item="item">
+    <span>{{ item | titlecase }}</span>
+  </ng-template>
+
+  <ng-template templateRef="text-translate" let-field let-item="item">
+    <span>{{ t(item) | titlecase }}</span>
+  </ng-template>
+
+  <ng-template templateRef="number" let-field let-item="item">
+    <span>{{ item | number }}</span>
+  </ng-template>
+
+  <ng-template templateRef="date" let-field let-item="item">
+    <span>{{ item | date }}</span>
+  </ng-template>
+
+  <ng-template templateRef="nested" let-field let-item="item">
+    <ng-container *ngTemplateOutlet="
+      (field.nestedType ?? 'default') | templateRef; 
+      context { $implicit: field, item: item[field.nestedKey] }
+      "
+    ></ng-container>
+  </ng-template>
+
+  <ng-template templateRef="array" let-field let-item="item">
+    <i *ngIf="!(item.length > 0)">N/A</i>
+    <i *ngFor="let arrayItem of item; let last = last">
+      <ng-container *ngTemplateOutlet="
+        (field.arrayType ?? 'default') | templateRef;
+        context { $implicit: field, item: arrayItem }
+        "
+      ></ng-container>
+      <!-- <b *ngIf="!last">,</b> -->
+    </i>
+  </ng-template>
+
+  <ng-template templateRef="button" let-field let-item="item">
+    <button mat-icon-button [color]="field.iconColor" (click)="field.action?.(item)">
+      <mat-icon>{{ field.icon }}</mat-icon>
+    </button>
+  </ng-template>
+</ng-container>
