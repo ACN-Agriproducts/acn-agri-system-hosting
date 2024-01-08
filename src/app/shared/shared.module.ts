@@ -29,6 +29,7 @@ import { LocalInventoryPipe } from './pipes/localInventory/local-inventory.pipe'
 import { pricerPerUnitPipe } from './classes/price';
 import { PrintableDialogComponent } from './components/printable-dialog/printable-dialog.component';
 import { DocumentUploadDialogComponent } from './components/document-upload-dialog/document-upload-dialog.component';
+import { TemplateRefModule } from './template-ref';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { DocumentUploadDialogComponent } from './components/document-upload-dial
     LocalInventoryPipe,
     pricerPerUnitPipe,
     PrintableDialogComponent,
+    TemplateRefModule
   ],
   declarations: [
     ToolbarComponent,

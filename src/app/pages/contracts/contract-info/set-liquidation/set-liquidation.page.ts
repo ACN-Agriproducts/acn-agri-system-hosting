@@ -53,12 +53,16 @@ export class SetLiquidationPage implements OnInit {
   }
 
   ngOnInit() {
-    Contract.getDocById(this.db, this.session.getCompany(), this.type, this.id).then(async contract => {
+    Contract.getDocById(this.db, this.session.getCompany(), this.id).then(async contract => {
       this.contract = contract;
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
       if ((this.discountTables?.tables.length ?? 0) <= 0) {
-        this.snack.open("Warning: No Discount Tables Were Found", "warn");
+        this.snack.open("Warning: No Discount Tables Found", "warn");
+      }
+
+      if ((this.contract.price?.amount ?? 0) <= 0) {
+        this.snack.open("Warning: No Price for Contract Found", "warn");
       }
 
       this.tickets = (await contract.getTickets()).map(ticket => {
@@ -108,6 +112,8 @@ export class SetLiquidationPage implements OnInit {
  
     this.liquidation.ticketRefs = this.selectedTickets.map(t => t.data.ref.withConverter(Ticket.converter));
     this.liquidation.tickets = this.selectedTickets.map(t => t.data);
+
+    this.liquidation.getTotal(this.contract); // TO SAVE THE LIQUIDATION TOTAL VALUE
 
     this.liquidation.set().then(() => {
       this.tickets.forEach(ticket => {

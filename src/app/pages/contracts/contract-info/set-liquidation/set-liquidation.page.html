@@ -25,13 +25,15 @@
           <ion-text>{{ t('Inspection') | titlecase }}</ion-text>
         </div>
         <div 
-          class="table-row" 
+          class="table-row body" 
           [class.even]="odd" 
-          [class.disabled]="ticket.data.status==='pending'&&!editingTickets?.includes(ticket)" 
+          [class.disabled]="(ticket.data.status==='pending' || ticket.data.status==='paid')&&!editingTickets?.includes(ticket)" 
           *ngFor="let ticket of tickets; let odd = odd"
+          (click)="checkbox.toggle(); $event.stopPropagation()"
         >
+          <div class="ripple-div-test" matRipple></div>
           <ion-text>
-            <mat-checkbox [(ngModel)]="ticket.inReport" (ngModelChange)="selectedTicketsChange()"
+            <mat-checkbox class="checkbox" #checkbox [(ngModel)]="ticket.inReport" (ngModelChange)="selectedTicketsChange()"
             [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
           </ion-text>
           <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
@@ -49,6 +51,7 @@
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -61,6 +64,7 @@
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -73,6 +77,7 @@
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -85,6 +90,7 @@
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>
@@ -97,6 +103,7 @@
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
               />
               <span matPrefix>$ &nbsp;</span>
             </mat-form-field>

@@ -17,6 +17,10 @@ import { TruckersFormComponent } from './components/truckers-form/truckers-form.
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { ContractPrintablesModule } from 'src/app/modules/contract-printables/contract-printables.module';
 import { LiquidationTableComponent, TicketIdsPipe } from './components/liquidation-table/liquidation-table.component';
+import { PaymentsTableComponent } from './components/payments-table/payments-table.component';
+import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './components/set-payment-dialog/set-payment-dialog.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ContractChartCardComponent } from './components/contract-chart-card/contract-chart-card.component';
 
 @NgModule({
   imports: [
@@ -30,6 +34,7 @@ import { LiquidationTableComponent, TicketIdsPipe } from './components/liquidati
     ReactiveFormsModule,
     ContractModule,
     ContractPrintablesModule,
+    NgxChartsModule
   ],
   declarations: [
     ContractInfoPage,
@@ -39,6 +44,10 @@ import { LiquidationTableComponent, TicketIdsPipe } from './components/liquidati
     TruckersFormComponent,
     LiquidationTableComponent,
     TicketIdsPipe,
+    PaymentsTableComponent,
+    SetPaymentDialogComponent,
+    ValidPaymentSelectionDirective,
+    ContractChartCardComponent
   ]
 })
 export class ContractInfoPageModule {}

@@ -333,4 +333,12 @@ export class ContractsPage implements AfterViewInit {
     if(checked) this.exportList.add(contract);
     else this.exportList.delete(contract);
   }
+
+  public getPriceTooltip(contract: Contract): string {
+    const price = contract.price;
+
+    return `$${price.getPricePerUnit('lbs', contract.quantity)?.toFixed(3) ?? "-"} lbs
+    $${price.getPricePerUnit('bu', contract.quantity)?.toFixed(3) ?? "-"} bu
+    $${price.getPricePerUnit('mTon', contract.quantity)?.toFixed(3) ?? "-"} mTon`;
+  }
 }

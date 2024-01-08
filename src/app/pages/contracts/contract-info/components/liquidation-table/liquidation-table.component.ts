@@ -20,6 +20,8 @@ export class LiquidationTableComponent implements OnInit {
   @Input() liquidations: Liquidation[];
   @Input() contract: Contract;
 
+  public permissions: any;
+
   constructor(
     private confirm: ConfirmationDialogService,
     private snack: SnackbarService,
@@ -28,7 +30,9 @@ export class LiquidationTableComponent implements OnInit {
     private transloco: TranslocoService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.permissions = this.session.getPermissions();
+  }
 
   public async remove(index: number) {
     if (await this.confirm.openDialog("delete this liquidation")) {
@@ -42,7 +46,7 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async cancel(liquidation: Liquidation) {
-    if (!await this.confirm.openDialog("cancel this liquidation?")) return;
+    if (!await this.confirm.openDialog("cancel this liquidation")) return;
 
     liquidation.update({ status: "cancelled" })
     .then(() => {
@@ -50,12 +54,12 @@ export class LiquidationTableComponent implements OnInit {
       this.snack.open("Liquidation Cancelled");
     }).catch(e => {
       console.error(e);
-      this.snack.open("Error: Liquidation not Cancelled", "error");
+      this.snack.open("Failed to Cancel Liquidation", "error");
     });
   }
 
   public openLiquidation(liquidation: Liquidation) {
-    const dialog = this.dialog.open(LiquidationDialogComponent, {
+    this.dialog.open(LiquidationDialogComponent, {
       data: {
         selectedTickets: liquidation.tickets,
         contract: this.contract,
@@ -69,21 +73,14 @@ export class LiquidationTableComponent implements OnInit {
     });
   }
 
-  public async uploadDocuments(liquidation: Liquidation, isProof: boolean) {
-    const docType = isProof ?
-      this.transloco.translate("contracts.info.Proof of Payment") : 
-      this.transloco.translate("contracts.info.Supplemental");
-
-    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}`;
-    locationRef += `/${docType.toLocaleLowerCase().replace(/\s+/g, "-")}`;
-      
-    const files = liquidation[isProof ? 'proofOfPaymentDocs' : 'supplementalDocs'].map(doc => 
-      ({ ...doc, url: null, dropfile: null, contentType: null })
-    );
+  public async uploadDocuments(liquidation: Liquidation) {
+    let locationRef = `/companies/${this.session.getCompany()}/contracts/${this.contract.id}/liquidations/${liquidation.ref.id}/supplemental-documents`;
+    
+    const files = liquidation.supplementalDocs.map(doc => ({ ...doc, url: null, dropfile: null, contentType: null }));
     const uploadable = liquidation.status !== 'cancelled';
 
     const dialogData: DialogUploadData = {
-      docType,
+      docType: this.transloco.translate("contracts.info.Supplemental"),
       locationRef,
       files,
       uploadable
@@ -97,14 +94,14 @@ export class LiquidationTableComponent implements OnInit {
     if (!updateData || !uploadable) return;
     
     updateDoc(liquidation.ref, {
-      [isProof ? 'proofOfPaymentDocs' : 'supplementalDocs']: updateData
+      supplementalDocs: updateData
     })
     .then(() => {
-      this.snack.open("Successfully updated Liquidation", "success");
+      this.snack.open("Successfully Updated Liquidation", "success");
     })
     .catch(e => {
       console.error(e);
-      this.snack.open("Failed to update Liquidation", "error");
+      this.snack.open("Failed to Update Liquidation", "error");
     });
   }
 

@@ -2,27 +2,17 @@
   <app-header-toolbar [titulo]="t('contract') + ' ' + (currentContract?.id ?? '')"></app-header-toolbar>
 
   <ion-content class="ion-padding">
+    <button mat-icon-button 
+      id="open-contract-button" 
+      color="primary" 
+      (click)="openContract()" 
+      [matTooltip]="t('View Contract')"
+    >
+      <mat-icon>open_in_new</mat-icon>
+    </button>
     <div class="flex-content" *ngIf="ready">
       <div class="info-section">
         <app-contract-form id="contract-form" *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
-        <div class="contract-tables">
-          <mat-card *ngIf="ticketList?.length > 0">
-            <mat-card-header>
-              <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" data-scroll></app-liquidation-table>
-            </mat-card-content>
-          </mat-card>
-          <mat-card *ngIf="ticketList?.length > 0">
-            <mat-card-header>
-              <mat-card-subtitle>{{ t('contract liquidations') | titlecase }}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" data-scroll></app-liquidation-table>
-            </mat-card-content>
-          </mat-card>
-        </div>
         <mat-card id="ticket-list" *ngIf="ticketList?.length > 0">
           <mat-card-header>
             <mat-card-subtitle>{{t("ticket list")}}</mat-card-subtitle>
@@ -40,14 +30,51 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <mat-card id="printable-contract">
+      
+      <div class="info-section">
+        <div class="contract-tables">
+          <app-contract-chart-card [data]="contractChartData"></app-contract-chart-card>
+          <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.liquidations?.read)">
+            <mat-card-header>
+              <mat-card-subtitle>{{ t('Liquidations') }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <app-liquidation-table [liquidations]="liquidations" [contract]="currentContract" scroll></app-liquidation-table>
+            </mat-card-content>
+            <mat-card-actions [align]="'end'">
+              <button mat-button 
+                color="primary" 
+                routerLink="./set-liquidation" 
+                *ngIf="permissions?.admin || permissions?.liquidations?.create"
+              >
+                <span>{{ t('new liquidation') | titlecase }}</span>&nbsp;<mat-icon>add_box</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+          <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.payments?.read)">
+            <mat-card-header>
+              <mat-card-subtitle>{{ t('Payments') }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <app-payments-table [payments]="payments" [liquidations]="liquidations" [contractId]="currentContract.id" scroll></app-payments-table>
+            </mat-card-content>
+            <mat-card-actions [align]="'end'">
+              <button mat-button color="primary" (click)="addPayment()">
+                <span>{{ t('New Payment') }}</span>&nbsp;<mat-icon>add_box</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+      <!-- <mat-card id="printable-contract">
         <mat-card-header>
           <mat-card-subtitle>{{t('contract document')}}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <app-display-contract [contract]="currentContract"></app-display-contract>
         </mat-card-content>
-      </mat-card>
+      </mat-card> -->
+      <!-- KEEP WORKING ON LAYOUT -->
     </div>
   </ion-content>
 </ng-container>

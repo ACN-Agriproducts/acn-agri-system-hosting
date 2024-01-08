@@ -8,6 +8,7 @@ import { Product } from "./product";
 import { ContractSettings } from "./contract-settings";
 import { Ticket } from "./ticket";
 import { Liquidation } from "./liquidation";
+import { Payment } from "./payment";
 
 
 declare type contractType = string | boolean;
@@ -76,7 +77,10 @@ export class Contract extends FirebaseDocInterface {
     type: string;
 
     deliveredHistory: { [date: string]: number };
-    progress: number; 
+    progress: number;
+
+    totalLiquidations: number;
+    totalPayments: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -187,6 +191,9 @@ export class Contract extends FirebaseDocInterface {
             this.contractOwner = FirebaseDocInterface.session.getUser().uid;
             this.grade = 2;
 
+            this.totalLiquidations = 0;
+            this.totalPayments = 0;
+
             return;
         }
 
@@ -295,6 +302,9 @@ export class Contract extends FirebaseDocInterface {
             this.futurePriceInfo.priceSetPeriodBegin ??= null;
             this.futurePriceInfo.priceSetPeriodEnd ??= null;
         }
+
+        this.totalLiquidations = data.totalLiquidations ?? 0;
+        this.totalPayments = data.totalPayments ?? 0;        
     }
 
     public static converter = {
@@ -364,6 +374,10 @@ export class Contract extends FirebaseDocInterface {
                 type: data.type ?? null,
 
                 progress: data.progress ?? null,
+
+                totalLiquidations: data.totalLiquidations,
+                totalPayments: data.totalPayments,
+                // toBeDelivered: data.toBeDelivered,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
@@ -465,19 +479,6 @@ export class Contract extends FirebaseDocInterface {
         return `${this.productInfo.marketCode}${marketMonthCodes.get(this.futurePriceInfo.expirationMonth.getMonth())}${this.futurePriceInfo.expirationMonth.getFullYear() % 10}`
     }
 
-    public getLiquidationsSnapshot(
-        onNext: (snapshot: QuerySnapshot<Liquidation>) => void, 
-        ...constraints: QueryConstraint[]
-    ): Unsubscribe {
-        const collectionRef = collection(this.ref, "liquidations").withConverter(Liquidation.converter);
-        const collectionQuery = query(collectionRef, ...constraints);
-        return onSnapshot(collectionQuery, onNext);
-    }
-
-    public getLiquidationByRefId(refId: string): Promise<Liquidation> {
-        return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
-    }
-
     public clearContactInfo(contactInfo: ContactInfo) {
         contactInfo.caat = null;
         contactInfo.city = null;
@@ -526,8 +527,8 @@ export class Contract extends FirebaseDocInterface {
             });
     }
 
-    public static getDocById(db: Firestore, company: string, contractType: contractType, contractId: string): Promise<Contract> {
-        const docRef = doc(Contract.getCollectionReference(db, company, contractType), contractId)
+    public static getDocById(db: Firestore, company: string, contractId: string): Promise<Contract> {
+        const docRef = doc(Contract.getCollectionReference(db, company), contractId)
         return getDoc(docRef).then(result => {
             return result.data();
         });
@@ -609,6 +610,38 @@ export class Contract extends FirebaseDocInterface {
         }
 
         return contractType;
+    }
+
+    public getLiquidationsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Liquidation>) => void, 
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionRef = collection(this.ref, "liquidations").withConverter(Liquidation.converter);
+        const collectionQuery = query(collectionRef, ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public getLiquidationByRefId(refId: string): Promise<Liquidation> {
+        return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
+    }
+
+    public getPaymentsCollection(): CollectionReference {
+        return collection(this.ref, "payments").withConverter(Payment.converter);
+    }
+
+    public getPaymentsSnapshot(
+        onNext: (snapshot: QuerySnapshot<Payment>) => void,
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionQuery = query(this.getPaymentsCollection(), ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public static getSnapshotById(db: Firestore, company: string, contractId: string, 
+        onNext: (snapshot: DocumentSnapshot<Contract>) => void
+    ): Unsubscribe {
+        const docRef = doc(Contract.getCollectionReference(db, company), contractId)
+        return onSnapshot(docRef, onNext);
     }
 }
 

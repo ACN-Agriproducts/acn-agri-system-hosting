@@ -60,10 +60,10 @@ export class DocumentUploadDialogComponent implements OnInit {
   public getDocumentUrl(file: DropFileStorageInfo) {
     getDownloadURL(ref(this.storage, file.ref))
     .then(async res => {
-      console.log(res)
+      // console.log(res)
       file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
       file.url = this.sanitizer.bypassSecurityTrustResourceUrl(res);
-      console.log(file.url)
+      // console.log(file.url)
       if (file.url == null) throw `The resource "${file.name}" could not be secured for use.`;
     })
     .catch(e => {
@@ -110,12 +110,9 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public addDocument() {
-    const name = this.transloco.translate('contracts.info.document');
     this.data.files.push({
-      // name: `${this.fileName} (${++this.count})`,
-      name: `${name} (${++this.count})`,
-      // ref: `${this.data.locationRef}/${this.fileName}(${this.count})`,
-      ref: `${this.data.locationRef}/${name}${this.count}`,
+      name: `document (${++this.count})`,
+      ref: `${this.data.locationRef}/document${this.count}`,
       url: null,
       dropfile: null,
       contentType: null
