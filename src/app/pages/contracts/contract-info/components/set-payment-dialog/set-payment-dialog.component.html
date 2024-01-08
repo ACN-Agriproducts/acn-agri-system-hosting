@@ -1,0 +1,121 @@
+
+<ng-container *transloco="let t; read: 'contracts.info'">
+  <h2 mat-dialog-title>{{ t('Set Payment') }}</h2>
+
+  <mat-dialog-content>
+    <form #paymentForm="ngForm">
+      <div class="form-field-row">
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>{{ t('Type') }}</mat-label>
+          <mat-select
+            #type="ngModel"
+            [(ngModel)]="data.payment.type"
+            (ngModelChange)="resetSelection()"
+            name="type"
+            [validPaymentType]="data.liquidations.length"
+            required
+            [readonly]="data.readonly"
+          >
+            <mat-option *ngFor="let paymentType of PAYMENT_TYPES" [value]="paymentType">{{ t(paymentType) | titlecase }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="paymentForm.controls['type']?.errors?.required">{{ t('Required') }}</mat-error>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill">
+          <mat-label>{{ t('Date') }}</mat-label>
+          <input matInput [(ngModel)]="data.payment.date" [matDatepicker]="picker" name="date" required [readonly]="data.readonly">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>{{t ('Required') }}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-field-row">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ t('Account Name') }}</mat-label>
+          <input matInput [(ngModel)]="data.payment.accountName" name="accountName" required [readonly]="data.readonly">
+          <mat-error>{{t ('Required') }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" #select>
+          <mat-label>{{ t('Payment Method') }}</mat-label>
+          <input matInput *ngIf="data.readonly" [readonly]="true" [value]="data.payment.paymentMethod | titlecase">
+          <mat-select [(ngModel)]="data.payment.paymentMethod" name="method" required *ngIf="!data.readonly">
+            <mat-option *ngFor="let method of PAYMENT_METHODS" [value]="method">{{ t(method) | titlecase }}</mat-option>
+          </mat-select>
+          <mat-error>{{t ('Required') }}</mat-error>
+        </mat-form-field>
+      </div>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ t('Amount') }}</mat-label>
+        <input matInput
+          [ngModel]="data.payment.amount"
+          (ngModelChange)="amountChange($event)"
+          type="number"
+          name="amount"
+          required
+          [readonly]="data.readonly"
+        >
+        <span matPrefix>$&nbsp;</span>
+        <mat-error *ngIf="paymentForm.controls['amount']?.errors?.required">{{ t('Required') }}</mat-error>
+      </mat-form-field>
+      <div class="select-liquidations" *ngIf="data.liquidations.length > 0">
+        <!-- <mat-checkbox class="select-all"
+          (change)="$event.checked ? paidDocuments.selectAll() : paidDocuments.deselectAll()"
+          labelPosition="before"
+          *ngIf="!data.readonly"
+        >
+          {{ t('Select All') }}
+        </mat-checkbox> -->
+        <div>
+          <mat-card class="selection"
+            [class.valid]="paymentForm.controls['paidDocuments']?.dirty && !paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected"
+            [class.invalid]="paymentForm.controls['paidDocuments']?.dirty && paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected"
+          >
+            <mat-selection-list
+              #paidDocuments
+              [(ngModel)]="selectedLiquidations"
+              (ngModelChange)="paidDocumentsChange()"
+              name="paidDocuments"
+              [disabled]="data.readonly"
+            >
+              <mat-list-option #option *ngFor="let liq of data.liquidations; let index = index"
+                [value]="liq"
+                labelPosition="after"
+                [disabled]="(liq.status !== 'pending' || (liq.total - liq.amountPaid) === 0) && !(liq | as:SETPAYMENTLIQUIDATION).selected"
+                [class.cancelled]="liq.status==='cancelled'"
+              >
+                <div class="display-liquidation">
+                  <span>{{ index + 1 }}</span>
+                  <span>{{ liq.date | date }}</span>
+                  <span class="liquidation-total">$ {{ liq.total - (liq.amountPaid ?? 0) | number:'.1-3' }}</span>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-card>
+          <mat-error class="selection-error"
+            [class.show]="paymentForm.controls['paidDocuments']?.dirty && paymentForm.controls['paidDocuments']?.errors?.noLiquidationsSelected">
+            {{ t('No Liquidations Selected') }}
+          </mat-error>
+        </div>
+        <div class="pay-difference">
+          <span>{{ (data.payment.amount ?? 0) | number:'.0-3' }}</span>
+          <span class="symbol">-</span>
+          <span>{{ selectedTotal | number:'.0-3' }}</span>
+          <span class="symbol">=</span>
+          <span [class.negative]="difference <= -.001" [class.positive]="difference > -.001">{{ difference | number:'.0-3' }}</span>
+        </div>
+      </div>
+      <mat-form-field appearance="fill" class="notes">
+        <mat-label>{{ t('Notes') }}</mat-label>
+        <textarea matInput [(ngModel)]="data.payment.notes" name="notes" [readonly]="data.readonly"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button mat-dialog-close>{{ t('Close') }}</button>
+    <div *ngIf="!data.readonly">
+      <button mat-button (click)="paymentForm.reset()">Reset</button>
+      <button mat-button color="primary" (click)="setPaidDocuments()" [disabled]="paymentForm.invalid">{{ t('Confirm') }}</button>
+    </div>
+  </mat-dialog-actions>
+</ng-container>

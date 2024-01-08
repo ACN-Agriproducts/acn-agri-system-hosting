@@ -35,18 +35,14 @@ export class ProductPage implements OnInit {
   }
 
   ngOnInit() {
-    Product.getProduct(this.db, this.session.getCompany(), this.product).then(productDoc => {
+    Product.getProduct(this.db, this.session.getCompany(), this.product).then(async productDoc => {
       this.doc = productDoc;
-      this.ready = true;
-    });
 
-    DiscountTables.getDiscountTables(this.db, this.session.getCompany(), this.product).then(async result => {
-      if (!result) {
-        this.discountTables = new DiscountTables(doc(DiscountTables.getCollectionReference(this.db, this.session.getCompany(), this.product)));
-        await this.discountTables.set();
-        return;
-      }
-      this.discountTables = result;
+      this.discountTables = await productDoc.getDiscountTables() 
+        ?? new DiscountTables(doc(productDoc.getDiscountTablesCollection()));
+      await this.discountTables.set();
+
+      this.ready = true;
     });
   }
 

@@ -1,0 +1,140 @@
+
+<ng-container *transloco="let t, read: 'contracts.info'">
+  <app-header-toolbar [titulo]="t('set liquidation') | titlecase"></app-header-toolbar>
+
+  <ng-template #loading>
+    <mat-spinner class="loading-spinner" diameter="40"></mat-spinner>
+  </ng-template>
+
+  <ion-content class="ion-padding">
+    <ng-container *ngIf="ready else loading">
+      <ion-card>
+        <div class="table-row header">
+          <ion-text>{{ t('Include') | titlecase }}</ion-text>
+          <ion-text>{{ t('Date') | titlecase }}</ion-text>
+          <ion-text>{{ t('ID') | titlecase }}</ion-text>
+          <ion-text>{{ t('Moisture') | titlecase }}</ion-text>
+          <ion-text>{{ t('Test Wt') | titlecase }}</ion-text>
+          <ion-text>{{ t('Gross') | titlecase }}</ion-text>
+          <ion-text>{{ t('Tare') | titlecase }}</ion-text>
+          <ion-text>{{ t('Net') | titlecase }}</ion-text>
+          <ion-text>{{ t('Infested') | titlecase }}</ion-text>
+          <ion-text>{{ t('Musty') | titlecase }}</ion-text>
+          <ion-text>{{ t('Sour') | titlecase }}</ion-text>
+          <ion-text>{{ t('Weathered') | titlecase }}</ion-text>
+          <ion-text>{{ t('Inspection') | titlecase }}</ion-text>
+        </div>
+        <div 
+          class="table-row body" 
+          [class.even]="odd" 
+          [class.disabled]="(ticket.data.status==='pending' || ticket.data.status==='paid')&&!editingTickets?.includes(ticket)" 
+          *ngFor="let ticket of tickets; let odd = odd"
+          (click)="checkbox.toggle(); $event.stopPropagation()"
+        >
+          <div class="ripple-div-test" matRipple></div>
+          <ion-text>
+            <mat-checkbox class="checkbox" #checkbox [(ngModel)]="ticket.inReport" (ngModelChange)="selectedTicketsChange()"
+            [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
+          </ion-text>
+          <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
+          <ion-text>{{ticket.data.id}}<span *ngIf="ticket.data.subId">-{{ticket.data.subId}}</span></ion-text>
+          <ion-text>{{ticket.data.moisture}}</ion-text>
+          <ion-text>{{ticket.data.weight}}</ion-text>
+          <ion-text>{{ticket.data.gross | massInUnit}}</ion-text>
+          <ion-text>{{ticket.data.tare | massInUnit}}</ion-text>
+          <ion-text>{{ticket.data.net | massInUnit}}</ion-text>
+          <ion-text>
+            <mat-form-field>
+              <input matInput
+                [(ngModel)]="ticket.data.priceDiscounts.infested"
+                (change)="selectedTicketsChange()"
+                type="number"
+                min="0"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
+              />
+              <span matPrefix>$ &nbsp;</span>
+            </mat-form-field>
+          </ion-text>
+          <ion-text>
+            <mat-form-field>
+              <input matInput
+                [(ngModel)]="ticket.data.priceDiscounts.musty"
+                (change)="selectedTicketsChange()"
+                type="number"
+                min="0"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
+              />
+              <span matPrefix>$ &nbsp;</span>
+            </mat-form-field>
+          </ion-text>
+          <ion-text>
+            <mat-form-field>
+              <input matInput
+                [(ngModel)]="ticket.data.priceDiscounts.sour"
+                (change)="selectedTicketsChange()"
+                type="number"
+                min="0"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
+              />
+              <span matPrefix>$ &nbsp;</span>
+            </mat-form-field>
+          </ion-text>
+          <ion-text>
+            <mat-form-field>
+              <input matInput
+                [(ngModel)]="ticket.data.priceDiscounts.weathered"
+                (change)="selectedTicketsChange()"
+                type="number"
+                min="0"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
+              />
+              <span matPrefix>$ &nbsp;</span>
+            </mat-form-field>
+          </ion-text>
+          <ion-text>
+            <mat-form-field>
+              <input matInput
+                [(ngModel)]="ticket.data.priceDiscounts.inspection"
+                (change)="selectedTicketsChange()"
+                type="number"
+                min="0"
+                [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
+                (click)="$event.stopPropagation()"
+              />
+              <span matPrefix>$ &nbsp;</span>
+            </mat-form-field>
+          </ion-text>
+        </div>
+      </ion-card>
+      
+      <div class="actions">
+        <div class="action-bar">
+          <button mat-raised-button disableRipple>
+            <mat-checkbox 
+              [checked]="allSelected" 
+              (change)="selectAllTickets($event.checked)"
+              [indeterminate]="!allSelected && selectedTickets.length > 0"
+            >{{ t('select all') | titlecase }}
+            </mat-checkbox>
+          </button>
+          <span class="selected-tickets-count" *ngIf="selectedTickets.length > 0" >
+            ( {{ selectedTickets.length }} Selected )
+          </span>
+        </div>
+        <div class="action-bar">
+          <button mat-raised-button
+            [disabled]="selectedTickets.length === 0"
+            (click)="openLiquidation()"
+          >{{ t('preview') | titlecase }}</button>
+          <button mat-raised-button (click)="submit()" [disabled]="selectedTickets.length === 0">
+            {{ t('submit') | titlecase }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </ion-content>
+</ng-container>

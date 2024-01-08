@@ -1,0 +1,95 @@
+
+<ng-container *transloco="let t, read: 'contracts.info'">
+	<h2 mat-dialog-title>{{ data.docType }} {{ t('Documents') }}</h2>
+	<mat-dialog-content>
+		<mat-tab-group [(selectedIndex)]="selected" [preserveContent]="true">
+			<mat-tab *ngFor="let file of data.files; let index = index">
+				<ng-template mat-tab-label>
+					<span>{{ file.name ?? "File " + index }}</span>
+					<button mat-icon-button 
+						*ngIf="data.uploadable" 
+						class="remove-document" 
+						(click)="removeDocument(index); $event.stopPropagation()"
+					>
+						<mat-icon>close</mat-icon>
+					</button>
+				</ng-template>
+				<div class="document">
+					<ng-container *ngTemplateOutlet="file.url ? preview : upload; context { $implicit: file }"></ng-container>
+					<button mat-mini-fab class="remove-file" color="warn" *ngIf="file.url && data.uploadable" (click)="onRemove(file)">
+						<mat-icon>delete</mat-icon>
+					</button>
+				</div>
+				<mat-form-field *ngIf="data.uploadable" appearance="outline">
+					<mat-label>Document Name</mat-label>
+					<input matInput [(ngModel)]="file.name">
+				</mat-form-field>
+			</mat-tab>
+			<mat-tab disabled *ngIf="data.uploadable">
+				<ng-template mat-tab-label>
+					<button mat-icon-button class="add-document" color="primary" (click)="addDocument(); $event.stopPropagation()">
+						<mat-icon>add</mat-icon>
+					</button>
+				</ng-template>
+			</mat-tab>
+		</mat-tab-group>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button mat-button color="primary" mat-dialog-close>{{ t('Close') }}</button>
+		<button mat-button color="primary"
+			*ngIf="data.uploadable"
+			[disabled]="checkFiles()"
+			(click)="confirm()"
+		>
+			{{ t('Confirm') }}
+		</button>
+	</mat-dialog-actions>
+
+	
+	<!-- TEMPLATES -->
+	<ng-template #upload let-file>
+		<ngx-dropzone class="dropzone" (change)="onSelect($event, file)">
+			<ngx-dropzone-label *ngIf="!file.url else preview">
+				<mat-icon>cloud_upload</mat-icon>
+				<h3>{{ t('Upload') }} {{ data.docType }} {{ t('Document') }}(s)</h3>
+				<p>{{ t('Simply drag and drop or click here to choose a file') }}.</p>
+			</ngx-dropzone-label>
+			<ng-template #preview>
+				<div class="custom-preview">
+					<div class="file">
+						<button mat-icon-button
+							color="warn"
+							class="remove"
+							(click)="onRemove(file); $event.stopPropagation()"
+						>
+							<mat-icon>cancel</mat-icon>
+						</button>
+						<ng-container *ngTemplateOutlet="dropzoneView; context { $implicit: file }"></ng-container>
+					</div>
+					<ngx-dropzone-label class="file-label">{{ file.dropfile.name }} ({{ file.dropfile.type }})</ngx-dropzone-label>
+				</div>
+			</ng-template>
+		</ngx-dropzone>
+	</ng-template>
+
+	<ng-template #preview let-file>
+		<div class="preview">
+			<img *ngIf="file.contentType.startsWith('image') else checkIfMsDoc(file.contentType) ? default : iframe" [src]="file.url">
+			<ng-template #iframe>
+				<iframe *ngIf="file.url" [src]="file.url" width="100%" height="100%"></iframe>
+			</ng-template>
+			<ng-template #default>
+				<p>Download File:</p>
+				<a [href]="file.url" style="text-align: center">{{ file.name }} ({{ file.contentType }})</a>
+			</ng-template>
+		</div>
+	</ng-template>
+
+	<ng-template #dropzoneView let-file>
+		<img *ngIf="file.dropfile.type.startsWith('image') else objectView" [src]="file.url" height="75%">
+		<ng-template #objectView>
+			<object *ngIf="file.url" [data]="file.url"></object>
+		</ng-template>
+	</ng-template>
+</ng-container>
+

@@ -33,7 +33,7 @@
                     selected
                 >
                     {{ header }}
-                    <button matChipRemove>
+                    <button matChipRemove *ngIf="header!=='discount'">
                         <mat-icon>cancel</mat-icon>
                     </button>
                 </mat-chip>

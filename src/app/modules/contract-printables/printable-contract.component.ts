@@ -18,7 +18,7 @@ export class PrintableContractComponent implements OnInit {
   @Input() contract: Contract;
   @Input() focusedField: string;
 
-  @Output() contractTypesListEmitter = new EventEmitter<Map<string, string>>();
+  // @Output() contractTypesListEmitter = new EventEmitter<Map<string, string>>();
 
   public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   public template$: Observable<TemplateRef<any>> = this.version$.pipe(
@@ -33,7 +33,7 @@ export class PrintableContractComponent implements OnInit {
   ngOnInit() {
     ContractSettings.getContractDoc(this.contract).then(result => {
       this.settings = result;
-      this.contractTypesListEmitter.emit(new Map(Object.entries(result.contractTypes)));
+      // this.contractTypesListEmitter.emit(new Map(Object.entries(result.contractTypes)));
     });
   }
 
