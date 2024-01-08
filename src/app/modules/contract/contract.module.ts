@@ -23,7 +23,8 @@ import { FutureDateFormatDirective } from './directives/future-date-format.direc
     CoreModule
   ],
   exports: [
-    ContractFormComponent
+    ContractFormComponent,
+    SelectClientComponent
   ]
 })
 export class ContractModule { }

@@ -1,0 +1,49 @@
+<ng-container *transloco="let t, read: 'tickets.console'">
+  <app-header-toolbar [titulo]="t('Ticket Console')"></app-header-toolbar>
+  
+  <ion-content>
+    <mat-toolbar class="console-bar">
+      <button
+        mat-icon-button
+        (click)="indexChange(-1)"
+        [disabled]="ticketIndex == 0">
+        <mat-icon>west</mat-icon></button>
+      <button
+        mat-icon-button
+        (click)="newTicketButton()"
+        [disabled]="!tickets">
+        <mat-icon>note_add</mat-icon></button>
+      <span>{{ticketIndex + 1}}/{{tickets?.length}}</span>
+      <button
+        mat-icon-button
+        (click)="print()"
+        [disabled]="!tickets?.[ticketIndex] || !currentTicketValid()">
+        <mat-icon>print</mat-icon></button>
+      <button
+        hidden
+        #printButton
+        ngxPrint
+        [printSectionId]="'ticket-' + ticketIndex"
+        [useExistingCss]="true"></button>
+      <button
+        mat-icon-button
+        [disabled]="!tickets || ticketIndex == tickets.length - 1"
+        (click)="indexChange(1)"><mat-icon>east</mat-icon></button>
+    </mat-toolbar>
+    <app-ticket-form
+      *ngFor="let ticket of tickets; let index = index"
+      [hidden]="ticketIndex != index"
+      [ticket]="ticket"
+      [openContracts]="openContracts"
+      [transportList]="transportList"
+      [discountTables]="discountTables"
+      [plant]="plant"></app-ticket-form>
+  </ion-content>
+  
+  <div class="tickets-section">
+    <app-printable-ticket
+      *ngFor="let ticket of tickets; let index = index"
+      [id]="'ticket-' + index"
+      [ticket]="ticket"></app-printable-ticket>
+  </div>
+</ng-container>

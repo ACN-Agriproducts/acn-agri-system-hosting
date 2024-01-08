@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, updateDoc } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, updateDoc, QueryConstraint, query, getDocs } from "@angular/fire/firestore";
 import { ContactInfo } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -145,6 +145,11 @@ export class Contact extends FirebaseDocInterface {
         return getDoc(Contact.getDocReference(db, company, contact)).then(result => {
             return result.data();
         });
+    }
+
+    public static getList(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<Contact[]> {
+        const q = query(Contact.getCollectionReference(db, company), ...constraints);
+        return getDocs(q).then(result => result.docs.map(d => d.data()));
     }
 
     public static updateRef(ref: DocumentReference, info: ContactInfo, bankInfo?: BankInfo[]) {

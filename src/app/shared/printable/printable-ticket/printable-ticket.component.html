@@ -59,19 +59,78 @@
   <!-- Ticket Info Block -->
   <div id='ticket-body'>
     <div id='ticket-body-grid'>
-      <ng-container *ngFor="let item of valuesList">
-        <div class='label'>{{item.label}}</div>
-        <div class='value'>{{item.value}}</div>
-      </ng-container>
+      <!-- Moisture -->
+      <div class='label'>Moisture</div>
+      <div class='value'>{{ticket?.moisture | number:'0.1'}}</div>
+
+      <!-- Contract# -->
+      <div class='label'>Contract #</div>
+      <div class='value'>{{ticket?.contractID}}</div>
+
+      <!-- TestWeight -->
+      <div class='label'>TestWeight</div>
+      <div class='value'>{{ticket?.weight | number:'0.1'}}</div>
+
+      <!-- Product -->
+      <div class='label'>Product</div>
+      <div class='value'>{{ticket?.productName}}</div>
+
+      <!-- PPB -->
+      <div class='label'>PPB</div>
+      <div class='value'>{{ticket?.PPB}}</div>
+
+      <!-- Lot -->
+      <div class='label'>Lot</div>
+      <div class='value'>{{ticket?.lot}}</div>
+
+      <!-- Foreign Matter -->
+      <div class='label'>Foreign Mat.</div>
+      <div class='value'>{{null}}</div>
+
+      <!-- Load # -->
+      <div class='label'>Load #</div>
+      <div class='value'>{{null}}</div>
+
+      <!-- U.S. Grade -->
+      <div class='label'>U.S. Grade</div>
+      <div class='value'>{{ticket?.grade}}</div>
+
+      <!-- Origin -->
+      <div class='label'>Origin</div>
+      <div class='value'>{{ticket?.origin}}</div>
+
+      <!-- DryWeight -->
+      <div class='label'>DryWeight</div>
+      <div class='value'>{{ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount | number:'0.0-2'}}</div>
+
+      <!-- Orig. Ticket # -->
+      <div class='label'>Orig. Ticket #</div>
+      <div class='value'>{{ticket?.original_ticket}}</div>
+      
+      <!-- Discount/100lbs -->
+      <div class='label'>Discount/100lbs</div>
+      <div class='value'>{{((ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount) / (ticket?.net | massInUnit:'lbs':ticket?.dryWeight.amount) * 1000) % 1 / 10 | number:'0.0-3'}}</div>
+      
+      <!-- Orig. Weight -->
+      <div class='label'>Orig Weight</div>
+      <div class='value'>{{ticket?.original_weight | massInUnit:'lbs':ticket?.dryWeight.amount}}</div>
+      
+      <!-- DryWeight -->
+      <div class='label'>DryWeight</div>
+      <div class='value'>{{ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount}}</div>
+      
+      <!-- Tank -->
+      <div class='label'>Tank</div>
+      <div class='value'>{{ticket.tank}}</div>
 
       <div class='label weight' id='gross'>Gross</div>
-      <div class='value weight' id='gross'>{{ticket.gross | massInUnit}}</div>
+      <div class='value weight' id='gross'>{{ticket.gross | massInUnit:null:ticket.gross.amount}}</div>
       <div class='label weight' id='tare'>Tare</div>
-      <div class='value weight' id='tare'>{{ticket.tare | massInUnit}}</div>
+      <div class='value weight' id='tare'>{{ticket.tare | massInUnit:null:ticket.tare.amount}}</div>
       <div class='label weight' id='net'>Net</div>
-      <div class='value weight' id='net'>{{ticket.getNet().get()}}</div>
+      <div class='value weight' id='net'>{{ticket.net | massInUnit:null:ticket.net.amount}}</div>
       <div class='label weight' id='mtons'>Metric Tons</div>
-      <div class='value weight' id='mtons'>{{ticket.getNet() | massInUnit:'mTon' | number:'1.3-3'}}</div>
+      <div class='value weight' id='mtons'>{{ticket.net | massInUnit:'mTon':ticket.net.amount | number:'1.3-3'}}</div>
     </div>
 
     <p><b>UNITED STATES WAREHOUSE ACT, GRAIN INSPECTION CERTIFICATE</b></p>

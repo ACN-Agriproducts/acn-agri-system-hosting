@@ -259,5 +259,42 @@
         "Destinations": "Destinos",
         "Add New": "Agregar Nuevo",
         "Destination": "Destino"
+    },
+    "tickets": {
+        "console": {
+            "Ticket Console": "Consola de Tickets",
+            "Date in": "Fecha de Entrada",
+            "Type": "Tipo",
+            "in": "entrada",
+            "out": "salida",
+            "service": "servicio",
+            "Contract Info": "Informacion de Contrato",
+            "Contract": "Contrato",
+            "Product": "Producto",
+            "Grade": "Grado",
+            "Origin": "Origen",
+            "mTon": "ton",
+            "Transport Info": "Informacion de Transporte",
+            "Transport": "Transporte",
+            "Vehicle": "Veiculo",
+            "Plates": "Placas",
+            "Driver": "Chofer",
+            "Weight Info": "Informacion de Pesos",
+            "Gross": "Bruto",
+            "Tare": "Tara",
+            "Net": "Neto",
+            "Discount W": "Peso Descontado",
+            "m. Ton": "ton",
+            "Grain Info": "Informacion de Grano",
+            "Moisture": "Humedad",
+            "Weight": "Peso Especifico",
+            "Plague": "Plagua",
+            "PPB": "PPB",
+            "Lot": "Lot",
+            "Original Ticket #": "Numero de Ticket Original",
+            "Original Ticket W.": "Peso  de Ticket Original",
+            "Comments": "Commentarios",
+            "Tank": "Tanque"
+        }
     }
 }

@@ -1,9 +1,9 @@
 import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, getDocs, doc, getDoc, collectionData, QueryConstraint, query, limit, orderBy, where } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { ProductInfo } from "./contract";
+import { DiscountTables } from "./discount-tables";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
-import { DiscountTables } from "./discount-tables";
 
 export class Product extends FirebaseDocInterface {
     public brokenGrain: number;

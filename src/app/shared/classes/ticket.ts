@@ -1,5 +1,5 @@
 
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer, where, limit } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, doc, query, QueryConstraint, getDocs, collectionData, collection, getDoc, Query, getCountFromServer, where, limit, orderBy } from "@angular/fire/firestore";
 import { Injectable } from "@angular/core";
 import { getDownloadURL, ref, Storage } from "@angular/fire/storage";
 import { Observable } from "rxjs";
@@ -11,9 +11,9 @@ import { Plant } from "./plant";
 import { DiscountTables } from "./discount-tables";
 import { Product } from "./product";
 
-type TicketStatus = "none" | "pending" | "paid";
+type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
+type TicketType = "in" | "out" | "service";
 
-@Injectable()
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
     public clientName: string;
@@ -64,6 +64,7 @@ export class Ticket extends FirebaseDocInterface{
 
     public contractRef: DocumentReference<Contract>;
 
+    public clientRef: DocumentReference<Contact>;
     public clientStreetAddress: string;
     public clientCity: string;
     public clientState: string;
@@ -78,13 +79,33 @@ export class Ticket extends FirebaseDocInterface{
 
     public subId: string;
     public moneyDiscounts: MoneyDiscounts;
+    public type: TicketType;
 
-    constructor(snapshot: QueryDocumentSnapshot<any>) {
+    constructor(snapshot: QueryDocumentSnapshot<any>);
+    constructor(ref: DocumentReference<any>);
+    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
+        let snapshot;
+        if(snapshotOrRef instanceof QueryDocumentSnapshot) {
+            snapshot = snapshotOrRef
+        }
+        
         super(snapshot, Ticket.converter);
-
+        const data = snapshot?.data();
         const unit = FirebaseDocInterface.session.getDefaultUnit();
 
-        const data = snapshot.data();
+        if(snapshotOrRef instanceof DocumentReference) {
+            this.ref = snapshotOrRef;
+            this.gross = new Mass(null, unit);
+            this.tare = new Mass(null, unit);
+            this.net = new Mass(null, unit);
+            this.dryWeight = new Mass(null, unit);
+            this.weightDiscounts = new WeightDiscounts();
+            this.original_weight = new Mass(null, unit);
+            this.dateIn = new Date();
+            this.status = "pending";
+
+            return;
+        }
 
         this.brokenGrain = data.brokenGrain;
         this.clientName = data.clientName;
@@ -92,7 +113,7 @@ export class Ticket extends FirebaseDocInterface{
         this.contractID = data.contractID;
         this.damagedGrain = data.damagedGrain;
         this.dateIn = data.dateIn.toDate();
-        this.dateOut = data.dateOut.toDate();
+        this.dateOut = data.dateOut?.toDate();
         this.discount = data.discount;
         this.driver = data.driver ?? '';
         this.dryWeight = new Mass(data.dryWeight, unit);
@@ -117,7 +138,7 @@ export class Ticket extends FirebaseDocInterface{
         this.PPB = data.PPB;
         this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
-        this.status = data.status ?? "none";
+        this.status = data.status ?? "closed";
         this.tank = data.tank;
         this.tankId = data.tankId;
         this.tare = new Mass(data.tare, unit);
@@ -134,6 +155,7 @@ export class Ticket extends FirebaseDocInterface{
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
+        this.clientRef = data.clientRef;
         this.clientStreetAddress = data.clientStreetAddress;
         this.clientCity = data.clientCity;
         this.clientState = data.clientState;
@@ -148,6 +170,7 @@ export class Ticket extends FirebaseDocInterface{
 
         this.subId = data.subId;
         this.moneyDiscounts = data.moneyDiscounts ?? {};
+        this.type = data.type ?? data.in ? 'in' : 'out';
 
         this.net = this.gross.subtract(this.tare);
     }
@@ -155,67 +178,69 @@ export class Ticket extends FirebaseDocInterface{
     public static converter = {
         toFirestore(data: Ticket): DocumentData {
             return {
-                brokenGrain: data.brokenGrain,
-                clientName: data.clientName,
-                comment: data.comment,
-                contractID: data.contractID,
-                damagedGrain: data.damagedGrain,
-                dateIn: data.dateIn,
-                dateOut: data.dateOut,
-                discount: data.discount,
-                driver: data.driver,
-                dryWeight: data.dryWeight.get(),
-                dryWeightPercent: data.dryWeightPercent,
-                foreignMatter: data.foreignMatter,
-                grade: data.grade,
-                gross: data.gross.get(),
-                id: data.id,
-                imageLinks: data.imageLinks,
-                impurities: data.impurities,
-                in: data.in,
-                lot: data.lot,
-                moisture: data.moisture,
-                needsAttention: data.needsAttention,
-                origin: data.origin,
-                original_ticket: data.original_ticket,
-                original_weight: data.original_weight.get(),
-                pdfLink: data.pdfLink,
-                plague: data.plague,
-                plates: data.plates,
-                PPB: data.PPB,
-                priceDiscounts: data.priceDiscounts,
-                productName: data.productName,
-                status: data.status,
-                tank: data.tank,
-                tankId: data.tankId,
-                tare: data.tare.get(),
-                truckerId: data.truckerId,
-                vehicleID: data.vehicleID,
-                void: data.void,
-                voidAcceptor: data.voidAcceptor,
-                voidReason: data.voidReason,
-                voidRequest: data.voidRequest,
-                voidRquester: data.voidRequester,
+                brokenGrain: data.brokenGrain ?? null,
+                clientName: data.clientName ?? null,
+                comment: data.comment ?? null,
+                contractID: data.contractID ?? null,
+                damagedGrain: data.damagedGrain ?? null,
+                dateIn: data.dateIn ?? null,
+                dateOut: data.dateOut ?? null,
+                discount: data.discount ?? null,
+                driver: data.driver ?? null,
+                dryWeight: data.dryWeight?.get() ?? null,
+                dryWeightPercent: data.dryWeightPercent ?? null,
+                foreignMatter: data.foreignMatter ?? null,
+                grade: data.grade ?? null,
+                gross: data.gross?.get() ?? null,
+                id: data.id ?? null,
+                imageLinks: data.imageLinks ?? null,
+                impurities: data.impurities ?? null,
+                in: data.in ?? null,
+                lot: data.lot ?? null,
+                moisture: data.moisture ?? null,
+                needsAttention: data.needsAttention ?? null,
+                origin: data.origin ?? null,
+                original_ticket: data.original_ticket ?? null,
+                original_weight: data.original_weight?.get() ?? null,
+                pdfLink: data.pdfLink ?? null,
+                plague: data.plague ?? null,
+                plates: data.plates ?? null,
+                PPB: data.PPB ?? null,
+                //priceDiscounts: data.priceDiscounts ?? null,
+                productName: data.productName ?? null,
+                status: data.status ?? null,
+                tank: data.tank ?? null,
+                tankId: data.tankId ?? null,
+                tare: data.tare?.get() ?? null,
+                truckerId: data.truckerId ?? null,
+                vehicleID: data.vehicleID ?? null,
+                void: data.void ?? null,
+                voidAcceptor: data.voidAcceptor ?? null,
+                voidReason: data.voidReason ?? null,
+                voidRequest: data.voidRequest ?? null,
+                voidRquester: data.voidRequester ?? null,
                 voidDate: data.voidDate ?? null,
-                weight: data.weight,
-                weightDiscounts: data.weightDiscounts,
+                weight: data.weight ?? null,
+                //weightDiscounts: data.weightDiscounts ?? null,
 
-                contractRef: data.contractRef,
+                contractRef: data.contractRef ?? null,
 
-                clientStreetAddress: data.weight,
-                clientCity: data.weight,
-                clientState: data.weight,
-                clientZipCode: data.weight,
+                clientRef: data.clientRef ?? null,
+                clientStreetAddress: data.clientStreetAddress ?? null,
+                clientCity: data.clientCity ?? null,
+                clientState: data.clientState ?? null,
+                clientZipCode: data.clientZipCode ?? null,
                 
-                transportName: data.weight,
-                transportStreetAddress: data.weight,
-                transportCity: data.weight,
-                transportState: data.weight,
-                transportZipCode: data.weight,
-                transportCaat: data.weight,
+                transportName: data.transportName ?? null,
+                transportStreetAddress: data.transportStreetAddress ?? null,
+                transportCity: data.transportCity ?? null,
+                transportState: data.transportState ?? null,
+                transportZipCode: data.transportZipCode ?? null,
+                transportCaat: data.transportCaat ?? null,
 
-                subId: data.subId,
-                moneyDiscounts: data.moneyDiscounts,
+                subId: data.subId ?? null,
+                moneyDiscounts: data.moneyDiscounts ?? null,
+                type: data.type ?? null,
 
             }
         },
@@ -332,6 +357,14 @@ export class Ticket extends FirebaseDocInterface{
         return ticketSnapshot.data().count;
     }
 
+    public static async getActiveTickets(db: Firestore, company: string, plant: string): Promise<Ticket[]> {
+        const ticketQuery = Ticket.getCollectionReference(db, company, plant, where('status', '==', 'pending'));
+        return getDocs(ticketQuery).then(result => {
+            return result.docs.map(t => t.data()).sort((a,b) => a.dateIn.getTime() - b.dateIn.getTime());
+        });
+    }
+
+
     public getWeightDiscounts(discountTables: DiscountTables) {
         this.weightDiscounts.getDiscounts(this, discountTables);
     }
@@ -419,7 +452,7 @@ export class WeightDiscounts {
     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
         for (const table of (discountTables?.tables ?? [])) {
             const key = table.fieldName;
-            const rowData = table.data.find(row => ticket[key] > row.low && ticket[key] < row.high);
+            const rowData = table.data.find(row => ticket[key] >= row.low && ticket[key] <= row.high);
 
             this[key] ??= new Mass(0, null);
             this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;
