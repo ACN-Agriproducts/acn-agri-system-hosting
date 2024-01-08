@@ -703,5 +703,12 @@
         "closed": "cerrado",
         "cancelled": "cancelado",
         "canceled": "cancelado"
+    },
+    "treasury": {
+        "Treasury": "Tesoreria",
+        "accounts": {
+            "Accounts": "Cuentas",
+            "Account": "Cuenta"
+        }
     }
 }

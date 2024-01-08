@@ -704,5 +704,12 @@
         "closed": "closed",
         "cancelled": "cancelled",
         "canceled": "canceled"
+    },
+    "treasury": {
+        "Treasury": "Treasury",
+        "accounts": {
+            "Accounts": "Accounts",
+            "Account": "Account"
+        }
     }
 }
