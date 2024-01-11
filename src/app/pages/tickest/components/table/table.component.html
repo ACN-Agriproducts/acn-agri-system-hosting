@@ -347,7 +347,7 @@
     <!-- ================================= -->
     <ng-container *ngFor="let item of paginator?.list">
         <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
-            *ngIf="item.status != 'pending'" >
+            *ngIf="item.status != 'active'" >
             <div class="item-content ion-hide-lg-up">
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
                     <div class="content-item-text">
@@ -460,7 +460,7 @@
 </ion-card>
 <div class="ion-hide-sm-up">
     <ng-container *ngFor="let item of paginator?.list">
-        <ion-card class="item-card" *ngIf="item.status != 'pending'">
+        <ion-card class="item-card" *ngIf="item.status != 'active'">
             <ion-item lines="none" button (click)="openDetails($event)">
                 <ion-label slot="start">
                     <h2>Ticket # <span>{{item.displayId}}</span></h2>
