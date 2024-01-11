@@ -51,7 +51,7 @@
               </button>
             </mat-card-actions>
           </mat-card>
-          <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.payments?.read)">
+          <mat-card *ngIf="permissions?.admin || permissions?.payments?.read">
             <mat-card-header>
               <mat-card-subtitle>{{ t('Payments') }}</mat-card-subtitle>
             </mat-card-header>
