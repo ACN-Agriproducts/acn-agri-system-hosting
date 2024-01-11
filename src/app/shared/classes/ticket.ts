@@ -358,7 +358,7 @@ export class Ticket extends FirebaseDocInterface{
     }
 
     public static async getActiveTickets(db: Firestore, company: string, plant: string): Promise<Ticket[]> {
-        const ticketQuery = Ticket.getCollectionReference(db, company, plant, where('status', '==', 'pending'));
+        const ticketQuery = Ticket.getCollectionReference(db, company, plant, where('status', '==', 'active'));
         return getDocs(ticketQuery).then(result => {
             return result.docs.map(t => t.data()).sort((a,b) => a.dateIn.getTime() - b.dateIn.getTime());
         });

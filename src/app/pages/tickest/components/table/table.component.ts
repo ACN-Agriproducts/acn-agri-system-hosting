@@ -59,7 +59,7 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   async getTickets(){
-    onSnapshot(Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), where('status', '==', 'pending'), where('in', '==', this.inTicket)), next => {
+    onSnapshot(Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), where('status', '==', 'active'), where('in', '==', this.inTicket)), next => {
       this.scaleTickets = next.docs.sort((a, b) => a.data().id - b.data().id).map(t => t.data());
     });
 
