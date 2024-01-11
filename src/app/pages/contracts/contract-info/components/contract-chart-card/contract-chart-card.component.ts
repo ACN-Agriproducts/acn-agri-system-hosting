@@ -19,7 +19,8 @@ export class ContractChartCardComponent implements OnInit {
   public stackedCustomColors: any = [
     { name: "Paid", value: "#437b40" },
     { name: "Pending", value: "#FFBC04" },
-    { name: "To Be Delivered", value: "#437b40" }
+    { name: "Current Delivered", value: "#437b40" },
+    { name: "To Be Delivered", value: "#FFBC04" }
   ];
   public chartDataMulti: {
     name: string,
@@ -47,7 +48,8 @@ export class ContractChartCardComponent implements OnInit {
       {
         name: this.transloco.translate("contracts.info.Grain"),
         series: [
-          { name: "To Be Delivered", value: data.toBeDelivered },
+          { name: "Current Delivered", value: data.currentDelivered },
+          { name: "To Be Delivered", value: data.toBeDelivered }
         ]
       },
       {
