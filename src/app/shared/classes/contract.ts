@@ -377,7 +377,6 @@ export class Contract extends FirebaseDocInterface {
 
                 totalLiquidations: data.totalLiquidations,
                 totalPayments: data.totalPayments,
-                // toBeDelivered: data.toBeDelivered,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contract {
