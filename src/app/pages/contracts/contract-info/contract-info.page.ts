@@ -50,10 +50,10 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     this.unsubs.push(Contract.getSnapshotById(this.db, this.currentCompany, this.id, async doc => {
       this.currentContract = doc.data();
       this.ticketList = await this.currentContract.getTickets();
-      
+
       this.contractChartData = {
         currentDelivered: this.currentContract.currentDelivered.getMassInUnit("bu") * this.currentContract.pricePerBushel, 
-        toBeDelivered: (this.currentContract.quantity.getMassInUnit("bu") - this.currentContract.currentDelivered.getMassInUnit("bu")) * this.currentContract.pricePerBushel, 
+        toBeDelivered: Math.max(0, (this.currentContract.quantity.getMassInUnit("bu") - this.currentContract.currentDelivered.getMassInUnit("bu")) * this.currentContract.pricePerBushel) || 0, 
         totalPaidLiquidations: 0,
         totalPendingLiquidations: 0,
         totalPaidPayments: 0,
