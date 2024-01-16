@@ -1,31 +1,79 @@
 .content-card-treasury {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 15px;
+  row-gap: 15px;
+}
+.item-treasury .item-text-treasury {
+  p {
+    margin: 0;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 15px;
-    row-gap: 15px;
-  }
-  .item-treasury .item-text-treasury {
-    p {
-      margin: 0;
-      display: grid;
-      grid-template-columns: auto auto;
-      column-gap: 5px;
-      justify-content: flex-start;
-      align-items: center;
-    }
-  }
-  .content-title {
-    // position: sticky;
-    // top: 0;
-    // right: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    // column-gap: 15px;
-    align-content: center;
+    grid-template-columns: auto auto;
+    column-gap: 5px;
+    justify-content: flex-start;
     align-items: center;
-    z-index: 500;
-    background: var(--ion-color-light);
-    // padding: 16px 16px;
-    transition: all 0.27s ease-in-out;
   }
+}
+.content-title {
+  // position: sticky;
+  // top: 0;
+  // right: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  // column-gap: 15px;
+  align-content: center;
+  align-items: center;
+  z-index: 500;
+  background: var(--ion-color-light);
+  // padding: 16px 16px;
+  transition: all 0.27s ease-in-out;
+}
+
+.account-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, auto));
+  align-items: center;
+
+  li {
+    font-size: 0.8rem;
+    margin-top: 0;
+  }
+  h2 {
+    font-size: 1.1em;
+  }
+
+  ion-card {
+    max-width: 450px;
+    max-height: 350px;
+  }
+  ion-card-content {
+    color: var(--ion-color-dark);
+  }
+}
+
+#add-account-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 200px;
+  height: 200px;
+
+  ion-icon {
+    font-size: 4rem;
+    color: var(--ion-color-primary);
+    width: 100%;
+    pointer-events: none;
+  }
+}
+
+div:has(>#add-account-card) {
+  display: flex;
+  justify-content: center;
+}
+
+.transaction-history-chart {
+  max-width: 400px;
+  max-height: 250px;
+}
