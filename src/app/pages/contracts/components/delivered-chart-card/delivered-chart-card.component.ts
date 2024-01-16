@@ -28,6 +28,8 @@ export class DeliveredChartCardComponent implements OnInit {
 
   ngOnInit() {
     this.buildTableData();
+    
+    console.log("hello", this.chartData)
   }
 
   buildTableData() {

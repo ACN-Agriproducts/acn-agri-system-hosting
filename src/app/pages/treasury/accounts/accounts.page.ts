@@ -17,8 +17,6 @@ export class AccountsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.accounts = Account.getAccounts(this.db, this.session.getCompany());
-    console.log(this.accounts)
   }
 
   public async createAccount() {
@@ -28,3 +26,5 @@ export class AccountsPage implements OnInit {
   }
 
 }
+
+// DELETE ACCOUNTS PAGE

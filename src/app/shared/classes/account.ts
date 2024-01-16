@@ -8,6 +8,7 @@ export class Account extends FirebaseDocInterface {
     public routingNumbers: string[]; // or routingNums
     public balance: number;
     public transactionHistory: { [date: string]: number };
+    // public bankName: string; // ???
 
     constructor(snapshotOrRef: QueryDocumentSnapshot | DocumentReference) {
         let snapshot;

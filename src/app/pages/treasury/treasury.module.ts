@@ -10,6 +10,7 @@ import { TreasuryPageRoutingModule } from './treasury-routing.module';
 
 import { TreasuryPage } from './treasury.page';
 import { TableComponent } from './components/table/table.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { TableComponent } from './components/table/table.component';
     FormsModule,
     IonicModule,
     TreasuryPageRoutingModule,
-    CoreModule
+    CoreModule,
+    NgxChartsModule
   ],
   declarations: [
     TreasuryPage, 
