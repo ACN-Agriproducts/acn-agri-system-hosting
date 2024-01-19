@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Contract } from '@shared/classes/contract';
+import { Contract, ProductInfo } from '@shared/classes/contract';
 import { DEFAULT_DISPLAY_UNITS, LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
 import { Mass, UNIT_LIST, units } from '@shared/classes/mass';
 import { Price } from '@shared/classes/price';
 import { PriceDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 import { LiquidationPrintableData } from '../liquidation-dialog/liquidation-dialog.component';
+import { Product } from '@shared/classes/product';
 
 
 @Component({
@@ -51,19 +52,8 @@ export class DiscountsPipe implements PipeTransform {
 })
 export class WeightDiscountsPipe implements PipeTransform {
 
-  transform(discounts: WeightDiscounts): Mass {
-    return discounts.totalMass();
+  transform(discounts: WeightDiscounts, product: Product | ProductInfo): Mass {
+    return discounts.totalMass(product);
   }
 
 }
-
-// @Pipe({
-//   name: 'priceDiscounts'
-// })
-// export class PriceDiscountsPipe implements PipeTransform {
-
-//   transform(discounts: PriceDiscounts, ...args: any): Price {
-//     return discounts.total();
-//   }
-
-// }
