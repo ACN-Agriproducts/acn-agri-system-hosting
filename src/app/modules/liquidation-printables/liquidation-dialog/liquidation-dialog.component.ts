@@ -127,7 +127,7 @@ export class LiquidationDialogComponent implements OnInit {
     // populating worksheet columns
     this.data.selectedTickets.forEach(ticket => {
       const net = ticket.gross.getMassInUnit(this.data.displayUnits.get('weight')) - ticket.tare.getMassInUnit(this.data.displayUnits.get('weight'));
-      const adjustedWeight = net - ticket.weightDiscounts.totalMass().get();
+      const adjustedWeight = net - ticket.weightDiscounts.totalMass(this.data.contract.productInfo).getMassInUnit(this.data.displayUnits.get('weight'));
       const total = (this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) * adjustedWeight);
       
       worksheet.addRow({
