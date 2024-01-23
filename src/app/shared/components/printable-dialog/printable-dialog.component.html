@@ -4,7 +4,7 @@
       ngxPrint
       printSectionId="printable"
       [useExistingCss]="true"
-      [printStyle]="printStyle"
+      [printStyle]="{'@page' : { size: 'letter portrait', margin: '1in' }}"
     >
       <mat-icon>print</mat-icon>
     </button>
@@ -16,5 +16,7 @@
 </mat-toolbar>
 
 <div class="printable-wrapper">
-  <ng-content></ng-content>
+  <div id="printable">
+    <ng-content></ng-content>
+  </div>
 </div>
