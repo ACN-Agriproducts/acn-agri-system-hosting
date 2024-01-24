@@ -10,11 +10,11 @@
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>{{t('Status')}}</mat-label>
-                <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,cancelled">
-                    <mat-option value="active,closed,pending,cancelled">{{t('all')}}</mat-option>
+                <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,cancelled,paid">
+                    <mat-option value="active,closed,pending,cancelled,paid">{{t('all')}}</mat-option>
                     <mat-option value="active">{{t('active') | titlecase}}</mat-option>
                     <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
-                    <mat-option value="closed">{{t('closed') | titlecase}}</mat-option>
+                    <mat-option value="closed,paid">{{t('closed') | titlecase}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
@@ -156,9 +156,9 @@
                             <ion-text>{{contract.date | date}}</ion-text>
                         </ion-item>
                         <ion-item lines="none">
-                            <ion-text class="item-status" [class.pending]="contract.status === 'pending'"
-                                [class.active]="contract.status === 'active'" [class.close]="contract.status === 'closed'"
-                                [class.cancel]="contract.status === 'cancelled'">{{t(contract.status)}}
+                            <ion-text class="item-status" 
+                                [ngClass]="contract.status"
+                                >{{t(contract.status)}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">

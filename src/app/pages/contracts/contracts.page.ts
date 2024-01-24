@@ -30,7 +30,7 @@ export class ContractsPage implements AfterViewInit {
   public assending: boolean = false;
   public listFilter: any = [];
   public activeFilter: boolean;
-  public orderStatus: string[] = ["active", "closed", "pending", "canceled"];
+  public orderStatus: string[] = ["active", "closed", "pending", "canceled", "paid"];
   public displayUnit: units;
   public exportMode: boolean = false;
   public exportList: Set<Contract>;

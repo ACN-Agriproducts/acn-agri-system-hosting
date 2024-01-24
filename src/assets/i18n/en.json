@@ -42,6 +42,7 @@
             "active": "active",
             "cancelled": "cancelled",
             "cancel": "Cancel",
+            "paid": "Paid",
             "download": "Download",
             "analytics": "Analytics"
         },
