@@ -1,41 +1,77 @@
 <app-header-toolbar titulo="Treasury"></app-header-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-    <div class="account-cards">
-        <ion-card *ngFor="let account of (accounts | async); let index = index">
-            <ion-card-header>
-                <ion-card-title><b>{{ account.name | titlecase }}</b></ion-card-title>
-                <ion-card-subtitle>ACCOUNT #: <b>{{ account.accountNumber }}</b></ion-card-subtitle>
-                <!-- <ion-card-subtitle>
-                    ROUTING #'s: 
-                    <span *ngFor="let routingNumber of account.routingNumbers; let last = last">{{ routingNumber }}<span *ngIf="!last">, </span></span>
-                </ion-card-subtitle> -->
-            </ion-card-header>
-            <ion-card-content>
-                <ul>
-                    <li>ACCOUNT #: <b>{{ account.accountNumber }}</b></li>
-                    <li>
-                        ROUTING #'s:
-                        <ul>
-                            <li *ngFor="let routingNumber of account.routingNumbers"><b>{{ routingNumber }}</b></li>
-                        </ul>
-                    </li>
-                    <li>Balance: <b>{{ account.balance }}</b></li>
-                </ul>
-                <div class="transaction-history-chart">
+    <!-- <div class="accounts-section"> -->
+        <div class="account-cards" *ngIf="ionicTemplate">
+            <!-- <ion-card *ngFor="let account of (accounts | async); let index = index">
+                <ion-card-header>
+                    <ion-card-title>{{ account.name | titlecase }}</ion-card-title>
+                    <ion-card-subtitle>ACCOUNT # <b>{{ account.accountNumber }}</b></ion-card-subtitle>
+                    <ion-card-subtitle>
+                        ROUTING:
+                        <span *ngFor="let routingNumber of account.routingNumbers; let last = last"><b>{{ routingNumber }}</b><span *ngIf="!last">, </span></span>
+                    </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                    <ul>
+                        <li>
+                            Routing:
+                            <ul style="list-style-type: none">
+                                <li *ngFor="let routingNumber of account.routingNumbers"><b>{{ routingNumber }}</b></li>
+                            </ul>
+                        </li>
+                        <li>Balance: <b>{{ account.balance }}</b></li>
+                    </ul>
+                    <div class="transaction-history-chart">
+                        <ngx-charts-line-chart
+                            [results]="chartData"
+                            [xAxis]="true"
+                            [yAxis]="true"
+                            xAxisLabel="Date"
+                            yAxisLabel="Balance"
+                            [showXAxisLabel]="false"
+                            [showYAxisLabel]="false"
+                        ></ngx-charts-line-chart>
+                    </div>
+                </ion-card-content>
+            </ion-card> -->
+            <ion-card *ngFor="let account of (accounts | async); let index = index">
+                <ion-card-header>
+                    <ion-card-title>{{ account.name | titlecase }}</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
                     <ngx-charts-line-chart
                         [results]="chartData"
                         [xAxis]="true"
                         [yAxis]="true"
                         xAxisLabel="Date"
                         yAxisLabel="Balance"
-                        [showXAxisLabel]="false"
+                        [showXAxisLabel]="true"
                         [showYAxisLabel]="true"
                     ></ngx-charts-line-chart>
-                </div>
-            </ion-card-content>
-        </ion-card>
-        <div>
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <div class="account-cards ion-padding" *ngIf="!ionicTemplate">
+            <mat-card *ngFor="let account of (accounts | async); let index = index">
+                <mat-card-header>
+                    <mat-card-title>{{ account.name | titlecase }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <ngx-charts-line-chart
+                        *ngIf="chartData"
+                        [results]="chartData"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        xAxisLabel="Date"
+                        yAxisLabel="Balance"
+                        [showXAxisLabel]="true"
+                        [showYAxisLabel]="true"
+                    ></ngx-charts-line-chart>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <!-- <div>
             <ion-card id="add-account-card" button (click)="createAccount()"
                 matTooltip="Create Account"
                 matTooltipClass="tooltip-primary-solid"
@@ -44,11 +80,14 @@
                 <ion-icon name="add-outline"></ion-icon>
             </ion-card>
         </div>
-    </div>
+    </div> -->
     <div class="content-title">
         <ion-searchbar ></ion-searchbar>
         <ion-button>
             <ion-text slot="end">New order</ion-text>
+        </ion-button>
+        <ion-button (click)="createAccount()">
+            <ion-text slot="end">New Account</ion-text>
         </ion-button>
     </div>
     <app-table-treasury></app-table-treasury>
