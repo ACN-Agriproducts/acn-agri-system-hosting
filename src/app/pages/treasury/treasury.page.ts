@@ -3,7 +3,7 @@ import { PopoverController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Account } from '@shared/classes/account';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Firestore, doc } from '@angular/fire/firestore';
+import { Firestore, Timestamp, doc } from '@angular/fire/firestore';
 
 
 @Component({
@@ -15,6 +15,9 @@ export class TreasuryPage implements OnInit {
   public press: any;
   public accounts: Promise<Account[]>;
   public chartData: any;
+  public date: Date = new Date();
+
+  public ionicTemplate: boolean = false;
   
   constructor(
     private popoverController: PopoverController,
@@ -26,32 +29,23 @@ export class TreasuryPage implements OnInit {
     this.accounts = Account.getAccounts(this.db, this.session.getCompany());
     console.log(this.accounts)
 
-    const newDate = new Date();
-    console.log(newDate.toDateString())
+    this.date.setDate(1);
+    this.date.setHours(0, 0, 0, 0);
+    console.log(this.date.toJSON())
 
     this.chartData = [
       {
         name: "Transaction History",
-        series: [
-          {
-            value: 500,
-            name: newDate.toDateString()
-          },
-          {
-            value: 1000,
-            name: (new Date(2024, 1, 13)).toDateString()
-          },
-          {
-            value: 400,
-            name: (new Date(2024, 1, 14)).toDateString()
-          },
-          {
-            value: 700,
-            name: (new Date(2024, 1, 15)).toDateString()
-          }
-        ]
+        series: []
       }
     ];
+
+    for (let i = 0; i < 30; i++) {
+      this.chartData[0].series.push({
+        value: Math.floor(Math.random() * 1000),
+        name: new Date(this.date.valueOf() + 86400000 * i)
+      });
+    }
   }
 
   public down = (event) => {
@@ -73,11 +67,23 @@ export class TreasuryPage implements OnInit {
 
   public async createAccount() {
     const newAccount = new Account(doc(Account.getCollectionReference(this.db, this.session.getCompany())));
-    newAccount.name = "New Account"
+
+    newAccount.name = "Avery Accounts"
     newAccount.accountNumber = "00000000000";
-    newAccount.routingNumbers = ["00000", "11111", "22222", "33333"];
+    newAccount.routingNumbers = ["000000000", "111111111", "222222222", "333333333"];
+
+    const timestamp = Timestamp.fromDate(this.date);
+    newAccount.transactionHistory = {
+      [timestamp.toString()]: Math.floor(Math.random() * 1000)
+    };
+
     await newAccount.set();
     console.log(newAccount)
   }
 
 }
+
+// WORK ON CREATING ACCOUNTS -- USE A NEW DIALOG PROBABLY -- KEEP WORKING ON LAYOUT/DESIGN OF ACCOUNT CARDS.
+// MAYBE MAKE IT SO THAT ONLY THE CHART SHOWS AND WHEN YOU CLICK ON THE ACCOUNT CARD YOU CAN SEE THE REST OF
+// IT'S INFORMATION, LIKE THE ACCOUNT AND ROUTING NUMBERS AS WELL AS THE BALANCE
+// TECHNICALLY YOU SHOULD ALREADY BE ABLE TO SEE THE BALANCE ON THE TRANSACTION HISTORY CHART

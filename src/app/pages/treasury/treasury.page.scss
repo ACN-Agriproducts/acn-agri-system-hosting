@@ -20,7 +20,7 @@
   // right: 0;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   // column-gap: 15px;
   align-content: center;
   align-items: center;
@@ -30,25 +30,51 @@
   transition: all 0.27s ease-in-out;
 }
 
+
 .account-cards {
   display: grid;
-  grid-template-columns: repeat(3, minmax(200px, auto));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 500px));
   align-items: center;
+
+  gap: 1rem;
 
   li {
     font-size: 0.8rem;
-    margin-top: 0;
   }
   h2 {
     font-size: 1.1em;
   }
-
-  ion-card {
-    max-width: 450px;
-    max-height: 350px;
+  ul {
+    padding-left: 20px;
+    margin: 0;
   }
+
+  mat-card {
+    height: 300px;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  mat-card-header {
+    flex: auto 0 0;
+    gap: 0.5rem;
+  }
+  mat-card-content {
+    flex: auto 1;
+  }
+
   ion-card-content {
     color: var(--ion-color-dark);
+
+    display: flex;
+    justify-content: center;
+    flex-flow: row wrap;
+    ul {
+      flex: 0 0 auto;
+    }
+    .transaction-history-chart {
+      flex: 1 1 auto;
+    }
   }
 }
 
@@ -73,7 +99,11 @@ div:has(>#add-account-card) {
   justify-content: center;
 }
 
-.transaction-history-chart {
-  max-width: 400px;
-  max-height: 250px;
+::ng-deep .ngx-charts text {
+  fill: var(--ion-color-dark);
+}
+
+.accounts-section {
+  display: grid;
+  grid-template-columns: 90% 10%;
 }
