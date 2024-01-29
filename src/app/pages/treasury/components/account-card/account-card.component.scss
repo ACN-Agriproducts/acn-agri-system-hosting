@@ -1,0 +1,37 @@
+
+mat-card {
+    background: var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));
+    color: var(--ion-color-dark);
+}
+
+mat-card {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column nowrap;
+}
+mat-card-header {
+    flex: 0 0 auto;
+}
+mat-card-content {
+    flex: 1 1 auto;
+}
+
+ion-card {
+    height: 100%;
+    margin: 0;
+    display: flex !important;
+    flex-flow: column nowrap;
+}
+ion-card-header {
+    // flex: 0 0 auto;
+}
+ion-card-content {
+    flex: 1 1 auto;
+    display: flex !important;
+    justify-content: center;
+
+    ngx-charts-line-chart {
+        flex: 1 1 auto;
+    }
+}

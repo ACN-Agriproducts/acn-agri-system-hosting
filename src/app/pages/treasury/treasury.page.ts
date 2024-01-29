@@ -17,7 +17,7 @@ export class TreasuryPage implements OnInit {
   public chartData: any;
   public date: Date = new Date();
 
-  public ionicTemplate: boolean = false;
+  public ionic: boolean = false;
   
   constructor(
     private popoverController: PopoverController,
@@ -27,25 +27,9 @@ export class TreasuryPage implements OnInit {
 
   ngOnInit() {
     this.accounts = Account.getAccounts(this.db, this.session.getCompany());
-    console.log(this.accounts)
 
     this.date.setDate(1);
     this.date.setHours(0, 0, 0, 0);
-    console.log(this.date.toJSON())
-
-    this.chartData = [
-      {
-        name: "Transaction History",
-        series: []
-      }
-    ];
-
-    for (let i = 0; i < 30; i++) {
-      this.chartData[0].series.push({
-        value: Math.floor(Math.random() * 1000),
-        name: new Date(this.date.valueOf() + 86400000 * i)
-      });
-    }
   }
 
   public down = (event) => {
@@ -71,14 +55,17 @@ export class TreasuryPage implements OnInit {
     newAccount.name = "Avery Accounts"
     newAccount.accountNumber = "00000000000";
     newAccount.routingNumbers = ["000000000", "111111111", "222222222", "333333333"];
-
-    const timestamp = Timestamp.fromDate(this.date);
-    newAccount.transactionHistory = {
-      [timestamp.toString()]: Math.floor(Math.random() * 1000)
-    };
+    newAccount.balance = Math.floor(Math.random() * 1000);
+    
+    for (let i = 0; i < 30; i++) {
+      const timestamp = Timestamp.fromDate(new Date(this.date.valueOf() + 86400000 * i));
+      newAccount.transactionHistory[timestamp.toString()] = Math.floor(Math.random() * 1000 + 200);
+      if (i === 29) {
+        newAccount.balance = newAccount.transactionHistory[timestamp.toString()];
+      }
+    }
 
     await newAccount.set();
-    console.log(newAccount)
   }
 
 }
