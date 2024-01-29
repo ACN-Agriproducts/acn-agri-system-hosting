@@ -11,6 +11,7 @@ import { TreasuryPageRoutingModule } from './treasury-routing.module';
 import { TreasuryPage } from './treasury.page';
 import { TableComponent } from './components/table/table.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { AccountCardComponent } from './components/account-card/account-card.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   declarations: [
     TreasuryPage, 
     TableComponent,
-    OptionsComponent
+    OptionsComponent,
+    AccountCardComponent
   ]
 })
 export class TreasuryPageModule {}
