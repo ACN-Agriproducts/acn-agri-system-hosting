@@ -12,19 +12,18 @@
           yAxisLabel="Balance"
           [showXAxisLabel]="false"
           [showYAxisLabel]="true"
-          [rotateXAxisTicks]="true"
-          [xAxisTickFormatting]="formatDateTick"
-          [roundDomains]="true"
           [referenceLines]="[{
             name: 'Current Balance',
             value: account.balance
           }]"
           [showRefLines]="true"
+          [scheme]="colorScheme"
+          [rotateXAxisTicks]="true"
     ></ngx-charts-line-chart>
   </mat-card-content>
 </mat-card>
 
-<!-- <ion-card *ngFor="let account of (accounts | async); let index = index">
+<!-- <ion-card>
     <ion-card-header>
         <ion-card-title>{{ account.name | titlecase }}</ion-card-title>
         <ion-card-subtitle>ACCOUNT # <b>{{ account.accountNumber }}</b></ion-card-subtitle>

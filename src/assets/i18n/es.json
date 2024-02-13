@@ -263,7 +263,17 @@
     "treasury": {
         "Treasury": "Tesoreria",
         "accounts": "cuentas",
-        "Accounts": "Cuentas"
+        "Accounts": "Cuentas",
+        "Set Account": "Establecer Cuenta",
+        "Account Name": "Nombre de Cuenta",
+        "Account Number": "Nùmero de Cuenta Principal",
+        "Routing Numbers": "Nùmeros de Ruta Bancaria",
+        "Description": "Descripción",
+        "Number": "Nùmero",
+        "Starting Balance": "Saldo Inicial",
+        "Balance": "Saldo",
+        "add": "agregar",
+        "remove": "quitar"
     },
     "tickets": {
         "console": {

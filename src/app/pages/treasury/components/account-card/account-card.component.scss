@@ -16,22 +16,3 @@ mat-card-header {
 mat-card-content {
     flex: 1 1 auto;
 }
-
-ion-card {
-    height: 100%;
-    margin: 0;
-    display: flex !important;
-    flex-flow: column nowrap;
-}
-ion-card-header {
-    // flex: 0 0 auto;
-}
-ion-card-content {
-    flex: 1 1 auto;
-    display: flex !important;
-    justify-content: center;
-
-    ngx-charts-line-chart {
-        flex: 1 1 auto;
-    }
-}

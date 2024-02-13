@@ -262,7 +262,17 @@
     "treasury": {
         "Treasury": "Treasury",
         "accounts": "accounts",
-        "Accounts": "Accounts"
+        "Accounts": "Accounts",
+        "Set Account": "Set Account",
+        "Account Name": "Account Name",
+        "Account Number": "Account Number",
+        "Routing Numbers": "Routing Numbers",
+        "Description": "Description",
+        "Number": "Number",
+        "Starting Balance": "Starting Balance",
+        "Balance": "Balance",
+        "add": "add",
+        "remove": "remove"
     },
     "tickets": {
         "console": {
