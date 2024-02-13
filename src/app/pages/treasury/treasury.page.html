@@ -1,20 +1,18 @@
 <app-header-toolbar titulo="Treasury"></app-header-toolbar>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-    <!-- <div class="accounts-section"> -->
-        <div class="accounts-card-grid">
-            <app-account-card *ngFor="let account of accounts | async" [account]="account"></app-account-card>
-        </div>
-        <!-- <div>
-            <ion-card id="add-account-card" button (click)="createAccount()"
+    <div class="accounts-card-grid">
+        <app-account-card *ngFor="let account of accounts" [account]="account"></app-account-card>
+        <div class="add-account-container">
+            <mat-card class="add-account-card" button (click)="createAccount()"
                 matTooltip="Create Account"
                 matTooltipClass="tooltip-primary-solid"
                 matTooltipShowDelay="500"
             >
                 <ion-icon name="add-outline"></ion-icon>
-            </ion-card>
+            </mat-card>
         </div>
-    </div> -->
+    </div>
     <div class="content-title">
         <ion-searchbar ></ion-searchbar>
         <ion-button>

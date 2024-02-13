@@ -121,6 +121,7 @@
             "options": "options",
             "payments": "payments",
             "Payments": "Payments",
+            "Peso Vol.": "Peso Vol.",
             "preview": "preview",
             "Preview": "Preview",
             "Price ($/BU)": "Price ($/BU)",
@@ -294,7 +295,22 @@
         "Add New": "Add New",
         "Destination": "Destination",
         "Document Name": "Document Name",
-        "Download File": "Download File"        
+        "Download File": "Download File"
+    },
+    "treasury": {
+        "Treasury": "Treasury",
+        "accounts": "accounts",
+        "Accounts": "Accounts",
+        "Set Account": "Set Account",
+        "Account Name": "Account Name",
+        "Account Number": "Account Number",
+        "Routing Numbers": "Routing Numbers",
+        "Description": "Description",
+        "Number": "Number",
+        "Starting Balance": "Starting Balance",
+        "Balance": "Balance",
+        "add": "add",
+        "remove": "remove"
     },
     "tickets": {
         "Report": "Report",
@@ -341,7 +357,6 @@
             "damagedGrain": "Damaged Grain",
             "price": "Price",
             "Discount Info" : "Discount Info"
-
         },
         "table": {
             "Type": "Type",
@@ -704,12 +719,5 @@
         "closed": "closed",
         "cancelled": "cancelled",
         "canceled": "canceled"
-    },
-    "treasury": {
-        "Treasury": "Treasury",
-        "accounts": {
-            "Accounts": "Accounts",
-            "Account": "Account"
-        }
     }
 }

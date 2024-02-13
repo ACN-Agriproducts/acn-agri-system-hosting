@@ -12,6 +12,7 @@ import { TreasuryPage } from './treasury.page';
 import { TableComponent } from './components/table/table.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AccountCardComponent } from './components/account-card/account-card.component';
+import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { AccountCardComponent } from './components/account-card/account-card.com
     TreasuryPage, 
     TableComponent,
     OptionsComponent,
-    AccountCardComponent
+    AccountCardComponent,
+    SetAccountDialogComponent
   ]
 })
 export class TreasuryPageModule {}

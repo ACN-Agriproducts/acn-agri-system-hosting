@@ -1,11 +1,13 @@
-import { CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
+import { formatDate } from "@angular/common";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Firestore, collection, getDocs, query } from "@angular/fire/firestore";
+import { CollectionReference, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, collection, getDocs, onSnapshot, query } from "@angular/fire/firestore";
+
+const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
 export class Account extends FirebaseDocInterface {
     public name: string;
-    public accountNumber: string; // or id ???
-    public routingNumbers: string[]; // or routingNums
+    public accountNumber: string;
+    public routingNumbers: { [description: string]: string };
     public balance: number;
     public transactionHistory: { [date: string]: number };
     // public bankName: string; // ???
@@ -25,10 +27,10 @@ export class Account extends FirebaseDocInterface {
 
             this.name = "";
             this.accountNumber = "";
-            this.routingNumbers = [];
-            this.balance = 0;
+            this.routingNumbers = {};
+            this.balance = null;
             this.transactionHistory = {};
-
+            
             return;
         }
 
@@ -62,6 +64,21 @@ export class Account extends FirebaseDocInterface {
         return getDocs(query(this.getCollectionReference(db, company), ...constraints)).then(result => {
             return result.docs.map(snap => snap.data());
         });
+    }
+
+    public static getAccountsSnapshot(db: Firestore, company: string, onNext: (snapshot: QuerySnapshot<Account>) => void, ...constraints): Unsubscribe {
+        const collectionQuery = query(Account.getCollectionReference(db, company), ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
+
+    public initializeTransactionHistory(): void {
+        const newDate = new Date();
+        newDate.setHours(0, 0, 0, 0);
+
+        for (let dayIndex = 0; dayIndex < 30; dayIndex++) {
+            const dateString = formatDate(new Date(newDate.valueOf() - MILLISECONDS_IN_A_DAY * dayIndex), "d MMM y", "en-US");
+            this.transactionHistory[dateString] = this.balance ?? 0;
+        }
     }
     
 }

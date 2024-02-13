@@ -4,6 +4,9 @@ import { Component, OnInit } from '@angular/core';
 import { Account } from '@shared/classes/account';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Firestore, Timestamp, doc } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
+import { lastValueFrom } from 'rxjs';
+import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 
 
 @Component({
@@ -13,7 +16,8 @@ import { Firestore, Timestamp, doc } from '@angular/fire/firestore';
 })
 export class TreasuryPage implements OnInit {
   public press: any;
-  public accounts: Promise<Account[]>;
+  // public accounts: Promise<Account[]>;
+  public accounts: Account[];
   public chartData: any;
   public date: Date = new Date();
 
@@ -22,13 +26,16 @@ export class TreasuryPage implements OnInit {
   constructor(
     private popoverController: PopoverController,
     private session: SessionInfo,
-    private db: Firestore
+    private db: Firestore,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
-    this.accounts = Account.getAccounts(this.db, this.session.getCompany());
+    // this.accounts = Account.getAccounts(this.db, this.session.getCompany());
+    Account.getAccountsSnapshot(this.db, this.session.getCompany(), accounts => {
+      this.accounts = accounts.docs.map(doc => doc.data());
+    });
 
-    this.date.setDate(1);
     this.date.setHours(0, 0, 0, 0);
   }
 
@@ -50,27 +57,26 @@ export class TreasuryPage implements OnInit {
   }
 
   public async createAccount() {
-    const newAccount = new Account(doc(Account.getCollectionReference(this.db, this.session.getCompany())));
+    const dialogRef = this.dialog.open(SetAccountDialogComponent);
 
-    newAccount.name = "Avery Accounts"
-    newAccount.accountNumber = "00000000000";
-    newAccount.routingNumbers = ["000000000", "111111111", "222222222", "333333333"];
-    newAccount.balance = Math.floor(Math.random() * 1000);
+    const account: Account = await lastValueFrom(dialogRef.afterClosed());
+    if (!account) return;
+
+    account.initializeTransactionHistory();
+
+    await account.set();
+  }
+
+  public async editAccount() {
+
+  }
+
+  public async openAccount() {
     
-    for (let i = 0; i < 30; i++) {
-      const timestamp = Timestamp.fromDate(new Date(this.date.valueOf() + 86400000 * i));
-      newAccount.transactionHistory[timestamp.toString()] = Math.floor(Math.random() * 1000 + 200);
-      if (i === 29) {
-        newAccount.balance = newAccount.transactionHistory[timestamp.toString()];
-      }
-    }
-
-    await newAccount.set();
   }
 
 }
 
-// WORK ON CREATING ACCOUNTS -- USE A NEW DIALOG PROBABLY -- KEEP WORKING ON LAYOUT/DESIGN OF ACCOUNT CARDS.
+// WORK ON CREATING/DISPLAYING AN ACCOUNT -- USE A NEW DIALOG PROBABLY
 // MAYBE MAKE IT SO THAT ONLY THE CHART SHOWS AND WHEN YOU CLICK ON THE ACCOUNT CARD YOU CAN SEE THE REST OF
 // IT'S INFORMATION, LIKE THE ACCOUNT AND ROUTING NUMBERS AS WELL AS THE BALANCE
-// TECHNICALLY YOU SHOULD ALREADY BE ABLE TO SEE THE BALANCE ON THE TRANSACTION HISTORY CHART
