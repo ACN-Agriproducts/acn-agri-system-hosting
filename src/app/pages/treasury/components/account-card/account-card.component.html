@@ -1,57 +1,44 @@
 <mat-card>
-  <mat-card-header>
-      <mat-card-title>{{ account.name | titlecase }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-      <ngx-charts-line-chart
-          *ngIf="chartData"
-          [results]="chartData"
-          [xAxis]="true"
-          [yAxis]="true"
-          xAxisLabel="Date"
-          yAxisLabel="Balance"
-          [showXAxisLabel]="false"
-          [showYAxisLabel]="true"
-          [referenceLines]="[{
+    <mat-card-header>
+        <mat-card-title>{{ account.name }}</mat-card-title>
+        <div class="account-actions-container">
+            <!-- <div class="account-actions"> -->
+                <button mat-icon-button (click)="openAccountDetails()">
+                    <mat-icon>info</mat-icon>
+                </button>
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="editAccount()">
+                        <mat-icon color="primary">edit</mat-icon>
+                        <span>Edit</span>
+                    </button>
+                    <button mat-menu-item (click)="archiveAccount()">
+                        <mat-icon color="warn">archive</mat-icon>
+                        <span>Archive</span>
+                    </button>
+                </mat-menu>
+            <!-- </div> -->
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <ngx-charts-line-chart
+            *ngIf="chartData"
+            [results]="chartData"
+            [xAxis]="true"
+            [yAxis]="true"
+            xAxisLabel="Date"
+            yAxisLabel="Balance"
+            [showXAxisLabel]="false"
+            [showYAxisLabel]="true"
+            [referenceLines]="[{
             name: 'Current Balance',
             value: account.balance
-          }]"
-          [showRefLines]="true"
-          [scheme]="colorScheme"
-          [rotateXAxisTicks]="true"
-    ></ngx-charts-line-chart>
-  </mat-card-content>
+            }]"
+            [showRefLines]="true"
+            [scheme]="colorScheme"
+            [rotateXAxisTicks]="true"
+        ></ngx-charts-line-chart>
+    </mat-card-content>
 </mat-card>
-
-<!-- <ion-card>
-    <ion-card-header>
-        <ion-card-title>{{ account.name | titlecase }}</ion-card-title>
-        <ion-card-subtitle>ACCOUNT # <b>{{ account.accountNumber }}</b></ion-card-subtitle>
-        <ion-card-subtitle>
-            ROUTING:
-            <span *ngFor="let routingNumber of account.routingNumbers; let last = last"><b>{{ routingNumber }}</b><span *ngIf="!last">, </span></span>
-        </ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-        <ul>
-            <li>
-                Routing:
-                <ul style="list-style-type: none">
-                    <li *ngFor="let routingNumber of account.routingNumbers"><b>{{ routingNumber }}</b></li>
-                </ul>
-            </li>
-            <li>Balance: <b>{{ account.balance }}</b></li>
-        </ul>
-        <div class="transaction-history-chart">
-            <ngx-charts-line-chart
-                [results]="chartData"
-                [xAxis]="true"
-                [yAxis]="true"
-                xAxisLabel="Date"
-                yAxisLabel="Balance"
-                [showXAxisLabel]="false"
-                [showYAxisLabel]="false"
-            ></ngx-charts-line-chart>
-        </div>
-    </ion-card-content>
-</ion-card> -->

@@ -6,13 +6,25 @@ $ion-dark: var(--ion-color-dark);
 }
 
 mat-dialog-content {
-    min-width: 500px;
+    max-width: 550px;
+    
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 10px;
+    max-height: none;
 }
 
 .form-field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    // display: grid;
+    // grid-template-columns: 1fr 1fr;
     gap: 10px;
+    
+    display: flex;
+    flex-flow: row wrap;
+        
+    mat-form-field {
+        flex: 1 1 100px;
+    }
 }
 
 .action-buttons-container {
@@ -20,11 +32,14 @@ mat-dialog-content {
     flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
+
+    flex: 1 1 auto;
+    margin-bottom: 10px;
 }
 
 section.routing-numbers {
-    display: grid;
-    grid-template-columns: 1fr 0.5fr 1fr;
+    // display: grid;
+    // grid-template-columns: 1fr 0.5fr 1fr;
 
     .routing-list {
         overflow-y: auto;
@@ -33,19 +48,51 @@ section.routing-numbers {
         color: $ion-dark;
         height: 170px;
 
+        flex: 1 0 auto;
+        min-width: 200px;
+
         mat-list-option {
             color: $ion-dark;
         }
     }
+
+    display: flex;
+    flex-flow: row wrap;
 }
 
 .form-field-col {
     display: flex;
     flex-flow: column nowrap;
+
+    flex: 1 0 auto;
 }
 
 .description-form-field {
     textarea {
         min-height: 73px;
     }
+}
+
+@media screen and (max-width: 768px) {
+    ::ng-deep mat-dialog-container {
+        height: 100vh !important;
+        width: 100vw !important;
+    }
+
+    mat-dialog-content {
+        max-width: none;
+    }
+}
+
+.account-name,
+section.routing-numbers,
+mat-divider,
+div[mat-subheader] {
+    flex: 1 1 100%;
+}
+.account-number {
+    flex: 1 1;
+}
+.starting-balance {
+    flex: 1 1;
 }

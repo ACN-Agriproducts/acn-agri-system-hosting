@@ -13,6 +13,8 @@ import { TableComponent } from './components/table/table.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AccountCardComponent } from './components/account-card/account-card.component';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
+import { MatRippleModule } from '@angular/material/core';
+import { SetAccountModalComponent } from './components/set-account-modal/set-account-modal.component';
 
 @NgModule({
   imports: [
@@ -21,14 +23,16 @@ import { SetAccountDialogComponent } from './components/set-account-dialog/set-a
     IonicModule,
     TreasuryPageRoutingModule,
     CoreModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatRippleModule
   ],
   declarations: [
     TreasuryPage, 
     TableComponent,
     OptionsComponent,
     AccountCardComponent,
-    SetAccountDialogComponent
+    SetAccountDialogComponent,
+    SetAccountModalComponent
   ]
 })
 export class TreasuryPageModule {}

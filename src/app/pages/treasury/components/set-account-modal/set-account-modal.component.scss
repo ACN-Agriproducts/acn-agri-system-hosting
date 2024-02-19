@@ -1,0 +1,55 @@
+
+$ion-dark: var(--ion-color-dark);
+
+:host {
+    color: $ion-dark;
+}
+
+ion-content {
+    min-width: 500px;
+}
+
+.form-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.action-buttons-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+section.routing-numbers {
+    display: grid;
+    grid-template-columns: 1fr 0.5fr 1fr;
+
+    .routing-list {
+        overflow-y: auto;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 2px;
+        color: $ion-dark;
+        height: 170px;
+
+        mat-list-option {
+            color: $ion-dark;
+        }
+    }
+}
+
+.form-field-col {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.description-form-field {
+    textarea {
+        min-height: 73px;
+    }
+}
+
+ion-item {
+    margin-bottom: 1rem;
+}

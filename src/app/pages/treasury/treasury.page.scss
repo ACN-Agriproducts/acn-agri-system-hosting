@@ -36,29 +36,6 @@
   align-items: center;
   gap: 1rem;
   padding: 10px;
-
-  // li {
-  //   font-size: 0.8rem;
-  // }
-  // h2 {
-  //   font-size: 1.1em;
-  // }
-  // ul {
-  //   padding-left: 20px;
-  //   margin: 0;
-  // }
-
-  // mat-card-content, ion-card-content {
-  //   display: flex;
-  //   justify-content: center;
-  //   flex-flow: row wrap;
-  //   ul {
-  //     flex: 0 0 auto;
-  //   }
-  //   .transaction-history-chart {
-  //     flex: 1 1 auto;
-  //   }
-  // }
 }
 
 .add-account-card {
@@ -84,4 +61,9 @@
 app-account-card, .add-account-container {
   height: 300px;
   // max-width: 500px;
+}
+
+mat-card {
+  background: var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));
+  color: var(--ion-color-dark);
 }
