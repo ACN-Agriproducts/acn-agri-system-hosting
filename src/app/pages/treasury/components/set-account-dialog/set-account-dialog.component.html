@@ -3,42 +3,23 @@
   <h2 mat-dialog-title>{{ t('Set Account') }}</h2>
   
   <mat-dialog-content>
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" class="account-name">
       <mat-label>{{ t('Account Name') }}</mat-label>
       <input matInput [(ngModel)]="account.name">
     </mat-form-field>
 
-    <div class="form-field-row">
-      <mat-form-field appearance="fill" floatLabel="always">
+    <!-- <div class="form-field-row"> -->
+      <mat-form-field appearance="fill" floatLabel="always" class="account-number">
         <mat-label>{{ t('Account Number') }}</mat-label>
         <span matPrefix>#&nbsp;</span>
         <input matInput [(ngModel)]="account.accountNumber" type="number">
       </mat-form-field>
-      <mat-form-field appearance="fill" floatLabel="always">
+      <mat-form-field appearance="fill" floatLabel="always" class="starting-balance">
         <mat-label>{{ t('Starting Balance') }}</mat-label>
         <span matPrefix>$&nbsp;</span>
         <input matInput [(ngModel)]="account.balance">
       </mat-form-field>
-    </div>
-
-    <!-- <section>
-      <mat-label>{{ t('Routing Numbers') }}</mat-label>
-      <button mat-icon-button color="primary" (click)="addRoutingNumber()">
-        <mat-icon>add_box</mat-icon>
-      </button>
-      <ng-container *ngFor="let item of account.routingNums">
-        <div class="form-field-row">
-          <mat-form-field appearance="fill">
-            <mat-label>{{ t('Number') }}</mat-label>
-            <input matInput [(ngModel)]="item.number" name="{{ item.number }}">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>{{ t('Description') }}</mat-label>
-            <textarea matInput [(ngModel)]="item.description" name="{{ item.description }}"></textarea>
-          </mat-form-field>
-        </div>
-      </ng-container>
-    </section> -->
+    <!-- </div> -->
 
     <mat-divider></mat-divider>
     <div mat-subheader>{{ t('Routing Numbers') }}</div>

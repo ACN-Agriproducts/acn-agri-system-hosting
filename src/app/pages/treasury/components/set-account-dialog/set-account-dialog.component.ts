@@ -24,13 +24,7 @@ export class SetAccountDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.account = this.data ? { ...this.data } : new Account(doc(Account.getCollectionReference(this.db, this.session.getCompany())));
-    this.account.routingNumbers = {
-      International: "000000000",
-      Domestic: "222222222",
-      Local: "333333333",
-      Other: "999999999"
-    }
+    this.account = this.data ? this.data : new Account(doc(Account.getCollectionReference(this.db, this.session.getCompany())));
   }
 
   ngOnDestroy() {
@@ -40,17 +34,12 @@ export class SetAccountDialogComponent implements OnInit {
   addRoutingNumber() {
     if (!this.routingNumber || !this.routingDescription) return;
 
-    // this.account.routingNums.push({
-    //   description: "",
-    //   number: ""
-    // });
-
     this.account.routingNumbers[this.routingDescription] = this.routingNumber;
     this.routingDescription = "";
     this.routingNumber = "";
   }
 
-  deleteRoutingNumbers(keyToDelete: any) {
+  deleteRoutingNumbers(keyToDelete: string) {
     delete this.account.routingNumbers[keyToDelete];
   }
 
