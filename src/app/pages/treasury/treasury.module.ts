@@ -14,7 +14,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AccountCardComponent } from './components/account-card/account-card.component';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 import { MatRippleModule } from '@angular/material/core';
-import { SetAccountModalComponent } from './components/set-account-modal/set-account-modal.component';
 
 @NgModule({
   imports: [
@@ -32,7 +31,6 @@ import { SetAccountModalComponent } from './components/set-account-modal/set-acc
     OptionsComponent,
     AccountCardComponent,
     SetAccountDialogComponent,
-    SetAccountModalComponent
   ]
 })
 export class TreasuryPageModule {}
