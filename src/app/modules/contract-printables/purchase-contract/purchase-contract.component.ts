@@ -3,6 +3,7 @@ import { Contract } from '@shared/classes/contract';
 import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 import { FocusedFieldDirective } from '../printable-contract.component';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'purchase-contract',
@@ -21,6 +22,8 @@ export class PurchaseContractComponent implements OnInit, OnChanges {
   private focusedFields: FocusedFieldDirective[] = [];
 
   readonly contractType: string = 'purchase';
+
+  @Input() company: Company;
 
   constructor(public utils: PrintableContractUtilitiesService) {}
 
