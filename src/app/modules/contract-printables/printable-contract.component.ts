@@ -3,6 +3,9 @@ import { Contract } from '@shared/classes/contract';
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { Company } from '@shared/classes/company';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-printable-contract',
@@ -18,6 +21,9 @@ export class PrintableContractComponent implements OnInit {
   @Input() contract: Contract;
   @Input() focusedField: string;
 
+  @Input() templateVersion: string;
+  public company: Promise<Company>;
+
   // @Output() contractTypesListEmitter = new EventEmitter<Map<string, string>>();
 
   public version$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
@@ -28,13 +34,18 @@ export class PrintableContractComponent implements OnInit {
 
   public settings: ContractSettings;
 
-  constructor() { }
+  constructor(
+    private db: Firestore,
+    private session: SessionInfo
+  ) { }
 
   ngOnInit() {
     ContractSettings.getContractDoc(this.contract).then(result => {
       this.settings = result;
       // this.contractTypesListEmitter.emit(new Map(Object.entries(result.contractTypes)));
     });
+
+    this.company = Company.getCompany(this.db, this.session.getCompany());
   }
 
   ngAfterViewInit() {

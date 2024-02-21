@@ -3,6 +3,7 @@ import { Contract } from '@shared/classes/contract';
 import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 import { FocusedFieldDirective } from '../printable-contract.component';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'contract-purchase-to-deposit',
@@ -20,6 +21,8 @@ export class PurchaseToDepositComponent implements OnInit, OnChanges {
   private focusedFields: FocusedFieldDirective[] = [];
 
   readonly contractType: string = 'compra_aDeposito';
+
+  @Input() company: Company;
 
   constructor(public utils: PrintableContractUtilitiesService) { }
 
