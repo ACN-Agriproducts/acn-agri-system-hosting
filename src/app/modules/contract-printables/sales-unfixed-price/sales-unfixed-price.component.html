@@ -44,7 +44,7 @@
                         {{contractForm?.clientInfo?.state}}<span *ngIf="contractForm?.clientInfo?.state && (contractForm?.clientInfo?.country || contractForm?.clientInfo?.zipCode)">,</span> 
                         {{contractForm?.clientInfo?.country}} 
                         <span *ngIf="contractForm?.clientInfo?.zipCode">C.P. {{contractForm?.clientInfo?.zipCode}}</span>
-                     </u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>. -->
+                     </u>, correo electrónico <u><span [printableField]="'clientInfo.email'">{{contractForm?.clientInfo?.email || 'XXXXXXXXXXXXX'}}</span></u> y teléfono <u><span [printableField]="'clientInfo.phoneNumber'">{{contractForm?.clientInfo?.phoneNumber || 'XXXXXXXXXXXXX'}}</span></u>.
                 </li>
 			</ol>
 		</li>
