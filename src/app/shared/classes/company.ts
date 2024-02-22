@@ -22,12 +22,12 @@ export class Company extends FirebaseDocInterface {
     defaultLanguage: 'en' | 'es';
     companyTags: string[];
 
+    address: string[];
+    curp: string;
+    legalRepresentative: string[];
     notarialAct: string;
     notarialActDate: Date;
-    legalRepresentative: string[];
     rfc: string;
-    curp: string;
-    address: string[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
