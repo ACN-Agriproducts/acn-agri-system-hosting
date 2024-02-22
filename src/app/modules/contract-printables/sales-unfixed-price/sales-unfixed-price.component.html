@@ -11,13 +11,13 @@
 			PERSONAS MORALES
 			<ol type="1">
 				<li>
-					Sociedad mercantil, constituida de conformidad con las leyes mexicanas bajo la denominación de <u>{{ company.name }};</u> como se acredita con la Escritura Pública número <u>{{ company.notarialAct }}</u>, de fecha <u>{{ company.notarialActDate | date:"dd 'de' MMMM 'de' y":"es" }}</u> y que el señor <u>{{ company.legalRepresentative[0] }}</u>, en su carácter de <u>Representante Legal</u>, está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
+					Sociedad mercantil, constituida de conformidad con las leyes mexicanas bajo la denominación de <u>{{ company.name }};</u> como se acredita con la Escritura Pública número <u>{{ company.notarialAct }}</u>, de fecha <u>{{ company.notarialActDate | date:"longDate":null:"es-MX" }}</u> y que el señor <u>{{ company.legalRepresentative[0] }}</u>, en su carácter de <u>Representante Legal</u>, está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
 				</li>
 				<li>
-					Que su Registro Federal de Contribuyentes es: <u>{{ company.rfc }}</u> y se encuentra al corriente de sus obligaciones.
+					Que su Registro Federal de Contribuyentes es: <u>{{ company.rfc | uppercase }}</u> y se encuentra al corriente de sus obligaciones.
 				</li>
 				<li>
-					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: {{ company.curp }}
+					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: {{ company.curp | uppercase }}
 				</li>
                 <li>
                     Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>{{ company.address }}</u> correo electrónico <u><span [printableField]="'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [printableField]="'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
@@ -125,7 +125,7 @@
 		<div class="party-signature">
 			POR “EL VENDEDOR”:
 			<div class="signature-line"></div>
-			<span>ING. {{ company.legalRepresentative[0] | uppercase }}</span>
+			<span>{{ company.legalRepresentative[0] | uppercase }}</span>
             <span>{{ company.name | uppercase }}</span>
 		</div>
 		<div class="party-signature">
@@ -152,7 +152,7 @@
 		<span class="party-title">VENDEDOR:</span>
 		<span class="party-name">{{ company.name | uppercase }}</span>
 		<span *ngFor="let addressLine of company.address">{{ addressLine | uppercase }}</span>
-		<span>R.F.C.: {{ company.rfc }}</span>
+		<span>R.F.C.: {{ company.rfc | uppercase }}</span>
 		<span class="party-title">COMPRADOR:</span>
 		<span class="party-name" [printableField]="'clientInfo.name'">{{contractForm?.clientInfo?.name}}</span>
         <span [printableField]="'clientInfo.streetAddress'">{{contractForm?.clientInfo?.streetAddress}}</span>
@@ -312,7 +312,7 @@
 		<div class="party-signature">
 			POR “EL VENDEDOR”:
 			<div class="signature-line"></div>
-			<span>ING. {{ company.legalRepresentative[0] | uppercase }}</span>
+			<span>{{ company.legalRepresentative[0] | uppercase }}</span>
             <span>{{ company.name | uppercase }}</span>
 		</div>
 		<div class="party-signature">

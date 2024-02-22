@@ -22,13 +22,11 @@ export class Company extends FirebaseDocInterface {
     defaultLanguage: 'en' | 'es';
     companyTags: string[];
 
-    // address: string;
     notarialAct: string;
     notarialActDate: Date;
-    legalRepresentative: string[]; // may have multiple
+    legalRepresentative: string[];
     rfc: string;
     curp: string;
-
     address: string[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
