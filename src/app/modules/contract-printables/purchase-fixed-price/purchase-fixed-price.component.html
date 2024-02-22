@@ -144,7 +144,7 @@
         <span>R.F.C.: <span [printableField]="'clientInfo.rfc'">{{contractForm?.clientInfo?.rfc}}</span></span>
         <span class="party-role">COMPRADOR:</span>
         <span class="party-name">{{ company.name | uppercase }}</span>
-        <span *ngFor="let line of company.address">{{ line | uppercase }}</span>
+        <span *ngFor="let addressLine of company.address">{{ addressLine | uppercase }}</span>
         <span>R.F.C.: {{ company.rfc }}</span>
     </div>
     <div class="contract-info">

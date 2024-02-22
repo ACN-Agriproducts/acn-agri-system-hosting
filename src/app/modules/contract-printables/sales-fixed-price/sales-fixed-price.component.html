@@ -1,7 +1,7 @@
 <div class="page-style main">
 	<div class="text-align-right"><b>No. de contrato:</b><span [printableField]="'id'" >{{(contractForm | contractId:settings:contractForm.id:contractForm.product | async)?? " "}}</span></div>
 	<div class="text-align-justify introduction">
-		CONTRATO DE COMPRA-VENTA DE <b><span [printableField]="'product'" >{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>RUBEN DARIO PUGA JUAREZ</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b><span [printableField]="'clientInfo.name'" >{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b><span [printableField]="'clientInfo.clientRep'" >{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
+		CONTRATO DE COMPRA-VENTA DE <b><span [printableField]="'product'" >{{contractForm?.product?.id}}</span></b> EN LO SUCESIVO DENOMINADO “PRODUCTO”, QUE CELEBRAN POR UNA PARTE, <b>{{ company.name | uppercase }}</b>, EN LO SUCESIVO DENOMINADO “EL VENDEDOR”, REPRESENTADA EN ESTE ACTO POR EL SEÑOR <b>{{ company.legalRepresentative[0] | uppercase }}</b>, EN SU CARÁCTER DE APODERADO LEGAL, Y POR LA OTRA PARTE <b><span [printableField]="'clientInfo.name'" >{{contractForm?.clientInfo?.name || 'XXXXXXXXXXXXXXXXX'}}</span></b>, EN LO SUCESIVO DENOMINADO “EL COMPRADOR”, REPRESENTADA EN ESTE ACTO POR <b><span [printableField]="'clientInfo.clientRep'" >{{ contractForm?.clientInfo?.clientRep || 'XXXXXXXXXXXX'}}</span></b>, EN SU CARÁCTER DE APODERADO LEGAL, EN LO SUCESIVO DENOMINADOS CONJUNTAMENTE LOS CONTRATANTES COMO “LAS PARTES”, DE CONFORMIDAD CON LAS SIGUIENTES DECLARACIONES Y CLÁUSULAS:
 	</div>
 	<div class="text-align-center section-header-spaced">DECLARACIONES</div>
 	<ol type="I" class="declarations text-align-justify">
@@ -11,7 +11,7 @@
 			PERSONAS MORALES
 			<ol type="1">
 				<li>
-					Sociedad mercantil, constituida de conformidad con las leyes mexicanas bajo la denominación de <u>Agropecuaria La Capilla del Noreste, SA de CV;</u> como se acredita con la Escritura Pública número <u>860</u>, de fecha <u>11 de Febrero de 2011</u> y que el señor <u>Rubén Darío Puga Juárez</u>, en su carácter de <u>Representante Legal</u>, está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
+					Sociedad mercantil, constituida de conformidad con las leyes mexicanas bajo la denominación de <u>{{ company.name }};</u> como se acredita con la Escritura Pública número <u>{{ company.notarialAct }}</u>, de fecha <u>{{ company.notarialActDate | date:"dd 'de' MMMM 'de' y":"es" }}</u> y que el señor <u>{{ company.legalRepresentative[0] }}</u>, en su carácter de <u>Representante Legal</u>, está facultado para celebrar este contrato y cuyas facultades no le han sido limitadas, modificadas o revocadas a la fecha.
 					<ol class="letter-parenthesis-list">
 						<li>
 							Que dentro de su objeto social se encuentra: compra, venta, comercialización, distribución, acopio, consumo, importación y/o exportación de todo tipo de granos, materias primas e insumos propios de la actividad agropecuaria, así como la realización de cualquier otra actividad afín o conexa con el sector agropecuario;
@@ -19,13 +19,13 @@
 					</ol>
 				</li>
 				<li>
-					Que su Registro Federal de Contribuyentes es: <u>ACN980211QC9</u> y se encuentra al corriente de sus obligaciones.
+					Que su Registro Federal de Contribuyentes es: <u>{{ company.rfc }}</u> y se encuentra al corriente de sus obligaciones.
 				</li>
 				<li>
-					Que la Clave Única de Registro de Población (CURP) del apoderado legal es:
+					Que la Clave Única de Registro de Población (CURP) del apoderado legal es: {{ company.curp }}
 				</li>
                 <li>
-                    Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>Zaragoza entre 1ª  y 2ª SN, Valle Hermoso, Tamaulipas CP 87500</u> correo electrónico <u><span [printableField]="'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [printableField]="'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
+                    Que señala como domicilio para los fines y efectos legales a que haya lugar derivados del presente contrato, el ubicado en: <u>{{ company.address }}</u> correo electrónico <u><span [printableField]="'companyInfo.email'">{{contractForm?.companyInfo?.email || 'XXXXX'}}</span></u> y teléfono <u><span [printableField]="'companyInfo.phone'">{{contractForm?.companyInfo?.phone || 'XXXXX'}}</span></u>.
                 </li>
 			</ol>
 		</li>
@@ -116,9 +116,8 @@
 		<div class="party-signature">
 			POR “EL VENDEDOR”:
 			<div class="signature-line"></div>
-			<span>ING. RUBÉN DARIO PUGA JUAREZ</span>
-            <span>AGROPECUARIA LA CAPILLA DEL NORESTE,</span>
-            <span>SA DE CV</span>
+			<span>ING. {{ company.legalRepresentative[0] | uppercase }}</span>
+            <span>{{ company.name | uppercase }}</span>
 		</div>
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
@@ -132,7 +131,7 @@
 <div class="page-style anexo-1 page-standard-height">
 	<p class="page-header">
 		<b>
-			<span class="company-name">AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV</span>
+			<span class="company-name">{{ company.name | uppercase }}</span>
 			<br>
 			<span class="contract-version">CONTRATO DE COMPRAVENTA PRECIO FIJO</span>
 		</b>
@@ -142,10 +141,9 @@
 	<p class="text-align-center page-title">“ANEXO 1”</p>
 	<div class="party-info">
 		<span class="party-title">VENDEDOR:</span>
-		<span class="party-name">AGROPECUARIA LA CAPILLA DEL NORESTE, S.A. DE C.V.</span>
-		<span>CALLE ZARAGOZA ENTRE 1ra y 2da</span>
-		<span>VALLE HERMOSO, TAMAULIPAS, MX        C.P. 87500</span>
-		<span>R.F.C.: ACN980211QC9</span>
+		<span class="party-name">{{ company.name | uppercase }}</span>
+		<span *ngFor="let addressLine of company.address">{{ addressLine | uppercase }}</span>
+		<span>R.F.C.: {{ company.rfc }}</span>
 		<span class="party-title">COMPRADOR:</span>
 		<span class="party-name" [printableField]="'clientInfo.name'" >{{contractForm?.clientInfo?.name}}</span>
         <span [printableField]="'clientInfo.streetAddress'" >{{contractForm?.clientInfo?.streetAddress}}</span>
@@ -301,9 +299,8 @@
 		<div class="party-signature">
 			POR “EL VENDEDOR”:
 			<div class="signature-line"></div>
-			<span>ING. RUBÉN DARIO PUGA JUAREZ</span>
-            <span>AGROPECUARIA LA CAPILLA DEL NORESTE,</span>
-            <span>SA DE CV</span>
+			<span>ING. {{ company.legalRepresentative[0] | uppercase }}</span>
+            <span>{{ company.name | uppercase }}</span>
 		</div>
 		<div class="party-signature">
 			POR “EL COMPRADOR”:
