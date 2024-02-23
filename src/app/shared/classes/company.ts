@@ -53,8 +53,8 @@ export class Company extends FirebaseDocInterface {
 
         this.address = data.address;
         this.notarialAct = data.notarialAct;
-        this.notarialActDate = data.notarialActDate.toDate();
-        this.legalRepresentative = data.legalRepresentative;
+        this.notarialActDate = data.notarialActDate?.toDate();
+        this.legalRepresentative = data.legalRepresentative ?? [];
         this.rfc = data.rfc;
         this.curp = data.curp;
     }
