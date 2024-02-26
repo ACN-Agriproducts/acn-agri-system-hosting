@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, Directive, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, Directive, ElementRef, HostBinding, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Contract } from '@shared/classes/contract';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { Company } from '@shared/classes/company';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Firestore } from '@angular/fire/firestore';
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
-import { BehaviorSubject, Observable, Subject, filter, map } from 'rxjs';
+import { BehaviorSubject, Observable, filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-printable-contract',
