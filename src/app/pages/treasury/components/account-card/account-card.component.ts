@@ -21,7 +21,6 @@ export class AccountCardComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private modalCtrl: ModalController,
   ) {}
 
   ngOnInit() {
@@ -44,7 +43,7 @@ export class AccountCardComponent implements OnInit {
       data: this.account,
       maxWidth: "none !important"
     });
-
+    
     const account: Account = await lastValueFrom(dialogRef.afterClosed());
     if (!account) return;
 

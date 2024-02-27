@@ -25,7 +25,6 @@ export class TreasuryPage implements OnInit {
     private session: SessionInfo,
     private db: Firestore,
     private dialog: MatDialog,
-    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
@@ -54,7 +53,9 @@ export class TreasuryPage implements OnInit {
   }
 
   public async createAccount() {
-    const dialogRef = this.dialog.open(SetAccountDialogComponent);
+    const dialogRef = this.dialog.open(SetAccountDialogComponent, {
+      maxWidth: "none !important"
+    });
 
     const account: Account = await lastValueFrom(dialogRef.afterClosed());
     if (!account) return;

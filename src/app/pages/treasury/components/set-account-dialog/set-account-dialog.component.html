@@ -5,21 +5,20 @@
   <mat-dialog-content>
     <mat-form-field appearance="fill" class="account-name">
       <mat-label>{{ t('Account Name') }}</mat-label>
-      <input matInput [(ngModel)]="account.name">
+      <input matInput [(ngModel)]="name">
     </mat-form-field>
 
-    <!-- <div class="form-field-row"> -->
-      <mat-form-field appearance="fill" floatLabel="always" class="account-number">
-        <mat-label>{{ t('Account Number') }}</mat-label>
-        <span matPrefix>#&nbsp;</span>
-        <input matInput [(ngModel)]="account.accountNumber" type="number">
-      </mat-form-field>
-      <mat-form-field appearance="fill" floatLabel="always" class="starting-balance">
-        <mat-label>{{ t('Starting Balance') }}</mat-label>
-        <span matPrefix>$&nbsp;</span>
-        <input matInput [(ngModel)]="account.balance">
-      </mat-form-field>
-    <!-- </div> -->
+    <mat-form-field appearance="fill" floatLabel="always" class="account-number">
+      <mat-label>{{ t('Account Number') }}</mat-label>
+      <span matPrefix>#&nbsp;</span>
+      <input matInput [(ngModel)]="accountNumber">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" floatLabel="always" class="starting-balance">
+      <mat-label>{{ t('Starting Balance') }}</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input matInput [(ngModel)]="balance" type="number">
+    </mat-form-field>
 
     <mat-divider></mat-divider>
     <div mat-subheader>{{ t('Routing Numbers') }}</div>
@@ -44,7 +43,7 @@
         </button>
       </div>
       <mat-selection-list dense class="routing-list" #routingList [multiple]="false">
-        <mat-list-option *ngFor="let item of account.routingNumbers | keyvalue" [value]="item.key">
+        <mat-list-option *ngFor="let item of routingNumbers | keyvalue" [value]="item.key">
           <p matLine>{{ item.key }}</p>
           <p matLine>{{ item.value }}</p>
         </mat-list-option>
@@ -55,6 +54,6 @@
   <mat-dialog-actions [align]="'end'">
     <button mat-button color="accent" (click)="test()">Test</button>
     <button mat-button color="primary" mat-dialog-close>Close</button>
-    <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="account">Confirm</button>
+    <button mat-button color="primary" [mat-dialog-close]="data" (click)="confirm()">Confirm</button>
   </mat-dialog-actions>
 </ng-container>
