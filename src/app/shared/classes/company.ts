@@ -22,6 +22,13 @@ export class Company extends FirebaseDocInterface {
     defaultLanguage: 'en' | 'es';
     companyTags: string[];
 
+    address: string[];
+    curp: string;
+    legalRepresentative: string[];
+    notarialAct: string;
+    notarialActDate: Date;
+    rfc: string;
+
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
         const data = snapshot.data();
@@ -43,6 +50,13 @@ export class Company extends FirebaseDocInterface {
         for(let contact of data.contactList) {
             this.contactList.push(new CompanyContact(contact));
         }
+
+        this.address = data.address;
+        this.notarialAct = data.notarialAct;
+        this.notarialActDate = data.notarialActDate?.toDate();
+        this.legalRepresentative = data.legalRepresentative ?? [];
+        this.rfc = data.rfc;
+        this.curp = data.curp;
     }
 
     public static converter = {
@@ -60,6 +74,13 @@ export class Company extends FirebaseDocInterface {
                 displayUnit: data.displayUnit,
                 defaultLanguage: data.defaultLanguage,
                 companyTags: data.companyTags,
+
+                address: data.address,
+                notarialAct: data.notarialAct,
+                notarialActDate: data.notarialActDate,
+                legalRepresentative: data.legalRepresentative,
+                rfc: data.rfc,
+                curp: data.curp
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Company {

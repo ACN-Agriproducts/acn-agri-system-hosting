@@ -3,6 +3,7 @@ import { Contract } from '@shared/classes/contract';
 import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 import { FocusedFieldDirective } from '../printable-contract.component';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'contract-purchase-fixed-price',
@@ -18,6 +19,8 @@ export class PurchaseFixedPriceComponent implements OnInit, OnChanges {
   @Input() settings: ContractSettings;
   @ViewChildren(FocusedFieldDirective) fieldsList: QueryList<FocusedFieldDirective>;
   private focusedFields: FocusedFieldDirective[] = [];
+
+  @Input() company: Company;
   
   readonly contractType: string = 'compra_precioFijo';
 

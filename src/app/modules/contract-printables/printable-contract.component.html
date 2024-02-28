@@ -1,36 +1,35 @@
-
 <ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
 
 <ng-template typeTemplate="compra_aDeposito">
-	<contract-purchase-to-deposit [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></contract-purchase-to-deposit>
+	<contract-purchase-to-deposit [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-purchase-to-deposit>
 </ng-template>
 
 <ng-template typeTemplate="compra_bodegaTerceros">
-	<contract-third-party-warehouse [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></contract-third-party-warehouse>
+	<contract-third-party-warehouse [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-third-party-warehouse>
 </ng-template>
 
 <ng-template typeTemplate="compra_precioFijo">
-	<contract-purchase-fixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></contract-purchase-fixed-price>
+	<contract-purchase-fixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-purchase-fixed-price>
 </ng-template>
 
 <ng-template typeTemplate="compra_precioSinFijar">
-	<contract-purchase-unfixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></contract-purchase-unfixed-price>
+	<contract-purchase-unfixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-purchase-unfixed-price>
 </ng-template>
 
 <ng-template typeTemplate="deVenta_precioFijo">
-	<contract-sales-fixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></contract-sales-fixed-price>
+	<contract-sales-fixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-sales-fixed-price>
 </ng-template>
 
 <ng-template typeTemplate="deVenta_precioSinFijar">
-	<contract-sales-unfixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></contract-sales-unfixed-price>
+	<contract-sales-unfixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-sales-unfixed-price>
 </ng-template>
 
 <ng-template typeTemplate="sales">
-	<sales-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></sales-contract>
+	<sales-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></sales-contract>
 </ng-template>
 
 <ng-template typeTemplate="purchase">
-	<purchase-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings"></purchase-contract>
+	<purchase-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></purchase-contract>
 </ng-template>
 
 <ng-template #none>

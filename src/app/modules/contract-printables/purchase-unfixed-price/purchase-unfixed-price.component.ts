@@ -3,6 +3,7 @@ import { Contract } from '@shared/classes/contract';
 import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 import { FocusedFieldDirective } from '../printable-contract.component';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'contract-purchase-unfixed-price',
@@ -20,6 +21,8 @@ export class PurchaseUnfixedPriceComponent implements OnInit {
   private focusedFields: FocusedFieldDirective[] = [];
 
   readonly contractType: string = 'compra_precioSinFijar';
+
+  @Input() company: Company;
 
   constructor(public utils: PrintableContractUtilitiesService) { }
 
