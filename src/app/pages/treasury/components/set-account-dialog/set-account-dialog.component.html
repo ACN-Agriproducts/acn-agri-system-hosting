@@ -28,26 +28,38 @@
           <mat-label>{{ t('Number') }}</mat-label>
           <span matPrefix>#&nbsp;</span>
           <input matInput [(ngModel)]="routingNumber">
+          <!-- <input matInput [(ngModel)]="routingNumber.number"> -->
         </mat-form-field>
         <mat-form-field appearance="fill" class="description-form-field">
           <mat-label>{{ t('Description') }}</mat-label>
           <textarea matInput [(ngModel)]="routingDescription"></textarea>
+          <!-- <textarea matInput [(ngModel)]="routingNumber.description"></textarea> -->
         </mat-form-field>
       </div>
       <div class="action-buttons-container">
-        <button mat-button color="primary" (click)="addRoutingNumber()">
+        <button mat-button color="primary" (click)="addRoutingNumber()" *ngIf="!editingRoutingNumber">
           {{ t('add') }} <mat-icon>arrow_right</mat-icon>
         </button>
-        <button mat-button color="warn" (click)="deleteRoutingNumbers(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0">
+        <button mat-button color="primary" (click)="editRoutingNumber(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0 && !editingRoutingNumber">
+          {{ t('edit') }} <mat-icon>arrow_right</mat-icon>
+        </button>
+        <button mat-button color="primary" (click)="finishEditingRoutingNumber(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0 && editingRoutingNumber">
+          {{ t('finish') }} <mat-icon>arrow_right</mat-icon>
+        </button>
+        <button mat-button color="warn" (click)="deleteRoutingNumber(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0 && !editingRoutingNumber">
           {{ t('remove') }} <mat-icon>delete</mat-icon>
         </button>
       </div>
       <mat-selection-list dense class="routing-list" #routingList [multiple]="false">
-        <mat-list-option *ngFor="let item of routingNumbers | keyvalue" [value]="item.key">
+        <!-- <mat-list-option *ngFor="let item of routingNumbers | keyvalue" [value]="item.key">
           <p matLine>{{ item.key }}</p>
           <p matLine>{{ item.value }}</p>
+        </mat-list-option> -->
+        <mat-list-option *ngFor="let item of routingNumbers; let index = index" [value]="index">
+          <p matLine>{{ item.description }}</p>
+          <p matLine>{{ item.number }}</p>
         </mat-list-option>
-      </mat-selection-list>
+    </mat-selection-list>
     </section>
   </mat-dialog-content>
   

@@ -13,10 +13,13 @@ export class SetAccountDialogComponent implements OnInit {
   public name: string;
   public accountNumber: string;
   public balance: number;
-  public routingNumbers: { [description: string]: string } = {};
+  // public routingNumbers: { [description: string]: string } = {};
+  public routingNumbers: { description: string, number: string }[] = [];
 
   public routingNumber: string;
   public routingDescription: string;
+  // public routingNumber: { description: string, number: string } = { description: "", number: "" };
+  public editingRoutingNumber: boolean = false;
 
   constructor(
     private db: Firestore,
@@ -42,18 +45,46 @@ export class SetAccountDialogComponent implements OnInit {
 
   addRoutingNumber() {
     if (!this.routingNumber || !this.routingDescription) return;
+    // if (!this.routingNumber.number || !this.routingNumber.description) return;
 
-    this.routingNumbers[this.routingDescription] = this.routingNumber;
-    this.routingDescription = "";
-    this.routingNumber = "";
+    // this.routingNumbers[this.routingDescription] = this.routingNumber;
+    // this.routingNumbers.push(this.routingNumber);
+    this.routingNumbers.push({ description: this.routingDescription, number: this.routingNumber });
+
+    this.resetRoutingNumber();
   }
 
-  deleteRoutingNumbers(keyToDelete: string) {
-    delete this.routingNumbers[keyToDelete];
+  // deleteRoutingNumber(keyToDelete: string) {
+  //   delete this.routingNumbers[keyToDelete];
+  // }
+  deleteRoutingNumber(index: number) {
+    this.routingNumbers.splice(index, 1);
   }
 
   test() {
     console.log(this.name, this.accountNumber, this.balance, this.routingNumbers)
+  }
+
+  editRoutingNumber(index: number) {
+    this.editingRoutingNumber = !this.editingRoutingNumber;
+
+    // this.routingNumber = this.routingNumbers[index];
+    this.routingNumber = this.routingNumbers[index].number;
+    this.routingDescription = this.routingNumbers[index].description;
+  }
+
+  finishEditingRoutingNumber(index: number) {
+    this.routingNumbers[index].number = this.routingNumber;
+    this.routingNumbers[index].description = this.routingDescription;
+    
+    this.resetRoutingNumber();
+    this.editingRoutingNumber = false;
+  }
+
+  resetRoutingNumber() {
+    this.routingNumber = "";
+    this.routingDescription = "";
+    // this.routingNumber = { description: "", number: "" };
   }
 
   confirm() {

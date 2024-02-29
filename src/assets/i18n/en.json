@@ -272,7 +272,9 @@
         "Starting Balance": "Starting Balance",
         "Balance": "Balance",
         "add": "add",
-        "remove": "remove"
+        "remove": "remove",
+        "edit": "edit",
+        "finish": "finish"
     },
     "tickets": {
         "console": {

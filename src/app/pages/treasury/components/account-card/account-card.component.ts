@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Account } from '@shared/classes/account';
 import { SetAccountDialogComponent } from '../set-account-dialog/set-account-dialog.component';
 import { lastValueFrom } from 'rxjs';
-import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-account-card',
@@ -18,6 +17,9 @@ export class AccountCardComponent implements OnInit {
   public colorScheme: any = {
     domain: ["#4D8C4A", "#FFBC04"]
   };
+
+  public viewAccountDetails: boolean = false;
+  public viewAccountNumber: boolean = false;
 
   constructor(
     private dialog: MatDialog,
@@ -34,8 +36,9 @@ export class AccountCardComponent implements OnInit {
     return new Date(date);
   }
 
-  public async openAccountDetails() {
-
+  public async toggleAccountDetails() {
+    this.viewAccountDetails = !this.viewAccountDetails;
+    this.viewAccountNumber = false;
   }
 
   public async editAccount() {
