@@ -50,13 +50,25 @@
 
         <ul *ngIf="viewAccountDetails" class="account-details">
             <li>Balance: &nbsp;<b>{{ account.balance | currency }}</b></li>
+            <li>Account number: 
+                <b class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
+                    <span *ngIf="viewAccountNumber else hide">{{ account.accountNumber }}</span>
+                    <ng-template #hide><u>View</u></ng-template>
+                </b>
+            </li>
             <li>
-                <div style="margin-bottom: 10px">Routing Numbers:</div>
+                <div style="margin-bottom: 10px">Routing numbers:</div>
                 <ul>
-                    <li *ngFor="let routingNumber of account.routingNumbers | keyvalue">
+                    <!-- <li *ngFor="let routingNumber of account.routingNumbers | keyvalue">
                         <div class="routing-number">
                             {{ routingNumber.key }}
                             <b># {{ routingNumber.value }}</b>
+                        </div>
+                    </li> -->
+                    <li *ngFor="let routingNumber of account.routingNumbers">
+                        <div class="routing-number">
+                            {{ routingNumber.description }}
+                            <b># {{ routingNumber.number }}</b>
                         </div>
                     </li>
                 </ul>
