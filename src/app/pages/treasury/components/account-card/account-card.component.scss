@@ -26,3 +26,23 @@ mat-card-title {
     display: flex;
     transform: translateY(-10px);
 }
+
+.routing-number {
+    display: flex;
+    justify-content: space-between;
+}
+
+.account-details {
+    padding-right: 40px;
+    li {
+        margin-bottom: 10px;
+    }
+}
+
+.view-account-number {
+    cursor: pointer;
+}
+
+mat-card-subtitle {
+    color: var(--ion-color-step-600, #666666)
+}

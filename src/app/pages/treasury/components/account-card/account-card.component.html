@@ -1,9 +1,16 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title>{{ account.name }}</mat-card-title>
+        <mat-card-subtitle *ngIf="viewAccountDetails">
+            Account # 
+            <b class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
+                <span *ngIf="viewAccountNumber else hide">{{ account.accountNumber }}</span>
+                <ng-template #hide><u>View</u></ng-template>
+            </b>
+        </mat-card-subtitle>
         <div class="account-actions-container">
             <!-- <div class="account-actions"> -->
-                <button mat-icon-button (click)="openAccountDetails()">
+                <button mat-icon-button (click)="toggleAccountDetails()">
                     <mat-icon>info</mat-icon>
                 </button>
                 <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -24,7 +31,7 @@
     </mat-card-header>
     <mat-card-content>
         <ngx-charts-line-chart
-            *ngIf="chartData"
+            *ngIf="chartData && !viewAccountDetails"
             [results]="chartData"
             [xAxis]="true"
             [yAxis]="true"
@@ -40,5 +47,20 @@
             [scheme]="colorScheme"
             [rotateXAxisTicks]="true"
         ></ngx-charts-line-chart>
+
+        <ul *ngIf="viewAccountDetails" class="account-details">
+            <li>Balance: &nbsp;<b>{{ account.balance | currency }}</b></li>
+            <li>
+                <div style="margin-bottom: 10px">Routing Numbers:</div>
+                <ul>
+                    <li *ngFor="let routingNumber of account.routingNumbers | keyvalue">
+                        <div class="routing-number">
+                            {{ routingNumber.key }}
+                            <b># {{ routingNumber.value }}</b>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </mat-card-content>
 </mat-card>

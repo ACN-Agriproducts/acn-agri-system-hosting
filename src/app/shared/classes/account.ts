@@ -7,7 +7,8 @@ const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
 export class Account extends FirebaseDocInterface {
     public name: string;
     public accountNumber: string;
-    public routingNumbers: { [description: string]: string };
+    // public routingNumbers: { [description: string]: string };
+    public routingNumbers: { description: string, number: string }[];
     public balance: number;
     public transactionHistory: { [date: string]: number };
     // public bankName: string; // ???
@@ -27,7 +28,8 @@ export class Account extends FirebaseDocInterface {
 
             this.name = "";
             this.accountNumber = "";
-            this.routingNumbers = {};
+            // this.routingNumbers = {};
+            this.routingNumbers = [];
             this.balance = null;
             this.transactionHistory = {};
             

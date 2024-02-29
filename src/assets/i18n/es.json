@@ -310,7 +310,9 @@
         "Starting Balance": "Saldo Inicial",
         "Balance": "Saldo",
         "add": "agregar",
-        "remove": "quitar"
+        "remove": "quitar",
+        "edit": "editar",
+        "finish": "finalizar"
     },
     "tickets": {
         "Report": "Reporte",
