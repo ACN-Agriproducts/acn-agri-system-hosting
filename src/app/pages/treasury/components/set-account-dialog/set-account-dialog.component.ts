@@ -36,7 +36,8 @@ export class SetAccountDialogComponent implements OnInit {
     this.name = this.data.name;
     this.accountNumber = this.data.accountNumber;
     this.balance = this.data.balance;
-    this.routingNumbers = this.data.routingNumbers;
+    // this.routingNumbers = this.data.routingNumbers;
+    this.routingNumbers = this.data.routingNumbers.map(route => ({ ...route }));
    }
 
   ngOnDestroy() {

@@ -1,32 +1,30 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title>{{ account.name }}</mat-card-title>
-        <mat-card-subtitle *ngIf="viewAccountDetails">
+        <!-- <mat-card-subtitle *ngIf="viewAccountDetails">
             Account # 
             <b class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
                 <span *ngIf="viewAccountNumber else hide">{{ account.accountNumber }}</span>
                 <ng-template #hide><u>View</u></ng-template>
             </b>
-        </mat-card-subtitle>
+        </mat-card-subtitle> -->
         <div class="account-actions-container">
-            <!-- <div class="account-actions"> -->
-                <button mat-icon-button (click)="toggleAccountDetails()">
-                    <mat-icon>info</mat-icon>
+            <button mat-icon-button (click)="toggleAccountDetails()">
+                <mat-icon>info</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editAccount()">
+                    <mat-icon color="primary">edit</mat-icon>
+                    <span>Edit</span>
                 </button>
-                <button mat-icon-button [matMenuTriggerFor]="menu">
-                    <mat-icon>more_vert</mat-icon>
+                <button mat-menu-item (click)="archiveAccount()">
+                    <mat-icon color="warn">archive</mat-icon>
+                    <span>Archive</span>
                 </button>
-                <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="editAccount()">
-                        <mat-icon color="primary">edit</mat-icon>
-                        <span>Edit</span>
-                    </button>
-                    <button mat-menu-item (click)="archiveAccount()">
-                        <mat-icon color="warn">archive</mat-icon>
-                        <span>Archive</span>
-                    </button>
-                </mat-menu>
-            <!-- </div> -->
+            </mat-menu>
         </div>
     </mat-card-header>
     <mat-card-content>
@@ -49,15 +47,17 @@
         ></ngx-charts-line-chart>
 
         <ul *ngIf="viewAccountDetails" class="account-details">
-            <li>Balance: &nbsp;<b>{{ account.balance | currency }}</b></li>
-            <li>Account number: 
-                <b class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
-                    <span *ngIf="viewAccountNumber else hide">{{ account.accountNumber }}</span>
-                    <ng-template #hide><u>View</u></ng-template>
-                </b>
+            <li><div>Balance: &nbsp;<b class="color-primary">{{ account.balance | currency }}</b></div></li>
+            <li>
+                <div class="account-number">Account number:
+                    <b class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
+                        <span *ngIf="viewAccountNumber else hide">{{ account.accountNumber }}</span>
+                        <ng-template #hide><u>View</u></ng-template>
+                    </b>
+                </div>
             </li>
             <li>
-                <div style="margin-bottom: 10px">Routing numbers:</div>
+                <div style="margin-bottom: 10px">Routing numbers: &nbsp;</div>
                 <ul>
                     <!-- <li *ngFor="let routingNumber of account.routingNumbers | keyvalue">
                         <div class="routing-number">
@@ -67,8 +67,7 @@
                     </li> -->
                     <li *ngFor="let routingNumber of account.routingNumbers">
                         <div class="routing-number">
-                            {{ routingNumber.description }}
-                            <b># {{ routingNumber.number }}</b>
+                            {{ routingNumber.description }} <b>{{ routingNumber.number }}</b>
                         </div>
                     </li>
                 </ul>
