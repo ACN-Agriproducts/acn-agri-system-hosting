@@ -17,6 +17,8 @@ mat-card-header {
 }
 mat-card-content {
     flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 mat-card-title {
     margin-bottom: 0;
@@ -27,7 +29,7 @@ mat-card-title {
     transform: translateY(-10px);
 }
 
-.routing-number {
+.routing-number, .account-number {
     display: flex;
     justify-content: space-between;
 }
@@ -46,3 +48,12 @@ mat-card-title {
 mat-card-subtitle {
     color: var(--ion-color-step-600, #666666)
 }
+
+.color-primary {
+    color: var(--ion-color-primary);
+}
+
+// .account-details li:not(:has(ul)) div {
+//     display: flex;
+//     justify-content: space-between;
+// }
