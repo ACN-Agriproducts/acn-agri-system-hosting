@@ -7,11 +7,10 @@ const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
 export class Account extends FirebaseDocInterface {
     public name: string;
     public accountNumber: string;
-    // public routingNumbers: { [description: string]: string };
     public routingNumbers: { description: string, number: string }[];
-    public balance: number;
+    public currentBalance: number;
     public transactionHistory: { [date: string]: number };
-    // public bankName: string; // ???
+    public startingBalance: number; 
 
     constructor(snapshotOrRef: QueryDocumentSnapshot | DocumentReference) {
         let snapshot;
@@ -28,19 +27,20 @@ export class Account extends FirebaseDocInterface {
 
             this.name = "";
             this.accountNumber = "";
-            // this.routingNumbers = {};
             this.routingNumbers = [];
-            this.balance = null;
+            this.currentBalance = null;
             this.transactionHistory = {};
-            
+            this.startingBalance = null;
+
             return;
         }
 
         this.name = data.name;
         this.accountNumber = data.accountNumber;
         this.routingNumbers = data.routingNumbers;
-        this.balance = data.balance;
+        this.currentBalance = data.currentBalance;
         this.transactionHistory = data.transactionHistory;
+        this.startingBalance = data.startingBalance;
     }
 
     public static converter = {
@@ -49,8 +49,9 @@ export class Account extends FirebaseDocInterface {
                 name: data.name,
                 accountNumber: data.accountNumber,
                 routingNumbers: data.routingNumbers,
-                balance: data.balance,
+                currentBalance: data.currentBalance,
                 transactionHistory: data.transactionHistory,
+                startingBalance: data.startingBalance
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot, options?: SnapshotOptions): Account {
@@ -79,8 +80,9 @@ export class Account extends FirebaseDocInterface {
 
         for (let dayIndex = 0; dayIndex < 30; dayIndex++) {
             const dateString = formatDate(new Date(newDate.valueOf() - MILLISECONDS_IN_A_DAY * dayIndex), "d MMM y", "en-US");
-            this.transactionHistory[dateString] = this.balance ?? 0;
+            this.transactionHistory[dateString] = this.startingBalance ?? 0;
         }
+        this.currentBalance = this.startingBalance;
     }
     
 }

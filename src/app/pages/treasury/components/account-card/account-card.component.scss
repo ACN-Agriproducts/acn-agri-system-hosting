@@ -26,19 +26,12 @@ mat-card-title {
 
 .account-actions-container {
     display: flex;
-    transform: translateY(-10px);
+    transform: translate(10px, -10px);
 }
 
 .routing-number, .account-number {
     display: flex;
     justify-content: space-between;
-}
-
-.account-details {
-    padding-right: 40px;
-    li {
-        margin-bottom: 10px;
-    }
 }
 
 .view-account-number {
@@ -49,11 +42,35 @@ mat-card-subtitle {
     color: var(--ion-color-step-600, #666666)
 }
 
-.color-primary {
+.account-balance {
+    div {
+        display: flex;
+        justify-content: space-between;
+        gap: 30px;
+    }
+    
+    position: sticky;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    top: 0;
+    background-color: var(--ion-color-light);
+    margin: 0;
+    border-radius: 5px;
+}
+
+.balance-value-text {
+    font-size: 1.4em;
     color: var(--ion-color-primary);
 }
 
-// .account-details li:not(:has(ul)) div {
-//     display: flex;
-//     justify-content: space-between;
-// }
+.account-details {
+    > ul {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .account-numbers-list {
+        li {
+            margin-bottom: 10px;
+        }
+    }
+}

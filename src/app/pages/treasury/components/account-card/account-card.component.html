@@ -39,39 +39,37 @@
             [showYAxisLabel]="true"
             [referenceLines]="[{
             name: 'Current Balance',
-            value: account.balance
+            value: account.currentBalance
             }]"
             [showRefLines]="true"
             [scheme]="colorScheme"
             [rotateXAxisTicks]="true"
         ></ngx-charts-line-chart>
 
-        <ul *ngIf="viewAccountDetails" class="account-details">
-            <li><div>Balance: &nbsp;<b class="color-primary">{{ account.balance | currency }}</b></div></li>
-            <li>
-                <div class="account-number">Account number:
-                    <b class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
-                        <span *ngIf="viewAccountNumber else hide">{{ account.accountNumber }}</span>
-                        <ng-template #hide><u>View</u></ng-template>
-                    </b>
-                </div>
-            </li>
-            <li>
-                <div style="margin-bottom: 10px">Routing numbers: &nbsp;</div>
-                <ul>
-                    <!-- <li *ngFor="let routingNumber of account.routingNumbers | keyvalue">
-                        <div class="routing-number">
-                            {{ routingNumber.key }}
-                            <b># {{ routingNumber.value }}</b>
-                        </div>
-                    </li> -->
-                    <li *ngFor="let routingNumber of account.routingNumbers">
-                        <div class="routing-number">
-                            {{ routingNumber.description }} <b>{{ routingNumber.number }}</b>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+        <div *ngIf="viewAccountDetails" class="account-details">
+            <ul class="account-balance">
+                <li><div>Balance: <b class="balance-value-text">{{ account.currentBalance | currency }}</b></div></li>
+            </ul>
+            <ul class="account-numbers-list">
+                <li>
+                    <div class="account-number">Account number:
+                        <span class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
+                            <span *ngIf="viewAccountNumber else hide"># <b>{{ account.accountNumber }}</b></span>
+                            <ng-template #hide><b><u>View</u></b></ng-template>
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <div style="margin-bottom: 10px">Routing numbers: &nbsp;</div>
+                    <ul>
+                        <li *ngFor="let routingNumber of account.routingNumbers">
+                            <div class="routing-number">
+                                {{ routingNumber.description }} <span># <b>{{ routingNumber.number }}</b></span>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </mat-card-content>
 </mat-card>

@@ -12,14 +12,13 @@ import { Account } from '@shared/classes/account';
 export class SetAccountDialogComponent implements OnInit {
   public name: string;
   public accountNumber: string;
-  public balance: number;
-  // public routingNumbers: { [description: string]: string } = {};
+  public startingBalance: number;
   public routingNumbers: { description: string, number: string }[] = [];
 
-  public routingNumber: string;
-  public routingDescription: string;
-  // public routingNumber: { description: string, number: string } = { description: "", number: "" };
+  public routingNumberInput: { description: string, number: string };
   public editingRoutingNumber: boolean = false;
+  public selectedRoutingNumber: number;
+  public editingAccount: boolean = false;
 
   constructor(
     private db: Firestore,
@@ -28,15 +27,18 @@ export class SetAccountDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.resetRoutingNumberInput();
+
     if (!this.data) {
       this.data = new Account(doc(Account.getCollectionReference(this.db, this.session.getCompany())));
       return;
     }
 
+    this.editingAccount = true;
+
     this.name = this.data.name;
     this.accountNumber = this.data.accountNumber;
-    this.balance = this.data.balance;
-    // this.routingNumbers = this.data.routingNumbers;
+    this.startingBalance = this.data.startingBalance;
     this.routingNumbers = this.data.routingNumbers.map(route => ({ ...route }));
    }
 
@@ -45,53 +47,40 @@ export class SetAccountDialogComponent implements OnInit {
   }
 
   addRoutingNumber() {
-    if (!this.routingNumber || !this.routingDescription) return;
-    // if (!this.routingNumber.number || !this.routingNumber.description) return;
-
-    // this.routingNumbers[this.routingDescription] = this.routingNumber;
-    // this.routingNumbers.push(this.routingNumber);
-    this.routingNumbers.push({ description: this.routingDescription, number: this.routingNumber });
-
-    this.resetRoutingNumber();
+    if (!this.routingNumberInput.number || !this.routingNumberInput.description) return;
+    
+    this.routingNumbers.push({ ...this.routingNumberInput });
+    this.resetRoutingNumberInput();
   }
 
-  // deleteRoutingNumber(keyToDelete: string) {
-  //   delete this.routingNumbers[keyToDelete];
-  // }
   deleteRoutingNumber(index: number) {
     this.routingNumbers.splice(index, 1);
   }
 
   test() {
-    console.log(this.name, this.accountNumber, this.balance, this.routingNumbers)
+    console.log(this.name, this.accountNumber, this.startingBalance, this.routingNumbers)
   }
 
   editRoutingNumber(index: number) {
     this.editingRoutingNumber = !this.editingRoutingNumber;
-
-    // this.routingNumber = this.routingNumbers[index];
-    this.routingNumber = this.routingNumbers[index].number;
-    this.routingDescription = this.routingNumbers[index].description;
+    this.selectedRoutingNumber = index;
+    this.routingNumberInput = { ...this.routingNumbers[index] };
   }
 
-  finishEditingRoutingNumber(index: number) {
-    this.routingNumbers[index].number = this.routingNumber;
-    this.routingNumbers[index].description = this.routingDescription;
-    
-    this.resetRoutingNumber();
+  finishEditingRoutingNumber() {
+    this.routingNumbers[this.selectedRoutingNumber] = { ...this.routingNumberInput };
+    this.resetRoutingNumberInput();
     this.editingRoutingNumber = false;
   }
 
-  resetRoutingNumber() {
-    this.routingNumber = "";
-    this.routingDescription = "";
-    // this.routingNumber = { description: "", number: "" };
+  resetRoutingNumberInput() {
+    this.routingNumberInput = { description: "", number: "" };
   }
 
   confirm() {
     this.data.name = this.name;
     this.data.accountNumber = this.accountNumber;
-    this.data.balance = this.balance;
+    this.data.startingBalance = this.startingBalance;
     this.data.routingNumbers = this.routingNumbers;
   }
 
