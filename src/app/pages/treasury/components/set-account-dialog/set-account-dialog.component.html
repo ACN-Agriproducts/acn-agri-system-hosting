@@ -15,9 +15,9 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" floatLabel="always" class="starting-balance">
-      <mat-label>{{ t('Balance') }}</mat-label>
+      <mat-label>{{ t('Starting Balance') }}</mat-label>
       <span matPrefix>$&nbsp;</span>
-      <input matInput [(ngModel)]="balance" type="number">
+      <input matInput [(ngModel)]="startingBalance" type="number" [disabled]="editingAccount">
     </mat-form-field>
 
     <mat-divider></mat-divider>
@@ -27,13 +27,11 @@
         <mat-form-field appearance="fill" floatLabel="always">
           <mat-label>{{ t('Number') }}</mat-label>
           <span matPrefix>#&nbsp;</span>
-          <input matInput [(ngModel)]="routingNumber">
-          <!-- <input matInput [(ngModel)]="routingNumber.number"> -->
+          <input matInput [(ngModel)]="routingNumberInput.number">
         </mat-form-field>
         <mat-form-field appearance="fill" class="description-form-field">
           <mat-label>{{ t('Description') }}</mat-label>
-          <textarea matInput [(ngModel)]="routingDescription"></textarea>
-          <!-- <textarea matInput [(ngModel)]="routingNumber.description"></textarea> -->
+          <textarea matInput [(ngModel)]="routingNumberInput.description"></textarea>
         </mat-form-field>
       </div>
       <div class="action-buttons-container">
@@ -43,7 +41,7 @@
         <button mat-button color="primary" (click)="editRoutingNumber(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0 && !editingRoutingNumber">
           {{ t('edit') }} <mat-icon>arrow_right</mat-icon>
         </button>
-        <button mat-button color="primary" (click)="finishEditingRoutingNumber(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0 && editingRoutingNumber">
+        <button mat-button color="primary" (click)="finishEditingRoutingNumber()" *ngIf="routingList.selectedOptions.selected.length > 0 && editingRoutingNumber">
           {{ t('finish') }} <mat-icon>arrow_right</mat-icon>
         </button>
         <button mat-button color="warn" (click)="deleteRoutingNumber(routingList.selectedOptions.selected[0].value)" *ngIf="routingList.selectedOptions.selected.length > 0 && !editingRoutingNumber">
@@ -51,10 +49,6 @@
         </button>
       </div>
       <mat-selection-list dense class="routing-list" #routingList [multiple]="false">
-        <!-- <mat-list-option *ngFor="let item of routingNumbers | keyvalue" [value]="item.key">
-          <p matLine>{{ item.key }}</p>
-          <p matLine>{{ item.value }}</p>
-        </mat-list-option> -->
         <mat-list-option *ngFor="let item of routingNumbers; let index = index" [value]="index">
           <p matLine>{{ item.description }}</p>
           <p matLine>{{ item.number }}</p>
