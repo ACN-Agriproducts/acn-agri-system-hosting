@@ -3,10 +3,12 @@ import { ModalController, PopoverController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Account } from '@shared/classes/account';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Firestore } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, Unsubscribe } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
-import { lastValueFrom } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
+import { SetTransactionDialogComponent } from './components/set-transaction-dialog/set-transaction-dialog.component';
+import { Contact } from '@shared/classes/contact';
 
 
 @Component({
@@ -19,6 +21,8 @@ export class TreasuryPage implements OnInit {
   public accounts: Account[];
   public chartData: any;
   public date: Date = new Date();
+  public contacts: Promise<Contact[]>;
+  public unsubs: Unsubscribe[] = [];
     
   constructor(
     private popoverController: PopoverController,
@@ -28,11 +32,18 @@ export class TreasuryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    Account.getAccountsSnapshot(this.db, this.session.getCompany(), accounts => {
+    const accountUnsub = Account.getAccountsSnapshot(this.db, this.session.getCompany(), accounts => {
       this.accounts = accounts.docs.map(doc => doc.data());
     });
 
     this.date.setHours(0, 0, 0, 0);
+
+    this.contacts = Contact.getList(this.db, this.session.getCompany());
+    this.unsubs.push(accountUnsub);
+  }
+
+  ngOnDestroy() {
+    this.unsubs.forEach(unsub => unsub());
   }
 
   public down = (event) => {
@@ -62,6 +73,17 @@ export class TreasuryPage implements OnInit {
 
     account.initializeTransactionHistory();
     await account.set();
+  }
+
+  public async createTransaction() {
+    console.log(this.accounts)
+    const dialogRef = this.dialog.open(SetTransactionDialogComponent, {
+      data: {
+        accounts: [...this.accounts],
+        contacts: [...(await this.contacts)]
+      },
+      maxWidth: "none !important"
+    });
   }
 
 }

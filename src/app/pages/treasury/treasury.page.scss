@@ -18,9 +18,9 @@
   // position: sticky;
   // top: 0;
   // right: 0;
-  width: 100%;
+  // width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto;
   // column-gap: 15px;
   align-content: center;
   align-items: center;
@@ -35,7 +35,7 @@
   grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
   align-items: center;
   gap: 1rem;
-  padding: 10px;
+  // padding: 10px;
 }
 
 .add-account-card {
@@ -66,4 +66,9 @@ app-account-card, .add-account-container {
 mat-card {
   background: var(--ion-card-background, var(--ion-item-background, var(--ion-background-color, #fff)));
   color: var(--ion-color-dark);
+}
+
+.content-wrapper {
+  display: grid;
+  row-gap: 20px;
 }

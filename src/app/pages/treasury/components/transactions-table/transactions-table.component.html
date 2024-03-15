@@ -1,0 +1,27 @@
+
+<ng-container *transloco="let t; read: 'treasury'">
+  <mat-card class="headers">
+    <div class="row">
+      <div>{{ t("Description") }}</div>
+      <div>{{ t("Amount") }}</div>
+      <div>{{ t("Bank Account") }}</div>
+      <div>{{ t("Date") }}</div>
+      <div>{{ t("Status") }}</div>
+      <div></div>
+    </div>
+  </mat-card>
+  <mat-card class="body">
+    <div class="row" *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]">
+      <div>Description {{ item }}</div>
+      <div>Amount {{ item }}</div>
+      <div>Bank Account {{ item }}</div>
+      <div>Date {{ item }}</div>
+      <div>Status {{ item }}</div>
+      <div>
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</ng-container>

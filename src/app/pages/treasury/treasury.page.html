@@ -1,27 +1,29 @@
-<app-header-toolbar titulo="Treasury"></app-header-toolbar>
-
-<ion-content [fullscreen]="true" class="ion-padding">
-    <div class="accounts-card-grid">
-        <app-account-card *ngFor="let account of accounts" [account]="account"></app-account-card>
-        <div class="add-account-container">
-            <mat-card class="add-account-card" button (click)="createAccount()"
-                matTooltip="Create Account"
-                matTooltipClass="tooltip-primary-solid"
-                matTooltipShowDelay="500"
-                matRipple
-            >
-                <ion-icon name="add-outline"></ion-icon>
-            </mat-card>
+<ng-container *transloco="let t; read: 'treasury'">
+    <app-header-toolbar [titulo]="t('Treasury')"></app-header-toolbar>
+    
+    <ion-content [fullscreen]="true" class="ion-padding">
+        <div class="content-wrapper">
+            <div class="accounts-card-grid">
+                <app-account-card *ngFor="let account of accounts" [account]="account"></app-account-card>
+                <div class="add-account-container">
+                    <mat-card class="add-account-card" button (click)="createAccount()"
+                        [matTooltip]="t('Add account')"
+                        matTooltipClass="tooltip-primary-solid"
+                        matTooltipShowDelay="500"
+                        matRipple
+                    >
+                        <ion-icon name="add-outline"></ion-icon>
+                    </mat-card>
+                </div>
+            </div>
+            <div class="content-title">
+                <ion-searchbar ></ion-searchbar>
+                <ion-button (click)="createTransaction()">
+                    <ion-text slot="end">{{ t("New Order") }}</ion-text>
+                </ion-button>
+            </div>
+            <app-transactions-table></app-transactions-table>
+            <!-- <app-table-treasury></app-table-treasury> -->
         </div>
-    </div>
-    <div class="content-title">
-        <ion-searchbar ></ion-searchbar>
-        <ion-button>
-            <ion-text slot="end">New order</ion-text>
-        </ion-button>
-        <!-- <ion-button (click)="createAccount()">
-            <ion-text slot="end">New Account</ion-text>
-        </ion-button> -->
-    </div>
-    <app-table-treasury></app-table-treasury>
-</ion-content>
+    </ion-content>
+</ng-container>

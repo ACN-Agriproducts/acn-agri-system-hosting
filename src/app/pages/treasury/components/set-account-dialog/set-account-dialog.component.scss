@@ -15,8 +15,6 @@ mat-dialog-content {
 }
 
 .form-field-row {
-    // display: grid;
-    // grid-template-columns: 1fr 1fr;
     gap: 10px;
     
     display: flex;
@@ -38,9 +36,6 @@ mat-dialog-content {
 }
 
 section.routing-numbers {
-    // display: grid;
-    // grid-template-columns: 1fr 0.5fr 1fr;
-
     .routing-list {
         overflow-y: auto;
         border: 2px solid rgba(0, 0, 0, 0.2);

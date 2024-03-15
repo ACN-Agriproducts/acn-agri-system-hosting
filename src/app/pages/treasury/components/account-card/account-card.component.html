@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *transloco="let t; read: 'treasury'">
     <mat-card-header>
         <mat-card-title>{{ account.name }}</mat-card-title>
         <!-- <mat-card-subtitle *ngIf="viewAccountDetails">
@@ -18,11 +18,11 @@
             <mat-menu #menu="matMenu">
                 <button mat-menu-item (click)="editAccount()">
                     <mat-icon color="primary">edit</mat-icon>
-                    <span>Edit</span>
+                    <span>{{ t('Edit') }}</span>
                 </button>
                 <button mat-menu-item (click)="archiveAccount()">
                     <mat-icon color="warn">archive</mat-icon>
-                    <span>Archive</span>
+                    <span>{{ t('Archive') }}</span>
                 </button>
             </mat-menu>
         </div>
@@ -33,12 +33,12 @@
             [results]="chartData"
             [xAxis]="true"
             [yAxis]="true"
-            xAxisLabel="Date"
-            yAxisLabel="Balance"
+            [xAxisLabel]="t('Date')"
+            [yAxisLabel]="t('Balance')"
             [showXAxisLabel]="false"
             [showYAxisLabel]="true"
             [referenceLines]="[{
-            name: 'Current Balance',
+            name: t('Current Balance'),
             value: account.currentBalance
             }]"
             [showRefLines]="true"
@@ -48,19 +48,19 @@
 
         <div *ngIf="viewAccountDetails" class="account-details">
             <ul class="account-balance">
-                <li><div>Balance: <b class="balance-value-text">{{ account.currentBalance | currency }}</b></div></li>
+                <li><div>{{ t('Balance') }}: <b class="balance-value-text">{{ account.currentBalance | currency }}</b></div></li>
             </ul>
             <ul class="account-numbers-list">
                 <li>
-                    <div class="account-number">Account number:
+                    <div class="account-number">{{ t('Account number') }}:
                         <span class="view-account-number" (click)="viewAccountNumber=!viewAccountNumber">
                             <span *ngIf="viewAccountNumber else hide"># <b>{{ account.accountNumber }}</b></span>
-                            <ng-template #hide><b><u>View</u></b></ng-template>
+                            <ng-template #hide><b><u>{{ t('View') }}</u></b></ng-template>
                         </span>
                     </div>
                 </li>
                 <li>
-                    <div style="margin-bottom: 10px">Routing numbers: &nbsp;</div>
+                    <div style="margin-bottom: 10px">{{ t('Routing numbers') }}: &nbsp;</div>
                     <ul>
                         <li *ngFor="let routingNumber of account.routingNumbers">
                             <div class="routing-number">

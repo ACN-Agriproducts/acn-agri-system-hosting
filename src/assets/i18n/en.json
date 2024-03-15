@@ -274,7 +274,22 @@
         "add": "add",
         "remove": "remove",
         "edit": "edit",
-        "finish": "finish"
+        "finish": "finish",
+        "Edit": "Edit",
+        "Archive": "Archive",
+        "Current Balance": "Current Balance",
+        "Account number": "Account number",
+        "Routing numbers": "Routing numbers",
+        "View": "View",
+        "Date": "Date",
+        "Add account": "Add account",
+        "Set Transaction": "Set Transaction",
+        "Amount": "Amount",
+        "New Order": "New Order",
+        "Status": "Status",
+        "Bank Account": "Bank Account",
+        "Account": "Account",
+        "Client": "Client"
     },
     "tickets": {
         "console": {
