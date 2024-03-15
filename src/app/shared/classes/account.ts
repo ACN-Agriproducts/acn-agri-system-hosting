@@ -1,6 +1,6 @@
 import { formatDate } from "@angular/common";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { CollectionReference, DocumentData, DocumentReference, Firestore, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, collection, getDocs, onSnapshot, query } from "@angular/fire/firestore";
+import { CollectionReference, DocumentData, DocumentReference, Firestore, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, collection, getDoc, getDocs, onSnapshot, query } from "@angular/fire/firestore";
 
 const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
@@ -69,7 +69,7 @@ export class Account extends FirebaseDocInterface {
         });
     }
 
-    public static getAccountsSnapshot(db: Firestore, company: string, onNext: (snapshot: QuerySnapshot<Account>) => void, ...constraints): Unsubscribe {
+    public static getAccountsSnapshot(db: Firestore, company: string, onNext: (snapshot: QuerySnapshot<Account>) => void, ...constraints: QueryConstraint[]): Unsubscribe {
         const collectionQuery = query(Account.getCollectionReference(db, company), ...constraints);
         return onSnapshot(collectionQuery, onNext);
     }
@@ -83,6 +83,10 @@ export class Account extends FirebaseDocInterface {
             this.transactionHistory[dateString] = this.startingBalance ?? 0;
         }
         this.currentBalance = this.startingBalance;
+    }
+
+    public static getAccountByRef(ref: DocumentReference<Account>): Promise<Account> {
+        return getDoc(ref).then(doc => doc.data());
     }
     
 }

@@ -312,7 +312,22 @@
         "add": "agregar",
         "remove": "quitar",
         "edit": "editar",
-        "finish": "finalizar"
+        "finish": "finalizar",
+        "Edit": "Editar",
+        "Archive": "Archivar",
+        "Current Balance": "Saldo Actual",
+        "Account number": "Nùmero principal de cuenta",
+        "Routing numbers": "Nùmeros de ruta bancaria",
+        "View": "Ver",
+        "Date": "Fecha",
+        "Add account": "Agregar cuenta",
+        "Set Transaction": "Establecer Transacción",
+        "Amount": "Cantidad",
+        "New Order": "Nuevo Orden",
+        "Status": "Estatus",
+        "Bank Account": "Cuenta Bancaria",
+        "Account": "Cuenta",
+        "Client": "Cliente"
     },
     "tickets": {
         "Report": "Reporte",
