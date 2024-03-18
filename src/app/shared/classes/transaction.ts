@@ -8,14 +8,10 @@ export class Transaction extends FirebaseDocInterface {
     public amount: number;
     public status: string;
     
-    // public account: Account;
-    // public client: Contact;
     public accountRef: DocumentReference<Account>;
     public clientRef: DocumentReference<Contact>;
-
-    // figure out how you should save/get account and client info needed for a transaction
-    // account - DocumentReference / accountName / accountNumber / AccountTransactionInfo (custom interface) ???
-    // client - DocumentReference / clientName / ClientTransactionInfo (custom interface) ???
+    public accountName: string;
+    public clientName: string;
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         if (snapshotOrRef instanceof DocumentReference) {
@@ -24,16 +20,15 @@ export class Transaction extends FirebaseDocInterface {
 
             this.date = new Date();
             this.amount = null;
-            this.status = "";
-            // this.account = null;
-            // this.client = null;
+            this.status = "pending";
             this.accountRef = null;
             this.clientRef = null;
+            this.accountName = "";
+            this.clientName = "";
 
             return;
         }
 
-        // super(snapshot, Transaction.converter);
         if (snapshotOrRef instanceof QueryDocumentSnapshot) {
             super(snapshotOrRef, Transaction.converter);
             const data = snapshotOrRef.data();
@@ -41,10 +36,10 @@ export class Transaction extends FirebaseDocInterface {
             this.date = data.date.toDate();
             this.amount = data.amount;
             this.status = data.status;
-            // this.account = data.account;
-            // this.client = data.client;
-            this.accountRef = null;
-            this.clientRef = null;
+            this.accountRef = data.accountRef;
+            this.clientRef = data.clientRef;
+            this.accountName = data.accountName;
+            this.clientName = data.clientName;
         }
     }
 
@@ -54,10 +49,10 @@ export class Transaction extends FirebaseDocInterface {
                 date: data.date,
                 amount: data.amount,
                 status: data.status,
-                // account: data.account,
-                // client: data.client,
                 accountRef: data.accountRef,
                 clientRef: data.clientRef,
+                accountName: data.accountName,
+                clientName: data.clientName
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Transaction {
@@ -69,7 +64,7 @@ export class Transaction extends FirebaseDocInterface {
         return collection(db, `companies/${company}/transactions`).withConverter(Transaction.converter);
     }
 
-    public static getTransactions(db: Firestore, company: string, onNext: (snapshot: QuerySnapshot<Transaction>) => void, ...constraints: QueryConstraint[]) {
+    public static getTransactionsSnapshot(db: Firestore, company: string, onNext: (snapshot: QuerySnapshot<Transaction>) => void, ...constraints: QueryConstraint[]) {
         const collectionQuery = query(Transaction.getCollectionReference(db, company), orderBy("date", "desc"), ...constraints);
         return onSnapshot(collectionQuery, onNext);
     }

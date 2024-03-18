@@ -15,9 +15,7 @@ import { Observable, map, startWith } from 'rxjs';
 })
 export class SetTransactionDialogComponent implements OnInit {
   public filteredContactOptions: Observable<Promise<Contact[]>>;
-  
-  public transactionForm: FormGroup;
-  public selectedContact: Contact;
+  public transactionForm: FormGroup;  
 
   constructor(
     private db: Firestore,
@@ -40,40 +38,38 @@ export class SetTransactionDialogComponent implements OnInit {
     this.transactionForm = this.formbuilder.group({
       amount: [this.data.transaction.amount, Validators.required],
       date: [this.data.transaction.date],
-      accountRef: [this.data.transaction.accountRef, Validators.required],
-      clientRef: [this.data.transaction.clientRef, Validators.required]
+      account: [this.data.transaction.accountRef, Validators.required],
+      client: [this.data.transaction.clientRef, Validators.required]
     });
 
-    this.filteredContactOptions = this.transactionForm.controls.clientRef.valueChanges.pipe(
+    this.filteredContactOptions = this.transactionForm.controls.client.valueChanges.pipe(
       startWith(''),
       map(async value => {
-        // const name = typeof value === "string" ? value : value?.name;
-        const name = typeof value === "string" ? value : (await this.documentRefPipe.transform(value as DocumentReference<Contact>))?.name;
-        return this.data.contacts.filter(contact => contact.name.toLowerCase().includes(name.toLowerCase()))
+        const name = typeof value === "string" ? value : value?.name;
+        // const name = typeof value === "string" ? value : (await this.documentRefPipe.transform(value as DocumentReference<Contact>))?.name;
+        return this.data.contacts.filter(contact => contact.name.toLowerCase().includes(name.toLowerCase()));
       })
     );
   }
   
   test() {
-    console.log("Test")
-    console.log(this.transactionForm)
     console.log(this.data)
+    console.log(this.transactionForm)
   }
 
-  onSubmit() {
-    // this.dialogRef.close(this.data)
+  public onSubmit() {
+    this.data.transaction.amount = this.transactionForm.controls.amount.value;
+    this.data.transaction.date = this.transactionForm.controls.date.value;
+    this.data.transaction.accountRef = this.transactionForm.controls.account.value.ref;
+    this.data.transaction.clientRef = this.transactionForm.controls.client.value.ref;
+    this.data.transaction.accountName = this.transactionForm.controls.account.value.name;
+    this.data.transaction.clientName = this.transactionForm.controls.client.value.name;
+
+    this.dialogRef.close(this.data.transaction);
   }
 
-  displayFn(selectedOption: Contact | Account): string {
-    // return selectedOption?.name || "";
-    console.log(this.selectedContact)
-    return this.selectedContact?.name;
-  }
-
-  async contactSelected(selectedContactRef: DocumentReference<Contact>) {
-    console.log(selectedContactRef)
-    this.selectedContact = await this.documentRefPipe.transform(selectedContactRef);
-    console.log(this.selectedContact)
+  public displayFn(selectedOption: Contact | Account): string {
+    return selectedOption?.name || "";
   }
 
 }
