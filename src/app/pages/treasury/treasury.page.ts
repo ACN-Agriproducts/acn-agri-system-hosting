@@ -9,6 +9,7 @@ import { Observable, lastValueFrom } from 'rxjs';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 import { SetTransactionDialogComponent } from './components/set-transaction-dialog/set-transaction-dialog.component';
 import { Contact } from '@shared/classes/contact';
+import { Transaction } from '@shared/classes/transaction';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class TreasuryPage implements OnInit {
   public date: Date = new Date();
   public contacts: Promise<Contact[]>;
   public unsubs: Unsubscribe[] = [];
+  public transactions: Transaction[];
     
   constructor(
     private popoverController: PopoverController,
@@ -40,6 +42,11 @@ export class TreasuryPage implements OnInit {
 
     this.contacts = Contact.getList(this.db, this.session.getCompany());
     this.unsubs.push(accountUnsub);
+
+    const transactionUnsub = Transaction.getTransactionsSnapshot(this.db, this.session.getCompany(), transactions => {
+      this.transactions = transactions.docs.map(doc => doc.data());
+    });
+    this.unsubs.push(transactionUnsub);
   }
 
   ngOnDestroy() {
@@ -76,7 +83,6 @@ export class TreasuryPage implements OnInit {
   }
 
   public async createTransaction() {
-    console.log(this.accounts)
     const dialogRef = this.dialog.open(SetTransactionDialogComponent, {
       data: {
         accounts: [...this.accounts],
@@ -84,6 +90,11 @@ export class TreasuryPage implements OnInit {
       },
       maxWidth: "none !important"
     });
+
+    const transaction: Transaction = await lastValueFrom(dialogRef.afterClosed());
+    if (!transaction) return;
+
+    await transaction.set();
   }
 
 }

@@ -22,7 +22,7 @@
                     <ion-text slot="end">{{ t("New Order") }}</ion-text>
                 </ion-button>
             </div>
-            <app-transactions-table></app-transactions-table>
+            <app-transactions-table [transactions]="transactions"></app-transactions-table>
             <!-- <app-table-treasury></app-table-treasury> -->
         </div>
     </ion-content>

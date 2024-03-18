@@ -4,31 +4,6 @@
   
   <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
     <mat-dialog-content>
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>{{ t("Date") }}</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="date" name="date">
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>{{ t("Amount") }}</mat-label>
-        <span matPrefix>$&nbsp;&nbsp;</span>
-        <input matInput [(ngModel)]="amount" name="amount">
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>{{ t("Account") }}</mat-label>
-        <mat-select [(ngModel)]="accountRef" name="account">
-          <mat-option *ngFor="let account of data.accounts" [value]="account.ref">{{ account.name }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>{{ t("Client") }}</mat-label>
-        <input matInput [formControl]="clientControl" [matAutocomplete]="auto" name="client">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let contact of filteredContactOptions | async" [value]="contact.ref">{{ contact.name }}</mat-option>
-        </mat-autocomplete>
-      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>{{ t("Date") }}</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="date">
@@ -43,15 +18,22 @@
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>{{ t("Account") }}</mat-label>
-        <mat-select formControlName="accountRef">
-          <mat-option *ngFor="let account of data.accounts" [value]="account.ref">{{ account.name }}</mat-option>
+        <mat-select formControlName="account">
+          <mat-option *ngFor="let account of data.accounts" [value]="account">{{ account.name }}</mat-option>
         </mat-select>
       </mat-form-field>
+      <!-- <mat-form-field appearance="fill">
+        <mat-label>{{ t("Account") }}</mat-label>
+        <input matInput [matAutocomplete]="accountAutoComplete" formControlName="account">
+        <mat-autocomplete #accountAutoComplete="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let account of data.accounts" [value]="account">{{ account.name }}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field> -->
       <mat-form-field appearance="fill">
         <mat-label>{{ t("Client") }}</mat-label>
-        <input matInput [matAutocomplete]="auto" formControlName="clientRef">
-        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="contactSelected($event.option.value)">
-          <mat-option *ngFor="let contact of filteredContactOptions | async | async" [value]="contact.ref">{{ contact.name }}</mat-option>
+        <input matInput [matAutocomplete]="clientAutoComplete" formControlName="client">
+        <mat-autocomplete #clientAutoComplete="matAutocomplete" [displayWith]="displayFn">
+          <mat-option *ngFor="let contact of filteredContactOptions | async | async" [value]="contact">{{ contact.name }}</mat-option>
         </mat-autocomplete>
       </mat-form-field>
     </mat-dialog-content>
