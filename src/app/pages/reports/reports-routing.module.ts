@@ -14,6 +14,10 @@ const routes: Routes = [
   },  {
     path: 'contract-reports',
     loadChildren: () => import('./contract-reports/contract-reports.module').then( m => m.ContractReportsPageModule)
+  },
+  {
+    path: 'tickets-client-weight',
+    loadChildren: () => import('./tickets-client-weight/tickets-client-weight.module').then( m => m.TicketsClientWeightPageModule)
   }
 
 ];
