@@ -94,7 +94,7 @@ export class SessionInfo {
     const unsubAuth = this.auth.onAuthStateChanged(user => {
       if(!user) return;
 
-      if(this.getPermissions().isScale) this.plant = this.getPermissions().scalePlant;
+      if(this.getPermissions()?.isScale) this.plant = this.getPermissions()?.scalePlant;
 
       else dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
         if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
@@ -168,7 +168,7 @@ export class SessionInfo {
   }
 
   public getPlant(): string {
-    if(this.user?.currentPermissions.isScale) return this.user?.currentPermissions.scalePlant;
+    if(this.user?.currentPermissions?.isScale) return this.user?.currentPermissions?.scalePlant;
     return this.plant;
   }
 
