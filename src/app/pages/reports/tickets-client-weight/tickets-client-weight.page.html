@@ -1,20 +1,45 @@
 <app-header-toolbar titulo="Client Weights"></app-header-toolbar>
 
 <ion-content>
-  <div class="options-bar">
+  <div id="plant-bar">
     <app-plant-select></app-plant-select>
-    <mat-form-field appearance="outline">
-      <mat-label>Type</mat-label>
-      <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
-          <mat-option [value]="true">In Tickets</mat-option>
-          <mat-option [value]="false">Out Tickets</mat-option>
-      </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-      <mat-label>Range</mat-label>
-      <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
-          <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
-      </mat-select>
-  </mat-form-field>
   </div>
+  <div class="options-bar">
+    <div id="toolbar">
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
+            <mat-option [value]="true">In Tickets</mat-option>
+            <mat-option [value]="false">Out Tickets</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Range</mat-label>
+          <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
+              <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Client</th>
+        <th>Scale Weight</th>
+        <th>Client Weight</th>
+        <th>Loss</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1234</td>
+        <td>AGROPECUARIA LA CAPILLA DEL NORESTE S.A. DE C.V.: AGROPECUARIA SANFANDILA S.A. DE C.V.</td>
+        <td>55000</td>
+        <td>20000</td>
+        <td>0.72%</td>
+      </tr>
+    </tbody>
+  </table>
 </ion-content>

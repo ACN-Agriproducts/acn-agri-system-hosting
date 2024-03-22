@@ -9,7 +9,7 @@ import { Ticket } from '@shared/classes/ticket';
   styleUrls: ['./tickets-client-weight.page.scss'],
 })
 export class TicketsClientWeightPage implements OnInit {
-  public inTicket: boolean = true;
+  public inTicket: boolean = false;
   public idRangeList: number[];
   public ticketRangeUpper: number;
 
@@ -19,6 +19,7 @@ export class TicketsClientWeightPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.getTickets();
   }
 
   async getTickets(){
@@ -35,8 +36,6 @@ export class TicketsClientWeightPage implements OnInit {
       where('in', '==', this.inTicket),
       where('id', '<', this.ticketRangeUpper * 100), 
       where('id', '>=', (this.ticketRangeUpper - 1) * 100), 
-      orderBy('id', 'desc'));
-
-    
+      orderBy('id', 'desc')); 
   }
 }
