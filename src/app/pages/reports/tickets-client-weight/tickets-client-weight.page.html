@@ -1,5 +1,20 @@
 <app-header-toolbar titulo="Client Weights"></app-header-toolbar>
 
 <ion-content>
-
+  <div class="options-bar">
+    <app-plant-select></app-plant-select>
+    <mat-form-field appearance="outline">
+      <mat-label>Type</mat-label>
+      <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
+          <mat-option [value]="true">In Tickets</mat-option>
+          <mat-option [value]="false">Out Tickets</mat-option>
+      </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+      <mat-label>Range</mat-label>
+      <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
+          <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
+      </mat-select>
+  </mat-form-field>
+  </div>
 </ion-content>

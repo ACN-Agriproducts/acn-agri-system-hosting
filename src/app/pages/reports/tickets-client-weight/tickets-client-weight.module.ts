@@ -8,6 +8,7 @@ import { TicketsClientWeightPageRoutingModule } from './tickets-client-weight-ro
 
 import { TicketsClientWeightPage } from './tickets-client-weight.page';
 import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     CoreModule,
     IonicModule,
-    TicketsClientWeightPageRoutingModule
+    TicketsClientWeightPageRoutingModule,
+    SharedModule
   ],
   declarations: [TicketsClientWeightPage]
 })

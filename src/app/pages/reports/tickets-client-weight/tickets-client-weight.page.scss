@@ -1,0 +1,6 @@
+.options-bar {
+    display: flex;
+    gap: 0.25rem;
+    background-color: var(--ion-toolbar-background, var(--ion-background-color, #fff));
+    align-items: center;
+  }
