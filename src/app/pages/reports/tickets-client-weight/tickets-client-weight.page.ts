@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, getDocs, limit, onSnapshot, orderBy, where } from '@angular/fire/firestore';
+import { Firestore, getDocs, limit, onSnapshot, orderBy, where, writeBatch } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -18,7 +19,8 @@ export class TicketsClientWeightPage implements OnInit {
 
   constructor(
     private db: Firestore,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -47,6 +49,21 @@ export class TicketsClientWeightPage implements OnInit {
   }
 
   submit() {
-    console.log(this.ticketsToUpload);
+    const batch = writeBatch(this.db);
+    
+    for(let ticket of this.ticketsToUpload) {
+      batch.update(ticket.ref, {
+        original_weight: ticket.original_weight.amount,
+        original_weight_unit: ticket.original_weight.defaultUnits,
+      });
+    }
+
+    this.snack.open('Submitting...', "info");
+    batch.commit().then(() => {
+      this.snack.open("Tickets successfully updated.", "success");
+    }).catch(error => {
+      console.error(error);
+      this.snack.open("Error submitting.", "error");
+    });
   }
 }

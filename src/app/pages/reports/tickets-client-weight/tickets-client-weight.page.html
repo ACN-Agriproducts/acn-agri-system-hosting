@@ -20,9 +20,10 @@
           </mat-select>
       </mat-form-field>
       <button 
+        id="submit-button"
         mat-flat-button 
         color="primary" 
-        [disabled]="ticketsToUpload.size == 0" 
+        [disabled]="ticketsToUpload?.size == 0" 
         (click)="submit()">
         Submit
       </button>
