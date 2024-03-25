@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, limit, onSnapshot, orderBy, where } from '@angular/fire/firestore';
+import { Firestore, getDocs, limit, onSnapshot, orderBy, where } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Ticket } from '@shared/classes/ticket';
 
@@ -12,6 +12,9 @@ export class TicketsClientWeightPage implements OnInit {
   public inTicket: boolean = false;
   public idRangeList: number[];
   public ticketRangeUpper: number;
+
+  public ticketList: Ticket[];
+  public ticketsToUpload: Set<Ticket>;
 
   constructor(
     private db: Firestore,
@@ -32,10 +35,18 @@ export class TicketsClientWeightPage implements OnInit {
   }
 
   async ticketIdSort() {
+    this.ticketsToUpload = new Set<Ticket>;
+    
     const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), 
       where('in', '==', this.inTicket),
       where('id', '<', this.ticketRangeUpper * 100), 
       where('id', '>=', (this.ticketRangeUpper - 1) * 100), 
       orderBy('id', 'desc')); 
+
+    this.ticketList = (await getDocs(colRef)).docs.map(d => d.data());
+  }
+
+  submit() {
+    console.log(this.ticketsToUpload);
   }
 }
