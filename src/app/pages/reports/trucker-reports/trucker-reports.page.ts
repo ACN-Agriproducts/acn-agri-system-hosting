@@ -4,6 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
+import { units } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
@@ -21,6 +22,7 @@ export class TruckerReportsPage implements OnInit {
   public endDate: Date;
   public startFreight: number = 0;
   public InTicketsOnly: boolean = false;
+  public freightUnit: units = "CWT";
   public contractMaps: {
     purchaseContracts: Map<number, Contract>,
     salesContracts: Map<number, Contract>
