@@ -114,7 +114,7 @@
   <mat-dialog-actions>
     <button mat-button mat-dialog-close>{{ t('Close') }}</button>
     <div *ngIf="!data.readonly">
-      <button mat-button (click)="paymentForm.reset()">Reset</button>
+      <button mat-button (click)="paymentForm.reset()">{{ t('Reset') }}</button>
       <button mat-button color="primary" (click)="setPaidDocuments()" [disabled]="paymentForm.invalid">{{ t('Confirm') }}</button>
     </div>
   </mat-dialog-actions>

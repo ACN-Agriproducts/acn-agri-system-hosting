@@ -1,0 +1,75 @@
+
+mat-dialog-content {
+    max-width: 570px;
+    max-height: none;
+}
+
+@media screen and (max-width: 768px) {
+    ::ng-deep mat-dialog-container {
+        height: 100vh !important;
+        width: 100vw !important;
+    }
+
+    mat-dialog-content {
+        max-width: none;
+    }
+}
+
+.flex-layout {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 8px;
+    
+    .type {
+        flex: 1 1;
+    }
+    .date {
+        flex: 1 1;
+    }
+    .credit-or-debit {
+        flex: 1 1;
+    }
+    .amount {
+        flex: 1 1;
+    }
+    
+    mat-divider, .sub-header {
+        flex: 1 1 100%;
+    }
+    
+}
+
+mat-checkbox, .sub-header, mat-divider {
+    padding-bottom: 16px;
+}
+
+mat-checkbox {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 8px;
+
+    .type {
+        grid-column-end: span 3;
+    }
+    .date {
+
+    }
+    .credit-or-debit {
+    
+    }
+    .amount {
+        grid-column-end: span 3;
+    }
+    .account {
+        grid-column-end: span 4;
+    }
+}
+
+::ng-deep .mat-form-field {
+    min-width: 0;
+}

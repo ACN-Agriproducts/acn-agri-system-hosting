@@ -201,6 +201,8 @@
             "invalid amount": "Invalid Amount",
             "Liquidations Available": "Liquidations Available",
             "View Contract": "View Contract",
+            "Grain": "Grain",
+            "Reset": "Reset",
             "chart": {
                 "Pending": "Pending",
                 "Paid": "Paid",
@@ -327,7 +329,13 @@
         "Status": "Status",
         "Bank Account": "Bank Account",
         "Account": "Account",
-        "Client": "Client"
+        "Client": "Client",
+        "Client Account Number": "Client Account Number",
+        "Close": "Close",
+        "Confirm": "Confirm",
+        "Type": "Type",
+        "Client Info.": "Client Info.",
+        "Notes": "Notes"
     },
     "tickets": {
         "Report": "Report",
