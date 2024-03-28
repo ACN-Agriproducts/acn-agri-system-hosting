@@ -185,7 +185,8 @@
             "Invalid Amount": "Cantidad Inválido",
             "Liquidations Available": "Liquidaciones Disponibles",
             "View Contract": "Ver Contrato",
-            "Grain": "Grano"
+            "Grain": "Grano",
+            "Reset": "Reiniciar"
         }
     },
     "directory": {
@@ -290,7 +291,13 @@
         "Status": "Estatus",
         "Bank Account": "Cuenta Bancaria",
         "Account": "Cuenta",
-        "Client": "Cliente"
+        "Client": "Cliente",
+        "Client Account Number": "Nùmero de Cuenta del Cliente",
+        "Close": "Cerrar",
+        "Confirm": "Confirmar",
+        "Type": "Tipo",
+        "Client Info.": "Informacion del Cliente",
+        "Notes": "Notas"
     },
     "tickets": {
         "console": {

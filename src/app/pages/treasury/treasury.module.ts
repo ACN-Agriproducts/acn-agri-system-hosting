@@ -1,7 +1,7 @@
 import { OptionsComponent } from './components/options/options.component';
 import { CoreModule } from '@core/core.module';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
@@ -39,7 +39,8 @@ import { DocumentReferencePipe, SetTransactionDialogComponent } from './componen
     DocumentReferencePipe
   ],
   providers: [
-    DocumentReferencePipe
+    DocumentReferencePipe,
+    TitleCasePipe
   ]
 })
 export class TreasuryPageModule {}

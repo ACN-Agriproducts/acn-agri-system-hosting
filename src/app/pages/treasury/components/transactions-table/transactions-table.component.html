@@ -12,8 +12,8 @@
   </mat-card>
   <mat-card class="body">
     <div class="row" *ngFor="let transaction of transactions">
-      <div>{{ transaction.clientName }}</div>
-      <div>{{ transaction.amount | number }}</div>
+      <div>{{ transaction.description }}</div>
+      <div [class.account-credit]="transaction.amount > 0"><span *ngIf="transaction.amount > 0">+</span>{{ transaction.amount | number }}</div>
       <div>{{ transaction.accountName }}</div>
       <div>{{ transaction.date | date }}</div>
       <div>{{ transaction.status }}</div>

@@ -184,7 +184,8 @@
             "invalid amount": "Invalid Amount",
             "Liquidations Available": "Liquidations Available",
             "View Contract": "View Contract",
-            "Grain": "Grain"
+            "Grain": "Grain",
+            "Reset": "Reset"
         }
     },
     "directory": {
@@ -289,7 +290,13 @@
         "Status": "Status",
         "Bank Account": "Bank Account",
         "Account": "Account",
-        "Client": "Client"
+        "Client": "Client",
+        "Client Account Number": "Client Account Number",
+        "Close": "Close",
+        "Confirm": "Confirm",
+        "Type": "Type",
+        "Client Info.": "Client Info.",
+        "Notes": "Notes"
     },
     "tickets": {
         "console": {
