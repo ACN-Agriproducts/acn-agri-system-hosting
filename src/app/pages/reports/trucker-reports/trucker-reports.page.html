@@ -11,7 +11,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-row>
-            <ion-col size="5">
+            <ion-col size="4">
               <mat-form-field>
                 <mat-label>Plants</mat-label>
                 <mat-select multiple [(ngModel)]="chosenPlants">
@@ -19,7 +19,7 @@
                 </mat-select>
               </mat-form-field>
             </ion-col>
-            <ion-col size="7">
+            <ion-col size="5">
               <mat-form-field>
                 <mat-label>Date Range</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
@@ -28,6 +28,13 @@
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="3">
+              <mat-form-field>
+                <mat-label>Tolerance</mat-label>
+                <span matSuffix>%</span>
+                <input matInput type="number" [(ngModel)]="_tolerance">
               </mat-form-field>
             </ion-col>
 
@@ -113,7 +120,7 @@
           <div *ngFor="let trucker of this.getCheckedTruckersOnly()">
             <table class="trucker-table" id="{{trucker.name}}">
               <tr>
-                <th colspan="6">{{trucker.name}}</th>
+                <th colspan="12">{{trucker.name}}</th>
               </tr>
               <tr>
                 <th>Date</th>
@@ -134,13 +141,13 @@
                 <td>{{ticket.ticket.displayId}}</td>
                 <td>{{ticket.ticket.contractID}}</td>
                 <td>{{ticket.ticket.net | massDisplay:3:freightUnit}}</td>
-                <td></td>
+                <td>{{ticket.ticket.original_weight | massDisplay:3:freightUnit}}</td>
                 <td>{{ticket.freight | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
                 <td>{{ticket.freight * (ticket.ticket.net | massInUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ticket.ticket.net.subtract(ticket.ticket.original_weight) | massDisplay:3}}</td>
+                <td>{{(ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100 | number:"0.3"}}</td>
+                <td>{{(ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)}}</td>
+                <td>{{ticket.contract.price | pricePerUnit:freightUnit}}</td>
                 <td></td>
               </tr>
               <tr>

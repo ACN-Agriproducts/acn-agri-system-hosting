@@ -23,14 +23,10 @@ export class TruckerReportsPage implements OnInit {
   public startFreight: number = 0;
   public InTicketsOnly: boolean = false;
   public freightUnit: units = "CWT";
-  public contractMaps: {
-    purchaseContracts: Map<number, Contract>,
-    salesContracts: Map<number, Contract>
-  };
-  public contractSet: { 
-    purchaseContracts: Set<number>,
-    salesContracts: Set<number>,
-  };
+  public _tolerance: number;
+  public tolerance: number;
+
+  public contractsMap: Map<string, Promise<Contract>>
 
   public transportList: transportGroup[];
   public printableTicketsDone: number = 0;
@@ -53,17 +49,10 @@ export class TruckerReportsPage implements OnInit {
   public async getTickets(): Promise<void> {
     const ticketList: Ticket[] = [];
     const promises: Promise<any>[] = [];
-    const contractPromises: Promise<any>[] = [];
     this.endDate.setHours(23, 59, 59, 999);
 
-    this.contractMaps = {
-      purchaseContracts: new Map<number, Contract>(),
-      salesContracts: new Map<number, Contract>()
-    };
-    this.contractSet = { 
-      purchaseContracts: new Set<number>(),
-      salesContracts: new Set<number>(),
-    };
+    this.contractsMap = new Map<string, Promise<Contract>>;
+    this.tolerance = this._tolerance;
 
     this.chosenPlants.forEach(plant => {
       const promise = getDocs(query(plant.getTicketCollectionReference(),
@@ -76,12 +65,8 @@ export class TruckerReportsPage implements OnInit {
             return;
           }
 
-          if(!this.contractSet[ticket.getContractType()].has(ticket.contractID)) {
-            this.contractSet[ticket.getContractType()].add(ticket.contractID);
-            const contractPromise = ticket.getContract(this.db).then(contract => {
-              this.contractMaps[ticket.getContractType()].set(ticket.contractID, contract);
-            });
-            contractPromises.push(contractPromise);
+          if(!this.contractsMap.has(ticket.contractRef.id)) {
+            this.contractsMap.set(ticket.contractRef.id, ticket.getContract(this.db))
           }
 
           ticketList.push(ticket);
@@ -92,11 +77,10 @@ export class TruckerReportsPage implements OnInit {
     });
 
     await Promise.all(promises);
-    await Promise.all(contractPromises);
 
     const tempTransportList: transportGroup[] = [];
 
-    ticketList.forEach(ticket => {
+    ticketList.forEach(async ticket => {
       let transport = tempTransportList.find(t => t.id == ticket.truckerId);
 
       if(transport == null){ 
@@ -110,8 +94,9 @@ export class TruckerReportsPage implements OnInit {
         trucker = transport.addDriver(ticket.driver);
       }
 
-      const ticketFreight = this.contractMaps[ticket.getContractType()].get(ticket.contractID).truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
-      trucker.addTicket(ticket, ticketFreight ?? this.startFreight);  
+      const contract = await this.contractsMap.get(ticket.contractRef.id);
+      const ticketFreight = contract.truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
+      trucker.addTicket(ticket, ticketFreight ?? this.startFreight, contract);  
     });
 
     tempTransportList.forEach(transport => {
@@ -233,17 +218,6 @@ class transportGroup {
     });
   }
 
-  public addTicket(ticket: Ticket, freight: number): void {
-    const driverName = ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
-    let driver = this.drivers.find(t => t.name == driverName);
-    
-    if(driver == null) {
-      driver = this.addDriver(driverName);
-    }
-
-    driver.addTicket(ticket, freight);
-  }
-
   public addDriver(name: string): truckerTickets {
     const driver = new truckerTickets(name);
     this.drivers.push(driver);
@@ -292,8 +266,8 @@ class truckerTickets {
     this.checked = false;
   }
 
-  addTicket(ticket: Ticket, freight: number) {
-    this.tickets.push(new ticketCheck(ticket, freight));
+  addTicket(ticket: Ticket, freight: number, contract: Contract) {
+    this.tickets.push(new ticketCheck(ticket, freight, contract));
   }
 
   public getPrintableTicketInfo(db: Firestore): Promise<void> {
@@ -391,10 +365,12 @@ class ticketCheck {
   public ticket: Ticket;
   public checked: boolean;
   public freight: number;
+  public contract: Contract;
 
-  constructor(_ticket: Ticket, freight: number ) {
+  constructor(_ticket: Ticket, freight: number, contract: Contract ) {
     this.ticket = _ticket;
     this.freight = freight;
+    this.contract = contract;
   }
 
   public getDescription(): string {
