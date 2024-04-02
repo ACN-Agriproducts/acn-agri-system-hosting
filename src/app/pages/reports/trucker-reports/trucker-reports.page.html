@@ -38,7 +38,7 @@
               </mat-form-field>
             </ion-col>
 
-            <ion-col size="6">
+            <ion-col size="4">
               <mat-form-field>
                 <mat-label>Freight</mat-label>
                 <span matPrefix>$</span>
@@ -46,7 +46,7 @@
                 <input matInput type="number" [(ngModel)]="startFreight">
               </mat-form-field>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="4">
               <mat-form-field>
                 <mat-label>Unit</mat-label>
                 <mat-select [(ngModel)]="freightUnit">
@@ -56,6 +56,22 @@
                   <mat-option value="bu">Bushels</mat-option>
                   <mat-option value="tn">Short Tons</mat-option>
                 </mat-select>
+              </mat-form-field>
+            </ion-col>
+            
+            <!-- <ion-col size="3">
+              <mat-form-field>
+                <mat-label>Price Unit</mat-label>
+                <mat-select>
+                  <mat-option>USD</mat-option>
+                  <mat-option>MXN</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ion-col> -->
+            <ion-col size="4">
+              <mat-form-field>
+                <mat-label>Exchange Rate</mat-label>
+                <input matInput type="number" [(ngModel)]="exchangeRate">
               </mat-form-field>
             </ion-col>
           </ion-row>
@@ -144,10 +160,10 @@
                 <td>{{ticket.ticket.original_weight | massDisplay:3:freightUnit}}</td>
                 <td>{{ticket.freight | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
                 <td>{{ticket.freight * (ticket.ticket.net | massInUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
-                <td>{{ticket.ticket.net.subtract(ticket.ticket.original_weight) | massDisplay:3}}</td>
+                <td>{{ticket.ticket.net.subtract(ticket.ticket.original_weight) | massDisplay:3:freightUnit}}</td>
                 <td>{{(ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100 | number:"0.3"}}</td>
-                <td>{{(ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)}}</td>
-                <td>{{ticket.contract.price | pricePerUnit:freightUnit}}</td>
+                <td>{{(ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100) | number:'0.2'}}</td>
+                <td>{{ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity | currency}}</td>
                 <td></td>
               </tr>
               <tr>

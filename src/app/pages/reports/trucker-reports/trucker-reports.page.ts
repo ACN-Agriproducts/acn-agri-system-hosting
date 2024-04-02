@@ -23,8 +23,9 @@ export class TruckerReportsPage implements OnInit {
   public startFreight: number = 0;
   public InTicketsOnly: boolean = false;
   public freightUnit: units = "CWT";
-  public _tolerance: number;
+  public _tolerance: number = 0.2;
   public tolerance: number;
+  public exchangeRate: number = 1;
 
   public contractsMap: Map<string, Promise<Contract>>
 
@@ -111,6 +112,7 @@ export class TruckerReportsPage implements OnInit {
     this.transportList = tempTransportList;
   }
 
+  // TODO
   public mergeTruckers(transport: transportGroup): void {
     const checkedTruckers = transport.getCheckedDrivers();
 
@@ -266,6 +268,7 @@ class truckerTickets {
     this.checked = false;
   }
 
+  // TODO
   addTicket(ticket: Ticket, freight: number, contract: Contract) {
     this.tickets.push(new ticketCheck(ticket, freight, contract));
   }
