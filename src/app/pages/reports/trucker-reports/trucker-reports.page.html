@@ -158,21 +158,21 @@
                 <td>{{ticket.ticket.contractID}}</td>
                 <td>{{ticket.ticket.net | massDisplay:3:freightUnit}}</td>
                 <td>{{ticket.ticket.original_weight | massDisplay:3:freightUnit}}</td>
-                <td>{{(ticket.freight | pricePerUnit:freightUnit) * exchangeRate | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
-                <td>{{(ticket.freight | pricePerUnit) * exchangeRate * (ticket.ticket.net | massInUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
+                <td>{{(ticket.freight | pricePerUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
+                <td>{{(ticket.freight | pricePerUnit) * (ticket.ticket.net | massInUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
                 <td>{{ticket.ticket.net.subtract(ticket.ticket.original_weight) | massDisplay:3:freightUnit}}</td>
                 <td>{{(ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100 | number:"0.3"}}</td>
                 <td>{{(ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100) | number:'0.2'}}</td>
                 <td>{{(ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity) * exchangeRate | currency}}</td>
-                <td>{{(((ticket.freight | pricePerUnit) * (ticket.ticket.net | massInUnit:freightUnit)) - (((ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)) * (ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity))) * exchangeRate | currency}}</td>
+                <td>{{(((ticket.freight | pricePerUnit) * (ticket.ticket.net | massInUnit:freightUnit)) - (((ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)) * (ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity) * exchangeRate)) | currency}}</td>
               </tr>
               <tr>
                 <th colspan="3">Totals</th>
                 <th>{{trucker.getTotalWeight() | massDisplay:3:freightUnit}}</th>
                 <th colspan="2"></th>
-                <th>{{trucker.getFreightTotal() * exchangeRate | currency:'USD':'symbol-narrow':'0.3-3'}}</th>
+                <th>{{trucker.getFreightTotal() | currency:'USD':'symbol-narrow':'0.3-3'}}</th>
                 <th colspan="4"></th>
-                <th>{{trucker.getDiscountedTotal() * exchangeRate | currency}}</th>
+                <th>{{trucker.getDiscountedTotal() | currency}}</th>
 
               </tr>
             </table>
