@@ -260,7 +260,6 @@ class truckerTickets {
   public checked: boolean;
   public tickets: ticketCheck[];
   public printableTicketInfo: [Ticket, Contract, Contact, Contact][];
-  public totalWeight: Mass;
 
   constructor(_name: string) {
     this.name = _name.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
@@ -270,7 +269,6 @@ class truckerTickets {
   }
 
   addTicket(ticket: Ticket, freight: number, contract: Contract) {
-    this.totalWeight = this.totalWeight ? this.totalWeight.add(ticket.net) : ticket.net;
     this.tickets.push(new ticketCheck(ticket, freight, contract));
   }
 
@@ -363,6 +361,31 @@ class truckerTickets {
 
     return newTrucker;
   }
+
+  public getTotalWeight(): Mass {
+    const ticketList = this.getCheckedTickets();
+    if(ticketList.length == 0) return new Mass(0, 'kg');
+
+    const firstTicket = ticketList[0];
+    let total = firstTicket.ticket.net;
+    
+    for(let i = 1; i < ticketList.length; i++) {
+      total = total.add(ticketList[i].ticket.net);
+    }
+
+    return total;
+  } 
+
+  // public getDiscountedTotal(): number {
+  //   let total = 0;
+  //   const ticketList = this.getCheckedTickets();
+
+  //   ticketList.forEach(cTicket => {
+  //     cTicket.
+  //   });
+
+  //   return total;
+  // }
 }
 
 class ticketCheck {
