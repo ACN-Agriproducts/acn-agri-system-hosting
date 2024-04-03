@@ -6,6 +6,7 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { Mass, units } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
+import { Price } from '@shared/classes/price';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
@@ -97,7 +98,7 @@ export class TruckerReportsPage implements OnInit {
 
       const contract = await this.contractsMap.get(ticket.contractRef.id);
       const ticketFreight = contract.truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
-      trucker.addTicket(ticket, ticketFreight ?? this.startFreight, contract);  
+      trucker.addTicket(ticket, (ticketFreight ? new Price(ticketFreight, 'CWT') : new Price(this.startFreight, this.freightUnit)), contract, this.tolerance); 
     });
 
     tempTransportList.forEach(transport => {
@@ -268,8 +269,8 @@ class truckerTickets {
     this.checked = false;
   }
 
-  addTicket(ticket: Ticket, freight: number, contract: Contract) {
-    this.tickets.push(new ticketCheck(ticket, freight, contract));
+  addTicket(ticket: Ticket, freight: Price, contract: Contract, tolerance: number) {
+    this.tickets.push(new ticketCheck(ticket, freight, contract, tolerance));
   }
 
   public getPrintableTicketInfo(db: Firestore): Promise<void> {
@@ -346,7 +347,7 @@ class truckerTickets {
 
   public changeAllFreight(freight: number): void {
     this.tickets.forEach(ticket => {
-      ticket.freight = freight;
+      ticket.freight.amount = freight;
     })
   }
 
@@ -376,28 +377,30 @@ class truckerTickets {
     return total;
   } 
 
-  // public getDiscountedTotal(): number {
-  //   let total = 0;
-  //   const ticketList = this.getCheckedTickets();
+  public getDiscountedTotal(): number {
+    let total = 0;
+    const ticketList = this.getCheckedTickets();
 
-  //   ticketList.forEach(cTicket => {
-  //     cTicket.
-  //   });
+    ticketList.forEach(cTicket => {
+      total += cTicket.getDiscountedFreight();
+    });
 
-  //   return total;
-  // }
+    return total;
+  }
 }
 
 class ticketCheck {
   public ticket: Ticket;
   public checked: boolean;
-  public freight: number;
+  public freight: Price;
   public contract: Contract;
+  public tolerance: number;
 
-  constructor(_ticket: Ticket, freight: number, contract: Contract ) {
+  constructor(_ticket: Ticket, freight: Price, contract: Contract, tolerance: number ) {
     this.ticket = _ticket;
     this.freight = freight;
     this.contract = contract;
+    this.tolerance = tolerance;
   }
 
   public getDescription(): string {
@@ -405,6 +408,10 @@ class ticketCheck {
   }
 
   public getFreight(): number {
-    return this.freight * this.ticket.getNet().get() / 100;
+    return this.freight.amount * this.ticket.net.getMassInUnit(this.freight.unit);
+  }
+
+  public getDiscountedFreight(): number {
+    return this.getFreight() - (this.ticket.net.subtract(this.ticket.original_weight).getMassInUnit(this.freight.unit) - this.ticket.net.getMassInUnit(this.freight.unit) * this.tolerance / 100) * this.contract.price.getPricePerUnit(this.freight.unit, this.contract.quantity);
   }
 }

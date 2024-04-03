@@ -22,6 +22,11 @@ export class Price {
         const unitConversion = mass.conversions.get(priceUnit) / mass.conversions.get(this.unit);
         return this.amount / unitConversion;
     }
+
+    public add(added: Price, mass: Mass = new Mass(null, null)): Price {
+        const amount = this.amount + added.getPricePerUnit(this.unit, mass);
+        return new Price(amount, this.unit);
+    }
 }
 
 @Pipe({
