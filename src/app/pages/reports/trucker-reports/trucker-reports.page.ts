@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
-import { units } from '@shared/classes/mass';
+import { Mass, units } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
@@ -260,6 +260,7 @@ class truckerTickets {
   public checked: boolean;
   public tickets: ticketCheck[];
   public printableTicketInfo: [Ticket, Contract, Contact, Contact][];
+  public totalWeight: Mass;
 
   constructor(_name: string) {
     this.name = _name.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
@@ -268,8 +269,8 @@ class truckerTickets {
     this.checked = false;
   }
 
-  // TODO
   addTicket(ticket: Ticket, freight: number, contract: Contract) {
+    this.totalWeight = this.totalWeight ? this.totalWeight.add(ticket.net) : ticket.net;
     this.tickets.push(new ticketCheck(ticket, freight, contract));
   }
 
