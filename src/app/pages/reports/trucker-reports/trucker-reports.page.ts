@@ -4,7 +4,9 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
+import { Mass, units } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
+import { Price } from '@shared/classes/price';
 import { Ticket } from '@shared/classes/ticket';
 import { utils, WorkBook, writeFile } from 'xlsx';
 
@@ -21,14 +23,12 @@ export class TruckerReportsPage implements OnInit {
   public endDate: Date;
   public startFreight: number = 0;
   public InTicketsOnly: boolean = false;
-  public contractMaps: {
-    purchaseContracts: Map<number, Contract>,
-    salesContracts: Map<number, Contract>
-  };
-  public contractSet: { 
-    purchaseContracts: Set<number>,
-    salesContracts: Set<number>,
-  };
+  public freightUnit: units = "CWT";
+  public _tolerance: number = 0.2;
+  public tolerance: number;
+  public exchangeRate: number = 1;
+
+  public contractsMap: Map<string, Promise<Contract>>
 
   public transportList: transportGroup[];
   public printableTicketsDone: number = 0;
@@ -51,17 +51,10 @@ export class TruckerReportsPage implements OnInit {
   public async getTickets(): Promise<void> {
     const ticketList: Ticket[] = [];
     const promises: Promise<any>[] = [];
-    const contractPromises: Promise<any>[] = [];
     this.endDate.setHours(23, 59, 59, 999);
 
-    this.contractMaps = {
-      purchaseContracts: new Map<number, Contract>(),
-      salesContracts: new Map<number, Contract>()
-    };
-    this.contractSet = { 
-      purchaseContracts: new Set<number>(),
-      salesContracts: new Set<number>(),
-    };
+    this.contractsMap = new Map<string, Promise<Contract>>;
+    this.tolerance = this._tolerance;
 
     this.chosenPlants.forEach(plant => {
       const promise = getDocs(query(plant.getTicketCollectionReference(),
@@ -74,12 +67,8 @@ export class TruckerReportsPage implements OnInit {
             return;
           }
 
-          if(!this.contractSet[ticket.getContractType()].has(ticket.contractID)) {
-            this.contractSet[ticket.getContractType()].add(ticket.contractID);
-            const contractPromise = ticket.getContract(this.db).then(contract => {
-              this.contractMaps[ticket.getContractType()].set(ticket.contractID, contract);
-            });
-            contractPromises.push(contractPromise);
+          if(!this.contractsMap.has(ticket.contractRef.id)) {
+            this.contractsMap.set(ticket.contractRef.id, ticket.getContract(this.db))
           }
 
           ticketList.push(ticket);
@@ -90,11 +79,10 @@ export class TruckerReportsPage implements OnInit {
     });
 
     await Promise.all(promises);
-    await Promise.all(contractPromises);
 
     const tempTransportList: transportGroup[] = [];
 
-    ticketList.forEach(ticket => {
+    ticketList.forEach(async ticket => {
       let transport = tempTransportList.find(t => t.id == ticket.truckerId);
 
       if(transport == null){ 
@@ -108,8 +96,9 @@ export class TruckerReportsPage implements OnInit {
         trucker = transport.addDriver(ticket.driver);
       }
 
-      const ticketFreight = this.contractMaps[ticket.getContractType()].get(ticket.contractID).truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
-      trucker.addTicket(ticket, ticketFreight ?? this.startFreight);  
+      const contract = await this.contractsMap.get(ticket.contractRef.id);
+      const ticketFreight = contract.truckers.find(t => t.trucker.id == ticket.truckerId)?.freight;
+      trucker.addTicket(ticket, (ticketFreight ? new Price(ticketFreight, 'CWT') : new Price(this.startFreight, this.freightUnit)), contract, this.tolerance, this.exchangeRate); 
     });
 
     tempTransportList.forEach(transport => {
@@ -124,6 +113,7 @@ export class TruckerReportsPage implements OnInit {
     this.transportList = tempTransportList;
   }
 
+  // TODO
   public mergeTruckers(transport: transportGroup): void {
     const checkedTruckers = transport.getCheckedDrivers();
 
@@ -231,17 +221,6 @@ class transportGroup {
     });
   }
 
-  public addTicket(ticket: Ticket, freight: number): void {
-    const driverName = ticket.driver.toUpperCase().replace(/\s*\d*\s*$/, '').replace(/\s{2,}/, ' ');
-    let driver = this.drivers.find(t => t.name == driverName);
-    
-    if(driver == null) {
-      driver = this.addDriver(driverName);
-    }
-
-    driver.addTicket(ticket, freight);
-  }
-
   public addDriver(name: string): truckerTickets {
     const driver = new truckerTickets(name);
     this.drivers.push(driver);
@@ -290,8 +269,8 @@ class truckerTickets {
     this.checked = false;
   }
 
-  addTicket(ticket: Ticket, freight: number) {
-    this.tickets.push(new ticketCheck(ticket, freight));
+  addTicket(ticket: Ticket, freight: Price, contract: Contract, tolerance: number, exchangeRate: number) {
+    this.tickets.push(new ticketCheck(ticket, freight, contract, tolerance, exchangeRate));
   }
 
   public getPrintableTicketInfo(db: Firestore): Promise<void> {
@@ -368,7 +347,7 @@ class truckerTickets {
 
   public changeAllFreight(freight: number): void {
     this.tickets.forEach(ticket => {
-      ticket.freight = freight;
+      ticket.freight.amount = freight;
     })
   }
 
@@ -383,16 +362,45 @@ class truckerTickets {
 
     return newTrucker;
   }
+
+  public getTotalWeight(): Mass {
+    const ticketList = this.getCheckedTickets();
+    if(ticketList.length == 0) return new Mass(0, 'kg');
+
+    const firstTicket = ticketList[0];
+    let total = firstTicket.ticket.net;
+    
+    for(let i = 1; i < ticketList.length; i++) {
+      total = total.add(ticketList[i].ticket.net);
+    }
+
+    return total;
+  } 
+
+  public getDiscountedTotal(): number {
+    let total = 0;
+    const ticketList = this.getCheckedTickets();
+
+    ticketList.forEach(cTicket => {
+      total += cTicket.getDiscountedFreight();
+    });
+
+    return total;
+  }
 }
 
 class ticketCheck {
   public ticket: Ticket;
   public checked: boolean;
-  public freight: number;
+  public freight: Price;
+  public contract: Contract;
+  public tolerance: number;
 
-  constructor(_ticket: Ticket, freight: number ) {
+  constructor(_ticket: Ticket, freight: Price, contract: Contract, tolerance: number, public exchangeRate: number ) {
     this.ticket = _ticket;
     this.freight = freight;
+    this.contract = contract;
+    this.tolerance = tolerance;
   }
 
   public getDescription(): string {
@@ -400,6 +408,10 @@ class ticketCheck {
   }
 
   public getFreight(): number {
-    return this.freight * this.ticket.getNet().get() / 100;
+    return this.freight.amount * this.ticket.net.getMassInUnit(this.freight.unit);
+  }
+
+  public getDiscountedFreight(): number {
+    return this.getFreight() - (this.ticket.net.subtract(this.ticket.original_weight).getMassInUnit(this.freight.unit) - this.ticket.net.getMassInUnit(this.freight.unit) * this.tolerance / 100) * this.contract.price.getPricePerUnit(this.freight.unit, this.contract.quantity) * this.exchangeRate;
   }
 }

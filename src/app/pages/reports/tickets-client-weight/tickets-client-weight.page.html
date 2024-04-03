@@ -1,0 +1,68 @@
+<app-header-toolbar titulo="Client Weights"></app-header-toolbar>
+
+<ion-content>
+  <div id="plant-bar">
+    <app-plant-select></app-plant-select>
+  </div>
+  <div class="options-bar">
+    <div id="toolbar">
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
+            <mat-option [value]="true">In Tickets</mat-option>
+            <mat-option [value]="false">Out Tickets</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Range</mat-label>
+          <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
+              <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+      <button 
+        id="submit-button"
+        mat-flat-button 
+        color="primary" 
+        [disabled]="ticketsToUpload?.size == 0" 
+        (click)="submit()">
+        Submit
+      </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Client</th>
+        <th>Scale Weight</th>
+        <th>Client Weight</th>
+        <th>Loss</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let ticket of ticketList">
+        <tr *ngIf="!ticket.void">
+          <td>{{ticket.id}}</td>
+          <td>{{ticket.clientName}}</td>
+          <td>{{ticket.net | massDisplay}}</td>
+          <td>
+            <mat-form-field class="weight-amount-field">
+              <input matInput type="number" [(ngModel)]="ticket.original_weight.amount" (focus)="ticketsToUpload.add(ticket)">
+            </mat-form-field>
+            <mat-form-field class="weight-unit-field">
+              <mat-select [(ngModel)]="ticket.original_weight.defaultUnits" (focus)="ticketsToUpload.add(ticket)">
+                <mat-option value="lbs">Lbs</mat-option>
+                <mat-option value="mTon">mTon</mat-option>
+                <mat-option value="CWT">CWT</mat-option>
+                <mat-option value="bu">Bushels</mat-option>
+                <mat-option value="tn">Short Tons</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+          <td>{{ticket.net.subtract(ticket.original_weight).get() / ticket.net.get() * 100 | number:"0.2"}}%</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</ion-content>

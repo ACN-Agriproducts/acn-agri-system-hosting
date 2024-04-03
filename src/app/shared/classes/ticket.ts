@@ -131,7 +131,7 @@ export class Ticket extends FirebaseDocInterface{
         this.needsAttention = data.needsAttention;
         this.origin = data.origin;
         this.original_ticket = data.original_ticket;
-        this.original_weight = new Mass(data.original_weight, unit);
+        this.original_weight = new Mass(data.original_weight, data.original_weight_unit ?? unit);
         this.pdfLink = data.pdfLink;
         this.plague = data.plague;
         this.plates = data.plates;
@@ -202,6 +202,7 @@ export class Ticket extends FirebaseDocInterface{
                 origin: data.origin ?? null,
                 original_ticket: data.original_ticket ?? null,
                 original_weight: data.original_weight?.get() ?? null,
+                original_weight_unit: data.original_weight?.defaultUnits ?? null,
                 pdfLink: data.pdfLink ?? null,
                 plague: data.plague ?? null,
                 plates: data.plates ?? null,
