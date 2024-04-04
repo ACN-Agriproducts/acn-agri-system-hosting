@@ -1,7 +1,13 @@
 
+* {
+    box-sizing: border-box;
+}
+
 mat-dialog-content {
-    max-width: 570px;
     max-height: none;
+    min-width: 450px;
+    width: 50vw;
+    max-width: 700px;
 }
 
 @media screen and (max-width: 768px) {
@@ -12,31 +18,9 @@ mat-dialog-content {
 
     mat-dialog-content {
         max-width: none;
+        width: unset;
+        min-width: 319px;
     }
-}
-
-.flex-layout {
-    display: flex;
-    flex-flow: row wrap;
-    column-gap: 8px;
-    
-    .type {
-        flex: 1 1;
-    }
-    .date {
-        flex: 1 1;
-    }
-    .credit-or-debit {
-        flex: 1 1;
-    }
-    .amount {
-        flex: 1 1;
-    }
-    
-    mat-divider, .sub-header {
-        flex: 1 1 100%;
-    }
-    
 }
 
 mat-checkbox, .sub-header, mat-divider {
@@ -56,12 +40,6 @@ mat-checkbox {
     .type {
         grid-column-end: span 3;
     }
-    .date {
-
-    }
-    .credit-or-debit {
-    
-    }
     .amount {
         grid-column-end: span 3;
     }
@@ -70,6 +48,33 @@ mat-checkbox {
     }
 }
 
-::ng-deep .mat-form-field {
-    min-width: 0;
+.mat-form-field {
+    // min-width: 150px !important;
+}
+
+.flex-row {
+    display: flex;
+    flex-flow: row wrap;
+    column-gap: 8px;
+
+    .type {
+        flex: 3 1 250px;
+    }
+    .date {
+        flex: 1 1;
+    }
+
+    .credit-or-debit {
+        flex: 1 1;
+    }
+    .amount {
+        flex: 2.5 1 225px;
+    }
+
+    .description {
+        flex: 4 1;
+    }
+    .description-button {
+        flex: 1 1;
+    }
 }

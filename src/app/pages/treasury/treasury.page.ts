@@ -89,7 +89,8 @@ export class TreasuryPage implements OnInit {
         contacts: [...(await this.contacts)]
       },
       maxWidth: "none !important",
-      autoFocus: false
+      autoFocus: false,
+      maxHeight: "100vh"
     });
 
     const transaction: Transaction = await lastValueFrom(dialogRef.afterClosed());

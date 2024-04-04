@@ -4,14 +4,14 @@
   
   <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
     <mat-dialog-content>
-      <div class="grid-layout">
+      <div class="flex-row">
         <mat-form-field appearance="fill" class="type">
           <mat-label>{{ t('Type') }}</mat-label>
-          <input matInput [matAutocomplete]="typeAutoComplete" formControlName="type" (ngModelChange)="selectType($event)">
+          <input matInput [matAutocomplete]="typeAutoComplete" formControlName="type" (ngModelChange)="selectType($event)" type="text">
           <mat-autocomplete #typeAutoComplete="matAutocomplete" (optionSelected)="selectType($event.option.value)" [displayWith]="typeDisplayFn.bind(this)">
             <mat-option *ngFor="let type of filteredTypeOptions | async" [value]="type">{{ type | titlecase }}</mat-option>
           </mat-autocomplete>
-          <button *ngIf="transactionForm.value.type" matSuffix mat-icon-button type="button" (click)="clearValue('type')">
+          <button *ngIf="transactionForm.value.type" matSuffix mat-icon-button type="button" (click)="resetTextInput('type')">
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-form-field>
@@ -22,8 +22,11 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+      </div>
+
+      <div class="flex-row">
         <mat-form-field appearance="fill" class="credit-or-debit">
-          <mat-label>Credit or Debit</mat-label>
+          <mat-label>{{ t('Credit or Debit') }}</mat-label>
           <mat-select formControlName="creditOrDebit">
             <mat-option [value]="1">Credit +</mat-option>
             <mat-option [value]="-1">Debit -</mat-option>
@@ -34,25 +37,26 @@
           <span matPrefix>$&nbsp;&nbsp;</span>
           <input matInput formControlName="amount" type="number" min="0" oninput="this.value=Math.abs(this.value)">
         </mat-form-field>
-        <mat-form-field appearance="fill" class="account">
-          <mat-label>{{ t("Account") }}</mat-label>
-          <mat-select formControlName="account">
-            <mat-option *ngFor="let account of data.accounts" [value]="account">{{ account.name }}</mat-option>
-          </mat-select>
-        </mat-form-field>
       </div>
+      
+      <mat-form-field appearance="fill" class="account">
+        <mat-label>{{ t("Account") }}</mat-label>
+        <mat-select formControlName="account">
+          <mat-option *ngFor="let account of data.accounts" [value]="account">{{ account.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      <mat-checkbox formControlName="otherParty">Client/Other Party Involved in Transaction</mat-checkbox>
+      <mat-checkbox formControlName="otherParty" (ngModelChange)="handleOtherPartyChange($event)">{{ t('Client/Other Party Involved in Transaction') }}</mat-checkbox>
       <ng-container *ngIf="this.transactionForm.value.otherParty">
         <mat-divider></mat-divider>
         <div class="sub-header">{{ t('Client Info.') }}</div>
         <mat-form-field appearance="fill">
           <mat-label>{{ t("Client") }}</mat-label>
-          <input matInput [matAutocomplete]="clientAutoComplete" formControlName="client">
+          <input matInput [matAutocomplete]="clientAutoComplete" formControlName="client" type="text">
           <mat-autocomplete #clientAutoComplete="matAutocomplete" [displayWith]="clientDisplayFn">
             <mat-option *ngFor="let contact of filteredContactOptions | async" [value]="contact">{{ contact.name }}</mat-option>
           </mat-autocomplete>
-          <button *ngIf="transactionForm.value.client" matSuffix mat-icon-button type="button" (click)="clearValue('client')">
+          <button *ngIf="transactionForm.value.client" matSuffix mat-icon-button type="button" (click)="resetTextInput('client')">
             <mat-icon>cancel</mat-icon>
           </button>
         </mat-form-field>
@@ -63,10 +67,13 @@
         <mat-divider></mat-divider>
       </ng-container>
 
-      <mat-form-field appearance="fill">
-        <mat-label>{{ t('Description') }}</mat-label>
-        <input matInput formControlName="description">
-      </mat-form-field>
+      <div class="flex-row">
+        <mat-form-field appearance="fill" class="description">
+          <mat-label>{{ t('Description') }}</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+        <!-- <button mat-button class="description-button">Generate</button> -->
+      </div>
       
       <mat-form-field appearance="fill">
         <mat-label>{{ t('Notes') }}</mat-label>
