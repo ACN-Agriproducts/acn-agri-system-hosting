@@ -102,7 +102,7 @@ export class Ticket extends FirebaseDocInterface{
             this.weightDiscounts = new WeightDiscounts();
             this.original_weight = new Mass(null, unit);
             this.dateIn = new Date();
-            this.status = "pending";
+            this.status = "active";
 
             return;
         }
@@ -170,7 +170,7 @@ export class Ticket extends FirebaseDocInterface{
 
         this.subId = data.subId;
         this.moneyDiscounts = data.moneyDiscounts ?? {};
-        this.type = data.type ?? data.in ? 'in' : 'out';
+        this.type = data.type ?? (data.in ? 'in' : 'out');
 
         this.net = this.gross.subtract(this.tare);
     }
