@@ -99,7 +99,7 @@ export class Transaction extends FirebaseDocInterface {
     }
 
     public setDescription(description: string): void {
-        this.description = description || `${this.titleCase(this.type)}   ${this.clientName}   #${this.clientAccountNumber}`;
+        this.description = description || `${this.titleCase(this.type)}   ${this.clientName ?? ""}   ${this.clientAccountNumber ? '#' + this.clientAccountNumber : ""}`;
     }
 
     public titleCase(str: string): string {

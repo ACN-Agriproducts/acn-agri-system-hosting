@@ -70,7 +70,7 @@
       <div class="flex-row">
         <mat-form-field appearance="fill" class="description">
           <mat-label>{{ t('Description') }}</mat-label>
-          <input matInput formControlName="description">
+          <input matInput formControlName="description" [placeholder]="t('Leave empty for auto-generated description')">
         </mat-form-field>
         <!-- <button mat-button class="description-button">Generate</button> -->
       </div>

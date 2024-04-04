@@ -103,7 +103,7 @@ export class SetTransactionDialogComponent implements OnInit {
 
   public resetClient() {
     this.transactionForm.controls.client.reset();
-    this.transactionForm.controls.clientAccountNumber.reset();
+    this.transactionForm.controls.clientAccountNumber.reset("");
   }
 
   public handleOtherPartyChange(value: boolean) {
