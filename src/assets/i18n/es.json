@@ -287,7 +287,7 @@
         "Add account": "Agregar cuenta",
         "Set Transaction": "Establecer Transacción",
         "Amount": "Cantidad",
-        "New Order": "Nuevo Orden",
+        "New Order": "Nueva Orden",
         "Status": "Estatus",
         "Bank Account": "Cuenta Bancaria",
         "Account": "Cuenta",
@@ -297,7 +297,9 @@
         "Confirm": "Confirmar",
         "Type": "Tipo",
         "Client Info.": "Informacion del Cliente",
-        "Notes": "Notas"
+        "Notes": "Notas",
+        "Credit or Debit": "Crédito or Débito",
+        "Client/Other Party Involved in Transaction": "Cliente/Otro Parte Involucrado en la Transacción"
     },
     "tickets": {
         "console": {

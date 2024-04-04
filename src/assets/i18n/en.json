@@ -296,7 +296,9 @@
         "Confirm": "Confirm",
         "Type": "Type",
         "Client Info.": "Client Info.",
-        "Notes": "Notes"
+        "Notes": "Notes",
+        "Credit or Debit": "Credit or Debit",
+        "Client/Other Party Involved in Transaction": "Client/Other Party Involved in Transaction"
     },
     "tickets": {
         "console": {

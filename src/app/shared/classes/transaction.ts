@@ -98,9 +98,8 @@ export class Transaction extends FirebaseDocInterface {
         return onSnapshot(collectionQuery, onNext);
     }
 
-    // SET BUT LEAVE OPEN TO CHANGES
-    public setDescription(): void {
-        this.description = `${this.titleCase(this.type)}  ${this.clientName}  #${this.clientAccountNumber}`;
+    public setDescription(description: string): void {
+        this.description = description || `${this.titleCase(this.type)}   ${this.clientName}   #${this.clientAccountNumber}`;
     }
 
     public titleCase(str: string): string {

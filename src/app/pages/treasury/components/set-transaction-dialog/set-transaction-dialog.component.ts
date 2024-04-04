@@ -71,19 +71,7 @@ export class SetTransactionDialogComponent implements OnInit {
   }
 
   public onSubmit() {
-    const formData = this.transactionForm.value;
-
-    this.data.transaction.amount = formData.amount * formData.creditOrDebit;
-    this.data.transaction.date = formData.date;
-    this.data.transaction.accountRef = formData.account.ref;
-    this.data.transaction.accountName = formData.account.name;
-    this.data.transaction.clientRef = formData.client?.ref;
-    this.data.transaction.clientName = formData.client?.name;
-    this.data.transaction.clientAccountNumber = formData.clientAccountNumber;
-    this.data.transaction.type = formData.type;
-    this.data.transaction.description = formData.description;
-    this.data.transaction.setDescription();
-
+    this.setTransactionData(this.transactionForm.value);
     this.dialogRef.close(this.data.transaction);
   }
 
@@ -96,11 +84,12 @@ export class SetTransactionDialogComponent implements OnInit {
 
     if (value === "deposit" || value === "withdrawal") {
       this.transactionForm.controls.otherParty.setValue(false);
-      this.transactionForm.controls.client.reset();
-      this.transactionForm.controls.clientAccountNumber.reset();
+      this.transactionForm.controls.creditOrDebit.setValue(value === "deposit" ? 1 : -1);
+      this.resetClient();
     }
-    else if (value === "payment to" || value === "payment from") {
+    else if (value === "payment from" || value === "payment to") {
       this.transactionForm.controls.otherParty.setValue(true);
+      this.transactionForm.controls.creditOrDebit.setValue(value === "payment from" ? 1 : -1);
     }
   }
 
@@ -108,8 +97,30 @@ export class SetTransactionDialogComponent implements OnInit {
     return this.titleCasePipe.transform(value);
   }
 
-  public clearValue(key: string) {
+  public resetTextInput(key: string) {
     this.transactionForm.controls[key].reset("");
+  }
+
+  public resetClient() {
+    this.transactionForm.controls.client.reset();
+    this.transactionForm.controls.clientAccountNumber.reset();
+  }
+
+  public handleOtherPartyChange(value: boolean) {
+    if (!value) this.resetClient();
+  }
+
+  public setTransactionData(formData: any) {
+    this.data.transaction.amount = formData.amount * formData.creditOrDebit;
+    this.data.transaction.date = formData.date;
+    this.data.transaction.accountRef = formData.account.ref;
+    this.data.transaction.accountName = formData.account.name;
+    this.data.transaction.clientRef = formData.client?.ref ?? null;
+    this.data.transaction.clientName = formData.client?.name ?? "";
+    this.data.transaction.clientAccountNumber = formData.clientAccountNumber;
+    this.data.transaction.type = formData.type;
+    
+    this.data.transaction.setDescription(formData.description);
   }
 
 }
