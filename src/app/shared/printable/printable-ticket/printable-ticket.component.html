@@ -32,10 +32,10 @@
       <div class='info'>{{ticket.vehicleID}}</div>
       <div class='info'>{{ticket.plates}}</div>
       <div class='transport-info info'>
-        <div>{{ticket.transportName ?? transport.name}}</div>
-        <div>{{ticket.transportStreetAddress ?? transport.streetAddress}}</div>
-        <div>{{ticket.transportCity ?? transport.city}} {{ticket.transportState ?? transport.state}} {{ticket.transportZipCode ?? transport.zipCode}}</div>
-        <div>{{ticket.transportCaat ?? transport.caat}}</div>
+        <div>{{ticket.transportName ?? transport?.name}}</div>
+        <div>{{ticket.transportStreetAddress ?? transport?.streetAddress}}</div>
+        <div>{{ticket.transportCity ?? transport?.city}} {{ticket.transportState ?? transport?.state}} {{ticket.transportZipCode ?? transport?.zipCode}}</div>
+        <div>{{ticket.transportCaat ?? transport?.caat}}</div>
       </div>
       <span class='label' id='driver'>Vehicle Driver</span>
       <span class='label'>Tare WT</span>
@@ -51,9 +51,9 @@
       <span>ID: </span>
     </div>
     <div id='customer-info'>
-      <div>{{ ticket.clientName ?? client.name}}</div>
-      <div>{{ ticket.clientStreetAddress ?? client.streetAddress}}</div>
-      <div>{{ ticket.clientCity ?? client.city}} {{ ticket.clientState ?? client.state}} {{ ticket.clientZipCode ?? client.zipCode}}</div>
+      <div>{{ ticket.clientName ?? client?.name}}</div>
+      <div>{{ ticket.clientStreetAddress ?? client?.streetAddress}}</div>
+      <div>{{ ticket.clientCity ?? client?.city}} {{ ticket.clientState ?? client?.state}} {{ ticket.clientZipCode ?? client?.zipCode}}</div>
     </div>
   </div>
   <!-- Ticket Info Block -->
