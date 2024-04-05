@@ -3,6 +3,9 @@
     
     <ion-content [fullscreen]="true" class="ion-padding">
         <div class="content-wrapper">
+            <div class="content-subtitle_small-inventory">
+                <h4><span>{{ t('Accounts') }}</span></h4>
+              </div>
             <div class="accounts-card-grid">
                 <app-account-card *ngFor="let account of accounts" [account]="account"></app-account-card>
                 <div class="add-account-container">
@@ -16,11 +19,21 @@
                     </mat-card>
                 </div>
             </div>
-            <div class="content-title">
-                <!-- <ion-searchbar></ion-searchbar> -->
-                <ion-button (click)="createTransaction()">
-                    <ion-text slot="end">{{ t("New Order") }}</ion-text>
-                </ion-button>
+
+            <div class="content-subtitle_small-inventory">
+                <h4><span>
+                    {{ t('Transactions') }}
+                    <span>
+                        <ion-button (click)="createTransaction()" fill="clear" size="small"
+                            [matTooltip]="t('Add transaction')"
+                            matTooltipClass="tooltip-primary-solid"
+                            matTooltipShowDelay="500"
+                            matRipple
+                        >
+                            <ion-icon name="add-outline"></ion-icon>
+                        </ion-button>
+                    </span>
+                </span></h4>
             </div>
             <app-transactions-table [transactions]="transactions"></app-transactions-table>
             <!-- <app-table-treasury></app-table-treasury> -->

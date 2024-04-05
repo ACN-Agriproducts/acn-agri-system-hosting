@@ -338,7 +338,9 @@
         "Notes": "Notes",
         "Credit or Debit": "Credit or Debit",
         "Client/Other Party Involved in Transaction": "Client/Other Party Involved in Transaction",
-        "Leave empty for auto-generated description": "Leave empty for auto-generated description"
+        "Leave empty for auto-generated description": "Leave empty for auto-generated description",
+        "Add transaction": "Add transaction",
+        "Transactions": "Transactions"
     },
     "tickets": {
         "Report": "Report",
