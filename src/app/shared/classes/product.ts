@@ -18,6 +18,8 @@ export class Product extends FirebaseDocInterface {
     public weight: number;
     public marketCode: string;
     public productCode: string;
+    public toReceive: Mass;
+    public toShip: Mass;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Product.converter);
@@ -37,6 +39,8 @@ export class Product extends FirebaseDocInterface {
         this.weight = data.weight;
         this.marketCode = data.marketCode;
         this.productCode = data.productCode;
+        this.toReceive = new Mass(data.toReceive, unit);
+        this.toShip = new Mass(data.toShip, unit);
     }
 
     public static converter = {
@@ -54,6 +58,8 @@ export class Product extends FirebaseDocInterface {
                 weight: data.weight,
                 marketCode: data.marketCode,
                 productCode: data.productCode,
+                toReceive: data.toReceive,
+                toShip: data.toShip
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Product {

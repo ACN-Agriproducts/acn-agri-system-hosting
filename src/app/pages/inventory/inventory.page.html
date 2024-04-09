@@ -58,6 +58,22 @@
               </p>
             </div>
           </div>
+          <div class="item-inventory">
+            <div class="item-text-inventory">
+              <p>
+                <span>To Receive: </span>
+                <b>{{product.toReceive.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
+              </p>
+            </div>
+          </div>
+          <div class="item-inventory">
+            <div class="item-text-inventory">
+              <p>
+                <span>To Ship: </span>
+                <b>{{product.toShip.getMassInUnit('mTon') | number:'1.3-3'}} Mt</b>
+              </p>
+            </div>
+          </div>
         </ion-card-content>
       </ion-card>
     </div>
