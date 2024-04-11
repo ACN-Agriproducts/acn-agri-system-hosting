@@ -14,8 +14,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { AccountCardComponent } from './components/account-card/account-card.component';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 import { MatRippleModule } from '@angular/material/core';
-import { TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
-import { DocumentReferencePipe, SetTransactionDialogComponent } from './components/set-transaction-dialog/set-transaction-dialog.component';
+import { AbsoluteValuePipe, TransactionsTableComponent } from './components/transactions-table/transactions-table.component';
+import { SetTransactionDialogComponent } from './components/set-transaction-dialog/set-transaction-dialog.component';
 
 @NgModule({
   imports: [
@@ -36,10 +36,9 @@ import { DocumentReferencePipe, SetTransactionDialogComponent } from './componen
     SetAccountDialogComponent,
     TransactionsTableComponent,
     SetTransactionDialogComponent,
-    DocumentReferencePipe
+    AbsoluteValuePipe
   ],
   providers: [
-    DocumentReferencePipe,
     TitleCasePipe
   ]
 })

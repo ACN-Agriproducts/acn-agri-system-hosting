@@ -31,6 +31,11 @@ export class Liquidation extends FirebaseDocInterface {
     public total: number;
     public amountPaid: number;
 
+    // FOLLOWING VALUES WILL BE USED TO HELP CALCULATE LIQUIDATION VALUES/TOTALS
+    public productInfo: any; // TODO
+    public price: Price; // TODO
+    public quantity: Mass; // TODO
+
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if (snapshotOrRef instanceof QueryDocumentSnapshot) {

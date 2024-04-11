@@ -1,7 +1,7 @@
 import { TitleCasePipe } from '@angular/common';
-import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { DocumentReference, Firestore, doc, getDoc } from '@angular/fire/firestore';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Account } from '@shared/classes/account';
@@ -25,35 +25,34 @@ export class SetTransactionDialogComponent implements OnInit {
     private db: Firestore,
     private session: SessionInfo,
     @Inject(MAT_DIALOG_DATA) public data: {
-      transaction?: Transaction, 
+      contacts: Contact[], 
       accounts: Account[], 
-      contacts: Contact[] 
+      transaction?: Transaction, 
+      currentAccount?: Account, 
+      currentClient?: Contact
     },
+    // @Inject(MAT_DIALOG_DATA) public data: any,
     private formbuilder: FormBuilder,
     private dialogRef: MatDialogRef<SetTransactionDialogComponent>,
     public titleCasePipe: TitleCasePipe
   ) { }
 
   ngOnInit() {
-    if (!this.data.transaction) {
-      this.data.transaction = new Transaction(doc(Transaction.getCollectionReference(this.db, this.session.getCompany())));
-    }
-
     this.transactionForm = this.formbuilder.group({
-      amount: [this.data.transaction.amount, Validators.required],
+      amount: [this.data.transaction.amount ? Math.abs(this.data.transaction.amount) : null, Validators.required],
       date: [this.data.transaction.date],
-      account: [this.data.transaction.accountRef, Validators.required],
-      client: [this.data.transaction.clientRef],
+      account: [this.data.currentAccount, Validators.required],
+      client: [this.data.currentClient],
       clientAccountNumber: [this.data.transaction.clientAccountNumber],
       type: [this.data.transaction.type, Validators.required],
       description: [this.data.transaction.description],
-      otherParty: [true],
-      creditOrDebit: [, Validators.required],
+      otherParty: [!!this.data.transaction.clientRef || !!this.data.transaction.clientAccountNumber],
+      creditOrDebit: [this.data.transaction.amount ? (this.data.transaction.amount < 0 ? -1 : 1) : null, Validators.required],
       notes: [this.data.transaction.notes]
     });
 
     this.filteredContactOptions = this.transactionForm.controls.client.valueChanges.pipe(
-      startWith(''),
+      startWith(this.transactionForm.value.client?.name || ''),
       map(value => {
         const name = typeof value === "string" ? value : (value?.name ?? "");
         return this.data.contacts.filter(contact => contact.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()));
@@ -61,18 +60,32 @@ export class SetTransactionDialogComponent implements OnInit {
     );
 
     this.filteredTypeOptions = this.transactionForm.controls.type.valueChanges.pipe(
-      startWith(''),
+      startWith(this.transactionForm.value.type || ''),
       map(value => this.TRANSACTION_TYPES.filter(type => type.toLocaleLowerCase().includes(value.toLocaleLowerCase())))
     );
   }
   
-  test() {
+  logForm() {
     console.log(this.transactionForm.value)
   }
 
   public onSubmit() {
-    this.setTransactionData(this.transactionForm.value);
-    this.dialogRef.close(this.data.transaction);
+    const formData = this.transactionForm.value;
+    const data = {
+      amount: formData.amount * formData.creditOrDebit,
+      date: formData.date,
+      accountRef: formData.account.ref,
+      accountName: formData.account.name,
+      clientRef: formData.client?.ref ?? null,
+      clientName: formData.client?.name ?? "",
+      clientAccountNumber: formData.clientAccountNumber,
+      type: formData.type,
+      description: formData.description,
+      notes: formData.notes
+    };
+    data.description ||= Transaction.setDescription(data as Transaction);
+
+    this.dialogRef.close(data);
   }
 
   public clientDisplayFn(selectedOption: Contact | Account): string {
@@ -110,34 +123,8 @@ export class SetTransactionDialogComponent implements OnInit {
     if (!value) this.resetClient();
   }
 
-  public setTransactionData(formData: any) {
-    this.data.transaction.amount = formData.amount * formData.creditOrDebit;
-    this.data.transaction.date = formData.date;
-    this.data.transaction.accountRef = formData.account.ref;
-    this.data.transaction.accountName = formData.account.name;
-    this.data.transaction.clientRef = formData.client?.ref ?? null;
-    this.data.transaction.clientName = formData.client?.name ?? "";
-    this.data.transaction.clientAccountNumber = formData.clientAccountNumber;
-    this.data.transaction.type = formData.type;
-    
-    this.data.transaction.setDescription(formData.description);
+  public accountCompareFn(acct1: Account, acct2: Account): boolean {
+    return acct1 && acct2 ? acct1.name === acct2.name : acct1 === acct2;
   }
 
-}
-
-@Pipe({
-  name: 'documentRef'
-})
-export class DocumentReferencePipe implements PipeTransform {
-  transform<Type>(ref: DocumentReference<Type>): Promise<Type> {
-    return getDoc(ref).then(doc => doc.data());
-  }
-}
-
-export interface SetTransactionData {
-  amount: number;
-  date: Date;
-  account: Account;
-  client: Contact;
-  clientAccountNumber: string;
 }

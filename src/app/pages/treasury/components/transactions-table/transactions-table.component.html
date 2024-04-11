@@ -13,14 +13,24 @@
   <mat-card class="body">
     <div class="row" *ngFor="let transaction of transactions">
       <div>{{ transaction.description }}</div>
-      <div [class.account-credit]="transaction.amount > 0"><span *ngIf="transaction.amount > 0">+</span>{{ transaction.amount | number }}</div>
+      <div [class.account-credit]="transaction.amount > 0"><span *ngIf="transaction.amount > 0">+</span>{{ transaction.amount | absNum | number }}</div>
       <div>{{ transaction.accountName }}</div>
       <div>{{ transaction.date | date }}</div>
       <div>{{ transaction.status }}</div>
       <div>
-        <button mat-icon-button>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="editTransaction(transaction)">
+            <mat-icon color="primary">edit</mat-icon>
+            <span>{{ t('Edit') }}</span>
+          </button>
+          <button mat-menu-item (click)="archiveTransaction(transaction)">
+            <mat-icon color="warn">archive</mat-icon>
+            <span>{{ t('Archive') }}</span>
+          </button>
+        </mat-menu>
       </div>
     </div>
   </mat-card>
