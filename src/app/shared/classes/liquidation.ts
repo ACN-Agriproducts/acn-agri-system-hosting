@@ -31,8 +31,6 @@ export class Liquidation extends FirebaseDocInterface {
     public total: number;
     public amountPaid: number;
 
-    // public id: string; // DO I NEED AFTER ALL ???
-
     // FOLLOWING VALUES WILL BE USED TO HELP CALCULATE LIQUIDATION VALUES/TOTALS
     public productInfo: any; // TODO
     public price: Price; // TODO

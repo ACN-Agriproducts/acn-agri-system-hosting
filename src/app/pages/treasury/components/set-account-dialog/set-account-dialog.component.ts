@@ -29,6 +29,8 @@ export class SetAccountDialogComponent implements OnInit {
   ngOnInit() {
     this.resetRoutingNumberInput();
 
+    console.log(this.data)
+
     if (!this.data) {
       this.data = new Account(doc(Account.getCollectionReference(this.db, this.session.getCompany())));
       return;

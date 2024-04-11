@@ -32,10 +32,13 @@
                         >
                             <ion-icon name="add-outline"></ion-icon>
                         </ion-button>
+                        <ion-button (click)="logTransactions()" fill="clear" size="small">
+                            <ion-icon name="print-outline"></ion-icon>
+                        </ion-button>
                     </span>
                 </span></h4>
             </div>
-            <app-transactions-table [transactions]="transactions"></app-transactions-table>
+            <app-transactions-table [transactions]="transactions" [accounts]="accounts" [contacts]="contacts | async"></app-transactions-table>
             <!-- <app-table-treasury></app-table-treasury> -->
         </div>
     </ion-content>

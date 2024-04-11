@@ -41,7 +41,7 @@
       
       <mat-form-field appearance="fill" class="account">
         <mat-label>{{ t("Account") }}</mat-label>
-        <mat-select formControlName="account">
+        <mat-select formControlName="account" [compareWith]="accountCompareFn">
           <mat-option *ngFor="let account of data.accounts" [value]="account">{{ account.name }}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -81,7 +81,7 @@
     </mat-dialog-content>
     
     <mat-dialog-actions [align]="'end'">
-      <button mat-button color="accent" type="button" (click)="test()">Test</button>
+      <button mat-button color="accent" type="button" (click)="logForm()">Test</button>
       <button mat-button color="primary" type="button" mat-dialog-close>{{ t('Close') }}</button>
       <button mat-button color="primary" type="submit" [disabled]="transactionForm.invalid">{{ t('Confirm') }}</button>
     </mat-dialog-actions>

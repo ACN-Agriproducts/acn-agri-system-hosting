@@ -47,10 +47,10 @@ export class AccountCardComponent implements OnInit {
       maxWidth: "none !important"
     });
     
-    const account: Account = await lastValueFrom(dialogRef.afterClosed());
-    if (!account) return;
+    const updatedAccount: Account = await lastValueFrom(dialogRef.afterClosed());
+    if (!updatedAccount) return;
 
-    await account.set();
+    await updatedAccount.update({...updatedAccount});
   }
 
   public archiveAccount() {

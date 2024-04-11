@@ -1,6 +1,6 @@
 import { formatDate } from "@angular/common";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { CollectionReference, DocumentData, DocumentReference, Firestore, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, collection, getDoc, getDocs, onSnapshot, query } from "@angular/fire/firestore";
+import { CollectionReference, DocumentData, DocumentReference, DocumentSnapshot, Firestore, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, SnapshotOptions, Unsubscribe, collection, getDoc, getDocs, onSnapshot, query } from "@angular/fire/firestore";
 
 const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000;
 
@@ -12,17 +12,9 @@ export class Account extends FirebaseDocInterface {
     public transactionHistory: { [date: string]: number };
     public startingBalance: number; 
 
-    constructor(snapshotOrRef: QueryDocumentSnapshot | DocumentReference) {
-        let snapshot;
-
-        if (snapshotOrRef instanceof QueryDocumentSnapshot) {
-            snapshot = snapshotOrRef;
-        }
-
-        super(snapshot, Account.converter);
-        const data = snapshot?.data();
-
+    constructor(snapshotOrRef: DocumentReference<any> | QueryDocumentSnapshot<any> | DocumentSnapshot<any>) {
         if (snapshotOrRef instanceof DocumentReference) {
+            super(null, Account.converter);
             this.ref = snapshotOrRef;
 
             this.name = "";
@@ -35,12 +27,21 @@ export class Account extends FirebaseDocInterface {
             return;
         }
 
-        this.name = data.name;
-        this.accountNumber = data.accountNumber;
-        this.routingNumbers = data.routingNumbers;
-        this.currentBalance = data.currentBalance;
-        this.transactionHistory = data.transactionHistory;
-        this.startingBalance = data.startingBalance;
+        if (snapshotOrRef instanceof QueryDocumentSnapshot || snapshotOrRef instanceof DocumentSnapshot) {
+            super(snapshotOrRef, Account.converter);
+            this.ref = snapshotOrRef.ref;
+            const data = snapshotOrRef.data();
+
+            this.name = data.name;
+            this.accountNumber = data.accountNumber;
+            this.routingNumbers = data.routingNumbers;
+            this.currentBalance = data.currentBalance;
+            this.transactionHistory = data.transactionHistory;
+            this.startingBalance = data.startingBalance;
+
+            return;
+        }
+
     }
 
     public static converter = {
@@ -86,6 +87,7 @@ export class Account extends FirebaseDocInterface {
     }
 
     public static getAccountByRef(ref: DocumentReference<Account>): Promise<Account> {
+        if (!ref) return;
         return getDoc(ref).then(doc => doc.data());
     }
     

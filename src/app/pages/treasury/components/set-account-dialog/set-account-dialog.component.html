@@ -59,7 +59,7 @@
   
   <mat-dialog-actions [align]="'end'">
     <button mat-button color="accent" (click)="test()">Test</button>
-    <button mat-button color="primary" mat-dialog-close>Close</button>
-    <button mat-button color="primary" [mat-dialog-close]="data" (click)="confirm()">Confirm</button>
+    <button mat-button color="primary" mat-dialog-close>{{ t('Close') }}</button>
+    <button mat-button color="primary" [mat-dialog-close]="data" (click)="confirm()">{{ t('Confirm') }}</button>
   </mat-dialog-actions>
 </ng-container>

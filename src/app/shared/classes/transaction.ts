@@ -1,4 +1,4 @@
-import { SetTransactionData } from "@pages/treasury/components/set-transaction-dialog/set-transaction-dialog.component";
+import { L } from "@angular/cdk/keycodes";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Account } from "./account";
 import { Status } from "./company";
@@ -11,7 +11,7 @@ export class Transaction extends FirebaseDocInterface {
     public date: Date;
     public amount: number;
     public status: Status;
-    public type: string; // LEAVE OPEN TO DIFFERENT TYPES, NOT ONLY DEPOSITS, ETC...
+    public type: string;
     public description: string;
     public notes: string;
 
@@ -35,6 +35,7 @@ export class Transaction extends FirebaseDocInterface {
             this.status = "pending";
             this.type = "";
             this.description = "";
+            this.notes = "";
 
             this.accountRef = null;
             this.accountName = "";
@@ -48,6 +49,7 @@ export class Transaction extends FirebaseDocInterface {
 
         if (snapshotOrRef instanceof QueryDocumentSnapshot) {
             super(snapshotOrRef, Transaction.converter);
+            this.ref = snapshotOrRef.ref;
             const data = snapshotOrRef.data();
 
             this.date = data.date.toDate();
@@ -55,6 +57,7 @@ export class Transaction extends FirebaseDocInterface {
             this.status = data.status;
             this.type = data.type;
             this.description = data.description;
+            this.notes = data.notes;
     
             this.accountRef = data.accountRef;
             this.accountName = data.accountName;
@@ -75,6 +78,7 @@ export class Transaction extends FirebaseDocInterface {
                 status: data.status,
                 type: data.type,
                 description: data.description,
+                notes: data.notes,
 
                 accountRef: data.accountRef,
                 accountName: data.accountName,
@@ -99,17 +103,19 @@ export class Transaction extends FirebaseDocInterface {
     }
 
     public setDescription(description: string): void {
-        this.description = description || `${this.titleCase(this.type)}   ${this.clientName ?? ""}   ${this.clientAccountNumber ? '#' + this.clientAccountNumber : ""}`;
+        this.description = description || `${this.titleCase(this.type)}  ${this.clientName ?? ""}  ${this.clientAccountNumber ? '#' + this.clientAccountNumber : ""}`.trim();
+    }
+
+    public static setDescription(transaction: Transaction): string {
+        return `${this.titleCase(transaction.type)}  ${transaction.clientName ?? ""}  ${transaction.clientAccountNumber ? '#' + transaction.clientAccountNumber : ""}`.trim();
     }
 
     public titleCase(str: string): string {
         return str.toLocaleLowerCase().split(' ').map(word => word.replace(word[0], word[0].toUpperCase())).join(' ');
     }
 
-}
+    public static titleCase(str: string): string {
+        return str.toLocaleLowerCase().split(' ').map(word => word.replace(word[0], word[0].toUpperCase())).join(' ');
+    }
 
-interface TransactionClientInfo {
-    clientRef: DocumentReference<Contact>;
-    clientName: string;
-    clientAccountNumber: string;
 }

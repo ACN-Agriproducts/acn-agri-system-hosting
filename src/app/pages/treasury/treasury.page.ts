@@ -1,11 +1,11 @@
 import { OptionsComponent } from './components/options/options.component';
-import { ModalController, PopoverController } from '@ionic/angular';
+import { PopoverController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
 import { Account } from '@shared/classes/account';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { DocumentReference, Firestore, Unsubscribe } from '@angular/fire/firestore';
+import { Firestore, Unsubscribe, doc, setDoc } from '@angular/fire/firestore';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 import { SetTransactionDialogComponent } from './components/set-transaction-dialog/set-transaction-dialog.component';
 import { Contact } from '@shared/classes/contact';
@@ -83,20 +83,27 @@ export class TreasuryPage implements OnInit {
   }
 
   public async createTransaction() {
+    const transaction = new Transaction(doc(Transaction.getCollectionReference(this.db, this.session.getCompany())));
+
     const dialogRef = this.dialog.open(SetTransactionDialogComponent, {
       data: {
         accounts: [...this.accounts],
-        contacts: [...(await this.contacts)]
+        contacts: [...(await this.contacts)],
+        transaction
       },
       maxWidth: "none !important",
       autoFocus: false,
       maxHeight: "100vh"
     });
 
-    const transaction: Transaction = await lastValueFrom(dialogRef.afterClosed());
-    if (!transaction) return;
+    const data = await lastValueFrom(dialogRef.afterClosed());
+    if (!data) return;
 
-    await transaction.set();
+    await setDoc(transaction.ref, { ...data, status: "pending" });
+  }
+
+  public logTransactions() {
+    console.log(this.transactions)
   }
 
 }
