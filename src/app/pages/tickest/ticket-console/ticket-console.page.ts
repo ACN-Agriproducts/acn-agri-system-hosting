@@ -80,7 +80,7 @@ export class TicketConsolePage implements OnInit, OnDestroy {
     );
     newTicket.in = isIn;
     newTicket.type = result;
-    newTicket.id = (await lastTicket)[0].id + 1;
+    newTicket.id = ((await lastTicket)?.[0]?.id ?? 0) + 1;
 
     this.tickets.push(newTicket);
     this.ticketIndex = this.tickets.length - 1;
