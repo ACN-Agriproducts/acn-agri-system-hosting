@@ -4,14 +4,7 @@
     <div class="content-actions">
 
       <!-- <ion-title class="capitalize">Progreso</ion-title> -->
-      <ion-buttons class="butons buttons-main">
-        <ion-button slot="start" color="dark">
-          <ion-label class="label-branch_office">
-            Progreso
-          </ion-label>
-          <ion-icon slot="end" name="chevron-down"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+      <app-plant-select (plantChangeEvent)="plantChange()"></app-plant-select>
       <!-- <ion-searchbar class="ion-no-padding ion-padding-vertical" animated></ion-searchbar> -->
 
       <ion-buttons class="butons">

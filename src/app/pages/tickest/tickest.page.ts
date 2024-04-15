@@ -67,4 +67,8 @@ export class TickestPage implements OnInit {
       data: {currentPlant: this.currentPlant}
     });
   }
+
+  plantChange(): void {
+    this.ticketTable.getTickets();
+  }
 }
