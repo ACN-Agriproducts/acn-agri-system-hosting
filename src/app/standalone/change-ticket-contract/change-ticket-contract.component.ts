@@ -53,7 +53,7 @@ export class ChangeTicketContractComponent implements OnInit {
     });
 
     this.displayUnit = this.session.getDisplayUnit();
-    this.language = this.session.getLanguage();
+    this.language = this.session.getLanguage() === 'es' ? 'es-MX' : 'en-US';
   }
 
   async submit(): Promise<void> {

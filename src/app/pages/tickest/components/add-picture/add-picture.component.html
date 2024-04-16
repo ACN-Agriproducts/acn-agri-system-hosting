@@ -17,13 +17,13 @@
         </ion-buttons> -->
     </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-    <h2 mat-dialog-title>Add picture</h2>
+<ion-content class="ion-padding" *transloco="let t; read: 'actions'">
+    <h2 mat-dialog-title>{{ t('Add Picture') }}</h2>
     <ngx-dropzone  accept="image/*" (change)="onSelect($event)">
         <ngx-dropzone-label>
             <ion-icon name="cloud-upload-outline"></ion-icon>
-            <h3>Add files</h3>
-            <p>Simply drag and drop elements</p>
+            <h3>{{ t('Add files') }}</h3>
+            <p>{{ t('Simply drag and drop elements') }}</p>
         </ngx-dropzone-label>
         <!-- <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
             <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>({{ f.type }})  
@@ -33,11 +33,11 @@
         </ngx-dropzone-image-preview>
     </ngx-dropzone>
 </ion-content>
-<mat-dialog-actions align="end" class="ion-padding">
-<ion-button (click)="closeModal()" fill="clear" color="dark">
-        Cancel
+<mat-dialog-actions align="end" class="ion-padding" *transloco="let t; read: 'actions'">
+    <ion-button (click)="closeModal()" fill="clear" color="dark">
+        {{ t('Cancel') }}
     </ion-button>
     <ion-button cdkFocusInitial [mat-dialog-close]="true" fill="solid" color="primary">
-        Save
+        {{ t('Save') }}
     </ion-button>
-  </mat-dialog-actions>
+</mat-dialog-actions>

@@ -10,6 +10,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { Mass } from '@shared/classes/mass';
 import { units } from '@shared/classes/mass';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -69,7 +70,8 @@ export class TicketReportDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private db: Firestore,
     private storage: Storage,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {
@@ -81,6 +83,10 @@ export class TicketReportDialogComponent implements OnInit {
     await this.getReportTickets();
   }
 
+  public translateTable(key: string): string {
+    return this.transloco.translate("tickets.table." + key);
+  }
+
   public async createExcelDoc(): Promise<void>{
     if(this.reportType == ReportType.ProductBalance) {
       const workbook = new Excel.Workbook();
@@ -88,13 +94,13 @@ export class TicketReportDialogComponent implements OnInit {
       for(let product in this.productTicketLists) {
         const workSheet = workbook.addWorksheet(product);
         workSheet.columns = [
-          {header: "Date", key: "dateOut"},
-          {header: "ID", key: "id"},
-          {header: "Client", key: "clientName"},
-          {header: "Contract", key: "contractID"},
-          {header: "Net", key: "net"},
-          {header: "Dry Weight", key: "dryWeight"},
-          {header: "Runnnig Total", key: "total"},
+          {header: this.translateTable("Date"), key: "dateOut"},
+          {header: this.translateTable("ID"), key: "id"},
+          {header: this.translateTable("Client"), key: "clientName"},
+          {header: this.translateTable("Contract"), key: "contractID"},
+          {header: this.translateTable("Net"), key: "net"},
+          {header: this.translateTable("Dry Weight"), key: "dryWeight"},
+          {header: this.translateTable("Running Total"), key: "total"},
         ]
 
         const list = this.productTicketLists[product] as Ticket[];
@@ -167,23 +173,23 @@ export class TicketReportDialogComponent implements OnInit {
           showRowStripes: true,
         },
         columns: [
-          {name: "IN", totalsRowLabel: "Totals:", filterButton: true},
-          {name: "Date", filterButton: true},
-          {name: "Ticket", filterButton: true},
-          {name: "OrgTicket", filterButton: true},
-          {name: "void", filterButton: true},
-          {name: "Contract", filterButton: true},
-          {name: "Product", filterButton: true},
-          {name: "Customer_Name", filterButton: true},
-          {name: "Vehicle_Driver", filterButton: true},
-          {name: "WT_GROSS", filterButton: true, totalsRowFunction: "sum"},
-          {name: "WT_TARE", filterButton: true, totalsRowFunction: "sum"},
-          {name: "WT_NET", filterButton: true, totalsRowFunction: "sum"},
-          {name: "Shrink", filterButton: true},
-          {name: "ShrinkWt", filterButton: true, totalsRowFunction: "sum"},
-          {name: "Tons", filterButton: true, totalsRowFunction: "sum"},
-          {name: "CCGE CERTIFICATE", filterButton: true},
-          {name: "Storage", filterButton: true}
+          {name: this.translateTable("IN"), totalsRowLabel: "Totals:", filterButton: true},
+          {name: this.translateTable("Date"), filterButton: true},
+          {name: this.translateTable("Ticket"), filterButton: true},
+          {name: this.translateTable("OrgTicket"), filterButton: true},
+          {name: this.translateTable("void"), filterButton: true},
+          {name: this.translateTable("Contract"), filterButton: true},
+          {name: this.translateTable("Product"), filterButton: true},
+          {name: this.translateTable("Customer_Name"), filterButton: true},
+          {name: this.translateTable("Vehicle_Driver"), filterButton: true},
+          {name: this.translateTable("WT_GROSS"), filterButton: true, totalsRowFunction: "sum"},
+          {name: this.translateTable("WT_TARE"), filterButton: true, totalsRowFunction: "sum"},
+          {name: this.translateTable("WT_NET"), filterButton: true, totalsRowFunction: "sum"},
+          {name: this.translateTable("Shrink"), filterButton: true},
+          {name: this.translateTable("ShrinkWt"), filterButton: true, totalsRowFunction: "sum"},
+          {name: this.translateTable("Tons"), filterButton: true, totalsRowFunction: "sum"},
+          {name: this.translateTable("CCGE CERTIFICATE"), filterButton: true},
+          {name: this.translateTable("Storage"), filterButton: true}
           
         ],
         rows: []

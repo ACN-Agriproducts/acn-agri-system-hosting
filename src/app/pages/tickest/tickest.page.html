@@ -1,27 +1,29 @@
-<app-header-toolbar titulo="Tickets"></app-header-toolbar>
-<ion-content [fullscreen]="true" class="ion-padding">
-  <div id="container">
-    <div class="content-actions">
-
-      <!-- <ion-title class="capitalize">Progreso</ion-title> -->
-      <ion-buttons class="butons buttons-main">
-        <ion-button slot="start" color="dark">
-          <ion-label class="label-branch_office">
-            Progreso
-          </ion-label>
-          <ion-icon slot="end" name="chevron-down"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <!-- <ion-searchbar class="ion-no-padding ion-padding-vertical" animated></ion-searchbar> -->
-
-      <ion-buttons class="butons">
-        <!-- <ion-button (click)="openFilter()" matTooltipPosition="below" matTooltipClass="tooltip-primary"
-          matTooltip="Filter by" color="primary">
-          <ion-icon slot="icon-only" name="options-outline"></ion-icon>
-        </ion-button> -->
-        <ion-button color="primary" fill="solid" (click)="openTicketReportDialog()">REPORT</ion-button>
-      </ion-buttons>
+<ng-container *transloco="let t, read: 'tickets'">
+  <app-header-toolbar [titulo]="t('Tickets')"></app-header-toolbar>
+  <ion-content [fullscreen]="true" class="ion-padding">
+    <div id="container">
+      <div class="content-actions">
+  
+        <!-- <ion-title class="capitalize">Progreso</ion-title> -->
+        <ion-buttons class="butons buttons-main">
+          <ion-button slot="start" color="dark">
+            <ion-label class="label-branch_office">
+              Progreso
+            </ion-label>
+            <ion-icon slot="end" name="chevron-down"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <!-- <ion-searchbar class="ion-no-padding ion-padding-vertical" animated></ion-searchbar> -->
+  
+        <ion-buttons class="butons">
+          <!-- <ion-button (click)="openFilter()" matTooltipPosition="below" matTooltipClass="tooltip-primary"
+            matTooltip="Filter by" color="primary">
+            <ion-icon slot="icon-only" name="options-outline"></ion-icon>
+          </ion-button> -->
+          <ion-button color="primary" fill="solid" (click)="openTicketReportDialog()">{{ t('Report') | uppercase }}</ion-button>
+        </ion-buttons>
+      </div>
+      <app-table #ticket_table></app-table>
     </div>
-    <app-table #ticket_table></app-table>
-  </div>
-</ion-content>
+  </ion-content>
+</ng-container>

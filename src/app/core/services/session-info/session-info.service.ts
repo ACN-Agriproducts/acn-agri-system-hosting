@@ -20,7 +20,7 @@ export interface UserInterface {
 }
 
 declare type keyOpts = 'currentCompany' | 'currentPlant' | 'user' | 'companyUnit' | 'userUnit' | 'companyDisplayUnit' | 'defaultLanguage';
-export declare type langOpts = 'en' | 'es';
+export declare type langOpts = 'en' | 'es'; // update language options to 'en-US' and 'es-MX' maybe ???
 
 @Injectable({
   providedIn: 'root'

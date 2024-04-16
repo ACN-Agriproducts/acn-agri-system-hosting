@@ -1,368 +1,139 @@
-<div class="options-bar">
-    <div>
-        <mat-form-field appearance="outline">
-            <mat-label>Type</mat-label>
-            <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
-                <mat-option [value]="true">In Tickets</mat-option>
-                <mat-option [value]="false">Out Tickets</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>Sort</mat-label>
-            <mat-select [(ngModel)]="sort" (selectionChange)="getTickets()">
-                <mat-option value="date">Date</mat-option>
-                <mat-option value="id">ID</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="outline" *ngIf="sort == 'date'">
-            <mat-label>Month and Year</mat-label>
-            <input matInput [matDatepicker]="dp" [(ngModel)]="date">
-            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-            <mat-datepicker #dp
-                            startView="multi-year"
-                            (monthSelected)="setMonthAndYear($event, dp)"
-                            panelClass="example-month-picker">
-            </mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="outline" *ngIf="sort == 'id'">
-            <mat-label>Range</mat-label>
-            <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
-                <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-</div>
-
-<!-- Tickets in scale -->
-<app-section-title title="Scale Tickets"></app-section-title>
-<ion-card class="ion-no-margin ion-hide-sm-down">
-    <div class="header-table ion-hide-sm-down">
-        <div class="item-content ion-hide-lg-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Customer / Ticket</ion-text>
-            </ion-item>
-        </div>
-        <!-- =========================================== -->
-        <!-- =========================================== -->
-        <!-- =========================================== -->
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Date</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Ticket #</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Customer</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-lg-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Product / Moisture / Tests Wt</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Moisture</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content  ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Tests Wt</ion-text>
-            </ion-item>
-        </div>
-
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-md-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Contract/ Gross/ Tare/ Net/</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Contract</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Product</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Gross</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Tare</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Net</ion-text>
-            </ion-item>
+<ng-container *transloco="let t, read: 'tickets.table'">
+    <div class="options-bar">
+        <div>
+            <mat-form-field appearance="outline">
+                <mat-label>{{ t('Type') }}</mat-label>
+                <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
+                    <mat-option [value]="true">{{ t('In Tickets') }}</mat-option>
+                    <mat-option [value]="false">{{ t('Out Tickets') }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>{{ t('Sort') }}</mat-label>
+                <mat-select [(ngModel)]="sort" (selectionChange)="getTickets()">
+                    <mat-option value="date">{{ t('Date') }}</mat-option>
+                    <mat-option value="id">{{ t('ID') }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="sort == 'date'">
+                <mat-label>{{ t('Month and Year') }}</mat-label>
+                <input matInput [matDatepicker]="dp" [(ngModel)]="date">
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp
+                                startView="multi-year"
+                                (monthSelected)="setMonthAndYear($event, dp)"
+                                panelClass="example-month-picker">
+                </mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="sort == 'id'">
+                <mat-label>{{ t('Range') }}</mat-label>
+                <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
+                    <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
     </div>
-    <!-- ================================= -->
-    <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
-        *ngFor="let item of scaleTickets">
-        <div class="item-content ion-hide-lg-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <div class="content-item-text">
-                    <ion-text class="item-text-md item-ticket">Ticket # <span>{{item.displayId}}</span></ion-text>
-                    <ion-text class="item-text-md item-costomer" 
-                        [class.request]="item.voidRequest" 
-                        [class.void]="item.void">{{item.clientName}}</ion-text>
-                    <ion-text class="item-text-md item-label-small">{{item.dateIn | date}}</ion-text>
-                </div>
-            </ion-item>
+    
+    <!-- Tickets in scale -->
+    <app-section-title title="Scale Tickets"></app-section-title>
+    <ion-card class="ion-no-margin ion-hide-sm-down">
+        <div class="header-table ion-hide-sm-down">
+            <div class="item-content ion-hide-lg-up">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Customer') }} / {{ t('Ticket') }}</ion-text>
+                </ion-item>
+            </div>
+            <!-- =========================================== -->
+            <!-- =========================================== -->
+            <!-- =========================================== -->
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Date') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Ticket') }} #</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Customer') }}</ion-text>
+                </ion-item>
+            </div>
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-lg-up">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Product') }} / {{ t('Moisture') }} / {{ t('Test Wt') }}</ion-text>
+                </ion-item>
+            </div>
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Moisture') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content  ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Test Wt') }}</ion-text>
+                </ion-item>
+            </div>
+    
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-md-up">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Contract') }}/ {{ t('Gross') }}/ {{ t('Tare') }}/ {{ t('Net') }}/</ion-text>
+                </ion-item>
+            </div>
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Contract') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Product') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Gross') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Tare') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Net') }}</ion-text>
+                </ion-item>
+            </div>
         </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text class="ion-hide-xl-down">{{item.dateIn | date}}</ion-text>
-                <ion-text class="ion-hide-xl-up">{{item.dateIn | date}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.displayId}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text [class.request]="item.voidRequest" 
-                [class.void]="item.void">{{item.clientName}}</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-lg-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <div class="content-item-text">
-                    <ion-text class="item-text-md item-costomer">{{item.productName | uppercase}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Moisture: {{item.moisture}}%</ion-text>
-                    <ion-text class="item-text-md item-ticket">TestsWt: {{item.weight}}</ion-text>
-                    <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
-                </div>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.moisture}}%</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content  ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.weight}}</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-md-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <div class="content-item-text">
-                    <!-- <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text> -->
-                    <ion-text class="item-text-md item-ticket">Contract: {{item.contractID}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">TestWt: {{item.weight}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Tare: {{item.tare | massInUnit}}</ion-text>
-                    <ion-text class="item-text-md item-ticket">Net: {{item.net | massInUnit}}</ion-text>
-                    <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
-                </div>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.contractID}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.productName}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.gross | massInUnit}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.tare | massInUnit}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>{{item.net | massInUnit}}</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content item-action" size="1">
-            <ion-item button="false" lines="none" class="item-cantidas ion-no-padding">
-                <ion-buttons>
-                    <ion-button matTooltipPosition="before" matTooltipClass="tooltip-primary-solid" matTooltip="Options"
-                        (click)="presentPopoverTicket($event, item)" color="primary" style="text-transform: none">
-
-                        <!-- <span class="ion-hide-md-down">
-                Open
-              </span> -->
-                        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
-                        <!-- <ion-icon class="ion-hide-md-up" name="open-outline" slot="icon-only"></ion-icon> -->
-                    </ion-button>
-                </ion-buttons>
-            </ion-item>
-        </div>
-    </div>
-</ion-card>
-<div class="ion-hide-sm-up">
-    <ion-card class="item-card" *ngFor="let item of scaleTickets">
-        <ion-item lines="none" button (click)="openDetails($event)">
-            <ion-label slot="start">
-                <h2>Ticket # <span>{{item.displayId}}</span></h2>
-                <p class="item-subtitle" [class.request]="item.voidRequest" 
-                [class.void]="item.void">{{item.clientName}}</p>
-                <p class="item-subtitle">{{item.dateIn | date}}</p>
-                <ul>
-                    <li>Product: <b>{{item.productName}}</b></li>
-                    <li>Moisture: <b>{{item.moisture}}</b></li>
-                    <li>Test Wt: <b>{{item.weight}}</b></li>
-                    <li>Gross: <b>{{item.gross | massInUnit}}</b></li>
-                    <li>Tare: <b>{{item.tare | massInUnit}}</b></li>
-                    <li>Net: <b>{{item.net | massInUnit}}</b></li>
-                </ul>
-            </ion-label>
-        </ion-item>
-        <ion-item lines="none" class="content-botons">
-            <ion-buttons slot="end">
-                <ion-button color="secondary" (click)="openDetails($event)">
-                    <ion-icon slot="icon-only" name="open-outline"></ion-icon>
-                </ion-button>
-                <ion-button color="tertiary" (click)="openAddicture()">
-                    <ion-icon slot="icon-only" name="images-outline"></ion-icon>
-                </ion-button>
-                <ion-button (click)="openDialog($event, item.ref.id)" color="primary">
-                    <ion-icon slot="icon-only" name="receipt-outline"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-        </ion-item>
-    </ion-card>
-</div>
-<div class="table-spacer"></div>
-<!-- Closed tickets -->
-<app-section-title title="Tickets"></app-section-title>
-<ion-card class="ion-no-margin ion-hide-sm-down">
-    <div class="header-table ion-hide-sm-down">
-        <div class="item-content ion-hide-lg-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Customer / Ticket</ion-text>
-            </ion-item>
-        </div>
-        <!-- =========================================== -->
-        <!-- =========================================== -->
-        <!-- =========================================== -->
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Date</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Ticket #</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Customer</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-lg-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Product / Moisture / Tests Wt</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Moisture</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content  ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Tests Wt</ion-text>
-            </ion-item>
-        </div>
-
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-md-up">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Contract/ Gross/ Tare/ Net/</ion-text>
-            </ion-item>
-        </div>
-        <!-- #################################### -->
-        <!-- #################################### -->
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Contract</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-lg-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Product</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Gross</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Tare</ion-text>
-            </ion-item>
-        </div>
-        <div class="item-content ion-hide-md-down" size="1">
-            <ion-item lines="none" class="item-cantidas ion-no-padding">
-                <ion-text>Net</ion-text>
-            </ion-item>
-        </div>
-    </div>
-    <!-- ================================= -->
-    <ng-container *ngFor="let item of paginator?.list">
+        <!-- ================================= -->
         <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
-            *ngIf="item.status != 'active'" >
+            *ngFor="let item of scaleTickets">
             <div class="item-content ion-hide-lg-up">
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
                     <div class="content-item-text">
-                        <ion-text class="item-text-md item-ticket">Ticket # <span>{{item.displayId}}</span></ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('Ticket') }} # <span>{{item.displayId}}</span></ion-text>
                         <ion-text class="item-text-md item-costomer"
                             [class.request]="item.voidRequest"
                             [class.void]="item.void">{{item.clientName}}</ion-text>
-                        <ion-text class="item-text-md item-label-small">{{item.dateOut | date}}</ion-text>
+                        <ion-text class="item-text-md item-label-small">{{item.dateIn | date}}</ion-text>
                     </div>
                 </ion-item>
             </div>
             <div class="item-content ion-hide-lg-down" size="1">
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
-                    <ion-text class="ion-hide-xl-down">{{item.dateOut | date}}</ion-text>
-                    <ion-text class="ion-hide-xl-up">{{item.dateOut | date}}</ion-text>
+                    <ion-text class="ion-hide-xl-down">{{item.dateIn | date}}</ion-text>
+                    <ion-text class="ion-hide-xl-up">{{item.dateIn | date}}</ion-text>
                 </ion-item>
             </div>
             <div class="item-content ion-hide-lg-down" size="1">
@@ -382,8 +153,8 @@
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
                     <div class="content-item-text">
                         <ion-text class="item-text-md item-costomer">{{item.productName | uppercase}}</ion-text>
-                        <ion-text class="item-text-md item-ticket">Moisture: {{item.moisture}}%</ion-text>
-                        <ion-text class="item-text-md item-ticket">TestsWt: {{item.weight}}</ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('Moisture') }}: {{item.moisture}}%</ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('TestWt') }}: {{item.weight}}</ion-text>
                         <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
                     </div>
                 </ion-item>
@@ -406,10 +177,10 @@
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
                     <div class="content-item-text">
                         <!-- <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text> -->
-                        <ion-text class="item-text-md item-ticket">Contract: {{item.contractID}}</ion-text>
-                        <ion-text class="item-text-md item-ticket">TestWt: {{item.weight}}</ion-text>
-                        <ion-text class="item-text-md item-ticket">Tare: {{item.tare | massInUnit}}</ion-text>
-                        <ion-text class="item-text-md item-ticket">Net: {{item.net | massInUnit}}</ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('Contract') }}: {{item.contractID}}</ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('Gross') }}: {{item.gross | massInUnit}}</ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('Tare') }}: {{item.tare | massInUnit}}</ion-text>
+                        <ion-text class="item-text-md item-ticket">{{ t('Net') }}: {{item.net | massInUnit}}</ion-text>
                         <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
                     </div>
                 </ion-item>
@@ -444,8 +215,9 @@
             <div class="item-content item-action" size="1">
                 <ion-item button="false" lines="none" class="item-cantidas ion-no-padding">
                     <ion-buttons>
-                        <ion-button matTooltipPosition="before" matTooltipClass="tooltip-primary-solid" matTooltip="Options"
+                        <ion-button matTooltipPosition="before" matTooltipClass="tooltip-primary-solid" [matTooltip]="t('Options')"
                             (click)="presentPopoverTicket($event, item)" color="primary" style="text-transform: none">
+    
                             <!-- <span class="ion-hide-md-down">
                     Open
                   </span> -->
@@ -456,24 +228,22 @@
                 </ion-item>
             </div>
         </div>
-    </ng-container>
-</ion-card>
-<div class="ion-hide-sm-up">
-    <ng-container *ngFor="let item of paginator?.list">
-        <ion-card class="item-card" *ngIf="item.status != 'active'">
+    </ion-card>
+    <div class="ion-hide-sm-up">
+        <ion-card class="item-card" *ngFor="let item of scaleTickets">
             <ion-item lines="none" button (click)="openDetails($event)">
                 <ion-label slot="start">
-                    <h2>Ticket # <span>{{item.displayId}}</span></h2>
+                    <h2>{{ t('Ticket') }} # <span>{{item.displayId}}</span></h2>
                     <p class="item-subtitle" [class.request]="item.voidRequest"
                     [class.void]="item.void">{{item.clientName}}</p>
-                    <p class="item-subtitle">{{item.dateOut | date}}</p>
+                    <p class="item-subtitle">{{item.dateIn | date}}</p>
                     <ul>
-                        <li>Product: <b>{{item.productName}}</b></li>
-                        <li>Moisture: <b>{{item.moisture}}</b></li>
-                        <li>Test Wt: <b>{{item.weight}}</b></li>
-                        <li>Gross: <b>{{item.gross | massInUnit}}</b></li>
-                        <li>Tare: <b>{{item.tare | massInUnit}}</b></li>
-                        <li>Net: <b>{{item.net | massInUnit}}</b></li>
+                        <li>{{ t('Product') }}: <b>{{item.productName}}</b></li>
+                        <li>{{ t('Moisture') }}: <b>{{item.moisture}}</b></li>
+                        <li>{{ t('Test Wt') }}: <b>{{item.weight}}</b></li>
+                        <li>{{ t('Gross') }}: <b>{{item.gross | massInUnit}}</b></li>
+                        <li>{{ t('Tare') }}: <b>{{item.tare | massInUnit}}</b></li>
+                        <li>{{ t('Net') }}: <b>{{item.net | massInUnit}}</b></li>
                     </ul>
                 </ion-label>
             </ion-item>
@@ -491,13 +261,245 @@
                 </ion-buttons>
             </ion-item>
         </ion-card>
-    </ng-container>
-
-</div>
-
-<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteTickets($event)">
-    <ion-infinite-scroll-content
-        loadingSpinner="bubbles"
-        loadingText="Loading more data...">
-    </ion-infinite-scroll-content>
-</ion-infinite-scroll>
+    </div>
+    <div class="table-spacer"></div>
+    <!-- Closed tickets -->
+    <app-section-title title="Tickets"></app-section-title>
+    <ion-card class="ion-no-margin ion-hide-sm-down">
+        <div class="header-table ion-hide-sm-down">
+            <div class="item-content ion-hide-lg-up">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Customer') }} / {{ t('Ticket') }}</ion-text>
+                </ion-item>
+            </div>
+            <!-- =========================================== -->
+            <!-- =========================================== -->
+            <!-- =========================================== -->
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Date') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Ticket') }} #</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Customer') }}</ion-text>
+                </ion-item>
+            </div>
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-lg-up">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Product') }} / {{ t('Moisture') }} / {{ t('Test Wt') }}</ion-text>
+                </ion-item>
+            </div>
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Moisture') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content  ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Test Wt') }}</ion-text>
+                </ion-item>
+            </div>
+    
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-md-up">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Contract') }}/ {{ t('Gross') }}/ {{ t('Tare') }}/ {{ t('Net') }}/</ion-text>
+                </ion-item>
+            </div>
+            <!-- #################################### -->
+            <!-- #################################### -->
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Contract') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-lg-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Product') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Gross') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Tare') }}</ion-text>
+                </ion-item>
+            </div>
+            <div class="item-content ion-hide-md-down" size="1">
+                <ion-item lines="none" class="item-cantidas ion-no-padding">
+                    <ion-text>{{ t('Net') }}</ion-text>
+                </ion-item>
+            </div>
+        </div>
+        <!-- ================================= -->
+        <ng-container *ngFor="let item of paginator?.list">
+            <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
+                *ngIf="item.status != 'active'" >
+                <div class="item-content ion-hide-lg-up">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <div class="content-item-text">
+                            <ion-text class="item-text-md item-ticket">{{ t('Ticket') }} # <span>{{item.displayId}}</span></ion-text>
+                            <ion-text class="item-text-md item-costomer"
+                                [class.request]="item.voidRequest"
+                                [class.void]="item.void">{{item.clientName}}</ion-text>
+                            <ion-text class="item-text-md item-label-small">{{item.dateOut | date}}</ion-text>
+                        </div>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-lg-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text class="ion-hide-xl-down">{{item.dateOut | date}}</ion-text>
+                        <ion-text class="ion-hide-xl-up">{{item.dateOut | date}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-lg-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.displayId}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-lg-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text [class.request]="item.voidRequest"
+                        [class.void]="item.void">{{item.clientName}}</ion-text>
+                    </ion-item>
+                </div>
+                <!-- #################################### -->
+                <!-- #################################### -->
+                <div class="item-content ion-hide-lg-up">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <div class="content-item-text">
+                            <ion-text class="item-text-md item-costomer">{{item.productName | uppercase}}</ion-text>
+                            <ion-text class="item-text-md item-ticket">{{ t('Moisture') }}: {{item.moisture}}%</ion-text>
+                            <ion-text class="item-text-md item-ticket">{{ t('TestWt') }}: {{item.weight}}</ion-text>
+                            <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
+                        </div>
+                    </ion-item>
+                </div>
+                <!-- #################################### -->
+                <!-- #################################### -->
+                <div class="item-content ion-hide-lg-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.moisture}}%</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content  ion-hide-lg-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.weight}}</ion-text>
+                    </ion-item>
+                </div>
+                <!-- #################################### -->
+                <!-- #################################### -->
+                <div class="item-content ion-hide-md-up">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <div class="content-item-text">
+                            <!-- <ion-text class="item-text-md item-costomer">{{item.product | uppercase}}</ion-text> -->
+                            <ion-text class="item-text-md item-ticket">{{ t('Contract') }}: {{item.contractID}}</ion-text>
+                            <ion-text class="item-text-md item-ticket">{{ t('Gross') }}: {{item.gross | massInUnit}}</ion-text>
+                            <ion-text class="item-text-md item-ticket">{{ t('Tare') }}: {{item.tare | massInUnit}}</ion-text>
+                            <ion-text class="item-text-md item-ticket">{{ t('Net') }}: {{item.net | massInUnit}}</ion-text>
+                            <!-- <ion-text class="item-text-md item-label-small" >{{item.date}}</ion-text> -->
+                        </div>
+                    </ion-item>
+                </div>
+                <!-- #################################### -->
+                <!-- #################################### -->
+                <div class="item-content ion-hide-md-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.contractID}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-lg-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.productName}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-md-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.gross | massInUnit}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-md-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.tare | massInUnit}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content ion-hide-md-down" size="1">
+                    <ion-item lines="none" class="item-cantidas ion-no-padding">
+                        <ion-text>{{item.net | massInUnit}}</ion-text>
+                    </ion-item>
+                </div>
+                <div class="item-content item-action" size="1">
+                    <ion-item button="false" lines="none" class="item-cantidas ion-no-padding">
+                        <ion-buttons>
+                            <ion-button matTooltipPosition="before" matTooltipClass="tooltip-primary-solid" [matTooltip]="t('Options')"
+                                (click)="presentPopoverTicket($event, item)" color="primary" style="text-transform: none">
+                                <!-- <span class="ion-hide-md-down">
+                        Open
+                      </span> -->
+                                <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                                <!-- <ion-icon class="ion-hide-md-up" name="open-outline" slot="icon-only"></ion-icon> -->
+                            </ion-button>
+                        </ion-buttons>
+                    </ion-item>
+                </div>
+            </div>
+        </ng-container>
+    </ion-card>
+    <div class="ion-hide-sm-up">
+        <ng-container *ngFor="let item of paginator?.list">
+            <ion-card class="item-card" *ngIf="item.status != 'active'">
+                <ion-item lines="none" button (click)="openDetails($event)">
+                    <ion-label slot="start">
+                        <h2>{{ t('Ticket') }} # <span>{{item.displayId}}</span></h2>
+                        <p class="item-subtitle" [class.request]="item.voidRequest"
+                        [class.void]="item.void">{{item.clientName}}</p>
+                        <p class="item-subtitle">{{item.dateOut | date}}</p>
+                        <ul>
+                            <li>{{ t('Product') }}: <b>{{item.productName}}</b></li>
+                            <li>{{ t('Moisture') }}: <b>{{item.moisture}}</b></li>
+                            <li>{{ t('Test Wt') }}: <b>{{item.weight}}</b></li>
+                            <li>{{ t('Gross') }}: <b>{{item.gross | massInUnit}}</b></li>
+                            <li>{{ t('Tare') }}: <b>{{item.tare | massInUnit}}</b></li>
+                            <li>{{ t('Net') }}: <b>{{item.net | massInUnit}}</b></li>
+                        </ul>
+                    </ion-label>
+                </ion-item>
+                <ion-item lines="none" class="content-botons">
+                    <ion-buttons slot="end">
+                        <ion-button color="secondary" (click)="openDetails($event)">
+                            <ion-icon slot="icon-only" name="open-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button color="tertiary" (click)="openAddicture()">
+                            <ion-icon slot="icon-only" name="images-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button (click)="openDialog($event, item.ref.id)" color="primary">
+                            <ion-icon slot="icon-only" name="receipt-outline"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
+                </ion-item>
+            </ion-card>
+        </ng-container>
+    
+    </div>
+    
+    <ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteTickets($event)">
+        <ion-infinite-scroll-content
+            loadingSpinner="bubbles"
+            loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ng-container>
