@@ -123,6 +123,9 @@ export class SessionInfo {
           this.transloco.setActiveLang(this.language);
         });
       }
+      else {
+        this.transloco.setActiveLang(this.language);
+      }
     });
 
     
