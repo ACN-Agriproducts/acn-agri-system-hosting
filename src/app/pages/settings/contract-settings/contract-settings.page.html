@@ -2,13 +2,25 @@
 
 <ion-content class="ion-padding">
   <button mat-flat-button color="primary" (click)="submit()">Submit</button>
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let contractName of settings?.contractTypes | keyvalue">
-      <mat-expansion-panel-header>
+  <cdk-accordion>
+    <cdk-accordion-item 
+    *ngFor="let contractName of settings?.contractTypes | keyvalue; let index = index"
+    #accordionItem="cdkAccordionItem"
+    role="button"
+    tabindex="0"
+    [attr.id]="'accordion-header-' + index"
+    [attr.aria-expanded]="accordionItem.expanded"
+    [attr.aria-controls]="'accordion-body-' + index">
+      <div class="accordion-item-header" (click)="accordionItem.toggle()">
         <mat-panel-title>{{contractName.key}}</mat-panel-title>
         <mat-panel-description><button mat-button (click)="addGroup($event, contractName.value)">Add Group</button></mat-panel-description>
-      </mat-expansion-panel-header>
-      <mat-card *ngFor="let fieldGroupName of settings.fieldGroupOrder[contractName.value]">
+      </div>
+      <mat-card 
+        role="region"
+        [style.display]="accordionItem.expanded ? '' : 'none'"
+        [attr.id]="'accordion-body-' + index"
+        [attr.aria-labelledby]="'accordion-header-' + index"
+        *ngFor="let fieldGroupName of settings.fieldGroupOrder[contractName.value]">
         <mat-card-header>
           <mat-card-title>
             <button mat-flat-button color="warn" (click)="removeGroup(contractName.value, fieldGroupName)">Delete Group</button>
@@ -88,6 +100,6 @@
           </div>
         </mat-card-content>
       </mat-card>
-    </mat-expansion-panel>
-  </mat-accordion>
+    </cdk-accordion-item>
+  </cdk-accordion>
 </ion-content>

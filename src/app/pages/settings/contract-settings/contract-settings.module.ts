@@ -8,6 +8,7 @@ import { ContractSettingsPageRoutingModule } from './contract-settings-routing.m
 
 import { ContractSettingsPage, MoveGroupDialog, NameDialog } from './contract-settings.page';
 import { CoreModule } from '@core/core.module';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { CoreModule } from '@core/core.module';
     FormsModule,
     IonicModule,
     ContractSettingsPageRoutingModule,
-    CoreModule
+    CoreModule,
+    CdkAccordionModule
   ],
   declarations: [
     ContractSettingsPage,
