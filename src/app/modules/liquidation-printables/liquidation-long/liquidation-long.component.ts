@@ -34,7 +34,7 @@ export class LiquidationLongComponent implements OnInit {
   ngOnInit() {
     this.language = this.session.getLanguage();
     this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
-    this.companyDoc$ = Company.getCompany(this.db, this.session.getCompany());
+    this.companyDoc$ = this.session.getCompanyObject();
     this.companyDoc$.then(async doc => {
       this.logoURL = await doc.getLogoURL(this.db);
     });
