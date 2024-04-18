@@ -6,6 +6,8 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { TranslocoService } from '@ngneat/transloco';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Company } from '@shared/classes/company';
+import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-layout',
@@ -110,6 +112,7 @@ export class LayoutComponent implements OnInit {
   public dataUser: any;
   public permissions: any;
   public ready: boolean = false;
+  public logoURL: string;
   // public nextPage = LayoutComponent;
 
   constructor(
@@ -117,6 +120,7 @@ export class LayoutComponent implements OnInit {
     private navController: NavController,
     private serviceSettings: SettingsService,
     private session: SessionInfo,
+    private db: Firestore
     // private nav: IonNav
   ) { }
 
@@ -126,6 +130,7 @@ export class LayoutComponent implements OnInit {
     if(!this.permissions) {
       this.authentication.logout();
     }
+    this.session.getCompanyObject().then(async c => this.logoURL = await c.getLogoURL(this.db));
     
     this.collapse$ = this.serviceSettings.collapseMenu$;
     this.displayName$ = this.serviceSettings.displayName$;
