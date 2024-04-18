@@ -1,42 +1,44 @@
-<app-header-toolbar titulo="{{ product }}"></app-header-toolbar>
+<app-header-toolbar [titulo]="product"></app-header-toolbar>
 
 <ng-template #loading [ngIf]="saving">
   <mat-spinner class="loading-spinner" diameter="40"></mat-spinner>
 </ng-template>
 
-<ion-content class="ion-padding">
-  <ion-grid *ngIf="ready else loading">
-    <ion-row>
-      <ion-col size-sm='12' size-md='6'>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Product DPR</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <app-product-dpr-table [productDoc]="doc"></app-product-dpr-table>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-
-    <div class="content-subtitle">
-      <h4><span>Discount Tables</span></h4>
-    </div>
-    <div class="sticky-section">
-      <div class="action-bar">
-        <button mat-flat-button color="primary" (click)="setTable()">+ Add Discount Table</button>
+<ng-container *transloco="let t; read: 'inventory.product'">
+  <ion-content class="ion-padding">
+    <ion-grid *ngIf="ready else loading">
+      <ion-row>
+        <ion-col size-sm='12' size-md='6'>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>{{ t('Product DPR') }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <app-product-dpr-table [productDoc]="doc"></app-product-dpr-table>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+  
+      <div class="content-subtitle">
+        <h4><span>{{ t('Discount Tables') }}</span></h4>
       </div>
-    </div>
-    <ion-row>
-      <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
-        <app-discount-table #discountTable 
-          [table]="table" 
-          (setTable)="setTable(table)" 
-          (saveTable)="saveTables()" 
-          (deleteTable)="deleteTable(table)" 
-        ></app-discount-table>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+      <div class="sticky-section">
+        <div class="action-bar">
+          <button mat-flat-button color="primary" (click)="setTable()">+ {{ t('Add Discount Table') }}</button>
+        </div>
+      </div>
+      <ion-row>
+        <ion-col *ngFor="let table of discountTables?.tables; let tableIndex = index" size-sm="12" size-md="6">
+          <app-discount-table #discountTable
+            [table]="table"
+            (setTable)="setTable(table)"
+            (saveTable)="saveTable()"
+            (deleteTable)="deleteTable(table)"
+          ></app-discount-table>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-container>
 

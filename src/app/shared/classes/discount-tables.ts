@@ -55,18 +55,20 @@ export class DiscountTables extends FirebaseDocInterface {
 }
 
 export class DiscountTable {
-    name: string;
-    fieldName: string;
-    headers: string[];
+    name: string = "";
+    fieldName: string = "";
+    headers: string[] = [];
     data: {
         [key: string]: number
-    }[];
+    }[] = [];
 
     constructor(tableData?: any) {
-        this.name = tableData?.name ?? "";
-        this.fieldName = tableData?.fieldName ?? "";
-        this.headers = [ ...(tableData?.headers ?? []) ];
-        this.data = tableData?.data.map(item => ({ ...item })) ?? [];
+        if (tableData) {
+            this.name = tableData.name;
+            this.fieldName = tableData.name;
+            this.headers = [ ...tableData.headers ];
+            this.data = tableData.data.map(item => ({ ...item }));    
+        }
     }
 
     public addTableData(tableData?: any): void {
