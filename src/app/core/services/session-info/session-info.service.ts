@@ -33,6 +33,7 @@ export class SessionInfo {
   private companyDisplayUnit: units;
   private userUnit: units;
   private language: langOpts;
+  private companyObject$: Promise<Company>;
 
   private keyMap: Map<keyOpts, string>;
 
@@ -63,6 +64,8 @@ export class SessionInfo {
 
     // Get all locally stored values
     localPromises.push(this.localStorage.get('currentCompany').then(val => {
+      this.companyObject$ = Company.getCompany(this.db, val);
+      this.companyObject$.then(c => c.getLogoURL(this.db));
       return this.company = val;
     }));
     
@@ -197,6 +200,10 @@ export class SessionInfo {
 
   public getLanguage(): string {
     return this.language;
+  }
+
+  public getCompanyObject(): Promise<Company> {
+    return this.companyObject$;
   }
 
   public clear(): Promise<void> {
