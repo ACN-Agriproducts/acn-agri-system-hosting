@@ -538,6 +538,9 @@
         "Contract status updated": "Estatus del contrato actualizado",
         "Error": "Error",
         "Required fields must be filled before closing": "Los campos obligatorios deben completarse antes del cierre",
-        "close this contract": "cerrar este contrato"
+        "close this contract": "cerrar este contrato",
+        "Alert": "Alerta",
+        "Are you sure you want to void this ticket?": "Está seguro de que quiere anular este boleta?",
+        "reason": "razón"
     }
 }
