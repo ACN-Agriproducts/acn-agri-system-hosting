@@ -26,7 +26,7 @@
 
 <ng-template #cards let-tabData>
     <div *ngFor="let data of tabData.data" class="card-content-segment">
-        <app-section-title [title]="data.title"></app-section-title>
+        <app-section-title [title]="('contracts.table.' + data.title) | transloco"></app-section-title>
         <div class="card-grid">
             <app-delivered-chart-card *ngFor="let contract of data.contracts[0] | async | filterContracts" [contract]="contract"></app-delivered-chart-card>
         </div>
