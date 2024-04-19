@@ -1,17 +1,17 @@
 <ion-header *transloco="let t, read: 'contracts.table'">
-    <app-header-toolbar [titulo]="t('contracts') | titlecase"></app-header-toolbar>
+    <app-header-toolbar [titulo]="t('contracts')"></app-header-toolbar>
     <ion-toolbar class="contract-toolbar">
         <div>
             <mat-form-field appearance="outline">
-                <mat-label>{{t('Contract type')}}</mat-label>
+                <mat-label>{{t('Contract Type')}}</mat-label>
                 <mat-select (selectionChange)="changedContractType($event)" [value]="0">
-                    <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{tab.label}}</mat-option>
+                    <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{ t(tab.label) | titlecase }}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>{{t('Status')}}</mat-label>
-                <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,cancelled,paid">
-                    <mat-option value="active,closed,pending,cancelled,paid">{{t('all')}}</mat-option>
+                <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,canceled,paid">
+                    <mat-option value="active,closed,pending,canceled,paid">{{t('all') | titlecase}}</mat-option>
                     <mat-option value="active">{{t('active') | titlecase}}</mat-option>
                     <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
                     <mat-option value="closed,paid">{{t('closed') | titlecase}}</mat-option>
@@ -36,7 +36,7 @@
 <ng-template #tableTemplate let-tabData *transloco="let t, read: 'contracts.table'">
     <div class="content">
         <div class="header-filter">
-            <ion-searchbar placeholder="search" [formControl]="searchIinput"></ion-searchbar>
+            <ion-searchbar [placeholder]="t('search')" [formControl]="searchIinput"></ion-searchbar>
             <ion-button color="dark" (click)='exportMode = !exportMode'>
                 <ion-text>{{t('Export')}}</ion-text>
             </ion-button>

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-close-contract-fields-dialog',
@@ -15,10 +16,11 @@ export class CloseContractFieldsDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<CloseContractFieldsDialogComponent>,
     private snack: SnackbarService,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {
-    this.snack.open("Required fields must be filled before closing", 'error');
+    this.snack.open(this.transloco.translate("messages." + "Required fields must be filled before closing"), 'error');
   }
 
   public confirm(): void {
@@ -28,7 +30,7 @@ export class CloseContractFieldsDialogComponent implements OnInit {
     }
 
     this.requiredFieldsForm?.form.markAllAsTouched();
-    this.snack.open("Required fields must be filled before closing", "error");
+    this.snack.open(this.transloco.translate("messages." + "Required fields must be filled before closing"), "error");
   }
 }
 

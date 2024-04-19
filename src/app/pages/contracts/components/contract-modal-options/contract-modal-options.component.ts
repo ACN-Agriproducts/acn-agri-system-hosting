@@ -9,6 +9,7 @@ import { Contract } from '@shared/classes/contract';
 import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { CloseContractFieldsDialogComponent } from '../close-contract-fields-dialog/close-contract-fields-dialog.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -30,7 +31,8 @@ export class ContractModalOptionsComponent implements OnInit {
     private navController: NavController,
     private snack: SnackbarService,
     private confirm: ConfirmationDialogService,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private transloco: TranslocoService
     ) { }
 
   ngOnInit() {}
@@ -45,10 +47,10 @@ export class ContractModalOptionsComponent implements OnInit {
     }
 
     this.contract.changeStatus('active').then(() => {
-      this.snack.open("Contract status updated", "success");
+      this.snack.open(this.transloco.translate("messages." + "Contract status updated"), "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.open("Error: could not update the contract", "error");
     });
   }
 
@@ -57,7 +59,7 @@ export class ContractModalOptionsComponent implements OnInit {
       `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContracts' : 'salesContracts'}/${this.contractId}`;
 
     const dialogData: UploadDialogData = {
-      docType: "Signed Contract",
+      docType: this.transloco.translate("contracts." + "Signed Contract"),
       hasDoc: this.contract.pdfReference != null,
       pdfRef,
       uploadable: this.contract.status !== 'closed'
@@ -77,12 +79,13 @@ export class ContractModalOptionsComponent implements OnInit {
       this.snack.open("Signed Contract Successfully Uploaded", 'success');
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.open("Unexpected error: could not upload signed ", 'error');
     });
   }
 
   public async closeContract() {
-    if(this.contract.status != "active" || !await this.confirm.openDialog("close this contract")) {
+    if(this.contract.status != "active" || !await this.confirm.openDialog(this.transloco.translate("messages." + "close this contract"))) {
       return;
     }
 

@@ -21,9 +21,10 @@
         "signout": "Salir"
     },
     "contracts": {
+        "Signed Contract": "Contrato Firmado",
         "table": {
             "contracts": "contratos",
-            "Contract type": "Tipo de Contrato",
+            "Contract Type": "Tipo de Contrato",
             "Export": "Exportacion",
             "New": "Nuevo",
             "search": "buscar",
@@ -37,14 +38,23 @@
             "Total": "Total",
             "loading more data": "Cargando mas informacion",
             "pending": "pendiente",
-            "all": "Todos",
+            "all": "todos",
             "closed": "cerrado",
             "active": "activo",
             "cancelled": "cancelado",
             "cancel": "Cancelar",
             "paid": "Pagado",
             "download": "Descargar",
-            "analytics": "Analiticos"
+            "analytics": "analiticos",
+            "Purchase": "Compra",
+            "Sales": "Venta",
+            "ID": "ID",
+            "Contract": "Contrato",
+            "Quantity": "Cantidad",
+            "canceled": "cancelado",
+            "Contracts": "Contratos",
+            "purchase": "compra",
+            "sales": "venta"
         },
         "new": {
             "contract info": "Informacion de Contrato",
@@ -52,7 +62,7 @@
             "contract executive": "Ejecutivo de Contrato",
             "contract type": "Tipo de Contrato",
             "ID": "ID",
-            "email": "Email",
+            "email": "Correo Electrónico",
             "phone number": "Numero Telefonico",
             "submit": "Enviar",
             "print": "Imprimir",
@@ -187,6 +197,16 @@
             "Liquidations Available": "Liquidaciones Disponibles",
             "View Contract": "Ver Contrato",
             "Grain": "Grano"
+        },
+        "modify": {
+            "Quantity Units": "Unidades de Cantidad",
+            "Price Units": "Unidades de Precio",
+            "Market Price": "Precio de Mercado",
+            "Quantity is required": "La cantidad es requerida",
+            "Price is required": "El precio es requerido",
+            "Price must be positive": "El precio debe ser positivo",
+            "Quantity must be positive": "La cantidad debe ser positiva",
+            "Market Price is required": "El precio de mercado es requerido"
         }
     },
     "directory": {
@@ -423,7 +443,16 @@
         "Edit Details": "Editar Detalles",
         "Delete": "Borrar",
         "Yes": "Sí",
-        "No": "No"
+        "No": "No",
+        "Accept": "Aceptar",
+        "File": "Archivo",
+        "Close": "Cerrar",
+        "Reopen": "Reabrir",
+        "Modify Price and Quantity": "Modificar Precio y Cantidad",
+        "Confirm": "Confirmar",
+        "Re-Upload": "Volver a Subir",
+        "Upload": "Subir",
+        "Simply drag and drop or click here to choose a file.": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo."
     },
     "inventory": {
         "Inventory": "Inventario",
@@ -502,6 +531,11 @@
         "delete the table": "borrar la tabla",
         "Table updated": "Tabla actualizada",
         "Table created": "Tabla creada",
-        "Table deleted": "Tabla borrada"
+        "Table deleted": "Tabla borrada",
+        "Contract updated": "Contrato actualizado",
+        "Contract status updated": "Estatus del contrato actualizado",
+        "Error": "Error",
+        "Required fields must be filled before closing": "Los campos obligatorios deben completarse antes del cierre",
+        "close this contract": "cerrar este contrato"
     }
 }

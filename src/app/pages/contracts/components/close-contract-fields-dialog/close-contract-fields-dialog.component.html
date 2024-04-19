@@ -1,11 +1,11 @@
 <!-- <h2>Missing Fields</h2> -->
 
-<mat-dialog-content>
+<mat-dialog-content *transloco="let t; read: 'contracts.modify'">
 	<form #requiredFieldsForm="ngForm">
 		<mat-grid-list cols="6" rowHeight="75px" gutterSize="15px">
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>Quantity</mat-label>
+					<mat-label>{{ t('Quantity') }}</mat-label>
 					<input
 						matInput
 						required
@@ -16,13 +16,13 @@
 						type="number"
 						min="0"
 					>
-					<mat-error *ngIf="quantity.errors?.required">Quantity is <strong>required</strong></mat-error>
-					<mat-error *ngIf="quantity.errors?.positive">Quantity must be <strong>positive</strong></mat-error>
+					<mat-error *ngIf="quantity.errors?.required">{{ t('Quantity is required') }}</mat-error>
+					<mat-error *ngIf="quantity.errors?.positive">{{ t('Quantity must be positive') }}</mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>Quantity Units</mat-label>
+					<mat-label>{{ t('Quantity Units') }}</mat-label>
 					<mat-select 
 						[(ngModel)]="data.quantityUnits"
 						#quantityUnits="ngModel"
@@ -37,7 +37,7 @@
 			</mat-grid-tile>
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>Price</mat-label>
+					<mat-label>{{ t('Price') }}</mat-label>
 					<span matPrefix>$ &nbsp;</span>
 					<input
 						matInput
@@ -49,13 +49,13 @@
 						type="number"
 						min="0"
 					>
-					<mat-error *ngIf="price.errors?.required">Price is <strong>required</strong></mat-error>
-					<mat-error *ngIf="price.errors?.positive">Price must be <strong>positive</strong></mat-error>
+					<mat-error *ngIf="price.errors?.required">{{ t('Price is required') }}</mat-error>
+					<mat-error *ngIf="price.errors?.positive">{{ t('Price must be positive') }}</mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>Price Units</mat-label>
+					<mat-label>{{ t('Price Units') }}</mat-label>
 					<mat-select 
 						[(ngModel)]="data.priceUnit"
 						#priceUnits="ngModel"
@@ -70,7 +70,7 @@
 			</mat-grid-tile>
 			<mat-grid-tile colspan="6">
 				<mat-form-field appearance="fill">
-					<mat-label>Market Price</mat-label>
+					<mat-label>{{ t('Market Price') }}</mat-label>
 					<span matPrefix>$ &nbsp;</span>
 					<input
 						matInput
@@ -80,14 +80,14 @@
 						name="marketPrice"
 						type="number"
 					>
-					<mat-error>Market Price is <strong>required</strong></mat-error>
+					<mat-error>{{ t('Market Price is required') }}</mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 		</mat-grid-list>
 	</form>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
-	<button mat-button color="primary" (click)="confirm()">Confirm</button>
+<mat-dialog-actions *transloco="let t; read: 'actions'">
+	<button mat-button color="primary" [mat-dialog-close]="null">{{ t('Cancel') }}</button>
+	<button mat-button color="primary" (click)="confirm()">{{ t('Confirm') }}</button>
 </mat-dialog-actions>

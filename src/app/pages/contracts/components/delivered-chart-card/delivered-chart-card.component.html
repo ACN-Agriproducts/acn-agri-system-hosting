@@ -1,7 +1,7 @@
 <mat-card [ngClass]="notification">
   <mat-card-header>
     <mat-card-title>
-      <a [routerLink]="['contract-info', (contract.ref.parent.id == 'purchaseContracts' ? 'purchase': 'sales'), contract.ref.id]">Contract {{contract.id}}</a>
+      <a [routerLink]="['contract-info', (contract.ref.parent.id == 'purchaseContracts' ? 'purchase': 'sales'), contract.ref.id]">{{ "contracts.table.Contract" | transloco }} {{contract.id}}</a>
     </mat-card-title>
     <span>{{contract.currentDelivered | massInUnit:'mTon' | number:'0.2-2' }} / {{contract.quantity | massInUnit:'mTon' | number:'0.2-2'}} MTon </span>
     <span id="product-span">{{contract.product.id}}</span>

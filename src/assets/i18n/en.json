@@ -21,9 +21,10 @@
         "signout": "Sign out"
     },
     "contracts": {
+        "Signed Contract": "Signed Contract",
         "table": {
             "contracts": "contracts",
-            "Contract type": "Contract type",
+            "Contract Type": "Contract Type",
             "Export": "Export",
             "New": "New",
             "search": "search",
@@ -37,14 +38,23 @@
             "Total": "Total",
             "loading more data": "Loading more data",
             "pending": "pending",
-            "all": "All",
+            "all": "all",
             "closed": "closed",
             "active": "active",
             "cancelled": "cancelled",
             "cancel": "Cancel",
             "paid": "Paid",
             "download": "Download",
-            "analytics": "Analytics"
+            "analytics": "analytics",
+            "Purchase": "Purchase",
+            "Sales": "Sales",
+            "ID": "ID",
+            "Contract": "Contract",
+            "Quantity": "Quantity",
+            "canceled": "canceled",
+            "Contracts": "Contracts",
+            "purchase": "purchase",
+            "sales": "sales"
         },
         "new": {
             "contract info": "Contract Info",
@@ -186,6 +196,16 @@
             "Liquidations Available": "Liquidations Available",
             "View Contract": "View Contract",
             "Grain": "Grain"
+        },
+        "modify": {
+            "Quantity Units": "Quantity Units",
+            "Price Units": "Price Units",
+            "Market Price": "Market Price",
+            "Quantity is required": "Quantity is required",
+            "Price is required": "Price is required",
+            "Price must be positive": "Price must be positive",
+            "Quantity must be positive": "Quantity must be positive",
+            "Market Price is required": "Market Price is required"
         }
     },
     "directory": {
@@ -423,8 +443,17 @@
         "Edit Details": "Edit Details",
         "Delete": "Delete",
         "Yes": "Yes",
-        "No": "No"
-    },
+        "No": "No",
+        "Accept": "Accept",
+        "File": "File",
+        "Close": "Close",
+        "Reopen": "Reopen",
+        "Modify Price and Quantity": "Modify Price and Quantity",
+        "Confirm": "Confirm",
+        "Re-Upload": "Re-Upload",
+        "Upload": "Upload",
+        "Simply drag and drop or click here to choose a file.": "Simply drag and drop or click here to choose a file."
+},
     "inventory": {
         "Products": "Products",
         "Total Physical": "Total Physical",
@@ -488,8 +517,7 @@
             "New header": "New header",
             "low": "low",
             "high": "high",
-            "discount": "discount",
-            "discount table": "discount table"
+            "discount": "discount"
         }
     },
     "messages": {
@@ -502,6 +530,11 @@
         "delete the table": "delete the table",
         "Table updated": "Table updated",
         "Table created": "Table created",
-        "Table deleted": "Table deleted"
+        "Table deleted": "Table deleted",
+        "Contract updated": "Contract updated",
+        "Contract status updated": "Contract status updated",
+        "Error": "Error",
+        "Required fields must be filled before closing": "Required fields must be filled before closing",
+        "close this contract": "close this contract"
     }
 }
