@@ -158,6 +158,46 @@ export class NewUserPage implements OnInit {
       ]
     },
     {
+      section: 'liquidations',
+      module: [
+        {
+          label: 'See liquidations table',
+          controlName: 'read',
+          main: true,
+        },
+        {
+          label: 'Create liquidations',
+          controlName: 'create',
+          main: false,
+        },
+        {
+          label: 'Cancel liquidations',
+          controlName: 'cancel',
+          main: false,
+        }
+      ]
+    },
+    {
+      section: 'payments',
+      module: [
+        {
+          label: 'See payments table',
+          controlName: 'read',
+          main: true,
+        },
+        {
+          label: 'Create payments',
+          controlName: 'create',
+          main: false,
+        },
+        {
+          label: 'Cancel payments',
+          controlName: 'cancel',
+          main: false
+        }
+      ]
+    },
+    {
       section: 'treasury',
       module: [
         {
@@ -302,6 +342,16 @@ export class NewUserPage implements OnInit {
         acceptContract: [false],
         closeContract: [false],
         cancelContract: [false],
+      }),
+      liquidations: this.fb.group({
+        read: [false],
+        create: [false],
+        cancel: [false]
+      }),
+      payments: this.fb.group({
+        read: [false],
+        create: [false],
+        cancel: [false]
       }),
       directory: this.fb.group({
         read: [false],
