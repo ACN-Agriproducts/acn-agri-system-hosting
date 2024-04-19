@@ -21,7 +21,7 @@
 					</button>
 				</div>
 				<mat-form-field *ngIf="data.uploadable" appearance="outline">
-					<mat-label>Document Name</mat-label>
+					<mat-label>{{ t('Document Name') }}</mat-label>
 					<input matInput [(ngModel)]="file.name">
 				</mat-form-field>
 			</mat-tab>
@@ -79,7 +79,7 @@
 				<iframe *ngIf="file.url" [src]="file.url" width="100%" height="100%"></iframe>
 			</ng-template>
 			<ng-template #default>
-				<p>Download File:</p>
+				<p>{{ t('Download File') }}:</p>
 				<a [href]="file.url" style="text-align: center">{{ file.name }} ({{ file.contentType }})</a>
 			</ng-template>
 		</div>

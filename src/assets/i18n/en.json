@@ -278,7 +278,9 @@
         "Type": "Type",
         "Destinations": "Destinations",
         "Add New": "Add New",
-        "Destination": "Destination"
+        "Destination": "Destination",
+        "Document Name": "Document Name",
+        "Download File": "Download File"        
     },
     "tickets": {
         "Report": "Report",
