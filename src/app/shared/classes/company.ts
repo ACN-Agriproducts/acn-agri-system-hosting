@@ -5,6 +5,8 @@ import { User } from "./user";
 import { Observable } from "rxjs";
 import { units } from "./mass";
 import { Plant } from "./plant";
+import { getDownloadURL, getStorage } from "@angular/fire/storage";
+import { ref } from "firebase/storage";
 
 export type Status = "pending" | "active" | "closed" | "cancelled" | "paid";
 
@@ -28,6 +30,8 @@ export class Company extends FirebaseDocInterface {
     notarialAct: string;
     notarialActDate: Date;
     rfc: string;
+
+    private logoURL: string;
 
     constructor(snapshot: QueryDocumentSnapshot<any>) {
         super(snapshot, Company.converter);
@@ -122,6 +126,18 @@ export class Company extends FirebaseDocInterface {
 
     public static getCompanyValueChanges(db: Firestore, company: string): Observable<Company> {
         return docData(Company.getCompanyRef(db, company));
+    }
+
+    public async getLogoURL(db: Firestore): Promise<string> {
+        if(this.logoURL) return this.logoURL;
+
+        const storage = getStorage(db.app);
+        const logoRef = ref(storage, `companies/${this.ref.id}/logo.jpg`);
+        const urlPromise = getDownloadURL(logoRef);
+        urlPromise.then(url => this.logoURL = url);
+        console.log(storage);
+
+        return urlPromise;
     }
 }
 

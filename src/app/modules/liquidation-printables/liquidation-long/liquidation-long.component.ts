@@ -7,6 +7,8 @@ import { Price } from '@shared/classes/price';
 import { PriceDiscounts, WeightDiscounts } from '@shared/classes/ticket';
 import { LiquidationPrintableData } from '../liquidation-dialog/liquidation-dialog.component';
 import { Product } from '@shared/classes/product';
+import { Firestore } from '@angular/fire/firestore';
+import { Company } from '@shared/classes/company';
 
 
 @Component({
@@ -19,16 +21,23 @@ export class LiquidationLongComponent implements OnInit {
 
   public date: Date = new Date();
   public language: string;
+  public companyDoc$: Promise<Company>;
+  public logoURL: string = '';
 
   readonly units = UNIT_LIST;
 
   constructor(
-    private session: SessionInfo
+    private session: SessionInfo,
+    private db: Firestore
   ) { }
 
   ngOnInit() {
     this.language = this.session.getLanguage();
     this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
+    this.companyDoc$ = this.session.getCompanyObject();
+    this.companyDoc$.then(async doc => {
+      this.logoURL = await doc.getLogoURL(this.db);
+    });
   }
 
   ngOnDestroy() {

@@ -64,7 +64,7 @@ export class TableComponent implements OnInit, OnDestroy {
     });
 
     const lastIdPromise = Ticket.getTickets(this.db, this.session.getCompany(), this.session.getPlant(), where('in', '==', this.inTicket), orderBy('id', 'desc'), limit(1));
-    const lastId = (await lastIdPromise)[0].id;
+    const lastId = (await lastIdPromise)[0]?.id ?? 0;
     this.ticketRangeUpper = Math.floor(lastId / 100) + 1;
     this.idRangeList = Array(this.ticketRangeUpper).fill(0).map((x, i) => this.ticketRangeUpper - i);
 

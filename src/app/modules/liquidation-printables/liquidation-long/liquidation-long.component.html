@@ -1,15 +1,15 @@
 
 <ng-container *transloco="let t, read: 'contracts.info'">
     <div id='title'>
-        <h1>ACN AGRIPRODUCTS LLC</h1>
-        <span id='address'>1512 Rancho Toluca Rd Progreso TX 78597</span>
+        <h1>{{(companyDoc$ | async)?.name}}</h1>
+        <span id='address'>{{(companyDoc$ | async)?.address}}</span>
     </div>
     
     
     <div class="client-info">
-        <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Fcompanylogoonly.png?alt=media&token=cd8bbf25-c1ae-4880-b883-6cfb8f12f9bb'>
+        <img id='company-logo' [src]='logoURL'>
         <div id="data.contract-details">
-            <div id='farmer-name'>FARMER NAME: {{ data.contract.clientName }}</div>
+            <div id='farmer-name'>CLIENT NAME: {{ data.contract.clientName }}</div>
             <div id='data.contract-id'>Contract {{ data.contract.id }}</div>
             <div id='date'>DATE: {{ date | date:'fullDate'}}</div>
         </div>

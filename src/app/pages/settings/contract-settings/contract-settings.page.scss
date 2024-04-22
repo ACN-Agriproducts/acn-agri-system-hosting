@@ -29,6 +29,11 @@ mat-card {
     grid-template-columns: repeat(auto-fit, minmax(650px, 1fr));
     gap: 1rem;
 }
+.accordion-item-header {
+    border: solid 1px #ccc;
+    padding: 0.25rem;
+    background-color: #fff;
+}
 
 mat-panel-description {
     justify-content: end;
