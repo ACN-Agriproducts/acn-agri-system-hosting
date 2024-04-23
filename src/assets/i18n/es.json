@@ -581,6 +581,8 @@
         "close this contract": "cerrar este contrato",
         "Alert": "Alerta",
         "Are you sure you want to void this ticket?": "Está seguro de que quiere anular este boleta?",
-        "reason": "razón"
+        "reason": "razón",
+        "Update Error: Could not update discounts.": "Error de Actualización: no se pudieron actualizar los descuentos.",
+        "Discounts updated": "Descuentos actualizados"
     }
 }

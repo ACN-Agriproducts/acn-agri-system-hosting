@@ -3,6 +3,7 @@ import { Firestore, updateDoc } from '@angular/fire/firestore';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { MoneyDiscounts, Ticket } from '@shared/classes/ticket';
 
 @Component({
@@ -19,7 +20,9 @@ export class DiscountsDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<DiscountsDialogComponent>,
     private db: Firestore,
     private session: SessionInfo,
-    private snack: SnackbarService) { }
+    private snack: SnackbarService,
+    private transloco: TranslocoService
+  ) { }
 
   ngOnInit() {
     this.discounts = Object.entries(this.data.moneyDiscounts);
@@ -52,13 +55,13 @@ export class DiscountsDialogComponent implements OnInit {
     updateDoc(this.data.ref.withConverter(null), {
       moneyDiscounts: discountsObject
     }).then(() => {
-        this.snack.open('Successfully updated', 'success');
-        this.dialogRef.close();
-      })
-      .catch(error => {
-        this.submitting = false;
-        this.snack.open('Error submitting', 'error');
-        console.error(error);
-      });
+      this.snack.open(this.transloco.translate("messages." + "Discounts updated"), 'success');
+      this.dialogRef.close();
+    })
+    .catch(error => {
+      this.submitting = false;
+      this.snack.open(this.transloco.translate("messages." + "Update Error: Could not update discounts."), 'error');
+      console.error(error);
+    });
   }
 }

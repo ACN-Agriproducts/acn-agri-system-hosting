@@ -580,6 +580,8 @@
         "close this contract": "close this contract",
         "Alert": "Alert",
         "Are you sure you want to void this ticket?": "Are you sure you want to void this ticket?",
-        "reason": "reason"
+        "reason": "reason",
+        "Update Error: Could not update discounts.": "Update Error: Could not update discounts.",
+        "Discounts updated": "Discounts updated"
     }
 }
