@@ -582,6 +582,7 @@
         "Are you sure you want to void this ticket?": "Are you sure you want to void this ticket?",
         "reason": "reason",
         "Update Error: Could not update discounts.": "Update Error: Could not update discounts.",
-        "Discounts updated": "Discounts updated"
+        "Discounts updated": "Discounts updated",
+        "Update Error: Could not add new storage.": "Update Error: Could not add new storage."
     }
 }

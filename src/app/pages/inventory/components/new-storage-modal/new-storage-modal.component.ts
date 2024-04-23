@@ -2,7 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { collection, doc, DocumentReference, Firestore, serverTimestamp } from '@angular/fire/firestore';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { ModalController } from '@ionic/angular';
+import { TranslocoService } from '@ngneat/transloco';
 import { Plant } from '@shared/classes/plant';
 import { Product } from '@shared/classes/product';
 import { runTransaction } from 'firebase/firestore';
@@ -22,7 +24,9 @@ export class NewStorageModalComponent implements OnInit {
     private modalController: ModalController,
     private fb: UntypedFormBuilder,
     private db: Firestore,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private transloco: TranslocoService,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -39,7 +43,7 @@ export class NewStorageModalComponent implements OnInit {
     return runTransaction(this.db, t => {
       return t.get(this.plantRef).then(async plantDoc => {
         if(!plantDoc.exists){
-          throw "Document Does not exist"
+          throw this.transloco.translate("messages." + "Document Does not exist")
         }
         const plant = plantDoc.data();
 
@@ -75,6 +79,9 @@ export class NewStorageModalComponent implements OnInit {
         updateDoc.lastStorageUpdate = logRef;
         t.set(logRef, storageLog);
         t.update(this.plantRef, updateDoc);
+      }).catch(err => {
+        this.snack.open(this.transloco.translate("messages." + "Update Error: Could not add new storage."), 'error');
+        console.error(err);
       })
     }).then(() => {
       this.modalController.dismiss({dismissed:true});
