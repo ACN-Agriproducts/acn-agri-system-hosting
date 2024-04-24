@@ -11,17 +11,18 @@ export class SnackbarService {
 
   constructor(private snackbar: MatSnackBar) { }
 
-  public open(message: string, snackType: snackType = 'info', action?: string) {
+  public open(message: string, snackType: snackType = 'info', action?: string, actionFn?: () => void) {
     const className = `snackbar-${snackType}`;
     if(snackType === 'error') console.error(message);
 
     this.snackbar.openFromComponent(SnackbarComponent, {
-      duration: snackType === 'error' ? 5000 : 2000,
+      duration: snackType === 'error' || snackType === 'warn' ? 5000 : 2000,
       panelClass: className,
       data: {
         message,
         snackType,
-        action
+        action,
+        actionFn
       }
     });
   }

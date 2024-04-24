@@ -9,19 +9,6 @@ import { TranslocoService } from '@ngneat/transloco';
 export class ContractChartCardComponent implements OnInit {
   @Input() data: any;
 
-  public colorScheme: any = {
-    domain: [
-      "#FFBC04", 
-      "#61ad5e", 
-      "#437b40"
-    ]
-  };
-  public stackedCustomColors: any = [
-    { name: "Paid", value: "#437b40" },
-    { name: "Pending", value: "#FFBC04" },
-    { name: "Current Delivered", value: "#437b40" },
-    { name: "To Be Delivered", value: "#FFBC04" }
-  ];
   public chartDataMulti: {
     name: string,
     series: {
@@ -30,13 +17,25 @@ export class ContractChartCardComponent implements OnInit {
     }[]
   }[];
 
+  public stackedCustomColors: any;
+  public labels: { [key: string]: string } = {};
+
 
   constructor(
     private transloco: TranslocoService
   ) {}
 
   ngOnInit() {
-    this.buildChartData(this.data);
+    this.transloco.selectTranslateObject('contracts.info.chart').subscribe(val => {
+      this.labels = val;
+      this.stackedCustomColors = [
+        { name: val['Paid'], value: "#437b40" },
+        { name: val['Pending'], value: "#FFBC04" },
+        { name: val['Current Delivered'], value: "#437b40" },
+        { name: val['To Be Delivered'], value: "#FFBC04" }
+      ];
+      this.buildChartData(this.data);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -46,24 +45,24 @@ export class ContractChartCardComponent implements OnInit {
   buildChartData(data: any) {
     this.chartDataMulti = [
       {
-        name: this.transloco.translate("contracts.info.Grain"),
+        name: this.labels["Grain"],
         series: [
-          { name: "Current Delivered", value: data.currentDelivered },
-          { name: "To Be Delivered", value: data.toBeDelivered }
+          { name: this.labels["Current Delivered"], value: data.currentDelivered },
+          { name: this.labels["To Be Delivered"], value: data.toBeDelivered }
         ]
       },
       {
-        name: this.transloco.translate("contracts.info.Liquidations"),
+        name: this.labels["Liquidations"],
         series: [
-          { name: "Paid", value: data.totalPaidLiquidations },
-          { name: "Pending", value: data.totalPendingLiquidations }
+          { name: this.labels["Paid"], value: data.totalPaidLiquidations },
+          { name: this.labels["Pending"], value: data.totalPendingLiquidations }
         ]
       },
       {
-        name: this.transloco.translate("contracts.info.Payments"),
+        name: this.labels["Payments"],
         series: [
-          { name: "Paid", value: data.totalPaidPayments },
-          { name: "Pending", value: data.totalPendingPayments }
+          { name: this.labels["Paid"], value: data.totalPaidPayments },
+          { name: this.labels["Pending"], value: data.totalPendingPayments }
         ]
       }
     ];

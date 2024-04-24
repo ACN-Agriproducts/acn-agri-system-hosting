@@ -103,11 +103,18 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     const result: Payment = await lastValueFrom(dialogRef.afterClosed());
     if (!result) return;
     
-    result.set().then(() => {
-      this.snack.open("Payment Set", "success");
+    this.setPayment(result);
+  }
+
+  setPayment(payment: Payment): void {
+    payment.set().then(() => {
+      this.snack.open("Payment added", "success");
+      throw 'error'
     }).catch(e => {
       console.error(e);
-      this.snack.open("Failed to Set Payment", "error");
+      this.snack.open("Could not add payment.", "error", "Retry", () => {
+        this.setPayment(payment);
+      });
     });
   }
 

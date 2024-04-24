@@ -64,11 +64,11 @@ export class DocumentUploadDialogComponent implements OnInit {
       file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
       file.url = this.sanitizer.bypassSecurityTrustResourceUrl(res);
       // console.log(file.url)
-      if (file.url == null) throw `The resource "${file.name}" could not be secured for use.`;
+      if (file.url == null) throw `The resource could not be secured for use.`;
     })
     .catch(e => {
       console.error(e);
-      this.snack.open(e, 'error');
+      this.snack.open(`The resource could not be secured for use.`, 'error');
     });
   }
 
@@ -105,7 +105,8 @@ export class DocumentUploadDialogComponent implements OnInit {
       file.ref = uploadRef.ref.fullPath;
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.open("Could not upload the file(s).", 'error');
     });
   }
 

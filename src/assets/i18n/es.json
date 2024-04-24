@@ -81,7 +81,7 @@
             "Contract": "Contrato",
             "CWT": "CWT",
             "Damage": "Daños",
-            "Date": "Fechas",
+            "Date": "Fecha",
             "Deselect All": "Deseleccionar Todas",
             "documents": "documentos",
             "Documents": "Documentos",
@@ -133,7 +133,7 @@
             "Sour": "Agrio",
             "status": "estatus",
             "Status": "Estatus",
-            "submit": "entregar",
+            "submit": "enviar",
             "supplemental": "complementario",
             "Supplemental": "Complementario",
             "Tare": "Tara",
@@ -196,7 +196,15 @@
             "Invalid Amount": "Cantidad Inválido",
             "Liquidations Available": "Liquidaciones Disponibles",
             "View Contract": "Ver Contrato",
-            "Grain": "Grano"
+            "chart": {
+                "Pending": "Pendiente",
+                "Paid": "Pagado",
+                "Current Delivered": "Entregado Actual",
+                "To Be Delivered": "Para Ser Entregado",
+                "Grain": "Grano",
+                "Liquidations": "Liquidaciones",
+                "Payments": "Pagos"
+            }
         },
         "modify": {
             "Quantity Units": "Unidades de Cantidad",
@@ -206,7 +214,9 @@
             "Price is required": "El precio es requerido",
             "Price must be positive": "El precio debe ser positivo",
             "Quantity must be positive": "La cantidad debe ser positiva",
-            "Market Price is required": "El precio de mercado es requerido"
+            "Market Price is required": "El precio de mercado es requerido",
+            "Quantity": "Cantidad",
+            "Price": "Precio"
         }
     },
     "directory": {
@@ -577,13 +587,52 @@
         "Contract updated": "Contrato actualizado",
         "Contract status updated": "Estatus del contrato actualizado",
         "Error": "Error",
-        "Required fields must be filled before closing": "Los campos obligatorios deben completarse antes del cierre",
+        "Required fields must be filled before closing.": "Los campos obligatorios deben completarse antes del cierre.",
         "close this contract": "cerrar este contrato",
         "Alert": "Alerta",
         "Are you sure you want to void this ticket?": "Está seguro de que quiere anular este boleta?",
         "reason": "razón",
         "Update Error: Could not update discounts.": "Error de Actualización: no se pudieron actualizar los descuentos.",
         "Discounts updated": "Descuentos actualizados",
-        "Update Error: Could not add new storage.": "Error de Actualización: no se pudo agregar nuevo almacenamiento."
+        "Update Error: Could not add new storage.": "Error de Actualización: no se pudo agregar nuevo almacenamiento.",
+        "Payment added": "Pago agregado",
+        "Could not add payment.": "No se pudo agregar el pago.",
+        "No discount tables were found. Some fields will be affected.": "No se encontraron tablas de descuentos. Algunos campos se verán afectados.",
+        "Contract does not have a price. Some fields will be affected.": "El contrato no tiene precio. Algunos campos se verán afectados.",
+        "The product for this contract does not have any discount tables. Some fields will be affected.": "El producto para este contrato no tiene tablas de descuento. Algunos campos se verán afectados.",
+        "submit this liquidation": "enviar esta liquidación",
+        "Liquidation added": "Liquidación agregada",
+        "Liquidation updated": "Liquidación actualizada",
+        "Could not add the liquidation.": "No se pudo agregar la liquidación.",
+        "Could not update the liquidation.": "No se pudo actualizar la liquidación.",
+        "delete this liquidation": "borrar esta liquidación",
+        "cancel this liquidation": "cancelar esta liquidación",
+        "Liquidation canceled": "Liquidación canceleda",
+        "Could not cancel the liquidation.": "No se pudo cancelar la liquidación.",
+        "Payment updated": "Pago actualizado",
+        "Could not update the payment.": "No se pudo actualizar el pago.",
+        "Payment canceled": "Pago cancelado",
+        "Could not cancel the payment.": "No se pudo cancelar el pago.",
+        "Could not update the contract.": "No se pudo actualizar el contrato",
+        "Signed contract uploaded": "Contrato firmado subido",
+        "Unexpected Error: could not upload the signed contract.": "Error Inesperado: no se pudo subir el contrato firmado.",
+        "The reference/path to the document does not exist.": "La referencia/ruta al documento no existe.",
+        "The resource could not be secured for use.": "No se pudo asegurar el recurso para su uso.",
+        "Could not upload the files.": "No se pudieron cargar los archivos.",
+        "Could not upload the file(s).": "No se pudo cargar el archivo(s)."
+    },
+    "statuses": {
+        "Paid": "Pagado",
+        "Pending": "Pendiente",
+        "Active": "Activo",
+        "Closed": "Cerrado",
+        "Cancelled": "Cancelado",
+        "Canceled": "Cancelado",
+        "paid": "pagado",
+        "pending": "pendiente",
+        "active": "activo",
+        "closed": "cerrado",
+        "cancelled": "cancelado",
+        "canceled": "cancelado"
     }
 }

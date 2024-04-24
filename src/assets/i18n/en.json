@@ -195,7 +195,15 @@
             "invalid amount": "Invalid Amount",
             "Liquidations Available": "Liquidations Available",
             "View Contract": "View Contract",
-            "Grain": "Grain"
+            "chart": {
+                "Pending": "Pending",
+                "Paid": "Paid",
+                "Current Delivered": "Current Delivered",
+                "To Be Delivered": "To Be Delivered",
+                "Grain": "Grain",
+                "Liquidations": "Liquidations",
+                "Payments": "Payments"
+            }
         },
         "modify": {
             "Quantity Units": "Quantity Units",
@@ -205,7 +213,9 @@
             "Price is required": "Price is required",
             "Price must be positive": "Price must be positive",
             "Quantity must be positive": "Quantity must be positive",
-            "Market Price is required": "Market Price is required"
+            "Market Price is required": "Market Price is required",
+            "Quantity": "Quantity",
+            "Price": "Price"
         }
     },
     "directory": {
@@ -494,7 +504,8 @@
         "Confirm": "Confirm",
         "Re-Upload": "Re-Upload",
         "Upload": "Upload",
-        "Simply drag and drop or click here to choose a file.": "Simply drag and drop or click here to choose a file."
+        "Simply drag and drop or click here to choose a file.": "Simply drag and drop or click here to choose a file.",
+        "Retry": "Retry"
 },
     "inventory": {
         "Products": "Products",
@@ -576,13 +587,52 @@
         "Contract updated": "Contract updated",
         "Contract status updated": "Contract status updated",
         "Error": "Error",
-        "Required fields must be filled before closing": "Required fields must be filled before closing",
+        "Required fields must be filled before closing.": "Required fields must be filled before closing.",
         "close this contract": "close this contract",
         "Alert": "Alert",
         "Are you sure you want to void this ticket?": "Are you sure you want to void this ticket?",
         "reason": "reason",
         "Update Error: Could not update discounts.": "Update Error: Could not update discounts.",
         "Discounts updated": "Discounts updated",
-        "Update Error: Could not add new storage.": "Update Error: Could not add new storage."
+        "Update Error: Could not add new storage.": "Update Error: Could not add new storage.",
+        "Payment added": "Payment added",
+        "Could not add payment.": "Could not add payment.",
+        "No discount tables were found. Some fields will be affected.": "No discount tables were found. Some fields will be affected.",
+        "Contract does not have a price. Some fields will be affected.": "Contract does not have a price. Some fields will be affected.",
+        "The product for this contract does not have any discount tables. Some fields will be affected.": "The product for this contract does not have any discount tables. Some fields will be affected.",
+        "submit this liquidation": "submit this liquidation",
+        "Liquidation added": "Liquidation added",
+        "Liquidation updated": "Liquidation updated",
+        "Could not add the liquidation.": "Could not add the liquidation.",
+        "Could not update the liquidation.": "Could not update the liquidation.",
+        "delete this liquidation": "delete this liquidation",
+        "cancel this liquidation": "cancel this liquidation",
+        "Liquidation canceled": "Liquidation canceled",
+        "Could not cancel the liquidation.": "Could not cancel the liquidation.",
+        "Payment updated": "Payment updated",
+        "Could not update the payment.": "Could not update the payment.",
+        "Payment canceled": "Payment canceled",
+        "Could not cancel the payment.": "Could not cancel the payment.",
+        "Could not update the contract.": "Could not update the contract",
+        "Signed contract uploaded": "Signed contract uploaded",
+        "Unexpected Error: could not upload the signed contract.": "Unexpected error: could not upload the signed contract",
+        "The reference/path to the document does not exist.": "The reference/path to the document does not exist.",
+        "The resource could not be secured for use.": "The resource could not be secured for use.",
+        "Could not upload the files.": "Could not upload the files.",
+        "Could not upload the file(s).": "Could not upload the file(s)."
+    },
+    "statuses": {
+        "Paid": "Paid",
+        "Pending": "Pending",
+        "Active": "Active",
+        "Closed": "Closed",
+        "Cancelled": "Cancelled",
+        "Canceled": "Canceled",
+        "paid": "paid",
+        "pending": "pending",
+        "active": "active",
+        "closed": "closed",
+        "cancelled": "cancelled",
+        "canceled": "canceled"
     }
 }

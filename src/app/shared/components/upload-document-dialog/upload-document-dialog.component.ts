@@ -45,7 +45,8 @@ export class UploadDocumentDialogComponent implements OnInit {
       if (!this.ready) throw "The resource could not be secured for use.";
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.open("The resource could not be secured for use.", 'error');
     });
   }
 
@@ -68,7 +69,8 @@ export class UploadDocumentDialogComponent implements OnInit {
       this.dialogRef.close(ref(this.storage, this.data.pdfRef).fullPath);
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.open("Could not upload the files.", 'error');
     });
   }
 }

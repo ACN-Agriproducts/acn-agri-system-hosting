@@ -47,10 +47,10 @@ export class ContractModalOptionsComponent implements OnInit {
     }
 
     this.contract.changeStatus('active').then(() => {
-      this.snack.open(this.transloco.translate("messages." + "Contract status updated"), "success");
+      this.snack.open("Contract status updated", "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Error: could not update the contract", "error");
+      this.snack.open("Could not update the contract.", "error");
     });
   }
 
@@ -76,27 +76,27 @@ export class ContractModalOptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      this.snack.open("Signed Contract Successfully Uploaded", 'success');
+      this.snack.open("Signed contract uploaded", 'success');
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Unexpected error: could not upload signed ", 'error');
+      this.snack.open("Unexpected Error: could not upload the signed contract.", 'error');
     });
   }
 
   public async closeContract() {
-    if(this.contract.status != "active" || !await this.confirm.openDialog(this.transloco.translate("messages." + "close this contract"))) {
+    if(this.contract.status != "active" || !await this.confirm.openDialog("close this contract")) {
       return;
     }
 
     if(this.contract.isOpen) await this.fixFields(true);
 
     this.contract.changeStatus('closed').then(() => {
-      this.snack.open("Contract Successfully Closed", "success");
+      this.snack.open("Contract status updated", "success");
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.open("Could not update the contract status.", "error");
     });
   }
 
@@ -105,7 +105,7 @@ export class ContractModalOptionsComponent implements OnInit {
       this.snack.open("Contract status updated", "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.open("Could not update the contract status.", "error");
     });
   }
 
@@ -139,7 +139,7 @@ export class ContractModalOptionsComponent implements OnInit {
       quantityUnits: newFieldData?.quantityUnits ?? requiredFieldData.quantityUnits
     })
     .then(() => {
-      this.snack.open("Contract Successfully updated", "success");
+      this.snack.open("Contract updated", "success");
       this.contract.market_price = requiredFieldData.marketPrice;
       this.contract.price.amount = requiredFieldData.price;
       this.contract.price.unit = requiredFieldData.priceUnit;
@@ -148,7 +148,7 @@ export class ContractModalOptionsComponent implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.open("Could not update the contract.", "error");
     });
   }
 }
