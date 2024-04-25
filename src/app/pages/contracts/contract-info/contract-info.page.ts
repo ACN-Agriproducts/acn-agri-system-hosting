@@ -108,11 +108,11 @@ export class ContractInfoPage implements OnInit, OnDestroy {
 
   setPayment(payment: Payment): void {
     payment.set().then(() => {
-      this.snack.open("Payment added", "success");
+      this.snack.openTranslated("Payment added", "success");
       throw 'error'
     }).catch(e => {
       console.error(e);
-      this.snack.open("Could not add payment.", "error", "Retry", () => {
+      this.snack.openTranslated("Could not add payment.", "error", "Retry", () => {
         this.setPayment(payment);
       });
     });

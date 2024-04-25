@@ -107,7 +107,7 @@ export class TruckersFormComponent implements OnInit {
     this.contract.update({truckers}).then(() => {
       this.truckerForm.markAsPristine();
       this.submitting = false;
-      this.snack.open(this.transloco.translate("contracts.info.truckers-saved-message"), "success");
+      this.snack.openTranslated("contracts.info.truckers-saved-message", "success");
     });
   }
 }

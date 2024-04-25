@@ -55,7 +55,7 @@ export class SetOrderPage implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Could not retrieve document.", "error");
+      this.snack.openTranslated("Could not retrieve document.", "error");
       this.router.navigate(['/dashboard/production-orders']);
     });
   }
@@ -115,17 +115,17 @@ export class SetOrderPage implements OnInit {
   submit() {
     if (this.orderForm.invalid) {
       this.orderForm.control.markAllAsTouched();
-      this.snack.open("Fields invalid or required", "error");
+      this.snack.openTranslated("Fields invalid or required.", "error");
       return;
     }
 
     if (this.editing) {
       this.order.set().then(() => {
         this.router.navigate(["/dashboard/production-orders"]);
-        this.snack.open("Order successfully updated", "success");
+        this.snack.openTranslated("Order updated", "success");
       }).catch(error => {
         console.error(error);
-        this.snack.open("Submit unsuccessful", "error");
+        this.snack.openTranslated("Error while updating the order.", "error");
       });
       return;
     }
@@ -148,10 +148,10 @@ export class SetOrderPage implements OnInit {
       return this.order.set();
     }).then(() => {
       this.router.navigate(["/dashboard/production-orders"]);
-      this.snack.open("Order successfully updated", "success");
+      this.snack.openTranslated("Order created", "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Submit unsuccessful", "error");
+      this.snack.openTranslated("Error while creating the order.", "error");
     });
   }
 }

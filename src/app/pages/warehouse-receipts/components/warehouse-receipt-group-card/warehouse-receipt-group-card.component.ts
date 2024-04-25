@@ -8,6 +8,7 @@ import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/compone
 import { lastValueFrom } from 'rxjs';
 import { ContractData, SetContractModalComponent } from '../set-contract-modal/set-contract-modal.component';
 import { ViewContractDialogComponent } from '../view-contract-dialog/view-contract-dialog.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-warehouse-receipt-group-card',
@@ -28,6 +29,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     private snack: SnackbarService,
     private confirmation: ConfirmationDialogService,
     private db: Firestore,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {
@@ -102,25 +104,27 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     })
     .then(() => {
       this.wrList.find(receipt => receipt.id === id).pdfReference = newPdfRef;
-      this.snack.open("Upload Successful", 'success');
+      this.snack.openTranslated("Warehouse receipt uploaded", 'success');
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Error while uploading warehouse receipt.", 'error');
     });
   }
 
   public async cancelGroup(): Promise<void> {
-    if (!await this.confirmation.openDialog("cancel this Warehouse Receipt Group")) return;
+    if (!await this.confirmation.openWithTranslatedAction("cancel this Warehouse Receipt Group")) return;
 
     this.wrGroup.update({
       status: "CANCELLED"
     })
     .then(() => {
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().cancelled;
-      this.snack.open("Warehouse Receipt Group has been cancelled.");
+      this.snack.openTranslated("Warehouse Receipt Group canceled.");
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Error while canceling the warehouse receipt group.", 'error');
     });
   }
 
@@ -180,11 +184,12 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     .then(()=> {
       this.wrGroup[contractType] = { ...newContractData, closedAt: new Date() };
       this.wrGroup.status = WarehouseReceiptGroup.getStatusType().active;
-      this.snack.open("Contract Successfully Updated", 'success');
+      this.snack.openTranslated("Contract updated", 'success');
     })
     .catch(error => {
       this.wrGroup[contractType] = fallback;
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Error while updating the contract.", 'error');
     });
   }
 
@@ -205,11 +210,15 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
 
   public async updatePaidStatus(warehouseReceipt: WarehouseReceipt, index: number): Promise<void> {
     if (this.wrGroup.saleContract === null) {
-      this.snack.open("Error: Sale Contract must be present.", 'error');
+      this.snack.openTranslated("Sale contract must be present.", 'error');
       return;
     }
 
-    if (!await this.confirmation.openDialog(`mark Warehouse Receipt ${warehouseReceipt.id} as paid`)) return;
+    const confirm = this.confirmation.openDialog(
+      this.transloco.translate(`mark Warehouse Receipt as paid`, { warehouseReceiptId: warehouseReceipt.id }, 'messages')
+    );
+    if (!await confirm) return;
+    
     this.updateList(index);
   }
 
@@ -231,17 +240,18 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
         });
       }
     }).then(() => {
-      this.snack.open(`Warehouse Receipt has been paid.`, 'success');
+      this.snack.openTranslated("Warehouse receipt marked as paid.", 'success');
 
       if (this.paidCount() === this.wrList.length) {
         this.wrGroup.saleContract.status = this.wrGroup.status = WarehouseReceiptGroup.getStatusType().closed;
         this.wrGroup.closedAt = new Date();
-        this.snack.open(`All Warehouse Receipts are paid.\nSale Contract and Warehouse Receipt Group are now CLOSED.`);
+        this.snack.openTranslated("All warehouse receipts are marked as paid.\nSale contract and warehouse receipt group are now CLOSED.");
       }
     })
     .catch(error => {
       this.wrList[index].isPaid = false;
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Error while marking the warehouse receipt as paid.", 'error');
     });
   }
 

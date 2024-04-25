@@ -124,14 +124,15 @@ export class InvoicesPage implements OnInit {
 
     const complete = this.invoiceItemList.every(item => {
       item.set().catch(error => {
-        this.snack.open(error, 'error');
+        console.error(error);
+        this.snack.openTranslated("Error while updating item list.", 'error');
         this.invoiceItemList = fallback;
         return false;
       });
       return true;
     });
 
-    if (complete) this.snack.open("Item List Successfully Updated", 'success');
+    if (complete) this.snack.openTranslated("Item list updated", 'success');
   }
 
   chosenYearHandler(event: any) {

@@ -111,11 +111,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
       zipCode: data.zipCode,
     })
     .then(() => {
-
-      this.snack.open(this.transloco.translate("directory.contact-update-success"), "success");
+      this.snack.openTranslated("contact-update-success", "success");
     })
     .catch(error => {
-      this.snack.open(error, "error");
+      console.error(error);
+      this.snack.openTranslated("Could not update the contact.", "error");
     });
   }
 

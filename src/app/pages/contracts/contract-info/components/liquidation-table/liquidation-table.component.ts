@@ -35,7 +35,7 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async remove(index: number) {
-    if (await this.confirm.openDialog("delete this liquidation")) {
+    if (await this.confirm.openWithTranslatedAction("delete this liquidation")) {
       const liquidation = this.liquidations.splice(index, 1)[0];
       liquidation.delete();
     }
@@ -46,15 +46,15 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public async cancel(liquidation: Liquidation) {
-    if (!await this.confirm.openDialog("cancel this liquidation")) return;
+    if (!await this.confirm.openWithTranslatedAction("cancel this liquidation")) return;
 
     liquidation.update({ status: "cancelled" })
     .then(() => {
       liquidation.status = "cancelled";
-      this.snack.open("Could not cancel the liquidation.", "error");
+      this.snack.openTranslated("Liquidation canceled");
     }).catch(e => {
       console.error(e);
-      this.snack.open("Liquidation canceled");
+      this.snack.openTranslated("Could not cancel the liquidation.", "error");
     });
   }
 
@@ -97,11 +97,11 @@ export class LiquidationTableComponent implements OnInit {
       supplementalDocs: updateData
     })
     .then(() => {
-      this.snack.open("Liquidation updated", "success");
+      this.snack.openTranslated("Liquidation updated", "success");
     })
     .catch(e => {
       console.error(e);
-      this.snack.open("Could not update the liquidation.", "error");
+      this.snack.openTranslated("Could not update the liquidation.", "error");
     });
   }
 

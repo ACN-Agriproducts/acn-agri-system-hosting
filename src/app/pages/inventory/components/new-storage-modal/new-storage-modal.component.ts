@@ -81,7 +81,7 @@ export class NewStorageModalComponent implements OnInit {
         t.update(this.plantRef, updateDoc);
       }).catch(err => {
         console.error(err);
-        this.snack.open("Update Error: Could not add new storage.", 'error');
+        this.snack.openTranslated("Update Error: Could not add new storage.", 'error');
       })
     }).then(() => {
       this.modalController.dismiss({dismissed:true});

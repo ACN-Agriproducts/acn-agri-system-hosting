@@ -44,13 +44,13 @@ export class DiscountTableComponent implements OnInit {
   cancel() {
     this.revert();
     this.editing = false;
-    this.snack.open("Changes canceled");
+    this.snack.openTranslated("Changes canceled");
   }
 
   reset() {
     this.revert();
     this.edit();
-    this.snack.open("Changes reset");
+    this.snack.openTranslated("Changes reset");
   }
 
   revert() {

@@ -45,11 +45,11 @@ export class TruckerFieldsDialog implements OnInit {
     this.contact.update({
       destinations: this.contact.destinations
     }).then(() => {
-      this.snack.open('Successfully submitted', 'success');
+      this.snack.openTranslated('Successfully submitted', 'success');
     }).catch(error => {
       console.error(error);
       this.submitting = false;
-      this.snack.open('Error uploading info', 'error');
+      this.snack.openTranslated('Error uploading info', 'error');
     });
   }
 }

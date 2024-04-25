@@ -126,20 +126,20 @@ export class PaymentsTableComponent implements OnInit {
     if (!result) return;
     
     payment.update({ ...result }).then(() => {
-      this.snack.open("Payment updated", "success");
+      this.snack.openTranslated("Payment updated", "success");
     }).catch(e => {
       console.error(e);
-      this.snack.open("Could not update the payment.", "error");
+      this.snack.openTranslated("Could not update the payment.", "error");
     });
   }
 
   cancelPayment(payment: Payment) {
     payment.update({ status: "cancelled" }).then(() => {
       console.log(payment)
-      this.snack.open("Payment canceled");
+      this.snack.openTranslated("Payment canceled");
     }).catch(e => {
       console.error(e);
-      this.snack.open("Could not cancel the payment.", "error");
+      this.snack.openTranslated("Could not cancel the payment.", "error");
     });
   }
 
@@ -167,11 +167,11 @@ export class PaymentsTableComponent implements OnInit {
       status: updateData.length > 0 ? "paid" : "pending"
     })
     .then(() => {
-      this.snack.open("Payment updated", "success");
+      this.snack.openTranslated("Payment updated", "success");
     })
     .catch(e => {
       console.error(e);
-      this.snack.open("Could not update the payment.", "error");
+      this.snack.openTranslated("Could not update the payment.", "error");
     });
   }
   

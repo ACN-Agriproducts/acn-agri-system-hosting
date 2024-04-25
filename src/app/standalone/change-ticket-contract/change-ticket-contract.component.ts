@@ -83,12 +83,12 @@ export class ChangeTicketContractComponent implements OnInit {
   
       await batch.commit();
 
-      this.snack.open("Successfully changed ticket contract", "success");
+      this.snack.openTranslated("Ticket contract changed", "success");
       this.dialogRef.close();
     } 
     catch (e) {
       console.error(e);
-      this.snack.open("Error", 'error');
+      this.snack.openTranslated("Error while changing the ticket contract.", 'error');
       this.submitting = false;
     }
   }

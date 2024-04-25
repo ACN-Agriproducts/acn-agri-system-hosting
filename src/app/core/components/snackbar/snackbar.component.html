@@ -2,11 +2,11 @@
 	<span class="main-icon">
 		<mat-icon>{{ getIcon }}</mat-icon>
 	</span>
-	<span class="text">{{ 'messages.'+ data.message | transloco }}</span>
+	<span class="text">{{ data.message }}</span>
 	<button mat-icon-button *ngIf="!data.action else action" (click)="close()">
 		<mat-icon>close</mat-icon>
 	</button>
 	<ng-template #action>
-		<button mat-button (click)="data.actionFn?.() ?? close()">{{ 'actions.'+ data.action | transloco | uppercase }}</button>
+		<button mat-button (click)="data.actionFn?.() ?? close()">{{ data.action | uppercase }}</button>
 	</ng-template>
 </div>

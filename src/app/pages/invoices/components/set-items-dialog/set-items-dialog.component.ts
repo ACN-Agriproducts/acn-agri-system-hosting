@@ -53,7 +53,8 @@ export class SetItemsDialogComponent implements OnInit {
       this.productList = productObjList.map(product => product.getName());
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Could not get the plant list.", 'error');
     });
   }
 
@@ -79,7 +80,7 @@ export class SetItemsDialogComponent implements OnInit {
 
   public showInvalid() {
     this.itemForm.form.markAllAsTouched();
-    this.snack.open("Please fill in required * fields", 'error');
+    this.snack.openTranslated("Please fill in required * fields.", 'error');
     this.selectList.deselectAll();
   }
   
@@ -95,7 +96,7 @@ export class SetItemsDialogComponent implements OnInit {
   }
 
   public async deleteItem(): Promise<void> {
-    if (!await this.confirm.openDialog("delete this Invoice Item")) return;
+    if (!await this.confirm.openWithTranslatedAction("delete this Invoice Item")) return;
     this.itemList.splice(this.itemList.indexOf(this.currentItem), 1);
     this.currentItem = null;
     this.drawer.open();

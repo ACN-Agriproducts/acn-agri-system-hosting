@@ -66,23 +66,23 @@ export class ProductPage implements OnInit {
     }
 
     await this.saveTables();
-    this.snack.open(`Table ${table ? "updated" : "created"}`, "success");
+    this.snack.openTranslated(`Table ${table ? "updated" : "created"}`, "success");
   }
 
   async deleteTable(table: DiscountTable) {
     let tableIndex = this.discountTables.tables.indexOf(table);
-    const confirm = this.confirmation.openDialog("delete this table");
+    const confirm = this.confirmation.openWithTranslatedAction("delete this table");
 
     if (await confirm) {
       this.discountTables.tables.splice(tableIndex, 1);
       await this.saveTables();
-      this.snack.open("Table deleted");
+      this.snack.openTranslated("Table deleted");
     }
   }
 
   async saveTable() {
     await this.saveTables();
-    this.snack.open("Changes saved", 'success');
+    this.snack.openTranslated("Changes saved", 'success');
   }
 
   async saveTables() {

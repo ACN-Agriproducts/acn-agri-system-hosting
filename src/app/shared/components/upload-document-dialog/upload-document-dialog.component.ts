@@ -31,7 +31,7 @@ export class UploadDocumentDialogComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.pdfRef == null) {
-      this.snack.open("The reference/path to the document does not exist.", 'error');
+      this.snack.openTranslated("The reference/path to the document does not exist.", 'error');
       return;
     }
     if (!this.data.hasDoc) {
@@ -46,7 +46,7 @@ export class UploadDocumentDialogComponent implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("The resource could not be secured for use.", 'error');
+      this.snack.openTranslated("The resource could not be secured for use.", 'error');
     });
   }
 
@@ -70,7 +70,7 @@ export class UploadDocumentDialogComponent implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Could not upload the files.", 'error');
+      this.snack.openTranslated("Could not upload the files.", 'error');
     });
   }
 }
