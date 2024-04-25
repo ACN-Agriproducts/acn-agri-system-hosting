@@ -55,12 +55,12 @@ export class DiscountsDialogComponent implements OnInit {
     updateDoc(this.data.ref.withConverter(null), {
       moneyDiscounts: discountsObject
     }).then(() => {
-      this.snack.open(this.transloco.translate("messages." + "Discounts updated"), 'success');
+      this.snack.open("Discounts updated", 'success');
       this.dialogRef.close();
     })
     .catch(error => {
       this.submitting = false;
-      this.snack.open(this.transloco.translate("messages." + "Update Error: Could not update discounts."), 'error');
+      this.snack.open("Update Error: Could not update discounts.", 'error');
       console.error(error);
     });
   }

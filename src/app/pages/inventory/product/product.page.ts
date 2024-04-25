@@ -66,23 +66,23 @@ export class ProductPage implements OnInit {
     }
 
     await this.saveTables();
-    this.snack.open(this.transloco.translate("messages." + `Table ${table ? "updated" : "created"}`), "success");
+    this.snack.open(`Table ${table ? "updated" : "created"}`, "success");
   }
 
   async deleteTable(table: DiscountTable) {
     let tableIndex = this.discountTables.tables.indexOf(table);
-    const confirm = this.confirmation.openDialog(`${this.transloco.translate("messages." + "delete the table")} "${this.discountTables.tables[tableIndex].name}"`);
+    const confirm = this.confirmation.openDialog("delete this table");
 
     if (await confirm) {
       this.discountTables.tables.splice(tableIndex, 1);
       await this.saveTables();
-      this.snack.open(this.transloco.translate("messages." + "Table deleted"));
+      this.snack.open("Table deleted");
     }
   }
 
   async saveTable() {
     await this.saveTables();
-    this.snack.open(this.transloco.translate("messages." + "Changes saved"), 'success');
+    this.snack.open("Changes saved", 'success');
   }
 
   async saveTables() {

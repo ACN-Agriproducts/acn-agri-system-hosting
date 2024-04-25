@@ -329,7 +329,10 @@
             "Original Ticket #": "Numero de Ticket Original",
             "Original Ticket W.": "Peso  de Ticket Original",
             "Comments": "Commentarios",
-            "Tank": "Tanque"
+            "Tank": "Tanque",
+            "New Ticket": "Nueva Boleta",
+            "In": "Entrada",
+            "Out": "Salida"
         },
         "table": {
             "Type": "Tipo",
@@ -581,6 +584,7 @@
         "Confirmation": "Confirmación",
         "Are you sure you would like to": "Está seguro de que desea",
         "delete the table": "borrar la tabla",
+        "delete this table": "borrar esta tabla",
         "Table updated": "Tabla actualizada",
         "Table created": "Tabla creada",
         "Table deleted": "Tabla borrada",
@@ -619,7 +623,8 @@
         "The reference/path to the document does not exist.": "La referencia/ruta al documento no existe.",
         "The resource could not be secured for use.": "No se pudo asegurar el recurso para su uso.",
         "Could not upload the files.": "No se pudieron cargar los archivos.",
-        "Could not upload the file(s).": "No se pudo cargar el archivo(s)."
+        "Could not upload the file(s).": "No se pudo cargar el archivo(s).",
+        "The document does not exist.": "El documento no existe."
     },
     "statuses": {
         "Paid": "Pagado",

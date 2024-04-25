@@ -328,7 +328,10 @@
             "Original Ticket #": "Original Ticket #",
             "Original Ticket W.": "Original Ticket W.",
             "Comments": "Comments",
-            "Tank": "Tank"
+            "Tank": "Tank",
+            "New Ticket": "New Ticket",
+            "In": "In",
+            "Out": "Out"
         },
         "table": {
             "Type": "Type",
@@ -581,6 +584,7 @@
         "Confirmation": "Confirmation",
         "Are you sure you would like to": "Are you sure you would like to",
         "delete the table": "delete the table",
+        "delete this table": "delete this table",
         "Table updated": "Table updated",
         "Table created": "Table created",
         "Table deleted": "Table deleted",
@@ -619,7 +623,8 @@
         "The reference/path to the document does not exist.": "The reference/path to the document does not exist.",
         "The resource could not be secured for use.": "The resource could not be secured for use.",
         "Could not upload the files.": "Could not upload the files.",
-        "Could not upload the file(s).": "Could not upload the file(s)."
+        "Could not upload the file(s).": "Could not upload the file(s).",
+        "The document does not exist.": "The document does not exist."
     },
     "statuses": {
         "Paid": "Paid",

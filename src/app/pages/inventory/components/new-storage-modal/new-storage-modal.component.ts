@@ -43,7 +43,7 @@ export class NewStorageModalComponent implements OnInit {
     return runTransaction(this.db, t => {
       return t.get(this.plantRef).then(async plantDoc => {
         if(!plantDoc.exists){
-          throw this.transloco.translate("messages." + "Document Does not exist")
+          throw this.transloco.translate("messages." + "The document does not exist.")
         }
         const plant = plantDoc.data();
 
@@ -80,8 +80,8 @@ export class NewStorageModalComponent implements OnInit {
         t.set(logRef, storageLog);
         t.update(this.plantRef, updateDoc);
       }).catch(err => {
-        this.snack.open(this.transloco.translate("messages." + "Update Error: Could not add new storage."), 'error');
         console.error(err);
+        this.snack.open("Update Error: Could not add new storage.", 'error');
       })
     }).then(() => {
       this.modalController.dismiss({dismissed:true});
