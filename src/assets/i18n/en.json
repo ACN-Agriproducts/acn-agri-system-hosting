@@ -54,7 +54,12 @@
             "canceled": "canceled",
             "Contracts": "Contracts",
             "purchase": "purchase",
-            "sales": "sales"
+            "sales": "sales",
+            "chart": {
+                "Delivered": "Delivered",
+                "Total": "Total",
+                "Trend": "Trend"
+            }
         },
         "new": {
             "contract info": "Contract Info",
@@ -509,6 +514,7 @@
         "Retry": "Retry"
     },
     "inventory": {
+        "Inventory": "Inventory",
         "Products": "Products",
         "Total Physical": "Total Physical",
         "Storage": "Storage",

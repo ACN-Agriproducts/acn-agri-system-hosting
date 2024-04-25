@@ -54,7 +54,12 @@
             "canceled": "cancelado",
             "Contracts": "Contratos",
             "purchase": "compra",
-            "sales": "venta"
+            "sales": "venta",
+            "chart": {
+                "Delivered": "Entregado",
+                "Total": "Total",
+                "Trend": "Tendencia"
+            }
         },
         "new": {
             "contract info": "Informacion de Contrato",
