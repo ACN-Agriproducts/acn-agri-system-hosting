@@ -671,7 +671,7 @@
         "Warehouse receipt group created": "Grupo de recibos de almacén creado",
         "Warehouse receipt marked as paid.": "Recibo de almacén marcado como pagado.",
         "Warehouse receipt preview updated": "Vista previa del recibo de almacén actualizada",
-        "Warehouse receipt uploaded": "Recibo de almacén subido",
+        "Warehouse receipt uploaded": "Recibo de almacén subido"
     },
     "statuses": {
         "Paid": "Pagado",
