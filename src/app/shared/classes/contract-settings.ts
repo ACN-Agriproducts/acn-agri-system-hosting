@@ -31,6 +31,10 @@ export class ContractSettings extends FirebaseDocInterface {
         [contractName: string]: string;
     }
 
+    liquidationTypes: {
+        [name: string]: string
+    }
+
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {

@@ -5,6 +5,7 @@ import { PrintableLiquidationComponent } from './printable-liquidation.component
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from "../../shared/shared.module";
 import { LiquidationDialogComponent } from './liquidation-dialog/liquidation-dialog.component';
+import { SalesLiquidationComponent } from './sales-liquidation/sales-liquidation.component';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { LiquidationDialogComponent } from './liquidation-dialog/liquidation-dia
         WeightDiscountsPipe,
         // PriceDiscountsPipe,
         LiquidationDialogComponent,
+        SalesLiquidationComponent
     ],
     exports: [
         PrintableLiquidationComponent,
