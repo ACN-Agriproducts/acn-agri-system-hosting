@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { Mass } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
@@ -19,38 +20,42 @@ export class DeliveredChartCardComponent implements OnInit {
   public colorScheme: any = {
     domain: ["#FFBC04", "#4D8C4A"]
   };
-
+  public labels: { [key: string]: string } = {};
   
   constructor(
     private datePipe: DatePipe,
     private session: SessionInfo,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {
-    this.buildTableData();
+    this.transloco.selectTranslateObject('contracts.table.chart').subscribe(val => {
+      this.labels = val;
+      this.buildTableData();
+    });
   }
 
   buildTableData() {
     this.refLines = [{
-      name: "Delivered",
+      name: this.labels["Delivered"],
       value: this.contract.currentDelivered.getMassInUnit('mTon')
     },
     {
-      name: "Total",
+      name: this.labels["Total"],
       value: this.contract.quantity.getMassInUnit('mTon')
     }];
 
     const lineDataReal: ChartData = {
-      name: "Delivered",
+      name: this.labels["Delivered"],
       series: []
     };
     const LineDataTrend: ChartData = {
-      name: "Trend",
+      name: this.labels["Trend"],
       series: []
     }
 
     const ticketData: ChartData = {
-      name: "Delivered", 
+      name: this.labels["Delivered"], 
       series: []
     }
 

@@ -5,7 +5,7 @@
             <mat-form-field appearance="outline">
                 <mat-label>{{t('Contract Type')}}</mat-label>
                 <mat-select (selectionChange)="changedContractType($event)" [value]="0">
-                    <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{ t(tab.label) | titlecase }}</mat-option>
+                    <mat-option *ngFor="let tab of tabData; let index = index" [value]="index">{{ tab.label | titlecase }}</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline">
