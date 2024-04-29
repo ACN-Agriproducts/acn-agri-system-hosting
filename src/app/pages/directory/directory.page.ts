@@ -55,7 +55,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   updateList = async () => {
     this.arrayChangeFlag = 0; // Will update when list gets any updates
-    this.contactsPagination = new Pagination(this.getQuery(), 1000, () => {
+    this.contactsPagination = new Pagination(this.getQuery(), 10000, () => {
       this.arrayChangeFlag++;
     });
   }
