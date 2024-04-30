@@ -262,7 +262,7 @@ export class ConfirmInvoicePage implements OnInit {
 
   deleteGroup(product: string, client: string, group: string) {
     if (this.groups[product][client][group].tickets.length !== 0) {
-      this.snack.open("Group must be empty to be deleted", "warn");
+      this.snack.openTranslated("Group must be empty to be deleted.", "warn");
       return;
     }
 
@@ -273,11 +273,11 @@ export class ConfirmInvoicePage implements OnInit {
     addDoc(Invoice.getCollectionReference(this.db, this.session.getCompany()), this.invoice)
     .then((result => {
       document.getElementById("print-button").click();
-      this.snack.open("Inovice succesfully created", "success");
+      this.snack.openTranslated("Invoice created", "success");
       this.router.navigate(["dashboard","invoices"]);
     }), reason => {
-      this.snack.open("Invoice was not created", "error");
       console.error(reason);
+      this.snack.openTranslated("Error while creating invoice.", "error");
     });
   }
 }

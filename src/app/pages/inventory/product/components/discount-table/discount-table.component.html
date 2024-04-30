@@ -2,22 +2,22 @@
 <mat-card class="discount-table">
   <mat-card-header class="discount-table-header">
     <mat-card-title>{{ table.name }}</mat-card-title>
-    <div class="action-bar">
+    <div class="action-bar" *transloco="let ta; read: 'actions'">
       <button mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="setTable.emit()">
           <mat-icon>notes</mat-icon>
-          <span>Edit Table Details</span>
+          <span>{{ ta('Edit Details') }}</span>
         </button>
         <button mat-menu-item [disabled]="editing" (click)="edit()">
           <mat-icon color="primary">edit</mat-icon>
-          <span>Edit Table</span>
+          <span>{{ ta('Edit') }}</span>
         </button>
         <button mat-menu-item (click)="deleteTable.emit()">
           <mat-icon color="warn">delete_forever</mat-icon>
-          <span>Delete Table</span>
+          <span>{{ ta('Delete') }}</span>
         </button>
       </mat-menu>
     </div>
@@ -25,9 +25,11 @@
   <mat-card-content>
     <ol class="collection">
       <mat-card class="header-card">
-        <li class="row">
+        <li class="row" *transloco="let t; read: 'inventory.product'">
           <div class="cell options" *ngIf="editing"></div>
-          <div class="cell" *ngFor="let header of table.headers">{{ header | titlecase }}</div>
+          <div class="cell" *ngFor="let header of table.headers">
+            {{ (header === 'low' || header === 'high' || header === 'discount' ? t(header) : header) | titlecase }}
+          </div>
           <div class="cell options" *ngIf="editing"></div>
         </li>
       </mat-card>
@@ -53,7 +55,7 @@
         <mat-card class="body-card" *ngIf="editing">
           <li class="row add-item">
             <button mat-button color="primary" (click)="table.addTableData()">
-              <span><i>Add Item</i></span>
+              <span><i>{{ 'actions.Add Item' | transloco }}</i></span>
               &nbsp;
               <mat-icon>add_box</mat-icon>
             </button>
@@ -62,9 +64,9 @@
       </div>
     </ol>
   </mat-card-content>
-  <div class="action-bar" [class.invisible]="!editing">
-    <button mat-flat-button color="primary" (click)="cancel()">Cancel</button>
-    <button mat-flat-button color="primary" (click)="reset()">Reset</button>
-    <button mat-flat-button color="primary" (click)="save()">Save</button>
+  <div class="action-bar" [class.invisible]="!editing" *transloco="let ta; read: 'actions'">
+    <button mat-flat-button color="primary" (click)="cancel()">{{ ta('Cancel') }}</button>
+    <button mat-flat-button color="primary" (click)="reset()">{{ ta('Reset') }}</button>
+    <button mat-flat-button color="primary" (click)="save()">{{ ta('Save') }}</button>
   </div>
 </mat-card>

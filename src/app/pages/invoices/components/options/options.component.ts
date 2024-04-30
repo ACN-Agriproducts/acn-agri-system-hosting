@@ -96,10 +96,11 @@ export class OptionsComponent implements OnInit {
       status: "paid"
     })
     .then(() => {
-      this.snack.open("Proof of Payment successfully uploaded.", 'success');
+      this.snack.openTranslated("Proof of payment uploaded", 'success');
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Could not upload the proof of payment.", 'error');
     });
   }
 

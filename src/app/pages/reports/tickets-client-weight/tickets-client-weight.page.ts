@@ -58,12 +58,12 @@ export class TicketsClientWeightPage implements OnInit {
       });
     }
 
-    this.snack.open('Submitting...', "info");
+    this.snack.openTranslated("Updating tickets...", "info");
     batch.commit().then(() => {
-      this.snack.open("Tickets successfully updated.", "success");
+      this.snack.openTranslated("Tickets updated", "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Error submitting.", "error");
+      this.snack.openTranslated("Error while updating the tickets.", "error");
     });
   }
 }

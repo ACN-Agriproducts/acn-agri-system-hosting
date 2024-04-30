@@ -157,12 +157,12 @@ export class SplitTicketComponent implements OnInit {
       ticketRef: this.data.ref.path,
     }).then(result => {
       console.log(result);
-      this.snack.open("Successful", 'success');
+      this.snack.openTranslated("Successful", 'success');
       this.dialogRef.close();
     }).catch(e => {
       this.submitting = false;
-      this.snack.open("Error", 'error');
       console.error(e)
+      this.snack.openTranslated("Error", 'error');
     });
   }
 }

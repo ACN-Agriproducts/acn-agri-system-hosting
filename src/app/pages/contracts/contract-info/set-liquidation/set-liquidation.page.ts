@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
 import { Liquidation, LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
@@ -46,6 +47,7 @@ export class SetLiquidationPage implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private confirm: ConfirmationDialogService,
+    private transloco: TranslocoService
   ) {
     this.type = this.route.snapshot.paramMap.get('type');
     this.id = this.route.snapshot.paramMap.get('id');
@@ -58,11 +60,11 @@ export class SetLiquidationPage implements OnInit {
       this.discountTables = await DiscountTables.getDiscountTables(this.db, this.session.getCompany(), contract.product.id);
 
       if ((this.discountTables?.tables.length ?? 0) <= 0) {
-        this.snack.open("Warning: No Discount Tables Found", "warn");
+        this.snack.openTranslated("The product for this contract does not have any discount tables. Some fields will be affected.", 'warn');
       }
 
       if ((this.contract.price?.amount ?? 0) <= 0) {
-        this.snack.open("Warning: No Price for Contract Found", "warn");
+        this.snack.openTranslated("Contract does not have a price. Some fields will be affected.", 'warn');
       }
 
       this.tickets = (await contract.getTickets()).map(ticket => {
@@ -108,7 +110,7 @@ export class SetLiquidationPage implements OnInit {
 
   public async submit(): Promise<void> {
     await this.openLiquidation();
-    if (!await this.confirm.openDialog("submit this liquidation")) return;
+    if (!await this.confirm.openWithTranslatedAction("submit this liquidation")) return;
  
     this.liquidation.ticketRefs = this.selectedTickets.map(t => t.data.ref.withConverter(Ticket.converter));
     this.liquidation.tickets = this.selectedTickets.map(t => t.data);
@@ -122,12 +124,12 @@ export class SetLiquidationPage implements OnInit {
           weightDiscounts: ticket.data.weightDiscounts.getRawData()
         });
       });
-      this.snack.open(`Liquidation successfully ${this.editingRefId ? "edited" : "created"}`, "success");
+      this.snack.openTranslated(`Liquidation ${this.editingRefId ? "updated" : "added"}`, "success");
       this.router.navigate([`dashboard/contracts/contract-info/${this.type}/${this.id}`]);
     })
     .catch(e => {
       console.error(e);
-      this.snack.open(`Error ${this.editingRefId ? "editing" : "creating"} liquidation`, "success");
+      this.snack.openTranslated(`Could not ${this.editingRefId ? "update" : "add"} the liquidation.`, "success");
     });
   }
 

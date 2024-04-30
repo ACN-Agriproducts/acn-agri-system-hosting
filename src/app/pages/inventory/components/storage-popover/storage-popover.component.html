@@ -1,14 +1,14 @@
-<ion-list>
+<ion-list *transloco="let t; read: 'inventory.storage'">
   <ion-item button (click)="moveInvButton($event)">
-    Move Inventory
+    {{ t('Move Inventory') }}
   </ion-item>
   <ion-item button (click)="editInvButton($event)">
-    Edit Inventory
+    {{ t('Edit Inventory') }}
   </ion-item>
   <ion-item button (click)="archiveButton($event)" *ngIf="tankList[storageId].current.get() === 0">
-    {{tankList[storageId].archived ? "Unarchive": "Archive"}} Inventory
+    {{ (tankList[storageId].archived ? "actions.Unarchive" : "actions.Archive") | transloco }} {{ t('Inventory') }}
   </ion-item>
   <ion-item button lines="none" (click)="zeroOutButton($event)">
-    Zero Out Tank
+    {{ t('Zero Out Tank') }}
   </ion-item>
 </ion-list>

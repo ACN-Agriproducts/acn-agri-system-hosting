@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { TranslocoService } from '@ngneat/transloco';
 import { DiscountTable } from '@shared/classes/discount-tables';
 
 @Component({
@@ -19,7 +20,8 @@ export class DiscountTableComponent implements OnInit {
   public prevTable: DiscountTable;
 
   constructor(
-    private snack: SnackbarService
+    private snack: SnackbarService,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() { }
@@ -42,17 +44,18 @@ export class DiscountTableComponent implements OnInit {
   cancel() {
     this.revert();
     this.editing = false;
+    this.snack.openTranslated("Changes canceled");
   }
 
   reset() {
     this.revert();
     this.edit();
+    this.snack.openTranslated("Changes reset");
   }
 
   revert() {
     this.table = this.prevTable;
     delete this.prevTable;
-    this.snack.open(`Changes Reverted`);
   }
 
   ngOnDestroy() {

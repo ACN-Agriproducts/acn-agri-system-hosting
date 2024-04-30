@@ -11,6 +11,7 @@ import { ContextMenuComponent } from './context-menu/context-menu.component';
 import { MaterialModule } from '@core/modules/material.module';
 import { SnackbarComponent } from './snackbar/snackbar.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { TranslocoModule } from '@ngneat/transloco';
 // import { NgxDropzoneModule } from 'ngx-dropzone';
 
 
@@ -19,8 +20,9 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     CommonModule,
     FormsModule,
     IonicModule,
-    MaterialModule
+    MaterialModule,
     // NgxDropzoneModule
+    TranslocoModule
   ],
   declarations: [
     OptionBusinessComponent,

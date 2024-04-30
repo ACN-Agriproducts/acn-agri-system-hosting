@@ -1,148 +1,150 @@
-<h1>Ticket Report</h1>
-<div class="dialog-content">
-  <h3>Generate report by...</h3>
-  <mat-radio-group [(ngModel)]="reportType" [disabled]="reportGenerated">
-    <mat-radio-button [value]="getReportType().DateRange">Date Range</mat-radio-button>
-    <mat-radio-button [value]="getReportType().Contract">Contract</mat-radio-button>
-    <mat-radio-button [value]="getReportType().IdRange">Id Range</mat-radio-button>
-    <mat-radio-button [value]="getReportType().ProductBalance">Product Balance</mat-radio-button>
-    <mat-radio-button [value]="getReportType().YTD">Year to Date</mat-radio-button>
-  </mat-radio-group>
-  
-  <div>
-    <label>Report Type</label>
-    <mat-radio-group [(ngModel)]="reportOutputType">
-      <mat-radio-button [value]="getOutputType().pdf" [disabled]="reportType == getReportType().ProductBalance || reportType == getReportType().YTD">PDF</mat-radio-button>
-      <mat-radio-button [value]="getOutputType().excel">Excel</mat-radio-button>
+<ng-container *transloco="let t; read: 'tickets.report'">
+  <h1>{{ t('Ticket Report') }}</h1>
+  <div class="dialog-content">
+    <h3>{{ t('Generate report by...') }}</h3>
+    <mat-radio-group [(ngModel)]="reportType" [disabled]="reportGenerated">
+      <mat-radio-button [value]="getReportType().DateRange">{{ t('Date Range') }}</mat-radio-button>
+      <mat-radio-button [value]="getReportType().Contract">{{ t('Contract') }}</mat-radio-button>
+      <mat-radio-button [value]="getReportType().IdRange">{{ t('ID Range') }}</mat-radio-button>
+      <mat-radio-button [value]="getReportType().ProductBalance">{{ t('Product Balance') }}</mat-radio-button>
+      <mat-radio-button [value]="getReportType().YTD">{{ t('Year to Date') }}</mat-radio-button>
     </mat-radio-group>
-  </div>
-
-  <div class="date-range-form" *ngIf="reportType == getReportType().DateRange || reportType == getReportType().ProductBalance">
-    <div>
-      <label *ngIf="reportType == getReportType().DateRange">Ticket Types</label>
-      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated" *ngIf="reportType == getReportType().DateRange">
-        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
-        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <div>
-      <label>Report Units</label>
-      <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
-        <mat-radio-button value="lbs">lbs</mat-radio-button>
-        <mat-radio-button value="kg">kg</mat-radio-button>
-        <mat-radio-button value="mTon">mTon</mat-radio-button>
-        <mat-radio-button value="bu">bu</mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate placeholder="Start date" [(ngModel)]="beginDate" [disabled]="reportGenerated">
-          <input matEndDate placeholder="End date" [(ngModel)]="endDate" [disabled]="reportGenerated">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="contract-id-form" *ngIf="reportType == 1">
-    <div>
-      <label>Contract Types</label>
-      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
-        <mat-radio-button [value]="true">Purchase Contract</mat-radio-button>
-        <mat-radio-button [value]="false">Sales Contract</mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <div>
-      <label>Report Units</label>
-      <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
-        <mat-radio-button value="lbs">lbs</mat-radio-button>
-        <mat-radio-button value="kg">kg</mat-radio-button>
-        <mat-radio-button value="mTon">mTon</mat-radio-button>
-        <mat-radio-button value="bu">bu</mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <mat-form-field>
-      <mat-label>Contract ID</mat-label>
-      <input matInput type="number" [(ngModel)]="contractId" [disabled]="reportGenerated">
-    </mat-form-field>
-  </div>
   
-  <div class="id-range-form" *ngIf="reportType == 2">
     <div>
-      <label>Ticket Types</label>
-      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
-        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
-        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
+      <label>{{ t('Report Type') }}</label>
+      <mat-radio-group [(ngModel)]="reportOutputType">
+        <mat-radio-button [value]="getOutputType().pdf" [disabled]="reportType == getReportType().ProductBalance || reportType == getReportType().YTD">{{ t('PDF') }}</mat-radio-button>
+        <mat-radio-button [value]="getOutputType().excel">{{ t('Excel') }}</mat-radio-button>
       </mat-radio-group>
     </div>
-    <div>
-      <label>Report Units</label>
-      <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
-        <mat-radio-button value="lbs">lbs</mat-radio-button>
-        <mat-radio-button value="kg">kg</mat-radio-button>
-        <mat-radio-button value="mTon">mTon</mat-radio-button>
-        <mat-radio-button value="bu">bu</mat-radio-button>
-      </mat-radio-group>
+  
+    <div class="date-range-form" *ngIf="reportType == getReportType().DateRange || reportType == getReportType().ProductBalance">
+      <div>
+        <label *ngIf="reportType == getReportType().DateRange">{{ t('Ticket Types') }}</label>
+        <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated" *ngIf="reportType == getReportType().DateRange">
+          <mat-radio-button [value]="true">{{ t('In Tickets') }}</mat-radio-button>
+          <mat-radio-button [value]="false">{{ t('Out Tickets') }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <label>{{ t('Report Units') }}</label>
+        <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
+          <mat-radio-button value="lbs">lbs</mat-radio-button>
+          <mat-radio-button value="kg">kg</mat-radio-button>
+          <mat-radio-button value="mTon">mTon</mat-radio-button>
+          <mat-radio-button value="bu">bu</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate [placeholder]="t('Start Date')" [(ngModel)]="beginDate" [disabled]="reportGenerated">
+            <input matEndDate [placeholder]="t('End Date')" [(ngModel)]="endDate" [disabled]="reportGenerated">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
     </div>
-    <div>
+  
+    <div class="contract-id-form" *ngIf="reportType == 1">
+      <div>
+        <label>{{ t('Contract Types') }}</label>
+        <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+          <mat-radio-button [value]="true">{{ t('Purchase Contract') }}</mat-radio-button>
+          <mat-radio-button [value]="false">{{ t('Sales Contract') }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <label>{{ t('Report Units') }}</label>
+        <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
+          <mat-radio-button value="lbs">lbs</mat-radio-button>
+          <mat-radio-button value="kg">kg</mat-radio-button>
+          <mat-radio-button value="mTon">mTon</mat-radio-button>
+          <mat-radio-button value="bu">bu</mat-radio-button>
+        </mat-radio-group>
+      </div>
       <mat-form-field>
-        <mat-label>Start ID</mat-label>
-        <input matInput type="number" [(ngModel)]="startId" [disabled]="reportGenerated">
+        <mat-label>{{ t('Contract ID') }}</mat-label>
+        <input matInput type="number" [(ngModel)]="contractId" [disabled]="reportGenerated">
       </mat-form-field>
-      <mat-form-field>
-        <mat-label>End ID</mat-label>
-        <input matInput type="number" [(ngModel)]="endId" [disabled]="reportGenerated">
-      </mat-form-field>
+    </div>
+  
+    <div class="id-range-form" *ngIf="reportType == 2">
+      <div>
+        <label>{{ t('Ticket Types') }}</label>
+        <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+          <mat-radio-button [value]="true">{{ t('In Tickets') }}</mat-radio-button>
+          <mat-radio-button [value]="false">{{ t('Out Tickets') }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <label>{{ t('Report Units') }}</label>
+        <mat-radio-group [(ngModel)]="displayUnit" [disabled]="reportGenerated">
+          <mat-radio-button value="lbs">lbs</mat-radio-button>
+          <mat-radio-button value="kg">kg</mat-radio-button>
+          <mat-radio-button value="mTon">mTon</mat-radio-button>
+          <mat-radio-button value="bu">bu</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>{{ t('Start ID') }}</mat-label>
+          <input matInput type="number" [(ngModel)]="startId" [disabled]="reportGenerated">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ t('End ID') }}</mat-label>
+          <input matInput type="number" [(ngModel)]="endId" [disabled]="reportGenerated">
+        </mat-form-field>
+      </div>
+    </div>
+  
+    <div class="YTD-form" *ngIf="reportType == getReportType().YTD">
+      <div>
+        <label>{{ t('Ticket Types') }}</label>
+        <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
+          <mat-radio-button [value]="true">{{ t('In Tickets') }}</mat-radio-button>
+          <mat-radio-button [value]="false">{{ t('Out Tickets') }}</mat-radio-button>
+        </mat-radio-group>
+      </div>
     </div>
   </div>
-
-  <div class="YTD-form" *ngIf="reportType == getReportType().YTD">
-    <div>
-      <label>Ticket Types</label>
-      <mat-radio-group [(ngModel)]="inTicket" [disabled]="reportGenerated">
-        <mat-radio-button [value]="true">In Tickets</mat-radio-button>
-        <mat-radio-button [value]="false">Out Tickets</mat-radio-button>
-      </mat-radio-group>
-    </div>
-  </div>
-</div>
-
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button (click)="generateReport()" [disabled]="!validateInputs()">Generate</button>
-  <button 
-    mat-button 
+</ng-container>
+  
+<mat-dialog-actions *transloco="let t; read: 'actions'">
+  <button mat-button mat-dialog-close>{{ t('Cancel') }}</button>
+  <button mat-button (click)="generateReport()" [disabled]="!validateInputs()">{{ t('Generate') }}</button>
+  <button
+    mat-button
     *ngIf="reportGenerated && reportOutputType == 0"
     ngxPrint
     [useExistingCss]="true"
     printSectionId="printable-report"
     [printStyle]='{"app-printable-ticket, .ticket-report-table" : { "page-break-after": "always" }}'
-    >Print</button>
-  <button 
+    >{{ t('Print') }}</button>
+  <button
     (click)="createExcelDoc()"
-    mat-button 
+    mat-button
     *ngIf="reportGenerated && reportOutputType == 1">
-    Download</button>
+    {{ t('Download') }}</button>
   <mat-spinner [diameter]="20" *ngIf="generatingReport"></mat-spinner>
 </mat-dialog-actions>
 
-<div class="printable" id="printable-report">
+<div class="printable" id="printable-report" >
   <div class="product-div" *ngFor="let ticketList of productTicketLists | keyvalue">
     <h2>{{ticketList.key}}</h2>
-    <table class='ticket-report-table' id="{{ticketList.key}}">
+    <table class='ticket-report-table' id="{{ticketList.key}}" *transloco="let t; read: 'tickets.table'">
       <tr>
-        <th>date</th>
-        <th>ID</th>
-        <th>Client</th>
-        <th>Contract</th>
-        <th>Tank</th>
-        <th>Gross</th>
-        <th>Tare</th>
-        <th>Net</th>
-        <th>Moisture</th>
-        <th>Plates</th>
+        <th>{{ t('Date') }}</th>
+        <th>{{ t('ID') }}</th>
+        <th>{{ t('Client') }}</th>
+        <th>{{ t('Contract') }}</th>
+        <th>{{ t('Tank') }}</th>
+        <th>{{ t('Gross') }}</th>
+        <th>{{ t('Tare') }}</th>
+        <th>{{ t('Net') }}</th>
+        <th>{{ t('Moisture') }}</th>
+        <th>{{ t('Plates') }}</th>
       </tr>
       <tr *ngFor="let ticket of ticketList.value">
         <td>{{ticket.dateOut | date:'shortDate'}}</td>
@@ -155,12 +157,12 @@
         <td>{{ticket.net | massInUnit:displayUnit}}</td>
         <td>{{ticket.moisture | number:'0.1'}}</td>
         <td>{{ticket.plates}}</td>
-        
+
       </tr>
       <tr>
         <td></td>
         <td></td>
-        <td>Totals</td>
+        <td>{{ t('Totals') }}</td>
         <td></td>
         <td></td>
         <td></td>

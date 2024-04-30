@@ -267,11 +267,11 @@ export class ContractFormComponent implements OnInit {
     if(this.useSameClientForTicket) this.contract.clientTicketInfo = this.contract.clientInfo;
 
     this.contract.set().then(() => {
-      this.snack.open('Contract submitted successfully', 'success');
+      this.snack.openTranslated('Contract submitted', 'success');
       this.router.navigate(['dashboard/contracts']);
     }).catch(error => {
-      this.snack.open('Error submitting contract', 'error');
       console.error(error);
+      this.snack.openTranslated('Error submitting contract', 'error');
     });
   }
 

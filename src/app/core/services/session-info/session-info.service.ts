@@ -116,14 +116,13 @@ export class SessionInfo {
           return company;
         });
       }
-  
+
       if(!this.language) {
         (dbPromises.user ?? User.getUser(this.db, this.user.uid)).then(async user => {
           this.language = user.language 
             || (await (dbPromises.company ?? Company.getCompany(this.db, this.company)))?.defaultLanguage
             || 'es';
   
-          this.transloco.setActiveLang(this.language);
         });
       }
       else {

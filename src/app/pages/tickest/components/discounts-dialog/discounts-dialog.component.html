@@ -1,19 +1,19 @@
-<h2 mat-dialog-title>Discount Table</h2>
-<mat-dialog-content>
+<h2 mat-dialog-title>{{ "tickets.discounts.Discount Table" | transloco }}</h2>
+<mat-dialog-content *transloco="let t; read: 'tickets.discounts'">
   <div class="table-row" *ngFor="let discount of discounts; let index = index">
     <mat-form-field>
-      <mat-label>Discount Name</mat-label>
+      <mat-label>{{ t('Discount Name') }}</mat-label>
       <input type="text" matInput [matAutocomplete]="auto" [(ngModel)]="discount[0]">
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option value="infested">infested</mat-option>
-        <mat-option value="musty">musty</mat-option>
-        <mat-option value="sour">sour</mat-option>
-        <mat-option value="weathered">weathered</mat-option>
-        <mat-option value="inspection">inspection</mat-option>
+        <mat-option value="infested">{{ t('infested') }}</mat-option>
+        <mat-option value="musty">{{ t('musty') }}</mat-option>
+        <mat-option value="sour">{{ t('sour') }}</mat-option>
+        <mat-option value="weathered">{{ t('weathered') }}</mat-option>
+        <mat-option value="inspection">{{ t('inspection') }}</mat-option>
       </mat-autocomplete>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Amount</mat-label>
+      <mat-label>{{ t('Amount') }}</mat-label>
       <span matPrefix>$</span>
       <input type="number" matInput [(ngModel)]="discount[1]">
     </mat-form-field>
@@ -21,9 +21,9 @@
       <mat-icon>delete</mat-icon>
     </button>
   </div>
-  <button mat-flat-button (click)="newDiscount()">+ Add New</button>
+  <button mat-flat-button (click)="newDiscount()">+ {{ "actions.Add New" | transloco }}</button>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-flat-button mat-dialog-close color="warn">Cancel</button>
-  <button mat-flat-button (click)="submit()" [disabled]="submitting" color="primary">Submit</button>
+<mat-dialog-actions *transloco="let t; read: 'actions'">
+  <button mat-flat-button mat-dialog-close color="warn">{{ t('Cancel') }}</button>
+  <button mat-flat-button (click)="submit()" [disabled]="submitting" color="primary">{{ t('Submit') }}</button>
 </mat-dialog-actions>

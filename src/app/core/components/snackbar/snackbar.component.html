@@ -4,9 +4,9 @@
 	</span>
 	<span class="text">{{ data.message }}</span>
 	<button mat-icon-button *ngIf="!data.action else action" (click)="close()">
-		<mat-icon *ngIf="!data.action else action">close</mat-icon>
+		<mat-icon>close</mat-icon>
 	</button>
 	<ng-template #action>
-		<button mat-button (click)="close()">{{ data.action }}</button>
+		<button mat-button (click)="data.actionFn?.() ?? close()">{{ data.action | uppercase }}</button>
 	</ng-template>
 </div>

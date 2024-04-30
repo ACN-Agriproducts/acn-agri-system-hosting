@@ -14,7 +14,7 @@ export interface LiquidationPrintableData {
   contract: Contract;
   totals: LiquidationTotals;
   displayUnits?: Map<string, units>;
-  cancelled: boolean;
+  canceled: boolean;
 }
 
 @Component({

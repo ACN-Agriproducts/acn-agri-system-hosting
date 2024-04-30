@@ -1,68 +1,70 @@
-<mat-form-field appearance="fill">
-  <mat-label>Month and Year</mat-label>
-  <input matInput [matDatepicker]="dp" [formControl]="date">
-  <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-  <mat-datepicker #dp
-                  startView="multi-year"
-                  (monthSelected)="chosenMonthHandler($event, dp)"
-                  panelClass="example-month-picker">
-  </mat-datepicker>
-  <button 
-    mat-icon-button aria-label="download" 
-    matSuffix
-    (click)="downloadDpr()"
-    [disabled]="!this.ready && !this.workbook">
-    <mat-icon>file_download</mat-icon>
-  </button>
-</mat-form-field>
-
-<table mat-table
-       [dataSource]="tableData" multiTemplateDataRows
-       class="mat-elevation-z8">
-  <ng-container matColumnDef="Day"> 
-    <th mat-header-cell *matHeaderCellDef> Day </th>
-    <td mat-cell *matCellDef="let day"> {{day.id}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="inQuantity">
-    <th mat-header-cell *matHeaderCellDef> Received </th>
-    <td mat-cell *matCellDef="let day"> {{day.inQuantity / this.productDoc.weight | number: '1.3-3'}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="outQuantity">
-    <th mat-header-cell *matHeaderCellDef> Loaded Out </th>
-    <td mat-cell *matCellDef="let day"> {{day.outQuantity / this.productDoc.weight | number: '1.3-3'}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="adjustment">
-    <th mat-header-cell *matHeaderCellDef> Adjustment </th>
-    <td mat-cell *matCellDef="let day"> {{day.adjustment / this.productDoc.weight | number: '1.3-3'}} </td>
-  </ng-container>
-
-  <ng-container matColumnDef="endOfDay">
-    <th mat-header-cell *matHeaderCellDef> Total </th>
-    <td mat-cell *matCellDef="let day"> {{day.endOfDay / this.productDoc.weight | number: '1.3-3'}} </td>
-  </ng-container>
-
-  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td mat-cell *matCellDef="let day" [attr.colspan]="columnsToDisplay.length">
-      <div class="example-element-detail"
-           [@detailExpand]="day == expandedDay ? 'expanded' : 'collapsed'">
-        <app-dpr-tickets-table class="dayTable" [title]="'In Tickets'" [ticketList]="day.inTickets" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
-        <div class="dayTable">
-          <app-dpr-tickets-table [title]="'Out Tickets'" [ticketList]="day.outTickets" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
-          <app-dpr-invoice-table [productName]="this.productDoc.ref.id" [invoiceList]="day.invoices" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-invoice-table>
+<ng-container *transloco="let t; read: 'inventory.product'">
+  <mat-form-field appearance="fill">
+    <mat-label>{{ t('Month and Year') }}</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date">
+    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker #dp
+                    startView="multi-year"
+                    (monthSelected)="chosenMonthHandler($event, dp)"
+                    panelClass="example-month-picker">
+    </mat-datepicker>
+    <button
+      mat-icon-button aria-label="download"
+      matSuffix
+      (click)="downloadDpr()"
+      [disabled]="!this.ready && !this.workbook">
+      <mat-icon>file_download</mat-icon>
+    </button>
+  </mat-form-field>
+  
+  <table mat-table
+         [dataSource]="tableData" multiTemplateDataRows
+         class="mat-elevation-z8">
+    <ng-container matColumnDef="Day">
+      <th mat-header-cell *matHeaderCellDef> {{ t('Day') }} </th>
+      <td mat-cell *matCellDef="let day"> {{day.id}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="inQuantity">
+      <th mat-header-cell *matHeaderCellDef> {{ t('Received') }} </th>
+      <td mat-cell *matCellDef="let day"> {{day.inQuantity / this.productDoc.weight | number: '1.3-3'}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="outQuantity">
+      <th mat-header-cell *matHeaderCellDef> {{ t('Loaded Out') }} </th>
+      <td mat-cell *matCellDef="let day"> {{day.outQuantity / this.productDoc.weight | number: '1.3-3'}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="adjustment">
+      <th mat-header-cell *matHeaderCellDef> {{ t('Adjustment') }} </th>
+      <td mat-cell *matCellDef="let day"> {{day.adjustment / this.productDoc.weight | number: '1.3-3'}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="endOfDay">
+      <th mat-header-cell *matHeaderCellDef> {{ t('Total') }} </th>
+      <td mat-cell *matCellDef="let day"> {{day.endOfDay / this.productDoc.weight | number: '1.3-3'}} </td>
+    </ng-container>
+  
+    <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let day" [attr.colspan]="columnsToDisplay.length">
+        <div class="example-element-detail"
+             [@detailExpand]="day == expandedDay ? 'expanded' : 'collapsed'">
+          <app-dpr-tickets-table class="dayTable" [title]="t('In Tickets')" [ticketList]="day.inTickets" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
+          <div class="dayTable">
+            <app-dpr-tickets-table [title]="t('Out Tickets')" [ticketList]="day.outTickets" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-tickets-table>
+            <app-dpr-invoice-table [productName]="this.productDoc.ref.id" [invoiceList]="day.invoices" [bushelWeight]="this.productDoc.weight" *ngIf="day == expandedDay"></app-dpr-invoice-table>
+          </div>
         </div>
-      </div>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-  <tr mat-row *matRowDef="let day; columns: columnsToDisplay;"
-      class="example-element-row"
-      [class.example-expanded-row]="expandedDay === day"
-      (click)="expandedDay = expandedDay === day ? null : day">
-  </tr>
-  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-</table>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let day; columns: columnsToDisplay;"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedDay === day"
+        (click)="expandedDay = expandedDay === day ? null : day">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+</ng-container>

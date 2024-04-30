@@ -9,6 +9,7 @@ import { Contract } from '@shared/classes/contract';
 import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { CloseContractFieldsDialogComponent } from '../close-contract-fields-dialog/close-contract-fields-dialog.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-contract-modal-options',
@@ -30,7 +31,8 @@ export class ContractModalOptionsComponent implements OnInit {
     private navController: NavController,
     private snack: SnackbarService,
     private confirm: ConfirmationDialogService,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private transloco: TranslocoService
     ) { }
 
   ngOnInit() {}
@@ -45,10 +47,10 @@ export class ContractModalOptionsComponent implements OnInit {
     }
 
     this.contract.changeStatus('active').then(() => {
-      this.snack.open("Contract status updated", "success");
+      this.snack.openTranslated("Contract status updated", "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.openTranslated("Could not update the contract.", "error");
     });
   }
 
@@ -57,7 +59,7 @@ export class ContractModalOptionsComponent implements OnInit {
       `/companies/${this.currentCompany}/contracts/${this.isPurchase ? 'purchaseContracts' : 'salesContracts'}/${this.contractId}`;
 
     const dialogData: UploadDialogData = {
-      docType: "Signed Contract",
+      docType: this.transloco.translate("contracts." + "Signed Contract"),
       hasDoc: this.contract.pdfReference != null,
       pdfRef,
       uploadable: this.contract.status !== 'closed'
@@ -74,35 +76,36 @@ export class ContractModalOptionsComponent implements OnInit {
       pdfReference: updatePdfRef
     })
     .then(() => {
-      this.snack.open("Signed Contract Successfully Uploaded", 'success');
+      this.snack.openTranslated("Signed contract uploaded", 'success');
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Unexpected Error: could not upload the signed contract.", 'error');
     });
   }
 
   public async closeContract() {
-    if(this.contract.status != "active" || !await this.confirm.openDialog("close this contract")) {
+    if(this.contract.status != "active" || !await this.confirm.openWithTranslatedAction("close this contract")) {
       return;
     }
 
     if(this.contract.isOpen) await this.fixFields(true);
 
     this.contract.changeStatus('closed').then(() => {
-      this.snack.open("Contract Successfully Closed", "success");
+      this.snack.openTranslated("Contract status updated", "success");
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.openTranslated("Could not update the contract status.", "error");
     });
   }
 
   public async reopen() {
     this.contract.changeStatus('active').then(() => {
-      this.snack.open("Contract status updated", "success");
+      this.snack.openTranslated("Contract status updated", "success");
     }).catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.openTranslated("Could not update the contract status.", "error");
     });
   }
 
@@ -136,7 +139,7 @@ export class ContractModalOptionsComponent implements OnInit {
       quantityUnits: newFieldData?.quantityUnits ?? requiredFieldData.quantityUnits
     })
     .then(() => {
-      this.snack.open("Contract Successfully updated", "success");
+      this.snack.openTranslated("Contract updated", "success");
       this.contract.market_price = requiredFieldData.marketPrice;
       this.contract.price.amount = requiredFieldData.price;
       this.contract.price.unit = requiredFieldData.priceUnit;
@@ -145,7 +148,7 @@ export class ContractModalOptionsComponent implements OnInit {
     })
     .catch(error => {
       console.error(error);
-      this.snack.open("Error updating status", "error");
+      this.snack.openTranslated("Could not update the contract.", "error");
     });
   }
 }

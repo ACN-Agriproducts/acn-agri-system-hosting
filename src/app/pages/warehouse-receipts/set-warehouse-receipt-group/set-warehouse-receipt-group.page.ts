@@ -85,7 +85,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
         return idArray.indexOf(id) !== index;
       });
 
-      if (invalid) this.snack.open("Cannot create group with multiple ID's", 'warn');
+      if (invalid) this.snack.openTranslated("Cannot create group with multiple ID's.", 'warn');
 
       return invalid ? { duplicateId: true} : null;
     }
@@ -106,7 +106,7 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
     for (let i = 0; i < formValues.quantity; i++) {
       warehouseReceiptList.push(this.createWarehouseReceipt(formValues, i));
     }
-    this.snack.open("Warehouse Receipt Preview Updated", 'info');
+    this.snack.openTranslated("Warehouse receipt preview updated", 'info');
   }
 
   public createWarehouseReceipt = (formValues: any, index: number): FormGroup => {
@@ -127,14 +127,13 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
   }
 
   public cancel = (): void => {
-    this.snack.open("Cancelled New Warehouse Receipt Group", 'info');
     this.navController.navigateBack('/dashboard/warehouse-receipts', {
       replaceUrl: true
     });
   }
 
   public confirm = async (): Promise<void> => {
-    if (!await this.confirmation.openDialog("submit these Warehouse Receipts")) return;
+    if (!await this.confirmation.openWithTranslatedAction("submit these Warehouse Receipts")) return;
     this.submitWarehouseReceiptGroup();
   }
 
@@ -161,10 +160,11 @@ export class SetWarehouseReceiptGroupPage implements OnInit {
 
     addDoc(this.warehouseReceiptCollectionRef, receiptGroup)
     .then(() => {
-      this.snack.open("Warehouse Receipt Group Created", 'success');
+      this.snack.openTranslated("Warehouse receipt group created", 'success');
       this.navController.navigateForward('/dashboard/warehouse-receipts');
     }).catch(error => {
-      this.snack.open(`Error submitting form: ${error}`, 'error');
+      console.error(error);
+      this.snack.openTranslated("Error while creating warehouse receipt group.", 'error');
     });
   }
 }

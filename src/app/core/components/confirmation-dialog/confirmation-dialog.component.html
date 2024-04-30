@@ -1,10 +1,12 @@
-<h2 mat-dialog-title>Confirmation</h2>
+<ng-container *transloco="let t; read: 'messages'">
+	<h2 mat-dialog-title>{{ t('Confirmation') }}</h2>
+	
+	<mat-dialog-content>
+		<p>{{ t("Are you sure you would like to") }} {{ data }}?</p>
+	</mat-dialog-content>
+</ng-container>
 
-<mat-dialog-content>
-	<p>Are you sure you would like to {{ data }}?</p>
-</mat-dialog-content>
-
-<mat-dialog-actions class="action-bar">
-	<button mat-button color="primary" [mat-dialog-close]="false">No</button>
-	<button mat-button color="primary" [mat-dialog-close]="true">Yes</button>
+<mat-dialog-actions class="action-bar" *transloco="let t; read: 'actions'">
+	<button mat-button color="primary" [mat-dialog-close]="false">{{ t('No') }}</button>
+	<button mat-button color="primary" [mat-dialog-close]="true">{{ t('Yes') }}</button>
 </mat-dialog-actions>

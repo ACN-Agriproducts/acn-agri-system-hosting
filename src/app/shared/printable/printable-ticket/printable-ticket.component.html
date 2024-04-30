@@ -1,147 +1,148 @@
-<div class='ticket-container' *ngIf="ticket">
-  <!-- ID Block -->
-  <div class='header' id='ticket-id-block'>
-    <h1>Ticket {{ticket.id}}<span *ngIf="ticket.subId">-{{ticket.subId}}</span></h1>
-  </div>
-
-  <!-- Date Block -->
-  <div class='header' id='ticket-date-block'>
-    <p>In: {{ticket.dateIn | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
-    <p *ngIf="ticket.dateOut">Out: {{ticket.dateOut | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
-  </div>
-
-  <!-- Ticket Type Block -->
-  <div class='header' id='ticket-type-block'>
-    <h1>{{ticket.in? 'In': 'Out'}} Ticket</h1>
-  </div>
-
-  <!-- Company Block -->
-  <div class='block-row' id='company-block'>
-    <h4>{{(company | async)?.name}}</h4>
-    <img [src]='logoURL'>
-  </div>
-
-  <!-- Transport Block -->
-  <div class='block-row' id='transport-block'>
-    <b>Transport</b>
-    <div id='transport-grid'>
-      <span class='label'>Hauler ID</span>
-      <span class='label'>Vehicle ID</span>
-      <span class='label'>Plates</span>
-      <div class='info'></div>
-      <div class='info'>{{ticket.vehicleID}}</div>
-      <div class='info'>{{ticket.plates}}</div>
-      <div class='transport-info info'>
-        <div>{{ticket.transportName ?? transport?.name}}</div>
-        <div>{{ticket.transportStreetAddress ?? transport?.streetAddress}}</div>
-        <div>{{ticket.transportCity ?? transport?.city}} {{ticket.transportState ?? transport?.state}} {{ticket.transportZipCode ?? transport?.zipCode}}</div>
-        <div>{{ticket.transportCaat ?? transport?.caat}}</div>
+<ng-container *transloco="let t; read: 'tickets.printable'">
+  <div class='ticket-container' *ngIf="ticket">
+    <!-- ID Block -->
+    <div class='header' id='ticket-id-block'>
+      <h1>{{ t('Ticket') }} {{ticket.id}}<span *ngIf="ticket.subId">-{{ticket.subId}}</span></h1>
+    </div>
+  
+    <!-- Date Block -->
+    <div class='header' id='ticket-date-block'>
+      <p>{{ t('In') }}: {{ticket.dateIn | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
+      <p *ngIf="ticket.dateOut">{{ t('Out') }}: {{ticket.dateOut | date:'EEEE, MMMM d, YYYY h:mm:ss aaa'}}</p>
+    </div>
+  
+    <!-- Ticket Type Block -->
+    <div class='header' id='ticket-type-block'>
+      <h1>{{ticket.in? t('In Ticket'): t('Out Ticket')}}</h1>
+    </div>
+  
+    <!-- Company Block -->
+    <div class='block-row' id='company-block'>
+      <h4>{{(company | async)?.name}}</h4>
+      <img [src]='logoURL'>
+    </div>
+  
+    <!-- Transport Block -->
+    <div class='block-row' id='transport-block'>
+      <b>{{ t('Transport') }}</b>
+      <div id='transport-grid'>
+        <span class='label'>{{ t('Hauler ID') }}</span>
+        <span class='label'>{{ t('Vehicle ID') }}</span>
+        <span class='label'>{{ t('Plates') }}</span>
+        <div class='info'></div>
+        <div class='info'>{{ticket.vehicleID}}</div>
+        <div class='info'>{{ticket.plates}}</div>
+        <div class='transport-info info'>
+          <div>{{ticket.transportName ?? transport?.name}}</div>
+          <div>{{ticket.transportStreetAddress ?? transport?.streetAddress}}</div>
+          <div>{{ticket.transportCity ?? transport?.city}} {{ticket.transportState ?? transport?.state}} {{ticket.transportZipCode ?? transport?.zipCode}}</div>
+          <div>{{ticket.transportCaat ?? transport?.caat}}</div>
+        </div>
+        <span class='label' id='driver'>{{ t('Vehicle Driver') }}</span>
+        <span class='label'>{{ t('Tare WT') }}</span>
+        <div class='info' id='driver'>{{ticket.driver}}</div>
+        <div class='info'></div>
       </div>
-      <span class='label' id='driver'>Vehicle Driver</span>
-      <span class='label'>Tare WT</span>
-      <div class='info' id='driver'>{{ticket.driver}}</div>
-      <div class='info'></div>
+    </div>
+  
+    <!-- Customer Block -->
+    <div class='block-row' id='customer-block'>
+      <div class='block-header'>
+        <span><b>{{ t('Customer') }}</b></span>
+        <span>{{ t('ID') }}: </span>
+      </div>
+      <div id='customer-info'>
+        <div>{{ ticket.clientName ?? client?.name}}</div>
+        <div>{{ ticket.clientStreetAddress ?? client?.streetAddress}}</div>
+        <div>{{ ticket.clientCity ?? client?.city}} {{ ticket.clientState ?? client?.state}} {{ ticket.clientZipCode ?? client?.zipCode}}</div>
+      </div>
+    </div>
+    <!-- Ticket Info Block -->
+    <div id='ticket-body'>
+      <div id='ticket-body-grid'>
+        <!-- Moisture -->
+        <div class='label'>{{ t('Moisture') }}</div>
+        <div class='value'>{{ticket?.moisture | number:'0.1'}}</div>
+  
+        <!-- Contract# -->
+        <div class='label'>{{ t('Contract') }} #</div>
+        <div class='value'>{{ticket?.contractID}}</div>
+  
+        <!-- TestWeight -->
+        <div class='label'>{{ t('TestWeight') }}</div>
+        <div class='value'>{{ticket?.weight | number:'0.1'}}</div>
+  
+        <!-- Product -->
+        <div class='label'>{{ t('Product') }}</div>
+        <div class='value'>{{ticket?.productName}}</div>
+  
+        <!-- PPB -->
+        <div class='label'>{{ t('PPB') }}</div>
+        <div class='value'>{{ticket?.PPB}}</div>
+  
+        <!-- Lot -->
+        <div class='label'>{{ t('Lot') }}</div>
+        <div class='value'>{{ticket?.lot}}</div>
+  
+        <!-- Foreign Matter -->
+        <div class='label'>{{ t('Foreign Mat.') }}</div>
+        <div class='value'>{{null}}</div>
+  
+        <!-- Load # -->
+        <div class='label'>{{ t('Load') }} #</div>
+        <div class='value'>{{null}}</div>
+  
+        <!-- U.S. Grade -->
+        <div class='label'>{{ t('U.S. Grade') }}</div>
+        <div class='value'>{{ticket?.grade}}</div>
+  
+        <!-- Origin -->
+        <div class='label'>{{ t('Origin') }}</div>
+        <div class='value'>{{ticket?.origin}}</div>
+  
+        <!-- DryWeight -->
+        <div class='label'>{{ t('DryWeight') }}</div>
+        <div class='value'>{{ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount | number:'0.0-2'}}</div>
+  
+        <!-- Orig. Ticket # -->
+        <div class='label'>{{ t('Orig. Ticket')}} #</div>
+        <div class='value'>{{ticket?.original_ticket}}</div>
+  
+        <!-- Discount/100lbs -->
+        <div class='label'>{{ t('Discount') }}/100lbs</div>
+        <div class='value'>{{((ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount) / (ticket?.net | massInUnit:'lbs':ticket?.dryWeight.amount) * 1000) % 1 / 10 | number:'0.0-3'}}</div>
+  
+        <!-- Orig. Weight -->
+        <div class='label'>{{ t('Orig. Weight') }}</div>
+        <div class='value'>{{ticket?.original_weight | massInUnit:'lbs':ticket?.dryWeight.amount}}</div>
+  
+        <!-- DryWeight -->
+        <div class='label'>{{ t('DryWeight') }}</div>
+        <div class='value'>{{ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount}}</div>
+  
+        <!-- Tank -->
+        <div class='label'>{{ t('Tank') }}</div>
+        <div class='value'>{{ticket.tank}}</div>
+  
+        <div class='label weight' id='gross'>{{ t('Gross') }}</div>
+        <div class='value weight' id='gross'>{{ticket.gross | massInUnit:null:ticket.gross.amount}}</div>
+        <div class='label weight' id='tare'>{{ t('Tare') }}</div>
+        <div class='value weight' id='tare'>{{ticket.tare | massInUnit:null:ticket.tare.amount}}</div>
+        <div class='label weight' id='net'>{{ t('Net') }}</div>
+        <div class='value weight' id='net'>{{ticket.net | massInUnit:null:ticket.net.amount}}</div>
+        <div class='label weight' id='mtons'>{{ t('Metric Tons') }}</div>
+        <div class='value weight' id='mtons'>{{ticket.net | massInUnit:'mTon':ticket.net.amount | number:'1.3-3'}}</div>
+      </div>
+  
+      <p><b>{{ t('UNITED STATES WAREHOUSE ACT') }} <span *ngIf="t('UNITED STATES WAREHOUSE ACT') !== ' '">,</span> {{ t('GRAIN INSPECTION CERTIFICATE') }}</b></p>
+      <p>
+        {{ t("certificate-warning") }}
+      </p>
+  
+      <div id='signature-line'>
+        <span>{{ t('Driver Signature') }}:_____________________________________</span>
+        <span>{{ t('Scale Operator Signature') }}:_____________________________</span>
+      </div>
     </div>
   </div>
-
-  <!-- Customer Block -->
-  <div class='block-row' id='customer-block'>
-    <div class='block-header'>
-      <span><b>Customer</b></span>
-      <span>ID: </span>
-    </div>
-    <div id='customer-info'>
-      <div>{{ ticket.clientName ?? client?.name}}</div>
-      <div>{{ ticket.clientStreetAddress ?? client?.streetAddress}}</div>
-      <div>{{ ticket.clientCity ?? client?.city}} {{ ticket.clientState ?? client?.state}} {{ ticket.clientZipCode ?? client?.zipCode}}</div>
-    </div>
-  </div>
-  <!-- Ticket Info Block -->
-  <div id='ticket-body'>
-    <div id='ticket-body-grid'>
-      <!-- Moisture -->
-      <div class='label'>Moisture</div>
-      <div class='value'>{{ticket?.moisture | number:'0.1'}}</div>
-
-      <!-- Contract# -->
-      <div class='label'>Contract #</div>
-      <div class='value'>{{ticket?.contractID}}</div>
-
-      <!-- TestWeight -->
-      <div class='label'>TestWeight</div>
-      <div class='value'>{{ticket?.weight | number:'0.1'}}</div>
-
-      <!-- Product -->
-      <div class='label'>Product</div>
-      <div class='value'>{{ticket?.productName}}</div>
-
-      <!-- PPB -->
-      <div class='label'>PPB</div>
-      <div class='value'>{{ticket?.PPB}}</div>
-
-      <!-- Lot -->
-      <div class='label'>Lot</div>
-      <div class='value'>{{ticket?.lot}}</div>
-
-      <!-- Foreign Matter -->
-      <div class='label'>Foreign Mat.</div>
-      <div class='value'>{{null}}</div>
-
-      <!-- Load # -->
-      <div class='label'>Load #</div>
-      <div class='value'>{{null}}</div>
-
-      <!-- U.S. Grade -->
-      <div class='label'>U.S. Grade</div>
-      <div class='value'>{{ticket?.grade}}</div>
-
-      <!-- Origin -->
-      <div class='label'>Origin</div>
-      <div class='value'>{{ticket?.origin}}</div>
-
-      <!-- DryWeight -->
-      <div class='label'>DryWeight</div>
-      <div class='value'>{{ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount | number:'0.0-2'}}</div>
-
-      <!-- Orig. Ticket # -->
-      <div class='label'>Orig. Ticket #</div>
-      <div class='value'>{{ticket?.original_ticket}}</div>
-      
-      <!-- Discount/100lbs -->
-      <div class='label'>Discount/100lbs</div>
-      <div class='value'>{{((ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount) / (ticket?.net | massInUnit:'lbs':ticket?.dryWeight.amount) * 1000) % 1 / 10 | number:'0.0-3'}}</div>
-      
-      <!-- Orig. Weight -->
-      <div class='label'>Orig Weight</div>
-      <div class='value'>{{ticket?.original_weight | massInUnit:'lbs':ticket?.dryWeight.amount}}</div>
-      
-      <!-- DryWeight -->
-      <div class='label'>DryWeight</div>
-      <div class='value'>{{ticket?.dryWeight | massInUnit:'lbs':ticket?.dryWeight.amount}}</div>
-      
-      <!-- Tank -->
-      <div class='label'>Tank</div>
-      <div class='value'>{{ticket.tank}}</div>
-
-      <div class='label weight' id='gross'>Gross</div>
-      <div class='value weight' id='gross'>{{ticket.gross | massInUnit:null:ticket.gross.amount}}</div>
-      <div class='label weight' id='tare'>Tare</div>
-      <div class='value weight' id='tare'>{{ticket.tare | massInUnit:null:ticket.tare.amount}}</div>
-      <div class='label weight' id='net'>Net</div>
-      <div class='value weight' id='net'>{{ticket.net | massInUnit:null:ticket.net.amount}}</div>
-      <div class='label weight' id='mtons'>Metric Tons</div>
-      <div class='value weight' id='mtons'>{{ticket.net | massInUnit:'mTon':ticket.net.amount | number:'1.3-3'}}</div>
-    </div>
-
-    <p><b>UNITED STATES WAREHOUSE ACT, GRAIN INSPECTION CERTIFICATE</b></p>
-    <p>
-      THIS CERTIFICATE NOT VALID FOR PURPOSE OF THE UNITED STATES GRAIN STANDARDS ACT. THIS CERTIFICATE IS ISSUED BY AN INSPECTOR AND WEIGHER
-      LICENSED UNDER THE "UNITED STATES WAREHOUSE ACT" AND THE REGULATIONS THEREUNDER.
-    </p>
-
-    <div id='signature-line'>
-      <span>Driver Signature:_____________________________________</span>
-      <span>Scale Operator Signature:_____________________________</span>
-    </div>
-  </div>
-</div>
+</ng-container>

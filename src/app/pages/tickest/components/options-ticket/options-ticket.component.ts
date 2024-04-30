@@ -13,6 +13,7 @@ import { ChangeTicketContractComponent } from 'src/app/standalone/change-ticket-
 import { DiscountsDialogComponent } from '../discounts-dialog/discounts-dialog.component';
 import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
 import { serverTimestamp } from '@angular/fire/firestore';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-options-ticket',
@@ -35,6 +36,7 @@ export class OptionsTicketComponent implements OnInit {
     private navController: NavController,
     private alertController: AlertController,
     private session: SessionInfo,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit() {
@@ -87,23 +89,23 @@ export class OptionsTicketComponent implements OnInit {
 
   public async voidTicket(): Promise<void> {
     let alert = await this.alertController.create({
-      header: "Alert",
-      message: "Are you sure you want to void this ticket?",
+      header: this.transloco.translate("messages." + "Alert"),
+      message: this.transloco.translate("messages." + "Are you sure you want to void this ticket?"),
       inputs: [
         {
           name: 'voidReason',
           type: 'textarea',
-          placeholder: 'reason',
+          placeholder: this.transloco.translate("messages." + 'reason'),
           value: this.ticket.voidReason
         }
       ],
       buttons: [
         {
-          text: "Cancel",
+          text: this.transloco.translate("actions." + "Cancel"),
           role: 'cancel'
         },
         {
-          text:"Accept",
+          text: this.transloco.translate("actions." + "Accept"),
           handler: async (data) => {
             alert.dismiss();
 

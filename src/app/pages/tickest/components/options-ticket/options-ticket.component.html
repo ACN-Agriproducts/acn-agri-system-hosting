@@ -1,36 +1,36 @@
-<ion-list>
+<ion-list *transloco="let t; read: 'actions'">
   <!-- <ion-list-header>Ionic</ion-list-header> -->
   <ion-item button (click)="openDialog()">
-    Open
+    {{ t('Open') }}
     <ion-icon slot="end" name="open-outline"></ion-icon>
   </ion-item>
   <ion-item button (click)="openDialogAddPicture()">
-    Add picture
+    {{ t('Add Picture') }}
     <ion-icon slot="end" name="images-outline"></ion-icon>
   </ion-item>
   <ion-item button (click)="discounts()">
-    Discounts
+    {{ t('Discounts') }}
     <ion-icon slot="end" name="cash-outline"></ion-icon>
   </ion-item>
   <ion-item *ngIf="downloadString" href="{{downloadString}}" target="_blank">
-    Download
+    {{ t('Download') }}
     <ion-icon slot="end" name="download-outline"></ion-icon>
   </ion-item>
   <ion-item button (click)="fixStorageModal()" *ngIf="ticket.needsAttention && (userPermissions?.admin || userPermissions?.tickets.ticketStorageFix)">
-    Fix Inventory
+    {{ t('Fix Inventory') }}
     <ion-icon slot="end" name="create-outline"></ion-icon>
   </ion-item>
   <ion-item button (click)="splitTicket()" *ngIf="!ticket.void && (userPermissions?.admin || userPermissions?.splitTicket)">
-    Split Ticket
+    {{ t('Split Ticket') }}
     <ion-icon slot="end" name="duplicate-outline"></ion-icon>
   </ion-item>
   <ion-item button (click)="changeTicketContract()" *ngIf="!ticket.void && (userPermissions?.admin || userPermissions?.changeContract)">
-    Change Ticket Contract
+    {{ t('Change Ticket Contract') }}
     <ion-icon slot="end" name="documents-outline"></ion-icon>
   </ion-item>
   <ion-item button lines="none" color="danger" (click)="voidTicket()" 
     *ngIf="!ticket.void && userPermissions?.admin || userPermissions?.['tickets']?.voidTicketRequest">
-    Void
+    {{ t('Void') }}
     <ion-icon slot="end" name="close-outline"></ion-icon>
   </ion-item>
   
