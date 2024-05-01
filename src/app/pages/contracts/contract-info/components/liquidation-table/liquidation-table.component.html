@@ -24,7 +24,7 @@
         </div>
         <div class="cell">{{ liquidation.date | date }}</div>
         <div class="cell">
-          <div class="status-text" [class]="liquidation.status">{{ liquidation.status }}</div>
+          <div class="status-text" [class]="liquidation.status">{{ 'statuses.' + liquidation.status | transloco }}</div>
         </div>
         <div class="cell button">
           <button mat-icon-button 

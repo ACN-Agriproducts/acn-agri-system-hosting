@@ -1,35 +1,35 @@
-<ion-list>
+<ion-list *transloco="let t; read: 'actions'">
   <ion-item lines='none' button (click)='openContractEdit()'>
-    View
+    {{ t('View') }}
     <ion-icon slot='end' name="document-text-outline"></ion-icon>
   </ion-item>
   <ng-container *ngIf="contract.status == 'pending'">
     <ion-item lines="none" button (click)='acceptContract()'>
-      Accept
+      {{ t('Accept') }}
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
   </ng-container>
   <ng-container *ngIf="contract.status != 'closed' || contract.pdfReference != null">
     <ion-item lines="none" button (click)="signedContract()">
-      File
+      {{ t('File') }}
       <ion-icon slot='end' name="cloud-upload-outline"></ion-icon>
     </ion-item>
   </ng-container>
   <ng-container  *ngIf="contract.status == 'active'">
     <ion-item lines="none" button (click)='closeContract()'>
-      Close
+      {{ t('Close') }}
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
   </ng-container>
   <ng-container *ngIf="contract.status == 'closed' && userPermissions.admin">
     <ion-item lines="none" button (click)='reopen()'>
-      Reopen
+      {{ t('Reopen') }}
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>
     </ion-item>
   </ng-container>
   <ng-container *ngIf="userPermissions.admin">
     <ion-item lines="none" button (click)='fixFields()'>
-      Modify Price and Quantity
+      {{ t('Modify Price and Quantity') }}
       <ion-icon slot='end' name="create-outline"></ion-icon>
     </ion-item>
   </ng-container>

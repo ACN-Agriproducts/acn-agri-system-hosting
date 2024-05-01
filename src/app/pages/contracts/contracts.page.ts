@@ -76,7 +76,7 @@ export class ContractsPage implements AfterViewInit {
       });
 
       this.tabData.push({
-        label: this.transloco.translate("contracts.table.all"),
+        label: "all",
         type: this.table,
         isInfiniteScrollDisabled: false,
         data: [
@@ -87,7 +87,7 @@ export class ContractsPage implements AfterViewInit {
         ]
       },
       {
-        label: this.transloco.translate("contracts.table.analytics"),
+        label: "analytics",
         type: this.cards,
         isInfiniteScrollDisabled: false,
         data: Object.entries(settings.contractTypes).map(contract => {
@@ -223,7 +223,7 @@ export class ContractsPage implements AfterViewInit {
 
   public exportButton() {
     const workbook = new Excel.Workbook();
-    const worksheet = workbook.addWorksheet('Contracts');
+    const worksheet = workbook.addWorksheet(this.tableTranslate('Contracts'));
     const contractsTable = worksheet.addTable({
       name: 'contract_table',
       ref: 'A1',
@@ -233,16 +233,16 @@ export class ContractsPage implements AfterViewInit {
         showRowStripes: true,
       },
       columns: [
-        {name: "ID", filterButton: true},
-        {name: "Contract Type", filterButton: true},
-        {name: "Customer", filterButton: true},
-        {name: "Date", filterButton: true},
-        {name: "Status", filterButton: true},
-        {name: "Product", filterButton: true},
-        {name: `Delivered (${this.displayUnit})`, filterButton: true},
-        {name: `Quantity (${this.displayUnit})`, filterButton: true}, 
-        {name: `Price ($/bu)`, filterButton: true},
-        {name: `Price ($/${this.displayUnit})`, filterButton: true}
+        {name: this.tableTranslate("ID"), filterButton: true},
+        {name: this.tableTranslate("Contract Type"), filterButton: true},
+        {name: this.tableTranslate("Customer"), filterButton: true},
+        {name: this.tableTranslate("Date"), filterButton: true},
+        {name: this.tableTranslate("Status"), filterButton: true},
+        {name: this.tableTranslate("Product"), filterButton: true},
+        {name: `${this.tableTranslate("Delivered")} (${this.displayUnit})`, filterButton: true},
+        {name: `${this.tableTranslate("Quantity")} (${this.displayUnit})`, filterButton: true},
+        {name: `${this.tableTranslate("Price")} ($/bu)`, filterButton: true},
+        {name: `${this.tableTranslate("Price")} ($/${this.displayUnit})`, filterButton: true}
       ],
       rows:[]
     });
@@ -250,10 +250,10 @@ export class ContractsPage implements AfterViewInit {
     [...this.exportList].forEach(contract => {
       contractsTable.addRow([
         contract.id,
-        contract.type,
+        this.tableTranslate(contract.type),
         contract.clientName,
         contract.date,
-        contract.status.toString(),
+        this.tableTranslate(contract.status.toString()),
         contract.product.id,
         contract.currentDelivered.getMassInUnit(this.displayUnit),
         contract.quantity.getMassInUnit(this.displayUnit),
@@ -340,5 +340,9 @@ export class ContractsPage implements AfterViewInit {
     return `$${price.getPricePerUnit('lbs', contract.quantity)?.toFixed(3) ?? "-"} lbs
     $${price.getPricePerUnit('bu', contract.quantity)?.toFixed(3) ?? "-"} bu
     $${price.getPricePerUnit('mTon', contract.quantity)?.toFixed(3) ?? "-"} mTon`;
+  }
+
+  public tableTranslate(key: string): string {
+    return this.transloco.translate("contracts.table." + key);
   }
 }

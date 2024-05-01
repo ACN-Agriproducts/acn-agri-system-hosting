@@ -10,6 +10,7 @@ import { SetDiscountTableDialogComponent } from './components/set-discount-table
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { lastValueFrom } from 'rxjs';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-product',
@@ -30,6 +31,7 @@ export class ProductPage implements OnInit {
     private dialog: MatDialog,
     private confirmation: ConfirmationDialogService,
     private snack: SnackbarService,
+    private transloco: TranslocoService
   ) { 
     this.product = route.snapshot.paramMap.get('product');
   }
@@ -49,7 +51,7 @@ export class ProductPage implements OnInit {
   async setTable(table?: DiscountTable) {
     const dialogRef = this.dialog.open(SetDiscountTableDialogComponent, {
       data: table,
-      disableClose: true
+      autoFocus: false
     });
 
     const result = await lastValueFrom(dialogRef.afterClosed());
@@ -64,18 +66,23 @@ export class ProductPage implements OnInit {
     }
 
     await this.saveTables();
-    this.snack.open(`Table ${table ? "Updated" : "Created"}`, "success");
+    this.snack.openTranslated(`Table ${table ? "updated" : "created"}`, "success");
   }
 
   async deleteTable(table: DiscountTable) {
     let tableIndex = this.discountTables.tables.indexOf(table);
-    const confirm = this.confirmation.openDialog(`delete the "${this.discountTables.tables[tableIndex].name}" table`);
+    const confirm = this.confirmation.openWithTranslatedAction("delete this table");
 
     if (await confirm) {
       this.discountTables.tables.splice(tableIndex, 1);
       await this.saveTables();
-      this.snack.open(`Table Deleted`);
+      this.snack.openTranslated("Table deleted");
     }
+  }
+
+  async saveTable() {
+    await this.saveTables();
+    this.snack.openTranslated("Changes saved", 'success');
   }
 
   async saveTables() {
@@ -89,7 +96,6 @@ export class ProductPage implements OnInit {
     this.discountTables.date = new Date();
     await this.discountTables.set();
 
-    this.snack.open(`Changes Saved`, 'success');
     this.saving = false;
   }
 

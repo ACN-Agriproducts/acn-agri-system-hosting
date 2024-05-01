@@ -47,7 +47,8 @@ export class SetContractModalComponent implements OnInit {
       this.dialogRef.close(this.data);
     })
     .catch(error => {
-      this.snack.open(error, 'error');
+      console.error(error);
+      this.snack.openTranslated("Error while uploading contract.", 'error');
     });
   }
 

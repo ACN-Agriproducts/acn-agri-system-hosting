@@ -1,17 +1,19 @@
-<h1 mat-dialog-title>Edit Inventory</h1>
-<mat-dialog-content>
-  <mat-form-field *ngIf="data.currentProduct == 'none'">
-    <mat-label>Product</mat-label>
-    <mat-select [(ngModel)]="response.newProduct">
-      <mat-option *ngFor="let product of data.productList" [value]="product.ref.id">{{product.ref.id}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Change quantity</mat-label>
-    <input matInput type="number" [(ngModel)]="response.quantity">
-  </mat-form-field>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="response" [disabled]="!response.newProduct && data.currentProduct == 'none'">Submit</button>
+<ng-container *transloco="let t; read: 'inventory.storage'">
+  <h1 mat-dialog-title>{{ t('Edit Inventory') }}</h1>
+  <mat-dialog-content>
+    <mat-form-field *ngIf="data.currentProduct == 'none'">
+      <mat-label>{{ t('Product') }}</mat-label>
+      <mat-select [(ngModel)]="response.newProduct">
+        <mat-option *ngFor="let product of data.productList" [value]="product.ref.id">{{product.ref.id}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{ t('Change quantity') }}</mat-label>
+      <input matInput type="number" [(ngModel)]="response.quantity">
+    </mat-form-field>
+  </mat-dialog-content>
+</ng-container>
+<mat-dialog-actions *transloco="let t; read: 'actions'">
+  <button mat-button mat-dialog-close>{{ t('Cancel') }}</button>
+  <button mat-button [mat-dialog-close]="response" [disabled]="!response.newProduct && data.currentProduct == 'none'">{{ t('Submit') }}</button>
 </mat-dialog-actions>

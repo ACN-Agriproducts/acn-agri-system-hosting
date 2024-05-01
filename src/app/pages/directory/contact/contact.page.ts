@@ -81,7 +81,8 @@ export class ContactPage implements OnInit {
 			this.docsType = this.getDocsType();
 		})
 		.catch(error => {
-			this.snack.open(error, 'error');
+			console.error(error);
+			this.snack.openTranslated("Could not load the contact.", 'error');
 		});
 	}
 
@@ -195,10 +196,11 @@ export class ContactPage implements OnInit {
 			this.contact.tags = data.tags;
 			this.contact.zipCode = data.zipCode;
 
-			this.snack.open("Contact successfully updated", "success");
+			this.snack.openTranslated("Contact updated", "success");
 		})
 		.catch(error => {
-			this.snack.open(error, "error");
+			console.error(error);
+			this.snack.openTranslated("Could not update the contact.", "error");
 		});
 	}
 

@@ -1,9 +1,9 @@
-<app-header-toolbar titulo="Edit Contact"></app-header-toolbar>
+<app-header-toolbar [titulo]="'directory.Edit Contact' | transloco"></app-header-toolbar>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" *transloco="let t; read: 'directory'">
   <ion-card>
     <ion-card-content class="content-form">
-      <h2><span>Edit Contact</span></h2>
+      <h2><span>{{ t('Edit Contact') }}</span></h2>
       <form [formGroup]="contactForm" (ngSubmit)="submitButton()">  
         <ion-list>
           <ion-item>
@@ -31,13 +31,13 @@
           </ion-item>
 
           <ion-item>
-            <ion-label>Customer Type</ion-label>
+            <ion-label>{{ t('Customer Type') }}</ion-label>
             <ion-select placeholder="Select One" formControlName="type" interface="popover">
-              <ion-select-option value="Client">Client</ion-select-option>
-              <ion-select-option value="Trucker">Trucker</ion-select-option>
+              <ion-select-option value="Client">{{ t('Client') }}</ion-select-option>
+              <ion-select-option value="Trucker">{{ t('Trucker') }}</ion-select-option>
             </ion-select>
           </ion-item>
-          <ion-button color="success" type="submit" [disabled]="contactForm.invalid">Submit</ion-button>
+          <ion-button color="success" type="submit" [disabled]="contactForm.invalid">{{ 'actions.Submit' | transloco }}</ion-button>
         </ion-list>
       </form>
     </ion-card-content>

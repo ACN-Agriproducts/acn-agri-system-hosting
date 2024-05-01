@@ -6,7 +6,7 @@
             <div>
                 <app-plant-select (plantChangeEvent)="getLogs()"></app-plant-select>
                 <mat-form-field>
-                    <mat-label>Choose week</mat-label>
+                    <mat-label>{{ 'inventory.storage.Choose week' | transloco}}</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
                         <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
                         <input matEndDate placeholder="End date" [(ngModel)]="endDate">
