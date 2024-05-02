@@ -3,6 +3,7 @@
         "administrator": "administrator",
         "dashboard": "dashboard",
         "tickets": "tickets",
+        "ticket console": "ticket console",
         "inventory": "inventory",
         "production orders": "production orders",
         "warehouse receipts": "warehouse receipts",
