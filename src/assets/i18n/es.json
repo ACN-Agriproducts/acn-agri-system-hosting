@@ -3,6 +3,7 @@
         "administrator": "administrador",
         "dashboard": "dashboard",
         "tickets": "boletas",
+        "ticket console": "Consola de Boletas",
         "inventory": "inventario",
         "production orders": "ordenes de produccion",
         "warehouse receipts": "recibos de almacén",

@@ -32,6 +32,12 @@ export class LayoutComponent implements OnInit {
       permissionName: 'tickets'
     },
     {
+      title: 'ticket console',
+      url: '/dashboard/ticket-console',
+      icon: 'create',
+      permission: p => p.isScale || p.admin,
+    },
+    {
       title: 'inventory',
       url: '/dashboard/inventory',
       icon: 'podium',
