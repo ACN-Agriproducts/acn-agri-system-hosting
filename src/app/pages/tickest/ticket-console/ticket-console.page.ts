@@ -100,7 +100,7 @@ export class TicketConsolePage implements OnInit, OnDestroy {
     const ticket = this.tickets?.[this.ticketIndex];
     if(!ticket) return false;
 
-    return !!ticket.contractRef && !!ticket.driver && !!ticket.gross.amount && !!ticket.tare.amount && !!ticket.moisture && !!ticket.weight && !!ticket.tank;
+    return ticket.contractRef != null && ticket.gross.amount != null && ticket.tare.amount != null && ticket.tank != null;
   }
 
   async print() {
