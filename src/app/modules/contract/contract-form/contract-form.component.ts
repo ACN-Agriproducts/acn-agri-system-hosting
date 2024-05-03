@@ -265,6 +265,7 @@ export class ContractFormComponent implements OnInit {
     await this.saveClientInfo();
 
     if(this.useSameClientForTicket) this.contract.clientTicketInfo = this.contract.clientInfo;
+    if(this.contract.tags.includes('open-price')) this.contract.isOpen = true;
 
     this.contract.set().then(() => {
       this.snack.openTranslated('Contract submitted', 'success');
