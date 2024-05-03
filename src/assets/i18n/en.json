@@ -335,7 +335,10 @@
             "Tank": "Tank",
             "New Ticket": "New Ticket",
             "In": "In",
-            "Out": "Out"
+            "Out": "Out",
+            "impurities": "Impurities",
+            "brokenGrain": "Broken Grain",
+            "price": "Price"
         },
         "table": {
             "Type": "Type",

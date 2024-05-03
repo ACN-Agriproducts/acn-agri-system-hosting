@@ -336,7 +336,10 @@
             "Tank": "Tanque",
             "New Ticket": "Nueva Boleta",
             "In": "Entrada",
-            "Out": "Salida"
+            "Out": "Salida",
+            "impurities": "Impurezas",
+            "brokenGrain": "Grano Quebrado",
+            "price": "Precio"
         },
         "table": {
             "Type": "Tipo",

@@ -45,6 +45,7 @@ export class Ticket extends FirebaseDocInterface{
     public plague: string;
     public plates: string;
     public PPB: number;
+    public price: number;
     public priceDiscounts: PriceDiscounts;
     public productName: string;
     public status: TicketStatus;
@@ -136,6 +137,7 @@ export class Ticket extends FirebaseDocInterface{
         this.plague = data.plague;
         this.plates = data.plates;
         this.PPB = data.PPB;
+        this.price = data.price;
         this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
         this.status = data.status ?? "closed";
@@ -207,6 +209,7 @@ export class Ticket extends FirebaseDocInterface{
                 plague: data.plague ?? null,
                 plates: data.plates ?? null,
                 PPB: data.PPB ?? null,
+                price: data.price ?? null, 
                 //priceDiscounts: data.priceDiscounts ?? null,
                 productName: data.productName ?? null,
                 status: data.status ?? null,
