@@ -179,6 +179,6 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.paginator.end();
+      this.paginator?.end();
   }
 }
