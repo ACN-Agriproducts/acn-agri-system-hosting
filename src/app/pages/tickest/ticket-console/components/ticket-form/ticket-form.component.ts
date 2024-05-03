@@ -87,13 +87,14 @@ export class TicketFormComponent implements OnInit {
   }
 
   calcNetWeight() {
+    this.calcDiscount();
     if(this.ticket.gross.amount == null || this.ticket.tare.amount == null) return;
     
     this.ticket.net.amount = this.ticket.gross.amount - this.ticket.tare.amount;
-    this.calcDiscount();
   }
 
   calcDiscount() {
+    this.saveTicket();
     if(this.ticket.gross.amount == null || this.ticket.tare.amount == null || !this.contractId) return;
 
     this.ticket.getWeightDiscounts(this.discountTables[this.ticket.productName]);
@@ -104,7 +105,6 @@ export class TicketFormComponent implements OnInit {
     }
 
     this.ticket.dryWeight = newDryWeight;
-    this.saveTicket();
   }
 
   async tankChange() {

@@ -125,13 +125,29 @@
       </mat-card-header>
   
       <mat-card-content>
+        <mat-form-field appearance="fill" *ngIf="currentContract?.tags.includes('open-price')">
+          <mat-label>{{t('price')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.price" (ngModelChange)="saveTicket()">
+          <span matPrefix>$</span>
+        </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Moisture')}}</mat-label>
           <input matInput type="number" [(ngModel)]="ticket.moisture" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Weight')}}</mat-label>
           <input matInput type="number" [(ngModel)]="ticket.weight" (ngModelChange)="calcDiscount()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('impurities')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.impurities" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('brokenGrain')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.brokenGrain" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Plague')}}</mat-label>
