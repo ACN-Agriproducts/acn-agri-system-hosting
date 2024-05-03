@@ -6,3 +6,8 @@ table {
   display: grid;
   grid-template-columns: auto auto 1fr repeat(3, 100px);
 }
+
+.table-price-row {
+  display: grid;
+  grid-template-columns: auto auto 1fr repeat(4, 100px);;
+}

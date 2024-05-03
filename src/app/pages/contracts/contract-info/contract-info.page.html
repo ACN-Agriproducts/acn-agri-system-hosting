@@ -18,7 +18,7 @@
             <mat-card-subtitle>{{t("ticket list")}}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <app-tickets-table #ticketTable [ticketList]="ticketList"></app-tickets-table>
+            <app-tickets-table #ticketTable [ticketList]="ticketList" [contract]="currentContract"></app-tickets-table>
           </mat-card-content>
         </mat-card>
         <mat-card id="trucker-list">

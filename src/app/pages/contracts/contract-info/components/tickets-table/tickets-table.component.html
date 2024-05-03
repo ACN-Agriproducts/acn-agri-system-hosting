@@ -1,16 +1,18 @@
-<div class='table-row' *transloco="let t, read: 'contracts.info'">
+<div *transloco="let t, read: 'contracts.info'" [ngClass]="contract.tags.includes('open-purchase') ? 'table-price-row' : 'table-row'">
   <ion-item lines='none'><b>{{t('ID')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Date')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Status')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Gross')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Tare')}}</b></ion-item>
   <ion-item lines='none'><b>{{t('Net')}}</b></ion-item>
+  <ion-item lines='none' *ngIf="contract.tags.includes('open-purchase')"><b>{{t('Price')}}</b></ion-item>
 </div>
-<div *ngFor="let ticket of ticketList" class='table-row'>
+<div *ngFor="let ticket of ticketList" [ngClass]="contract.tags.includes('open-purchase') ? 'table-price-row' : 'table-row'">
   <ion-item lines='none'><b>{{ticket.displayId}}</b></ion-item>
   <ion-item lines='none'>{{ticket.dateOut | date}}</ion-item>
   <ion-item lines='none'>{{ ticket.status | titlecase }}</ion-item>
-  <ion-item lines='none'>{{ticket.gross.get() | number}}</ion-item>
-  <ion-item lines='none'>{{ticket.tare.get() | number}}</ion-item>
-  <ion-item lines='none'>{{ticket.getNet().get() | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.gross.amount | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.tare.amount | number}}</ion-item>
+  <ion-item lines='none'>{{ticket.net.amount | number}}</ion-item>
+  <ion-item lines='none' *ngIf="contract.tags.includes('open-purchase')">{{ticket.price | currency}}</ion-item>
 </div>
