@@ -1,21 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { TranslocoService } from '@ngneat/transloco';
-import { Contract } from '@shared/classes/contract';
-import { DEFAULT_DISPLAY_UNITS, LiquidationTotals, ReportTicket, TicketInfo } from '@shared/classes/liquidation';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 import { PrintableDialogComponent } from '@shared/components/printable-dialog/printable-dialog.component';
+import { LiquidationPrintableData } from '../printable-liquidation.component';
 
 import * as Excel from 'exceljs';
-
-export interface LiquidationPrintableData {
-  selectedTickets: TicketInfo[];
-  contract: Contract;
-  totals: LiquidationTotals;
-  displayUnits?: Map<string, units>;
-  canceled: boolean;
-}
+import { ContractSettings } from '@shared/classes/contract-settings';
 
 @Component({
   selector: 'app-liquidation-dialog',
@@ -23,23 +16,30 @@ export interface LiquidationPrintableData {
   styleUrls: ['./liquidation-dialog.component.scss'],
 })
 export class LiquidationDialogComponent implements OnInit {
-
-  public printableFormats = {
-    "Liquidation Long": "liquidation-long",
-  };
-  public selectedFormat: string = this.printableFormats["Liquidation Long"];
-
   readonly units = UNIT_LIST;
+  
+  public selectedFormat: string;
+  public liquidationTypes: { [name: string]: string };
 
   constructor(
     public dialogRef: MatDialogRef<PrintableDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: LiquidationPrintableData,
     private transloco: TranslocoService,
-    private snack: SnackbarService,
+    private session: SessionInfo,
+    private db: Firestore
   ) {}
 
   ngOnInit() {
-    this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
+    ContractSettings.getDocument(this.db, this.session.getCompany()).then(settings => {
+      this.liquidationTypes = settings.liquidationTypes;
+      
+      if (this.data.contract.type === "sales" || this.data.contract.tags.includes("sale")) {
+        this.selectedFormat = this.liquidationTypes['sales liquidation'];
+      }
+      else if (this.data.contract.type === "purchase" || this.data.contract.tags.includes("purchase")) {
+        this.selectedFormat = this.liquidationTypes['liquidation long'];
+      }
+    });
   }
 
   public async onDownloadLiquidation(): Promise<void> {

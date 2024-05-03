@@ -1,2 +1,99 @@
+<ng-container *transloco="let t; read: 'contracts.info'">
+    <div class="title">
+        <h1>{{(companyDoc$ | async)?.name}}</h1>
+        <span>{{(companyDoc$ | async)?.address}}</span>
+    </div>
+    
+    
+    <div class="client-info">
+        <img id='company-logo' [src]="logoUrl">
+        <div id="contract-details">
+            <div id='farmer-name'>{{ t("Client Name") | uppercase }}: {{ contract.clientName }}</div>
+            <div id='contract-id'>{{ t("Contract") }} {{ contract.id }}</div>
+            <div id='date'>{{ t("Date") | uppercase }}: {{ date | date:'fullDate'}}</div>
+        </div>
+    </div>
+    
+    <table id="liquidation-table">
+        <colgroup>
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+            <col [lang]="language">
+        </colgroup>
+        <tr>
+            <th rowspan="2">{{ t('Date') }}</th>
+            <th rowspan="2">{{ t('Ticket') }} #</th>
+            <th rowspan="2">{{ t('Contract') }}</th>
+            <th rowspan="1" colspan="3">
+                {{ t('Weight') }}
+                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'weight' }"></ng-container>
+            </th>
+            <th rowspan="2">{{ t('Moisture') }}</th>
+            <th rowspan="2">
+                {{ t('Destination Net') }} ({{ t('Client Weight') }})
+                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'original_weight' }"></ng-container>
+            </th>
+            <th rowspan="2">
+                {{ t('Price') }}
+                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'price', isPrice: true }"></ng-container>
+            </th>
+            <th rowspan="2">{{ t('Net to Pay') }} ($)</th>
+        </tr>
+        <tr>
+            <th>{{ t('Gross') }}</th>
+            <th>{{ t('Tare') }}</th>
+            <th>{{ t('Net') }}</th>
+        </tr>
+        <tr class="body" *ngFor="let ticket of data.selectedTickets">
+            <td class="text-center">{{ ticket.dateOut | date }}</td>
+            <td class="text-center">{{ ticket.displayId }}</td>
+            <td class="text-center"></td>
+            <td class="text-right">{{ ticket.gross | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
+            <td class="text-right">{{ ticket.tare | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
+            <td class="text-right">{{ ticket.net | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
+            <td class="text-right">{{ ticket.moisture | number:'1.1' }}</td>
+            <td class="text-right">{{ ticket.original_weight | massInUnit:data.displayUnits.get('original_weight') | number:'1.0-3' }}</td>
+            <td class="text-right">{{ contract.price | pricePerUnit:data.displayUnits.get('price'):contract.quantity | currency:'USD':'$':'1.4' }}</td>
+            <td class="text-right">{{ (ticket.original_weight | massInUnit:'bu') * (contract.price | pricePerUnit:'bu':contract.quantity) | currency:'USD':'$':'1.3' }}</td>
+        </tr>
+        <tr class="totals">
+            <td class="text-center">{{ t("Totals") | uppercase }}</td>
+            <td></td>
+            <td></td>
+            <td>Total Gross</td>
+            <td>Tare</td>
+            <td>Net</td>
+            <td></td>
+            <td>Original Weight</td>
+            <td></td>
+            <td>Net to Pay</td>
+        </tr>
+    </table>
+</ng-container>
 
-
+<ng-template #headerUnits let-fieldname let-isPrice="isPrice">
+    <div class="header-units">
+        <span class="unit-label"> ( {{ isPrice ? "$/" : "" }}{{ data.displayUnits.get(fieldname) | uppercase }} )</span>
+        <span class="unit-select">
+            ( 
+                <mat-form-field [style.max-width.%]="25">
+                <mat-select
+                    [value]="data.displayUnits.get(fieldname)"
+                    (valueChange)="data.displayUnits.set(fieldname, $event)"
+                >
+                    <mat-option *ngFor="let unit of units" [value]="unit">
+                        {{ (isPrice ? ("$/" + unit) : unit) | uppercase }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+             )
+        </span>
+    </div>
+</ng-template>

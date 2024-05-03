@@ -3,7 +3,7 @@
     box-sizing: border-box;
 }
 
-:host > .watermark:before {
+:host > .canceled-watermark:before {
     content: "CANCELED";
     font-size: 100px;
     color: gray;

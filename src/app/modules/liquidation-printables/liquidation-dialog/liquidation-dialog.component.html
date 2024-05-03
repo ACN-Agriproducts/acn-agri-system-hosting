@@ -13,9 +13,9 @@
     <button mat-stroked-button [matMenuTriggerFor]="formatMenu">{{ t('format') | titlecase }}</button>
     <mat-menu #formatMenu>
       <button mat-menu-item 
-        *ngFor="let format of printableFormats | keyvalue" 
+        *ngFor="let format of liquidationTypes | keyvalue" 
         (click)="selectedFormat=format.value"
-      >{{ format.key }}</button>
+      >{{ format.key | titlecase }}</button>
     </mat-menu>
   </ng-container>
   <app-printable-liquidation id="printable"

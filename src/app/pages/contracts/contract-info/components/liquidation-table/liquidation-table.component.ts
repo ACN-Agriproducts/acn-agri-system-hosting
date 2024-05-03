@@ -64,7 +64,7 @@ export class LiquidationTableComponent implements OnInit {
         selectedTickets: liquidation.tickets,
         contract: this.contract,
         totals: new LiquidationTotals(liquidation.tickets, this.contract),
-        canceled: liquidation.status === 'cancelled'
+        canceled: liquidation.status === 'cancelled' || liquidation.status === 'canceled'
       },
       panelClass: "borderless-dialog",
       minWidth: "80%",

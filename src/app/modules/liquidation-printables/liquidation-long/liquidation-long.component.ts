@@ -1,15 +1,21 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Contract, ProductInfo } from '@shared/classes/contract';
-import { DEFAULT_DISPLAY_UNITS, LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
+import { ProductInfo } from '@shared/classes/contract';
 import { Mass, UNIT_LIST, units } from '@shared/classes/mass';
-import { Price } from '@shared/classes/price';
 import { PriceDiscounts, WeightDiscounts } from '@shared/classes/ticket';
-import { LiquidationPrintableData } from '../liquidation-dialog/liquidation-dialog.component';
 import { Product } from '@shared/classes/product';
 import { Firestore } from '@angular/fire/firestore';
 import { Company } from '@shared/classes/company';
+import { LiquidationPrintableData } from '../printable-liquidation.component';
 
+const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
+  ["weight", "lbs"],
+  ["moisture", "CWT"],
+  ["dryWeight", "CWT"],
+  ["damagedGrain", "CWT"],
+  ["adjustedWeight", "lbs"],
+  ["price", "bu"],
+]);
 
 @Component({
   selector: 'app-liquidation-long',
@@ -33,7 +39,9 @@ export class LiquidationLongComponent implements OnInit {
 
   ngOnInit() {
     this.language = this.session.getLanguage();
-    this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
+
+    this.data.displayUnits = new Map<string, units>(DEFAULT_DISPLAY_UNITS);
+    
     this.companyDoc$ = this.session.getCompanyObject();
     this.companyDoc$.then(async doc => {
       this.logoURL = await doc.getLogoURL(this.db);

@@ -1,17 +1,17 @@
 
 <ng-container *transloco="let t, read: 'contracts.info'">
-    <div id='title'>
+    <div class="title">
         <h1>{{(companyDoc$ | async)?.name}}</h1>
-        <span id='address'>{{(companyDoc$ | async)?.address}}</span>
+        <span>{{(companyDoc$ | async)?.address}}</span>
     </div>
     
     
     <div class="client-info">
         <img id='company-logo' [src]='logoURL'>
-        <div id="data.contract-details">
-            <div id='farmer-name'>CLIENT NAME: {{ data.contract.clientName }}</div>
-            <div id='data.contract-id'>Contract {{ data.contract.id }}</div>
-            <div id='date'>DATE: {{ date | date:'fullDate'}}</div>
+        <div id="contract-details">
+            <div id='farmer-name'>{{ t('Client Name') | uppercase}}: {{ data.contract.clientName }}</div>
+            <div id='contract-id'>{{ t('Contract') }} {{ data.contract.id }}</div>
+            <div id='date'>{{ t('Date') }}: {{ date | date:'fullDate'}}</div>
         </div>
     </div>
     
@@ -132,7 +132,7 @@
             </td> <!-- NET TO PAY -->
         </tr>
         <tr>
-            <td class='total-row center'>TOTALS:</td>
+            <td class='total-row center'>{{ t('Totals') | uppercase}}:</td>
             <td class='total-row right'></td>
             <td class='total-row right'>{{ data.totals.gross | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ data.totals.tare | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>

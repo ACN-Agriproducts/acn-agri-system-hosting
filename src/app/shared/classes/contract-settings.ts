@@ -32,7 +32,7 @@ export class ContractSettings extends FirebaseDocInterface {
     }
 
     liquidationTypes: {
-        [name: string]: string
+        [typeName: string]: string;
     }
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
@@ -61,6 +61,7 @@ export class ContractSettings extends FirebaseDocInterface {
         this.contractTags = data.contractTags;
         this.contractIdFormat = data.contractIdFormat;
         this.contractTypeCodes = data.contractTypeCodes;
+        this.liquidationTypes = data.liquidationTypes;
     }
 
     public static converter = {
@@ -75,6 +76,7 @@ export class ContractSettings extends FirebaseDocInterface {
                 contractTags: data.contractTags,
                 contractIdFormat: data.contractIdFormat,
                 contractTypeCodes: data.contractTypeCodes,
+                liquidationTypes: data.liquidationTypes
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): ContractSettings {

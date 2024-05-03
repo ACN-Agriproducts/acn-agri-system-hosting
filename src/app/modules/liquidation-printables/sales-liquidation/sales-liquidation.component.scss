@@ -1,0 +1,120 @@
+
+$lightlightgray: rgb(230, 230, 230);
+
+* {
+    box-sizing: border-box;
+}
+
+:host {
+    background-color: white;
+    display: block;
+    margin: 1em;
+    // padding: 1em;
+}
+
+.title {
+    text-align: center;
+    h1 {
+        line-height: 0.8em;
+    }
+}
+
+#company-logo {
+    max-width: 20%;
+}
+
+.client-info {
+    margin-top: 2em;
+    margin-bottom: 1em;
+    display: flex;
+    justify-content: space-evenly;
+    
+    #contract-details {
+        display: inline-block;
+
+        // #farmer-name {
+        //     background-color: lightgreen;
+        // }
+        // #contract-name {
+        //     background-color: lightgreen;
+        // }
+        // #date {
+        //     background-color: yellow;
+        // }
+    }
+}
+
+#liquidation-table {
+    font-size: xx-small;
+    line-height: 1.5em;
+    table-layout: fixed;
+    width: 100%;
+
+    th, td {
+        border: black solid 1px;
+        padding: 0px 2px;
+        hyphens: auto;
+    }
+
+    th {
+        text-transform: uppercase;
+    }
+
+    .totals {
+        font-weight: bold;
+        td {
+            border: none;
+            &:not(.text-center) {
+                text-align: right;
+            }
+        }
+    }
+
+    .body:nth-child(even) {
+        background-color: $lightlightgray;
+    }
+
+    td {
+        &.text-center {
+            text-align: center;
+        }
+        &.text-right {
+            text-align: right;
+        }
+    }
+}
+
+@media print {
+    * {
+        print-color-adjust: exact;
+    }
+
+    .unit-select {
+        display: none;
+    }
+    .unit-label {
+        display: block !important;
+    }
+}
+
+.unit-select {
+    min-width: 170px;
+    // max-width: 50px;
+    .mat-form-field {
+        font-weight: bold;
+    }
+    .mat-input-underline {
+        display: none !important;
+    }
+}
+
+.header-units {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.unit-label {
+    display: none;
+}

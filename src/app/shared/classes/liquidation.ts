@@ -2,7 +2,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { PriceDiscounts, Ticket, WeightDiscounts } from "./ticket";
 import { Contract } from "./contract";
 import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, Timestamp } from "@angular/fire/firestore";
-import { Mass, units } from "./mass";
+import { Mass } from "./mass";
 import { Status } from "./company";
 import { Price } from "./price";
 
@@ -10,15 +10,6 @@ export type ReportTicket = {
     data: TicketInfo,
     inReport: boolean
 }
-
-export const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
-    ["weight", "lbs"],
-    ["moisture", "CWT"],
-    ["dryWeight", "CWT"],
-    ["damagedGrain", "CWT"],
-    ["adjustedWeight", "lbs"],
-    ["price", "bu"],
-]);
 
 export class Liquidation extends FirebaseDocInterface {
     public date: Date;

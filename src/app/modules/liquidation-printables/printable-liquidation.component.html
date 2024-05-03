@@ -2,9 +2,13 @@
 <ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
 
 <ng-template typeTemplate="liquidation-long">
-  <app-liquidation-long class="landscape" [class.watermark]="data.canceled" [data]="data"></app-liquidation-long>
+  <app-liquidation-long class="landscape" [class.canceled-watermark]="data.canceled" [data]="data"></app-liquidation-long>
+</ng-template>
+
+<ng-template typeTemplate="sales-liquidation">
+  <app-sales-liquidation class="landscape" [class.canceled-watermark]="data.canceled" [data]="data"></app-sales-liquidation>
 </ng-template>
 
 <ng-template #none>
-  <i>No Content to Display</i>
+  <i>{{ "messages." + "No Content to Display" | transloco }}</i>
 </ng-template>
