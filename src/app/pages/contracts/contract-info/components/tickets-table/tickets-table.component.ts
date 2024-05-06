@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import { Storage } from '@ionic/storage';
 import { Contract } from '@shared/classes/contract';
 import { Ticket } from '@shared/classes/ticket';
