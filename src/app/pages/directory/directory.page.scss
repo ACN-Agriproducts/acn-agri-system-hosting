@@ -60,3 +60,11 @@ ion-item{
 .margin-inline{
     margin-inline: 10px;
 }
+
+ion-card{ 
+    height: 1200px;
+}
+
+cdk-virtual-scroll-viewport {
+    height: 100%;
+}
