@@ -581,7 +581,12 @@
             "New header": "New header",
             "low": "low",
             "high": "high",
-            "discount": "discount"
+            "discount": "discount",
+            "weight-discount": "weight discount",
+            "price-discount": "price discount",
+            "Unmark Discount": "Unmark Discount",
+            "Mark as Weight Discount": "Mark as Weight Discount",
+            "Mark as Price Discount": "Mark as Price Discount"
         }
     },
     "messages": {

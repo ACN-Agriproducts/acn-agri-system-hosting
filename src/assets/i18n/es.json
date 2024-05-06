@@ -581,7 +581,12 @@
             "New header": "Nuevo encabezado",
             "low": "bajo",
             "high": "alto",
-            "discount": "descuento"
+            "discount": "descuento",
+            "weight-discount": "descuento de peso",
+            "price-discount": "descuento de precio",
+            "Unmark Discount": "Desmarcar Descuento",
+            "Mark as Weight Discount": "Marcar como Descunto de Peso",
+            "Mark as Price Discount": "Marcar como Descuento de Precio"
         }
     },
     "messages": {

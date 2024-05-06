@@ -28,7 +28,7 @@
         <li class="row" *transloco="let t; read: 'inventory.product'">
           <div class="cell options" *ngIf="editing"></div>
           <div class="cell" *ngFor="let header of table.headers">
-            {{ (header === 'low' || header === 'high' || header === 'discount' ? t(header) : header) | titlecase }}
+            {{ (header.name === 'low' || header.name === 'high' || header.name === 'discount' ? t(header.name) : header.name) | titlecase }}
           </div>
           <div class="cell options" *ngIf="editing"></div>
         </li>
@@ -43,9 +43,9 @@
             </div>
             <div class="cell" *ngFor="let header of table.headers">
               <mat-form-field *ngIf="editing else readonly">
-                <input matInput [(ngModel)]="row[header]" type="number" step="0.01" min="0">
+                <input matInput [(ngModel)]="row[header.name]" type="number" step="0.01" min="0">
               </mat-form-field>
-              <ng-template #readonly>{{ row[header] | number:"1.2" }}</ng-template>
+              <ng-template #readonly>{{ row[header.name] | number:"1.2" }}</ng-template>
             </div>
             <div class="cell options" *ngIf="editing">
               <mat-icon cdkDragHandle>drag_handle</mat-icon>

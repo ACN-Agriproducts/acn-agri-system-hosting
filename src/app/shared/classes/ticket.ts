@@ -210,7 +210,6 @@ export class Ticket extends FirebaseDocInterface{
                 plates: data.plates ?? null,
                 PPB: data.PPB ?? null,
                 price: data.price ?? null, 
-                //priceDiscounts: data.priceDiscounts ?? null,
                 productName: data.productName ?? null,
                 status: data.status ?? null,
                 tank: data.tank ?? null,
@@ -225,7 +224,6 @@ export class Ticket extends FirebaseDocInterface{
                 voidRquester: data.voidRequester ?? null,
                 voidDate: data.voidDate ?? null,
                 weight: data.weight ?? null,
-                //weightDiscounts: data.weightDiscounts ?? null,
 
                 contractRef: data.contractRef ?? null,
 
@@ -436,6 +434,10 @@ export const WEIGHT_DISCOUNT_FIELDS = [
     "impurities",
 ];
 
+/**
+ * Based on common discounts used by the company. 
+ * These discounts are calculated as a percentage of the weight of the product brought in as recorded on the ticket.
+ */
 export class WeightDiscounts {
     brokenGrain: Mass;
     damagedGrain: Mass;

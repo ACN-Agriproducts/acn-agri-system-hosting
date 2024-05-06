@@ -54,12 +54,21 @@ export class DiscountTables extends FirebaseDocInterface {
     }
 }
 
+export interface DiscountTableHeader {
+    name: string;
+    type?: "weight-discount" | "price-discount";
+}
+
 export class DiscountTable {
     name: string = "";
     fieldName: string = "";
-    headers: string[] = [];
+    // headers: string[] = [];
+    headers: DiscountTableHeader[] = [];
     data: {
-        [key: string]: number
+        low?: number,
+        high?: number,
+        discount?: number,
+        [columnName: string]: number
     }[] = [];
 
     constructor(tableData?: any) {
@@ -67,17 +76,12 @@ export class DiscountTable {
             this.name = tableData.name;
             this.fieldName = tableData.name;
             this.headers = [ ...tableData.headers ];
-            this.data = tableData.data.map(item => ({ ...item }));    
+            this.data = tableData.data.map(item => ({ ...item }));
         }
     }
 
     public addTableData(tableData?: any): void {
-        if (tableData) {
-            this.data.push(tableData);
-            return;
-        }
-
         const length = this.data.push({});
-        this.headers.forEach(header => this.data[length - 1][header] = 0);
+        this.headers.forEach(header => this.data[length - 1][header.name] = tableData?.[header.name] ?? 0);
     }
 }
