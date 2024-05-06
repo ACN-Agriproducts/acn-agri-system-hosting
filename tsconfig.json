@@ -10,21 +10,38 @@
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "lib": [
       "es2018",
       "dom"
     ],
     "paths": {
-      "@core/*": ["src/app/core/*"],
-      "@shared/*": ["src/app/shared/*"],
-      "@layout/*": ["src/app/layout/*"],
-      "@coreServices/*": ["src/app/core/services/*"],
-      "@coreModule/*": ["src/app/core/module/*"],
-      "@model/*": ["src/app/core/model/*"],
-      "@pages/*": ["src/app/pages/*"],
-      "@enviroment/*": ["src/environments/*"],
-    }
+      "@core/*": [
+        "src/app/core/*"
+      ],
+      "@shared/*": [
+        "src/app/shared/*"
+      ],
+      "@layout/*": [
+        "src/app/layout/*"
+      ],
+      "@coreServices/*": [
+        "src/app/core/services/*"
+      ],
+      "@coreModule/*": [
+        "src/app/core/module/*"
+      ],
+      "@model/*": [
+        "src/app/core/model/*"
+      ],
+      "@pages/*": [
+        "src/app/pages/*"
+      ],
+      "@enviroment/*": [
+        "src/environments/*"
+      ]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
