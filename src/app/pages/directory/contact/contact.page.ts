@@ -88,7 +88,7 @@ export class ContactPage implements OnInit {
 
 	public async getContracts(): Promise<void> {
 		const constraints = [
-			where("clientName", "==", this.contact.name),
+			where("client", "==", this.contact.ref),
 			orderBy('date')
 		];
 
