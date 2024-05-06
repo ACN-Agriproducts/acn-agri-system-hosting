@@ -1,6 +1,6 @@
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Firestore, getDocsFromServer, limit, query, DocumentReference, orderBy, doc } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';

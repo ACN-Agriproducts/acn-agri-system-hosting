@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { doc, Firestore } from '@angular/fire/firestore';
 import { NgForm } from '@angular/forms';
-import { MatSelectionList } from '@angular/material/list';
+import { MatLegacySelectionList as MatSelectionList } from '@angular/material/legacy-list';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';

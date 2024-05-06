@@ -1,6 +1,6 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
 import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';

@@ -5,7 +5,7 @@ import { doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fi
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';

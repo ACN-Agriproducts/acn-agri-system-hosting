@@ -1,6 +1,6 @@
 import { ModalController, PopoverController } from '@ionic/angular';
 import { ShowModalComponent } from './../show-modal/show-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Component, Input, OnInit } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 
