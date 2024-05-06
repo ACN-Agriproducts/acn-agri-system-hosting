@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { collection, DocumentReference, serverTimestamp } from '@angular/fire/firestore';
 import { runTransaction, doc } from '@angular/fire/firestore'
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { PopoverController } from '@ionic/angular';
 import { Inventory, Plant } from '@shared/classes/plant';

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { arrayUnion, Firestore } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';

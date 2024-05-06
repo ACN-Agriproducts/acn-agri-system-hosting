@@ -1,4 +1,4 @@
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { OptionsComponent } from '../options/options.component';
