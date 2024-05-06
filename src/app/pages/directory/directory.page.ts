@@ -1,18 +1,16 @@
 import { NavController } from '@ionic/angular';
-import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { firstValueFrom, lastValueFrom, Observable, Subscription } from 'rxjs';
-import { doc, Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { doc, Firestore} from '@angular/fire/firestore';
 import { Contact } from '@shared/classes/contact';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { EditContactDialogComponent } from './components/edit-contact-dialog/edit-contact-dialog.component';
 import { TranslocoService } from '@ngneat/transloco';
-import * as Excel from 'exceljs';
-import { Contract } from '@shared/classes/contract';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
-import { Pagination } from '@shared/classes/FirebaseDocInterface';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-directory',
@@ -29,6 +27,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
   public contactList: CompanyContact[];
 
   public permissions;
+
+  @ViewChild(CdkVirtualScrollViewport) view: CdkVirtualScrollViewport;
 
   constructor(
     private db: Firestore,
@@ -49,7 +49,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
         if(a.name.toUpperCase() > b.name.toUpperCase()) return 1;
         return 0
       });
+
+      
     });
+
+    setTimeout(() => this.view.checkViewportSize(), 1000)
   }
 
   ngOnDestroy() {
