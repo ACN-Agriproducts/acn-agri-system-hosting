@@ -1,7 +1,7 @@
 import { Component, Directive, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionList } from '@angular/material/list';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatLegacySelectionList as MatSelectionList } from '@angular/material/legacy-list';
 import { Status } from '@shared/classes/company';
 import { Liquidation, TicketInfo } from '@shared/classes/liquidation';
 import { PAYMENT_METHODS, PAYMENT_TYPES, PaidDocument, Payment } from '@shared/classes/payment';

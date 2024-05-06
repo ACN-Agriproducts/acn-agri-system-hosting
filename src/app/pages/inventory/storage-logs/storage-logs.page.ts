@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { DateAdapter } from '@angular/material/core';
 import { DateRange, MatDateRangeSelectionStrategy, MAT_DATE_RANGE_SELECTION_STRATEGY } from '@angular/material/datepicker';
-import { MatSlider, MatSliderChange } from '@angular/material/slider';
+import { MatLegacySlider as MatSlider, MatLegacySliderChange as MatSliderChange } from '@angular/material/legacy-slider';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { StorageLogs } from '@shared/classes/storageLogs';
 
