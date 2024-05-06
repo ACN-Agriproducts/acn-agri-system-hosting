@@ -74,7 +74,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
     newContact.set();
   }
 
-  public async edit(contact: Contact): Promise<void> {
+  public async edit(cContact: CompanyContact): Promise<void> {
+    const contact = await Contact.getDoc(this.db, this.currentCompany, cContact.id);
+
     const metacontacts = [];
     contact.metacontacts.forEach(metaContact => {
       metacontacts.push({ ...metaContact });
@@ -104,6 +106,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
     })
     .then(() => {
       this.snack.openTranslated("contact-update-success", "success");
+      const companyContact = this.contactList.find(c => c.id == contact.ref.id);
+      companyContact.name = contact.name;
+      companyContact.tags = contact.tags;
     })
     .catch(error => {
       console.error(error);
