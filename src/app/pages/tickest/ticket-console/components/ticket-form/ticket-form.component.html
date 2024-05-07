@@ -106,15 +106,15 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="net-field">
           <mat-label>{{t('Net')}}</mat-label>
-          <input matInput type="number" [(ngModel)]="ticket.net.amount" readonly>
+          <input matInput type="number" [ngModel]="ticket.net.amount | number:'0.0-3'" readonly>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Discount W')}}</mat-label>
-          <input matInput type="number" [(ngModel)]="ticket.dryWeight.amount" readonly >
+          <input matInput type="number" [ngModel]="ticket.dryWeight.amount | number:'0.0-3'" readonly>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('m. Ton')}}</mat-label>
-          <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.3'" readonly>
+          <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.0-3'" readonly>
         </mat-form-field>
       </mat-card-content>
     </mat-card>
