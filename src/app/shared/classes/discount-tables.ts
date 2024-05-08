@@ -74,7 +74,7 @@ export class DiscountTable {
     constructor(tableData?: any) {
         if (tableData) {
             this.name = tableData.name;
-            this.fieldName = tableData.name;
+            this.fieldName = tableData.fieldName;
             this.headers = [ ...tableData.headers ];
             this.data = tableData.data.map(item => ({ ...item }));
         }

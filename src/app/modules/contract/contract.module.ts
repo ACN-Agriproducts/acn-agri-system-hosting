@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { GetFieldClassPipe } from './pipes/get-field-class.pipe';
 import { FutureDateFormatDirective } from './directives/future-date-format.directive';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { FutureDateFormatDirective } from './directives/future-date-format.direc
     FormsModule,
     IonicModule,
     FormsModule,
-    CoreModule
+    CoreModule,
+    ScrollingModule
   ],
   exports: [
     ContractFormComponent,

@@ -155,6 +155,7 @@ export class ContractFormComponent implements OnInit {
   openTicketClientSelect() { 
     const dialogRef = this.dialog.open(SelectClientComponent, {
       width: '600px',
+      height: '600px',
       data: this.contactList
     });
     this.selectedFieldEvent.emit('ticketClientInfo');

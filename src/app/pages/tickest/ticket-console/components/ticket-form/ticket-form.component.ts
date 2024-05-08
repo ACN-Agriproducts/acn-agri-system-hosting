@@ -87,10 +87,10 @@ export class TicketFormComponent implements OnInit {
   }
 
   calcNetWeight() {
-    this.calcDiscount();
     if(this.ticket.gross.amount == null || this.ticket.tare.amount == null) return;
     
-    this.ticket.net.amount = this.ticket.gross.amount - this.ticket.tare.amount;
+    this.ticket.net.amount = Math.round((this.ticket.gross.amount - this.ticket.tare.amount) * 1000) / 1000;
+    this.calcDiscount();
   }
 
   calcDiscount() {

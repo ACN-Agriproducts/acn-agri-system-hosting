@@ -159,6 +159,7 @@ export class Liquidation extends FirebaseDocInterface {
             id: ticket.id,
             moisture: ticket.moisture ?? 0,
             net: ticket.net,
+            price: ticket.price ? new Price(ticket.price, ticket.net.defaultUnits) : null,
             priceDiscounts: ticket.priceDiscounts,
             ref: ticket.ref.withConverter(Ticket.converter),
             status: ticket.status,
@@ -190,6 +191,8 @@ export class LiquidationTotals {
 
         this.gross = this.tare = this.net = this.adjustedWeight = new Mass(0, FirebaseDocInterface.session.getDefaultUnit(), contract.productInfo);
         tickets.forEach(ticket => {
+            const price = ticket.price ?? contract.price;
+
             this.gross = this.gross.add(ticket.gross);
             this.tare = this.tare.add(ticket.tare);
             this.net = this.net.add(contract.paymentTerms.origin === "client-scale" && contract.type === "purchase" ? (ticket.original_weight ?? ticket.net ): ticket.net);
@@ -201,7 +204,7 @@ export class LiquidationTotals {
             const tempAdjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
             this.adjustedWeight = this.adjustedWeight.add(tempAdjustedWeight);
 
-            const tempBeforeFinalDiscounts = contract.price.getPricePerUnit(ticket.net.getUnit(), contract.quantity) * tempAdjustedWeight.get();
+            const tempBeforeFinalDiscounts = (price.getPricePerUnit(ticket.net.getUnit(), contract.quantity)) * tempAdjustedWeight.get();
             this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
 
             for (const key of Object.keys(this.priceDiscounts)) {
@@ -223,6 +226,7 @@ export interface TicketInfo {
     moisture: number;
     net: Mass;
     priceDiscounts: PriceDiscounts;
+    price: Price;
     ref: DocumentReference<Ticket>;
     status: string;
     subId: string;
