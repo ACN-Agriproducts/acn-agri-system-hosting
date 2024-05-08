@@ -175,6 +175,7 @@ export class Ticket extends FirebaseDocInterface{
         this.type = data.type ?? (data.in ? 'in' : 'out');
 
         this.net = this.gross.subtract(this.tare);
+        this.net.amount = Math.round(this.net.amount * 1000) / 1000;
     }
 
     public static converter = {
