@@ -454,13 +454,17 @@ export class WeightDiscounts {
     }
 
     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
+        console.log("################");
         for (const table of (discountTables?.tables ?? [])) {
             const key = table.fieldName;
             const rowData = table.data.find(row => ticket[key] >= row.low && ticket[key] <= row.high);
 
             this[key] ??= new Mass(0, null);
             this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;
+            this[key].amount = Math.round(this[key].amount * 1000) / 1000  // Rounding discount before it's applied
             this[key].defaultUnits = ticket.net.getUnit();
+
+            console.log(key, ticket[key], rowData, this[key]);
         }
     }
 
