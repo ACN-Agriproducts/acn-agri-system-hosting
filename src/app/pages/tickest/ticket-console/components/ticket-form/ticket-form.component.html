@@ -106,15 +106,15 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="net-field">
           <mat-label>{{t('Net')}}</mat-label>
-          <input matInput type="number" [(ngModel)]="ticket.net.amount" readonly>
+          <input matInput type="number" [ngModel]="ticket.net.amount | number:'0.0-3'" readonly>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Discount W')}}</mat-label>
-          <input matInput type="number" [(ngModel)]="ticket.dryWeight.amount" readonly >
+          <input matInput type="number" [ngModel]="ticket.dryWeight.amount | number:'0.0-3'" readonly>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('m. Ton')}}</mat-label>
-          <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.3'" readonly>
+          <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.0-3'" readonly>
         </mat-form-field>
       </mat-card-content>
     </mat-card>
@@ -125,13 +125,29 @@
       </mat-card-header>
   
       <mat-card-content>
+        <mat-form-field appearance="fill" *ngIf="currentContract?.tags.includes('open-purchase')">
+          <mat-label>{{t('price')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.price" (ngModelChange)="saveTicket()">
+          <span matPrefix>$</span>
+        </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Moisture')}}</mat-label>
           <input matInput type="number" [(ngModel)]="ticket.moisture" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Weight')}}</mat-label>
           <input matInput type="number" [(ngModel)]="ticket.weight" (ngModelChange)="calcDiscount()">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('impurities')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.impurities" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('brokenGrain')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.brokenGrain" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Plague')}}</mat-label>

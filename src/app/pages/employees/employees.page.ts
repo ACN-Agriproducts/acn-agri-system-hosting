@@ -1,5 +1,5 @@
 import { ShowModalComponent } from './components/show-modal/show-modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

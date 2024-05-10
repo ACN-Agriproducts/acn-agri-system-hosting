@@ -1,6 +1,6 @@
 import { Component, ContentChild, EventEmitter, Input, OnInit, Output, QueryList, TemplateRef, ViewChildren } from '@angular/core';
 import { Firestore, getDocsFromServer, limit, query, DocumentReference, orderBy, doc } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
@@ -155,6 +155,7 @@ export class ContractFormComponent implements OnInit {
   openTicketClientSelect() { 
     const dialogRef = this.dialog.open(SelectClientComponent, {
       width: '600px',
+      height: '600px',
       data: this.contactList
     });
     this.selectedFieldEvent.emit('ticketClientInfo');
@@ -265,6 +266,7 @@ export class ContractFormComponent implements OnInit {
     await this.saveClientInfo();
 
     if(this.useSameClientForTicket) this.contract.clientTicketInfo = this.contract.clientInfo;
+    if(this.contract.tags.includes('open-purchase')) this.contract.isOpen = true;
 
     this.contract.set().then(() => {
       this.snack.openTranslated('Contract submitted', 'success');

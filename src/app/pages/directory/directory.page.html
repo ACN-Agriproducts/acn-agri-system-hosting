@@ -5,7 +5,7 @@
 		<div class="content-header margin-inline">
 			<mat-form-field appearance="fill">
 				<mat-label>{{t('Type')}}</mat-label>
-				<mat-select [(ngModel)]="contactType" (ngModelChange)="updateList()">
+				<mat-select [(ngModel)]="contactType">
 					<mat-option>None</mat-option>
 					<mat-option value="client">{{t('Client')}}</mat-option>
 					<mat-option value="trucker">{{t('Trucker')}}</mat-option>
@@ -28,35 +28,37 @@
 			</ion-button> -->
 		</div>
 		<ion-card>
-			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag)?.length ?? 0 }})</div>
-			<div class="content-item" (contextmenu)="openOptions($event)"
-				*ngFor="let contact of (contactsPagination?.list | search:searchResults:searchQuery:contactType:deliveryCity:arrayChangeFlag); let i = index">
-				<ion-item (click)="nav('dashboard/directory/contact/' + contact.ref.id)" button >
-					<ion-avatar slot="start">
-						<img src="../../../assets/avatar.svg">
-					</ion-avatar>
-					<ion-label>
-						<div class="content-label">
-							<span>{{ contact.name }} </span>
-							<span class="label-text">
-								{{ contact | contactTagsDisplay | titlecase }}
-							</span>
-						</div>
-					</ion-label>
-					<ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact()?.phone ?? "" }}</ion-label>
-					<ion-buttons class="ion-hide-sm-down" slot="end">
-						<ion-button color="primary" *ngIf="contact.tags.includes('trucker')" (click)="$event.stopPropagation(); editTransportField(contact)">
-							<ion-icon name="car-outline"></ion-icon>
-						</ion-button>
-						<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
-							<ion-icon name="create-outline"></ion-icon>
-						</ion-button>
-						<!-- <ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
-							<ion-icon name="archive-outline"></ion-icon>
-						</ion-button> -->
-					</ion-buttons>
-				</ion-item>
-			</div>
+			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactList | search:searchResults:searchQuery:contactType:deliveryCity:contactType)?.length ?? 0 }})</div>
+				<cdk-virtual-scroll-viewport itemSize="64" *ngIf="contactList" minBufferPx="300">
+					<div class="content-item" (contextmenu)="openOptions($event)"
+						*cdkVirtualFor="let contact of (contactList | search:searchResults:searchQuery:contactType:deliveryCity:contactType); let i = index">
+						<ion-item (click)="nav('dashboard/directory/contact/' + contact.id)" button >
+							<ion-avatar slot="start">
+								<img src="../../../assets/avatar.svg">
+							</ion-avatar>
+							<ion-label>
+								<div class="content-label">
+									<span>{{ contact.name }} </span>
+									<span class="label-text">
+										{{ contact | contactTagsDisplay | titlecase }}
+									</span>
+								</div>
+							</ion-label>
+							<!-- <ion-label color="dark" class="ion-hide-lg-down">{{ contact.getPrimaryMetaContact()?.phone ?? "" }}</ion-label> -->
+							<ion-buttons class="ion-hide-sm-down" slot="end">
+								<ion-button color="primary" *ngIf="contact.tags.includes('trucker')" (click)="$event.stopPropagation(); editTransportField(contact)">
+									<ion-icon name="car-outline"></ion-icon>
+								</ion-button>
+								<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
+									<ion-icon name="create-outline"></ion-icon>
+								</ion-button>
+								<!-- <ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
+									<ion-icon name="archive-outline"></ion-icon>
+								</ion-button> -->
+							</ion-buttons>
+						</ion-item>
+					</div>
+				</cdk-virtual-scroll-viewport>
 		</ion-card>
 	</ion-content>
 </ng-container>

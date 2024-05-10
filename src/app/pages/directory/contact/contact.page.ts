@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
@@ -88,7 +88,7 @@ export class ContactPage implements OnInit {
 
 	public async getContracts(): Promise<void> {
 		const constraints = [
-			where("clientName", "==", this.contact.name),
+			where("client", "==", this.contact.ref),
 			orderBy('date')
 		];
 

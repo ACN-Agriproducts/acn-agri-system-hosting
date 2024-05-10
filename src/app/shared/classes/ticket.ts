@@ -45,6 +45,7 @@ export class Ticket extends FirebaseDocInterface{
     public plague: string;
     public plates: string;
     public PPB: number;
+    public price: number;
     public priceDiscounts: PriceDiscounts;
     public productName: string;
     public status: TicketStatus;
@@ -136,6 +137,7 @@ export class Ticket extends FirebaseDocInterface{
         this.plague = data.plague;
         this.plates = data.plates;
         this.PPB = data.PPB;
+        this.price = data.price;
         this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
         this.productName = data.productName;
         this.status = data.status ?? "closed";
@@ -173,6 +175,7 @@ export class Ticket extends FirebaseDocInterface{
         this.type = data.type ?? (data.in ? 'in' : 'out');
 
         this.net = this.gross.subtract(this.tare);
+        this.net.amount = Math.round(this.net.amount * 1000) / 1000;
     }
 
     public static converter = {
@@ -207,6 +210,7 @@ export class Ticket extends FirebaseDocInterface{
                 plague: data.plague ?? null,
                 plates: data.plates ?? null,
                 PPB: data.PPB ?? null,
+                price: data.price ?? null, 
                 //priceDiscounts: data.priceDiscounts ?? null,
                 productName: data.productName ?? null,
                 status: data.status ?? null,
@@ -451,13 +455,17 @@ export class WeightDiscounts {
     }
 
     public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
+        console.log("################");
         for (const table of (discountTables?.tables ?? [])) {
             const key = table.fieldName;
             const rowData = table.data.find(row => ticket[key] >= row.low && ticket[key] <= row.high);
 
             this[key] ??= new Mass(0, null);
             this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;
+            this[key].amount = Math.round(this[key].amount * 1000) / 1000  // Rounding discount before it's applied
             this[key].defaultUnits = ticket.net.getUnit();
+
+            console.log(key, ticket[key], rowData, this[key]);
         }
     }
 

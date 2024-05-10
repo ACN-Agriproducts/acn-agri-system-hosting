@@ -9,7 +9,7 @@ import { Plant } from '@shared/classes/plant';
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import * as moment from 'moment';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 

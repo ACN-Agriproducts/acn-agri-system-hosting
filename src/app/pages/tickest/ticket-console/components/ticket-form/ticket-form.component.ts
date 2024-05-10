@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { arrayUnion, Firestore } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
@@ -87,14 +87,15 @@ export class TicketFormComponent implements OnInit {
   }
 
   calcNetWeight() {
-    if(!this.ticket.gross.amount || !this.ticket.tare.amount) return;
+    if(this.ticket.gross.amount == null || this.ticket.tare.amount == null) return;
     
-    this.ticket.net.amount = this.ticket.gross.amount - this.ticket.tare.amount;
+    this.ticket.net.amount = Math.round((this.ticket.gross.amount - this.ticket.tare.amount) * 1000) / 1000;
     this.calcDiscount();
   }
 
   calcDiscount() {
-    if(!this.ticket.gross.amount || !this.ticket.tare.amount || !this.contractId) return;
+    this.saveTicket();
+    if(this.ticket.gross.amount == null || this.ticket.tare.amount == null || !this.contractId) return;
 
     this.ticket.getWeightDiscounts(this.discountTables[this.ticket.productName]);
 
@@ -104,7 +105,6 @@ export class TicketFormComponent implements OnInit {
     }
 
     this.ticket.dryWeight = newDryWeight;
-    this.saveTicket();
   }
 
   async tankChange() {

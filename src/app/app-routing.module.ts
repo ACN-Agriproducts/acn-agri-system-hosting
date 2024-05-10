@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
-import { IsScaleGuard } from './is-scale.guard';
 
 const redirectLoggedLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
@@ -17,7 +16,7 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
-        canActivate: [AuthGuard, IsScaleGuard], data: { authGuardPipe: redirectLoggedLogin },
+        canActivate: [AuthGuard], data: { authGuardPipe: redirectLoggedLogin },
         children: [
           {
             path: '',
@@ -84,14 +83,13 @@ const routes: Routes = [
             path: 'production-orders',
             loadChildren: () => import('./pages/production-orders/production-orders.module').then( m => m.BaggingOrdersPageModule)
           },
+          {
+            path: 'ticket-console',
+            loadChildren: () => import('./pages/tickest/ticket-console/ticket-console.module').then(m => m.TicketConsolePageModule)
+          }
         ]
       },
     ]
-  },
-  {
-    path: 'ticket-console',
-    canActivate: [AuthGuard, IsScaleGuard], data: { authGuardPipe: redirectLoggedLogin },
-    loadChildren: () => import('./pages/tickest/ticket-console/ticket-console.module').then(m => m.TicketConsolePageModule)
   },
   {
     path: 'login',
@@ -110,7 +108,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule]
 })

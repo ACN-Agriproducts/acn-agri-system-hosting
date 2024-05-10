@@ -13,6 +13,7 @@ import { ShowContactModalComponent } from './components/show-contact-modal/show-
 import { AddNewTagDialogComponent, EditContactDialogComponent, PrimaryPipe } from './components/edit-contact-dialog/edit-contact-dialog.component';
 import { ContactTagsDisplayPipe } from './components/contact-tags-display/contact-tags-display.pipe';
 import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-
     DirectoryPageRoutingModule,
     CoreModule,
     ReactiveFormsModule,
-    ContactTagsDisplayPipe
+    ContactTagsDisplayPipe,
+    ScrollingModule
   ],
   declarations: [
     DirectoryPage, 

@@ -3,6 +3,7 @@
         "administrator": "administrator",
         "dashboard": "dashboard",
         "tickets": "tickets",
+        "ticket console": "ticket console",
         "inventory": "inventory",
         "production orders": "production orders",
         "warehouse receipts": "warehouse receipts",
@@ -340,7 +341,10 @@
             "Tank": "Tank",
             "New Ticket": "New Ticket",
             "In": "In",
-            "Out": "Out"
+            "Out": "Out",
+            "impurities": "Impurities",
+            "brokenGrain": "Broken Grain",
+            "price": "Price"
         },
         "table": {
             "Type": "Type",
