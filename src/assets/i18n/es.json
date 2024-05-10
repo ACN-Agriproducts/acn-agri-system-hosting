@@ -134,7 +134,7 @@
             "Save": "Guardar",
             "Select All": "Seleccionar Todas",
             "select all": "seleccionar todos",
-            "selected": "Seleccionada",
+            "selected": "seleccionada",
             "set liquidation": "establecer liquidación",
             "Sour": "Agrio",
             "status": "estatus",
@@ -585,7 +585,7 @@
             "weight-discount": "descuento de peso",
             "price-discount": "descuento de precio",
             "Unmark Discount": "Desmarcar Descuento",
-            "Mark as Weight Discount": "Marcar como Descunto de Peso",
+            "Mark as Weight Discount": "Marcar como Descuento de Peso",
             "Mark as Price Discount": "Marcar como Descuento de Precio"
         }
     },

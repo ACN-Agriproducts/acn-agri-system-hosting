@@ -59,23 +59,24 @@ export interface DiscountTableHeader {
     type?: "weight-discount" | "price-discount";
 }
 
+export interface DiscountTableRow {
+    low?: number;
+    high?: number;
+    discount?: number;
+    [columnName: string]: number;
+}
+
 export class DiscountTable {
     name: string = "";
     fieldName: string = "";
-    // headers: string[] = [];
     headers: DiscountTableHeader[] = [];
-    data: {
-        low?: number,
-        high?: number,
-        discount?: number,
-        [columnName: string]: number
-    }[] = [];
+    data: DiscountTableRow[] = [];
 
     constructor(tableData?: any) {
         if (tableData) {
             this.name = tableData.name;
             this.fieldName = tableData.fieldName;
-            this.headers = [ ...tableData.headers ];
+            this.headers = tableData.headers.map(header => ({ ...header }));
             this.data = tableData.data.map(item => ({ ...item }));
         }
     }

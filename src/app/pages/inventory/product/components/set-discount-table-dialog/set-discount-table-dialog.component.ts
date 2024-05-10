@@ -62,7 +62,6 @@ export class SetDiscountTableDialogComponent implements OnInit {
   generateDiscountData() {
     if (!this.standardConfig || this.editing) return;
 
-    // this.table.headers.unshift("low", "high", "discount");
     this.table.headers.unshift(
       { name: "low" },
       { name: "high" },
@@ -88,6 +87,7 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   setName(fieldName: string) {
     this.table.name = this.titleCasePipe.transform(fieldName);
+    console.log(this.table.fieldName, this.table.name)
   }
 
   resetHeaderType(header: DiscountTableHeader) {

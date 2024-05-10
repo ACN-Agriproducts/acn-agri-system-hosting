@@ -63,7 +63,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
       this.unsubs.push(this.currentContract.getLiquidationsSnapshot(result => {
         this.liquidations = result.docs.map(qds => {
           const liquidation = qds.data();
-          liquidation.getTotal(this.currentContract);
+          liquidation.setTotalValue(this.currentContract);
           return liquidation;
         });
 

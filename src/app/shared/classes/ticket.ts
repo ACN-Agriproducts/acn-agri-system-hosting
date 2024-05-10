@@ -8,8 +8,9 @@ import { Contract, ProductInfo } from "./contract";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass, units } from "./mass";
 import { Plant } from "./plant";
-import { DiscountTables } from "./discount-tables";
+import { DiscountTableRow, DiscountTables } from "./discount-tables";
 import { Product } from "./product";
+import { Price } from "./price";
 
 type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
 type TicketType = "in" | "out" | "service";
@@ -138,7 +139,7 @@ export class Ticket extends FirebaseDocInterface{
         this.plates = data.plates;
         this.PPB = data.PPB;
         this.price = data.price;
-        this.priceDiscounts = new PriceDiscounts(data.priceDiscounts);
+        this.priceDiscounts = new PriceDiscounts();
         this.productName = data.productName;
         this.status = data.status ?? "closed";
         this.tank = data.tank;
@@ -153,7 +154,7 @@ export class Ticket extends FirebaseDocInterface{
         this.voidRequester = data.voidRequester;
         this.voidDate = data.voidDate?.toDate() ?? null;
         this.weight = data.weight;
-        this.weightDiscounts = new WeightDiscounts(data.weightDiscounts);
+        this.weightDiscounts = new WeightDiscounts();
 
         this.contractRef = data.contractRef?.withConverter(Contract.converter) || null;
 
@@ -367,12 +368,7 @@ export class Ticket extends FirebaseDocInterface{
         });
     }
 
-
-    public getWeightDiscounts(discountTables: DiscountTables) {
-        this.weightDiscounts.getDiscounts(this, discountTables);
-    }
-
-    public defineBushels(product: Product | ProductInfo) {
+    public defineBushels(product: Product | ProductInfo | number): void {
         Object.keys(this).forEach(key => {
             if (this[key] instanceof Mass) {
                 (this[key] as Mass).defineBushels(product);
@@ -380,26 +376,24 @@ export class Ticket extends FirebaseDocInterface{
         });
         this.weightDiscounts.defineBushels(product);
     }
-}
 
-export class PriceDiscounts {
-    public infested: number = 0;
-    public musty: number = 0;
-    public sour: number = 0;
-    public weathered: number = 0;
-    public inspection: number = 0;
+    public setDiscounts(discountTables: DiscountTables): void {
+        for (const table of discountTables?.tables ?? []) {
+            const discountName = table.fieldName;
+            const rowData = table.data.find(row => this[discountName] >= row.low && this[discountName] <= row.high);
 
-    constructor(data?: any) {
-        if (!data) return;
-        Object.keys(data).forEach(key => this[key] = data[key]);
-    }
-
-    public total(): number {
-        return Object.values(this).reduce((total, currentValue) => total + currentValue, 0);
-    }
-
-    public getRawData() {
-        return { ...this };
+            table.headers.forEach(header => {
+                if (header.type === 'price-discount') {
+                    // UNIT IS SET AS COMPANY DEFAULT UNIT
+                    // CHANGE IF WE ADD A DEFAULT UNIT FOR DISCOUNT TABLES SPECIFICALLY
+                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], FirebaseDocInterface.session.getDefaultUnit()), this.net);
+                }
+                else if (header.type === 'weight-discount') {
+                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], this.net);
+                }
+            });
+        }
+        console.log(this.weightDiscounts, this.priceDiscounts)
     }
 }
 
@@ -436,6 +430,70 @@ export const WEIGHT_DISCOUNT_FIELDS = [
 ];
 
 /**
+ * Weight Discounts:
+ *  - weight that is subtracted for reasons such as moisture, drying, or damage to the product
+ *  - calculated as a percentage of the weight
+ *  - Formula: (Percentage)/100 * (Mass).amount
+ */
+
+/**
+ * Price Discounts:
+ *  - Fixed: just a flat $ amount
+ * 
+ *  - Unit Rate: rate in discount tables will determine amount
+ *      --> Formula: (Rate: Price per [Unit]).amount * (Mass in [Unit]).amount
+ * 
+ *  - Tax: by percentage of the final amount I'm guessing
+ *      --> Formula: (Percentage)/100 * ($ Total)
+ */
+
+// DECIDE WHETHER TO SUBDIVIDE INTO 3 TYPES OF PRICE DISCOUNTS OR CREATE SEPARATE CLASSES FOR THEM ALTOGETHER
+export class PriceDiscounts {
+    public infested: number = 0;
+    public musty: number = 0;
+    public sour: number = 0;
+    public weathered: number = 0;
+    public inspection: number = 0;
+    public unitRateDiscounts: {
+        [discountName: string]: number;
+    } = {};
+
+    constructor(data?: PriceDiscounts) {
+        if (data) {
+            Object.entries(data).forEach(([key, value]) => {
+                if (key !== 'unitRateDiscounts') {
+                    this[key] = value;
+                }
+            });
+            this.unitRateDiscounts = { ...data.unitRateDiscounts };
+        }
+    }
+
+    public total(): number {
+        return this.getFixedTotal();
+    }
+
+    public setUnitRateDiscount(discountName: string, rate: Price, productWeight: Mass): void {
+        const defaultUnit = FirebaseDocInterface.session.getDefaultUnit();
+        const discount = rate.getPricePerUnit(defaultUnit) * productWeight.getMassInUnit(defaultUnit);
+
+        this.unitRateDiscounts[discountName] ??= 0;
+        this.unitRateDiscounts[discountName] += Math.round(discount * 1000) / 1000;
+    }
+
+    public getFixedTotal(): number {
+        const discountsTotal = Object.entries(this).reduce((total, [currentKey, currentValue]) => {
+            if (currentKey === 'unitRateDiscounts') return 0;
+            return total + currentValue
+        }, 0);
+
+        const unitRateDiscountsTotal = Object.values(this.unitRateDiscounts).reduce((total, currentValue) => total + currentValue, 0);
+
+        return discountsTotal + unitRateDiscountsTotal;
+    }
+}
+
+/**
  * Based on common discounts used by the company. 
  * These discounts are calculated as a percentage of the weight of the product brought in as recorded on the ticket.
  */
@@ -449,25 +507,15 @@ export class WeightDiscounts {
     PPB: Mass;
     impurities: Mass;
 
-    constructor(data?: any) {
-        if (!data) return;
-        for (const key of Object.keys(data)) {
-            this[key] = new Mass(data[key].amount, data[key].defaultUnits);
-        }
-    }
-
-    public async getDiscounts(ticket: Ticket, discountTables: DiscountTables): Promise<void> {
-        console.log("################");
-        for (const table of (discountTables?.tables ?? [])) {
-            const key = table.fieldName;
-            const rowData = table.data.find(row => ticket[key] >= row.low && ticket[key] <= row.high);
-
-            this[key] ??= new Mass(0, null);
-            this[key].amount = (rowData?.discount ?? 0) * ticket.net.get() / 100;
-            this[key].amount = Math.round(this[key].amount * 1000) / 1000  // Rounding discount before it's applied
-            this[key].defaultUnits = ticket.net.getUnit();
-
-            console.log(key, ticket[key], rowData, this[key]);
+    constructor(data?: WeightDiscounts) {
+        if (data) {
+            Object.entries(data).forEach(([key, value]) => {
+                // if (key === 'otherDiscounts' || !(value instanceof Mass)) return;
+                this[key] = new Mass(value.amount, value.defaultUnits);
+            });
+            // Object.entries(data.otherDiscounts).forEach(([key, value]) => {
+            //     this.otherDiscounts[key] = new Mass(value.amount, value.defaultUnits);
+            // });
         }
     }
 
@@ -479,18 +527,21 @@ export class WeightDiscounts {
         return Object.values(this).reduce((total: Mass, currentValue: Mass) => total.add(currentValue), new Mass(0, "lbs", product));
     }
 
-    public getRawData(): any {
-        const rawData = {};
-        for (const key of Object.keys(this)) {
-            rawData[key] = (this[key] as Mass).getRawData();
-        }
-        return rawData;
-    }
-
-    public defineBushels(product: Product | ProductInfo): void {
+    public defineBushels(product: Product | ProductInfo | number): void {
         Object.keys(this).forEach(key => {
             (this[key] as Mass).defineBushels(product);
         });
+    }
+
+    public setDiscount(discountName: string, percentage: number = 0, weight: Mass): void {
+        // UNIT IS SET AS COMPANY DEFAULT UNIT
+        // CHANGE IF WE ADD A DEFAULT UNIT FOR DISCOUNT TABLES SPECIFICALLY
+        this[discountName] ??= new Mass(0, FirebaseDocInterface.session.getDefaultUnit());
+
+        const discountWeight = (percentage / 100) * weight.get();
+        const roundedDiscountWeight = Math.round(discountWeight * 1000) / 1000;
+
+        this[discountName] = this[discountName].add(new Mass(roundedDiscountWeight, weight.getUnit()));
     }
 }
 
