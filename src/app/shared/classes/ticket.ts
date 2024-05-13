@@ -374,7 +374,6 @@ export class Ticket extends FirebaseDocInterface{
                 (this[key] as Mass).defineBushels(product);
             }
         });
-        this.weightDiscounts.defineBushels(product);
     }
 
     public setDiscounts(discountTables: DiscountTables): void {
@@ -384,16 +383,13 @@ export class Ticket extends FirebaseDocInterface{
 
             table.headers.forEach(header => {
                 if (header.type === 'price-discount') {
-                    // UNIT IS SET AS COMPANY DEFAULT UNIT
-                    // CHANGE IF WE ADD A DEFAULT UNIT FOR DISCOUNT TABLES SPECIFICALLY
-                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], FirebaseDocInterface.session.getDefaultUnit()), this.net);
+                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], table.unit), this.net);
                 }
                 else if (header.type === 'weight-discount') {
-                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], this.net);
+                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], table.unit, this.net);
                 }
             });
         }
-        console.log(this.weightDiscounts, this.priceDiscounts)
     }
 }
 
@@ -458,6 +454,7 @@ export class PriceDiscounts {
         [discountName: string]: number;
     } = {};
 
+
     constructor(data?: PriceDiscounts) {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
@@ -473,9 +470,8 @@ export class PriceDiscounts {
         return this.getFixedTotal();
     }
 
-    public setUnitRateDiscount(discountName: string, rate: Price, productWeight: Mass): void {
-        const defaultUnit = FirebaseDocInterface.session.getDefaultUnit();
-        const discount = rate.getPricePerUnit(defaultUnit) * productWeight.getMassInUnit(defaultUnit);
+    public setUnitRateDiscount(discountName: string, rate: Price, weight: Mass): void {
+        const discount = rate.getPricePerUnit() * weight.getMassInUnit(rate.getUnit());
 
         this.unitRateDiscounts[discountName] ??= 0;
         this.unitRateDiscounts[discountName] += Math.round(discount * 1000) / 1000;
@@ -510,12 +506,8 @@ export class WeightDiscounts {
     constructor(data?: WeightDiscounts) {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
-                // if (key === 'otherDiscounts' || !(value instanceof Mass)) return;
                 this[key] = new Mass(value.amount, value.defaultUnits);
             });
-            // Object.entries(data.otherDiscounts).forEach(([key, value]) => {
-            //     this.otherDiscounts[key] = new Mass(value.amount, value.defaultUnits);
-            // });
         }
     }
 
@@ -533,10 +525,8 @@ export class WeightDiscounts {
         });
     }
 
-    public setDiscount(discountName: string, percentage: number = 0, weight: Mass): void {
-        // UNIT IS SET AS COMPANY DEFAULT UNIT
-        // CHANGE IF WE ADD A DEFAULT UNIT FOR DISCOUNT TABLES SPECIFICALLY
-        this[discountName] ??= new Mass(0, FirebaseDocInterface.session.getDefaultUnit());
+    public setDiscount(discountName: string, percentage: number = 0, tableUnit: units, weight: Mass): void {
+        this[discountName] ??= new Mass(0, tableUnit, weight.conversions.get('bu'));
 
         const discountWeight = (percentage / 100) * weight.get();
         const roundedDiscountWeight = Math.round(discountWeight * 1000) / 1000;

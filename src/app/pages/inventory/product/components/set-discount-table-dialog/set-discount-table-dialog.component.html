@@ -58,6 +58,13 @@
                     (matChipInputTokenEnd)="add($event)"
                 >
             </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>{{ t("Unit for Table") }}</mat-label>
+                <mat-select [(ngModel)]="table.unit" name="unit">
+                    <mat-option *ngFor="let unit of UNIT_NAME_LIST | keyvalue" [value]="unit.key">{{ unit.value }} ({{ unit.key}})</mat-option>
+                </mat-select>
+            </mat-form-field>
     
             <section *ngIf="!editing">
                 <mat-divider></mat-divider>

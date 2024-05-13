@@ -27,6 +27,10 @@ export class Price {
         const amount = this.amount + added.getPricePerUnit(this.unit, mass);
         return new Price(amount, this.unit);
     }
+
+    public getUnit(): units {
+        return this.unit;
+    }
 }
 
 @Pipe({

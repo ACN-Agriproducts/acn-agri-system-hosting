@@ -4,7 +4,9 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { DiscountTable, DiscountTableHeader } from '@shared/classes/discount-tables';
+import { UNIT_LIST, unitNameMap } from '@shared/classes/mass';
 import { WEIGHT_DISCOUNT_FIELDS } from '@shared/classes/ticket';
 
 @Component({
@@ -26,16 +28,19 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   readonly discountFieldsList = WEIGHT_DISCOUNT_FIELDS;
+  readonly UNIT_NAME_LIST = unitNameMap;
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DiscountTable,
     public dialogRef: MatDialogRef<SetDiscountTableDialogComponent>,
     private titleCasePipe: TitleCasePipe,
+    private session: SessionInfo
   ) {}
 
   ngOnInit() {
     this.editing = this.data ? true : false;
     this.table = new DiscountTable(this.data);
+    this.table.unit ??= this.session.getDefaultUnit();
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -87,7 +92,6 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   setName(fieldName: string) {
     this.table.name = this.titleCasePipe.transform(fieldName);
-    console.log(this.table.fieldName, this.table.name)
   }
 
   resetHeaderType(header: DiscountTableHeader) {

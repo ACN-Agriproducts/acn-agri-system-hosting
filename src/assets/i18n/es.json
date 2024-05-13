@@ -586,7 +586,8 @@
             "price-discount": "descuento de precio",
             "Unmark Discount": "Desmarcar Descuento",
             "Mark as Weight Discount": "Marcar como Descuento de Peso",
-            "Mark as Price Discount": "Marcar como Descuento de Precio"
+            "Mark as Price Discount": "Marcar como Descuento de Precio",
+            "Unit for Table": "Unidad para la Tabla"
         }
     },
     "messages": {

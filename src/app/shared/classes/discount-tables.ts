@@ -2,6 +2,7 @@ import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { CollectionReference, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 import { Firestore, collection, doc, getDoc, getDocs, limit, orderBy, query, where } from "@angular/fire/firestore";
+import { units } from "./mass";
 
 export class DiscountTables extends FirebaseDocInterface {
     date: Date;
@@ -71,6 +72,7 @@ export class DiscountTable {
     fieldName: string = "";
     headers: DiscountTableHeader[] = [];
     data: DiscountTableRow[] = [];
+    unit: units;
 
     constructor(tableData?: any) {
         if (tableData) {
@@ -78,6 +80,7 @@ export class DiscountTable {
             this.fieldName = tableData.fieldName;
             this.headers = tableData.headers.map(header => ({ ...header }));
             this.data = tableData.data.map(item => ({ ...item }));
+            this.unit = tableData.unit;
         }
     }
 
