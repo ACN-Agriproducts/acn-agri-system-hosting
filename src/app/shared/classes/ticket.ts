@@ -443,7 +443,6 @@ export const WEIGHT_DISCOUNT_FIELDS = [
  *      --> Formula: (Percentage)/100 * ($ Total)
  */
 
-// DECIDE WHETHER TO SUBDIVIDE INTO 3 TYPES OF PRICE DISCOUNTS OR CREATE SEPARATE CLASSES FOR THEM ALTOGETHER
 export class PriceDiscounts {
     public infested: number = 0;
     public musty: number = 0;
@@ -465,11 +464,7 @@ export class PriceDiscounts {
             this.unitRateDiscounts = { ...data.unitRateDiscounts };
         }
     }
-
-    public total(): number {
-        return this.getFixedTotal();
-    }
-
+    
     public setUnitRateDiscount(discountName: string, rate: Price, weight: Mass): void {
         const discount = rate.getPricePerUnit() * weight.getMassInUnit(rate.getUnit());
 
@@ -477,7 +472,7 @@ export class PriceDiscounts {
         this.unitRateDiscounts[discountName] += Math.round(discount * 1000) / 1000;
     }
 
-    public getFixedTotal(): number {
+    public total(): number {
         const discountsTotal = Object.entries(this).reduce((total, [currentKey, currentValue]) => {
             if (currentKey === 'unitRateDiscounts') return 0;
             return total + currentValue
