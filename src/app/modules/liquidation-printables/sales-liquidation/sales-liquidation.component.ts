@@ -4,8 +4,8 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
 import { Contract } from '@shared/classes/contract';
 import { UNIT_LIST, units } from '@shared/classes/mass';
-import { Ticket } from '@shared/classes/ticket';
 import { LiquidationPrintableData } from '../printable-liquidation.component';
+import { LiquidationTotals } from '@shared/classes/liquidation';
 
 const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
   ["weight", "mTon"],
@@ -25,13 +25,12 @@ const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
 export class SalesLiquidationComponent implements OnInit {
   @Input() data: LiquidationPrintableData;
 
-  public tickets: Ticket[];
-  public contract: Contract;
   public companyDoc$: Promise<Company>;
   public logoUrl: string = '';
   public date: Date = new Date();
   public language: string;
-  public units = UNIT_LIST;
+
+  readonly units = UNIT_LIST;
 
   constructor(
     private db: Firestore,
@@ -45,8 +44,6 @@ export class SalesLiquidationComponent implements OnInit {
     this.companyDoc$.then(async doc => {
       this.logoUrl = await doc.getLogoURL(this.db);
     });
-
-    this.contract = this.data.contract;
 
     this.data.displayUnits = new Map<string, units>(DEFAULT_DISPLAY_UNITS);
   }
