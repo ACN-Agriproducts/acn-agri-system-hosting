@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { arrayUnion, Firestore } from '@angular/fire/firestore';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -6,6 +6,7 @@ import { CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
 import { Contract, TruckerInfo } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
+import { Mass } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Ticket, WeightDiscounts } from '@shared/classes/ticket';
 import { firstValueFrom, lastValueFrom, map, Observable } from 'rxjs';
@@ -30,6 +31,7 @@ export class TicketFormComponent implements OnInit {
   public currentContract: Contract;
 
   public saveTimeout: NodeJS.Timeout;
+  public discountChangeFlag: boolean = false;
 
   constructor(
     public dialog: MatDialog,
@@ -98,6 +100,7 @@ export class TicketFormComponent implements OnInit {
     if(this.ticket.gross.amount == null || this.ticket.tare.amount == null || !this.contractId) return;
 
     this.ticket.setDiscounts(this.discountTables[this.ticket.productName]);
+    this.discountChangeFlag = !this.discountChangeFlag;
 
     let newDryWeight = this.ticket.net;    
     for(const mass of Object.values(this.ticket.weightDiscounts)) {
@@ -161,4 +164,23 @@ export class TicketFormComponent implements OnInit {
     clearTimeout(this.saveTimeout);
     this.saveTimeout = setTimeout(() => this.ticket.set(), 5000);
   }
+}
+
+
+@Pipe({
+  name: 'discountIterator',
+  pure: true,
+})
+export class WeightDiscountIteratorPipe implements PipeTransform {
+
+  transform(value: WeightDiscounts, ...args: any[] ): {[name: string]: Mass} {
+    const data = {};
+    for (const key of Object.keys(value)) {
+        data[key] = value[key];
+    }
+
+    console.log(data);
+    return data;
+  }
+
 }

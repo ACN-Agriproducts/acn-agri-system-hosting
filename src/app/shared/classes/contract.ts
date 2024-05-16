@@ -219,7 +219,7 @@ export class Contract extends FirebaseDocInterface {
         this.client = data.client.withConverter(Contact.converter);
         this.clientInfo = data.clientInfo;
         if(data?.clientInfo?.notarialActDate) this.clientInfo.notarialActDate = data.clientInfo.notarialActDate.toDate();
-        this.clientName = data.clientName;
+        this.clientName = data.clientName ?? data.clientInfo.name;
         this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = new Mass(data.currentDelivered ?? 0, FirebaseDocInterface.session.getDefaultUnit());
         this.date = data.date?.toDate();

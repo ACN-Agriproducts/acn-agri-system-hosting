@@ -338,7 +338,9 @@
             "Out": "Out",
             "impurities": "Impurities",
             "brokenGrain": "Broken Grain",
-            "price": "Price"
+            "price": "Price",
+            "Discount Info" : "Discount Info"
+
         },
         "table": {
             "Type": "Type",

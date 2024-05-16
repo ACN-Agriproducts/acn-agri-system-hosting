@@ -339,7 +339,8 @@
             "Out": "Salida",
             "impurities": "Impurezas",
             "brokenGrain": "Grano Quebrado",
-            "price": "Precio"
+            "price": "Precio",
+            "Discount Info" : "Descuentos"
         },
         "table": {
             "Type": "Tipo",

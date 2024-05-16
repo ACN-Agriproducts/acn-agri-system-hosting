@@ -227,6 +227,8 @@ export class Ticket extends FirebaseDocInterface{
                 voidDate: data.voidDate ?? null,
                 weight: data.weight ?? null,
 
+                // weightDiscounts: data.weightDiscounts.getRawData() ?? null,
+
                 contractRef: data.contractRef ?? null,
 
                 clientRef: data.clientRef ?? null,
@@ -527,6 +529,16 @@ export class WeightDiscounts {
         const roundedDiscountWeight = Math.round(discountWeight * 1000) / 1000;
 
         this[discountName] = this[discountName].add(new Mass(roundedDiscountWeight, weight.getUnit()));
+    }
+
+    public getDiscountsObject(): {[name: string]: Mass} {
+        const data = {};
+        for (const key of Object.keys(this)) {
+            data[key] = this[key];
+        }
+
+        console.log(data);
+        return data;
     }
 }
 
