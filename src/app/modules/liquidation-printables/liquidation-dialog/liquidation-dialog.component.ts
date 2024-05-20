@@ -40,6 +40,7 @@ export class LiquidationDialogComponent implements OnInit {
 
   ngOnInit() {
     this.data.displayUnits ??= new Map<string, units>(DEFAULT_DISPLAY_UNITS);
+    this.data.totals = new LiquidationTotals(this.data.selectedTickets, this.data.contract);
   }
 
   public async onDownloadLiquidation(): Promise<void> {

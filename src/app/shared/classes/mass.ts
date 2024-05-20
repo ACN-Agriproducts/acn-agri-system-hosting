@@ -4,11 +4,11 @@ import { Product } from "./product";
 export const UNIT_LIST = ["lbs", "kg", "mTon", "CWT", "bu", "tn"] as const;
 export declare type units = typeof UNIT_LIST[number];
 
-const unitNameMap: Map<units, string> = new Map<units, string>([
+export const unitNameMap: Map<units, string> = new Map<units, string>([
     ["lbs", "pounds"],
     ["kg", "kilograms"],
     ["mTon", "metric tons"],
-    ["CWT", "hundedweight"],
+    ["CWT", "hundredweight"],
     ["bu", "bushels"],
     ["tn", "short tons"]
 ]);
@@ -50,6 +50,7 @@ export class Mass {
     }
 
     add(addend: Mass): Mass {
+        if (this.defaultUnits === 'bu' && !addend.conversions.get('bu')) addend.defineBushels(this.conversions.get('bu'));
         const amount = this.get() + addend.getMassInUnit(this.defaultUnits);
         return new Mass(amount, this.defaultUnits, this.conversions.get('bu'));
     }

@@ -1,5 +1,5 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { Component, OnInit } from '@angular/core';
+import { Firestore, doc } from '@angular/fire/firestore';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
@@ -8,8 +8,8 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
-import { Liquidation, LiquidationTotals, ReportTicket } from '@shared/classes/liquidation';
-import { UNIT_LIST, units } from '@shared/classes/mass';
+import { Liquidation, ReportTicket } from '@shared/classes/liquidation';
+import { UNIT_LIST } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
 
@@ -28,7 +28,6 @@ export class SetLiquidationPage implements OnInit {
   public type: string;
   public ready: boolean = false;
   public liquidation: Liquidation;
-  public totals: LiquidationTotals = new LiquidationTotals();
   public editingRefId: string;
   public allSelected: boolean = false;
 
@@ -67,9 +66,9 @@ export class SetLiquidationPage implements OnInit {
         this.snack.openTranslated("Contract does not have a price. Some fields will be affected.", 'warn');
       }
 
-      this.tickets = (await contract.getTickets()).map(ticket => {
-        ticket.getWeightDiscounts(this.discountTables);
+      this.tickets = (await contract.getTickets()).map(ticket  => {
         ticket.defineBushels(contract.productInfo);
+        ticket.setDiscounts(this.discountTables);
         return {
           data: Liquidation.getTicketInfo(ticket),
           inReport: false
@@ -91,7 +90,6 @@ export class SetLiquidationPage implements OnInit {
   }
 
   ngOnDestroy() {
-    delete this.totals;
     delete this.liquidation;
   }
 
@@ -104,7 +102,6 @@ export class SetLiquidationPage implements OnInit {
 
   public selectedTicketsChange(): void {
     this.selectedTickets = this.selectedTicketsPipe.transform(this.tickets);
-    this.totals = new LiquidationTotals(this.selectedTickets.map(t => t.data), this.contract);
     this.allSelected = this.selectedTickets.length === this.tickets.filter(t => t.data.status !== "pending" || this.editingTickets?.includes(t)).length;
   }
 
@@ -115,15 +112,9 @@ export class SetLiquidationPage implements OnInit {
     this.liquidation.ticketRefs = this.selectedTickets.map(t => t.data.ref.withConverter(Ticket.converter));
     this.liquidation.tickets = this.selectedTickets.map(t => t.data);
 
-    this.liquidation.getTotal(this.contract); // TO SAVE THE LIQUIDATION TOTAL VALUE
+    this.liquidation.setTotalValue(this.contract); // TO SAVE THE LIQUIDATION TOTAL VALUE
 
     this.liquidation.set().then(() => {
-      this.tickets.forEach(ticket => {
-        updateDoc(ticket.data.ref, {
-          priceDiscounts: ticket.data.priceDiscounts.getRawData(),
-          weightDiscounts: ticket.data.weightDiscounts.getRawData()
-        });
-      });
       this.snack.openTranslated(`Liquidation ${this.editingRefId ? "updated" : "added"}`, "success");
       this.router.navigate([`dashboard/contracts/contract-info/${this.type}/${this.id}`]);
     })
@@ -138,7 +129,6 @@ export class SetLiquidationPage implements OnInit {
       data: {
         selectedTickets: this.selectedTickets.map(t => t.data),
         contract: this.contract,
-        totals: this.totals,
       },
       panelClass: "borderless-dialog",
       minWidth: "80%",

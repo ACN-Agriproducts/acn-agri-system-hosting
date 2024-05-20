@@ -134,7 +134,7 @@
             "Save": "Guardar",
             "Select All": "Seleccionar Todas",
             "select all": "seleccionar todos",
-            "selected": "Seleccionada",
+            "selected": "seleccionada",
             "set liquidation": "establecer liquidación",
             "Sour": "Agrio",
             "status": "estatus",
@@ -582,7 +582,13 @@
             "New header": "Nuevo encabezado",
             "low": "bajo",
             "high": "alto",
-            "discount": "descuento"
+            "discount": "descuento",
+            "weight-discount": "descuento de peso",
+            "price-discount": "descuento de precio",
+            "Unmark Discount": "Desmarcar Descuento",
+            "Mark as Weight Discount": "Marcar como Descuento de Peso",
+            "Mark as Price Discount": "Marcar como Descuento de Precio",
+            "Unit for Table": "Unidad para la Tabla"
         }
     },
     "messages": {

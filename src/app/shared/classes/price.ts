@@ -16,8 +16,8 @@ export class Price {
      * @param mass must provide if the desired unit to convert the price to is bushels
      * @returns price per unit ($/unit)
      */
-    public getPricePerUnit(priceUnit: units, mass: Mass = new Mass(null, null)): number {
-        if (this.unit === priceUnit) return this.amount;
+    public getPricePerUnit(priceUnit?: units, mass: Mass = new Mass(null, null)): number {
+        if (this.unit === priceUnit || !priceUnit) return this.amount;
 
         const unitConversion = mass.conversions.get(priceUnit) / mass.conversions.get(this.unit);
         return this.amount / unitConversion;
@@ -27,6 +27,10 @@ export class Price {
         const amount = this.amount + added.getPricePerUnit(this.unit, mass);
         return new Price(amount, this.unit);
     }
+
+    public getUnit(): units {
+        return this.unit;
+    }
 }
 
 @Pipe({
@@ -35,6 +39,7 @@ export class Price {
 export class pricerPerUnitPipe implements PipeTransform {
     transform(value: Price, unit?: units, massOrSomething?: Mass | any, ...args: unknown[]): number {
         const mass: Mass = massOrSomething instanceof Mass ? massOrSomething : new Mass(null, null);
+        
         return (unit || value.unit) ? value.getPricePerUnit(unit || value.unit, mass) : value.amount;
     }
 }

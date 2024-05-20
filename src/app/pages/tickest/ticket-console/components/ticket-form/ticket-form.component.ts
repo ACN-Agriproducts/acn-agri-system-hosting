@@ -99,7 +99,7 @@ export class TicketFormComponent implements OnInit {
     this.saveTicket();
     if(this.ticket.gross.amount == null || this.ticket.tare.amount == null || !this.contractId) return;
 
-    this.ticket.getWeightDiscounts(this.discountTables[this.ticket.productName]);
+    this.ticket.setDiscounts(this.discountTables[this.ticket.productName]);
     this.discountChangeFlag = !this.discountChangeFlag;
 
     let newDryWeight = this.ticket.net;    

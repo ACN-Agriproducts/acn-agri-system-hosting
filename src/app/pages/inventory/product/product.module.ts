@@ -14,24 +14,26 @@ import { DprInvoiceTableComponent } from './components/dpr-invoice-table/dpr-inv
 import { DiscountTableComponent } from './components/discount-table/discount-table.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SetDiscountTableDialogComponent } from './components/set-discount-table-dialog/set-discount-table-dialog.component';
+import { SharedModule } from "../../../shared/shared.module";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ProductPageRoutingModule,
-    CoreModule,
-    ReactiveFormsModule,
-    DragDropModule
-  ],
-  declarations: [
-    ProductPage,
-    ProductDprTableComponent,
-    DprTicketsTableComponent,
-    DprInvoiceTableComponent,
-    DiscountTableComponent,
-    SetDiscountTableDialogComponent,
-  ]
+    declarations: [
+        ProductPage,
+        ProductDprTableComponent,
+        DprTicketsTableComponent,
+        DprInvoiceTableComponent,
+        DiscountTableComponent,
+        SetDiscountTableDialogComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        ProductPageRoutingModule,
+        CoreModule,
+        ReactiveFormsModule,
+        DragDropModule,
+        SharedModule
+    ]
 })
 export class ProductPageModule {}

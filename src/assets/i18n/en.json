@@ -133,7 +133,7 @@
             "Save": "Save",
             "select all": "select all",
             "Select All": "Select All",
-            "selected": "Selected",
+            "selected": "selected",
             "set liquidation": "set liquidation",
             "Sour": "Sour",
             "status": "status",
@@ -583,7 +583,13 @@
             "New header": "New header",
             "low": "low",
             "high": "high",
-            "discount": "discount"
+            "discount": "discount",
+            "weight-discount": "weight discount",
+            "price-discount": "price discount",
+            "Unmark Discount": "Unmark Discount",
+            "Mark as Weight Discount": "Mark as Weight Discount",
+            "Mark as Price Discount": "Mark as Price Discount",
+            "Unit for Table": "Unit for Table"
         }
     },
     "messages": {
