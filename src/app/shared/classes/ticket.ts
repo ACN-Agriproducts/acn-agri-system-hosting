@@ -388,7 +388,7 @@ export class Ticket extends FirebaseDocInterface{
                     this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], table.unit), this.net);
                 }
                 else if (header.type === 'weight-discount') {
-                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], table.unit, this.net);
+                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], table.unit ?? this.gross.defaultUnits, this.net);
                 }
             });
         }
