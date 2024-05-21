@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Ticket } from '@shared/classes/ticket';
 import { Company } from '@shared/classes/company';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { addDoc, Firestore } from '@angular/fire/firestore';
+import { addDoc, Firestore, where } from '@angular/fire/firestore';
 import { contactInfo, Invoice, item } from '@shared/classes/invoice';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Contract } from '@shared/classes/contract';
@@ -11,6 +11,7 @@ import { Product } from '@shared/classes/product';
 import { Contact } from '@shared/classes/contact';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Mass } from '@shared/classes/mass';
+import { MatLegacySelectChange } from '@angular/material/legacy-select';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { Mass } from '@shared/classes/mass';
   styleUrls: ['./confirm-invoice.page.scss'],
 })
 export class ConfirmInvoicePage implements OnInit {
+  public exportClients: Promise<Contact[]>;
   public today: Date = new Date();
   public companyDoc: Company;
   public selectedTickets: Set<Ticket>;
@@ -52,6 +54,8 @@ export class ConfirmInvoicePage implements OnInit {
     }
 
     this.generatePromises = [];
+
+    this.exportClients = Contact.getList(this.db, this.session.getCompany(), where('isExportClient', "==", true));
 
     this.generatePromises.push(Company.getCompany(this.db, this.session.getCompany()).then(company => {
       this.companyDoc = company;
@@ -106,14 +110,14 @@ export class ConfirmInvoicePage implements OnInit {
     
     this.invoice = {
       buyer: {
-        city: "Valle Hermoso",
-        country: "Mexico",
-        name: "Agropecuaria la Capilla del Noreste SA de CV",
+        city:null,
+        country:null,
+        name:null,
         phone: null,
-        state: "Tamaulipas",
-        street: "Zaragosa S/N Colonia Centro",
+        state:null,
+        street:null,
         zip: null,
-        other: "CP:. 87500\nRFC: ACN 980211QC9"
+        other:null,
       },
       date: new Date(),
       id: 0,
@@ -267,6 +271,18 @@ export class ConfirmInvoicePage implements OnInit {
     }
 
     delete this.groups[product][client][group];
+  }
+
+  exportClientChange(change: MatLegacySelectChange) {
+    const contact = change.value as Contact;
+    const buyer = this.invoice.buyer;
+
+    buyer.city = contact.city;
+    buyer.country = contact.country;
+    buyer.name = contact.name;
+    buyer.state = contact.state;
+    buyer.street = contact.streetAddress;
+    buyer.other = `CP:. ${contact.zipCode}\nRFC: ${contact.rfc}`;
   }
 
   submit() {
