@@ -92,7 +92,7 @@ export class Ticket extends FirebaseDocInterface{
     // public adjustedWeight: Mass;
     // public beforeDiscounts: number;
     // public priceDiscounts: PriceDiscounts;
-    // public total: number;
+    // public netToPay: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -396,7 +396,7 @@ export class Ticket extends FirebaseDocInterface{
     }
 
     public setLiquidationData() {
-
+        
     }
 }
 

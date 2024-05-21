@@ -1,5 +1,5 @@
 
-* {
+:host * {
     box-sizing: border-box;
 }
 
@@ -29,5 +29,11 @@
         height: 8.5in;
         width: 11in;
         padding: 0.75in;
+    }
+}
+
+@media print {
+    :host * {
+        print-color-adjust: exact;
     }
 }

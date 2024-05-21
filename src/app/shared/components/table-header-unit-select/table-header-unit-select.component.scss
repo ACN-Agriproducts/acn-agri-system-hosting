@@ -1,9 +1,5 @@
 
 @media print {
-    * {
-        print-color-adjust: exact;
-    }
-
     .unit-select {
         display: none;
     }
@@ -13,21 +9,13 @@
 }
 
 .unit-select {
-    // min-width: 170px;
-    // max-width: 50px;
     .mat-form-field {
         font-weight: bold;
+        width: min(55px, 70%);
     }
     .mat-input-underline {
         display: none !important;
     }
-}
-
-.header-units {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: center;
 }
 
 .unit-label {

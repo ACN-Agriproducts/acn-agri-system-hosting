@@ -47,19 +47,19 @@
             <th [lang]="language" rowspan="2">{{ t('Inbound Date') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Ticket #') | uppercase }}</th>
             <th [lang]="language" colspan="3">
-                {{ t('Weight') | uppercase }}
-                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'weight' }"></ng-container>
+                {{ t('Weight') | uppercase }}<br>
+                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="weight"></app-table-header-unit-select>
             </th>
             <th [lang]="language" colspan="2">{{ t('Moisture') | uppercase }}</th>
             <th [lang]="language" colspan="2">{{ t('Drying') | uppercase }}</th>
             <th [lang]="language" colspan="2">{{ t('Damage') | uppercase }}</th>
             <th [lang]="language" rowspan="2">
-                {{ t('Adjusted Weight') | uppercase }}
-                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'adjustedWeight' }"></ng-container>
+                {{ t('Adjusted Weight') | uppercase }}<br>
+                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-table-header-unit-select>
             </th>
             <th [lang]="language" rowspan="2">
-                {{ t('Price') | uppercase }}
-                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'price', isPrice: true }"></ng-container>
+                {{ t('Price') | uppercase }}<br>
+                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="price" [isPrice]="true"></app-table-header-unit-select>
             </th>
             <th [lang]="language" rowspan="2" 
                 *ngIf="data.totals.priceDiscounts.infested 
@@ -82,15 +82,15 @@
             <th>{{ t('Net') | uppercase }}</th>
             <th>{{ t('%') }}</th>
             <th>
-                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'moisture' }"></ng-container>
+                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="moisture"></app-table-header-unit-select>
             </th>
             <th>{{ t('%') }}</th>
             <th>
-                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'dryWeight' }"></ng-container>
+                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="dryWeight"></app-table-header-unit-select>
             </th>
             <th>{{ t('%') }}</th>
             <th>
-                <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'damagedGrain' }"></ng-container>
+                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="damagedGrain"></app-table-header-unit-select>
             </th>
         </tr>
         <tr *ngFor="let ticket of data.selectedTickets; even as even">

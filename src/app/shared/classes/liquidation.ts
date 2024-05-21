@@ -227,8 +227,6 @@ export interface TicketInfo {
     original_weight: Mass;
 }
 
-
-
 export interface FileStorageInfo {
     name: string;
     ref: string;

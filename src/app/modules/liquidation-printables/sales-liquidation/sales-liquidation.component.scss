@@ -1,10 +1,6 @@
 
 $lightlightgray: rgb(230, 230, 230);
 
-* {
-    box-sizing: border-box;
-}
-
 :host {
     background-color: white;
     display: block;
@@ -58,6 +54,7 @@ $lightlightgray: rgb(230, 230, 230);
 
     th {
         text-transform: uppercase;
+        padding: 2px 2px;
     }
 
     .totals {
@@ -82,39 +79,4 @@ $lightlightgray: rgb(230, 230, 230);
             text-align: right;
         }
     }
-}
-
-@media print {
-    * {
-        print-color-adjust: exact;
-    }
-
-    .unit-select {
-        display: none;
-    }
-    .unit-label {
-        display: block !important;
-    }
-}
-
-.unit-select {
-    min-width: 170px;
-    // max-width: 50px;
-    .mat-form-field {
-        font-weight: bold;
-    }
-    .mat-input-underline {
-        display: none !important;
-    }
-}
-
-.header-units {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.unit-label {
-    display: none;
 }
