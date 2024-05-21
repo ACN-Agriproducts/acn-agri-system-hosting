@@ -32,7 +32,9 @@ export class ConfirmInvoicePage implements OnInit {
   public groups: {
     [product: string]: {
       [client: string]: {
-        [group: string]: TicketGroup
+        [contractID: string]: {
+          [group: string]: TicketGroup
+        }
       }
     }
   }
@@ -90,8 +92,12 @@ export class ConfirmInvoicePage implements OnInit {
         this.groups[ticket.productName][ticket.clientName] = {};
       }
 
-      if(!this.groups[ticket.productName][ticket.clientName][driver]) {
-        this.groups[ticket.productName][ticket.clientName][driver] = {
+      if(!this.groups[ticket.productName][ticket.clientName][ticket.contractRef.id]) {
+        this.groups[ticket.productName][ticket.clientName][ticket.contractRef.id] = {};
+      }
+
+      if(!this.groups[ticket.productName][ticket.clientName][ticket.contractRef.id][driver]) {
+        this.groups[ticket.productName][ticket.clientName][ticket.contractRef.id][driver] = {
           tickets: [],
           price: null,
           totalWeight: 0,
@@ -99,10 +105,10 @@ export class ConfirmInvoicePage implements OnInit {
       }
       
       this.generatePromises.push(ticket.getTransport(this.db).then(result => {
-        this.groups[ticket.productName][ticket.clientName][driver].transport = result;
+        this.groups[ticket.productName][ticket.clientName][ticket.contractRef.id][driver].transport = result;
       }));
 
-      const object = this.groups[ticket.productName][ticket.clientName][driver];
+      const object = this.groups[ticket.productName][ticket.clientName][ticket.contractRef.id][driver];
       object.tickets.push(ticket);
       object.totalWeight += ticket.net.get();
       totalWeight = totalWeight.add(ticket.net);
@@ -144,9 +150,9 @@ export class ConfirmInvoicePage implements OnInit {
     }
   }
 
-  getConnectedProductGroupList(product: string, client: string, group: string): string[] {
-    const connectedList: string[] = Object.keys(this.groups[product][client])
-      .filter(f => this.groups[product][client][f].tickets[0]?.truckerId == this.groups[product][client][group].tickets[0]?.truckerId)
+  getConnectedProductGroupList(product: string, client: string, contractID: string, group: string): string[] {
+    const connectedList: string[] = Object.keys(this.groups[product][client][contractID])
+      .filter(f => this.groups[product][client][contractID][f].tickets[0]?.truckerId == this.groups[product][client][contractID][group].tickets[0]?.truckerId)
       .map(g => `${product}-${client}-${g}`);
     const index = connectedList.findIndex(s => s == `${product}-${client}-${group}`);
     connectedList.splice(index, 1);
@@ -174,7 +180,7 @@ export class ConfirmInvoicePage implements OnInit {
 
   getItemFromListId(id: string) {
     const steps = id.split('-');
-    return this.groups[steps[0]][steps[1]][steps[2]];
+    return this.groups[steps[0]][steps[1]][steps[2]][steps[3]];
   }
 
   getMetricTonTotal(ticketList: Ticket[]) {
@@ -203,8 +209,9 @@ export class ConfirmInvoicePage implements OnInit {
         type: "label"
       });
       for(let client in this.groups[product]) {
-        for(let group in this.groups[product][client]){
-          const ticketGroup = this.groups[product][client][group];
+        for(let contractID in this.groups[product][client]) {
+          for(let group in this.groups[product][client][contractID]){
+          const ticketGroup = this.groups[product][client][contractID][group];
           console.log(ticketGroup.price);
           ticketGroup.price ??= await this.getItemPrice(ticketGroup);
           const nextItem: item = {
@@ -218,6 +225,7 @@ export class ConfirmInvoicePage implements OnInit {
           };
           this.invoice.total += Math.round(nextItem.quantity * nextItem.price * 100) / 100;
           this.invoice.items.push(nextItem);
+          }
         }
       }
     }
@@ -264,8 +272,8 @@ export class ConfirmInvoicePage implements OnInit {
     return Math.round(mTonPrice * 100) / 100;
   }
 
-  deleteGroup(product: string, client: string, group: string) {
-    if (this.groups[product][client][group].tickets.length !== 0) {
+  deleteGroup(product: string, client: string, contractID: string, group: string) {
+    if (this.groups[product][client][contractID][group].tickets.length !== 0) {
       this.snack.openTranslated("Group must be empty to be deleted.", "warn");
       return;
     }

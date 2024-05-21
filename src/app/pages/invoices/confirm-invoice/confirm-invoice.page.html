@@ -172,39 +172,41 @@
           </ion-card-header>
           <ion-card-content>
             <div *ngFor="let client of productGroup.value | keyvalue">
-              <h3>{{client.key}}</h3>
-              <div class="group-area" *ngFor="let group of client.value | keyvalue">
-                <div class="list-title">
-                  <span class="list-title-text">
-                    <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
-                    <span>{{group.value.totalWeight}} lbs | {{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
-                  </span>
-                  <span>
-                    <mat-form-field>
-                      <mat-label>Price</mat-label>
-                      <span matPrefix>$</span>
-                      <input matInput [(ngModel)]="group.value.price" [disabled]="invoiceCreated">
-                    </mat-form-field>
-                  </span>
-                  <button class="list-action-bar" mat-icon-button (click)="deleteGroup(productGroup.key, client.key, group.key)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-                <div
-                  cdkDropList
-                  [id]="productGroup.key + '-' + client.key + '-' + group.key"
-                  [cdkDropListData]="group.value.tickets"
-                  [cdkDropListConnectedTo]="getConnectedProductGroupList(productGroup.key, client.key, group.key)"
-                  class="ticket-list"
-                  (cdkDropListDropped)="drop($event)">
-                  <div class="ticket-box" *ngFor="let ticket of group.value.tickets" cdkDrag [cdkDragData]="ticket">
-                    <span>{{ticket.id}}</span>
-                    <span>{{ticket.driver}}</span>
-                    <span>{{ticket.plates}}</span>
-                    <span>{{ticket.net | massInUnit:"lbs"}} lbs | {{ticket.net | massInUnit:'mTon' | number:"0.3"}} mTon</span>
+              <ng-container *ngFor="let contractID of client.value | keyvalue">
+                <h3>{{client.key}}</h3>
+                <div class="group-area" *ngFor="let group of contractID.value | keyvalue">
+                  <div class="list-title">
+                    <span class="list-title-text">
+                      <ion-card-subtitle>{{group.key}}</ion-card-subtitle>
+                      <span>{{group.value.totalWeight}} lbs | {{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
+                    </span>
+                    <span>
+                      <mat-form-field>
+                        <mat-label>Price</mat-label>
+                        <span matPrefix>$</span>
+                        <input matInput [(ngModel)]="group.value.price" [disabled]="invoiceCreated">
+                      </mat-form-field>
+                    </span>
+                    <button class="list-action-bar" mat-icon-button (click)="deleteGroup(productGroup.key, contractID.key, contractID.key, group.key)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                  <div
+                    cdkDropList
+                    [id]="productGroup.key + '-' + contractID.key + '-' + group.key"
+                    [cdkDropListData]="group.value.tickets"
+                    [cdkDropListConnectedTo]="getConnectedProductGroupList(productGroup.key, client.key, contractID.key, group.key)"
+                    class="ticket-list"
+                    (cdkDropListDropped)="drop($event)">
+                    <div class="ticket-box" *ngFor="let ticket of group.value.tickets" cdkDrag [cdkDragData]="ticket">
+                      <span>{{ticket.id}}</span>
+                      <span>{{ticket.driver}}</span>
+                      <span>{{ticket.plates}}</span>
+                      <span>{{ticket.net | massInUnit:"lbs"}} lbs | {{ticket.net | massInUnit:'mTon' | number:"0.3"}} mTon</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
             </div>
           </ion-card-content>
         </ion-card>
@@ -231,21 +233,23 @@
           <span>{{today | date:'MM-dd-yy'}}</span>
         </div>
         <div class="grain-relation-section" *ngFor="let client of product.value | keyvalue">
-          <h1>{{client.key}}</h1>
-          <div *ngFor="let group of client.value | keyvalue; let last = last">
-            <div class="relation-grid">
-              <span>{{group.value.price | currency}}</span>
-              <div class="plates-column">
-                <span *ngFor="let ticket of group.value.tickets">{{ticket.plates}} - {{ticket.getNet().getMassInUnit('mTon') | number:"0.3"}} mTon</span>
+          <ng-container *ngFor="let contractID of client.value | keyvalue">
+            <h1>{{client.key}}</h1>
+            <div *ngFor="let group of contractID.value | keyvalue; let last = last">
+              <div class="relation-grid">
+                <span>{{group.value.price | currency}}</span>
+                <div class="plates-column">
+                  <span *ngFor="let ticket of group.value.tickets">{{ticket.plates}} - {{ticket.getNet().getMassInUnit('mTon') | number:"0.3"}} mTon</span>
+                </div>
+                <div class="right-row">
+                  <span>{{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
+                  <span>{{group.value.transport.name}}</span>
+                  <span>{{group.value.transport.caat}}</span>
+                </div>
               </div>
-              <div class="right-row">
-                <span>{{getMetricTonTotal(group.value.tickets) | number:"0.3"}} mTon</span>
-                <span>{{group.value.transport.name}}</span>
-                <span>{{group.value.transport.caat}}</span>
-              </div>
+              <mat-divider *ngIf="!last"></mat-divider>
             </div>
-            <mat-divider *ngIf="!last"></mat-divider>
-          </div>
+          </ng-container>
         </div>
       </div>
       <div class="page-break"></div>
