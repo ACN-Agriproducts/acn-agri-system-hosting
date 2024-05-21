@@ -42,7 +42,7 @@ export class ProductPage implements OnInit {
 
       this.discountTables = await productDoc.getDiscountTables() 
         ?? new DiscountTables(doc(productDoc.getDiscountTablesCollection()));
-      await this.discountTables.set();
+      //await this.discountTables.set();
 
       this.ready = true;
     });

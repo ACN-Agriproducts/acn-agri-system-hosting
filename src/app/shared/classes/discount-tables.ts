@@ -80,7 +80,7 @@ export class DiscountTable {
             this.fieldName = tableData.fieldName;
             this.headers = tableData.headers.map(header => ({ ...header }));
             this.data = tableData.data.map(item => ({ ...item }));
-            this.unit = tableData.unit;
+            this.unit = tableData.unit ?? FirebaseDocInterface.session.getDefaultUnit();
         }
     }
 
