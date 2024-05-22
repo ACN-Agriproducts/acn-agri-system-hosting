@@ -22,13 +22,6 @@ export class Liquidation extends FirebaseDocInterface {
     public total: number;
     public amountPaid: number;
 
-    // public id: string; // DO I NEED AFTER ALL ???
-
-    // FOLLOWING VALUES WILL BE USED TO HELP CALCULATE LIQUIDATION VALUES/TOTALS
-    public productInfo: any; // TODO
-    public price: Price; // TODO
-    public quantity: Mass; // TODO
-
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if (snapshotOrRef instanceof QueryDocumentSnapshot) {
@@ -162,7 +155,7 @@ export class Liquidation extends FirebaseDocInterface {
         };
     }
 
-    public getTotal(contract: Contract): void {
+    public setTotalValue(contract: Contract): void {
         this.total = +(new LiquidationTotals(this.tickets, contract)).netToPay.toFixed(3);
     }
 }
@@ -198,9 +191,15 @@ export class LiquidationTotals {
             const tempBeforeFinalDiscounts = (price.getPricePerUnit(ticket.net.getUnit(), contract.quantity)) * tempAdjustedWeight.get();
             this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
 
-            for (const key of Object.keys(this.priceDiscounts)) {
+            for (const key of Object.keys(ticket.priceDiscounts)) {
+                if (key === 'unitRateDiscounts') continue;
                 this.priceDiscounts[key] += ticket.priceDiscounts[key];
             }
+            for (const key of Object.keys(ticket.priceDiscounts.unitRateDiscounts)) {
+                this.priceDiscounts.unitRateDiscounts[key] ??= 0;
+                this.priceDiscounts.unitRateDiscounts[key] += ticket.priceDiscounts.unitRateDiscounts[key];
+            }
+
             this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
         });
     }

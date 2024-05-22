@@ -170,7 +170,7 @@
             "Save": "Save",
             "select all": "select all",
             "Select All": "Select All",
-            "selected": "Selected",
+            "selected": "selected",
             "set liquidation": "set liquidation",
             "Set Payment": "Set Payment",
             "Simply drag and drop or click here to choose a file": "Simply drag and drop or click here to choose a file",
@@ -344,7 +344,9 @@
             "Out": "Out",
             "impurities": "Impurities",
             "brokenGrain": "Broken Grain",
-            "price": "Price"
+            "price": "Price",
+            "Discount Info" : "Discount Info"
+
         },
         "table": {
             "Type": "Type",
@@ -587,7 +589,13 @@
             "New header": "New header",
             "low": "low",
             "high": "high",
-            "discount": "discount"
+            "discount": "discount",
+            "weight-discount": "weight discount",
+            "price-discount": "price discount",
+            "Unmark Discount": "Unmark Discount",
+            "Mark as Weight Discount": "Mark as Weight Discount",
+            "Mark as Price Discount": "Mark as Price Discount",
+            "Unit for Table": "Unit for Table"
         }
     },
     "messages": {

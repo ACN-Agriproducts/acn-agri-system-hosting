@@ -10,6 +10,7 @@ import { LiquidationPrintableData } from '../printable-liquidation.component';
 
 import * as Excel from 'exceljs';
 import { ContractSettings } from '@shared/classes/contract-settings';
+import { LiquidationTotals } from '@shared/classes/liquidation';
 
 @Component({
   selector: 'app-liquidation-dialog',
@@ -41,6 +42,7 @@ export class LiquidationDialogComponent implements OnInit {
         this.selectedFormat = this.liquidationTypes['liquidation long'];
       }
     });
+    this.data.totals = new LiquidationTotals(this.data.selectedTickets, this.data.contract);
   }
 
   public async onDownloadLiquidation(): Promise<void> {

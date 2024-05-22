@@ -49,7 +49,8 @@ export class TicketConsolePage implements OnInit, OnDestroy {
     });
 
     // Get active tickets
-    Ticket.getActiveTickets(this.db, this.session.getCompany(), this.session.getPlant()).then(result => this.tickets = result);
+    const ticketsPromise = Ticket.getActiveTickets(this.db, this.session.getCompany(), this.session.getPlant());
+    ticketsPromise.then(result => this.tickets = result);
 
     // Get product discount tables
     Product.getProductList(this.db, this.session.getCompany()).then(async list => {
@@ -59,6 +60,11 @@ export class TicketConsolePage implements OnInit, OnDestroy {
       for(let i = 0; i < list.length; i++) {
         this.discountTables[list[i].ref.id] = tables[i];
       }
+
+      ticketsPromise.then(() => {
+        this.tickets.forEach(t => t.productName ? t.setDiscounts(this.discountTables[t.productName]) : console.log("??"));
+        this.ticketForms.forEach(form => form.discountChangeFlag = !form.discountChangeFlag)
+      });
     });
 
     // Get inventory info

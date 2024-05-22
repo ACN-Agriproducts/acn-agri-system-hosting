@@ -4,7 +4,9 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { DiscountTable } from '@shared/classes/discount-tables';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { DiscountTable, DiscountTableHeader } from '@shared/classes/discount-tables';
+import { UNIT_LIST, unitNameMap } from '@shared/classes/mass';
 import { WEIGHT_DISCOUNT_FIELDS } from '@shared/classes/ticket';
 
 @Component({
@@ -26,16 +28,19 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
   readonly discountFieldsList = WEIGHT_DISCOUNT_FIELDS;
+  readonly UNIT_NAME_LIST = unitNameMap;
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DiscountTable,
     public dialogRef: MatDialogRef<SetDiscountTableDialogComponent>,
     private titleCasePipe: TitleCasePipe,
+    private session: SessionInfo
   ) {}
 
   ngOnInit() {
     this.editing = this.data ? true : false;
     this.table = new DiscountTable(this.data);
+    this.table.unit ??= this.session.getDefaultUnit();
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -45,24 +50,28 @@ export class SetDiscountTableDialogComponent implements OnInit {
   add(event: MatChipInputEvent) {
     const value = (event.value || '').trim();
     if (value) {
-      this.table.headers.push(value);
+      this.table.headers.push({ name: value });
       this.table.data.forEach(item => item[value] = 0);
     }
     event.chipInput!.clear();
   }
 
-  remove(header: string) {
+  remove(header: DiscountTableHeader) {
     const index = this.table.headers.indexOf(header);
     if (index >= 0) {
       this.table.headers.splice(index, 1);
-      this.table.data.forEach(item => delete item[header]);
+      this.table.data.forEach(item => delete item[header.name]);
     }
   }
 
   generateDiscountData() {
     if (!this.standardConfig || this.editing) return;
 
-    this.table.headers.push("low", "high", "discount");
+    this.table.headers.unshift(
+      { name: "low" },
+      { name: "high" },
+      { name: "discount", type: "weight-discount" }
+    );
 
     this.table.addTableData({
       low: 0,
@@ -83,6 +92,10 @@ export class SetDiscountTableDialogComponent implements OnInit {
 
   setName(fieldName: string) {
     this.table.name = this.titleCasePipe.transform(fieldName);
+  }
+
+  resetHeaderType(header: DiscountTableHeader) {
+    delete header.type;
   }
 
   ngOnDestroy() {

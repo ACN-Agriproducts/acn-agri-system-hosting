@@ -2,6 +2,7 @@ import { DocumentData } from "rxfire/firestore/interfaces";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { CollectionReference, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore";
 import { Firestore, collection, doc, getDoc, getDocs, limit, orderBy, query, where } from "@angular/fire/firestore";
+import { units } from "./mass";
 
 export class DiscountTables extends FirebaseDocInterface {
     date: Date;
@@ -54,30 +55,37 @@ export class DiscountTables extends FirebaseDocInterface {
     }
 }
 
+export interface DiscountTableHeader {
+    name: string;
+    type?: "weight-discount" | "price-discount";
+}
+
+export interface DiscountTableRow {
+    low?: number;
+    high?: number;
+    discount?: number;
+    [columnName: string]: number;
+}
+
 export class DiscountTable {
     name: string = "";
     fieldName: string = "";
-    headers: string[] = [];
-    data: {
-        [key: string]: number
-    }[] = [];
+    headers: DiscountTableHeader[] = [];
+    data: DiscountTableRow[] = [];
+    unit: units;
 
     constructor(tableData?: any) {
         if (tableData) {
             this.name = tableData.name;
             this.fieldName = tableData.fieldName;
-            this.headers = [ ...tableData.headers ];
-            this.data = tableData.data.map(item => ({ ...item }));    
+            this.headers = tableData.headers.map(header => ({ ...header }));
+            this.data = tableData.data.map(item => ({ ...item }));
+            this.unit = tableData.unit ?? FirebaseDocInterface.session.getDefaultUnit();
         }
     }
 
     public addTableData(tableData?: any): void {
-        if (tableData) {
-            this.data.push(tableData);
-            return;
-        }
-
         const length = this.data.push({});
-        this.headers.forEach(header => this.data[length - 1][header] = 0);
+        this.headers.forEach(header => this.data[length - 1][header.name] = tableData?.[header.name] ?? 0);
     }
 }

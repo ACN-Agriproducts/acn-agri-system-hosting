@@ -8,7 +8,7 @@ import { TicketConsolePageRoutingModule } from './ticket-console-routing.module'
 
 import { NewTicketDialog, TicketConsolePage } from './ticket-console.page';
 import { CoreModule } from '@core/core.module';
-import { TicketFormComponent } from './components/ticket-form/ticket-form.component';
+import { TicketFormComponent, WeightDiscountIteratorPipe } from './components/ticket-form/ticket-form.component';
 import { ContractModule } from 'src/app/modules/contract/contract.module';
 import { NgxPrintModule } from 'ngx-print';
 import { SharedModule } from '@shared/shared.module';
@@ -27,7 +27,8 @@ import { SharedModule } from '@shared/shared.module';
   declarations: [
     TicketConsolePage, 
     TicketFormComponent, 
-    NewTicketDialog, 
+    NewTicketDialog,
+    WeightDiscountIteratorPipe, 
   ]
 })
 export class TicketConsolePageModule {}

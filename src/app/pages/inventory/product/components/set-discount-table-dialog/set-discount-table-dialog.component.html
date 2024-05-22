@@ -31,11 +31,24 @@
                         *ngFor="let header of table.headers"
                         (removed)="remove(header)"
                         selected
+                        [mat-menu-trigger-for]="matMenu"
                     >
-                        {{ header === 'low' || header === 'high' || header === 'discount' ? t(header) : header }}
-                        <button matChipRemove *ngIf="header!=='discount'">
+                        {{ header.name === 'low' || header.name === 'high' || header.name === 'discount' ? t(header.name) : header.name }}
+                        <span *ngIf="header.type">&nbsp;({{ t(header.type) }})</span>
+                        <button matChipRemove *ngIf="header.name!=='discount'">
                             <mat-icon>cancel</mat-icon>
                         </button>
+                        <mat-menu #matMenu>
+                            <button *ngIf="header.type" mat-menu-item (click)="resetHeaderType(header)">
+                                {{ t("Unmark Discount") }}
+                            </button>
+                            <button *ngIf="header.type !== 'weight-discount'" mat-menu-item (click)="header.type='weight-discount'">
+                                {{ t("Mark as Weight Discount") }}
+                            </button>
+                            <button *ngIf="header.type !== 'price-discount'" mat-menu-item (click)="header.type='price-discount'">
+                                {{ t("Mark as Price Discount") }}
+                            </button>
+                        </mat-menu>
                     </mat-chip>
                 </mat-chip-list>
                 <input [placeholder]="t('New header') + '...'"
@@ -44,6 +57,13 @@
                     [matChipInputAddOnBlur]="true"
                     (matChipInputTokenEnd)="add($event)"
                 >
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>{{ t("Unit for Table") }}</mat-label>
+                <mat-select [(ngModel)]="table.unit" name="unit">
+                    <mat-option *ngFor="let unit of UNIT_NAME_LIST | keyvalue" [value]="unit.key">{{ unit.value }} ({{ unit.key}})</mat-option>
+                </mat-select>
             </mat-form-field>
     
             <section *ngIf="!editing">

@@ -106,15 +106,15 @@
         </mat-form-field>
         <mat-form-field appearance="fill" class="net-field">
           <mat-label>{{t('Net')}}</mat-label>
-          <input matInput type="number" [ngModel]="ticket.net.amount | number:'0.0-3'" readonly>
+          <input matInput [ngModel]="ticket.net | massInUnit:null:ticket.net.amount | number:'0.0-3'" readonly>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('Discount W')}}</mat-label>
-          <input matInput type="number" [ngModel]="ticket.dryWeight.amount | number:'0.0-3'" readonly>
+          <input matInput [ngModel]="ticket.dryWeight.amount | number:'0.0-3'" readonly>
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{t('m. Ton')}}</mat-label>
-          <input matInput type="number" [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.0-3'" readonly>
+          <input matInput [ngModel]="ticket.net | massInUnit:'mTon':ticket.net.amount | number:'0.0-3'" readonly>
         </mat-form-field>
       </mat-card-content>
     </mat-card>
@@ -197,6 +197,19 @@
             </mat-radio-button>
           </ng-container>
         </mat-radio-group>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-subtitle>{{t('Discount Info')}}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list role="list">
+          <mat-list-item *ngFor="let discount of ticket.weightDiscounts | discountIterator:discountChangeFlag | keyvalue">
+            <b>{{discount.key | titlecase}}: </b> {{discount.value | massInUnit:null:null:discount.value.amount | number:'0.0-3'}} {{discount.value.defaultUnits}}
+          </mat-list-item>
+        </mat-list>
       </mat-card-content>
     </mat-card>
   </div>
