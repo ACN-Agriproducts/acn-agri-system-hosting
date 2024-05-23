@@ -2,17 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
-import { Contract } from '@shared/classes/contract';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 import { LiquidationPrintableData } from '../printable-liquidation.component';
-import { LiquidationTotals } from '@shared/classes/liquidation';
 
 const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
   ["weight", "mTon"],
-  // ["moisture", "mTon"],
-  // ["dryWeight", "mTon"],
-  // ["damagedGrain", "mTon"],
-  // ["adjustedWeight", "mTon"],
   ["price", "bu"],
   ["original_weight", "mTon"]
 ]);

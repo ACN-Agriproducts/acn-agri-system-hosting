@@ -18,7 +18,7 @@
         <colgroup>
             <col [lang]="language">
             <col [lang]="language">
-            <col [lang]="language">
+            <!-- <col [lang]="language"> -->
             <col [lang]="language">
             <col [lang]="language">
             <col [lang]="language">
@@ -30,14 +30,14 @@
         <tr>
             <th rowspan="2">{{ t('Date') }}</th>
             <th rowspan="2">{{ t('Ticket') }} #</th>
-            <th rowspan="2">{{ t('Contract') }}</th>
+            <!-- <th rowspan="2">{{ t('Contract') }}</th> -->
             <th rowspan="1" colspan="3">
                 {{ t('Weight') }}<br>
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="weight"></app-table-header-unit-select>
             </th>
             <th rowspan="2">{{ t('Moisture') }} %</th>
             <th rowspan="2">
-                {{ t('Original Weight') }}<br>
+                {{ t('Client Weight') }}<br>
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="original_weight"></app-table-header-unit-select>
             </th>
             <th rowspan="2">
@@ -54,7 +54,7 @@
         <tr class="body" *ngFor="let ticket of data.selectedTickets">
             <td class="text-center">{{ ticket.dateOut | date }}</td>
             <td class="text-center">{{ ticket.displayId }}</td>
-            <td class="text-center"></td>
+            <!-- <td class="text-center">{{ data.contract.id }}</td> -->
             <td class="text-right">{{ ticket.gross | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
             <td class="text-right">{{ ticket.tare | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
             <td class="text-right">{{ ticket.net | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
@@ -66,7 +66,7 @@
         <tr class="totals">
             <td class="text-center">{{ t("Totals") | uppercase }}</td>
             <td></td>
-            <td></td>
+            <!-- <td></td> -->
             <td>{{ data.totals.gross | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
             <td>{{ data.totals.tare | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
             <td>{{ data.totals.net | massInUnit:data.displayUnits.get('weight') | number:'1.0-3' }}</td>
