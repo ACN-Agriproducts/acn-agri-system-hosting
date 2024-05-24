@@ -89,7 +89,7 @@ export class DiscountTable {
         this.headers.forEach(header => this.data[length - 1][header.name] = tableData?.[header.name] ?? 0);
     }
 
-    public getTableData(value: number): DiscountTableRow {
-        return this.data.find(row => value >= row.low && value <= row.high);
+    public getTableData(lookupValue: number): DiscountTableRow {
+        return this.data.find(row => lookupValue >= row.low && lookupValue <= row.high);
     }
 }
