@@ -23,14 +23,16 @@ mat-toolbar {
     box-shadow: 2px 2px rgba($color: #000000, $alpha: 0.2);
     overflow-y: auto;
     flex: 1; // ==> flex: 1 1 0%;
-
-    &>* {
-        flex: 0 0 auto; // auto means look at my height and width
-    }
+    padding: 20px;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 12in) {
     .printable-wrapper {
         justify-content: center;
     }
+}
+
+:host ::ng-deep .printable-wrapper > * {
+    // flex: 0 0 auto; // auto means look at my height and width
+    transform: scale(0.9);
 }
