@@ -2,11 +2,6 @@
 $lightlightgray: rgb(230, 230, 230);
 
 :host {
-    display: block;
-    height: auto; //203.2mm;
-    background-color: white;
-    margin: 1em;
-    
     // width: 10in; //266.7mm;
     // outline: black solid 1px;
     // padding: 12.7mm;
@@ -26,19 +21,16 @@ table {
     }
 
     .one-fr {
-        width: 42.66px;
+        // width: 42.66px;
     }
-
     .one-and-half-fr {
-        width: 64px;
+        // width: 64px;
     }
-
     .two-fr {
-        width: 85.33px;
+        // width: 85.33px;
     }
-
     .four-and-half-fr {
-        width: 192px;
+        // width: 192px;
     }
 
     .total-row {
@@ -49,11 +41,9 @@ table {
     .center {
         text-align: center;
     }
-    
     .left {
         text-align: left;
     }
-    
     .right {
         text-align: right;
     }
@@ -141,4 +131,28 @@ table {
 
 .unit-label {
     display: none;
+}
+
+@media print {
+    table {
+        font-size: 1vw;
+
+        .one-fr {
+            // width: 42.66px;
+        }
+        .one-and-half-fr {
+            // width: 64px;
+        }
+        .two-fr {
+            // width: 85.33px;
+        }
+        .four-and-half-fr {
+            // width: 192px;
+        }
+
+        col {
+            min-width: min-content;
+            width: auto !important;
+        }
+    }
 }

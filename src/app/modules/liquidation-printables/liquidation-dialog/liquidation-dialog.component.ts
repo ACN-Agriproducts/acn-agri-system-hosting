@@ -28,6 +28,7 @@ export class LiquidationDialogComponent implements OnInit {
     "Liquidation Long": "liquidation-long",
   };
   public selectedFormat: string = this.printableFormats["Liquidation Long"];
+  public orientation: string = "landscape";
 
   readonly units = UNIT_LIST;
 

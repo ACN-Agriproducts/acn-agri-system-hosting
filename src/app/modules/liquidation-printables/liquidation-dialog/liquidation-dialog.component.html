@@ -1,14 +1,12 @@
 
-<app-printable-dialog [printStyle]="{'@page' : { size: 'letter landscape' }}" *transloco="let t, read: 'contracts.info'">
+<app-printable-dialog *transloco="let t, read: 'contracts.info'">
   <ng-container ngProjectAs="buttons">
     <button mat-icon-button (click)="onDownloadLiquidation()">
       <mat-icon>save_alt</mat-icon>
     </button>
     <button mat-stroked-button [matMenuTriggerFor]="unitsMenu">{{ t('units') | titlecase }}</button>
     <mat-menu #unitsMenu>
-      <button mat-menu-item *ngFor="let unit of units" (click)="setUnits(unit)">
-        {{ unit | uppercase }}
-      </button>
+      <button mat-menu-item *ngFor="let unit of units" (click)="setUnits(unit)">{{ unit }}</button>
     </mat-menu>
     <button mat-stroked-button [matMenuTriggerFor]="formatMenu">{{ t('format') | titlecase }}</button>
     <mat-menu #formatMenu>
@@ -17,9 +15,15 @@
         (click)="selectedFormat=format.value"
       >{{ format.key }}</button>
     </mat-menu>
+    <button mat-stroked-button [matMenuTriggerFor]="orientationMenu">{{ t('orientation') | titlecase }}</button>
+    <mat-menu #orientationMenu>
+      <button mat-menu-item (click)="orientation='landscape'">{{ t('landscape') }}</button>
+      <button mat-menu-item (click)="orientation='portrait'">{{ t('portrait') }}</button>
+    </mat-menu>
   </ng-container>
   <app-printable-liquidation id="printable"
     [data]="data"
     [format]="selectedFormat"
+    [class]="orientation"
   ></app-printable-liquidation>
 </app-printable-dialog>
