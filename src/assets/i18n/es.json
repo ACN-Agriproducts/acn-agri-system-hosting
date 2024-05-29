@@ -201,6 +201,9 @@
             "Invalid Amount": "Cantidad Inválido",
             "Liquidations Available": "Liquidaciones Disponibles",
             "View Contract": "Ver Contrato",
+            "orientation": "orientación",
+            "landscape": "horizontal",
+            "portrait": "vertical",
             "chart": {
                 "Pending": "Pendiente",
                 "Paid": "Pagado",

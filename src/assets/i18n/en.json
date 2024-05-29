@@ -200,6 +200,9 @@
             "invalid amount": "Invalid Amount",
             "Liquidations Available": "Liquidations Available",
             "View Contract": "View Contract",
+            "orientation": "orientation",
+            "landscape": "landscape",
+            "portrait": "portrait",
             "chart": {
                 "Pending": "Pending",
                 "Paid": "Paid",
