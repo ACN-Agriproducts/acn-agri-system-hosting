@@ -523,12 +523,10 @@ export class WeightDiscounts {
     }
 
     public setDiscount(discountName: string, percentage: number = 0, tableUnit: units, weight: Mass): void {
-        this[discountName] ??= new Mass(0, tableUnit, weight.conversions.get('bu'));
-
         const discountWeight = (percentage / 100) * weight.get();
         const roundedDiscountWeight = Math.round(discountWeight * 1000) / 1000;
 
-        this[discountName] = this[discountName].add(new Mass(roundedDiscountWeight, weight.getUnit()));
+        this[discountName] =new Mass(roundedDiscountWeight, weight.getUnit());
     }
 
     public getDiscountsObject(): {[name: string]: Mass} {

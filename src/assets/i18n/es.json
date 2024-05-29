@@ -339,6 +339,7 @@
             "Out": "Salida",
             "impurities": "Impurezas",
             "brokenGrain": "Grano Quebrado",
+            "damagedGrain": "Grano Dañado",
             "price": "Precio",
             "Discount Info" : "Descuentos"
         },

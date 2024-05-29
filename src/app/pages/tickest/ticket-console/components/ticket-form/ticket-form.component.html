@@ -152,6 +152,11 @@
           <span matSuffix>%</span>
         </mat-form-field>
         <mat-form-field appearance="fill">
+          <mat-label>{{t('damagedGrain')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.damagedGrain" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
           <mat-label>{{t('Plague')}}</mat-label>
           <input matInput type="text" [(ngModel)]="ticket.plague" (ngModelChange)="saveTicket()">
         </mat-form-field>
