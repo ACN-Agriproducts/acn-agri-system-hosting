@@ -9,7 +9,7 @@ import { DiscountTables } from '@shared/classes/discount-tables';
 import { Mass } from '@shared/classes/mass';
 import { Plant } from '@shared/classes/plant';
 import { Ticket, WeightDiscounts } from '@shared/classes/ticket';
-import { firstValueFrom, lastValueFrom, map, Observable } from 'rxjs';
+import { firstValueFrom, groupBy, lastValueFrom, map, Observable } from 'rxjs';
 import { SelectClientComponent } from 'src/app/modules/contract/select-client/select-client.component';
 
 @Component({
@@ -24,7 +24,7 @@ export class TicketFormComponent implements OnInit {
   @Input() discountTables: {[product: string]: DiscountTables};
   @Input() plant: Promise<Plant>;
 
-  public selectableContracts: Observable<Contract[]>;
+  public selectableContracts: Observable<GroupedContracts>;
   public selectableTransport: CompanyContact[];
 
   public contractId: string;
@@ -41,18 +41,19 @@ export class TicketFormComponent implements OnInit {
 
   ngOnInit() {
     // Filter contracts
-    let contractTag: string;
-    if(this.ticket.in === true) contractTag = 'purchase';
-    if(this.ticket.in === false) contractTag = 'sale';
+    let contractTags: string[];
+    if(this.ticket.in === true) contractTags = ['purchase', 'service'];
+    if(this.ticket.in === false) contractTags = ['sale', 'service'];
 
     this.selectableContracts = this.openContracts.pipe(
-      map(contracts => contracts.filter(contract => contract.tags.includes(contractTag)))
+      map(contracts => contracts.filter(contract => contract.tags.some(t => contractTags.includes(t)))),
+      this.groupContract()
     );
 
     this.contractId = this.ticket?.contractRef?.id ?? null;
 
     firstValueFrom(this.selectableContracts).then(contracts => {
-      this.currentContract = contracts.find(c => c.ref.id == this.contractId);  
+      this.currentContract = this.findContract(contracts, this.contractId);  
     });
 
     this.loadTransport();
@@ -60,7 +61,7 @@ export class TicketFormComponent implements OnInit {
 
   async contractChange() { 
     const contracts = await firstValueFrom(this.selectableContracts);
-    this.currentContract = contracts.find(c => c.ref.id == this.contractId);
+    this.currentContract = this.findContract(contracts, this.contractId);
 
     this.ticket.contractID = this.currentContract?.id;
     this.ticket.contractRef = this.currentContract?.ref.withConverter(Contract.converter);
@@ -83,7 +84,7 @@ export class TicketFormComponent implements OnInit {
     if(this.contractId == null) return;
 
     const contracts = await firstValueFrom(this.selectableContracts);
-    const contract = contracts.find(c => c.ref.id == this.contractId);
+    const contract = this.findContract(contracts, this.contractId);
 
     this.selectableTransport = this.transportList.filter(t => contract.truckers.some(ti => ti.trucker.id == t.id));
   }
@@ -165,8 +166,38 @@ export class TicketFormComponent implements OnInit {
     clearTimeout(this.saveTimeout);
     this.saveTimeout = setTimeout(() => this.ticket.set(), 5000);
   }
+
+  groupContract() 
+  {
+    return function(source: Observable<Contract[]>): Observable<GroupedContracts> {
+      return new Observable(subscriber => {
+        source.subscribe({
+          next(value) {
+            const groupedContracts: GroupedContracts = {};
+            value.forEach(contract => {
+              if(!groupedContracts[contract.type]) groupedContracts[contract.type] = [];
+              groupedContracts[contract.type].push(contract);
+            });
+  
+            subscriber.next(groupedContracts)
+          }
+        })
+      }) 
+    }
+  }
+
+  findContract(contractsGroup: GroupedContracts, contractID: string): Contract {
+    for(let type in contractsGroup) {
+      for(let contract of contractsGroup[type]) {
+        if(contract.ref.id == contractID) return contract;
+      }
+    }
+  }
 }
 
+interface GroupedContracts {
+  [type: string]: Contract[]
+}
 
 @Pipe({
   name: 'discountIterator',

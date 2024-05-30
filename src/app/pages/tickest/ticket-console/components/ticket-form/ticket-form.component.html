@@ -20,9 +20,11 @@
           <mat-form-field appearance="fill">
           <mat-label>{{t('Contract')}}</mat-label>
           <mat-select [(ngModel)]="contractId" (ngModelChange)="contractChange()">
-            <mat-option *ngFor="let contract of selectableContracts | async" [value]="contract.ref.id">
-              {{contract.id + ": " + contract.clientName}}
-            </mat-option>
+            <mat-optgroup *ngFor="let type of selectableContracts | async | keyvalue" [label]="type.key | titlecase">
+              <mat-option *ngFor="let contract of type.value" [value]="contract.ref.id">
+                {{contract.id + ": " + contract.clientName}}
+              </mat-option>
+            </mat-optgroup>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="fill">
@@ -147,6 +149,11 @@
         <mat-form-field appearance="fill">
           <mat-label>{{t('brokenGrain')}}</mat-label>
           <input matInput type="number" [(ngModel)]="ticket.brokenGrain" (ngModelChange)="calcDiscount()">
+          <span matSuffix>%</span>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{t('damagedGrain')}}</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.damagedGrain" (ngModelChange)="calcDiscount()">
           <span matSuffix>%</span>
         </mat-form-field>
         <mat-form-field appearance="fill">

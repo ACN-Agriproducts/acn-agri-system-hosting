@@ -378,11 +378,18 @@ export class Ticket extends FirebaseDocInterface{
         });
     }
 
-    public setDiscounts(discountTables: DiscountTables): void {
+    public setDiscounts(discountTables: DiscountTables): void | Error {
         for (const table of discountTables?.tables ?? []) {
             const discountName = table.fieldName;
-            const rowData = table.data.find(row => this[discountName] >= row.low && this[discountName] <= row.high);
 
+            let ticketDiscountValue = this[discountName];
+            if (ticketDiscountValue == null) {
+                console.error("Could not find a value for this discount on the ticket. Please make sure the Field Name on the discount table is correct.");
+                ticketDiscountValue = 0;
+            }
+
+            const rowData = table.getTableData(ticketDiscountValue);
+            
             table.headers.forEach(header => {
                 if (header.type === 'price-discount') {
                     this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], table.unit), this.net);
@@ -523,12 +530,10 @@ export class WeightDiscounts {
     }
 
     public setDiscount(discountName: string, percentage: number = 0, tableUnit: units, weight: Mass): void {
-        this[discountName] ??= new Mass(0, tableUnit, weight.conversions.get('bu'));
-
         const discountWeight = (percentage / 100) * weight.get();
         const roundedDiscountWeight = Math.round(discountWeight * 1000) / 1000;
 
-        this[discountName] = this[discountName].add(new Mass(roundedDiscountWeight, weight.getUnit()));
+        this[discountName] = new Mass(roundedDiscountWeight, weight.getUnit());
     }
 
     public getDiscountsObject(): {[name: string]: Mass} {
