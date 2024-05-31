@@ -88,4 +88,8 @@ export class DiscountTable {
         const length = this.data.push({});
         this.headers.forEach(header => this.data[length - 1][header.name] = tableData?.[header.name] ?? 0);
     }
+
+    public getTableData(lookupValue: number): DiscountTableRow {
+        return this.data.find(row => lookupValue >= row.low && lookupValue <= row.high);
+    }
 }
