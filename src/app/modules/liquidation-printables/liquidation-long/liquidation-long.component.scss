@@ -1,13 +1,6 @@
 
 $lightlightgray: rgb(230, 230, 230);
 
-:host {
-    // width: 10in; //266.7mm;
-    // outline: black solid 1px;
-    // padding: 12.7mm;
-    // box-shadow: -0.5em 0.5em 0.25em gray;
-}
-
 table {
     font-size: xx-small;
     line-height: 1.5em;
@@ -21,10 +14,6 @@ table {
         -webkit-hyphens: auto;
         -ms-hyphens: auto;
         -moz-hyphens: auto;
-
-        &[lang="en"] {
-            overflow-wrap: break-word;
-        }
     }
 
     .one-fr {
@@ -53,6 +42,10 @@ table {
     }
     .right {
         text-align: right;
+    }
+
+    th[lang="en"], td {
+        overflow-wrap: break-word;
     }
 }
 
@@ -144,22 +137,18 @@ table {
     table {
         font-size: 1vw;
 
-        .one-fr {
-            width: 1fr;
-        }
-        .one-and-half-fr {
-            width: 1.5fr;
-        }
-        .two-fr {
-            width: 2fr;
-        }
-        .four-and-half-fr {
-            width: 4.5fr;
-        }
-
         col {
             min-width: min-content;
-            width: auto !important;
         }
     }
+}
+
+@media (orientation: portrait) {
+    table col {
+        width: auto !important;
+    }
+}
+
+.portrait :host table col {
+    width: auto !important;
 }
