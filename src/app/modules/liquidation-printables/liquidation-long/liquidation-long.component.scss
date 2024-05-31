@@ -18,19 +18,26 @@ table {
         border: black solid 1px;
         padding: 0px 2px;
         hyphens: auto;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+
+        &[lang="en"] {
+            overflow-wrap: break-word;
+        }
     }
 
     .one-fr {
-        // width: 42.66px;
+        width: 42.66px;
     }
     .one-and-half-fr {
-        // width: 64px;
+        width: 64px;
     }
     .two-fr {
-        // width: 85.33px;
+        width: 85.33px;
     }
     .four-and-half-fr {
-        // width: 192px;
+        width: 192px;
     }
 
     .total-row {
@@ -138,16 +145,16 @@ table {
         font-size: 1vw;
 
         .one-fr {
-            // width: 42.66px;
+            width: 1fr;
         }
         .one-and-half-fr {
-            // width: 64px;
+            width: 1.5fr;
         }
         .two-fr {
-            // width: 85.33px;
+            width: 2fr;
         }
         .four-and-half-fr {
-            // width: 192px;
+            width: 4.5fr;
         }
 
         col {

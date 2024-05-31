@@ -79,19 +79,19 @@
     
         </tr>
         <tr>
-            <th>{{ t('Gross') | uppercase }}</th>
-            <th>{{ t('Tare') | uppercase }}</th>
-            <th>{{ t('Net') | uppercase }}</th>
-            <th>{{ t('%') }}</th>
-            <th>
+            <th [lang]="language">{{ t('Gross') | uppercase }}</th>
+            <th [lang]="language">{{ t('Tare') | uppercase }}</th>
+            <th [lang]="language">{{ t('Net') | uppercase }}</th>
+            <th [lang]="language">{{ t('%') }}</th>
+            <th [lang]="language">
                 <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'moisture' }"></ng-container>
             </th>
-            <th>{{ t('%') }}</th>
-            <th>
+            <th [lang]="language">{{ t('%') }}</th>
+            <th [lang]="language">
                 <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'dryWeight' }"></ng-container>
             </th>
-            <th>{{ t('%') }}</th>
-            <th>
+            <th [lang]="language">{{ t('%') }}</th>
+            <th [lang]="language">
                 <ng-container *ngTemplateOutlet="headerUnits; context: { $implicit: 'damagedGrain' }"></ng-container>
             </th>
         </tr>
