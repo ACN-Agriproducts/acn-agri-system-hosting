@@ -52,24 +52,32 @@ export class Liquidation extends FirebaseDocInterface {
         this.status = data.status;
         this.supplementalDocs = data.supplementalDocs;
         this.ticketRefs = data.ticketRefs;
-        this.tickets = data.tickets.map(ticket => ({
-            damagedGrain: ticket.damagedGrain,
-            dateIn: ticket.dateIn.toDate(),
-            dateOut: ticket.dateOut.toDate(),
-            displayId: ticket.displayId,
-            dryWeightPercent: ticket.dryWeightPercent,
-            gross: new Mass(ticket.gross.amount, ticket.gross.defaultUnits),
-            id: ticket.id,
-            moisture: ticket.moisture,
-            net: new Mass(ticket.net.amount, ticket.net.defaultUnits),
-            priceDiscounts: new PriceDiscounts(ticket.priceDiscounts),
-            ref: ticket.ref.withConverter(Ticket.converter),
-            status: ticket.status,
-            subId: ticket.subId ?? "",
-            tare: new Mass(ticket.tare.amount, ticket.tare.defaultUnits),
-            weight: ticket.weight,
-            weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
-        }));
+        this.tickets = data.tickets.map(ticket => {
+            const adjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
+            const beforeDiscounts = adjustedWeight.get() * ticket.price;
+            return {
+                damagedGrain: ticket.damagedGrain,
+                dateIn: ticket.dateIn.toDate(),
+                dateOut: ticket.dateOut.toDate(),
+                displayId: ticket.displayId,
+                dryWeightPercent: ticket.dryWeightPercent,
+                gross: new Mass(ticket.gross.amount, ticket.gross.defaultUnits),
+                id: ticket.id,
+                moisture: ticket.moisture,
+                net: new Mass(ticket.net.amount, ticket.net.defaultUnits),
+                priceDiscounts: new PriceDiscounts(ticket.priceDiscounts),
+                ref: ticket.ref.withConverter(Ticket.converter),
+                status: ticket.status,
+                subId: ticket.subId ?? "",
+                tare: new Mass(ticket.tare.amount, ticket.tare.defaultUnits),
+                weight: ticket.weight,
+                weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
+
+                adjustedWeight,
+                beforeDiscounts,
+                netToPay: beforeDiscounts - ticket.priceDiscounts.total()
+            }
+        });
         this.archived = data.archived;
         this.amountPaid = data.amountPaid;
         this.total = data.total;
@@ -151,7 +159,11 @@ export class Liquidation extends FirebaseDocInterface {
             tare: ticket.tare,
             weight: ticket.weight,
             weightDiscounts: ticket.weightDiscounts,
-            original_weight: ticket.original_weight
+            original_weight: ticket.original_weight,
+
+            adjustedWeight: ticket.adjustedWeight ?? null,
+            beforeDiscounts: ticket.beforeDiscounts ?? null,
+            netToPay: ticket.netToPay ?? null
         };
     }
 
@@ -224,6 +236,10 @@ export interface TicketInfo {
     weight: number;
     weightDiscounts: WeightDiscounts;
     original_weight: Mass;
+
+    adjustedWeight: Mass;
+    beforeDiscounts: number;
+    netToPay: number;
 }
 
 export interface FileStorageInfo {

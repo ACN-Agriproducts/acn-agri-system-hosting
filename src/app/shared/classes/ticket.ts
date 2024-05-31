@@ -83,17 +83,9 @@ export class Ticket extends FirebaseDocInterface{
     public moneyDiscounts: MoneyDiscounts;
     public type: TicketType;
 
-    // ONLY FOR LIQUIDATIONS, DO NOT SAVE TO DATABASE
-    // public gross: Mass;
-    // public tare: Mass;
-    // public net: Mass;
-    // public dryWeight: Mass;
-    // public weightDiscounts: WeightDiscounts;
-    // public original_weight: Mass;
-    // public adjustedWeight: Mass;
-    // public beforeDiscounts: number;
-    // public priceDiscounts: PriceDiscounts;
-    // public netToPay: number;
+    public adjustedWeight: Mass;
+    public beforeDiscounts: number;
+    public netToPay: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -404,6 +396,10 @@ export class Ticket extends FirebaseDocInterface{
                 }
             });
         }
+
+        this.adjustedWeight = this.net.subtract(this.weightDiscounts.totalMass());
+        this.beforeDiscounts = this.adjustedWeight.get() * this.price;
+        this.netToPay = this.beforeDiscounts - this.priceDiscounts.total();
     }
 }
 
