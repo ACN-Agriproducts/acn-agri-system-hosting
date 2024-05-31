@@ -203,7 +203,7 @@
                         </ion-item>
                         <div 
                             class="progress-bar" 
-                            *ngIf="contract.status == 'active' && !contract.isOpen" 
+                            *ngIf="contract.status == 'active' && !contract.isOpen && !contract.tags.contains('service')" 
                             [style.width]="contract.progress + '%'"></div>
                     </div>
                 </div>
