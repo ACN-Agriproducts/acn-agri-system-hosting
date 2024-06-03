@@ -107,51 +107,22 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.dryWeightPercent | massInUnit:data.displayUnits.get('dryWeight') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.damagedGrain ?? 0 | number:'1.1' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.damagedGrain | massInUnit:data.displayUnits.get('damagedGrain') | number:'1.0-3' }}</td>
-            <!-- <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.net | massInUnit:data.displayUnits.get('adjustedWeight')) - (ticket.weightDiscounts | weightDiscounts:data.contract.productInfo | massInUnit:data.displayUnits.get('adjustedWeight')) | number:'1.0-3' }}</td> -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.adjustedWeight | massInUnit:data.displayUnits.get('adjustedWeight') | number:'1.0-3' }}</td> <!-- ADJUSTED WEIGHT -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (((ticket.price ?? data.contract.price) | pricePerUnit:data.displayUnits.get('price'):data.contract.quantity) ?? 0) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
-            <!-- <td [class.odd]='!even' [class.even]='even' class='right' 
-                *ngIf="data.totals.priceDiscounts.infested 
-                    || data.totals.priceDiscounts.musty 
-                    || data.totals.priceDiscounts.sour 
-                    || data.totals.priceDiscounts.weathered 
-                    || data.totals.priceDiscounts.inspection"
-            >{{ (ticket.price ?? data.contract.price | pricePerUnit:'lbs':data.contract.quantity) * ((ticket.net | massInUnit) - (ticket.weightDiscounts | discounts)) | currency:'USD':'$':'1.3-3' }}</td> -->
             <td [class.odd]='!even' [class.even]='even' class='right' 
                 *ngIf="data.totals.priceDiscounts.infested 
                     || data.totals.priceDiscounts.musty 
                     || data.totals.priceDiscounts.sour 
                     || data.totals.priceDiscounts.weathered 
                     || data.totals.priceDiscounts.inspection"
-            >{{ ticket.beforeDiscounts | currency:'USD':'$':'1.3-3' }}</td> <!-- Total -->
+            >{{ ticket.beforeDiscounts | currency:'USD':'$':'1.3' }}</td> <!-- Total -->
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.infested">{{ ticket.priceDiscounts.infested | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.musty">{{ ticket.priceDiscounts.musty | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.sour">{{ ticket.priceDiscounts.sour | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.weathered">{{ ticket.priceDiscounts.weathered | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.inspection">{{ ticket.priceDiscounts.inspection | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngFor="let discount of ticket.priceDiscounts.unitRateDiscounts | keyvalue">{{ discount.value | currency:'USD':'$':'1.2-3' }}</td>
-            <!-- <td [class.odd]='!even' [class.even]='even' class='right'>
-                {{ (ticket.price ?? data.contract.price | pricePerUnit:'lbs':data.contract.quantity) * ((ticket.net | massInUnit) - (ticket.weightDiscounts | discounts)) 
-                    - (ticket.priceDiscounts | discounts
-                        :ticket.priceDiscounts.infested
-                        :ticket.priceDiscounts.musty
-                        :ticket.priceDiscounts.sour
-                        :ticket.priceDiscounts.weathered
-                        :ticket.priceDiscounts.inspection
-                      ) | currency:'USD':'$':'1.3-3' 
-                }}
-            </td> -->
-            <td [class.odd]='!even' [class.even]='even' class='right'>
-                {{ (ticket.price ?? data.contract.price | pricePerUnit:'lbs':data.contract.quantity) * ((ticket.net | massInUnit) - (ticket.weightDiscounts | discounts)) 
-                    - (ticket.priceDiscounts | discounts
-                        :ticket.priceDiscounts.infested
-                        :ticket.priceDiscounts.musty
-                        :ticket.priceDiscounts.sour
-                        :ticket.priceDiscounts.weathered
-                        :ticket.priceDiscounts.inspection
-                      ) | currency:'USD':'$':'1.3' 
-                }}
-            </td> <!-- NET TO PAY -->
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.netToPay | currency:'USD':'$':'1.3' }}</td> <!-- NET TO PAY -->
         </tr>
         <tr>
             <td class='total-row center'>{{ t('Totals') | uppercase}}:</td>

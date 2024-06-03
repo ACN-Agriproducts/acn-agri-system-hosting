@@ -396,9 +396,19 @@ export class Ticket extends FirebaseDocInterface{
                 }
             });
         }
+    }
+    
+    public setLiquidationData(discountTables: DiscountTables, contract: Contract): void {
+        this.defineBushels(contract.productInfo);
+        this.setDiscounts(discountTables);
 
         this.adjustedWeight = this.net.subtract(this.weightDiscounts.totalMass());
-        this.beforeDiscounts = this.adjustedWeight.get() * this.price;
+        const sharedUnit = this.adjustedWeight.defaultUnits;
+
+        this.price ??= contract.price.getPricePerUnit(sharedUnit, this.adjustedWeight);
+        const price = new Price(this.price, sharedUnit);
+        
+        this.beforeDiscounts = this.adjustedWeight.get() * price.getPricePerUnit(sharedUnit);
         this.netToPay = this.beforeDiscounts - this.priceDiscounts.total();
     }
 }

@@ -61,7 +61,7 @@
             <td class="text-right">{{ ticket.moisture | number:'1.1' }}</td>
             <td class="text-right">{{ ((ticket.net | massInUnit:data.displayUnits.get('original_weight')) - (ticket.weightDiscounts | weightDiscounts:data.contract.productInfo | massInUnit:data.displayUnits.get('original_weight'))) | number:'1.0-3' }}</td>
             <td class="text-right">{{ data.contract.price | pricePerUnit:data.displayUnits.get('price'):data.contract.quantity | currency:'USD':'$':'1.4' }}</td>
-            <td class="text-right">{{ ((ticket.net | massInUnit:'lbs') - (ticket.weightDiscounts | weightDiscounts:data.contract.productInfo | massInUnit:'lbs')) * (data.contract.price | pricePerUnit:'lbs':data.contract.quantity) | currency:'USD':'$':'1.3' }}</td>
+            <td class="text-right">{{ ticket.netToPay | currency:'USD':'$':'1.3' }}</td>
         </tr>
         <tr class="totals">
             <td class="text-center">{{ t("Totals") | uppercase }}</td>
