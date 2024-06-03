@@ -1,13 +1,6 @@
 
 $lightlightgray: rgb(230, 230, 230);
 
-:host {
-    background-color: white;
-    display: block;
-    margin: 1em;
-    // padding: 1em;
-}
-
 .title {
     text-align: center;
     h1 {
@@ -27,16 +20,6 @@ $lightlightgray: rgb(230, 230, 230);
     
     #contract-details {
         display: inline-block;
-
-        // #farmer-name {
-        //     background-color: lightgreen;
-        // }
-        // #contract-name {
-        //     background-color: lightgreen;
-        // }
-        // #date {
-        //     background-color: yellow;
-        // }
     }
 }
 
@@ -50,6 +33,9 @@ $lightlightgray: rgb(230, 230, 230);
         border: black solid 1px;
         padding: 0px 2px;
         hyphens: auto;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
     }
 
     th {
@@ -79,4 +65,28 @@ $lightlightgray: rgb(230, 230, 230);
             text-align: right;
         }
     }
+
+    th[lang="en"], td {
+        overflow-wrap: break-word;
+    }
+}
+
+@media print {
+    #liquidation-table {
+        font-size: 1vw;
+
+        col {
+            min-width: min-content;
+        }
+    }
+}
+
+@media (orientation: portrait) {
+    #liquidation-table col {
+        width: auto !important;
+    }
+}
+
+.portrait :host #liquidation-table col {
+    width: auto !important;
 }

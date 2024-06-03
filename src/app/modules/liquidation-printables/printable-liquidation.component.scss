@@ -19,16 +19,25 @@
     font-weight: 500;
 }
 
+:host {
+    display: block;
+    background-color: white;
+}
+
 @media not print {
-    .portrait {
+    :host.portrait, .portrait {
+        min-height: 11in;
+        min-width: 8.5in;
+        padding: 0.75in;
         height: 11in;
         width: 8.5in;
-        padding: 0.75in;
     }
-    .landscape {
+    :host.landscape, .landscape {
+        min-height: 8.5in;
+        min-width: 11in;
+        padding: 0.75in;
         height: 8.5in;
         width: 11in;
-        padding: 0.75in;
     }
 }
 

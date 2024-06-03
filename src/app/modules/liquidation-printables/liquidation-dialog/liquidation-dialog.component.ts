@@ -20,6 +20,7 @@ import { LiquidationTotals } from '@shared/classes/liquidation';
 export class LiquidationDialogComponent implements OnInit {
   readonly units = UNIT_LIST;
   
+  public orientation: string = "landscape";
   public selectedFormat: string;
   public liquidationTypes: { [name: string]: string };
 

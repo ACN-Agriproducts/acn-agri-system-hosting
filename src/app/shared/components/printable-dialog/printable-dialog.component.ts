@@ -7,7 +7,11 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
   styleUrls: ['./printable-dialog.component.scss'],
 })
 export class PrintableDialogComponent implements OnInit {
-  @Input() printStyle: any;
+  @Input() printStyle: {
+    [key: string]: {
+      [key: string]: string;
+    }
+  };
 
   constructor() {}
 

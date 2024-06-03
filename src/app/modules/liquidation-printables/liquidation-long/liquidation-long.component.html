@@ -45,7 +45,7 @@
             <col class="two-fr">  <!-- NET TO PAY -->
         </colgroup>
         <tr>
-            <th [lang]="language" rowspan="2">{{ t('Inbound Date') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ (t('Inbound Date')==="Inbound Date" ? "In&shy;bound Date" : t('Inbound Date')) | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Ticket #') | uppercase }}</th>
             <th [lang]="language" colspan="3">
                 {{ t('Weight') | uppercase }}<br>
@@ -55,7 +55,7 @@
             <th [lang]="language" colspan="2">{{ t('Drying') | uppercase }}</th>
             <th [lang]="language" colspan="2">{{ t('Damage') | uppercase }}</th>
             <th [lang]="language" rowspan="2">
-                {{ t('Adjusted Weight') | uppercase }}<br>
+                {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-table-header-unit-select>
             </th>
             <th [lang]="language" rowspan="2">
@@ -69,29 +69,29 @@
                     || data.totals.priceDiscounts.weathered 
                     || data.totals.priceDiscounts.inspection"
             >{{ t('Total ($)') | uppercase }}</th>
-            <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.infested">{{ t('Infested') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.infested">{{ (t('Infested')==="Infested" ? "In&shy;fest&shy;ed" : t('Infested')) | uppercase }}</th>
             <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.musty">{{ t('Musty') | uppercase }}</th>
             <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.sour">{{ t('Sour') | uppercase }}</th>
-            <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.weathered">{{ t('Weathered') | uppercase }}</th>
-            <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.inspection">{{ t('Inspection') | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.weathered">{{ (t('Weathered')==="Weathered" ? "Weath&shy;ered" : t('Weathered')) | uppercase }}</th>
+            <th [lang]="language" rowspan="2" *ngIf="data.totals.priceDiscounts.inspection">{{ (t('Inspection')==="Inspection" ? "In&shy;spect&shy;ion" : t('Inspection')) | uppercase }}</th>
             <th [lang]="language" rowspan="2"  *ngFor="let discount of data.totals.priceDiscounts.unitRateDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Net to Pay ($)') | uppercase }}</th>
     
         </tr>
         <tr>
-            <th>{{ t('Gross') | uppercase }}</th>
-            <th>{{ t('Tare') | uppercase }}</th>
-            <th>{{ t('Net') | uppercase }}</th>
-            <th>{{ t('%') }}</th>
-            <th>
+            <th [lang]="language">{{ t('Gross') | uppercase }}</th>
+            <th [lang]="language">{{ t('Tare') | uppercase }}</th>
+            <th [lang]="language">{{ t('Net') | uppercase }}</th>
+            <th [lang]="language">{{ t('%') }}</th>
+            <th [lang]="language">
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="moisture"></app-table-header-unit-select>
             </th>
-            <th>{{ t('%') }}</th>
-            <th>
+            <th [lang]="language">{{ t('%') }}</th>
+            <th [lang]="language">
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="dryWeight"></app-table-header-unit-select>
             </th>
-            <th>{{ t('%') }}</th>
-            <th>
+            <th [lang]="language">{{ t('%') }}</th>
+            <th [lang]="language">
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="damagedGrain"></app-table-header-unit-select>
             </th>
         </tr>
@@ -109,7 +109,7 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.damagedGrain | massInUnit:data.displayUnits.get('damagedGrain') | number:'1.0-3' }}</td>
             <!-- <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.net | massInUnit:data.displayUnits.get('adjustedWeight')) - (ticket.weightDiscounts | weightDiscounts:data.contract.productInfo | massInUnit:data.displayUnits.get('adjustedWeight')) | number:'1.0-3' }}</td> -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.adjustedWeight | massInUnit:data.displayUnits.get('adjustedWeight') | number:'1.0-3' }}</td> <!-- ADJUSTED WEIGHT -->
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ((ticket.price ?? data.contract.price | pricePerUnit:data.displayUnits.get('price'):data.contract.quantity) ?? 0) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ (((ticket.price ?? data.contract.price) | pricePerUnit:data.displayUnits.get('price'):data.contract.quantity) ?? 0) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
             <!-- <td [class.odd]='!even' [class.even]='even' class='right' 
                 *ngIf="data.totals.priceDiscounts.infested 
                     || data.totals.priceDiscounts.musty 
@@ -149,7 +149,7 @@
                         :ticket.priceDiscounts.sour
                         :ticket.priceDiscounts.weathered
                         :ticket.priceDiscounts.inspection
-                      ) | currency:'USD':'$':'1.3-3' 
+                      ) | currency:'USD':'$':'1.3' 
                 }}
             </td> <!-- NET TO PAY -->
         </tr>
@@ -173,35 +173,15 @@
                     || data.totals.priceDiscounts.sour 
                     || data.totals.priceDiscounts.weathered 
                     || data.totals.priceDiscounts.inspection"
-            >{{ data.totals.beforeFinalDiscounts | currency:'USD':'$':'1.3-3' }}</td>
+            >{{ data.totals.beforeFinalDiscounts | currency:'USD':'$':'1.3' }}</td>
             <td class='total-row right' *ngIf="data.totals.priceDiscounts.infested">{{ data.totals.priceDiscounts.infested | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right' *ngIf="data.totals.priceDiscounts.musty">{{ data.totals.priceDiscounts.musty | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right' *ngIf="data.totals.priceDiscounts.sour">{{ data.totals.priceDiscounts.sour | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right' *ngIf="data.totals.priceDiscounts.weathered">{{ data.totals.priceDiscounts.weathered | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right' *ngIf="data.totals.priceDiscounts.inspection">{{ data.totals.priceDiscounts.inspection | currency:'USD':'$':'1.2-3' }}</td>
             <td class="total-row right" *ngFor="let discount of data.totals.priceDiscounts.unitRateDiscounts | keyvalue">{{ discount.value | currency:'USD':'$':'1.2-3' }}</td>
-            <td class='total-row right'>{{ data.totals.netToPay | currency:'USD':'$':'1.3-3' }}</td>
+            <td class='total-row right'>{{ data.totals.netToPay | currency:'USD':'$':'1.3' }}</td>
         </tr>
     </table>
-
-    <ng-template #headerUnits let-fieldname let-isPrice="isPrice">
-        <div class="header-units">
-            <span class="unit-label"> ( {{ isPrice ? "$/" : "" }}{{ data.displayUnits.get(fieldname) | uppercase }} )</span>
-            <span class="unit-select">
-                ( 
-                    <mat-form-field [style.max-width.%]="25">
-                    <mat-select
-                        [value]="data.displayUnits.get(fieldname)"
-                        (valueChange)="data.displayUnits.set(fieldname, $event)"
-                    >
-                        <mat-option *ngFor="let unit of units" [value]="unit">
-                            {{ (isPrice ? ("$/" + unit) : unit) | uppercase }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-                 )
-            </span>
-        </div>
-    </ng-template>
 </ng-container>
 
