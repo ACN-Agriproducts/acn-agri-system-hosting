@@ -47,7 +47,7 @@
             <mat-form-field>
               <input matInput
                 [(ngModel)]="ticket.data.priceDiscounts.infested"
-                (change)="selectedTicketsChange()"
+                (change)="priceDiscountsChange(ticket.data)"
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
@@ -60,7 +60,7 @@
             <mat-form-field>
               <input matInput
                 [(ngModel)]="ticket.data.priceDiscounts.musty"
-                (change)="selectedTicketsChange()"
+                (change)="priceDiscountsChange(ticket.data)"
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
@@ -73,7 +73,7 @@
             <mat-form-field>
               <input matInput
                 [(ngModel)]="ticket.data.priceDiscounts.sour"
-                (change)="selectedTicketsChange()"
+                (change)="priceDiscountsChange(ticket.data)"
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
@@ -86,7 +86,7 @@
             <mat-form-field>
               <input matInput
                 [(ngModel)]="ticket.data.priceDiscounts.weathered"
-                (change)="selectedTicketsChange()"
+                (change)="priceDiscountsChange(ticket.data)"
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"
@@ -99,7 +99,7 @@
             <mat-form-field>
               <input matInput
                 [(ngModel)]="ticket.data.priceDiscounts.inspection"
-                (change)="selectedTicketsChange()"
+                (change)="priceDiscountsChange(ticket.data)"
                 type="number"
                 min="0"
                 [readonly]="ticket.data.status==='pending' && !editingTickets?.includes(ticket)"

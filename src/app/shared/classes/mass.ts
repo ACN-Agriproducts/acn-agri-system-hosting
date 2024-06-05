@@ -61,6 +61,7 @@ export class Mass {
     }
 
     defineBushels(product: Product | ProductInfo | number): void {
+        if (this.conversions.get('bu')) return;
         if(typeof product == 'number') this.conversions.set("bu", product);
         else this.conversions.set("bu", this.conversions.get("lbs") / product?.weight);
     }

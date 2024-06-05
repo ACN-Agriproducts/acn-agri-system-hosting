@@ -5,6 +5,7 @@ import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, Collect
 import { Mass } from "./mass";
 import { Status } from "./company";
 import { Price } from "./price";
+import { DiscountTables } from "./discount-tables";
 
 export type ReportTicket = {
     data: TicketInfo,
@@ -18,7 +19,7 @@ export class Liquidation extends FirebaseDocInterface {
     public ticketRefs: DocumentReference<Ticket>[];
     public tickets: TicketInfo[];
     public archived: boolean;
-    
+
     public total: number;
     public amountPaid: number;
 
@@ -33,7 +34,7 @@ export class Liquidation extends FirebaseDocInterface {
 
         if (snapshotOrRef instanceof DocumentReference) {
             this.ref = snapshotOrRef;
-            
+
             this.date = new Date();
             this.status = "pending";
             this.supplementalDocs = [];
@@ -52,32 +53,28 @@ export class Liquidation extends FirebaseDocInterface {
         this.status = data.status;
         this.supplementalDocs = data.supplementalDocs;
         this.ticketRefs = data.ticketRefs;
-        this.tickets = data.tickets.map(ticket => {
-            const adjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
-            const beforeDiscounts = adjustedWeight.get() * ticket.price;
-            return {
-                damagedGrain: ticket.damagedGrain,
-                dateIn: ticket.dateIn.toDate(),
-                dateOut: ticket.dateOut.toDate(),
-                displayId: ticket.displayId,
-                dryWeightPercent: ticket.dryWeightPercent,
-                gross: new Mass(ticket.gross.amount, ticket.gross.defaultUnits),
-                id: ticket.id,
-                moisture: ticket.moisture,
-                net: new Mass(ticket.net.amount, ticket.net.defaultUnits),
-                priceDiscounts: new PriceDiscounts(ticket.priceDiscounts),
-                ref: ticket.ref.withConverter(Ticket.converter),
-                status: ticket.status,
-                subId: ticket.subId ?? "",
-                tare: new Mass(ticket.tare.amount, ticket.tare.defaultUnits),
-                weight: ticket.weight,
-                weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
-
-                adjustedWeight,
-                beforeDiscounts,
-                netToPay: beforeDiscounts - ticket.priceDiscounts.total()
-            }
-        });
+        this.tickets = data.tickets.map(ticket => ({
+            damagedGrain: ticket.damagedGrain,
+            dateIn: ticket.dateIn.toDate(),
+            dateOut: ticket.dateOut.toDate(),
+            displayId: ticket.displayId,
+            dryWeightPercent: ticket.dryWeightPercent,
+            gross: new Mass(ticket.gross.amount, ticket.gross.defaultUnits),
+            id: ticket.id,
+            moisture: ticket.moisture,
+            net: new Mass(ticket.net.amount, ticket.net.defaultUnits),
+            priceDiscounts: new PriceDiscounts(ticket.priceDiscounts),
+            ref: ticket.ref.withConverter(Ticket.converter),
+            status: ticket.status,
+            subId: ticket.subId ?? "",
+            tare: new Mass(ticket.tare.amount, ticket.tare.defaultUnits),
+            weight: ticket.weight,
+            weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
+            
+            adjustedWeight: new Mass(ticket.adjustedWeight.amount, ticket.adjustedWeight.defaultUnits),
+            beforeDiscounts: ticket.beforeDiscounts,
+            netToPay: ticket.netToPay
+        }));
         this.archived = data.archived;
         this.amountPaid = data.amountPaid;
         this.total = data.total;
@@ -115,14 +112,14 @@ export class Liquidation extends FirebaseDocInterface {
         return collection(db, `companies/${company}/contracts/${contractRefId}/liquidations`).withConverter(Liquidation.converter);
     }
 
-    public static getLiquidations(db: Firestore, company: string, contractRefId: string, 
+    public static getLiquidations(db: Firestore, company: string, contractRefId: string,
         ...constraints: QueryConstraint[]
     ): Promise<Liquidation[]> {
         const collectionQuery = query(Liquidation.getCollectionReference(db, company, contractRefId), ...constraints);
         return getDocs(collectionQuery).then(result => result.docs.map(qds => qds.data()));
     }
 
-    public static getLiquidationsSnapshot(db: Firestore, company: string, contractRefId: string, 
+    public static getLiquidationsSnapshot(db: Firestore, company: string, contractRefId: string,
         onNext: (snapshot: QuerySnapshot<Liquidation>) => void,
         ...constraints: QueryConstraint[]
     ): Unsubscribe {
@@ -130,11 +127,11 @@ export class Liquidation extends FirebaseDocInterface {
         return onSnapshot(collectionQuery, onNext);
     }
 
-    public static async getLiquidationByContractId(db: Firestore, company: string, contractRefId: string, 
+    public static async getLiquidationByContractId(db: Firestore, company: string, contractRefId: string,
         refId: string
     ): Promise<Liquidation> {
         const liquidationDoc = await getDoc(doc(db, `companies/${company}/contracts/${contractRefId}/liquidations/${refId}`)
-        .withConverter(Liquidation.converter));
+            .withConverter(Liquidation.converter));
         return liquidationDoc.data();
     }
 
@@ -191,7 +188,7 @@ export class LiquidationTotals {
 
             this.gross = this.gross.add(ticket.gross);
             this.tare = this.tare.add(ticket.tare);
-            this.net = this.net.add(contract.paymentTerms.origin === "client-scale" && contract.type === "purchase" ? (ticket.original_weight ?? ticket.net ): ticket.net);
+            this.net = this.net.add(contract.paymentTerms.origin === "client-scale" && contract.type === "purchase" ? (ticket.original_weight ?? ticket.net) : ticket.net);
 
             for (const key of Object.keys(ticket.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);

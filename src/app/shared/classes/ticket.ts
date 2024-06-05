@@ -11,6 +11,7 @@ import { Plant } from "./plant";
 import { DiscountTableRow, DiscountTables } from "./discount-tables";
 import { Product } from "./product";
 import { Price } from "./price";
+import { TicketInfo } from "./liquidation";
 
 type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
 type TicketType = "in" | "out" | "service";
@@ -397,20 +398,31 @@ export class Ticket extends FirebaseDocInterface{
             });
         }
     }
-    
+
+    public static calcLiquidationValuesForTicket(ticket: Ticket | TicketInfo, contract: Contract): void {
+        ticket.adjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
+        const sharedUnit = ticket.adjustedWeight.defaultUnits;
+
+        let price: number | Price;
+        if (ticket instanceof Ticket) {
+            const priceAmount = ticket.price || contract.price.getPricePerUnit(sharedUnit, ticket.adjustedWeight);
+            price = new Price(priceAmount, sharedUnit);
+        }
+        else {
+            price = ticket.price ?? contract.price;
+        }
+
+        ticket.beforeDiscounts = ticket.adjustedWeight.get() * price.getPricePerUnit(sharedUnit, ticket.adjustedWeight);
+        ticket.netToPay = ticket.beforeDiscounts - ticket.priceDiscounts.total();
+    }
+
+
     public setLiquidationData(discountTables: DiscountTables, contract: Contract): void {
         this.defineBushels(contract.productInfo);
         this.setDiscounts(discountTables);
-
-        this.adjustedWeight = this.net.subtract(this.weightDiscounts.totalMass());
-        const sharedUnit = this.adjustedWeight.defaultUnits;
-
-        this.price ??= contract.price.getPricePerUnit(sharedUnit, this.adjustedWeight);
-        const price = new Price(this.price, sharedUnit);
-        
-        this.beforeDiscounts = this.adjustedWeight.get() * price.getPricePerUnit(sharedUnit);
-        this.netToPay = this.beforeDiscounts - this.priceDiscounts.total();
+        Ticket.calcLiquidationValuesForTicket(this, contract);
     }
+
 }
 
 const MASS_FIELDS_AND_NAMES = [
@@ -493,14 +505,25 @@ export class PriceDiscounts {
     }
 
     public total(): number {
-        const discountsTotal = Object.entries(this).reduce((total, [currentKey, currentValue]) => {
-            if (currentKey === 'unitRateDiscounts') return 0;
-            return total + currentValue
+        return Object.entries(this).reduce((total, [currentKey, currentValue]) => {
+            if (currentKey === 'unitRateDiscounts') {
+                const unitRateDiscountsTotal = Object.values(this.unitRateDiscounts).reduce((total, currentValue) => total + currentValue, 0);
+                return total + unitRateDiscountsTotal;
+            }
+            return total + currentValue;
         }, 0);
+    }
 
-        const unitRateDiscountsTotal = Object.values(this.unitRateDiscounts).reduce((total, currentValue) => total + currentValue, 0);
+    public getRawData(): any {
 
-        return discountsTotal + unitRateDiscountsTotal;
+        return {
+            infested: this.infested,
+            musty: this.musty,
+            sour: this.sour,
+            weathered: this.weathered,
+            inspection: this.inspection,
+            unitRateDiscounts: { ...this.unitRateDiscounts }
+        }
     }
 }
 
@@ -555,8 +578,11 @@ export class WeightDiscounts {
             data[key] = this[key];
         }
 
-        console.log(data);
         return data;
+    }
+
+    public getRawData(): any {
+        return this.getDiscountsObject();
     }
 }
 

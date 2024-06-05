@@ -55,7 +55,7 @@
             <th [lang]="language" colspan="2">{{ t('Drying') | uppercase }}</th>
             <th [lang]="language" colspan="2">{{ t('Damage') | uppercase }}</th>
             <th [lang]="language" rowspan="2">
-                {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}
+                {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}<br>
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-table-header-unit-select>
             </th>
             <th [lang]="language" rowspan="2">
