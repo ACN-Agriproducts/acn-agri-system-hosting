@@ -8,6 +8,8 @@ import { Firestore } from '@angular/fire/firestore';
 import { Company } from '@shared/classes/company';
 import { LiquidationPrintableData } from '../printable-liquidation.component';
 
+import * as Excel from 'exceljs';
+
 const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
   ["weight", "lbs"],
   ["moisture", "CWT"],
@@ -50,6 +52,10 @@ export class LiquidationLongComponent implements OnInit {
 
   ngOnDestroy() {
     delete this.date;
+  }
+
+  public createExcelLiquidation(worksheet: Excel.Worksheet): void {
+    
   }
 }
 

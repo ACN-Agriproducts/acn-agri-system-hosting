@@ -5,6 +5,8 @@ import { Company } from '@shared/classes/company';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 import { LiquidationPrintableData } from '../printable-liquidation.component';
 
+import * as Excel from 'exceljs';
+
 const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
   ["weight", "mTon"],
   ["price", "bu"],
@@ -44,6 +46,10 @@ export class SalesLiquidationComponent implements OnInit {
 
   ngOnDestroy() {
     delete this.date;
+  }
+
+  createLiquidationExcelSheet(workbook: Excel.Workbook): void {
+    
   }
 
 }
