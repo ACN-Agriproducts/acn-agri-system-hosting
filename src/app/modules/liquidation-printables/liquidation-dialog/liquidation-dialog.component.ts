@@ -10,7 +10,7 @@ import { LiquidationPrintableData, PrintableLiquidationComponent } from '../prin
 
 import * as Excel from 'exceljs';
 import { ContractSettings } from '@shared/classes/contract-settings';
-import { LiquidationTotals } from '@shared/classes/liquidation';
+import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
 
 const EXCEL_ACCOUNTING_FORMAT_3 = '_($* #,##0.000_);_($* (#,##0.000);_($* "-"??_);_(@_)';
 const EXCEL_ACCOUNTING_FORMAT_4 = '_($* #,##0.0000_);_($* (#,##0.0000);_($* "-"??_);_(@_)';
@@ -274,7 +274,7 @@ export class LiquidationDialogComponent implements OnInit {
         tare: ticket.tare.getMassInUnit(this.data.displayUnits.get('weight')),
         net: ticket.net.getMassInUnit(this.data.displayUnits.get('weight')),
         moisture: ticket.moisture,
-        original_weight: ticket.original_weight.getMassInUnit(this.data.displayUnits.get('weight')),
+        original_weight: ticket.original_weight.getMassInUnit(this.data.displayUnits.get('original_weight')),
         price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
         netToPay: ticket.netToPay
       });

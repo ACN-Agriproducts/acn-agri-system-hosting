@@ -5,8 +5,6 @@ import { Contract } from '@shared/classes/contract';
 import { TicketInfo, LiquidationTotals } from '@shared/classes/liquidation';
 import { units } from '@shared/classes/mass';
 
-import * as Excel from 'exceljs';
-
 @Component({
   selector: 'app-printable-liquidation',
   templateUrl: './printable-liquidation.component.html',
@@ -34,12 +32,6 @@ export class PrintableLiquidationComponent implements OnInit {
 
   ngAfterViewInit() {
     this.format$.next(this.format$.getValue());
-  }
-
-  public createExcelLiquidation(worksheet: Excel.Worksheet): void {
-    this.format$.subscribe(format => {
-      
-    })
   }
 }
 
