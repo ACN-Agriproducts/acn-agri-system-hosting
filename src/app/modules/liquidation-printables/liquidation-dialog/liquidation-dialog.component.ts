@@ -12,6 +12,9 @@ import * as Excel from 'exceljs';
 import { ContractSettings } from '@shared/classes/contract-settings';
 import { LiquidationTotals } from '@shared/classes/liquidation';
 
+const EXCEL_ACCOUNTING_FORMAT_3 = '_($* #,##0.000_);_($* (#,##0.000);_($* "-"??_);_(@_)';
+const EXCEL_ACCOUNTING_FORMAT_4 = '_($* #,##0.0000_);_($* (#,##0.0000);_($* "-"??_);_(@_)';
+
 @Component({
   selector: 'app-liquidation-dialog',
   templateUrl: './liquidation-dialog.component.html',
@@ -69,7 +72,6 @@ export class LiquidationDialogComponent implements OnInit {
         'weathered',
         'inspection',
         'netToPay',
-        'original_weight'
       ];
     }
     else if (this.selectedFormat === "sales-liquidation") {
@@ -99,7 +101,6 @@ export class LiquidationDialogComponent implements OnInit {
     const row = totalRow.number;
 
     colKeys.forEach(colKey => {
-      console.log(worksheet.getColumn(colKey));
       const col = String.fromCharCode('A'.charCodeAt(0) + worksheet.getColumn(colKey)?.number - 1);
 
       totalRow.getCell(colKey).value = {
@@ -139,7 +140,6 @@ export class LiquidationDialogComponent implements OnInit {
     worksheet.columns = [
       { header: this.transloco.translate("contracts.info.Inbound Date"), key: 'dateIn' },
       { header: this.transloco.translate("contracts.info.Ticket #"), key: 'id' },
-      { header: this.transloco.translate("contracts.info.Contract"), key: 'contractID' },
       { header: this.transloco.translate("contracts.info.Gross"), key: 'gross', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.Tare"), key: 'tare', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.Net"), key: 'net', style: { numFmt: '0.000' } },
@@ -149,12 +149,12 @@ export class LiquidationDialogComponent implements OnInit {
       { header: this.data.displayUnits.get('dryWeight').toUpperCase(), key: 'dryWeight', style: { numFmt: '0.000' } },
       { header: this.transloco.translate("contracts.info.%"), key: 'damage' },
       { header: this.data.displayUnits.get('damagedGrain').toUpperCase(), key: 'damagedGrain', style: { numFmt: '0.000' } },
-      { header: this.transloco.translate("contracts.info.Adjusted Weight") + `(${this.data.displayUnits.get('adjustedWeight').toUpperCase()})`, key: 'adjustedWeight', style: { numFmt: '0.000' } },
-      { header: this.transloco.translate("contracts.info.Price ($/BU)"), key: 'pricePerBushel', style: { numFmt: '0.0000' } },
+      { header: `${this.transloco.translate("contracts.info.Adjusted Weight")} (${this.data.displayUnits.get('adjustedWeight').toUpperCase()})`, key: 'adjustedWeight', style: { numFmt: '0.000' } },
+      { header: `${this.transloco.translate("contracts.info.Price")} ($/${this.data.displayUnits.get('price').toUpperCase()})`, key: 'price', style: { numFmt: EXCEL_ACCOUNTING_FORMAT_4 } },
       { 
         header: this.transloco.translate("contracts.info.Total ($)"), 
         key: 'total', 
-        style: { numFmt: '0.000' },
+        style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 },
         hidden: (
           !this.data.totals.priceDiscounts.infested 
           && !this.data.totals.priceDiscounts.musty 
@@ -166,34 +166,34 @@ export class LiquidationDialogComponent implements OnInit {
       { 
         header: this.transloco.translate("contracts.info.Infested"), 
         key: 'infested', 
-        style: { numFmt: '0.000' }, 
+        style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 }, 
         hidden: !this.data.totals.priceDiscounts.infested 
       },
       { 
         header: this.transloco.translate("contracts.info.Musty"), 
         key: 'musty', 
-        style: { numFmt: '0.000' }, 
+        style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 }, 
         hidden: !this.data.totals.priceDiscounts.musty 
       },
       { 
         header: this.transloco.translate("contracts.info.Sour"), 
         key: 'sour', 
-        style: { numFmt: '0.000' }, 
+        style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 }, 
         hidden: !this.data.totals.priceDiscounts.sour 
       },
       { 
         header: this.transloco.translate("contracts.info.Weathered"), 
         key: 'weathered', 
-        style: { numFmt: '0.000' }, 
+        style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 }, 
         hidden: !this.data.totals.priceDiscounts.weathered 
       },
       { 
         header: this.transloco.translate("contracts.info.Inspection"), 
         key: 'inspection', 
-        style: { numFmt: '0.000' }, 
+        style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 }, 
         hidden: !this.data.totals.priceDiscounts.inspection 
       },
-      { header: this.transloco.translate("contracts.info.Net to Pay ($)"), key: 'netToPay', style: { numFmt: '0.000' } }
+      { header: this.transloco.translate("contracts.info.Net to Pay ($)"), key: 'netToPay', style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 } }
     ];
 
     let rowValues = [];
@@ -215,15 +215,15 @@ export class LiquidationDialogComponent implements OnInit {
 
     // populating worksheet columns
     this.data.selectedTickets.forEach(ticket => {
-      const net = ticket.gross.getMassInUnit(this.data.displayUnits.get('weight')) - ticket.tare.getMassInUnit(this.data.displayUnits.get('weight'));
+      const net = ticket.net.getMassInUnit(this.data.displayUnits.get('weight'));
       const adjustedWeight = net - ticket.weightDiscounts.totalMass(this.data.contract.productInfo).getMassInUnit(this.data.displayUnits.get('weight'));
-      const total = (this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) * adjustedWeight);
+      // const total = (this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) * adjustedWeight);
       
       worksheet.addRow({
         ...ticket,
         gross: ticket.gross.getMassInUnit(this.data.displayUnits.get('weight')),
         tare: ticket.tare.getMassInUnit(this.data.displayUnits.get('weight')),
-        net: net,
+        net,
         moisture: ticket.moisture,
         moistureWeight: ticket.weightDiscounts.moisture?.getMassInUnit(this.data.displayUnits.get('moisture')) ?? 0,
         dryWeightPercent: ticket.dryWeightPercent,
@@ -231,10 +231,10 @@ export class LiquidationDialogComponent implements OnInit {
         damage: ticket.damagedGrain,
         damagedGrain: ticket.weightDiscounts.damagedGrain?.getMassInUnit(this.data.displayUnits.get('damagedGrain')) ?? 0,
         adjustedWeight: adjustedWeight,
-        pricePerBushel: this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
-        total: total,
+        price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
+        total: ticket.beforeDiscounts,
         ...ticket.priceDiscounts,
-        netToPay: total - ticket.priceDiscounts.total()
+        netToPay: ticket.beforeDiscounts - ticket.priceDiscounts.total()
       });
     });
   }
@@ -248,8 +248,8 @@ export class LiquidationDialogComponent implements OnInit {
       { header: this.transloco.translate("contracts.info.Net"), key: 'net', style: { numFmt: '0.000' } },
       { header: `${this.transloco.translate("contracts.info.Moisture")} %`, key: 'moisture' },
       { header: this.transloco.translate("contracts.info.Client Weight"), key:'original_weight', style: { numFmt: '0.000' } },
-      { header: `${this.transloco.translate("contracts.info.Price")} ($/${this.data.displayUnits.get('price').toUpperCase()})`, key: 'pricePerBushel', style: { numFmt: '_($* #,##0.0000_);_($* (#,##0.0000);_($* "-"??_);_(@_)' } },
-      { header: this.transloco.translate("contracts.info.Net to Pay ($)"), key: 'netToPay', style: { numFmt: '_($* #,##0.000_);_($* (#,##0.000);_($* "-"??_);_(@_)' } }
+      { header: `${this.transloco.translate("contracts.info.Price")} ($/${this.data.displayUnits.get('price').toUpperCase()})`, key: 'price', style: { numFmt: EXCEL_ACCOUNTING_FORMAT_4 } },
+      { header: this.transloco.translate("contracts.info.Net to Pay ($)"), key: 'netToPay', style: { numFmt: EXCEL_ACCOUNTING_FORMAT_3 } }
     ];
 
     // insert merged headers
@@ -275,7 +275,7 @@ export class LiquidationDialogComponent implements OnInit {
         net: ticket.net.getMassInUnit(this.data.displayUnits.get('weight')),
         moisture: ticket.moisture,
         original_weight: ticket.original_weight.getMassInUnit(this.data.displayUnits.get('weight')),
-        pricePerBushel: this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
+        price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
         netToPay: ticket.netToPay
       });
     });
