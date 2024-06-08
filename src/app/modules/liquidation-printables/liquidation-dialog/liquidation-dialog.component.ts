@@ -231,7 +231,7 @@ export class LiquidationDialogComponent implements OnInit {
         damage: ticket.damagedGrain,
         damagedGrain: ticket.weightDiscounts.damagedGrain?.getMassInUnit(this.data.displayUnits.get('damagedGrain')) ?? 0,
         adjustedWeight: adjustedWeight,
-        price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
+        price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) ?? 0,
         total: ticket.beforeDiscounts,
         ...ticket.priceDiscounts,
         netToPay: ticket.beforeDiscounts - ticket.priceDiscounts.total()
@@ -275,7 +275,7 @@ export class LiquidationDialogComponent implements OnInit {
         net: ticket.net.getMassInUnit(this.data.displayUnits.get('weight')),
         moisture: ticket.moisture,
         original_weight: ticket.original_weight.getMassInUnit(this.data.displayUnits.get('original_weight')),
-        price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity),
+        price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) ?? 0,
         netToPay: ticket.netToPay
       });
     });
