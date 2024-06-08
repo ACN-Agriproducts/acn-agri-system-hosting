@@ -400,20 +400,26 @@ export class Ticket extends FirebaseDocInterface{
     }
 
     public static calcLiquidationValuesForTicket(ticket: Ticket | TicketInfo, contract: Contract): void {
-        ticket.adjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
-        const sharedUnit = ticket.adjustedWeight.defaultUnits;
+        const sharedUnit = ticket.net.getUnit();
 
         let price: number | Price;
         if (ticket instanceof Ticket) {
-            const priceAmount = ticket.price || contract.price.getPricePerUnit(sharedUnit, ticket.adjustedWeight);
+            const priceAmount = ticket.price || contract.price.getPricePerUnit(sharedUnit, ticket.net);
             price = new Price(priceAmount, sharedUnit);
         }
         else {
             price = ticket.price ?? contract.price;
         }
 
+        ticket.adjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
         ticket.beforeDiscounts = ticket.adjustedWeight.get() * price.getPricePerUnit(sharedUnit, ticket.adjustedWeight);
-        ticket.netToPay = ticket.beforeDiscounts - ticket.priceDiscounts.total();
+
+        if (contract.type === "sales" || contract.tags.includes("sale")) {
+            ticket.netToPay = ticket.net.get() * price.getPricePerUnit(sharedUnit, ticket.net);
+        }
+          else if (contract.type === "purchase" || contract.tags.includes("purchase")) {
+            ticket.netToPay = ticket.beforeDiscounts - ticket.priceDiscounts.total();
+        }
     }
 
 

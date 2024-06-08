@@ -42,12 +42,14 @@ export class LiquidationDialogComponent implements OnInit {
       
       if (this.data.contract.type === "sales" || this.data.contract.tags.includes("sale")) {
         this.selectedFormat = this.liquidationTypes['sales liquidation'];
+        this.data.totals = new LiquidationTotals(this.data.selectedTickets, this.data.contract, true);
+
       }
       else if (this.data.contract.type === "purchase" || this.data.contract.tags.includes("purchase")) {
         this.selectedFormat = this.liquidationTypes['liquidation long'];
+        this.data.totals = new LiquidationTotals(this.data.selectedTickets, this.data.contract);
       }
     });
-    this.data.totals = new LiquidationTotals(this.data.selectedTickets, this.data.contract);
   }
 
   public async onDownloadLiquidation(): Promise<void> {
