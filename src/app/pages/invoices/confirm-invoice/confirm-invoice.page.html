@@ -193,7 +193,7 @@
                   </div>
                   <div
                     cdkDropList
-                    [id]="productGroup.key + '-' + contractID.key + '-' + group.key"
+                    [id]="productGroup.key + '-' + client.key + '-' + contractID.key + '-' + group.key"
                     [cdkDropListData]="group.value.tickets"
                     [cdkDropListConnectedTo]="getConnectedProductGroupList(productGroup.key, client.key, contractID.key, group.key)"
                     class="ticket-list"
