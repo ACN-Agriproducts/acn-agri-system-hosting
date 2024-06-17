@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Transaction } from '@shared/classes/transaction';
 import { SetTransactionDialogComponent } from '../set-transaction-dialog/set-transaction-dialog.component';
 import { Contact } from '@shared/classes/contact';

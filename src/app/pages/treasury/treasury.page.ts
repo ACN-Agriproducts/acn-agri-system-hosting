@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Account } from '@shared/classes/account';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Firestore, Unsubscribe, doc, setDoc } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { lastValueFrom } from 'rxjs';
 import { SetAccountDialogComponent } from './components/set-account-dialog/set-account-dialog.component';
 import { SetTransactionDialogComponent } from './components/set-transaction-dialog/set-transaction-dialog.component';

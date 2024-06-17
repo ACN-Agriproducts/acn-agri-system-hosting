@@ -2,7 +2,7 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Account } from '@shared/classes/account';
 import { Contact } from '@shared/classes/contact';
