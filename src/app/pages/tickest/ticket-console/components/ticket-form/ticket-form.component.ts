@@ -118,6 +118,7 @@ export class TicketFormComponent implements OnInit {
 
   async addTransport() {
     const dialogRef = this.dialog.open(SelectClientComponent, {
+      width: '600px',
       data: this.transportList.filter(t => !this.selectableTransport.some(st => st.id == t.id)).sort((a, b) => {
         const nameA = a.name.toUpperCase();
         const nameB = b.name.toUpperCase();
