@@ -158,13 +158,13 @@
                 <td>{{ticket.ticket.contractID}}</td>
                 <td>{{ticket.ticket.net | massDisplay:3:freightUnit}}</td>
                 <td>{{ticket.ticket.original_weight | massDisplay:3:freightUnit}}</td>
-                <td>{{(ticket.freight | pricePerUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
-                <td>{{(ticket.freight | pricePerUnit) * (ticket.ticket.net | massInUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
+                <td>{{(ticket.freight | pricePerUnit:freightUnit:null:ticket.freight.amount) | currency:'USD':'symbol-narrow':'0.3-3'}}</td>
+                <td>{{(ticket.freight | pricePerUnit:null:null:ticket.freight.amount) * (ticket.ticket.net | massInUnit:freightUnit) | currency:'USD':'symbol-narrow':'0.3-3'}}</td> 
                 <td>{{ticket.ticket.net.subtract(ticket.ticket.original_weight) | massDisplay:3:freightUnit}}</td>
                 <td>{{(ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100 | number:"0.3"}}</td>
                 <td>{{(ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100) | number:'0.2'}}</td>
                 <td>{{(ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity) * exchangeRate | currency}}</td>
-                <td>{{(((ticket.freight | pricePerUnit) * (ticket.ticket.net | massInUnit:freightUnit)) - (((ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)) * (ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity) * exchangeRate)) | currency}}</td>
+                <td>{{(((ticket.freight | pricePerUnit:null:null:ticket.freight.amount) * (ticket.ticket.net | massInUnit:freightUnit)) - (((ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)) * (ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity) * exchangeRate)) | currency}}</td>
               </tr>
               <tr>
                 <th colspan="3">Totals</th>

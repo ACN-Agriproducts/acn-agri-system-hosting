@@ -3,7 +3,7 @@
   <mat-selection-list #client [(ngModel)]="clientSelected" [multiple]="false" cdkVirtualScrollingElement>
     <mat-list-option *ngIf="canCreateUser" value="new">+ New client</mat-list-option>
     <cdk-virtual-scroll-viewport itemSize="48">
-      <mat-list-option *cdkVirtualFor="let client of data" [value]="client">
+      <mat-list-option *cdkVirtualFor="let client of clientsList" [value]="client">
         {{client.name}}
       </mat-list-option>
     </cdk-virtual-scroll-viewport>
