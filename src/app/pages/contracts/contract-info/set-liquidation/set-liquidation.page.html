@@ -37,7 +37,7 @@
             [disabled]="ticket.data.status==='pending' && !editingTickets?.includes(ticket) "></mat-checkbox>
           </ion-text>
           <ion-text>{{ticket.data.dateOut | date:'shortDate'}}</ion-text>
-          <ion-text>{{ticket.data.id}}<span *ngIf="ticket.data.subId">-{{ticket.data.subId}}</span></ion-text>
+          <ion-text><b>{{ticket.data.id}}<span *ngIf="ticket.data.subId">-{{ticket.data.subId}}</span></b></ion-text>
           <ion-text>{{ticket.data.moisture}}</ion-text>
           <ion-text>{{ticket.data.weight}}</ion-text>
           <ion-text>{{ticket.data.gross | massInUnit}}</ion-text>

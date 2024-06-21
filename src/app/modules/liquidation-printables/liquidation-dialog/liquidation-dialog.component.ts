@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 import { PrintableDialogComponent } from '@shared/components/printable-dialog/printable-dialog.component';
@@ -10,7 +9,7 @@ import { LiquidationPrintableData, PrintableLiquidationComponent } from '../prin
 
 import * as Excel from 'exceljs';
 import { ContractSettings } from '@shared/classes/contract-settings';
-import { Liquidation, LiquidationTotals } from '@shared/classes/liquidation';
+import { LiquidationTotals } from '@shared/classes/liquidation';
 
 const EXCEL_ACCOUNTING_FORMAT_3 = '_($* #,##0.000_);_($* (#,##0.000);_($* "-"??_);_(@_)';
 const EXCEL_ACCOUNTING_FORMAT_4 = '_($* #,##0.0000_);_($* (#,##0.0000);_($* "-"??_);_(@_)';
