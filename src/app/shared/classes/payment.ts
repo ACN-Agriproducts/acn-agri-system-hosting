@@ -4,7 +4,7 @@ import { FileStorageInfo } from "./liquidation";
 import { Firestore, collection, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, where } from "@angular/fire/firestore";
 
 export const PAYMENT_TYPES = ["default", "prepay"];
-export const PAYMENT_METHODS = ["wire", "check"];
+export const PAYMENT_METHODS = ["wire", "check", "credit"];
 
 export class Payment extends FirebaseDocInterface {
     public accountName: string;

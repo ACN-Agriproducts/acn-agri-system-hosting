@@ -51,7 +51,7 @@ export class Mass {
 
     add(addend: Mass): Mass {
         if (this.defaultUnits === 'bu' && !addend.conversions.get('bu')) addend.defineBushels(this.conversions.get('bu'));
-        const amount = this.get() + addend.getMassInUnit(this.defaultUnits);
+        const amount = this.get() + (addend?.getMassInUnit(this.defaultUnits) ?? 0);
         return new Mass(amount, this.defaultUnits, this.conversions.get('bu'));
     }
 
