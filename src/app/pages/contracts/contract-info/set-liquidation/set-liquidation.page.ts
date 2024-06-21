@@ -94,7 +94,7 @@ export class SetLiquidationPage implements OnInit {
 
   public selectAllTickets(select: boolean): void {
     this.tickets.forEach(t => {
-      if (t.data.status !== "pending" || this.editingTickets?.includes(t)) t.inReport = select;
+      if ((t.data.status !== "pending" && t.data.status !== "paid") || this.editingTickets?.includes(t)) t.inReport = select;
     });
     this.selectedTicketsChange();
   }

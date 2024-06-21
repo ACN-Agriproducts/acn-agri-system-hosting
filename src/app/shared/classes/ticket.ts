@@ -538,6 +538,17 @@ export class PriceDiscounts {
             unitRateDiscounts: { ...this.unitRateDiscounts }
         }
     }
+
+    public getRawData() {
+        return {
+            infested: this.infested,
+            musty: this.musty,
+            sour: this.sour,
+            weathered: this.weathered,
+            inspection: this.inspection,
+            unitRateDiscounts: { ...this.unitRateDiscounts },
+        }
+    }
 }
 
 /**
@@ -594,8 +605,13 @@ export class WeightDiscounts {
         return data;
     }
 
-    public getRawData(): any {
-        return this.getDiscountsObject();
+    public getRawData() {
+        const data = {};
+        Object.keys(this).forEach(key => {
+            data[key] = this[key].getRawData();
+        });
+
+        return data;
     }
 }
 
