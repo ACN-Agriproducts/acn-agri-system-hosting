@@ -103,7 +103,11 @@ const routes: Routes = [
     path: '**',
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
+  },  {
+    path: 'freights',
+    loadChildren: () => import('./pages/freights/freights.module').then( m => m.FreightsPageModule)
   },
+
 ];
 
 @NgModule({
