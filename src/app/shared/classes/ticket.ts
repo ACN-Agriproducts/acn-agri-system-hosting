@@ -528,7 +528,6 @@ export class PriceDiscounts {
     }
 
     public getRawData(): any {
-
         return {
             infested: this.infested,
             musty: this.musty,
@@ -536,17 +535,6 @@ export class PriceDiscounts {
             weathered: this.weathered,
             inspection: this.inspection,
             unitRateDiscounts: { ...this.unitRateDiscounts }
-        }
-    }
-
-    public getRawData() {
-        return {
-            infested: this.infested,
-            musty: this.musty,
-            sour: this.sour,
-            weathered: this.weathered,
-            inspection: this.inspection,
-            unitRateDiscounts: { ...this.unitRateDiscounts },
         }
     }
 }
