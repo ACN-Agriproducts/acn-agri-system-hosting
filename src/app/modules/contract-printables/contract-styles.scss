@@ -229,4 +229,8 @@ $text-highlight: #F2F2F2;
 	.text-highlight {
 		print-color-adjust: exact;
 	}
+
+    .page-style {
+		page-break-after: always;
+	}
 }
