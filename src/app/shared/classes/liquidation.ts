@@ -218,11 +218,8 @@ export class LiquidationTotals {
             else {
                 this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
             }
-                
         });
     }
-
-    update
 }
 
 export interface TicketInfo {
