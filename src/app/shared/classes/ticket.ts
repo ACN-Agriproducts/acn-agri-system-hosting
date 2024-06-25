@@ -422,10 +422,10 @@ export class Ticket extends FirebaseDocInterface{
         ticket.beforeDiscounts = ticket.adjustedWeight.get() * price.getPricePerUnit(sharedUnit, ticket.adjustedWeight);
 
         if (contract.type === "sales" || contract.tags.includes("sale")) {
-            ticket.netToPay = ticket.net.get() * price.getPricePerUnit(sharedUnit, ticket.net);
+            ticket.netToPay = Math.round(ticket.net.get() * price.getPricePerUnit(sharedUnit, ticket.net) * 1000) / 1000;
         }
           else if (contract.type === "purchase" || contract.tags.includes("purchase")) {
-            ticket.netToPay = ticket.beforeDiscounts - ticket.priceDiscounts.total();
+            ticket.netToPay = Math.round((ticket.beforeDiscounts - ticket.priceDiscounts.total()) * 1000) / 1000;
         }
     }
 

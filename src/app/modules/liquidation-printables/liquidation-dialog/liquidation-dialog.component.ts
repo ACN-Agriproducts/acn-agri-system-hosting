@@ -20,7 +20,6 @@ const EXCEL_ACCOUNTING_FORMAT_4 = '_($* #,##0.0000_);_($* (#,##0.0000);_($* "-"?
   styleUrls: ['./liquidation-dialog.component.scss'],
 })
 export class LiquidationDialogComponent implements OnInit {
-  @ViewChild('#printable') printable: PrintableLiquidationComponent;
   readonly units = UNIT_LIST;
   
   public orientation: string = "landscape";
@@ -218,7 +217,6 @@ export class LiquidationDialogComponent implements OnInit {
     this.data.selectedTickets.forEach(ticket => {
       const net = ticket.net.getMassInUnit(this.data.displayUnits.get('weight'));
       const adjustedWeight = net - ticket.weightDiscounts.totalMass(this.data.contract.productInfo).getMassInUnit(this.data.displayUnits.get('weight'));
-      // const total = (this.data.contract.price.getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) * adjustedWeight);
       
       worksheet.addRow({
         ...ticket,
@@ -235,7 +233,7 @@ export class LiquidationDialogComponent implements OnInit {
         price: (ticket.price ?? this.data.contract.price).getPricePerUnit(this.data.displayUnits.get('price'), this.data.contract.quantity) ?? 0,
         total: ticket.beforeDiscounts,
         ...ticket.priceDiscounts,
-        netToPay: ticket.beforeDiscounts - ticket.priceDiscounts.total()
+        netToPay: ticket.netToPay
       });
     });
   }
