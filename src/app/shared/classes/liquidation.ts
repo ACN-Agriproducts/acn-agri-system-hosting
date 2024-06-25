@@ -194,31 +194,36 @@ export class LiquidationTotals {
 
             for (const key of Object.keys(ticket.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);
-                this.weightDiscounts[key].amount += ticket.weightDiscounts[key].amount;
+                this.weightDiscounts[key].amount += this.roundAmount(ticket.weightDiscounts[key].amount, 3);
             }
             const tempAdjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
             this.adjustedWeight = this.adjustedWeight.add(tempAdjustedWeight);
 
             const tempBeforeFinalDiscounts = (price.getPricePerUnit(ticket.net.getUnit(), contract.quantity)) * tempAdjustedWeight.get();
-            this.beforeFinalDiscounts += tempBeforeFinalDiscounts;
+            this.beforeFinalDiscounts += this.roundAmount(tempBeforeFinalDiscounts, 3);
 
             for (const key of Object.keys(ticket.priceDiscounts)) {
                 if (key === 'unitRateDiscounts') continue;
-                this.priceDiscounts[key] += ticket.priceDiscounts[key];
+                this.priceDiscounts[key] += this.roundAmount(ticket.priceDiscounts[key], 3);
             }
             for (const key of Object.keys(ticket.priceDiscounts.unitRateDiscounts)) {
                 this.priceDiscounts.unitRateDiscounts[key] ??= 0;
-                this.priceDiscounts.unitRateDiscounts[key] += ticket.priceDiscounts.unitRateDiscounts[key];
+                this.priceDiscounts.unitRateDiscounts[key] += this.roundAmount(ticket.priceDiscounts.unitRateDiscounts[key], 3);
             }
 
             if (isSalesLiquidation) {
                 const massToUse = ticket.original_weight.get() > 0 ? ticket.original_weight : ticket.net;
-                this.netToPay += (massToUse.get() || ticket.net.get()) * (price.getPricePerUnit(massToUse.getUnit(), contract.quantity));
+                this.netToPay += this.roundAmount((massToUse.get() || ticket.net.get()) * (price.getPricePerUnit(massToUse.getUnit(), contract.quantity)), 3);
             }
             else {
-                this.netToPay += tempBeforeFinalDiscounts - ticket.priceDiscounts.total();
+                this.netToPay += this.roundAmount(tempBeforeFinalDiscounts - ticket.priceDiscounts.total(), 3);
             }
         });
+    }
+
+    public roundAmount(amount: number, decimalPlaces: number): number {
+        const multiplier = Math.pow(10, decimalPlaces);
+        return Math.round(amount * multiplier) / multiplier;
     }
 }
 
