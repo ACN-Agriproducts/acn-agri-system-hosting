@@ -109,6 +109,15 @@ export class ContractModalOptionsComponent implements OnInit {
     });
   }
 
+  public async markAsPaid() {
+    this.contract.changeStatus('paid').then(() => {
+      this.snack.openTranslated("Contract status updated", "success");
+    }).catch(error => {
+      console.error(error);
+      this.snack.openTranslated("Could not update the contract status.", "error");
+    });
+  }
+
   public async fixFields(isClosing: boolean = false): Promise<void> {
     const requiredFieldData = {
       marketPrice: this.contract.market_price,

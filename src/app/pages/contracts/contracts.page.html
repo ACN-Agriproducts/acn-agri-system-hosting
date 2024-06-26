@@ -131,9 +131,9 @@
             <ng-container *ngFor="let contractsPromise of tabData.data[0].contracts"> 
                 <div *ngFor="let contract of contractsPromise | async" class="item-wrapper">
                     <div 
-                        (contextmenu)="openOptions($event)" 
+                        (contextmenu)="openContractOptions($event, contract)" 
                         class="grid-item item-table" 
-                        [class.progress]="contract.status == 'active' && !contract.isOpen">
+                        [class.progress]="contract.status == 'active' && !contract.isOpen || contract.status == 'closed'">
                         <ion-item lines="none ">
                             <section [hidden]="!exportMode">
                                 <mat-checkbox (change)="exportSelect($event.checked, contract)" color="primary"></mat-checkbox>
@@ -177,7 +177,7 @@
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getQuantityTooltip(contract)"
                                 matTooltipClass="multiline-tooltip">
-                                {{!contract.isOpen || contract.status == 'closed' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-'}}
+                                {{!contract.isOpen || contract.status == 'closed' || contract.status == 'paid' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-'}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -205,6 +205,10 @@
                             class="progress-bar" 
                             *ngIf="contract.status == 'active' && !contract.isOpen" 
                             [style.width]="contract.progress + '%'"></div>
+                        <div
+                            class="paid-bar" 
+                            *ngIf="contract.status == 'closed'" 
+                            [style.width]="contract.paidProgress + '%'"></div>
                     </div>
                 </div>
             <!-- </ion-virtual-scroll> -->

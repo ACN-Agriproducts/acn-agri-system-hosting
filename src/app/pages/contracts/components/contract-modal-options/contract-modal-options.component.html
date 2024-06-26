@@ -22,6 +22,12 @@
     </ion-item>
   </ng-container>
   <ng-container *ngIf="contract.status == 'closed' && userPermissions.admin">
+    <ion-item lines="none" button (click)="markAsPaid()">
+      {{ t('Paid') }}
+      <ion-icon slot='end' name="checkmark-outline"></ion-icon>
+    </ion-item>
+  </ng-container>
+  <ng-container *ngIf="contract.status == 'closed' && userPermissions.admin">
     <ion-item lines="none" button (click)='reopen()'>
       {{ t('Reopen') }}
       <ion-icon slot='end' name="checkmark-outline"></ion-icon>

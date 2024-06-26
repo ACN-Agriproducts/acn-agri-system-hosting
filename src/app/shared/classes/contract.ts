@@ -78,6 +78,7 @@ export class Contract extends FirebaseDocInterface {
 
     deliveredHistory: { [date: string]: number };
     progress: number;
+    paidProgress: number;
 
     totalLiquidations: number;
     totalPayments: number;
@@ -283,8 +284,6 @@ export class Contract extends FirebaseDocInterface {
 
         this.deliveredHistory = data.deliveredHistory;
 
-        this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
-
         this.clientTicketInfo.ref = this.clientTicketInfo.ref.withConverter(Contact.converter);
 
         if(this.product) {
@@ -305,6 +304,9 @@ export class Contract extends FirebaseDocInterface {
 
         this.totalLiquidations = data.totalLiquidations ?? 0;
         this.totalPayments = data.totalPayments ?? 0;        
+
+        this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
+        this.paidProgress = this.totalPayments / this.currentDelivered.getMassInUnit(this.price.getUnit()) * this.price.amount * 100;
     }
 
     public static converter = {

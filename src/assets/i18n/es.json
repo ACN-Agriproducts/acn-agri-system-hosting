@@ -526,7 +526,8 @@
         "Re-Upload": "Volver a Subir",
         "Upload": "Subir",
         "Simply drag and drop or click here to choose a file.": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
-        "Retry": "Reintentar"
+        "Retry": "Reintentar",
+        "Paid": "Pagado"
     },
     "inventory": {
         "Inventory": "Inventario",
