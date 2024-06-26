@@ -11,6 +11,7 @@ import { Plant } from "./plant";
 import { DiscountTableRow, DiscountTables } from "./discount-tables";
 import { Product } from "./product";
 import { Price } from "./price";
+import { TicketInfo } from "./liquidation";
 
 type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
 type TicketType = "in" | "out" | "service";
@@ -82,6 +83,10 @@ export class Ticket extends FirebaseDocInterface{
     public subId: string;
     public moneyDiscounts: MoneyDiscounts;
     public type: TicketType;
+
+    public adjustedWeight: Mass;
+    public beforeDiscounts: number;
+    public netToPay: number;
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -400,6 +405,37 @@ export class Ticket extends FirebaseDocInterface{
             });
         }
     }
+
+    public static calcLiquidationValuesForTicket(ticket: Ticket | TicketInfo, contract: Contract): void {
+        const sharedUnit = ticket.net.getUnit();
+
+        let price: number | Price;
+        if (ticket instanceof Ticket) {
+            const priceAmount = ticket.price || contract.price.getPricePerUnit(sharedUnit, ticket.net);
+            price = new Price(priceAmount, sharedUnit);
+        }
+        else {
+            price = ticket.price ?? contract.price;
+        }
+
+        ticket.adjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
+        ticket.beforeDiscounts = ticket.adjustedWeight.get() * price.getPricePerUnit(sharedUnit, ticket.adjustedWeight);
+
+        if (contract.type === "sales" || contract.tags.includes("sale")) {
+            ticket.netToPay = Math.round(ticket.net.get() * price.getPricePerUnit(sharedUnit, ticket.net) * 1000) / 1000;
+        }
+          else if (contract.type === "purchase" || contract.tags.includes("purchase")) {
+            ticket.netToPay = Math.round((ticket.beforeDiscounts - ticket.priceDiscounts.total()) * 1000) / 1000;
+        }
+    }
+
+
+    public setLiquidationData(discountTables: DiscountTables, contract: Contract): void {
+        this.defineBushels(contract.productInfo);
+        this.setDiscounts(discountTables);
+        Ticket.calcLiquidationValuesForTicket(this, contract);
+    }
+
 }
 
 const MASS_FIELDS_AND_NAMES = [
@@ -482,24 +518,23 @@ export class PriceDiscounts {
     }
 
     public total(): number {
-        const discountsTotal = Object.entries(this).reduce((total, [currentKey, currentValue]) => {
-            if (currentKey === 'unitRateDiscounts') return 0;
-            return total + currentValue
+        return Object.entries(this).reduce((total, [currentKey, currentValue]) => {
+            if (currentKey === 'unitRateDiscounts') {
+                const unitRateDiscountsTotal = Object.values(this.unitRateDiscounts).reduce((total, currentValue) => total + currentValue, 0);
+                return total + unitRateDiscountsTotal;
+            }
+            return total + currentValue;
         }, 0);
-
-        const unitRateDiscountsTotal = Object.values(this.unitRateDiscounts).reduce((total, currentValue) => total + currentValue, 0);
-
-        return discountsTotal + unitRateDiscountsTotal;
     }
 
-    public getRawData() {
+    public getRawData(): any {
         return {
             infested: this.infested,
             musty: this.musty,
             sour: this.sour,
             weathered: this.weathered,
             inspection: this.inspection,
-            unitRateDiscounts: { ...this.unitRateDiscounts },
+            unitRateDiscounts: { ...this.unitRateDiscounts }
         }
     }
 }
@@ -541,10 +576,12 @@ export class WeightDiscounts {
     }
 
     public setDiscount(discountName: string, percentage: number = 0, tableUnit: units, weight: Mass): void {
+        this[discountName] ??= new Mass(0, tableUnit, weight.conversions.get('bu'));
+
         const discountWeight = (percentage / 100) * weight.get();
         const roundedDiscountWeight = Math.round(discountWeight * 1000) / 1000;
 
-        this[discountName] = new Mass(roundedDiscountWeight, weight.getUnit());
+        this[discountName] = this[discountName].add(new Mass(roundedDiscountWeight, weight.getUnit()));
     }
 
     public getDiscountsObject(): {[name: string]: Mass} {
@@ -553,7 +590,6 @@ export class WeightDiscounts {
             data[key] = this[key];
         }
 
-        console.log(data);
         return data;
     }
 

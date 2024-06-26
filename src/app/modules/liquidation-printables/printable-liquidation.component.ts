@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, QueryList, TemplateRef, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { TypeTemplateDirective } from '@core/directive/type-template/type-template.directive';
-import { Contract } from '@shared/classes/contract';
-import { ReportTicket, LiquidationTotals } from '@shared/classes/liquidation';
-import { units } from '@shared/classes/mass';
 import { BehaviorSubject, Observable, filter, map } from 'rxjs';
-import { LiquidationPrintableData } from './liquidation-dialog/liquidation-dialog.component';
+import { Contract } from '@shared/classes/contract';
+import { TicketInfo, LiquidationTotals } from '@shared/classes/liquidation';
+import { units } from '@shared/classes/mass';
 
 @Component({
   selector: 'app-printable-liquidation',
@@ -14,8 +13,8 @@ import { LiquidationPrintableData } from './liquidation-dialog/liquidation-dialo
 export class PrintableLiquidationComponent implements OnInit {
   @ViewChildren(TypeTemplateDirective) private versionTemplates: QueryList<TypeTemplateDirective>;
 
-  @Input("format") set format(newVersion: string) {
-    this.format$.next(newVersion);
+  @Input("format") set format(newFormat: string) {
+    this.format$.next(newFormat);
   }
   @Input() data: LiquidationPrintableData;
 
@@ -34,4 +33,12 @@ export class PrintableLiquidationComponent implements OnInit {
   ngAfterViewInit() {
     this.format$.next(this.format$.getValue());
   }
+}
+
+export interface LiquidationPrintableData {
+  selectedTickets: TicketInfo[];
+  contract: Contract;
+  totals: LiquidationTotals;
+  displayUnits?: Map<string, units>;
+  canceled?: boolean;
 }

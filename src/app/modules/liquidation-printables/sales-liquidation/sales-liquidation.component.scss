@@ -20,18 +20,6 @@ $lightlightgray: rgb(230, 230, 230);
     
     #contract-details {
         display: inline-block;
-
-        // #farmer-name {
-        //     background-color: lightgreen;
-        // }
-
-        // #contract-name {
-        //     background-color: lightgreen;
-        // }
-
-        // #date {
-        //     background-color: yellow;
-        // }
     }
 }
 
@@ -50,45 +38,37 @@ $lightlightgray: rgb(230, 230, 230);
         -moz-hyphens: auto;
     }
 
-    .one-fr {
-        width: 42.66px;
-    }
-    .one-and-half-fr {
-        width: 64px;
-    }
-    .two-fr {
-        width: 85.33px;
-    }
-    .four-and-half-fr {
-        width: 192px;
+    th {
+        text-transform: uppercase;
+        padding: 2px 2px;
     }
 
-    .total-row {
+    .totals {
         font-weight: bold;
-        border: none !important;
+        td {
+            border: none;
+            &:not(.text-center) {
+                text-align: right;
+            }
+        }
     }
 
-    .center {
-        text-align: center;
+    .body:nth-child(even) {
+        background-color: $lightlightgray;
     }
-    .left {
-        text-align: left;
-    }
-    .right {
-        text-align: right;
+
+    td {
+        &.text-center {
+            text-align: center;
+        }
+        &.text-right {
+            text-align: right;
+        }
     }
 
     th[lang="en"], td {
         overflow-wrap: break-word;
     }
-}
-
-.even {
-    background-color: $lightlightgray;
-}
-
-.odd {
-    background-color: white;
 }
 
 @media print {

@@ -30,6 +30,7 @@ import { pricerPerUnitPipe } from './classes/price';
 import { PrintableDialogComponent } from './components/printable-dialog/printable-dialog.component';
 import { DocumentUploadDialogComponent } from './components/document-upload-dialog/document-upload-dialog.component';
 import { TemplateRefModule } from './template-ref';
+import { TableHeaderUnitSelectComponent } from './components/table-header-unit-select/table-header-unit-select.component';
 
 @NgModule({
   imports: [
@@ -61,7 +62,8 @@ import { TemplateRefModule } from './template-ref';
     LocalInventoryPipe,
     pricerPerUnitPipe,
     PrintableDialogComponent,
-    TemplateRefModule
+    TemplateRefModule,
+    TableHeaderUnitSelectComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -87,6 +89,7 @@ import { TemplateRefModule } from './template-ref';
     pricerPerUnitPipe,
     PrintableDialogComponent,
     DocumentUploadDialogComponent,
+    TableHeaderUnitSelectComponent
   ]
 })
 export class SharedModule {}

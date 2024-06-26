@@ -8,7 +8,7 @@ import { Plant } from "./plant";
 import { getDownloadURL, getStorage } from "@angular/fire/storage";
 import { ref } from "firebase/storage";
 
-export type Status = "pending" | "active" | "closed" | "cancelled" | "paid";
+export type Status = "pending" | "active" | "closed" | "cancelled" | "paid" | "canceled";
 
 export class Company extends FirebaseDocInterface {
     contactList: CompanyContact[];

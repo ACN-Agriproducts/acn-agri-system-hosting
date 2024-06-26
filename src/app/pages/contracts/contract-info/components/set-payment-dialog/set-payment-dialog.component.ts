@@ -15,7 +15,6 @@ import { DocumentReference } from 'firebase/firestore';
 export class SetPaymentDialogComponent implements OnInit {
   @ViewChild('paidDocuments') paidDocuments: ElementRef<MatSelectionList>;
 
-  // readonly PAYMENT_TYPES = PAYMENT_TYPES;
   readonly PAYMENT_METHODS = PAYMENT_METHODS;
   readonly SETPAYMENTLIQUIDATION: SetPaymentLiquidation;
 
@@ -66,6 +65,7 @@ export class SetPaymentDialogComponent implements OnInit {
 
   setPaidDocuments() {
     let pay = this.data.payment.amount;
+
     this.data.payment.paidDocuments = this.selectedLiquidations.map((liq: SetPaymentLiquidation) => {
       if (pay <= 0) return;
 

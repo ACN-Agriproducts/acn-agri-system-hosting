@@ -8,7 +8,7 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { DiscountTables } from '@shared/classes/discount-tables';
-import { Liquidation, ReportTicket } from '@shared/classes/liquidation';
+import { Liquidation, ReportTicket, TicketInfo } from '@shared/classes/liquidation';
 import { UNIT_LIST } from '@shared/classes/mass';
 import { Ticket } from '@shared/classes/ticket';
 import { SelectedTicketsPipe } from '@shared/pipes/selectedTickets/selected-tickets.pipe';
@@ -67,8 +67,7 @@ export class SetLiquidationPage implements OnInit {
       }
 
       this.tickets = (await contract.getTickets()).map(ticket  => {
-        ticket.defineBushels(contract.productInfo);
-        ticket.setDiscounts(this.discountTables);
+        ticket.setLiquidationData(this.discountTables, contract);
         return {
           data: Liquidation.getTicketInfo(ticket),
           inReport: false
@@ -136,5 +135,9 @@ export class SetLiquidationPage implements OnInit {
       height: "75vh"
     });
     return lastValueFrom(dialog.afterClosed());
+  }
+
+  public priceDiscountsChange(ticket: TicketInfo): void {
+    Ticket.calcLiquidationValuesForTicket(ticket, this.contract);
   }
 }
