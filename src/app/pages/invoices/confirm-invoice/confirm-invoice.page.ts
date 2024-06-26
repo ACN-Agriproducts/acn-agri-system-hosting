@@ -285,12 +285,13 @@ export class ConfirmInvoicePage implements OnInit {
     const contact = change.value as Contact;
     const buyer = this.invoice.buyer;
 
-    buyer.city = contact.city;
-    buyer.country = contact.country;
-    buyer.name = contact.name;
-    buyer.state = contact.state;
-    buyer.street = contact.streetAddress;
-    buyer.other = `CP:. ${contact.zipCode}\nRFC: ${contact.rfc}`;
+    buyer.city = contact.city ?? null;
+    buyer.country = contact.country ?? null;
+    buyer.name = contact.name ?? null;
+    buyer.state = contact.state ?? null;
+    buyer.street = contact.streetAddress ?? null;
+    if (!contact.zipCode && !contact.rfc) buyer.other = null;
+    else buyer.other = (contact.zipCode ? `CP:. ${contact.zipCode}` : "") + (contact.rfc ? `\nRFC: ${contact.rfc}` : "");
   }
 
   submit() {
