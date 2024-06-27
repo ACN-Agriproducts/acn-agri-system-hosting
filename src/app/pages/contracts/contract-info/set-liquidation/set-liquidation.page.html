@@ -126,6 +126,12 @@
           </span>
         </div>
         <div class="action-bar">
+          <button mat-raised-button disableRipple>
+            <mat-checkbox 
+              [(ngModel)]="liquidation.createInvoice"
+            >{{ t('Create Invoice') | titlecase }}
+            </mat-checkbox>
+          </button>
           <button mat-raised-button
             [disabled]="selectedTickets.length === 0"
             (click)="openLiquidation()"

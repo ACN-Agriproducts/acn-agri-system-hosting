@@ -217,7 +217,8 @@
                 "Grain": "Grain",
                 "Liquidations": "Liquidations",
                 "Payments": "Payments"
-            }
+            },
+            "Create Invoice": "Crear Factura"
         },
         "modify": {
             "Quantity Units": "Quantity Units",

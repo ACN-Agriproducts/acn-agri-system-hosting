@@ -23,6 +23,8 @@ export class Liquidation extends FirebaseDocInterface {
     public total: number;
     public amountPaid: number;
 
+    public createInvoice: boolean;
+
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if (snapshotOrRef instanceof QueryDocumentSnapshot) {
@@ -78,6 +80,7 @@ export class Liquidation extends FirebaseDocInterface {
         this.archived = data.archived;
         this.amountPaid = data.amountPaid;
         this.total = data.total;
+        this.createInvoice = data.createInvoice;
     }
 
     public static converter = {
@@ -100,7 +103,8 @@ export class Liquidation extends FirebaseDocInterface {
                 tickets: rawTickets,
                 archived: data.archived,
                 amountPaid: data.amountPaid,
-                total: data.total
+                total: data.total,
+                createInvoice: data.createInvoice
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Liquidation {

@@ -218,7 +218,8 @@
                 "Grain": "Grano",
                 "Liquidations": "Liquidaciones",
                 "Payments": "Pagos"
-            }
+            },
+            "Create Invoice": "Create Invoice"
         },
         "modify": {
             "Quantity Units": "Unidades de Cantidad",
