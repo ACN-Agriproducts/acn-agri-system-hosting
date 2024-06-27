@@ -622,7 +622,10 @@
         "Delivery at Place": "Delivery at Place",
         "EX Works": "EX Works",
         "Free On Board": "Free On Board",
-        "Delivery": "Delivery"
+        "Delivery": "Delivery",
+        "Add Inv": "Agregar Inv",
+        "Item": "Elemento",
+        "Invoice": "Factura"
     },
     "messages": {
         "Alert": "Alerta",
