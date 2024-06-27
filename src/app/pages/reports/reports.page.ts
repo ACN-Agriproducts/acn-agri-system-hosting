@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MonthlyTicketsComponent } from './components/monthly-tickets/monthly-tickets.component';
 
 @Component({
   selector: 'app-reports',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportsPage implements OnInit {
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
+    
+  }
+
+  openDialog(): void {
+    this.dialog.open(MonthlyTicketsComponent);
   }
 
 }

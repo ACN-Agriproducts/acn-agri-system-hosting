@@ -9,6 +9,8 @@ import { ReportsPageRoutingModule } from './reports-routing.module';
 import { ReportsPage } from './reports.page';
 import { CoreModule } from '@core/core.module';
 import { CardButtonComponent } from './components/card-button/card-button.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MonthlyTicketsComponent } from './components/monthly-tickets/monthly-tickets.component';
 
 @NgModule({
   imports: [
@@ -16,8 +18,9 @@ import { CardButtonComponent } from './components/card-button/card-button.compon
     FormsModule,
     IonicModule,
     ReportsPageRoutingModule,
-    CoreModule
+    CoreModule,
+    MatDialogModule
   ],
-  declarations: [ReportsPage, CardButtonComponent]
+  declarations: [ReportsPage, CardButtonComponent, MonthlyTicketsComponent]
 })
 export class ReportsPageModule {}
