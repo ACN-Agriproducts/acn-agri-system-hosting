@@ -1,7 +1,7 @@
-<app-header-toolbar titulo="Invoices"></app-header-toolbar>
-<ion-content class="ion-padding">
+<app-header-toolbar [titulo]="'layout.invoices' | transloco | titlecase"></app-header-toolbar>
+<ion-content class="ion-padding" *transloco="let t; read: 'invoices'">
   <div class="content-header magin-inline">
-    <ion-searchbar (contextmenu)="openContextMenu($event)" class="ion-no-padding"></ion-searchbar>
+    <ion-searchbar (contextmenu)="openContextMenu($event)" class="ion-no-padding" [placeholder]="t('Search')"></ion-searchbar>
     <div class="content-button">
       <!-- <mat-form-field>
         <input matInput [matDatepicker]="dp" [(ngModel)]="date">
@@ -18,10 +18,10 @@
         <ion-icon [name]="filter ? 'close-outline' : 'options-outline'"></ion-icon>
       </ion-button> -->
       <ion-button (click)="openOption($event)">
-        <ion-text slot="end">New Invoice</ion-text>
+        <ion-text slot="end">{{ t("New Invoice") }}</ion-text>
       </ion-button>
       <ion-button (click)="setInvoiceItems()">
-        <ion-text slot="end">Set Items</ion-text>
+        <ion-text slot="end">{{ t("Set Items") }}</ion-text>
       </ion-button>
     </div>
   </div>

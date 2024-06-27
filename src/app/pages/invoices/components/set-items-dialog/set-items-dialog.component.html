@@ -1,19 +1,19 @@
 
-<h2 mat-dialog-title class="align-text-icon">
+<h2 mat-dialog-title class="align-text-icon" >
 	<button mat-icon-button class="align-icon" (click)="drawer.toggle()" [disabled]="!itemSelected()">
 		<mat-icon>menu</mat-icon>
 	</button>
 	&nbsp;
-	Set Invoice Items
+	{{ "invoices."+"Set Invoice Items" | transloco }}
 </h2>
 
-<mat-dialog-content>
+<mat-dialog-content *transloco="let t; read: 'invoices'">
 	<mat-drawer-container>
 		<mat-drawer #drawer [disableClose]="!itemSelected()" mode="over" opened>
 			<mat-selection-list #selectList [multiple]="false" (selectionChange)="selectItem($event)">
 				<mat-list-option (click)="addItem()" [value]="currentItem">
 					<span class="align-text-icon">
-						Add Item &nbsp; <mat-icon class="align-icon">add_box</mat-icon>
+						{{ t("Add Item") }} &nbsp; <mat-icon class="align-icon">add_box</mat-icon>
 					</span>
 				</mat-list-option>
 				<mat-list-option *ngFor="let item of itemList" [value]="item">
@@ -28,7 +28,7 @@
 					<mat-grid-list cols="10" rowHeight="70px" gutterSize="5px">
 						<mat-grid-tile colspan="8">
 							<mat-form-field appearance="fill">
-								<mat-label>Name</mat-label>
+								<mat-label>{{ t("Name") }}</mat-label>
 								<input
 									matInput
 									#name="ngModel"
@@ -36,14 +36,13 @@
 									name="name"
 									required
 								>
-								<mat-error>Name is <strong>required</strong></mat-error>
 							</mat-form-field>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="2">
 							<ion-button
 								(click)="deleteItem()"
 								color="danger"
-								matTooltip="Delete Item"
+								[matTooltip]="t('Delete Item')"
 								matTooltipClass="tooltip-primary-solid"
 								matTooltipPosition="right"
 								matTooltipShowDelay="1000"
@@ -53,23 +52,23 @@
 						</mat-grid-tile>
 						<mat-grid-tile colspan="5">
 							<mat-form-field appearance="fill">
-								<mat-label>Price</mat-label>
+								<mat-label>{{ t("Price") }}</mat-label>
 								<span matPrefix>$ &nbsp;</span>
 								<input matInput [(ngModel)]="currentItem.price" type="number" name="price">
 							</mat-form-field>
 						</mat-grid-tile>
 						<mat-grid-tile colspan="5">
 							<mat-checkbox color="primary" [(ngModel)]="currentItem.affectsInventory" name="affectsInventory">
-								Affects Inventory
+								{{ t("Affects Inventory") }}
 							</mat-checkbox>
 						</mat-grid-tile>
 					</mat-grid-list>
 					<ng-template [ngIf]="currentItem.affectsInventory" [ngIfElse]="noAffect">
 						<div id="info-header">
-							Inventory Info
+							{{ t("Inventory Info") }}
 							<button mat-icon-button type="button"
 								(click)="addInfo()"
-								matTooltip="Add Inventory Info"
+								[matTooltip]="t('Add Inventory Info')"
 								matTooltipClass="tooltip-primary-solid"
 								matTooltipPosition="right"
 								matTooltipShowDelay="1000"
@@ -84,7 +83,7 @@
 									<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
 										<mat-grid-tile colspan="6">
 											<mat-form-field appearance="fill">
-												<mat-label>Product</mat-label>
+												<mat-label>{{ t("Product") }}</mat-label>
 												<mat-select
 													[(ngModel)]="item.product"
 													[disableOptionCentering]="true"
@@ -93,12 +92,11 @@
 												>
 													<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
 												</mat-select>
-												<mat-error>Product is <strong>required</strong></mat-error>
 											</mat-form-field>
 										</mat-grid-tile>
 										<mat-grid-tile colspan="3">
 											<mat-form-field appearance="fill">
-												<mat-label>Quantity</mat-label>
+												<mat-label>{{ t("Quantity") }}</mat-label>
 												<input
 													matInput
 													[(ngModel)]="item.quantity"
@@ -107,14 +105,13 @@
 													required
 												/>
 												<span matSuffix>lbs</span>
-												<mat-error>Quantity is <strong>required</strong></mat-error>
 											</mat-form-field>
 										</mat-grid-tile>
 										<mat-grid-tile>
 											<button mat-icon-button type="button"
 												color="warn"
 												(click)="deleteInfo(index)"
-												matTooltip="Delete Inventory Info"
+												[matTooltip]="t('Delete Inventory Info')"
 												matTooltipClass="tooltip-primary-solid"
 												matTooltipPosition="right"
 												matTooltipShowDelay="1000"
@@ -126,7 +123,7 @@
 									<mat-grid-list cols="10" gutterSize="20px" rowHeight="75px">
 										<mat-grid-tile colspan="5">
 											<mat-form-field appearance="fill">
-												<mat-label>Plant</mat-label>
+												<mat-label>{{ t("Plant") }}</mat-label>
 												<mat-select #plant
 													[(ngModel)]="item.plant"
 													[disableOptionCentering]="true"
@@ -135,12 +132,11 @@
 												>
 													<mat-option *ngFor="let plant of plantNameList" [value]="plant">{{ plant }}</mat-option>
 												</mat-select>
-												<mat-error>Plant is <strong>required</strong></mat-error>
 											</mat-form-field>
 										</mat-grid-tile>
 										<mat-grid-tile colspan="4">
 											<mat-form-field appearance="fill">
-												<mat-label>Tank</mat-label>
+												<mat-label>{{ t("Tank") }}</mat-label>
 												<mat-select
 													[(ngModel)]="item.tank"
 													[disabled]="plant.value == ''"
@@ -150,7 +146,6 @@
 												>
 													<mat-option *ngFor="let tank of getTankList(index)" [value]="tank">{{ tank }}</mat-option>
 												</mat-select>
-												<mat-error>Tank is <strong>required</strong></mat-error>
 											</mat-form-field>
 										</mat-grid-tile>
 									</mat-grid-list>
@@ -169,7 +164,7 @@
 	</mat-drawer-container>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-	<button mat-button color="primary" [mat-dialog-close]="null">Cancel</button>
-	<button mat-button color="primary" [mat-dialog-close]="itemList" [disabled]="!formValid()">Save</button>
+<mat-dialog-actions *transloco="let t; read: 'actions'">
+	<button mat-button color="primary" [mat-dialog-close]="null">{{ t("Cancel") }}</button>
+	<button mat-button color="primary" [mat-dialog-close]="itemList" [disabled]="!formValid()">{{ t("Save") }}</button>
 </mat-dialog-actions>
