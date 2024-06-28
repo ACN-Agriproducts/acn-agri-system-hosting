@@ -101,6 +101,7 @@ export class MonthlyTicketsComponent implements OnInit {
 
 		// Crete workbook
 		this.workbook = new Excel.Workbook();
+		console.log(productTickets);
 
 		for (let type in productTickets) {
 			for (let product in productTickets[type]) {
@@ -108,18 +109,10 @@ export class MonthlyTicketsComponent implements OnInit {
 				const worksheet = this.workbook.addWorksheet(name);
 				const reportInfo = type == 'in' ? this.inReportInfo : this.outReportInfo;
 
-				worksheet.addTable({
-					name: `${name}-TABLE`,
-					ref: "A1",
-					headerRow: true,
-					totalsRow: false,
-					style: {
-						theme: "TableStyleLight11",
-						showRowStripes: false,
-					},
-					columns: reportInfo.headers,
-					rows: productTickets[type][product].map(reportInfo.map),
-				});
+				console.log(reportInfo, product, type, productTickets[type][product]);
+
+				worksheet.columns = reportInfo.headers;
+				worksheet.addRows((productTickets[type][product] as Ticket[]).map(reportInfo.map));
 			}
 		}
 
@@ -156,7 +149,6 @@ export class MonthlyTicketsComponent implements OnInit {
 			t.void ? null : t.gross.get(),
 			t.void ? null : t.tare.get(),
 			t.void ? null : t.net.get(),
-			t.void ? null : null, // Freight
 			t.void ? null : t.dryWeight.get(),
 			t.void ? null : t.net.getMassInUnit("mTon"),
 			t.void ? null : null, // Price ($/mTon)
@@ -166,23 +158,22 @@ export class MonthlyTicketsComponent implements OnInit {
 			t.void ? null : null, // Cheque
 		],
 		headers: [
-			{ name: "DATE", filterButton: false },
-			{ name: "ACN TICKET #", filterButton: false },
-			{ name: "ORIGINAL TICKET", filterButton: false },
-			{ name: "VOID", filterButton: false },
-			{ name: "CONTRACT #", filterButton: false },
-			{ name: "PRODUCT", filterButton: false },
-			{ name: "FARMER", filterButton: false },
-			{ name: "WT-GROSS", filterButton: false },
-			{ name: "WT-TARE", filterButton: false },
-			{ name: "WT-NET", filterButton: false },
-			{ name: "Freight Price", filterButton: false },
-			{ name: "SHRINK", filterButton: false },
-			{ name: "METRIC TONS", filterButton: false },
-			{ name: "PRICE", filterButton: false },
-			{ name: "PROVEEDOR", filterButton: false },
-			{ name: "FREIGHT PRICE / CWT", filterButton: false },
-			{ name: "CHEQUE", filterButton: false },
+			{ header: "DATE", width: 10 },
+			{ header: "ACN TICKET #", width: 6 },
+			{ header: "ORIGINAL TICKET", width: 9.8 },
+			{ header: "VOID", width: 12 },
+			{ header: "CONTRACT #", width: 6 },
+			{ header: "PRODUCT", width: 13.6 },
+			{ header: "FARMER", width: 24.5 },
+			{ header: "WT-GROSS", width: 15.86 },
+			{ header: "WT-TARE", width: 16.93 },
+			{ header: "WT-NET", width: 16 },
+			{ header: "SHRINK", width: 10.93 },
+			{ header: "METRIC TONS", width: 12.27 },
+			{ header: "PRICE", width: 10 },
+			{ header: "PROVEEDOR", width: 14.13 },
+			{ header: "FREIGHT PRICE / CWT", width: 12.7 },
+			{ header: "CHEQUE", width: 11 },
 		]
 	}
 
@@ -207,23 +198,22 @@ export class MonthlyTicketsComponent implements OnInit {
 			t.void ? null : null, // Cheque
 		],
 		headers: [
-			{ name: "DATE", filterButton: false },
-			{ name: "ACN TICKET #", filterButton: false },
-			{ name: "ORIGINAL TICKET", filterButton: false },
-			{ name: "VOID", filterButton: false },
-			{ name: "CONTRACT #", filterButton: false },
-			{ name: "PRODUCT", filterButton: false },
-			{ name: "FARMER", filterButton: false },
-			{ name: "DRIVER", filterButton: false },
-			{ name: "WT-GROSS", filterButton: false },
-			{ name: "WT-TARE", filterButton: false },
-			{ name: "WT-NET", filterButton: false },
-			{ name: "Freight Price", filterButton: false },
-			{ name: "SHRINK", filterButton: false },
-			{ name: "METRIC TONS", filterButton: false },
-			{ name: "INVOICE", filterButton: false },
-			{ name: "PRICE", filterButton: false },
-			{ name: "TOTAL", filterButton: false },
+			{ header: "DATE", width: 10 },
+			{ header: "ACN TICKET #", width: 6 },
+			{ header: "ORIGINAL TICKET", width: 9.8 },
+			{ header: "VOID", width: 12 },
+			{ header: "CONTRACT #", width: 6 },
+			{ header: "PRODUCT", width: 13.6 },
+			{ header: "FARMER", width: 24.5 },
+			{ header: "WT-GROSS", width: 15.86 },
+			{ header: "WT-TARE", width: 16.93 },
+			{ header: "WT-NET", width: 16 },
+			{ header: "SHRINK", width: 10.93 },
+			{ header: "METRIC TONS", width: 12.27 },
+			{ header: "INVOICE", width: 9.5 },
+			{ header: "PRICE", width: 9.5 },
+			{ header: "Freight Price", width: 12.7 },
+			{ header: "TOTAL", width: 12.5 },
 		]
 	}
 }
