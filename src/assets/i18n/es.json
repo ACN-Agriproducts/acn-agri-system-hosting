@@ -627,6 +627,47 @@
         "Item": "Elemento",
         "Invoice": "Factura"
     },
+    "warehouse receipts": {
+        "Add Warehouse Receipts": "Agregar Recibos de Almacén",
+        "Purchase Contract": "Contrato de Compra",
+        "Sales Contract": "Contrato de Venta",
+        "Created": "Creado",
+        "Quantity": "Cantidad",
+        "Product": "Producto",
+        "Options": "Opciones",
+        "Statistics": "Estadísticas",
+        "Plant": "Planta",
+        "Paid": "Pagado",
+        "ID Range": "Rango de ID",
+        "View Purchase Contract": "Ver Contrato de Compra",
+        "View Sales Contract": "Ver Contrato de Venta",
+        "Cancel Group": "Cancelar Grupo",
+        "Set Contract": "Establecer Contrato",
+        "Future Price": "Precio Futuro",
+        "Base Price": "Precio Base",
+        "Start Date": "Fecha de Inicio",
+        "Bushel Qty": "Cantidad de Bushel",
+        "Set as Paid": "Establecer Como Pagado",
+        "Upload": "Subir",
+        "View / Re-Upload": "Ver / Volver a Subir",
+        "View": "Ver",
+        "Document": "Documento",
+        "Toggle Warehouse Receipt List": "Alternar Lista de Recibos de Almacén",
+        "Warehouse Receipt": "Recibo de Almacén",
+        "Set": "Establecer",
+        "Date": "Fecha",
+        "Group Info": "Información del Grupo",
+        "Bushel Quantity (per Receipt)": "Cantidad de Bushel (por Recibo)",
+        "Please select a product.": "Seleccione un producto.",
+        "Starting ID": "ID Inicial",
+        "Please select a plant.": "Seleccione una planta.",
+        "# of Warehouse Receipts": "# de Recibos de Almacén",
+        "Warehouse Receipts": "Recibos de Almacén",
+        "duplicate-id-error": "No se puede crear un grupo con múltiples identificaciones.",
+        "Please input an ID.": "Entre una ID.",
+        "ID already exists.": "Esa ID ya existe.",
+        "Set Warehouse Receipt Group": "Establecer Grupo de Receibos de Almacén"
+    },
     "messages": {
         "Alert": "Alerta",
         "All warehouse receipts are marked as paid.\nSale contract and warehouse receipt group are now CLOSED.": "Todos los recibos de almacén están marcados como pagados.\nEl contrato de venta y el grupo de recibos de almacén ahora están CERRADOS.",
@@ -727,7 +768,9 @@
         "No Content to Display": "No Hay Contenido Para Mostrar",
         "Invoice cancelled": "Factura cancelada",
         "Invoice canceled": "Factura cancelada",
-        "Could not cancel the invoice": "No se pudo cancelar la factura"
+        "Could not cancel the invoice": "No se pudo cancelar la factura",
+        "required": "requerido(a)",
+        "Required": "Requerido(a)"
     },
     "actions": {
         "Cancel": "Cancelar",
@@ -769,7 +812,8 @@
         "Upload": "Subir",
         "Simply drag and drop or click here to choose a file.": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
         "Retry": "Reintentar",
-        "Paid": "Pagado"
+        "Paid": "Pagado",
+        "drag-drop-message": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo."
     },
     "statuses": {
         "Paid": "Pagado",
@@ -783,6 +827,16 @@
         "active": "activo",
         "closed": "cerrado",
         "cancelled": "cancelado",
-        "canceled": "cancelado"
+        "canceled": "cancelado",
+        "All": "Todos",
+        "all": "todos",
+        "N/A": "N/A",
+        "PAID": "PAGADO",
+        "PENDING": "PENDIENTE",
+        "ACTIVE": "ACTIVO",
+        "CLOSED": "CERRADO",
+        "CANCELLED": "CANCELADO",
+        "CANCELED": "CANCELADO",
+        "ALL": "TODOS"
     }
 }

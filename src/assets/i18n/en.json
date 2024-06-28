@@ -627,6 +627,47 @@
         "Item": "Item",
         "Invoice": "Invoice"
     },
+    "warehouse receipts": {
+        "Add Warehouse Receipts": "Add Warehouse Receipts",
+        "Purchase Contract": "Purchase Contract",
+        "Sales Contract": "Sales Contract",
+        "Created": "Created",
+        "Quantity": "Quantity",
+        "Product": "Product",
+        "Options": "Options",
+        "Statistics": "Statistics",
+        "Plant": "Plant",
+        "Paid": "Paid",
+        "ID Range": "ID Range",
+        "View Purchase Contract": "View Purchase Contract",
+        "View Sales Contract": "View Sales Contract",
+        "Cancel Group": "Cancel Group",
+        "Set Contract": "Set Contract",
+        "Future Price": "Future Price",
+        "Base Price": "Base Price",
+        "Start Date": "Start Date",
+        "Bushel Qty": "Bushel Qty",
+        "Set as Paid": "Set as Paid",
+        "Upload": "Upload",
+        "View / Re-Upload": "View / Re-Upload",
+        "View": "View",
+        "Document": "Document",
+        "Toggle Warehouse Receipt List": "Toggle Warehouse Receipt List",
+        "Warehouse Receipt": "Warehouse Receipt",
+        "Set": "Set",
+        "Date": "Date",
+        "Group Info": "Group Info",
+        "Bushel Quantity (per Receipt)": "Bushel Quantity (per Receipt)",
+        "Please select a product.": "Please select a product.",
+        "Starting ID": "Starting ID",
+        "Please select a plant.": "Please select a plant.",
+        "# of Warehouse Receipts": "# of Warehouse Receipts",
+        "Warehouse Receipts": "Warehouse Receipts",
+        "duplicate-id-error": "Cannot create group with duplicate ID's",
+        "Please input an ID.": "Please input an ID.",
+        "ID already exists.": "ID already exists.",
+        "Set Warehouse Receipt Group": "Set Warehouse Receipt Group"
+    },
     "messages": {
         "Alert": "Alert",
         "All warehouse receipts are marked as paid.\nSale contract and warehouse receipt group are now CLOSED.": "All warehouse receipts are marked as paid.\nSale contract and warehouse receipt group are now CLOSED.",
@@ -727,7 +768,9 @@
         "No Content to Display": "No Content to Display",
         "Invoice cancelled": "Invoice cancelled",
         "Invoice canceled": "Invoice canceled",
-        "Could not cancel the invoice": "Could not cancel the invoice"
+        "Could not cancel the invoice": "Could not cancel the invoice",
+        "required": "required",
+        "Required": "Required"
     },
     "actions": {
         "Cancel": "Cancel",
@@ -769,7 +812,8 @@
         "Upload": "Upload",
         "Simply drag and drop or click here to choose a file.": "Simply drag and drop or click here to choose a file.",
         "Retry": "Retry",
-        "Paid": "Paid"
+        "Paid": "Paid",
+        "drag-drop-message": "Simply drag and drop or click here to choose a file."
     },
     "statuses": {
         "Paid": "Paid",
@@ -783,6 +827,16 @@
         "active": "active",
         "closed": "closed",
         "cancelled": "cancelled",
-        "canceled": "canceled"
+        "canceled": "canceled",
+        "All": "All",
+        "all": "all",
+        "N/A": "N/A",
+        "PAID": "PAID",
+        "PENDING": "PENDING",
+        "ACTIVE": "ACTIVE",
+        "CLOSED": "CLOSED",
+        "CANCELLED": "CANCELLED",
+        "CANCELED": "CANCELED",
+        "ALL": "ALL"
     }
 }
