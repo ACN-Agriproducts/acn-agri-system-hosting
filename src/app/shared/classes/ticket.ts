@@ -14,7 +14,7 @@ import { Price } from "./price";
 import { TicketInfo } from "./liquidation";
 
 type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
-type TicketType = "in" | "out" | "service";
+type TicketType = "in" | "out";
 
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
