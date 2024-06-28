@@ -144,7 +144,7 @@ export class Ticket extends FirebaseDocInterface{
         this.plates = data.plates;
         this.PPB = data.PPB;
         this.price = data.price;
-        this.priceDiscounts = new PriceDiscounts();
+        this.priceDiscounts = new PriceDiscounts(data.moneyDiscounts);
         this.productName = data.productName;
         this.status = data.status ?? "closed";
         this.tank = data.tank;
@@ -494,6 +494,7 @@ export class PriceDiscounts {
     public sour: number = 0;
     public weathered: number = 0;
     public inspection: number = 0;
+    public grade: number = 0;
     public unitRateDiscounts: {
         [discountName: string]: number;
     } = {};

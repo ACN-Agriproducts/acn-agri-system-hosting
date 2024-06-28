@@ -219,7 +219,8 @@
                 "Liquidations": "Liquidaciones",
                 "Payments": "Pagos"
             },
-            "Create Invoice": "Create Invoice"
+            "Create Invoice": "Crear Factura",
+            "Grade": "Grado"
         },
         "modify": {
             "Quantity Units": "Unidades de Cantidad",
