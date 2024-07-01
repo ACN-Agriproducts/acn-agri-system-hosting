@@ -74,37 +74,40 @@ export class Payment extends FirebaseDocInterface {
         }
     }
 
-    // public static getCollectionReference(db: Firestore, company: string): CollectionReference<Payment> {
-    //     return collection(db, `companies/${company}/payments`).withConverter(Payment.converter);
-    // }
+    public static getCollectionReference(db: Firestore, company: string, contractID: string): CollectionReference<Payment> {
+        return collection(db, `companies/${company}/contracts/${contractID}/payments`).withConverter(Payment.converter);
+    }
 
-    // public static getCollectionQuery(
-    //     db: Firestore, 
-    //     company: string, 
-    //     ...constraints: QueryConstraint[]
-    // ): Query<Payment> {
-    //     const collectionRef = Payment.getCollectionReference(db, company);
-    //     return query(collectionRef, ...constraints);
-    // }
+    public static getCollectionQuery(
+        db: Firestore, 
+        company: string,
+        contractID: string, 
+        ...constraints: QueryConstraint[]
+    ): Query<Payment> {
+        const collectionRef = Payment.getCollectionReference(db, company, contractID);
+        return query(collectionRef, ...constraints);
+    }
 
-    // public static getPayments(
-    //     db: Firestore, 
-    //     company: string, 
-    //     ...constraints: QueryConstraint[]
-    // ): Promise<Payment[]> {
-    //     const collectionQuery = Payment.getCollectionQuery(db, company, ...constraints);
-    //     return getDocs(collectionQuery).then(result => result.docs.map(qds => qds.data()));
-    // }
+    public static getPayments(
+        db: Firestore, 
+        company: string, 
+        contractID: string,
+        ...constraints: QueryConstraint[]
+    ): Promise<Payment[]> {
+        const collectionQuery = Payment.getCollectionQuery(db, company, contractID, ...constraints);
+        return getDocs(collectionQuery).then(result => result.docs.map(qds => qds.data()));
+    }
 
-    // public static getPaymentsSnapshot(
-    //     db: Firestore, 
-    //     company: string, 
-    //     onNext: (snapshot: QuerySnapshot<Payment>) => void,
-    //     ...constraints: QueryConstraint[]
-    // ): Unsubscribe {
-    //     const collectionQuery = Payment.getCollectionQuery(db, company, ...constraints);
-    //     return onSnapshot(collectionQuery, onNext);
-    // }
+    public static getPaymentsSnapshot(
+        db: Firestore, 
+        company: string,
+        contractID: string, 
+        onNext: (snapshot: QuerySnapshot<Payment>) => void,
+        ...constraints: QueryConstraint[]
+    ): Unsubscribe {
+        const collectionQuery = Payment.getCollectionQuery(db, company, contractID, ...constraints);
+        return onSnapshot(collectionQuery, onNext);
+    }
 }
 
 export interface PaidDocument {

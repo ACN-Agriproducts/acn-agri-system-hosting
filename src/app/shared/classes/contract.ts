@@ -626,6 +626,14 @@ export class Contract extends FirebaseDocInterface {
         return getDoc(doc(this.ref, "liquidations", refId).withConverter(Liquidation.converter)).then(result => result.data());
     }
 
+    public getLiquidations(): Promise<Liquidation[]> {
+        return Liquidation.getLiquidations(this.ref.firestore, this.ref.parent.parent.id, this.ref.id);
+    }
+
+    public getPayments(): Promise<Payment[]> {
+        return Payment.getPayments(this.ref.firestore, this.ref.parent.parent.id, this.ref.id);
+    }
+
     public getPaymentsCollection(): CollectionReference {
         return collection(this.ref, "payments").withConverter(Payment.converter);
     }

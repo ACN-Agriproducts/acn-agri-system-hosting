@@ -29,6 +29,7 @@ export class Ticket extends FirebaseDocInterface{
     public dryWeight: Mass;
     public dryWeightPercent: number;
     public foreignMatter: number;
+    public freight: Price;
     public grade: number;
     public gross: Mass;
     public id: number;

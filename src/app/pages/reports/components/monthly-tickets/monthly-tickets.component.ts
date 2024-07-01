@@ -1,8 +1,11 @@
 import { Component, createPlatform, OnInit } from "@angular/core";
-import { Firestore, where } from "@angular/fire/firestore";
+import { Firestore, getDoc, where } from "@angular/fire/firestore";
 import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { SessionInfo } from "@core/services/session-info/session-info.service";
+import { Contract } from "@shared/classes/contract";
+import { Liquidation } from "@shared/classes/liquidation";
+import { Payment } from "@shared/classes/payment";
 import { Plant } from "@shared/classes/plant";
 import { Product } from "@shared/classes/product";
 import { Ticket } from "@shared/classes/ticket";
@@ -37,7 +40,14 @@ export class MonthlyTicketsComponent implements OnInit {
 	public date: Date;
 	public today: Date = new Date();
 	public status: "idle" | "generating" | "complete" = "idle";
-	public workbook: Excel.Workbook;
+	private workbook: Excel.Workbook;
+	private contracts: {[id: string]: Promise<Contract>} = {};
+	private contractDocs: {
+		[contractID: string]: {
+			payments: Promise<Payment[]>,
+			liquidations: Promise<Liquidation[]>,
+		}
+	} = {};
 
 	constructor(private db: Firestore, private session: SessionInfo) { }
 
@@ -95,13 +105,23 @@ export class MonthlyTicketsComponent implements OnInit {
 		const outTickets: Ticket[] = [];
 
 		for (let ticket of allTickets) {
+			if(!this.contracts[ticket.contractRef.id]) {
+				this.contracts[ticket.contractRef.id] = getDoc(ticket.contractRef).then(doc => doc.data());
+
+				if(ticket.in) this.contracts[ticket.contractRef.id].then(c => {
+					this.contractDocs[c.ref.id] = {
+						liquidations: c.getLiquidations(),
+						payments: c.getPayments()
+					}
+				});
+			}
+
 			(ticket.in ? inTickets : outTickets).push(ticket);
 			productTickets[ticket.type][ticket.productName].push(ticket);
 		}
 
 		// Crete workbook
 		this.workbook = new Excel.Workbook();
-		console.log(productTickets);
 
 		for (let type in productTickets) {
 			for (let product in productTickets[type]) {
@@ -109,10 +129,8 @@ export class MonthlyTicketsComponent implements OnInit {
 				const worksheet = this.workbook.addWorksheet(name);
 				const reportInfo = type == 'in' ? this.inReportInfo : this.outReportInfo;
 
-				console.log(reportInfo, product, type, productTickets[type][product]);
-
 				worksheet.columns = reportInfo.headers;
-				worksheet.addRows((productTickets[type][product] as Ticket[]).map(reportInfo.map));
+				worksheet.addRows(await Promise.all((productTickets[type][product] as Ticket[]).map(reportInfo.map)));
 			}
 		}
 
@@ -138,25 +156,33 @@ export class MonthlyTicketsComponent implements OnInit {
 	}
 
 	inReportInfo = {
-		map: (t: Ticket) => [
-			t.dateOut,
-			t.id + (t.subId ? `-${t.subId}` : null),
-			t.original_ticket,
-			t.void ? "VOID" : null,
-			t.void ? null : t.contractID,
-			t.void ? null : t.productName,
-			t.void ? null : t.clientName,
-			t.void ? null : t.gross.get(),
-			t.void ? null : t.tare.get(),
-			t.void ? null : t.net.get(),
-			t.void ? null : t.dryWeight.get(),
-			t.void ? null : t.net.getMassInUnit("mTon"),
-			t.void ? null : null, // Price ($/mTon)
-			t.void ? null : null, // Proveedor ?
-			t.void ? null : null, // Freight price/cwt
-			t.void ? null : null, // Freight total
-			t.void ? null : null, // Cheque
-		],
+		map: async (t: Ticket, index: number) => {
+			const contract = await this.contracts[t.contractRef.id];
+			const isService = contract.tags.includes("service");
+			const liquidation = isService ? null : (await this.contractDocs[t.contractRef.id].liquidations).find(liq => liq.ticketRefs.some(tref => tref.id == t.ref.id));
+			const payment = liquidation ? (await this.contractDocs[t.contractRef.id].payments).find(p => p.paidDocuments.some(doc => doc.ref.id == liquidation.ref.id)) : null;
+			console.log(t.id, payment, payment?.notes);
+
+			return [
+				t.dateOut,
+				t.id + (t.subId ? `-${t.subId}` : ""),
+				t.original_ticket,
+				t.void ? "VOID" : "",
+				t.void ? "" : t.contractID,
+				t.void ? "" : t.productName,
+				t.void ? "" : t.clientName,
+				t.void ? "" : t.gross.get(),
+				t.void ? "" : t.tare.get(),
+				t.void ? "" : t.net.get(),
+				t.void ? "" : t.dryWeight.get(),
+				t.void ? "" : t.net.getMassInUnit("mTon"),
+				t.void ? "" : contract.price.getPricePerUnit('mTon', contract.quantity), // Price ($/mTon)
+				t.void ? "" : {formula: `L${index + 2} + M${index + 2}`}, // SUBTOTAL
+				t.void ? "" : t.freight?.getPricePerUnit("CWT", contract.quantity) ?? contract.default_freight, // Freight price/cwt
+				t.void ? "" : t.net.getMassInUnit("CWT") * (t.freight?.getPricePerUnit("CWT", contract.quantity) ?? contract.default_freight), // Freight total
+				t.void ? "" : payment?.notes,
+			]
+		}, 
 		headers: [
 			{ header: "DATE", width: 10 },
 			{ header: "ACN TICKET #", width: 6 },
@@ -171,32 +197,37 @@ export class MonthlyTicketsComponent implements OnInit {
 			{ header: "SHRINK", width: 10.93 },
 			{ header: "METRIC TONS", width: 12.27 },
 			{ header: "PRICE", width: 10 },
-			{ header: "PROVEEDOR", width: 14.13 },
+			{ header: "SUBTOTAL", width: 14.13 },
 			{ header: "FREIGHT PRICE / CWT", width: 12.7 },
-			{ header: "CHEQUE", width: 11 },
+			{ header: "FREIGHT PRICE TOTAL", width: 12.7 },
+			{ header: "CHECK", width: 11 },
 		]
 	}
 
 	outReportInfo = {
-		map: (t: Ticket) => [
-			t.dateOut,
-			t.id + (t.subId ? `-${t.subId}` : null),
-			t.original_ticket,
-			t.void ? "VOID" : null,
-			t.void ? null : t.contractID,
-			t.void ? null : t.productName,
-			t.void ? null : t.clientName,
-			t.void ? null : t.gross.get(),
-			t.void ? null : t.tare.get(),
-			t.void ? null : t.net.get(),
-			t.void ? null : t.dryWeight.get(),
-			t.void ? null : t.net.getMassInUnit("mTon"),
-			t.void ? null : null, // Price ($/mTon)
-			t.void ? null : null, // Proveedor ?
-			t.void ? null : null, // Freight price/cwt
-			t.void ? null : null, // Freight total
-			t.void ? null : null, // Cheque
-		],
+		map: async (t: Ticket, index: number) => {
+			const contract = await this.contracts[t.contractRef.id];
+
+			return [
+				t.dateOut,
+				t.id + (t.subId ? `-${t.subId}` : ""),
+				t.original_ticket,
+				t.void ? "VOID" : "",
+				t.void ? "" : t.contractID,
+				t.void ? "" : t.productName,
+				t.void ? "" : t.clientName,
+				t.void ? "" : t.gross.get(),
+				t.void ? "" : t.tare.get(),
+				t.void ? "" : t.net.get(),
+				t.void ? "" : t.dryWeight.get(),
+				t.void ? "" : t.net.getMassInUnit("mTon"),
+				t.void ? "" : "", // INVOICE
+				t.void ? "" : contract.price.getPricePerUnit('mTon', contract.quantity), // PRICE
+				t.void ? "" : t.freight?.getPricePerUnit("CWT", contract.quantity) ?? contract.default_freight, // Freight price/cwt
+				t.void ? "" : {formula: `J${index + 2} * O${index + 2} / 100`}, // Freight total
+				t.void ? "" : "", // Total
+			]
+		},
 		headers: [
 			{ header: "DATE", width: 10 },
 			{ header: "ACN TICKET #", width: 6 },
@@ -213,6 +244,7 @@ export class MonthlyTicketsComponent implements OnInit {
 			{ header: "INVOICE", width: 9.5 },
 			{ header: "PRICE", width: 9.5 },
 			{ header: "Freight Price", width: 12.7 },
+			{ header: "Freight Total", width: 12.7 },
 			{ header: "TOTAL", width: 12.5 },
 		]
 	}

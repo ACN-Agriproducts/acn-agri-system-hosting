@@ -73,7 +73,7 @@ export class Liquidation extends FirebaseDocInterface {
             weight: ticket.weight,
             weightDiscounts: new WeightDiscounts(ticket.weightDiscounts),
             
-            adjustedWeight: new Mass(ticket.adjustedWeight.amount, ticket.adjustedWeight.defaultUnits),
+            adjustedWeight: new Mass(ticket.adjustedWeight?.amount ?? 0, ticket.adjustedWeight?.defaultUnits ?? 0),
             beforeDiscounts: ticket.beforeDiscounts,
             netToPay: ticket.netToPay
         }));
