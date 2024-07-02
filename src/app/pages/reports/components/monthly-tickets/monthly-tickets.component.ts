@@ -190,11 +190,11 @@ export class MonthlyTicketsComponent implements OnInit {
 				t.void ? "" : t.tare.get(),
 				t.void ? "" : t.net.get(),
 				t.void ? "" : t.dryWeight.get(),
-				t.void ? "" : {value: t.net.getMassInUnit("mTon"), numFmt: "0.000"},
+				t.void ? "" : t.net.getMassInUnit("mTon"),
 				t.void ? "" : contract.price.getPricePerUnit('mTon', contract.quantity), // Price ($/mTon)
-				t.void ? "" : {formula: `L${index + 2} * M${index + 2}`, numFmt: "$0.00" }, // SUBTOTAL
+				t.void ? "" : {formula: `L${index + 2} * M${index + 2}`, numFmt: "$#.00" }, // SUBTOTAL
 				t.void ? "" : t.freight.amount ? t.freight?.getPricePerUnit("CWT", contract.quantity) : contract.default_freight, // Freight price/cwt
-				t.void ? "" : {formula: `O${index + 2} * J${index + 2} / 100`}, // Freight total
+				t.void ? "" : {formula: `O${index + 2} * J${index + 2} / 100`, numFmt: "$#.00"}, // Freight total
 				t.void ? "" : payment?.notes,
 			]
 		}, 
@@ -241,10 +241,10 @@ export class MonthlyTicketsComponent implements OnInit {
 				t.void ? "" : t.net.getMassInUnit("mTon"),
 				t.void ? "" : invoice?.id, // INVOICE
 				t.void ? "" : contract.price.getPricePerUnit('mTon', contract.quantity), // PRICE
-				t.void ? "" : {formula: `N${index + 2} * L${index + 2}`}, // SUBTOTAL
+				t.void ? "" : {formula: `N${index + 2} * L${index + 2}`, numFmt: "$#.00" }, // SUBTOTAL
 				t.void ? "" : t.freight.amount ? t.freight?.getPricePerUnit("CWT", contract.quantity) : contract.default_freight, // Freight price/cwt
-				t.void ? "" : {formula: `J${index + 2} * P${index + 2} / 100`}, // Freight total
-				t.void ? "" : {formula: `O${index + 2} + Q${index + 2}`}, // Total
+				t.void ? "" : {formula: `J${index + 2} * P${index + 2} / 100`, numFmt: "$#.00"}, // Freight total
+				t.void ? "" : {formula: `O${index + 2} + Q${index + 2}`, numFmt: "$#.00"}, // Total
 			]
 		},
 		headers: [
