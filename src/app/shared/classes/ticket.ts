@@ -127,6 +127,7 @@ export class Ticket extends FirebaseDocInterface{
         this.dryWeight = new Mass(data.dryWeight, unit);
         this.dryWeightPercent = data.dryWeightPercent;
         this.foreignMatter = data.foreignMatter;
+        this.freight = new Price(data.freight, data.freightUnit),
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
         this.id = data.id; 
@@ -200,6 +201,8 @@ export class Ticket extends FirebaseDocInterface{
                 dryWeight: data.dryWeight?.get() ?? null,
                 dryWeightPercent: data.dryWeightPercent ?? null,
                 foreignMatter: data.foreignMatter ?? null,
+                freight: data?.freight?.amount ?? null,
+                freightUnit: data?.freight?.unit ?? null,
                 grade: data.grade ?? null,
                 gross: data.gross?.get() ?? null,
                 id: data.id ?? null,
