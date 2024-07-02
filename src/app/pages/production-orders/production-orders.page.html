@@ -1,22 +1,22 @@
-<app-header-toolbar titulo="Production Orders"></app-header-toolbar>
+<app-header-toolbar [titulo]="'layout.production orders' | transloco"></app-header-toolbar>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" *transloco="let t; read: 'production orders'">
     <div class="center-content">
         <div class="content-column">
             <div class="action-bar">
                 <button mat-flat-button class="new-button" color="primary"
                 routerLink="/dashboard/production-orders/set-order">
-                    New Order
+                    {{ t("New Order") }}
                 </button>
             </div>
             <ol class="order-collection">
                 <mat-card class="header-card">
                     <li class="row">
                         <div class="cell id">ID</div>
-                        <div class="cell status">Status</div>
-                        <div class="cell date">Date</div>
-                        <div class="cell info">Information</div>
-                        <div class="cell storage">Storage</div>
+                        <div class="cell status">{{ t("Status") }}</div>
+                        <div class="cell date">{{ t("Date") }}</div>
+                        <div class="cell info">{{ t("Information") }}</div>
+                        <div class="cell storage">{{ t("Storage") }}</div>
                     </li>
                 </mat-card>
                 <mat-card class="body-card" *ngFor="let order of orderList$ | async">
