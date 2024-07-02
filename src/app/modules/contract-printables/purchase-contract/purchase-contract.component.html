@@ -29,7 +29,7 @@
         <b>PAYMENT TERMS</b><br>
         <b>BROKER</b><br>
         <b>BROKER NUMBER</b><br>
-        <b>FREIGHT PRICE</b><br>
+        <!-- <b>FREIGHT PRICE</b><br> -->
         <b>INCOTERMS</b><br>
       </div>
       <div class='column-size-3' *ngIf="contractForm.date">
@@ -43,7 +43,7 @@
         <br>
         <br>
         <br>
-        {{contractForm?.default_freight | currency:'USD':'symbol':'0.3'}}<br>
+        <!-- {{contractForm?.default_freight | currency:'USD':'symbol':'0.3'}}<br> -->
         {{contractForm?.deliveryType | selectFieldDisplay:contractType:'deliveryType' | async}}<br>
       </div>
     </div>
