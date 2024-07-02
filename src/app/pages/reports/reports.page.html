@@ -1,18 +1,18 @@
-<app-header-toolbar titulo="Reports"></app-header-toolbar>
+<app-header-toolbar [titulo]="'layout.reports' | transloco"></app-header-toolbar>
 
-<ion-content>
+<ion-content *transloco="let t; read: 'reports'">
   <div class="grid">
     <app-card-button 
       icon="car-outline"
-      text="Transport"
+      [text]="t('Transport')"
       routerLink="/dashboard/reports/trucker-reports"></app-card-button>
     <app-card-button 
       icon="newspaper-outline" 
-      text="Contracts"
+      [text]="t('Contracts')"
       routerLink="/dashboard/reports/contract-reports"></app-card-button>
     <app-card-button 
       icon="scale-outline" 
-      text="Client Weights"
+      [text]="t('Client Weights')"
       routerLink="/dashboard/reports/tickets-client-weight"></app-card-button>
   </div>
 </ion-content>

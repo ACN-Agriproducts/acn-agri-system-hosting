@@ -1,14 +1,14 @@
-<ion-list>
+<ion-list *transloco="let t; read: 'actions'">
     <ion-item button (click)="openModal()">
-        Open
+        {{ t("Open") }}
         <ion-icon color="primary" name="open-outline" slot="end"></ion-icon>
     </ion-item>
     <ion-item button>
-        Edit
+        {{ t("Edit") }}
         <ion-icon color="primary" name="create-outline" slot="end"></ion-icon>
     </ion-item>
     <ion-item lines="none" button>
-        Delete
+        {{ t("Delete") }}
         <ion-icon color="primary" name="trash-outline" slot="end"></ion-icon>
     </ion-item>
 </ion-list>
