@@ -4,6 +4,7 @@ import { MAT_DATE_FORMATS } from "@angular/material/core";
 import { MatDatepicker } from "@angular/material/datepicker";
 import { SessionInfo } from "@core/services/session-info/session-info.service";
 import { Contract } from "@shared/classes/contract";
+import { Invoice } from "@shared/classes/invoice";
 import { Liquidation } from "@shared/classes/liquidation";
 import { Payment } from "@shared/classes/payment";
 import { Plant } from "@shared/classes/plant";
@@ -46,6 +47,7 @@ export class MonthlyTicketsComponent implements OnInit {
 		[contractID: string]: {
 			payments: Promise<Payment[]>,
 			liquidations: Promise<Liquidation[]>,
+			invoices: Promise<Invoice[]>
 		}
 	} = {};
 
@@ -108,10 +110,24 @@ export class MonthlyTicketsComponent implements OnInit {
 			if(!this.contracts[ticket.contractRef.id]) {
 				this.contracts[ticket.contractRef.id] = getDoc(ticket.contractRef).then(doc => doc.data());
 
-				if(ticket.in) this.contracts[ticket.contractRef.id].then(c => {
+				this.contracts[ticket.contractRef.id].then(c => {
+					const liquidationsPromise = c.getLiquidations();
+					const invoicesPromise = liquidationsPromise.then(liquidations => {
+						const invoiceList: Promise<Invoice>[] = [];
+
+						for(let liq of liquidations) {
+							if(liq.invoiceRef) invoiceList.push(getDoc(liq.invoiceRef).then(result => {
+								return result.data();
+							}));
+						}
+
+						return Promise.all(invoiceList);
+					});
+
 					this.contractDocs[c.ref.id] = {
-						liquidations: c.getLiquidations(),
-						payments: c.getPayments()
+						liquidations: liquidationsPromise,
+						payments: c.getPayments(),
+						invoices: invoicesPromise
 					}
 				});
 			}
@@ -161,7 +177,6 @@ export class MonthlyTicketsComponent implements OnInit {
 			const isService = contract.tags.includes("service");
 			const liquidation = isService ? null : (await this.contractDocs[t.contractRef.id].liquidations).find(liq => liq.ticketRefs.some(tref => tref.id == t.ref.id));
 			const payment = liquidation ? (await this.contractDocs[t.contractRef.id].payments).find(p => p.paidDocuments.some(doc => doc.ref.id == liquidation.ref.id)) : null;
-			console.log(t.id, payment, payment?.notes);
 
 			return [
 				t.dateOut,
@@ -175,11 +190,11 @@ export class MonthlyTicketsComponent implements OnInit {
 				t.void ? "" : t.tare.get(),
 				t.void ? "" : t.net.get(),
 				t.void ? "" : t.dryWeight.get(),
-				t.void ? "" : t.net.getMassInUnit("mTon"),
+				t.void ? "" : {value: t.net.getMassInUnit("mTon"), numFmt: "0.000"},
 				t.void ? "" : contract.price.getPricePerUnit('mTon', contract.quantity), // Price ($/mTon)
-				t.void ? "" : {formula: `L${index + 2} + M${index + 2}`}, // SUBTOTAL
-				t.void ? "" : t.freight?.getPricePerUnit("CWT", contract.quantity) ?? contract.default_freight, // Freight price/cwt
-				t.void ? "" : t.net.getMassInUnit("CWT") * (t.freight?.getPricePerUnit("CWT", contract.quantity) ?? contract.default_freight), // Freight total
+				t.void ? "" : {formula: `L${index + 2} * M${index + 2}`, numFmt: "$0.00" }, // SUBTOTAL
+				t.void ? "" : t.freight.amount ? t.freight?.getPricePerUnit("CWT", contract.quantity) : contract.default_freight, // Freight price/cwt
+				t.void ? "" : {formula: `O${index + 2} * J${index + 2} / 100`}, // Freight total
 				t.void ? "" : payment?.notes,
 			]
 		}, 
@@ -207,6 +222,9 @@ export class MonthlyTicketsComponent implements OnInit {
 	outReportInfo = {
 		map: async (t: Ticket, index: number) => {
 			const contract = await this.contracts[t.contractRef.id];
+			const isService = contract.tags.includes("service");
+			const liquidation = isService ? null : (await this.contractDocs[t.contractRef.id].liquidations).find(liq => liq.ticketRefs.some(tref => tref.id == t.ref.id));
+			const invoice = liquidation?.invoiceRef ? (await this.contractDocs[t.contractRef.id].invoices).find(inv => inv.ref.id == liquidation.invoiceRef.id) : null;
 
 			return [
 				t.dateOut,
@@ -221,11 +239,12 @@ export class MonthlyTicketsComponent implements OnInit {
 				t.void ? "" : t.net.get(),
 				t.void ? "" : t.dryWeight.get(),
 				t.void ? "" : t.net.getMassInUnit("mTon"),
-				t.void ? "" : "", // INVOICE
+				t.void ? "" : invoice?.id, // INVOICE
 				t.void ? "" : contract.price.getPricePerUnit('mTon', contract.quantity), // PRICE
-				t.void ? "" : t.freight?.getPricePerUnit("CWT", contract.quantity) ?? contract.default_freight, // Freight price/cwt
-				t.void ? "" : {formula: `J${index + 2} * O${index + 2} / 100`}, // Freight total
-				t.void ? "" : "", // Total
+				t.void ? "" : {formula: `N${index + 2} * L${index + 2}`}, // SUBTOTAL
+				t.void ? "" : t.freight.amount ? t.freight?.getPricePerUnit("CWT", contract.quantity) : contract.default_freight, // Freight price/cwt
+				t.void ? "" : {formula: `J${index + 2} * P${index + 2} / 100`}, // Freight total
+				t.void ? "" : {formula: `O${index + 2} + Q${index + 2}`}, // Total
 			]
 		},
 		headers: [
@@ -243,6 +262,7 @@ export class MonthlyTicketsComponent implements OnInit {
 			{ header: "METRIC TONS", width: 12.27 },
 			{ header: "INVOICE", width: 9.5 },
 			{ header: "PRICE", width: 9.5 },
+			{ header: "Subtotal", width: 12.7 },
 			{ header: "Freight Price", width: 12.7 },
 			{ header: "Freight Total", width: 12.7 },
 			{ header: "TOTAL", width: 12.5 },
