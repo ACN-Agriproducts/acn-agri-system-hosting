@@ -23,6 +23,9 @@
       <ion-button (click)="setInvoiceItems()">
         <ion-text slot="end">Set Items</ion-text>
       </ion-button>
+      <ion-button (click)="exportInvoices()" *ngIf="userIsDev">
+        <ion-text slot="end">Download</ion-text>
+      </ion-button>
     </div>
   </div>
   <div class="content-filter magin-inline" *ngIf="filter">
