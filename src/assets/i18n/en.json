@@ -56,6 +56,12 @@
             "Contracts": "Contracts",
             "purchase": "purchase",
             "sales": "sales",
+            "Venta Precio Fijo": "Sales Fixed Price",
+            "Compra Bodega Terceros": "Third Party Warehouse",
+            "Compra Precio Fijo": "Purchase Fixed Price",
+            "Compra Precio Sin Fijar": "Purchase Unfixed Price",
+            "Venta Precio Sin Fijar": "Sales Unfixed Price",
+            "Compra a Deposito": "Purchase to Deposit",
             "chart": {
                 "Delivered": "Delivered",
                 "Total": "Total",

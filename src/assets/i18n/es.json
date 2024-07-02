@@ -56,6 +56,12 @@
             "Contracts": "Contratos",
             "purchase": "compra",
             "sales": "venta",
+            "Venta Precio Fijo": "Venta Precio Fijo",
+            "Compra Bodega Terceros": "Compra Bodega Terceros",
+            "Compra Precio Fijo": "Compra Precio Fijo",
+            "Compra Precio Sin Fijar": "Compra Precio Sin Fijar",
+            "Venta Precio Sin Fijar": "Venta Precio Sin Fijar",
+            "Compra a Deposito": "Compra a Deposito",
             "chart": {
                 "Delivered": "Entregado",
                 "Total": "Total",
