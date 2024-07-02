@@ -6,6 +6,7 @@ import { Mass } from "./mass";
 import { Status } from "./company";
 import { Price } from "./price";
 import { DiscountTables } from "./discount-tables";
+import { Invoice } from "./invoice";
 
 export type ReportTicket = {
     data: TicketInfo,
@@ -23,6 +24,7 @@ export class Liquidation extends FirebaseDocInterface {
     public total: number;
     public amountPaid: number;
 
+    public invoiceRef: DocumentReference<Invoice> | null;
     public createInvoice: boolean;
 
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
@@ -80,6 +82,7 @@ export class Liquidation extends FirebaseDocInterface {
         this.archived = data.archived;
         this.amountPaid = data.amountPaid;
         this.total = data.total;
+        this.invoiceRef = data.invoiceRef?.withConverter(Invoice.converter);
         this.createInvoice = data.createInvoice;
     }
 
@@ -104,6 +107,7 @@ export class Liquidation extends FirebaseDocInterface {
                 archived: data.archived,
                 amountPaid: data.amountPaid,
                 total: data.total,
+                invoiceRef: data.invoiceRef,
                 createInvoice: data.createInvoice
             }
         },
