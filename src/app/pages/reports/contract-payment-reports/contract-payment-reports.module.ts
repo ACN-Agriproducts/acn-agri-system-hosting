@@ -7,13 +7,17 @@ import { IonicModule } from '@ionic/angular';
 import { ContractPaymentReportsPageRoutingModule } from './contract-payment-reports-routing.module';
 
 import { ContractPaymentReportsPage } from './contract-payment-reports.page';
+import { CoreModule } from '@core/core.module';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     FormsModule,
     IonicModule,
-    ContractPaymentReportsPageRoutingModule
+    ContractPaymentReportsPageRoutingModule,
+    SharedModule
   ],
   declarations: [ContractPaymentReportsPage]
 })

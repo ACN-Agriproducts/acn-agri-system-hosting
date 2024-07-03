@@ -29,13 +29,14 @@ export class ContractPaymentReportsPage implements OnInit {
   ngOnInit() {
     this.queryDate = new Date();
     this.queryDate.setMonth(this.queryDate.getMonth() - 3);
-    this.clientAccounts = {};
-    this.productAccounts = {};
   }
 
   public async getContracts(): Promise<void> {
-    const ready = false;
-    const contractList = await Contract.getContracts(this.db, this.session.getCompany(), null, where('status', 'in', ['active, closed']), where('date', '>', this.queryDate));
+    this.ready = false;
+    this.clientAccounts = {};
+    this.productAccounts = {};
+
+    const contractList = await Contract.getContracts(this.db, this.session.getCompany(), null, where('status', 'in', ['active', 'closed', 'paid']), where('date', '>', this.queryDate));
     
     for(let contract of contractList) {
       let currentClient = this.clientAccounts[contract.clientInfo.ref.id];
@@ -65,10 +66,12 @@ export class ContractPaymentReportsPage implements OnInit {
       currentClient.paid += contract.totalPayments;
       currentProduct.paid += contract.totalPayments;
 
-      const pendingToPay = contract.currentDelivered.getMassInUnit(contract.price.getUnit()) * contract.price.amount - contract.totalPayments;
+      const pendingToPay = (contract.status == "paid") ? 0 : contract.currentDelivered.getMassInUnit(contract.price.getUnit()) * contract.price.amount - contract.totalPayments;
       currentClient.pendingToPay += pendingToPay;
       currentProduct.pendingToPay += pendingToPay;
     }
+
+    this.ready = true
   }
 }
 
