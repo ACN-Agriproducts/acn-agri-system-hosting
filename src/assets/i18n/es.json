@@ -747,7 +747,10 @@
         "Totals": "Totales",
         "Choose name for merge": "Seleccione nombre para la fusion",
         "confirm-truckers-merge": "Esta seguro que quiere fusionar los siguientes camioneros?",
-        "New Name": "Nombre Nuevo"
+        "New Name": "Nombre Nuevo",
+        "Monthly tickets": "Boletas mensual",
+        "Plant": "Planta",
+        "Month and Year": "Mes y Año"
     },
     "users": {
         "User": "Usuario",

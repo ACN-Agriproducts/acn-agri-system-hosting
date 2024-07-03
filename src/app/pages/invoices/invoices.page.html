@@ -1,4 +1,4 @@
-<app-header-toolbar [titulo]="'layout.invoices' | transloco | titlecase"></app-header-toolbar>
+<app-header-toolbar [titulo]="'layout.invoices' | transloco"></app-header-toolbar>
 <ion-content class="ion-padding" *transloco="let t; read: 'invoices'">
   <div class="content-header magin-inline">
     <ion-searchbar (contextmenu)="openContextMenu($event)" class="ion-no-padding" [placeholder]="t('Search')"></ion-searchbar>
@@ -24,7 +24,7 @@
         <ion-text slot="end">{{ t("Set Items") }}</ion-text>
       </ion-button>
       <ion-button (click)="exportInvoices()" *ngIf="userIsDev">
-        <ion-text slot="end">Download</ion-text>
+        <ion-text slot="end">{{ "Download" | translocoNested:'actions' }}</ion-text>
       </ion-button>
     </div>
   </div>
