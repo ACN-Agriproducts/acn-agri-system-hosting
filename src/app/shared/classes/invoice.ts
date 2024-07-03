@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, query, limit, where, getDoc, getDocs } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, QueryDocumentSnapshot, SnapshotOptions, collection, doc, query, limit, where, getDoc, getDocs, QueryConstraint } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Mass } from "./mass";
 
@@ -108,6 +108,13 @@ export class Invoice extends FirebaseDocInterface {
         return getDocs(invoiceQuery).then(result => {
             return result.docs[0].data();
         });
+    }
+
+    public static getDocs(db: Firestore, company: string, ...constraints: QueryConstraint[]): Promise<Invoice[]> {
+        return getDocs(query(this.getCollectionReference(db, company), ...constraints)).then(result => {
+            return result.docs.map(doc => doc.data());
+        });
+        
     }
 
     public static getDocById(db: Firestore, company: string, id: string): Promise<Invoice> {

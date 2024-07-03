@@ -14,7 +14,7 @@ import { Price } from "./price";
 import { TicketInfo } from "./liquidation";
 
 type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
-type TicketType = "in" | "out" | "service";
+type TicketType = "in" | "out";
 
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
@@ -29,6 +29,7 @@ export class Ticket extends FirebaseDocInterface{
     public dryWeight: Mass;
     public dryWeightPercent: number;
     public foreignMatter: number;
+    public freight: Price;
     public grade: number;
     public gross: Mass;
     public id: number;
@@ -126,6 +127,7 @@ export class Ticket extends FirebaseDocInterface{
         this.dryWeight = new Mass(data.dryWeight, unit);
         this.dryWeightPercent = data.dryWeightPercent;
         this.foreignMatter = data.foreignMatter;
+        this.freight = new Price(data.freight, data.freightUnit),
         this.grade = data.grade;
         this.gross = new Mass(data.gross, unit);
         this.id = data.id; 
@@ -144,7 +146,7 @@ export class Ticket extends FirebaseDocInterface{
         this.plates = data.plates;
         this.PPB = data.PPB;
         this.price = data.price;
-        this.priceDiscounts = new PriceDiscounts();
+        this.priceDiscounts = new PriceDiscounts(data.moneyDiscounts);
         this.productName = data.productName;
         this.status = data.status ?? "closed";
         this.tank = data.tank;
@@ -199,6 +201,8 @@ export class Ticket extends FirebaseDocInterface{
                 dryWeight: data.dryWeight?.get() ?? null,
                 dryWeightPercent: data.dryWeightPercent ?? null,
                 foreignMatter: data.foreignMatter ?? null,
+                freight: data?.freight?.amount ?? null,
+                freightUnit: data?.freight?.unit ?? null,
                 grade: data.grade ?? null,
                 gross: data.gross?.get() ?? null,
                 id: data.id ?? null,
@@ -494,6 +498,7 @@ export class PriceDiscounts {
     public sour: number = 0;
     public weathered: number = 0;
     public inspection: number = 0;
+    public grade: number = 0;
     public unitRateDiscounts: {
         [discountName: string]: number;
     } = {};

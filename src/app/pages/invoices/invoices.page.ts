@@ -11,8 +11,12 @@ import { SetItemsDialogComponent } from './components/set-items-dialog/set-items
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { InvoiceItem } from '@shared/classes/invoice_item';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, where } from '@angular/fire/firestore';
 import { lastValueFrom } from 'rxjs';
+import * as Excel from "exceljs";
+import { Invoice } from '@shared/classes/invoice';
+import { orderBy } from 'firebase/firestore';
+
 @Component({
   selector: 'app-invoices',
   templateUrl: './invoices.page.html',
@@ -24,6 +28,7 @@ export class InvoicesPage implements OnInit {
   public template: any;
   public currentCompany: string;
   public invoiceItemList: InvoiceItem[];
+  public userIsDev: boolean;
 
   constructor(
     private dialog: MatDialog,
@@ -37,6 +42,7 @@ export class InvoicesPage implements OnInit {
   ngOnInit() {
     const data = document.getElementById('file-html-invoice');
     this.currentCompany = this.session.getCompany();
+    this.userIsDev = this.session.getPermissions().developer;
 
     InvoiceItem.getCollectionValueChanges(this.db, this.currentCompany).subscribe(list => {
       this.invoiceItemList = list;
@@ -141,6 +147,50 @@ export class InvoicesPage implements OnInit {
 
   chosenMonthHandler(event: any, datepicker: MatDatepicker<any>) {
 
+  }
+
+  async exportInvoices() {
+    const invoices = await Invoice.getDocs(this.db, this.session.getCompany(), where("buyer.name", "in", ["AGROPECUARIA LA CAPILLA DEL NORESTE", "AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV", "Agropecuaria la Capilla del Noreste SA de CV", "AGROPECUARIA LA CAPILLA DEL NORESTE S.A. DE C.V."]));
+    invoices.sort((a,b) => b.id - a.id);
+
+    const workbook = new Excel.Workbook();
+    const sheet = workbook.addWorksheet();
+
+    sheet.columns = [
+      { header: "ID"},
+      { header: "FECHA"},
+      { header: "NOMBRE"},
+      { header: "PRODUCT"},
+      { header: "CANTIDAD"},
+      { header: "MONTO"},
+    ];
+
+    console.table(invoices, ["id", "date", "buyer", "exportInfo", "total"])
+
+    sheet.addRows(invoices.map(invoice => [
+      invoice.id,
+      invoice.date,
+      invoice.buyer.name,
+      invoice.exportInfo?.product,
+      invoice.exportInfo?.quantity.getMassInUnit('mTon'),
+      invoice.total
+    ]));
+
+    workbook.xlsx.writeBuffer().then((data) => {
+			const blob = new Blob([data], {
+				type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+			});
+	  
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement("a");
+			a.setAttribute("style", "display: none");
+			a.href = url;
+			a.download = `report.xlsx`;
+			document.body.appendChild(a);
+			a.click();
+			window.URL.revokeObjectURL(url);
+			a.remove();
+		});
   }
 
 }
