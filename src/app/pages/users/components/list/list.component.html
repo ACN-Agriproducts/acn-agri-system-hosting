@@ -1,83 +1,85 @@
-<ion-card class="card-header">
-  <ion-item lines="none" (click)="filterEmployee = !filterEmployee ">
-    <ion-label>User</ion-label>
-    <ion-icon name="chevron-down-outline" [class.active-arrow]="filterEmployee"></ion-icon>
-  </ion-item>
-  <ion-item lines="none" class="ion-hide-md-down" (click)="filterStatus = !filterStatus  ">
-    <ion-label>Type user</ion-label>
-    <ion-icon name="chevron-down-outline" [class.active-arrow]="filterStatus "></ion-icon>
-  </ion-item>
-  <ion-item lines="none" class="ion-hide-sm-down" (click)="filterSalary = !filterSalary ">
-    <ion-label>Email</ion-label>
-    <ion-icon name="chevron-down-outline" [class.active-arrow]="filterSalary"></ion-icon>
-  </ion-item>
-  <ion-item lines="none" class="ion-hide-sm-down">
-    <ion-label>Manage</ion-label>
-  </ion-item>
-</ion-card>
-
-<mat-spinner *ngIf="listEmployees.length == 0"></mat-spinner>
-
-<ion-card *ngFor="let item of listEmployees" matRipple>
-  <div class="content-data-avatar" (click)="openModal($event, item)">
-    <ion-item lines="none">
-      <ion-avatar>
-        <img [src]="item.pictureURL ?? 'assets/avatar.svg'" >
-      </ion-avatar>
+<ng-container *transloco="let t; read: 'users'">
+  <ion-card class="card-header">
+    <ion-item lines="none" (click)="filterEmployee = !filterEmployee ">
+      <ion-label>{{ t("User") }}</ion-label>
+      <ion-icon name="chevron-down-outline" [class.active-arrow]="filterEmployee"></ion-icon>
     </ion-item>
-    <ion-item lines="none">
+    <ion-item lines="none" class="ion-hide-md-down" (click)="filterStatus = !filterStatus  ">
+      <ion-label>{{ t("Type user") }}</ion-label>
+      <ion-icon name="chevron-down-outline" [class.active-arrow]="filterStatus "></ion-icon>
+    </ion-item>
+    <ion-item lines="none" class="ion-hide-sm-down" (click)="filterSalary = !filterSalary ">
+      <ion-label>{{ t("Email") }}</ion-label>
+      <ion-icon name="chevron-down-outline" [class.active-arrow]="filterSalary"></ion-icon>
+    </ion-item>
+    <ion-item lines="none" class="ion-hide-sm-down">
+      <ion-label>{{ t("Manage") }}</ion-label>
+    </ion-item>
+  </ion-card>
+  
+  <mat-spinner *ngIf="listEmployees.length == 0"></mat-spinner>
+  
+  <ion-card *ngFor="let item of listEmployees" matRipple>
+    <div class="content-data-avatar" (click)="openModal($event, item)">
+      <ion-item lines="none">
+        <ion-avatar>
+          <img [src]="item.pictureURL ?? 'assets/avatar.svg'" >
+        </ion-avatar>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>
+          <div class="content-label">
+            <span>{{item.name}} </span>
+            <!-- <span class="label-text">{{  item.employment}}</span> -->
+            <span class="label-text-normal">{{ t("Created At") }}: {{item.createdAt}}</span>
+          </div>
+        </ion-label>
+      </ion-item>
+    </div>
+    <!-- <ion-item lines="none">
+          <ion-label>
+              <div class="content-label">
+                <span>{{item.code}} </span>
+                <span class="label-text">{{item.email}}</span>
+              </div>
+            </ion-label>
+      </ion-item> -->
+    <ion-item lines="none" class="ion-hide-md-down">
       <ion-label>
         <div class="content-label">
-          <span>{{item.name}} </span>
-          <!-- <span class="label-text">{{  item.employment}}</span> -->
-          <span class="label-text-normal">Created At: {{item.createdAt}}</span>
+          <span></span>
+          <span class="label-text"></span>
+          <!-- <span>{{item.status}} </span>
+          <span class="label-text">{{item.employment}}</span> -->
+          <!-- <span class="label-text">{{item.time}}</span> -->
         </div>
       </ion-label>
     </ion-item>
-  </div>
-  <!-- <ion-item lines="none">
-        <ion-label>
-            <div class="content-label">
-              <span>{{item.code}} </span>
-              <span class="label-text">{{item.email}}</span>
-            </div>
-          </ion-label>
-    </ion-item> -->
-  <ion-item lines="none" class="ion-hide-md-down">
-    <ion-label>
-      <div class="content-label">
-        <span></span>
-        <span class="label-text"></span>
-        <!-- <span>{{item.status}} </span>
-        <span class="label-text">{{item.employment}}</span> -->
-        <!-- <span class="label-text">{{item.time}}</span> -->
-      </div>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-hide-sm-down">
-    <ion-label>
-      <div class="content-label">
-        <span>{{item.email}} </span>
-        <span class="label-text">Id: {{item.ref.id}}</span>
-      </div>
-    </ion-label>
-  </ion-item>
-  <ion-item lines="none" class="ion-hide-sm-down">
-    <ion-buttons>
-      <ion-button color="medium" [matMenuTriggerFor]="menu">
-        <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
-      </ion-button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item [routerLink]="item.ref.id">
-          <mat-icon>edit</mat-icon>
-          <span>Edit User</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>delete</mat-icon>
-          <span>Remove</span>
-        </button>
-      </mat-menu>
-    </ion-buttons>
-  </ion-item>
-</ion-card>
+    <ion-item lines="none" class="ion-hide-sm-down">
+      <ion-label>
+        <div class="content-label">
+          <span>{{item.email}} </span>
+          <span class="label-text">Id: {{item.ref.id}}</span>
+        </div>
+      </ion-label>
+    </ion-item>
+    <ion-item lines="none" class="ion-hide-sm-down">
+      <ion-buttons>
+        <ion-button color="medium" [matMenuTriggerFor]="menu">
+          <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
+        </ion-button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="item.ref.id">
+            <mat-icon>edit</mat-icon>
+            <span>{{ t("Edit User") }}</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>delete</mat-icon>
+            <span>{{ t("Remove") }}</span>
+          </button>
+        </mat-menu>
+      </ion-buttons>
+    </ion-item>
+  </ion-card>
+</ng-container>
  

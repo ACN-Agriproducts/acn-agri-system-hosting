@@ -1,10 +1,10 @@
-<app-header-toolbar [border]="!border" titulo="Users"></app-header-toolbar>
+<app-header-toolbar [border]="!border" [titulo]="'layout.'+'Users' | transloco"></app-header-toolbar>
 <ion-content [scrollEvents]="true" (ionScroll)="logScroll($event)">
     <div class="content-title" [class.border-shadow]="border" [class.change-color]="border">
         <ion-searchbar ></ion-searchbar>
         <ion-button (click)="openNewUser()">
             <!-- <ion-icon name="person-add-outline" slot="start"></ion-icon> -->
-            <ion-text slot="end">New User</ion-text>
+            <ion-text slot="end">{{ 'users.'+"New User" | transloco }}</ion-text>
         </ion-button>
     </div>
     <div class="ion-padding-horizontal content">

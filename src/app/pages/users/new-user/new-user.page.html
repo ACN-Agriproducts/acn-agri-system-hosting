@@ -1,19 +1,19 @@
-<app-header-toolbar [titulo]="userId? 'User ' + userId : 'New User'"></app-header-toolbar>
+<app-header-toolbar [titulo]="userId? 'User ' + userId : ('users.'+'New User' | transloco)"></app-header-toolbar>
 
 
-<ion-content class="ion-padding"  (ionScroll)="logScrolling($event)" [scrollEvents]="true">
+<ion-content class="ion-padding"  (ionScroll)="logScrolling($event)" [scrollEvents]="true" *transloco="let t; read: 'users'">
   <main>
     <form [formGroup]='userForm' (ngSubmit)="submitForm()">
       <ion-card>
         <ion-card-header>
-          User Data
+          {{ t("User Data") }}
         </ion-card-header>
         <ion-card-content>
           <ion-grid>
             <ion-row>
               <ion-col size="12" size-sm="12">
                 <mat-form-field appearance="fill">
-                  <mat-label>Name</mat-label>
+                  <mat-label>{{ t("Name") }}</mat-label>
                   <input matInput formControlName='name' [readonly]="userId">
                 </mat-form-field>
               </ion-col>
@@ -21,7 +21,7 @@
             <ion-row>
               <ion-col size="12" >
                 <mat-form-field appearance="fill">
-                  <mat-label>Email</mat-label>
+                  <mat-label>{{ t("Email") }}</mat-label>
                   <input matInput formControlName='email' [readonly]="userId">
                 </mat-form-field>
               </ion-col>
@@ -29,7 +29,7 @@
             <ion-row *ngIf="!userId">
               <ion-col size="12" >
                 <mat-form-field appearance="fill">
-                  <mat-label>Password</mat-label>
+                  <mat-label>{{ t("Password") }}</mat-label>
                   <input matInput formControlName='password'>
                 </mat-form-field>
               </ion-col>
@@ -37,7 +37,7 @@
             <ion-row>
               <ion-col size="12" >
                 <mat-form-field appearance="fill">
-                  <mat-label>Position</mat-label>
+                  <mat-label>{{ t("Position") }}</mat-label>
                   <input matInput formControlName="position" [readonly]="userId">
                 </mat-form-field>
               </ion-col>
@@ -47,19 +47,19 @@
       </ion-card>
       <ion-card formGroupName='permissions'>
         <ion-card-header>
-          Privileges
+          {{ t("Privileges") }}
         </ion-card-header>
         <ion-card-content>
           <ion-grid>
             <ion-row>
               <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
                 <ion-item lines="none" class="ion-no-padding">
-                  <ion-label class="label-title">User</ion-label>
+                  <ion-label class="label-title">{{ t("User") }}</ion-label>
                 </ion-item>
               </ion-col>
               <ion-col size-lg="8" size-sm="12" size-xs="12">
                 <ion-item lines="none" class="item-select">
-                  <ion-label class="label-title">Administrator</ion-label>
+                  <ion-label class="label-title">{{ t("Administrator") }}</ion-label>
                   <ion-checkbox slot="start" formControlName='admin'></ion-checkbox>
                 </ion-item>
               </ion-col>
@@ -70,15 +70,15 @@
             <ion-row *ngFor="let item of privilege; let last = last" formGroupName='{{item.section}}'>
               <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
                 <ion-item lines="none" class="ion-no-padding">
-                  <ion-label class="label-title">{{item.section | titlecase}}</ion-label>
+                  <ion-label class="label-title">{{ t(item.section) | titlecase}}</ion-label>
                 </ion-item>
               </ion-col>
               <ion-col size-lg="8" size-sm="12" size-xs="12">
                 <div class="div-content-privilege">
                   <div class="item-privilege">
-                    <ion-item matTooltipClass="tooltip-white" [matTooltip]="module.label" lines="none"
+                    <ion-item matTooltipClass="tooltip-white" [matTooltip]="t(module.label)" lines="none"
                       *ngFor="let module of item.module;" [class.main]="module.main">
-                      <ion-label>{{module.label}}</ion-label>
+                      <ion-label>{{ t(module.label) }}</ion-label>
                       <ion-checkbox slot="start" [formControlName]="module.controlName"></ion-checkbox>
                       <!-- <ion-icon slot="end" color="dark" [name]="entry.icon"></ion-icon> -->
                     </ion-item>
@@ -95,7 +95,7 @@
       </ion-card>
       <div class="content-footer-button">
         <div class="item-button">
-          <ion-button type='submit' [disabled]='userForm.invalid && !userId'>Save user</ion-button>
+          <ion-button type='submit' [disabled]='userForm.invalid && !userId'>{{ t("Save User") }}</ion-button>
         </div>
       </div>
     </form>
