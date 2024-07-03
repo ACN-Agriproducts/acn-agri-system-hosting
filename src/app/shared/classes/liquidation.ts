@@ -107,8 +107,8 @@ export class Liquidation extends FirebaseDocInterface {
                 archived: data.archived,
                 amountPaid: data.amountPaid,
                 total: data.total,
-                invoiceRef: data.invoiceRef,
-                createInvoice: data.createInvoice
+                invoiceRef: data.invoiceRef ?? null,
+                createInvoice: data.createInvoice ?? null
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Liquidation {
