@@ -189,6 +189,21 @@ export class TruckerReportsPage implements OnInit {
 
     return total;
   }
+
+  public saveTicketFreights(): void {
+    console.log('uploading')
+
+    const ticketArray = this.getCheckedTruckersOnly().map(truckers => truckers.getCheckedTickets());
+    const tickets: ticketCheck[] = [];
+    ticketArray.forEach(ticketList => tickets.push(...ticketList));
+
+    tickets.forEach(checkedTicket => {
+      checkedTicket.ticket.update({
+        freight: checkedTicket.freight.amount,
+        freightUnit: checkedTicket.freight.unit,
+      })
+    })
+  }
 }
 
 @Component({

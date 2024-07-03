@@ -139,6 +139,7 @@
         <th>{{ t('ID') }}</th>
         <th>{{ t('Client') }}</th>
         <th>{{ t('Contract') }}</th>
+        <th>{{ t('Lot #') }}</th>
         <th>{{ t('Tank') }}</th>
         <th>{{ t('Gross') }}</th>
         <th>{{ t('Tare') }}</th>
@@ -151,6 +152,7 @@
         <td>{{ticket.displayId}}</td>
         <td>{{ticket.clientName}}</td>
         <td>{{ticket.contractID}}</td>
+        <td>{{ticket.lot}}</td>
         <td>{{ticket.tank}}</td>
         <td>{{ticket.gross | massInUnit:displayUnit}}</td>
         <td>{{ticket.tare | massInUnit:displayUnit}}</td>

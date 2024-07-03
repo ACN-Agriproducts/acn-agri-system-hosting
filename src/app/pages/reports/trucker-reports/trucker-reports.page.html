@@ -125,8 +125,9 @@
           [useExistingCss]="true"
           printSectionId="printable-report"
           [disabled]="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"
+          (click)="saveTicketFreights()"
         >{{ 'Print' | translocoNested:'actions' }}</button>
-        <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">{{ t("Print with tickets") }}</mat-checkbox>
+        <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">Print with tickets</mat-checkbox>
         <mat-spinner [diameter]="20" *ngIf="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"></mat-spinner>
       </ng-container>
     </ion-col>    
