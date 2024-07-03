@@ -9,6 +9,9 @@ import { ContractPaymentReportsPageRoutingModule } from './contract-payment-repo
 import { ContractPaymentReportsPage } from './contract-payment-reports.page';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
+import { ProductCardComponent } from './components/product-card/product-card.component';
+import { ClientCardComponent } from './components/client-card/client-card.component';
+import { ContractsTableComponent } from './components/contracts-table/contracts-table.component';
 
 @NgModule({
   imports: [
@@ -19,6 +22,11 @@ import { SharedModule } from '@shared/shared.module';
     ContractPaymentReportsPageRoutingModule,
     SharedModule
   ],
-  declarations: [ContractPaymentReportsPage]
+  declarations: [
+    ContractPaymentReportsPage,
+    ProductCardComponent,
+    ClientCardComponent,
+    ContractsTableComponent
+  ]
 })
 export class ContractPaymentReportsPageModule {}
