@@ -28,7 +28,8 @@ export class ContractPaymentReportsPage implements OnInit {
 
   ngOnInit() {
     this.queryDate = new Date();
-    this.queryDate.setMonth(this.queryDate.getMonth() - 3);
+    this.queryDate.setMonth(this.queryDate.getMonth() - 2);
+    this.getContracts();
   }
 
   public async getContracts(): Promise<void> {
@@ -36,7 +37,8 @@ export class ContractPaymentReportsPage implements OnInit {
     this.clientAccounts = {};
     this.productAccounts = {};
 
-    const contractList = await Contract.getContracts(this.db, this.session.getCompany(), null, where('status', 'in', ['active', 'closed', 'paid']), where('date', '>', this.queryDate));
+    const contractList = await Contract.getContracts(this.db, this.session.getCompany(), null, where('date', '>', this.queryDate), where('status', 'in', ['active', 'closed', 'paid']));
+    console.log(contractList);
     
     for(let contract of contractList) {
       let currentClient = this.clientAccounts[contract.clientInfo.ref.id];
@@ -46,8 +48,14 @@ export class ContractPaymentReportsPage implements OnInit {
         currentClient = this.clientAccounts[contract.clientInfo.ref.id] = {
           client: contract.clientInfo,
           contracts: [],
-          pendingToPay: 0,
-          paid: 0
+          purchase: {
+            pendingToPay: 0,
+            paid: 0
+          },
+          sale: {
+            pendingToPay: 0,
+            paid: 0
+          }
         };
       }
 
@@ -55,36 +63,88 @@ export class ContractPaymentReportsPage implements OnInit {
         currentProduct = this.productAccounts[contract.product.id] = {
           product: contract.product.id,
           contracts: [],
-          pendingToPay: 0,
-          paid: 0
+          purchase: {
+            pendingToPay: 0,
+            paid: 0
+          },
+          sale: {
+            pendingToPay: 0,
+            paid: 0
+          }
         }
       }
       
       currentClient.contracts.push(contract);
       currentProduct.contracts.push(contract);
-      
-      currentClient.paid += contract.totalPayments;
-      currentProduct.paid += contract.totalPayments;
 
-      const pendingToPay = (contract.status == "paid") ? 0 : contract.currentDelivered.getMassInUnit(contract.price.getUnit()) * contract.price.amount - contract.totalPayments;
-      currentClient.pendingToPay += pendingToPay;
-      currentProduct.pendingToPay += pendingToPay;
+      let type;
+
+      if(contract.tags.includes('sale')) {
+        type = 'sale'
+      }
+      else if(contract.tags.includes('purchase')) {
+        type = 'purchase'
+      }
+      else continue;
+      
+      currentClient[type].paid += contract.totalPayments;
+      currentProduct[type].paid += contract.totalPayments;
+
+      const pending = (contract.status == "paid") ? 0 : contract.currentDelivered.getMassInUnit(contract.price.getUnit()) * contract.price.amount - contract.totalPayments;
+      currentClient[type].pendingToPay += pending;
+      currentProduct[type].pendingToPay += pending;
     }
 
     this.ready = true
   }
 }
 
-interface ClientAccount {
+export interface ClientAccount {
   client: ContactInfo,
   contracts: Contract[],
-  pendingToPay: number,
-  paid: number
+  purchase: {
+    pendingToPay: number,
+    paid: number
+  }
+  sale: {
+    pendingToPay: number,
+    paid: number
+  }
 }
 
-interface ProductAccount {
+export interface ProductAccount {
   product: string,
   contracts: Contract[],
-  pendingToPay: number,
-  paid: number,
+  purchase: {
+    pendingToPay: number,
+    paid: number
+  }
+  sale: {
+    pendingToPay: number,
+    paid: number
+  }
 }
+
+/*
+  purchase
+    date
+    contract
+    name
+    quantity
+    price
+    deliverry
+    ammount
+    discount
+    comments
+    payment
+    CTA Futuro
+
+  Sale
+    Date
+    Contract
+    Name
+    delivered
+    to deliver
+    discounts
+    payments
+*/

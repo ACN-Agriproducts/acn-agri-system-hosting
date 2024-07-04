@@ -12,6 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ClientCardComponent } from './components/client-card/client-card.component';
 import { ContractsTableComponent } from './components/contracts-table/contracts-table.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ContractsTableComponent } from './components/contracts-table/contracts-
     FormsModule,
     IonicModule,
     ContractPaymentReportsPageRoutingModule,
-    SharedModule
+    SharedModule,
+    NgxChartsModule
   ],
   declarations: [
     ContractPaymentReportsPage,

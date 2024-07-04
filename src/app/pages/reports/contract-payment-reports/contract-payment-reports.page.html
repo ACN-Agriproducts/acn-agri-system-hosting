@@ -3,6 +3,12 @@
 <ion-content>
   <div class="page-content">
     <app-section-title title="Products"></app-section-title>
-    <app-section-title title="Contracts"></app-section-title>
+    <div class="card-section">
+      <app-product-card class="card" *ngFor="let account of productAccounts | keyvalue" [data]="account.value"></app-product-card>
+    </div>
+    <app-section-title title="Clients">
+      <app-client-card></app-client-card>
+    </app-section-title>
+    <div class="card-section"></div>
   </div>
 </ion-content>
