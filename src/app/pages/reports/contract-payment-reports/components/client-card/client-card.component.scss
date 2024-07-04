@@ -1,0 +1,26 @@
+mat-card-content {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.card-numbers {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-title {
+    color: var(--ion-color-primary)
+}
+
+.stat-number {
+    font-size: large;
+    font-weight: bold;
+}
+
+.stat-number.remaining {
+    color: red;
+}
+
+.stat-number.remaining-receive {
+    color: green;
+}

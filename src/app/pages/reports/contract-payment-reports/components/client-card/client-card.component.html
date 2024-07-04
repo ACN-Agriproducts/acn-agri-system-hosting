@@ -1,3 +1,28 @@
-<p>
-  client-card works!
-</p>
+<mat-card (click)="openContractsDialog()">
+  <mat-card-header>
+    <mat-card-title>{{data.client.name}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="card-numbers">
+      <ng-container *ngIf="data.purchase.paid + data.purchase.pendingToPay > 0">
+        <span class="stat-title">To Pay</span>
+        <span class="stat-number remaining">{{data.purchase.pendingToPay | currency}}</span>
+        <span class="stat-title">Paid</span>
+        <span class="stat-number">{{data.purchase.paid | currency}}</span>
+      </ng-container>
+      <ng-container *ngIf="data.sale.paid + data.sale.pendingToPay > 0">
+        <span class="stat-title">To Receive</span>
+        <span class="stat-number remaining-receive">{{data.sale.pendingToPay | currency}}</span>
+        <span class="stat-title">Paid</span>
+        <span class="stat-number">{{data.sale.paid | currency}}</span>
+      </ng-container>
+    </div>
+    <div>
+      <ngx-charts-bar-horizontal-stacked
+        [results]="tableData"
+        [xAxis]="true" 
+        [yAxis]="true">
+      </ngx-charts-bar-horizontal-stacked>
+    </div>
+  </mat-card-content>
+</mat-card>

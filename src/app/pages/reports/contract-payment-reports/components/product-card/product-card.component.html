@@ -12,7 +12,7 @@
       </ng-container>
       <ng-container *ngIf="data.sale.paid + data.sale.pendingToPay > 0">
         <span class="stat-title">To Receive</span>
-        <span class="stat-number remaining">{{data.sale.pendingToPay | currency}}</span>
+        <span class="stat-number remaining-receive">{{data.sale.pendingToPay | currency}}</span>
         <span class="stat-title">Paid</span>
         <span class="stat-number">{{data.sale.paid | currency}}</span>
       </ng-container>

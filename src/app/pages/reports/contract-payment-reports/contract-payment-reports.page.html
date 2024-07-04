@@ -6,9 +6,9 @@
     <div class="card-section">
       <app-product-card class="card" *ngFor="let account of productAccounts | keyvalue" [data]="account.value"></app-product-card>
     </div>
-    <app-section-title title="Clients">
-      <app-client-card></app-client-card>
-    </app-section-title>
-    <div class="card-section"></div>
+    <app-section-title title="Clients"></app-section-title>
+    <div class="card-section">
+      <app-client-card class="card" *ngFor="let account of clientAccounts | keyvalue" [data]="account.value"></app-client-card>
+    </div>
   </div>
 </ion-content>
