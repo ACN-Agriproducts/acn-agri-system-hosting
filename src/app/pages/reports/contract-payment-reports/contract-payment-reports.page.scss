@@ -11,3 +11,21 @@
 .card {
     min-height: 224px;
 }
+
+ion-toolbar{
+    min-height: 35px;
+    height: auto;
+}
+
+mat-form-field {
+    width: auto;
+    margin: 16px;
+
+    ::ng-deep .mat-form-field-wrapper{
+      margin-bottom: -1.25em;
+      
+      .mat-form-field-outline {
+        background-color: white;
+      }
+    }
+  }

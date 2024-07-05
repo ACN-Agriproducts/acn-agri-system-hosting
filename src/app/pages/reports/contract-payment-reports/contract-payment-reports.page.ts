@@ -11,6 +11,7 @@ import { ContactInfo, Contract } from '@shared/classes/contract';
 })
 export class ContractPaymentReportsPage implements OnInit {
   public queryDate: Date;
+  public contractType: "sale" | "purchase" | null;
   public clientAccounts: {
     [id: string]: ClientAccount
   };
