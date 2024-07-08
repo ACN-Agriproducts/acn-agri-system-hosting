@@ -81,13 +81,13 @@
         <span><b>WEIGHT:</b></span><br>
         <span><b>GRADES:</b></span><br>
         <span><b>TRANSPORTATION:</b></span><br>
-        <span><b>REFERENCE:</b></span>
+        <span><b>AFLATOXIN:</b></span>
       </div>
       <div class='column-size-2 text-align-right'>
         <span [printableField]="'paymentTerms.origin'">{{ contractForm.paymentTerms.origin | selectFieldDisplay:contractType:'origin' | async | uppercase }}</span><br>
         <span [printableField]="'grade'">U.S. {{ contractForm.grade }} OR BETTER</span><br>
         <span>TRUCK</span><br>
-        <span [printableField]="'aflatoxin'">{{ contractForm.aflatoxin }} OR LESS</span>
+        <span [printableField]="'aflatoxin'">{{ contractForm.aflatoxin }}PPM OR LESS</span>
       </div>
     </div>
     <div id='extra-info-header' class="text-align-center">
