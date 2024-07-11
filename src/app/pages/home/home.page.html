@@ -1,7 +1,95 @@
 <app-header-toolbar titulo="Dashboard"></app-header-toolbar>
 
 <ion-content class="ion-padding">
-    <div class="main-grid">
+    <div class="main-layout-container">
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
+    
+        <app-section-title [title]="'Product Overview'"></app-section-title>
+    
+        <div class="product-overview-selectors">
+            <mat-form-field appearance="outline">
+                <mat-label>Product</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let product of products$ | async" [value]="product">{{ product.ref.id }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" style="flex: 0 1 300px !important">
+                <mat-label>Overview Type</mat-label>
+                <mat-select>
+                    <mat-option value="Sales / Purchases">Sales / Purchases</mat-option>
+                    <mat-option value="Pending to Deliver / Pending to Receive">Pending to Deliver / Pending to Receive</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="amount-cards-container">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>Sales</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>{{ 50000 | currency }}</mat-card-title>
+                </mat-card-content>
+                <div>+ {{ 2.34 }}%</div>
+                <!-- OR -->
+                <!-- <div>+ {{ 3460 | currency }}</div> -->
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>Purchases</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>{{ 37000 | currency }}</mat-card-title>
+                </mat-card-content>
+                <div>- {{ 3.34 }}%</div>
+                <!-- OR -->
+                <!-- <div>- {{ 5023  | currency}}</div> -->
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>Pending to Deliver</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>{{ 6700 | number }} bushels</mat-card-title>
+                </mat-card-content>
+                <div>+ {{ 7.8 }}%</div>
+                <!-- OR -->
+                <!-- <div>+ {{ 523 | number }} bushels</div> -->
+                <div></div>
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>Pending to Receive</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>{{ 4800 | number }} bushels</mat-card-title>
+                </mat-card-content>
+                <div>- {{ 7.19 }}%</div>
+                <!-- OR -->
+                <!-- <div>- {{ 345 }} bushels</div> -->
+            </mat-card>
+        </div>
+
+        <div class="charts-row-1">
+            <mat-card>
+                <mat-card-header>
+                    <div mat-card-title>Sales / Purchases</div>
+                    <div mat-card-subtitle>This section will display the sales and purchases of the selected product.</div>
+                </mat-card-header>
+                <mat-card-content>
+                    <!-- Sales and purchases chart goes here -->
+                    
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <div mat-card-title>Pending to Deliver / Pending to Receive</div>
+                    <div mat-card-subtitle>This section will display the pending deliveries and receivals of the selected product.</div>
+                </mat-card-header>
+                <mat-card-content>
+                    <!-- Pending deliveries and receives chart goes here -->
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 </ion-content>
