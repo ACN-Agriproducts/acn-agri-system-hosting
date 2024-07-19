@@ -310,6 +310,7 @@
     "tickets": {
         "Report": "Report",
         "Tickets": "Tickets",
+        "New Ticket": "New Ticket",
         "console": {
             "Ticket Console": "Ticket Console",
             "Date in": "Date in",

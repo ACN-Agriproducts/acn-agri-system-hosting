@@ -22,6 +22,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
 import { DiscountsDialogComponent } from './components/discounts-dialog/discounts-dialog.component';
+import { NewTicketModalComponent } from './components/new-ticket-modal/new-ticket-modal.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { DiscountsDialogComponent } from './components/discounts-dialog/discount
     ShowDetailsComponent,
     OptionsTicketComponent,
     TicketReportDialogComponent,
-    DiscountsDialogComponent
+    DiscountsDialogComponent,
+    NewTicketModalComponent
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },
