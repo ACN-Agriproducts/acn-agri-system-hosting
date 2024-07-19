@@ -14,6 +14,7 @@
             <ion-icon slot="icon-only" name="options-outline"></ion-icon>
           </ion-button> -->
           <ion-button color="primary" fill="solid" (click)="openTicketReportDialog()">{{ t('Report') | uppercase }}</ion-button>
+          <ion-button color="primary" fill="solid" (click)="openNewTicketModal()">{{ t('New Ticket') | uppercase }}</ion-button>
         </ion-buttons>
       </div>
       <app-table #ticket_table></app-table>

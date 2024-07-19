@@ -8,6 +8,7 @@ import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 import { TableComponent } from './components/table/table.component';
+import { NewTicketModalComponent } from './components/new-ticket-modal/new-ticket-modal.component';
 
 
 export const MY_FORMATS = {
@@ -70,5 +71,9 @@ export class TickestPage implements OnInit {
 
   plantChange(): void {
     this.ticketTable.getTickets();
+  }
+
+  async openNewTicketModal() {
+    this.dialog.open(NewTicketModalComponent);
   }
 }

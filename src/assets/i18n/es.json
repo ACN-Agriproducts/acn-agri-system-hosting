@@ -311,6 +311,7 @@
     "tickets": {
         "Report": "Reporte",
         "Tickets": "Boletas",
+        "New Ticket": "Nueva Boleta",
         "console": {
             "Ticket Console": "Consola de Tickets",
             "Date in": "Fecha de Entrada",
