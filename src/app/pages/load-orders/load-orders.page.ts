@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./load-orders.page.scss'],
 })
 export class LoadOrdersPage implements OnInit {
+  tableData;
 
   constructor() { }
 
   ngOnInit() {
+    this.tableData = new Array(25);
   }
 
 }

@@ -1,5 +1,24 @@
 <app-header-toolbar titulo="Load Orders"></app-header-toolbar>
 
 <ion-content>
-
+    <ion-card class="table header">
+        <ion-item lines="none">ID</ion-item>
+        <ion-item lines="none">Date</ion-item>
+        <ion-item lines="none">Contract</ion-item>
+        <ion-item lines="none">Transport</ion-item>
+        <ion-item lines="none">Status</ion-item>
+        <ion-item lines="none">Driver</ion-item>
+        <ion-item lines="none">Freight</ion-item>
+    </ion-card>
+    <ion-card class="table-body">
+        <div *ngFor="let item of tableData" class="table row">
+            <ion-item lines="none">25</ion-item>
+            <ion-item lines="none">Jul 4, 2024</ion-item>
+            <ion-item lines="none">1025</ion-item>
+            <ion-item lines="none">3M Montalvo</ion-item>
+            <ion-item lines="none">pending</ion-item>
+            <ion-item lines="none">Jose</ion-item>
+            <ion-item lines="none">$1.25</ion-item>
+        </div>
+    </ion-card>
 </ion-content>
