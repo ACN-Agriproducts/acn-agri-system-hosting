@@ -35,12 +35,4 @@ export class CompanyService {
   public getCompanyReference(name: string): DocumentReference<Company> {
     return doc(this.getCollectionReference(), name);
   }
-
-  public getCompany(): Company {
-    return this.company;
-  }
-
-  public getPlantsList(): Plant[] {
-    return this.plantsList;
-  }
 }
