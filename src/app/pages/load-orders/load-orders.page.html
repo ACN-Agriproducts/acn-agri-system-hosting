@@ -1,24 +1,63 @@
-<app-header-toolbar titulo="Load Orders"></app-header-toolbar>
+<ion-header>
+    <app-header-toolbar titulo="Load Orders"></app-header-toolbar>
+    <ion-toolbar class="toolbar">
+    <button mat-flat-button color="primary">+ New Order</button>
+    </ion-toolbar>
+</ion-header>
 
 <ion-content>
     <ion-card class="table header">
-        <ion-item lines="none">ID</ion-item>
-        <ion-item lines="none">Date</ion-item>
-        <ion-item lines="none">Contract</ion-item>
-        <ion-item lines="none">Transport</ion-item>
-        <ion-item lines="none">Status</ion-item>
-        <ion-item lines="none">Driver</ion-item>
-        <ion-item lines="none">Freight</ion-item>
+        <ion-item lines="none">
+            <ion-text>ID</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>Date</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>Contract</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>Transport</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>Status</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>Driver</ion-text>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-text>Freight</ion-text>
+        </ion-item>
+        <ion-item lines="none"></ion-item>
     </ion-card>
     <ion-card class="table-body">
         <div *ngFor="let item of tableData" class="table row">
-            <ion-item lines="none">25</ion-item>
-            <ion-item lines="none">Jul 4, 2024</ion-item>
-            <ion-item lines="none">1025</ion-item>
-            <ion-item lines="none">3M Montalvo</ion-item>
-            <ion-item lines="none">pending</ion-item>
-            <ion-item lines="none">Jose</ion-item>
-            <ion-item lines="none">$1.25</ion-item>
+            <ion-item lines="none">
+                <ion-text><b>25</b></ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text>Jul 4, 2024</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text><b>1025</b></ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text>3M Montalvo</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text class="item-status pending">pending</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text>Jose</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-text>$1.25</ion-text>
+            </ion-item>
+            <ion-item lines="none">
+                <ion-button color="medium" slot="end" shape="round" fill="clear">
+                    <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+            </ion-item>
         </div>
     </ion-card>
 </ion-content>
