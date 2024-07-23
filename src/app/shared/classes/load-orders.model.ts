@@ -12,7 +12,7 @@ export class LoadOrder extends FirebaseDocInterface {
     clientName: string;
     transportRef: DocumentReference<Contact>;
     transportName: string;
-    status: string;
+    status: 'pending' | 'closed';
     driver: string;
     freight: Price;
     plants: string[];
@@ -32,7 +32,7 @@ export class LoadOrder extends FirebaseDocInterface {
         super(snapshot, Ticket.converter);
         const data = snapshot?.data();
 
-        if(snapshotOrRef instanceof DocumentReference) {
+        if(!snapshotOrRef || snapshotOrRef instanceof DocumentReference) {
             return;
         }
 
@@ -55,21 +55,21 @@ export class LoadOrder extends FirebaseDocInterface {
     public static converter = {
         toFirestore(data: LoadOrder): DocumentData {
             return {
-                id: data.id,
-                date: data.date,
-                contractRef: data.contractRef,
-                clientName: data.clientName,
-                transportRef: data.transportRef,
-                transportName: data.transportName,
-                status: data.status,
-                driver: data.driver,
-                freight: data.freight.amount,
-                freightUnit: data.freight.unit,
-                plants: data.plants,
-                carPlates: data.carPlates,
-                plates: data.plates,
-                ticketRef: data.ticketRef,
-                ticketID: data.ticketID,
+                id: data.id ?? null,
+                date: data.date ?? null,
+                contractRef: data.contractRef ?? null,
+                clientName: data.clientName ?? null,
+                transportRef: data.transportRef ?? null,
+                transportName: data.transportName ?? null,
+                status: data.status ?? null,
+                driver: data.driver ?? null,
+                freight: data.freight.amount ?? null,
+                freightUnit: data.freight.unit ?? null,
+                plants: data.plants ?? null,
+                carPlates: data.carPlates ?? null,
+                plates: data.plates ?? null,
+                ticketRef: data.ticketRef ?? null,
+                ticketID: data.ticketID ?? null,
             };
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): LoadOrder {
