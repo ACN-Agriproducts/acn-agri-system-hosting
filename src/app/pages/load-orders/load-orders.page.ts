@@ -20,12 +20,12 @@ export class LoadOrdersPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.tableData = new Array(25);
+    this.tableData = new Array(25); // For mock data
   }
 
   newOrderDialog() {
     const newLoadOrder = new LoadOrder(null);
-    newLoadOrder.plants = this.company.getPlantsList().map(plant => plant.ref.id);
+    newLoadOrder.plants = this.company.plantsList.map(plant => plant.ref.id);
 
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
       data: newLoadOrder

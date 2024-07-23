@@ -1,3 +1,49 @@
-<p>
-  set-order-modal works!
-</p>
+<h1 mat-dialog-title>New Load Order</h1>
+<div mat-dialog-content> 
+  <mat-form-field appearance="fill">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="order.date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Contract</mat-label>
+    <mat-select [(ngModel)]="order.contractRef">
+      <mat-option>1025: Something Farms</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Transport</mat-label>
+    <mat-select [(ngModel)]="currentTransport">
+      <mat-option>1025: Something Farms</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Plants</mat-label>
+    <mat-select [(ngModel)]="order.plants" multiple>
+      <mat-option *ngFor="let plant of plants" [value]="plant">{{plant | titlecase}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Driver</mat-label>
+    <input matInput type="text" [(ngModel)]="order.driver">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <span matPrefix>$</span>
+    <span matSuffix>CWT</span>
+    <mat-label>Freight</mat-label>
+    <input matInput type="number" [(ngModel)]="order.freight">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Truck Plates</mat-label>
+    <input matInput type="text" [(ngModel)]="order.carPlates">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Box Plates</mat-label>
+    <input matInput type="text" [(ngModel)]="order.plates">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button color="warn" mat-dialog-close>Cancel</button>
+  <button mat-flat-button color="primary" mat-dialog-close="true">Submit</button>
+</div>

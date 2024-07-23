@@ -32,7 +32,7 @@ export class CompanyService {
     return collection(this.db, 'companies').withConverter(Company.converter);
   }
 
-  public getCompanyReference(name: string): DocumentReference<Company> {
+  public getCompanyReference(name: string = this.company.ref.id): DocumentReference<Company> {
     return doc(this.getCollectionReference(), name);
   }
 }
