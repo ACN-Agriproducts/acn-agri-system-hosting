@@ -29,7 +29,6 @@ export class LoadOrderService {
     newDoc.id = lastOrder.empty ? 1 : lastOrder.docs[0].get('id') + 1;
     newDoc.status = 'pending';
     const data = LoadOrder.converter.toFirestore(newDoc);
-    data.date = serverTimestamp();
     setDoc(newRef, data);
   }
 }

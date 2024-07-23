@@ -9,6 +9,7 @@ import { LoadOrdersPageRoutingModule } from './load-orders-routing.module';
 import { LoadOrdersPage } from './load-orders.page';
 import { CoreModule } from '@core/core.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SetOrderModalComponent } from './components/set-order-modal/set-order-modal.component';
 
 @NgModule({
   imports: [
@@ -17,8 +18,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     IonicModule,
     LoadOrdersPageRoutingModule,
     CoreModule,
-    MatDialogModule
+    MatDialogModule,
   ],
-  declarations: [LoadOrdersPage]
+  declarations: [LoadOrdersPage, SetOrderModalComponent]
 })
 export class LoadOrdersPageModule {}
