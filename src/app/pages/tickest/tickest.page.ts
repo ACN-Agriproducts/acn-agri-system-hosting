@@ -74,6 +74,8 @@ export class TickestPage implements OnInit {
   }
 
   async openNewTicketModal() {
-    this.dialog.open(NewTicketModalComponent);
+    this.dialog.open(NewTicketModalComponent, {
+      width: "1000px"
+    });
   }
 }

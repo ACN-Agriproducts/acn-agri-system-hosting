@@ -1,3 +1,148 @@
-<p>
-  new-ticket-modal works!
-</p>
+<div mat-dialog-content>
+  <mat-stepper>
+    <mat-step>
+      <ng-template matStepLabel>Contract</ng-template>
+      <div class="step-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Plant</mat-label>
+          <mat-select [(ngModel)]="chosenPlant">
+            <mat-option *ngFor="let plant of plants | async" [value]="plant">
+              {{plant.ref.id | titlecase}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Ticket Type</mat-label>
+          <mat-select [(ngModel)]="ticket.type" (ngModelChange)="ticketTypeChange()">
+            <mat-option value="in">In</mat-option>
+            <mat-option value="out">Out</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Contract</mat-label>
+          <mat-select [(ngModel)]="currentContract" (ngModelChange)="contractChange()">
+            <mat-option *ngFor="let contract of selectableContracts" [value]="contract">
+              {{contract.id + ": " + contract.clientName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Grade</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.grade">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Origin</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.origin">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Transport</mat-label>
+          <mat-select [(ngModel)]="currentDriver" (ngModelChange)="transportChange()">
+            <mat-option *ngFor="let transport of driverList" [value]="transport">
+              {{transport.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Vehicle</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.vehicleID">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Plates</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.plates">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Driver</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.driver">
+        </mat-form-field>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Weights</ng-template>
+      <div class="step-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Tank</mat-label>
+          <mat-select [(ngModel)]="ticket.tankId">
+            <ng-container *ngFor="let inv of chosenPlant?.inventory; let index = index">
+              <mat-option 
+                *ngIf="!inv.archived"
+                [disabled]="inv.product.id != 'none' && inv.product.id != ticket.productName"
+                [value]="index"><b>{{inv.name}}</b>: {{inv.product.id}}</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Original Ticket</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.original_ticket">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Original Ticket W.</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.original_weight.amount">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Gross</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.gross.amount">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Tare</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.tare.amount">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Net</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.net.amount">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>m. Ton</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.net.amount">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Discount W.</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.net.amount">
+        </mat-form-field>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Grain Info</ng-template>
+      <div class="step-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Moisture</mat-label>
+          <span matSuffix>%</span>
+          <input matInput type="number" [(ngModel)]="ticket.moisture">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Weight</mat-label>
+          <input matInput type="number" [(ngModel)]="ticket.weight">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>impurities</mat-label>
+          <span matSuffix>%</span>
+          <input matInput type="number" [(ngModel)]="ticket.impurities">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Broken Grain</mat-label>
+          <span matSuffix>%</span>
+          <input matInput type="number" [(ngModel)]="ticket.brokenGrain">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Damaged Grain</mat-label>
+          <span matSuffix>%</span>
+          <input matInput type="number" [(ngModel)]="ticket.damagedGrain">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Plague</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.plague">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>PPB</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.PPB">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Lot</mat-label>
+          <input matInput type="text" [(ngModel)]="ticket.lot">
+        </mat-form-field>
+      </div>
+    </mat-step>
+  </mat-stepper>
+</div>
+<div mat-dialog-actions>
+
+</div>
