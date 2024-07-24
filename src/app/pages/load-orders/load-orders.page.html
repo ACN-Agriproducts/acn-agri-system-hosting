@@ -31,32 +31,39 @@
         <ion-item lines="none"></ion-item>
     </ion-card>
     <ion-card class="table-body">
-        <div *ngFor="let item of tableData" class="table row">
+        <div *ngFor="let loadOrder of tableData[index] | async" class="table row">
             <ion-item lines="none">
-                <ion-text><b>25</b></ion-text>
+                <ion-text><b>{{loadOrder.id}}</b></ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>Jul 4, 2024</ion-text>
+                <ion-text>{{loadOrder.date | date}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text><b>1025</b></ion-text>
+                <ion-text [matTooltip]="(loadOrder.contractTags?.[0] | titlecase) + '\n' + loadOrder.clientName">
+                    <b>{{loadOrder.contractID}}</b>
+                </ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>3M Montalvo</ion-text>
+                <ion-text>{{loadOrder.transportName}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text class="item-status pending">pending</ion-text>
+                <ion-text class="item-status" [class]="loadOrder.status">{{loadOrder.status}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>Jose</ion-text>
+                <ion-text>{{loadOrder.driver}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>$1.25</ion-text>
+                <ion-text>{{loadOrder.freight | pricePerUnit | currency}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-button color="medium" slot="end" shape="round" fill="clear">
+                <ion-button color="medium" slot="end" shape="round" fill="clear" [mat-menu-trigger-for]="menu">
                     <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
                 </ion-button>
+                <mat-menu #menu>
+                    <!-- TODO ADD NGIF -->
+                    <button mat-menu-item (click)="editOrderDialog(loadOrder)">Edit</button>
+                    <button mat-menu-item (click)="cancelOrder(loadOrder)">Cancel</button>
+                </mat-menu>
             </ion-item>
         </div>
     </ion-card>

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { collection, CollectionReference, doc, Firestore, getDocs, getDocsFromServer, limit, query, QueryConstraint, runTransaction, serverTimestamp, setDoc } from '@angular/fire/firestore';
+import { collection, CollectionReference, doc, Firestore, getDocs, getDocsFromServer, limit, query, QueryConstraint, setDoc, startAfter, orderBy, getCountFromServer, updateDoc } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { LoadOrder } from '@shared/classes/load-orders.model';
-import { orderBy } from 'firebase/firestore';
+import { LoadOrder, LoadOrderStatus } from '@shared/classes/load-orders.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +16,26 @@ export class LoadOrderService {
     return collection(this.db, 'companies', this.session.getCompany(), 'loadOrders').withConverter(LoadOrder.converter);
   }
 
-  public async getList(...constraints: QueryConstraint[]): Promise<LoadOrder[]> {
-    const list = await getDocs(query(this.getCollectionReference(), ...constraints));
+  public async getList(amount: number, startAfterObject?: LoadOrder): Promise<LoadOrder[]> {
+    const constraints: QueryConstraint[] = [
+      orderBy('id', 'desc'),
+      limit(amount)
+    ];
+
+    if(startAfterObject) constraints.push(startAfter(startAfterObject.ref));
+
+    const list = await getDocs(
+      query(
+        this.getCollectionReference(), 
+        ...constraints
+      )
+    );
+
     return list.docs.map(order => order.data());
+  }
+
+  public async getCount(): Promise<number> {
+    return getCountFromServer(this.getCollectionReference()).then(result => result.data().count);
   }
 
   public async add(newDoc: LoadOrder) {
@@ -28,7 +44,6 @@ export class LoadOrderService {
     const newRef = doc(this.getCollectionReference());
     newDoc.id = lastOrder.empty ? 1 : lastOrder.docs[0].get('id') + 1;
     newDoc.status = 'pending';
-    const data = LoadOrder.converter.toFirestore(newDoc);
-    setDoc(newRef, data);
+    setDoc(newRef, newDoc);
   }
 }

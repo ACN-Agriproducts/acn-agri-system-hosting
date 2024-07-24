@@ -10,6 +10,7 @@ import { LoadOrdersPage } from './load-orders.page';
 import { CoreModule } from '@core/core.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SetOrderModalComponent } from './components/set-order-modal/set-order-modal.component';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { SetOrderModalComponent } from './components/set-order-modal/set-order-m
     LoadOrdersPageRoutingModule,
     CoreModule,
     MatDialogModule,
+    SharedModule
   ],
   declarations: [LoadOrdersPage, SetOrderModalComponent]
 })

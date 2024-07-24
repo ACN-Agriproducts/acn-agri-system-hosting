@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { collection, CollectionReference, doc, DocumentReference, Firestore, getDoc, getDocs } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
-import { Company } from '@shared/classes/company';
+import { Company, CompanyContact } from '@shared/classes/company';
 import { Plant } from '@shared/classes/plant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompanyService {
-  company: Company;
-  plantsList: Plant[];
-  currentPlant: Plant;
+  private company: Company;
+  private plantsList: Plant[];
+  private currentPlant: Plant;
 
   constructor(
     private db: Firestore,
@@ -34,5 +34,21 @@ export class CompanyService {
 
   public getCompanyReference(name: string = this.company.ref.id): DocumentReference<Company> {
     return doc(this.getCollectionReference(), name);
+  }
+
+  public getCompany(): Company {
+    return this.company;
+  }
+
+  public getPlantsList(): Plant[] {
+    return this.plantsList;
+  }
+
+  public getCurrentPlant(): Plant {
+    return this.currentPlant;
+  }
+
+  public getContactsList(): CompanyContact[] {
+    return this.company.contactList;
   }
 }

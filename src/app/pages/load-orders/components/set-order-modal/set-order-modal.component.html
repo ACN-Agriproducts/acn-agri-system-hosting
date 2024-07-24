@@ -8,14 +8,18 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Contract</mat-label>
-    <mat-select [(ngModel)]="order.contractRef">
-      <mat-option>1025: Something Farms</mat-option>
+    <mat-select [(ngModel)]="currentContract" (ngModelChange)="contractChange()">
+      <mat-optgroup *ngFor="let contractGroup of activeContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
+        <mat-option *ngFor="let contract of contractGroup.value" [value]="contract">
+          {{contract.id + ": " + contract.clientName}}
+        </mat-option>
+      </mat-optgroup>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Transport</mat-label>
-    <mat-select [(ngModel)]="currentTransport">
-      <mat-option>1025: Something Farms</mat-option>
+    <mat-select [(ngModel)]="currentTransport" (ngModelChange)="transportChange()" [disabled]="!currentContract">
+      <mat-option *ngFor="let contact of selectableTransport" [value]="contact">{{contact.name | uppercase}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">
@@ -32,7 +36,7 @@
     <span matPrefix>$</span>
     <span matSuffix>CWT</span>
     <mat-label>Freight</mat-label>
-    <input matInput type="number" [(ngModel)]="order.freight">
+    <input matInput type="number" [(ngModel)]="order.freight.amount">
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Truck Plates</mat-label>
