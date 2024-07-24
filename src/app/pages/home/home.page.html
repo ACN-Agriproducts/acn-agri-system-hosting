@@ -6,21 +6,20 @@
     
         <app-section-title [title]="'Product Overview'"></app-section-title>
     
-        <div class="product-overview-selectors">
-            <mat-form-field appearance="outline">
-                <mat-label>Product</mat-label>
-                <mat-select>
-                    <mat-option *ngFor="let product of products$ | async" [value]="product">{{ product.ref.id }}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field appearance="outline" style="flex: 0 1 300px !important">
-                <mat-label>Overview Type</mat-label>
-                <mat-select>
-                    <mat-option value="Sales / Purchases">Sales / Purchases</mat-option>
-                    <mat-option value="Pending to Deliver / Pending to Receive">Pending to Deliver / Pending to Receive</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+        <!-- <div class="product-overview-selectors">
+        </div> -->
+        <button mat-button (click)="test()">Test</button>
+        <button mat-button (click)="createDashboardManually()">Create Dashboard Metrics Manually</button>
+        <button mat-button (click)="setDashboardManually()">Set Dashboard Metrics Manually</button>
+        <button mat-button (click)="testDashboardUpdate()">Test Dashboard Update</button>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Product</mat-label>
+            <mat-select #selectedProductRef [(ngModel)]="selectedProduct" (selectionChange)="test()">
+                <mat-option value="all">All</mat-option>
+                <mat-option *ngFor="let product of products$ | async" [value]="product">{{ product.ref.id }}</mat-option>
+            </mat-select>
+        </mat-form-field>
 
         <div class="amount-cards-container">
             <mat-card>
@@ -36,6 +35,18 @@
             </mat-card>
             <mat-card>
                 <mat-card-header>
+                    <mat-card-subtitle>Pending to Deliver</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>{{ 0 | number }} bushels</mat-card-title>
+                </mat-card-content>
+                <div>+ {{ 7.8 }}%</div>
+                <!-- OR -->
+                <!-- <div>+ {{ 523 | number }} bushels</div> -->
+                <div></div>
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
                     <mat-card-subtitle>Purchases</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
@@ -44,18 +55,6 @@
                 <div>- {{ 3.34 }}%</div>
                 <!-- OR -->
                 <!-- <div>- {{ 5023  | currency}}</div> -->
-            </mat-card>
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-subtitle>Pending to Deliver</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <mat-card-title>{{ 6700 | number }} bushels</mat-card-title>
-                </mat-card-content>
-                <div>+ {{ 7.8 }}%</div>
-                <!-- OR -->
-                <!-- <div>+ {{ 523 | number }} bushels</div> -->
-                <div></div>
             </mat-card>
             <mat-card>
                 <mat-card-header>
@@ -70,6 +69,14 @@
             </mat-card>
         </div>
 
+        <mat-form-field appearance="outline" #exchangeType>
+            <mat-label>Exchange Type</mat-label>
+            <mat-select value="sales">
+                <mat-option value="sales">Sales</mat-option>
+                <mat-option value="purchase">Purchase</mat-option>
+            </mat-select>
+        </mat-form-field>
+
         <div class="charts-row-1">
             <mat-card>
                 <mat-card-header>
@@ -78,7 +85,10 @@
                 </mat-card-header>
                 <mat-card-content>
                     <!-- Sales and purchases chart goes here -->
-                    
+                     <!-- ONLY CHART RESULTS WILL CHANGE, BASED ON WHETHER SALES OR PURCHASES WAS SELECTED -->
+                    <!-- <ngx-chart
+                        [results]=""
+                    ></ngx-chart> -->
                 </mat-card-content>
             </mat-card>
             <mat-card>
@@ -88,6 +98,9 @@
                 </mat-card-header>
                 <mat-card-content>
                     <!-- Pending deliveries and receives chart goes here -->
+                    <!-- ONLY CHART RESULTS WILL CHANGE, BASED ON WHETHER SALES OR PURCHASES WAS SELECTED -->
+                    <!-- <ngx-chart
+                     ></ngx-chart> -->
                 </mat-card-content>
             </mat-card>
         </div>

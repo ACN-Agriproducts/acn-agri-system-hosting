@@ -6,6 +6,8 @@ import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
+import { DashboardData } from '@shared/classes/dashboard-data';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -27,10 +29,13 @@ export class HomePage implements OnInit {
   public contract: Contract;
   
   public products$: Observable<Product[]>;
+  public selectedProduct: Product | "all";
+  public dashboardData: DashboardData;
 
   constructor(
     private session: SessionInfo,
-    private db: Firestore
+    private db: Firestore,
+    private functions: Functions
   ) {
   }
 
@@ -43,9 +48,31 @@ export class HomePage implements OnInit {
     );
 
     this.products$ = Product.getCollectionSnapshot(this.db, this.currentCompany);
+
+    DashboardData.getLatestDashboardMetrics(this.db, this.currentCompany).then(data => {
+      this.dashboardData = data;
+    });
   }
 
   focusEventHandler(fieldName: string) {
     console.log(fieldName);
+  }
+
+  test() {
+    console.log(this.selectedProduct)
+  }
+
+  createDashboardManually() {
+    this.dashboardData = new DashboardData(doc(DashboardData.getCollectionRef(this.db, this.currentCompany)));
+    console.log("Created Dashboard Data:", this.dashboardData);
+  }
+
+  setDashboardManually() {
+    this.dashboardData.set();
+    console.log("Set Dashboard Data:", this.dashboardData);
+  }
+
+  testDashboardUpdate() {
+    httpsCallable(this.functions, 'schedules-dashboardMetricsUpdateLocal')("UPDATE DASHBOARD WITH NEW DOCUMENT");
   }
 }
