@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CollectionReference, Firestore, query, where } from '@angular/fire/firestore';
 import { CompanyService } from '@core/services/company/company.service';
+import { CompanyContact } from '@shared/classes/company';
 import { Contract } from '@shared/classes/contract';
 import { collection } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
@@ -39,5 +40,9 @@ export class ContractsService {
 
   getCollectionReference(): CollectionReference<Contract> {
     return collection(this.company.getCompanyReference(), 'contracts').withConverter(Contract.converter);
+  }
+
+  getContractTransportList(contract: Contract): CompanyContact[] {
+    return this.company.getTransportList().filter(c => contract.truckers.some(contact => contact.trucker.id == c.id));
   }
 }

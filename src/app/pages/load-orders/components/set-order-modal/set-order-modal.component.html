@@ -8,9 +8,9 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Contract</mat-label>
-    <mat-select [(ngModel)]="currentContract" (ngModelChange)="contractChange()">
-      <mat-optgroup *ngFor="let contractGroup of activeContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
-        <mat-option *ngFor="let contract of contractGroup.value" [value]="contract">
+    <mat-select [(ngModel)]="currentContractID" (ngModelChange)="contractChange()">
+      <mat-optgroup *ngFor="let contractGroup of groupedContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
+        <mat-option *ngFor="let contract of contractGroup.value" [value]="contract.ref.id">
           {{contract.id + ": " + contract.clientName}}
         </mat-option>
       </mat-optgroup>
@@ -18,7 +18,7 @@
   </mat-form-field>
   <mat-form-field appearance="fill">
     <mat-label>Transport</mat-label>
-    <mat-select [(ngModel)]="currentTransport" (ngModelChange)="transportChange()" [disabled]="!currentContract">
+    <mat-select [(ngModel)]="currentTransportID" (ngModelChange)="transportChange()" [disabled]="!currentContract">
       <mat-option *ngFor="let contact of selectableTransport" [value]="contact">{{contact.name | uppercase}}</mat-option>
     </mat-select>
   </mat-form-field>

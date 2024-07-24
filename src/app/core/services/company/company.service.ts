@@ -11,6 +11,7 @@ export class CompanyService {
   private company: Company;
   private plantsList: Plant[];
   private currentPlant: Plant;
+  private transportList: CompanyContact[];
 
   constructor(
     private db: Firestore,
@@ -20,7 +21,6 @@ export class CompanyService {
   async initialize(): Promise<any> {
     const companyName = await this.storage.get('currentCompany') as string;
     const plantsCollectionRef = collection(this.getCompanyReference(companyName), 'plants').withConverter(Plant.converter);
-    console.log(plantsCollectionRef.path);
 
     return Promise.all([
       getDoc(this.getCompanyReference(companyName)).then(val => this.company = val.data()),
@@ -50,5 +50,13 @@ export class CompanyService {
 
   public getContactsList(): CompanyContact[] {
     return this.company.contactList;
+  }
+
+  public getPlantsNamesList(): string[] {
+    return this.plantsList.map(p => p.ref.id);
+  }
+
+  public getTransportList(): CompanyContact[] {
+    return this.transportList ??= this.company.contactList.filter(c => c.tags.includes('trucker'));
   }
 }

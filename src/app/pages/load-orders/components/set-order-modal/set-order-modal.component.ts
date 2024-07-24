@@ -14,11 +14,14 @@ import { first, lastValueFrom, Observable } from 'rxjs';
 })
 export class SetOrderModalComponent implements OnInit {
   plants: string[];
-  activeContracts: Observable<{[type: string]: Contract[]}>;
+  groupedContracts: Observable<{[type: string]: Contract[]}>;
+  contractsList: Observable<Contract[]>;
   selectableTransport: CompanyContact[];
 
+  currentTransportID: string;
   currentTransport: CompanyContact;
   currentContract: Contract;
+  currentContractID: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public order: LoadOrder,
@@ -27,26 +30,36 @@ export class SetOrderModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.plants = this.company.getPlantsList().map(p => p.ref.id);
-    this.activeContracts = this.contracts.getActiveGrouped();
-    if(this.order.transportRef) this.currentTransport = this.company.getContactsList().find(contact => contact.id == this.order.transportRef.id);
-    if(this.order.contractRef) this.activeContracts.pipe(first()).subscribe(groups => {
-      // Ew #TODO: SOME VALUES ARE NOT LOADED CORRECTLY FOR SETTING
-      const temp = Object.values(groups).reduce((prev, curr) => {prev.push(...curr); return prev}, []).find(contract => contract.ref.id == this.order.contractRef.id);
-      console.log(temp);
-      this.currentContract = temp;
+    console.log(this.order);
+
+    this.plants = this.company.getPlantsNamesList();
+    this.groupedContracts = this.contracts.getActiveGrouped();
+    this.contractsList = this.contracts.getActive();
+    if(this.order.transportRef) {
+      this.currentTransport = this.company.getContactsList().find(contact => contact.id == this.order.transportRef.id)
+      this.currentTransportID = this.currentTransport.id;
+    };
+    if(this.order.contractRef) {
+      this.currentContractID = this.order.contractRef.id;
+      this.contractChange();
+    }
+  }
+
+  async contractChange() {
+    this.contractsList.pipe(first()).subscribe(list => {
+      this.currentContract = list.find(contract => contract.ref.id == this.currentContractID);
+      this.currentContractID = this.currentContract.ref.id;
+      this.selectableTransport = this.contracts.getContractTransportList(this.currentContract);
+      this.order.contractRef = this.currentContract.ref.withConverter(Contract.converter);
+      this.order.clientName = this.currentContract.clientName;
+      this.order.contractTags = this.currentContract.tags;
+      this.order.contractID = this.currentContract.id;
     });
   }
 
-  contractChange() {
-    this.selectableTransport = this.company.getContactsList().filter(contact => this.currentContract.truckers.some(trucker => trucker.trucker.id == contact.id));
-    this.order.contractRef = this.currentContract.ref.withConverter(Contract.converter);
-    this.order.clientName = this.currentContract.clientName;
-    this.order.contractTags = this.currentContract.tags;
-    this.order.contractID = this.currentContract.id;
-  }
-
   transportChange() {
+    this.currentTransport = this.selectableTransport.find(contact => contact.id == this.currentTransportID)
+    console.log(this.currentTransportID, this.currentTransport);
     this.order.transportName = this.currentTransport.name;
     this.order.transportRef = this.currentContract.truckers.find(trucker => trucker.trucker.id == this.currentTransport.id).trucker;
   }

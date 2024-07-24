@@ -29,7 +29,7 @@ export class LoadOrdersPage implements OnInit {
 
   newOrderDialog() {
     const newLoadOrder = new LoadOrder(null);
-    newLoadOrder.plants = this.company.getPlantsList().map(plant => plant.ref.id);
+    newLoadOrder.plants = this.company.getPlantsNamesList();
 
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
       data: newLoadOrder
@@ -57,7 +57,6 @@ export class LoadOrdersPage implements OnInit {
       if(!result) return;
 
       order.set().then(() => {
-        console.log(order);
         this.snack.open("Successfully updated Load Order", 'success');
       }).catch(error => {
         console.error(error);
