@@ -41,9 +41,14 @@ export class LoadOrderService {
   public async add(newDoc: LoadOrder) {
     const lastOrderQuery = query(this.getCollectionReference(), orderBy('id', 'desc'), limit(1));
     const lastOrder = await getDocsFromServer(lastOrderQuery);
-    const newRef = doc(this.getCollectionReference());
     newDoc.id = lastOrder.empty ? 1 : lastOrder.docs[0].get('id') + 1;
-    newDoc.status = 'pending';
+    const newRef = doc(this.getCollectionReference());
     setDoc(newRef, newDoc);
+  }
+  
+  public createNew(): LoadOrder {
+    const newDoc = new LoadOrder(null)
+    newDoc.status = 'pending';
+    return newDoc;
   }
 }

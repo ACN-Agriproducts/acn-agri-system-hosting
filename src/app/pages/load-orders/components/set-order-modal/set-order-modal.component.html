@@ -19,7 +19,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Transport</mat-label>
     <mat-select [(ngModel)]="currentTransportID" (ngModelChange)="transportChange()" [disabled]="!currentContract">
-      <mat-option *ngFor="let contact of selectableTransport" [value]="contact">{{contact.name | uppercase}}</mat-option>
+      <mat-option *ngFor="let contact of selectableTransport" [value]="contact.id">{{contact.name | uppercase}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="fill">

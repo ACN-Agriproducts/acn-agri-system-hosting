@@ -17,18 +17,18 @@ export class LoadOrdersPage implements OnInit {
 
   constructor(
     private company: CompanyService,
-    private LoadOrders: LoadOrderService,
+    private loadOrders: LoadOrderService,
     private dialog: MatDialog,
     private snack: SnackbarService
   ) { }
 
   ngOnInit() {
-    this.tableData = [this.LoadOrders.getList(20)];
+    this.tableData = [this.loadOrders.getList(20)];
     this.index = 0;
   }
 
   newOrderDialog() {
-    const newLoadOrder = new LoadOrder(null);
+    const newLoadOrder = this.loadOrders.createNew();
     newLoadOrder.plants = this.company.getPlantsNamesList();
 
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
@@ -38,7 +38,7 @@ export class LoadOrdersPage implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(!result) return;
 
-      this.LoadOrders.add(newLoadOrder).then(async () => {
+      this.loadOrders.add(newLoadOrder).then(async () => {
         (await this.tableData[0]).unshift(newLoadOrder);
         this.snack.open("Successfully added", 'success');
       }).catch(error => {

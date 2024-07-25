@@ -29,10 +29,10 @@ export class LoadOrder extends FirebaseDocInterface {
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
         let snapshot;
         if(snapshotOrRef instanceof QueryDocumentSnapshot) {
-            snapshot = snapshotOrRef
+            snapshot = snapshotOrRef;
         }
         
-        super(snapshot, Ticket.converter);
+        super(snapshot, LoadOrder.converter);
         const data = snapshot?.data();
 
         if(!snapshotOrRef || snapshotOrRef instanceof DocumentReference) {
@@ -80,7 +80,7 @@ export class LoadOrder extends FirebaseDocInterface {
                 ticketID: data.ticketID ?? null,
             };
 
-            console.log(fireData)
+            console.log("###", fireData);
 
             return fireData;
         },
