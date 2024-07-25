@@ -11,8 +11,8 @@ import { Liquidation } from "./liquidation";
 import { Payment } from "./payment";
 
 
-declare type contractType = string | boolean;
-declare type ContractStatus = 'pending' | 'active' | 'closed' | 'cancelled' | 'paid';
+export declare type contractType = string | boolean;
+export declare type ContractStatus = 'pending' | 'active' | 'closed' | 'cancelled' | 'paid';
 
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;

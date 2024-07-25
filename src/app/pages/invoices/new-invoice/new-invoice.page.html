@@ -1,17 +1,17 @@
-<app-header-toolbar titulo="New Export Invoice"></app-header-toolbar>
+<app-header-toolbar [titulo]="'invoices.New Export Invoice' | transloco"></app-header-toolbar>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding" *transloco="let t; read: 'invoices'">
   <div class="ion-content-div">
     <div class="header-title">
-      <ion-title class=" title-content">Select tickets</ion-title>
-      <ion-searchbar placeholder="Search tickets"></ion-searchbar>
+      <ion-title class=" title-content">{{ t("Select Tickets") }}</ion-title>
+      <ion-searchbar [placeholder]="t('Search Tickets')"></ion-searchbar>
     </div>
     <div class="content-main">
       <ion-card (click)="set(ticket)" class="item-card" [class.active-card]="selectedTickets.has(ticket)"
         *ngFor="let ticket of ticketsPromise | async; let i = index" >
         <!-- [class.active-card]="item <= 3" -->
         <ion-card-header>
-          <ion-card-title color="dark">Ticket {{ticket.id}}</ion-card-title>
+          <ion-card-title color="dark">{{ t("Ticket") }} {{ticket.id}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <p class="ion-no-margin">{{ticket.clientName}}</p>
@@ -25,12 +25,12 @@
       <ion-card class="panel-action">
         <ion-card-content>
           <div class="content-panel-button">
-            <ion-button fill="clear" color="secondary" routerLink="/dashboard/invoices" (click)="selectedTickets.clear()">Cancel</ion-button>
+            <ion-button fill="clear" color="secondary" routerLink="/dashboard/invoices" (click)="selectedTickets.clear()">{{ "actions."+"Cancel" | transloco}}</ion-button>
             <div class="panel-list">
               <ion-item color="dark" lines="none">
                 <ion-label *ngFor="let item of selectedTickets; let last = last">{{item.id}} {{ last ? "" : ", " }}</ion-label>
               </ion-item>
-              <ion-button routerLink="/dashboard/invoices/confirm-invoice" [state]="selectedTickets">Next</ion-button>
+              <ion-button routerLink="/dashboard/invoices/confirm-invoice" [state]="selectedTickets">{{ t("Next") }}</ion-button>
             </div>
           </div>
         </ion-card-content>

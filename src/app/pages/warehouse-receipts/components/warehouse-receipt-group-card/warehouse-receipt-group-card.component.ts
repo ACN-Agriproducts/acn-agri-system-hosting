@@ -79,7 +79,7 @@ export class WarehouseReceiptGroupCardComponent implements OnInit {
     const pdfRef = receipt.pdfReference ?? this.groupRef + `list/warehouseReceipt#${id}`;
 
     const dialogData: UploadDialogData = {
-      docType: "Warehouse Receipt",
+      docType: this.transloco.translate("warehouse receipts."+"Warehouse Receipt"),
       hasDoc: receipt.pdfReference != null,
       pdfRef,
       uploadable: this.wrGroup.status !== 'CLOSED' && this.wrGroup.status !== 'CANCELLED',

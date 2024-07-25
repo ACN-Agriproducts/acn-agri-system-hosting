@@ -38,6 +38,12 @@ export class LayoutComponent implements OnInit {
       permission: p => p.isScale || p.admin,
     },
     {
+      title: 'load orders',
+      url: '/dashboard/load-orders',
+      icon: 'train',
+      permission: p => this.hasPermission('loadOrders', p)
+    },
+    {
       title: 'inventory',
       url: '/dashboard/inventory',
       icon: 'podium',
@@ -111,7 +117,8 @@ export class LayoutComponent implements OnInit {
       url: '/dashboard/prices',
       icon: 'pricetag',
       permission: p => this.hasPermission('prices', p) || p?.prices?.write,
-    }
+    },
+
   ];
   public collapse$: Observable<boolean>;
   public displayName$: Observable<boolean>;

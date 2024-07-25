@@ -1,27 +1,27 @@
-<app-header-toolbar titulo="Set Warehouse Receipt Group"></app-header-toolbar>
+<app-header-toolbar [titulo]="'warehouse receipts.'+'Set Warehouse Receipt Group' | transloco"></app-header-toolbar>
 
-<ion-content class="ion-padding" [fullscreen]="true">
+<ion-content class="ion-padding" [fullscreen]="true" *transloco="let t; read: 'warehouse receipts'">
 	<form [formGroup]="warehouseReceiptGroupForm" class="form">
 		<ion-card>
-			<ion-card-header>Group Info</ion-card-header>
+			<ion-card-header>{{ t("Group Info") }}</ion-card-header>
 
 			<ion-card-content>
 				<ion-grid>
 					<ion-row>
 						<ion-col>
 							<mat-form-field>
-								<mat-label>Bushel Quantity (per Receipt)</mat-label>
+								<mat-label>{{ t("Bushel Quantity (per Receipt)") }}</mat-label>
 								<input matInput formControlName="bushelQuantity" type="number" step="5000" min="5000">
 							</mat-form-field>
 						</ion-col>
 
 						<ion-col>
 							<mat-form-field>
-								<mat-label>Product</mat-label>
+								<mat-label>{{ t("Product") }}</mat-label>
 								<mat-select formControlName="product">
 									<mat-option *ngFor="let product of productList" [value]="product">{{ product }}</mat-option>
 								</mat-select>
-								<mat-error>Please choose a product</mat-error>
+								<mat-error>{{ t("Please select a product.") }}</mat-error>
 							</mat-form-field>
 						</ion-col>
 					</ion-row>
@@ -29,19 +29,19 @@
 					<ion-row>
 						<ion-col>
 							<mat-form-field>
-								<mat-label>Starting ID</mat-label>
+								<mat-label>{{ t("Starting ID") }}</mat-label>
 								<input matInput formControlName="startId" type="number" min="1">
-								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.required">Please input an ID</mat-error>
+								<mat-error *ngIf="warehouseReceiptGroupForm.controls['startId'].errors?.required">{{ t("Please input an ID.") }}</mat-error>
 							</mat-form-field>
 						</ion-col>
 
 						<ion-col>
 							<mat-form-field>
-								<mat-label>Plant</mat-label>
+								<mat-label>{{ t("Plant") }}</mat-label>
 								<mat-select formControlName="plant">
 									<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
 								</mat-select>
-								<mat-error>Please choose a location</mat-error>
+								<mat-error>{{ t("Please select a plant.") }}</mat-error>
 							</mat-form-field>
 						</ion-col>
 					</ion-row>
@@ -49,14 +49,14 @@
 					<ion-row>
 						<ion-col>
 							<mat-form-field>
-								<mat-label># of Warehouse Receipts</mat-label>
+								<mat-label>{{ t("# of Warehouse Receipts") }}</mat-label>
 								<input matInput formControlName="quantity" type="number" min="1">
 							</mat-form-field>
 						</ion-col>
 
 						<ion-col>
 							<mat-form-field>
-								<mat-label>Date</mat-label>
+								<mat-label>{{ t("Date") }}</mat-label>
 								<input matInput formControlName="receiptDates" [matDatepicker]="datesPicker" readonly>
 								<mat-datepicker-toggle matSuffix [for]="datesPicker"></mat-datepicker-toggle>
 								<mat-datepicker #datesPicker></mat-datepicker>
@@ -68,11 +68,11 @@
 		</ion-card>
 
 		<ion-card formArrayName="warehouseReceiptList" *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList')">
-			<ion-card-header>Warehouse Receipts</ion-card-header>
+			<ion-card-header>{{ t("Warehouse Receipts") }}</ion-card-header>
 
 			<ion-card-content>
 				<ion-item>
-					<mat-error *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId; else nothing">Cannot create group with duplicate ID's</mat-error>
+					<mat-error *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId; else nothing">{{ t("duplicate-id-error") }}</mat-error>
 					<ng-template #nothing></ng-template>
 				</ion-item>
 
@@ -83,14 +83,14 @@
 								<mat-form-field>
 									<mat-label>ID</mat-label>
 									<input matInput formControlName="id" type="number" min="1">
-									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.required">Please input an ID</mat-error>
-									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.idExists">ID already exists</mat-error>
+									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.required">{{ t("Please input an ID.") }}</mat-error>
+									<mat-error *ngIf="warehouseReceiptGroupForm.get(['warehouseReceiptList', i, 'id']).errors?.idExists">{{ t("ID already exists.") }}</mat-error>
 								</mat-form-field>
 							</ion-col>
 
 							<ion-col>
 								<mat-form-field>
-									<mat-label>Plant</mat-label>
+									<mat-label>{{ t("Plant") }}</mat-label>
 									<mat-select formControlName="plant">
 										<mat-option *ngFor="let plant of plantList" [value]="plant">{{ plant }}</mat-option>
 									</mat-select>
@@ -99,14 +99,14 @@
 
 							<ion-col>
 								<mat-form-field>
-									<mat-label>Product</mat-label>
+									<mat-label>{{ t("Product") }}</mat-label>
 									<input matInput formControlName="product" >
 								</mat-form-field>
 							</ion-col>
 
 							<ion-col>
 								<mat-form-field>
-									<mat-label>Date</mat-label>
+									<mat-label>{{ t("Date") }}</mat-label>
 									<input matInput formControlName="startDate" [matDatepicker]="picker" readonly>
 									<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 									<mat-datepicker #picker></mat-datepicker>
@@ -115,7 +115,7 @@
 
 							<ion-col>
 								<mat-form-field>
-									<mat-label>Bushel Qty</mat-label>
+									<mat-label>{{ t("Bushel Qty") }}</mat-label>
 									<input matInput formControlName="bushelQuantity" type="number" step="5000" min="5000">
 								</mat-form-field>
 							</ion-col>
@@ -124,13 +124,13 @@
 				</ion-item>
 
 				<ion-item lines="none">
-					<mat-error *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId; else nothing">Cannot create group with duplicate ID's</mat-error>
+					<mat-error *ngIf="warehouseReceiptGroupForm.get('warehouseReceiptList').errors?.duplicateId; else nothing">{{ t("Cannot create group with duplicate ID's") }}</mat-error>
 					<ng-template #nothing></ng-template>
 				</ion-item>
 
 				<div class="action-bar">
-					<ion-button (click)="cancel()">Cancel</ion-button>
-					<ion-button (click)="confirm()" [disabled]="warehouseReceiptGroupForm.invalid">Confirm</ion-button>
+					<ion-button (click)="cancel()">{{ "Cancel" | translocoNested:'actions' }}</ion-button>
+					<ion-button (click)="confirm()" [disabled]="warehouseReceiptGroupForm.invalid">{{ "Confirm" | translocoNested:'actions' }}</ion-button>
 				</div>
 			</ion-card-content>
 		</ion-card>
