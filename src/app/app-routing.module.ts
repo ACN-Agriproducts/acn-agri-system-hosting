@@ -86,7 +86,11 @@ const routes: Routes = [
           {
             path: 'ticket-console',
             loadChildren: () => import('./pages/tickest/ticket-console/ticket-console.module').then(m => m.TicketConsolePageModule)
-          }
+          },
+          {
+            path: 'load-orders',
+            loadChildren: () => import('./pages/load-orders/load-orders.module').then( m => m.LoadOrdersPageModule)
+          },
         ]
       },
     ]
@@ -103,7 +107,8 @@ const routes: Routes = [
     path: '**',
     redirectTo: '/dashboard/home',
     pathMatch: 'full',
-  },
+  }
+
 ];
 
 @NgModule({
