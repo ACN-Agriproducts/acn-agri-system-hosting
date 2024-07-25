@@ -1,4 +1,4 @@
-<ion-card>
+<ion-card *transloco="let t; read: 'settings'">
 
     <ion-card-header>
         <ion-item class="ion-no-padding" lines="none">
@@ -24,7 +24,7 @@
             <ion-row>
                 <ion-col size="4">
                     <ion-item lines="none" class="ion-no-padding">
-                        <ion-label class="label-title">Privileges</ion-label>
+                        <ion-label class="label-title">{{ t("Privileges") }}</ion-label>
                     </ion-item>
                 </ion-col>
                 <ion-col size="8">
@@ -32,49 +32,49 @@
                     <ion-list  class="list-item-privileges">
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Tickets</ion-label>
+                                <ion-label class="label-item">{{ t("Tickets") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
 
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Invoices</ion-label>
+                                <ion-label class="label-item">{{ t("Invoices") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
 
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Inventory</ion-label>
+                                <ion-label class="label-item">{{ t("Inventory") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
 
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Contract</ion-label>
+                                <ion-label class="label-item">{{ t("Contract") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
 
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Directory</ion-label>
+                                <ion-label class="label-item">{{ t("Directory") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
 
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Employees</ion-label>
+                                <ion-label class="label-item">{{ t("Employees") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
 
                         <ion-radio-group value="yes">
                             <ion-item lines="none">
-                                <ion-label class="label-item">Users</ion-label>
+                                <ion-label class="label-item">{{ t("Users") }}</ion-label>
                                 <ion-radio mode="ios" slot="start" value="yes"></ion-radio>
                             </ion-item>
                         </ion-radio-group>
@@ -85,7 +85,7 @@
             <ion-row>
                 <ion-col size="4">
                     <ion-item lines="none" class="ion-no-padding">
-                        <ion-label class="label-title">Works at</ion-label>
+                        <ion-label class="label-title">{{ t("Works at") }}</ion-label>
                     </ion-item>
                 </ion-col>
                 <ion-col size="8">
