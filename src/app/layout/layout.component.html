@@ -25,7 +25,7 @@
                         <ion-item (click)="selectedIndex = i" routerDirection="forward" routerLinkActive="selected"
                             [routerLink]="[p.url]" lines="none" detail="false" *ngIf="p.permission(permissions)">
                             <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
-                            <ion-label>{{ t(p.title) | titlecase}}</ion-label>
+                            <ion-label>{{ t(p.title) }}</ion-label>
                         </ion-item>
                     </ion-menu-toggle>
                 </ion-list>

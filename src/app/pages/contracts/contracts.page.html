@@ -1,5 +1,5 @@
 <ion-header *transloco="let t, read: 'contracts.table'">
-    <app-header-toolbar [titulo]="t('contracts')"></app-header-toolbar>
+    <app-header-toolbar [titulo]="'layout.'+'contracts' | transloco"></app-header-toolbar>
     <ion-toolbar class="contract-toolbar">
         <div>
             <mat-form-field appearance="outline">
