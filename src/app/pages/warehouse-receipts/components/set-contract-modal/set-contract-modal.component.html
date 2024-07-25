@@ -1,19 +1,20 @@
-<h2 mat-dialog-title>Set {{ contractType }} Contract</h2>
 
-<mat-dialog-content>
-	<form #contractForm="ngForm">
+<form #contractForm="ngForm" *transloco="let t; read: 'warehouse receipts'">
+	<h2 mat-dialog-title>{{ t("Set") }} {{ t(contractType) }}</h2>
+
+	<mat-dialog-content>
 		<mat-grid-list cols="6" rowHeight="70px" gutterSize="15px">
 			<mat-grid-tile colspan="4">
 				<mat-form-field appearance="fill">
 					<mat-label>ID</mat-label>
 					<input matInput required [(ngModel)]="data.id" name="id">
-					<mat-error>ID is <strong>required</strong></mat-error>
+					<mat-error>ID <strong>{{ "required" | translocoNested:"messages" }}</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="2">
 				<mat-form-field appearance="fill">
-					<mat-label>Date</mat-label>
+					<mat-label>{{ t("Date") }}</mat-label>
 					<input matInput [matDatepicker]="picker" readonly required 
 					[(ngModel)]="data.startDate" name="startDate">
 					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -23,38 +24,41 @@
 
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>Future Price</mat-label>
+					<mat-label>{{ t("Future Price") }}</mat-label>
 					<span matPrefix>$ &nbsp;</span>
 					<input matInput type="number" required [(ngModel)]="data.futurePrice" name="futurePrice">
-					<mat-error>Future Price is <strong>required</strong></mat-error>
+					<mat-error>{{ t("Future Price") }} <strong>{{ "required" | translocoNested:"messages" }}</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 
 			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>Base Price</mat-label>
+					<mat-label>{{ t("Base Price") }}</mat-label>
 					<span matPrefix>$ &nbsp;</span>
 					<input matInput type="number" required [(ngModel)]="data.basePrice" name="basePrice">
-					<mat-error>Base Price is <strong>required</strong></mat-error>
+					<mat-error>{{ t("Base Price") }} <strong>{{ "required" | translocoNested:"messages" }}</strong></mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 		</mat-grid-list>
-	</form>
 
-	<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
-		<ngx-dropzone-label>
-			<mat-icon>cloud_upload</mat-icon>
-			<h3>Upload {{ contractType }} Contract</h3>
-			<p>Simply drag and drop or click here to choose a file.</p>
-		</ngx-dropzone-label>
+		<ngx-dropzone class="dropzone" [multiple]="false" (change)="onSelect($event)">
+			<ngx-dropzone-label>
+				<mat-icon>cloud_upload</mat-icon>
+				<h3>{{ "Upload" | translocoNested:"actions" }} {{ t(contractType) }}</h3>
+				<p>{{ "drag-drop-message" | translocoNested:"actions" }}</p>
+			</ngx-dropzone-label>
 
-		<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
-			<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
-		</ngx-dropzone-preview>
-	</ngx-dropzone>
-</mat-dialog-content>
+			<ngx-dropzone-preview *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+				<ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+			</ngx-dropzone-preview>
+		</ngx-dropzone>
+	</mat-dialog-content>
 
-<mat-dialog-actions class="action-bar">
-	<button mat-button color="primary" (click)="cancel()">Cancel</button>
-	<button mat-button color="primary" (click)="confirm()" [disabled]="contractForm.invalid">Confirm</button>
-</mat-dialog-actions>
+	<mat-dialog-actions class="action-bar">
+		<button mat-button color="primary" (click)="cancel()">{{ "Cancel" | translocoNested:"actions" }}</button>
+		<button mat-button color="primary" (click)="confirm()" [disabled]="contractForm.invalid">{{ "Confirm" | translocoNested:"actions" }}</button>
+	</mat-dialog-actions>
+</form>
+
+
+

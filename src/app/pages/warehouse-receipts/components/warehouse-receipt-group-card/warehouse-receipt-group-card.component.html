@@ -1,21 +1,21 @@
-<ion-card class="wr-card">
+<ion-card class="wr-card" *transloco="let t; read: 'warehouse receipts'">
 	<div class="wr-group">
 		<div class="info-section">
 			<div class="group-info">
 				<div class="info">
-					<ion-text>Created: <b>{{ wrGroup.createdAt | date }}</b></ion-text>
-					<ion-text>ID Range: <b>{{ idRange }}</b></ion-text>
-					<ion-text>Quantity: <b>{{ wrGroup.totalBushelQuantity | number}} BU</b></ion-text>
-					<ion-text>Product: <b>{{ wrGroup.product }}</b></ion-text>
+					<ion-text>{{ t("Created") }}: <b>{{ wrGroup.createdAt | date }}</b></ion-text>
+					<ion-text>{{ t("ID Range") }}: <b>{{ idRange }}</b></ion-text>
+					<ion-text>{{ t("Quantity") }}: <b>{{ wrGroup.totalBushelQuantity | number}} BU</b></ion-text>
+					<ion-text>{{ t("Product") }}: <b>{{ wrGroup.product }}</b></ion-text>
 				</div>
 
 				<div class="group-status">
-					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ wrGroup.status }}</ion-text>
+					<ion-text class="status-text" [ngClass]="wrGroup.status.toLocaleLowerCase()">{{ "statuses."+wrGroup.status | transloco }}</ion-text>
 				</div>
 
 				<button mat-icon-button class="group-options-button" 
 					[matMenuTriggerFor]="groupOptions" 
-					matTooltip="Options" 
+					[matTooltip]="t('Options')" 
 					matTooltipClass="tooltip-primary-solid" 
 					matTooltipPosition="left" 
 					matTooltipShowDelay="1000"
@@ -29,7 +29,7 @@
 						(click)="viewContractDialog(true)"
 					>
 						<mat-icon>picture_as_pdf</mat-icon>
-						<span>View Purchase Contract</span>
+						<span>{{ t("View Purchase Contract") }}</span>
 					</button>
 					<button mat-menu-item
 						class="group-option"
@@ -37,7 +37,7 @@
 						(click)="viewContractDialog(false)"
 					>
 						<mat-icon>picture_as_pdf</mat-icon>
-						<span>View Sale Contract</span>
+						<span>{{ t("View Sales Contract") }}</span>
 					</button>
 					<button mat-menu-item 
 						class="group-option cancel-group"
@@ -45,7 +45,7 @@
 						(click)="cancelGroup()"
 					>
 						<mat-icon>cancel</mat-icon>
-						<span>Cancel Group</span>
+						<span>{{ t("Cancel Group") }}</span>
 					</button>
 				</mat-menu>
 			</div>
@@ -53,7 +53,7 @@
 			<hr>
 
 			<div class="group-stats">
-				<ion-text>Statistics: </ion-text>
+				<ion-text>{{ t("Statistics") }}: </ion-text>
 			</div>
 		</div>
 
@@ -64,16 +64,16 @@
 				[disabled]="wrGroup.status === 'CANCELLED'"
 			>
 				<div class="contract-header">
-					<ion-card-title>Purchase Contract</ion-card-title>
+					<ion-card-title>{{ t("Purchase Contract") }}</ion-card-title>
 					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.purchaseContract?.status.toLocaleLowerCase()">
-						{{ wrGroup.purchaseContract?.status ?? "N/A" }}
+						{{ "statuses."+(wrGroup.purchaseContract?.status ?? "N/A") | transloco }}
 					</ion-text>
 
 					<button mat-icon-button 
 						*ngIf="isEditable(wrGroup.purchaseContract)" 
 						(click)="setContract(wrGroup.purchaseContract, true)" 
-						matTooltip="Set Contract" 
+						[matTooltip]="t('Set Contract')" 
 						matTooltipClass="tooltip-primary-solid" 
 						matTooltipPosition="left" 
 						matTooltipShowDelay="1000"
@@ -87,8 +87,8 @@
 						<ion-text>ID: &nbsp; {{ wrGroup.purchaseContract.id }}</ion-text>
 						<ion-text class="align-right">{{ wrGroup.purchaseContract.startDate | date }}</ion-text>
 						<div class="prices">
-							<ion-card-title class="border-right">Future Price</ion-card-title>
-							<ion-card-title>Base Price</ion-card-title>
+							<ion-card-title class="border-right">{{ t("Future Price") }}</ion-card-title>
+							<ion-card-title>{{ t("Base Price") }}</ion-card-title>
 							<ion-text class="border-right">{{ wrGroup.purchaseContract.futurePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
 							<ion-text>{{ wrGroup.purchaseContract.basePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
 						</div>
@@ -102,10 +102,10 @@
 				[disabled]="wrGroup.status === 'CANCELLED'"
 			>
 				<div class="contract-header">
-					<ion-card-title>Sale Contract</ion-card-title>
+					<ion-card-title>{{ t("Sales Contract") }}</ion-card-title>
 					&nbsp;
 					<ion-text class="status-text" [ngClass]="wrGroup.saleContract?.status.toLocaleLowerCase()">
-						{{ wrGroup.saleContract?.status ?? "N/A" }}
+						{{ "statuses."+(wrGroup.saleContract?.status ?? "N/A") | transloco }}
 						<span *ngIf="paidCount() > 0">
 							{{ paidCount() }} / {{ wrList.length }}
 						</span>
@@ -114,7 +114,7 @@
 					<button mat-icon-button 
 						*ngIf="isEditable(wrGroup.saleContract)" 
 						(click)="setContract(wrGroup.saleContract, false)" 
-						matTooltip="Set Contract" 
+						[matTooltip]="t('Set Contract')" 
 						matTooltipClass="tooltip-primary-solid" 
 						matTooltipPosition="left" 
 						matTooltipShowDelay="1000"
@@ -129,8 +129,8 @@
 						<ion-text>ID: &nbsp; {{ wrGroup.saleContract.id }}</ion-text>
 						<ion-text class="align-right">{{ wrGroup.saleContract.startDate | date }}</ion-text>
 						<div class="prices">
-							<ion-card-title class="border-right">Future Price </ion-card-title>
-							<ion-card-title>Base Price </ion-card-title>
+							<ion-card-title class="border-right">{{ t("Future Price") }}</ion-card-title>
+							<ion-card-title>{{ t("Base Price") }}</ion-card-title>
 							<ion-text class="border-right">{{ wrGroup.saleContract.futurePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
 							<ion-text>{{ wrGroup.saleContract.basePrice | currency:'USD':"symbol-narrow":"1.2-3" }}</ion-text>
 						</div>
@@ -143,11 +143,11 @@
 	<ion-card class="expandable-wr-list" [disabled]="wrGroup.status === 'CANCELLED'">
 		<div class="table-row table-header">
 			<ion-text>ID</ion-text>
-			<ion-text>Start Date</ion-text>
-			<ion-text>Product</ion-text>
-			<ion-text>Bushel Qty</ion-text>
-			<ion-text>Plant</ion-text>
-			<ion-text>Paid</ion-text>
+			<ion-text>{{ t("Start Date") }}</ion-text>
+			<ion-text>{{ t("Product") }}</ion-text>
+			<ion-text>{{ t("Bushel Qty") }}</ion-text>
+			<ion-text>{{ t("Plant") }}</ion-text>
+			<ion-text>{{ t("Paid") }}</ion-text>
 		</div>
 		<div class="table-row table-body" 
 			[class.odd]="odd" 
@@ -163,7 +163,7 @@
 					class="paid-button" 
 					(click)="updatePaidStatus(warehouseReceipt, i)" 
 					[disabled]="warehouseReceipt.isPaid"
-					matTooltip="Set as paid" 
+					[matTooltip]="t('Set as Paid')" 
 					matTooltipClass="tooltip-primary-solid" 
 					matTooltipPosition="before" 
 					matTooltipShowDelay="1000"
@@ -182,6 +182,7 @@
 						wrGroup.status !== 'CLOSED' ? 'View / Re-Upload' : 
 						'View'
 					}} Document"
+					[matTooltip]="t(!warehouseReceipt.pdfReference ? 'Upload' : wrGroup.status !=='CLOSED' ? 'View / Re-Upload' : 'View') + ' ' + t('Document')"
 					matTooltipClass="tooltip-primary-solid"
 					matTooltipPosition="before"
 					matTooltipShowDelay="1000"
@@ -198,7 +199,7 @@
 	<div class="expansion-bar">
 		<hr>
 		<mat-icon (click)="toggleExpandable($event)" 
-			matTooltip="Toggle Warehouse Receipt List" 
+			[matTooltip]="t('Toggle Warehouse Receipt List')" 
 			matTooltipClass="tooltip-primary-solid" 
 			matTooltipPosition="left" 
 			matTooltipShowDelay="1000"

@@ -12,6 +12,7 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { lastValueFrom } from 'rxjs';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { InvoiceDialogComponent } from '@shared/printable/printable-invoice/invoice-dialog/invoice-dialog.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class OptionsComponent implements OnInit {
     private session: SessionInfo,
     private snack: SnackbarService,
     private storage: Storage,
+    private transloco: TranslocoService
   ) { }
 
   ngOnInit(): void {
@@ -78,7 +80,7 @@ export class OptionsComponent implements OnInit {
       `/companies/${this.currentCompany}/invoices/${this.invoice.id}/proofPayment`;
 
     const dialogData: UploadDialogData = {
-      docType: "Proof of Payment",
+      docType: this.transloco.translate("invoices."+"Proof of Payment"),
       hasDoc: this.invoice.proofLinks != null,
       pdfRef,
       uploadable: this.invoice.status !== 'closed'
@@ -106,5 +108,18 @@ export class OptionsComponent implements OnInit {
 
   public openFixInvPage(): void {
     this.navController.navigateForward(`dashboard/invoices/item-fixes/${this.invoice.ref.id}`);
+  }
+
+  public cancelInvoice(): void {
+    this.invoice.update({
+      status: "cancelled"
+    })
+    .then(() => {
+      this.snack.openTranslated("Invoice cancelled", "success");
+    })
+    .catch(error => {
+      console.error(error);
+      this.snack.openTranslated("Could not cancel the invoice.", "error");
+    });
   }
 }

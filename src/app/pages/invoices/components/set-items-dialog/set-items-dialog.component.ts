@@ -17,7 +17,7 @@ import { Product } from '@shared/classes/product';
 })
 export class SetItemsDialogComponent implements OnInit {
   @ViewChild('itemForm') private itemForm: NgForm;
-  @ViewChild('drawer') private drawer: MatDrawer;
+  @ViewChild('drawer') public drawer: MatDrawer;
   @ViewChild('selectList') private selectList: MatSelectionList;
 
   public currentItem: DialogInvoiceItem = null;

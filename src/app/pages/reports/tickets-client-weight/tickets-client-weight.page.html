@@ -1,20 +1,20 @@
-<app-header-toolbar titulo="Client Weights"></app-header-toolbar>
+<app-header-toolbar [titulo]="'reports.'+'Client Weights' | transloco"></app-header-toolbar>
 
-<ion-content>
+<ion-content *transloco="let t; read: 'reports'">
   <div id="plant-bar">
     <app-plant-select></app-plant-select>
   </div>
   <div class="options-bar">
     <div id="toolbar">
       <mat-form-field appearance="outline">
-        <mat-label>Type</mat-label>
+        <mat-label>{{ t("Type") }}</mat-label>
         <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
-            <mat-option [value]="true">In Tickets</mat-option>
-            <mat-option [value]="false">Out Tickets</mat-option>
+            <mat-option [value]="true">{{ t("In Tickets") }}</mat-option>
+            <mat-option [value]="false">{{ t("Out Tickets") }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-          <mat-label>Range</mat-label>
+          <mat-label>{{ t("Range") }}</mat-label>
           <mat-select [(ngModel)]="ticketRangeUpper" (selectionChange)="ticketIdSort()">
               <mat-option *ngFor="let num of idRangeList" [value]="num">{{((num-1)*100) + "-" + (num*100-1)}}</mat-option>
           </mat-select>
@@ -25,7 +25,7 @@
         color="primary" 
         [disabled]="ticketsToUpload?.size == 0" 
         (click)="submit()">
-        Submit
+        {{ "Submit" | translocoNested:'actions' }}
       </button>
     </div>
   </div>
@@ -34,10 +34,10 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>Client</th>
-        <th>Scale Weight</th>
-        <th>Client Weight</th>
-        <th>Loss</th>
+        <th>{{ t("Client") }}</th>
+        <th>{{ t("Scale Weight") }}</th>
+        <th>{{ t("Client Weight") }}</th>
+        <th>{{ t("Loss") }}</th>
       </tr>
     </thead>
     <tbody>
