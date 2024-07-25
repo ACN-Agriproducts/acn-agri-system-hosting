@@ -58,7 +58,7 @@ export class TruckersFormComponent implements OnInit {
   private newTruckerGroup(): FormGroup {
     return this.fb.group({
       trucker: ['', [Validators.required, this.truckerInListValidator()]],
-      freight: [0, Validators.required]
+      freight: [this.contract.default_freight ?? 0, Validators.required]
     });
   }
 
