@@ -1,16 +1,18 @@
-<h1>Choose Name for merge</h1>
-<div mat-dialog-content>
-    <p>Are you sure you want to merge the following truckers?</p>
-    <ul>
-        <li *ngFor="let trucker of truckerList">{{trucker.name}}</li>
-    </ul>
-
-    <mat-form-field>
-        <mat-label>New Name</mat-label>
-        <input matInput [(ngModel)]="name">
-    </mat-form-field>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-button [mat-dialog-close]="name">Ok</button>
-</div>
+<ng-container *transloco="let t; read: 'reports'">
+    <h1>{{ t("Choose Name for merge") }}</h1>
+    <div mat-dialog-content>
+        <p>{{ t("confirm-truckers-merge") }}</p>
+        <ul>
+            <li *ngFor="let trucker of truckerList">{{trucker.name}}</li>
+        </ul>
+    
+        <mat-form-field>
+            <mat-label>{{ t("New Name") }}</mat-label>
+            <input matInput [(ngModel)]="name">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onCancel()">{{ "Cancel" | translocoNested:'actions' }}</button>
+        <button mat-button [mat-dialog-close]="name">{{ "Ok" | translocoNested:'actions' }}</button>
+    </div>
+</ng-container>

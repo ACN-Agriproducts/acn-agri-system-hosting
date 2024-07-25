@@ -1,18 +1,18 @@
-<ion-card class="card-header">
+<ion-card class="card-header" *transloco="let t; read: 'employees'">
   <ion-item lines="none" (click)="filterEmployee = !filterEmployee ">
-    <ion-label>Employee</ion-label>
+    <ion-label>{{ t("Employee") }}</ion-label>
     <ion-icon name="chevron-down-outline" [class.active-arrow]="filterEmployee"></ion-icon>
   </ion-item>
   <ion-item lines="none" class="ion-hide-md-down" (click)="filterStatus = !filterStatus  ">
-    <ion-label>Status</ion-label>
+    <ion-label>{{ t("Status") }}</ion-label>
     <ion-icon name="chevron-down-outline" [class.active-arrow]="filterStatus "></ion-icon>
   </ion-item>
   <ion-item lines="none" class="ion-hide-sm-down" (click)="filterSalary = !filterSalary ">
-    <ion-label>Salary</ion-label>
+    <ion-label>{{ t("Salary") }}</ion-label>
     <ion-icon name="chevron-down-outline" [class.active-arrow]="filterSalary"></ion-icon>
   </ion-item>
   <ion-item lines="none" class="ion-hide-sm-down">
-    <ion-label>Manage</ion-label>
+    <ion-label>{{ t("Manage") }}</ion-label>
   </ion-item>
 </ion-card>
 

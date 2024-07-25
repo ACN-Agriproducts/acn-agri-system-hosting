@@ -9,7 +9,6 @@ import { InvoicesPageRoutingModule } from './invoices-routing.module';
 
 import { InvoicesPage } from './invoices.page';
 import { TableComponent } from './components/table/table.component';
-import { ModalComponent } from './components/modal/modal.component';
 import { OptionsComponent } from './components/options/options.component';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { OptionNewInvoiceComponent } from './components/option-new-invoice/option-new-invoice.component';
@@ -28,7 +27,6 @@ import { SetItemsDialogComponent } from './components/set-items-dialog/set-items
   declarations: [
     InvoicesPage,
     TableComponent,
-    ModalComponent,
     OptionsComponent,
     OptionNewInvoiceComponent,
     SetItemsDialogComponent,

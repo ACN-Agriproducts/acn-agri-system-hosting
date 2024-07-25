@@ -1,19 +1,19 @@
-<app-header-toolbar titulo="Trucker Reports"></app-header-toolbar>
+<app-header-toolbar [titulo]="'reports.'+'Trucker Reports' | transloco"></app-header-toolbar>
 
 
 
-<ion-content>
+<ion-content *transloco="let t; read: 'reports'">
   <ion-row>
     <ion-col size="6">
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Report Information</ion-card-title>
+          <ion-card-title>{{ t("Report Information") }}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
           <ion-row>
             <ion-col size="4">
               <mat-form-field>
-                <mat-label>Plants</mat-label>
+                <mat-label>{{ t("Plants") }}</mat-label>
                 <mat-select multiple [(ngModel)]="chosenPlants">
                   <mat-option *ngFor="let plant of plantList" [value]="plant">{{plant.ref.id | titlecase}}</mat-option>
                 </mat-select>
@@ -21,7 +21,7 @@
             </ion-col>
             <ion-col size="5">
               <mat-form-field>
-                <mat-label>Date Range</mat-label>
+                <mat-label>{{ t("Date Range") }}</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
                   <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
                   <input matEndDate placeholder="End date" [(ngModel)]="endDate">
@@ -32,7 +32,7 @@
             </ion-col>
             <ion-col size="3">
               <mat-form-field>
-                <mat-label>Tolerance</mat-label>
+                <mat-label>{{ t("Tolerance") }}</mat-label>
                 <span matSuffix>%</span>
                 <input matInput type="number" [(ngModel)]="_tolerance">
               </mat-form-field>
@@ -40,7 +40,7 @@
 
             <ion-col size="4">
               <mat-form-field>
-                <mat-label>Freight</mat-label>
+                <mat-label>{{ t("Freight") }}</mat-label>
                 <span matPrefix>$</span>
                 <span matSuffix>/</span>
                 <input matInput type="number" [(ngModel)]="startFreight">
@@ -48,7 +48,7 @@
             </ion-col>
             <ion-col size="4">
               <mat-form-field>
-                <mat-label>Unit</mat-label>
+                <mat-label>{{ t("Unit") }}</mat-label>
                 <mat-select [(ngModel)]="freightUnit">
                   <mat-option value="lbs">Lbs</mat-option>
                   <mat-option value="mTon">mTon</mat-option>
@@ -70,13 +70,13 @@
             </ion-col> -->
             <ion-col size="4">
               <mat-form-field>
-                <mat-label>Exchange Rate</mat-label>
+                <mat-label>{{ t("Exchange Rate") }}</mat-label>
                 <input matInput type="number" [(ngModel)]="exchangeRate">
               </mat-form-field>
             </ion-col>
           </ion-row>
-          <button mat-button (click)="getTickets()" [disabled]="startDate == null || endDate == null || chosenPlants.length == 0 ">Submit</button>
-          <mat-checkbox [(ngModel)]="InTicketsOnly">Only In Tickets</mat-checkbox>
+          <button mat-button (click)="getTickets()" [disabled]="startDate == null || endDate == null || chosenPlants.length == 0 ">{{ 'Submit' | translocoNested:'actions'}}</button>
+          <mat-checkbox [(ngModel)]="InTicketsOnly">{{ t("Only In Tickets") }}</mat-checkbox>
         </ion-card-content>
       </ion-card>
 
@@ -95,7 +95,7 @@
                     {{trucker.name}}
                   </mat-checkbox>
                   <mat-form-field appearance="fill" class="freight-input">
-                    <mat-label>Freight</mat-label>
+                    <mat-label>{{ t("Freight") }}</mat-label>
                     <span matPrefix>$</span>
                     <input matInput type="number" [value]="startFreight" (change)="trucker.changeAllFreight($event.target['valueAsNumber'])">
                   </mat-form-field>
@@ -108,7 +108,7 @@
                       {{ticket.getDescription()}}
                     </mat-checkbox>
                     <mat-form-field class="freight-input">
-                      <mat-label>Freight</mat-label>
+                      <mat-label>{{ t("Freight") }}</mat-label>
                       <span matPrefix>$</span>
                       <input matInput type="number" [(ngModel)]="ticket.freight.amount">
                     </mat-form-field>
@@ -116,17 +116,17 @@
                 </div>
               </div>
             </ion-item>
-            <button mat-button (click)="mergeTruckers(transport)">Merge</button>
+            <button mat-button (click)="mergeTruckers(transport)">{{ 'Merge' | translocoNested:'actions'}}</button>
           </ion-card-content>
         </ion-card>
-        <button mat-raised-button (click)="download()">Download</button>
+        <button mat-raised-button (click)="download()">{{ 'Download' | translocoNested:'actions' }}</button>
         <button mat-raised-button
           ngxPrint
           [useExistingCss]="true"
           printSectionId="printable-report"
           [disabled]="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"
           (click)="saveTicketFreights()"
-        >Print</button>
+        >{{ 'Print' | translocoNested:'actions' }}</button>
         <mat-checkbox (change)="getTruckerPrintableTickets()" [disabled]="ticketsBoxChecked">Print with tickets</mat-checkbox>
         <mat-spinner [diameter]="20" *ngIf="ticketsBoxChecked && printableTicketsDone < getTicketAmount()"></mat-spinner>
       </ng-container>
@@ -140,18 +140,18 @@
                 <th colspan="12">{{trucker.name}}</th>
               </tr>
               <tr>
-                <th>Date</th>
+                <th>{{ t("Date") }}</th>
                 <th>Id</th>
-                <th>Contract</th>
-                <th>Net Weight</th>
-                <th>Client Weight</th>
-                <th>Freight</th>
-                <th>Total</th>
-                <th>Difference</th>
-                <th>Tolerance</th>
-                <th>Loss</th>
-                <th>Price</th>
-                <th>Discounted Total</th>
+                <th>{{ t("Contract") }}</th>
+                <th>{{ t("Net Weight") }}</th>
+                <th>{{ t("Client Weight") }}</th>
+                <th>{{ t("Freight") }}</th>
+                <th>{{ t("Total") }}</th>
+                <th>{{ t("Difference") }}</th>
+                <th>{{ t("Tolerance") }}</th>
+                <th>{{ t("Loss") }}</th>
+                <th>{{ t("Price") }}</th>
+                <th>{{ t("Discounted Total") }}</th>
               </tr>
               <tr *ngFor="let ticket of trucker.getCheckedTickets()">
                 <td>{{ticket.ticket.dateOut | date: 'shortDate'}}</td>
@@ -168,7 +168,7 @@
                 <td>{{(((ticket.freight | pricePerUnit:null:null:ticket.freight.amount) * (ticket.ticket.net | massInUnit:freightUnit)) - (((ticket.ticket.net.subtract(ticket.ticket.original_weight) | massInUnit:freightUnit) - ((ticket.ticket.net | massInUnit:freightUnit) * tolerance / 100)) * (ticket.contract.price | pricePerUnit:freightUnit:ticket.contract.quantity) * exchangeRate)) | currency}}</td>
               </tr>
               <tr>
-                <th colspan="3">Totals</th>
+                <th colspan="3">{{ t("Totals") }}</th>
                 <th>{{trucker.getTotalWeight() | massDisplay:3:freightUnit}}</th>
                 <th colspan="2"></th>
                 <th>{{trucker.getFreightTotal() | currency:'USD':'symbol-narrow':'0.3-3'}}</th>

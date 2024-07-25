@@ -20,7 +20,7 @@ export class SetContractModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.contractType = this.data.status === 'PENDING' ? 'Sale' : 'Purchase';
+    this.contractType = this.data.status === 'PENDING' ? 'Sales Contract' : 'Purchase Contract';
   }
 
   public onSelect(event: any):void {

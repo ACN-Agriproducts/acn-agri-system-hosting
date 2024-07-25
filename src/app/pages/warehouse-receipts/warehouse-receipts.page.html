@@ -1,21 +1,21 @@
 <ion-header>
-	<app-header-toolbar titulo="Warehouse Receipts"></app-header-toolbar>
-	<ion-toolbar>
+	<app-header-toolbar [titulo]="'layout.'+'warehouse receipts' | transloco"></app-header-toolbar>
+	<ion-toolbar *transloco="let t; read: 'statuses'">
 		<ion-segment value="PENDING,ACTIVE,CLOSED,CANCELLED" (ionChange)="statusFilterChange($event)">
 			<ion-segment-button value="PENDING,ACTIVE,CLOSED,CANCELLED">
-				<ion-label>All</ion-label>
+				<ion-label>{{ t("All") }}</ion-label>
 			</ion-segment-button>
 			<ion-segment-button value="PENDING">
-				<ion-label>Pending</ion-label>
+				<ion-label>{{ t("Pending") }}</ion-label>
 			</ion-segment-button>
 			<ion-segment-button value="ACTIVE">
-				<ion-label>Active</ion-label>
+				<ion-label>{{ t("Active") }}</ion-label>
 			</ion-segment-button>
 			<ion-segment-button value="CLOSED">
-				<ion-label>Closed</ion-label>
+				<ion-label>{{ t("Closed") }}</ion-label>
 			</ion-segment-button>
 			<ion-segment-button value="CANCELLED">
-				<ion-label>Cancelled</ion-label>
+				<ion-label>{{ t("Cancelled") }}</ion-label>
 			</ion-segment-button>
 		</ion-segment>
 	</ion-toolbar>
@@ -23,19 +23,19 @@
 
 <ion-content class="ion-padding" [fullscreen]="true">
 	<div class="card-list">
-		<ion-card button="true" id="add-card" class="wr-card" (click)="nav('/dashboard/warehouse-receipts/set')">
+		<ion-card button="true" id="add-card" class="wr-card" (click)="nav('/dashboard/warehouse-receipts/set')" *transloco="let t; read: 'warehouse receipts'">
 			<div class="wr-group">
 				<div class="info-section">
-					<ion-card-title>+ Add Warehouse Receipts</ion-card-title>
+					<ion-card-title>+ {{ t("Add Warehouse Receipts")}}</ion-card-title>
 				</div>
 
 				<div class="contract-section">
 					<ion-card class="contract">
-						<ion-card-title>Purchase Contract</ion-card-title>
+						<ion-card-title>{{ t("Purchase Contract") }}</ion-card-title>
 					</ion-card>
 
 					<ion-card class="contract">
-						<ion-card-title>Sale Contract</ion-card-title>
+						<ion-card-title>{{ t("Sales Contract") }}</ion-card-title>
 					</ion-card>
 				</div>
 			</div>

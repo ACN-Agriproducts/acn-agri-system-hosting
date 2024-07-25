@@ -1,4 +1,4 @@
-<ion-card class="table-header grid-item ion-hide-md-down">
+<ion-card class="table-header grid-item ion-hide-md-down" *transloco="let t; read: 'invoices'">
     <ion-item lines="none" class="item-icon-hide-hover" (click)="number = number">
         <div class="item-text-header">
             <ion-text>N°</ion-text>
@@ -7,31 +7,31 @@
     </ion-item>
     <ion-item lines="none" class="item-icon-hide-hover" (click)="customer = customer">
         <div class="item-text-header">
-            <ion-text>Customer</ion-text>
+            <ion-text>{{ t("Customer") }}</ion-text>
             <ion-icon [class.active-arrow]="customer" name="chevron-down-outline" color="primary"></ion-icon>
         </div>
     </ion-item>
     <ion-item lines="none" class="item-icon-hide-hover" (click)="issue = issue">
         <div class="item-text-header">
-            <ion-text>Date</ion-text>
+            <ion-text>{{ t("Date") }}</ion-text>
             <ion-icon [class.active-arrow]="issue" name="chevron-down-outline" color="primary"></ion-icon>
         </div>
     </ion-item>
     <ion-item lines="none" class="item-icon-hide-hover" (click)="paid = paid">
         <div class="item-text-header">
-            <ion-text>Status</ion-text>
+            <ion-text>{{ t("Status") }}</ion-text>
             <ion-icon [class.active-arrow]="paid" name="chevron-down-outline" color="primary"></ion-icon>
         </div>
     </ion-item>
     <ion-item lines="none" class="item-icon-hide-hover" (click)="billed = billed">
         <div class="item-text-header">
-            <ion-text>Billed</ion-text>
+            <ion-text>{{ t("Billed") }}</ion-text>
             <ion-icon [class.active-arrow]="billed" name="chevron-down-outline" color="primary"></ion-icon>
         </div>
     </ion-item>
     <ion-item lines="none">
         <div class="item-text-header">
-            <ion-text>Manage</ion-text>
+            <ion-text>{{ t("Manage") }}</ion-text>
         </div>
     </ion-item>
 </ion-card>
@@ -47,7 +47,7 @@
             <ion-text>{{invoice.date | date}}</ion-text>
         </ion-item>
         <ion-item lines="none">
-            <ion-text class="status" [class]="invoice.status">{{invoice.status}}</ion-text>
+            <ion-text class="status" [class]="invoice.status">{{("statuses."+invoice.status) | transloco}}</ion-text>
         </ion-item>
         <ion-item lines="none">
             <ion-text class="item-text-price" color="dark">

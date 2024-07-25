@@ -1,7 +1,7 @@
-<app-header-toolbar titulo="Employees"></app-header-toolbar>
+<app-header-toolbar [titulo]="'layout.employees' | transloco"></app-header-toolbar>
 <ion-content>
     <div class="content-search">
-        <ion-searchbar></ion-searchbar>
+        <ion-searchbar [placeholder]="'employees.'+'Search' | transloco"></ion-searchbar>
     </div>
     <div class="content-list">
         <app-list></app-list>

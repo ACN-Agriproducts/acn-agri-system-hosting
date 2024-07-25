@@ -1,30 +1,30 @@
-<app-header-toolbar titulo="{{'Invoice ' + invoice.id}}" *ngIf="invoice"></app-header-toolbar>
+<app-header-toolbar [titulo]="('invoices.'+'Invoice' | transloco)+ ' ' + invoice.id" *ngIf="invoice"></app-header-toolbar>
 <ion-content *ngIf="invoice">
-  <ion-row>
+  <ion-row *transloco="let t; read: 'invoices'">
     <ion-col size='6'>
       <ion-card>
-        <ion-card-header>Seller Info</ion-card-header>
+        <ion-card-header>{{ t("Seller Info") }}</ion-card-header>
         <ion-card-content>
           <ion-grid>
             <ion-row>
               <ion-col size='7'>
-                <span class="info-label">Name:</span>
+                <span class="info-label">{{ t("Name") }}:</span>
                 <span class="info-content">{{invoice.seller.name}}</span>
               </ion-col>
               <ion-col size='5'>
-                <span class="info-label">Phone #</span>
+                <span class="info-label">{{ t("Phone") }} #</span>
                 <span class="info-content">{{invoice.seller.phone}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
-                <span class="info-label">Street</span>
+                <span class="info-label">{{ t("Street") }}</span>
                 <span class="info-content">{{invoice.seller.street}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size='5'>
-                <span class="info-label">City</span>
+                <span class="info-label">{{ t("City") }}</span>
                 <span class="info-content">{{invoice.seller.city}}</span>                
               </ion-col>
               <ion-col size='2'>              
@@ -32,11 +32,11 @@
                 <span class="info-content">{{invoice.seller.zip}}</span>                
               </ion-col>
               <ion-col size='2'>              
-                <span class="info-label" >State</span>
+                <span class="info-label" >{{ t("State") }}</span>
                 <span class="info-content">{{invoice.seller.state}}</span>                
               </ion-col>
               <ion-col size='3'>              
-                <span class="info-label">Country</span>
+                <span class="info-label">{{ t("Country") }}</span>
                 <span class="info-content">{{invoice.seller.country}}</span>                
               </ion-col>
             </ion-row>
@@ -47,28 +47,28 @@
 
     <ion-col size="6">
       <ion-card>
-        <ion-card-header>Buyer Info</ion-card-header>
+        <ion-card-header>{{ t("Buyer Info") }}</ion-card-header>
         <ion-card-content>
           <ion-grid>
             <ion-row>
               <ion-col size='7'>
-                <span class="info-label">Name:</span>
+                <span class="info-label">{{ t("Name") }}:</span>
                 <span class="info-content">{{invoice.buyer.name}}</span>
               </ion-col>
               <ion-col size='5'>
-                <span class="info-label">Phone #</span>
+                <span class="info-label">{{ t("Phone") }} #</span>
                 <span class="info-content">{{invoice.buyer.phone}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col>
-                <span class="info-label">Street</span>
+                <span class="info-label">{{ t("Street") }}</span>
                 <span class="info-content">{{invoice.buyer.street}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col size='5'>
-                <span class="info-label">City</span>
+                <span class="info-label">{{ t("City") }}</span>
                 <span class="info-content">{{invoice.buyer.city}}</span>                
               </ion-col>
               <ion-col size='2'>              
@@ -76,11 +76,11 @@
                 <span class="info-content">{{invoice.buyer.zip}}</span>                
               </ion-col>
               <ion-col size='2'>              
-                <span class="info-label" >State</span>
+                <span class="info-label" >{{ t("State") }}</span>
                 <span class="info-content">{{invoice.buyer.state}}</span>                
               </ion-col>
               <ion-col size='3'>              
-                <span class="info-label">Country</span>
+                <span class="info-label">{{ t("Country") }}</span>
                 <span class="info-content">{{invoice.buyer.country}}</span>                
               </ion-col>
             </ion-row>
@@ -92,7 +92,7 @@
     <ion-col *ngFor="let item of invoice.items; let i = index" size="6">
       <ion-card>
         <ion-card-header>
-          <span>Item {{i + 1}}</span>
+          <span>{{ t("Item") }} {{i + 1}}</span>
         </ion-card-header>
         <ion-card-content>
           <ion-item>
@@ -100,19 +100,19 @@
               <ion-row>
                 <ion-col size="6">
                   <mat-form-field>
-                    <mat-label>Item Name</mat-label>
+                    <mat-label>{{ t("Item Name") }}</mat-label>
                     <input matInput disabled [value]="item.name">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="2">
                   <mat-form-field>
-                    <mat-label>Quantity</mat-label>
+                    <mat-label>{{ t("Quantity") }}</mat-label>
                     <input matInput type="number" disabled [value]="item.quantity">
                   </mat-form-field>
                 </ion-col>
                 <ion-col size="2">
                   <mat-form-field>
-                    <mat-label>Price</mat-label>
+                    <mat-label>{{ t("Price") }}</mat-label>
                     <div matPrefix>$</div>
                     <input matInput type="number" disabled [value]="item.price">
                   </mat-form-field>
@@ -131,7 +131,7 @@
                     </ion-col>
                     <ion-col size="3">
                       <mat-form-field>
-                        <mat-label>Product</mat-label>
+                        <mat-label>{{ t("Product") }}</mat-label>
                         <mat-select [(ngModel)]="info.product">
                           <mat-option *ngFor="let product of productList" value={{product.ref.id}}>{{product.ref.id}}</mat-option>
                         </mat-select>
@@ -139,14 +139,14 @@
                     </ion-col>
                     <ion-col size="2">
                       <mat-form-field>
-                        <mat-label>Quantity</mat-label>
+                        <mat-label>{{ t("Quantity") }}</mat-label>
                         <input matInput type="number" [(ngModel)]="info.quantity">
                         <div matSuffix>lbs</div>
                       </mat-form-field>
                     </ion-col>
                     <ion-col size="3">
                       <mat-form-field>
-                        <mat-label>Plant</mat-label>
+                        <mat-label>{{ t("Plant") }}</mat-label>
                         <mat-select [(ngModel)]="info.plant">
                           <mat-option *ngFor="let plant of plantsList" value="{{plant.ref.id}}" >{{plant.ref.id | titlecase}}</mat-option>
                         </mat-select>
@@ -154,10 +154,10 @@
                     </ion-col>
                     <ion-col size="3">
                       <mat-form-field>
-                        <mat-label>Storage</mat-label>
+                        <mat-label>{{ t("Storage") }}</mat-label>
                         <mat-select [disabled]="!info.plant" [(ngModel)]="info.tank">
                           <mat-option *ngFor="let tank of getPlantInv(info.plant)" value="{{tank.name}}">{{tank.name}}</mat-option>
-                          <mat-option value="none">None</mat-option>
+                          <mat-option value="none">{{ t("None") }}</mat-option>
                         </mat-select>
                       </mat-form-field>
                     </ion-col>
@@ -167,11 +167,11 @@
             </ion-grid>
           </ion-item>
           <ion-item lines="none">
-            <button mat-button color="primary" (click)="addInvButton(item.inventoryInfo)">+ Add Inv...</button>
+            <button mat-button color="primary" (click)="addInvButton(item.inventoryInfo)">+ {{ t("Add Inv") }}...</button>
           </ion-item>
         </ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
-  <button mat-button color="primary" (click)="submit()" [disabled]="!formValid()">Submit</button>
+  <button mat-button color="primary" (click)="submit()" [disabled]="!formValid()">{{"actions."+"Submit" | transloco}}</button>
 </ion-content>

@@ -138,7 +138,7 @@ export class TicketFormComponent implements OnInit {
 
     const truckerInfo: TruckerInfo = {
       trucker: Contact.getDocReference(this.db, this.session.getCompany(), newTransport[0].id),
-      freight: 0,
+      freight: this.currentContract.default_freight ?? 0,
     };
 
     this.currentContract.truckers.push(truckerInfo);
