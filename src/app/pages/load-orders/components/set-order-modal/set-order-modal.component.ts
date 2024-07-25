@@ -54,6 +54,7 @@ export class SetOrderModalComponent implements OnInit {
       this.order.clientName = this.currentContract.clientName;
       this.order.contractTags = this.currentContract.tags;
       this.order.contractID = this.currentContract.id;
+      this.order.freight.amount = this.currentContract.default_freight;
     });
   }
 
