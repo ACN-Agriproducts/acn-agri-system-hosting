@@ -708,7 +708,7 @@
         "Pending": "Pendiente",
         "Active": "Activo",
         "Closed": "Cerrado",
-        "Cancelled": "Cancelado",
+    "Cancelled": "Cancelado",
         "Canceled": "Cancelado",
         "paid": "pagado",
         "pending": "pendiente",
@@ -716,5 +716,21 @@
         "closed": "cerrado",
         "cancelled": "cancelado",
         "canceled": "cancelado"
-    }
+    },
+    "loadOrders": {
+        "id": "ID",
+        "date": "Fecha",
+        "contract": "Contrato",
+        "transport": "Transporte",
+        "status": "Estatus",
+        "driver": "Chofer",
+        "freight": "Flete",
+        "edit": "Editar",
+        "cancel": "Cancelar",
+        "truck plates": "Placas de Camion",
+        "box plates": "Placas de Caja",
+        "submit": "Guardar",
+        "New Order": "Nueva Orden"
+    } 
 }
+

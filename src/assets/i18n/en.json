@@ -717,5 +717,20 @@
         "closed": "closed",
         "cancelled": "cancelled",
         "canceled": "canceled"
-    }
+    },
+    "loadOrders": {
+        "id": "ID",
+        "date": "Date",
+        "contract": "Contract",
+        "transport": "Transport",
+        "status": "Status",
+        "driver": "Driver",
+        "freight": "Freight",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "truck plates": "Truck Plates",
+        "box plates": "Box Plates",
+        "submit": "Submit",
+        "New Order": "New Order"
+    } 
 }

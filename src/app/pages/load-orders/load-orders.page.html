@@ -1,70 +1,72 @@
-<ion-header>
-    <app-header-toolbar titulo="Load Orders"></app-header-toolbar>
-    <ion-toolbar class="toolbar">
-    <button mat-flat-button color="primary" (click)="newOrderDialog()">+ New Order</button>
-    </ion-toolbar>
-</ion-header>
-
-<ion-content>
-    <ion-card class="table header">
-        <ion-item lines="none">
-            <ion-text>ID</ion-text>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-text>Date</ion-text>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-text>Contract</ion-text>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-text>Transport</ion-text>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-text>Status</ion-text>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-text>Driver</ion-text>
-        </ion-item>
-        <ion-item lines="none">
-            <ion-text>Freight</ion-text>
-        </ion-item>
-        <ion-item lines="none"></ion-item>
-    </ion-card>
-    <ion-card class="table-body">
-        <div *ngFor="let loadOrder of tableData[index] | async" class="table row">
+<ng-container *transloco="let t, read: 'loadOrders'">
+    <ion-header>
+        <app-header-toolbar titulo="Load Orders"></app-header-toolbar>
+        <ion-toolbar class="toolbar">
+        <button mat-flat-button color="primary" (click)="newOrderDialog()">+ {{t('New Order')}}</button>
+        </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+        <ion-card class="table header">
             <ion-item lines="none">
-                <ion-text><b>{{loadOrder.id}}</b></ion-text>
+                <ion-text>{{t('id')}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>{{loadOrder.date | date}}</ion-text>
+                <ion-text>{{t('date')}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text [matTooltip]="(loadOrder.contractTags?.[0] | titlecase) + '\n' + loadOrder.clientName">
-                    <b>{{loadOrder.contractID}}</b>
-                </ion-text>
+                <ion-text>{{t('contract')}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>{{loadOrder.transportName}}</ion-text>
+                <ion-text>{{t('transport')}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text class="item-status" [class]="loadOrder.status">{{loadOrder.status}}</ion-text>
+                <ion-text>{{t('status')}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>{{loadOrder.driver}}</ion-text>
+                <ion-text>{{t('driver')}}</ion-text>
             </ion-item>
             <ion-item lines="none">
-                <ion-text>{{loadOrder.freight | pricePerUnit | currency}}</ion-text>
+                <ion-text>{{t('freight')}}</ion-text>
             </ion-item>
-            <ion-item lines="none">
-                <ion-button color="medium" slot="end" shape="round" fill="clear" [mat-menu-trigger-for]="menu">
-                    <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
-                </ion-button>
-                <mat-menu #menu>
-                    <!-- TODO ADD NGIF -->
-                    <button mat-menu-item (click)="editOrderDialog(loadOrder)">Edit</button>
-                    <button mat-menu-item (click)="cancelOrder(loadOrder)" *ngIf="loadOrder.status == 'pending'">Cancel</button>
-                </mat-menu>
-            </ion-item>
-        </div>
-    </ion-card>
-</ion-content>
+            <ion-item lines="none"></ion-item>
+        </ion-card>
+        <ion-card class="table-body">
+            <div *ngFor="let loadOrder of tableData[index] | async" class="table row">
+                <ion-item lines="none">
+                    <ion-text><b>{{loadOrder.id}}</b></ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-text>{{loadOrder.date | date}}</ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-text [matTooltip]="(loadOrder.contractTags?.[0] | titlecase) + '\n' + loadOrder.clientName">
+                        <b>{{loadOrder.contractID}}</b>
+                    </ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-text>{{loadOrder.transportName}}</ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-text class="item-status" [class]="loadOrder.status">{{loadOrder.status}}</ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-text>{{loadOrder.driver}}</ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-text>{{loadOrder.freight | pricePerUnit | currency}}</ion-text>
+                </ion-item>
+                <ion-item lines="none">
+                    <ion-button color="medium" slot="end" shape="round" fill="clear" [mat-menu-trigger-for]="menu">
+                        <ion-icon name="ellipsis-vertical-outline" slot="icon-only"></ion-icon>
+                    </ion-button>
+                    <mat-menu #menu>
+                        <!-- TODO ADD NGIF -->
+                        <button mat-menu-item (click)="editOrderDialog(loadOrder)">{{t('edit')}}</button>
+                        <button mat-menu-item (click)="cancelOrder(loadOrder)" *ngIf="loadOrder.status == 'pending'">{{t('cancel')}}</button>
+                    </mat-menu>
+                </ion-item>
+            </div>
+        </ion-card>
+    </ion-content>
+</ng-container>
