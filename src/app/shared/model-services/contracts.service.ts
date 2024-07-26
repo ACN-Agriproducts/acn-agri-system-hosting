@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference, Firestore, query, where } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, getDoc, getDocs, limit, query, where } from '@angular/fire/firestore';
 import { CompanyService } from '@core/services/company/company.service';
 import { CompanyContact } from '@shared/classes/company';
-import { Contract } from '@shared/classes/contract';
+import { Contract, ContractStatus } from '@shared/classes/contract';
+import { Ticket } from '@shared/classes/ticket';
 import { collection } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
 import { map, Observable } from 'rxjs';
@@ -44,5 +45,10 @@ export class ContractsService {
 
   getContractTransportList(contract: Contract): CompanyContact[] {
     return this.company.getTransportList().filter(c => contract.truckers.some(contact => contact.trucker.id == c.id));
+  }
+
+  async getContractByTicket(ticket: Ticket): Promise<Contract> {
+    return ticket.contractRef ? getDoc(ticket.contractRef).then(res => res.data())
+      : getDocs(query(this.getCollectionReference(), where('tickets', 'array-contains', ticket.ref), limit(1))).then(result => result.docs[0].data());
   }
 }
