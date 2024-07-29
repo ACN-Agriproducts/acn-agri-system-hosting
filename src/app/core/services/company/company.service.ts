@@ -20,6 +20,7 @@ export class CompanyService {
 
   async initialize(): Promise<any> {
     const companyName = await this.storage.get('currentCompany') as string;
+    if (!companyName) return;
     const plantsCollectionRef = collection(this.getCompanyReference(companyName), 'plants').withConverter(Plant.converter);
 
     return Promise.all([
