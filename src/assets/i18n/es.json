@@ -358,7 +358,8 @@
             "brokenGrain": "Grano Quebrado",
             "damagedGrain": "Grano Dañado",
             "price": "Precio",
-            "Discount Info" : "Descuentos"
+            "Discount Info" : "Descuentos",
+            "Corpus Christi Inspection": "Inspeccion de Corpus Christi"
         },
         "table": {
             "Type": "Tipo",
