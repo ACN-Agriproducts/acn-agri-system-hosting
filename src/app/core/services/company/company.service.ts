@@ -3,6 +3,7 @@ import { collection, CollectionReference, doc, DocumentReference, Firestore, get
 import { Storage } from '@ionic/storage';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Plant } from '@shared/classes/plant';
+import { AuthenticationService } from '../Authentication/Authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,14 @@ export class CompanyService {
 
   constructor(
     private db: Firestore,
-    private storage: Storage
+    private storage: Storage,
+    private auth: AuthenticationService
   ) {}
 
-  async initialize(): Promise<any> {
-    const companyName = await this.storage.get('currentCompany') as string;
+  async initialize(_companyName?: string): Promise<any> {
+    if(!this.auth.auth.currentUser) return;
+
+    const companyName = _companyName ?? await this.storage.get('currentCompany') as string;
     const plantsCollectionRef = collection(this.getCompanyReference(companyName), 'plants').withConverter(Plant.converter);
 
     return Promise.all([
