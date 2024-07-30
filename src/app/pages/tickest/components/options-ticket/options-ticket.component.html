@@ -20,6 +20,14 @@
     {{ t('Fix Inventory') }}
     <ion-icon slot="end" name="create-outline"></ion-icon>
   </ion-item>
+  <ion-item button (click)="openContract()">
+    {{ t('Open Contract') }}
+    <ion-icon slot="end" name="duplicate-outline"></ion-icon>
+  </ion-item>
+  <ion-item button (click)="openContact()">
+    {{ t('Open Client') }}
+    <ion-icon slot="end" name="duplicate-outline"></ion-icon>
+  </ion-item>
   <ion-item button (click)="splitTicket()" *ngIf="!ticket.void && (userPermissions?.admin || userPermissions?.splitTicket)">
     {{ t('Split Ticket') }}
     <ion-icon slot="end" name="duplicate-outline"></ion-icon>

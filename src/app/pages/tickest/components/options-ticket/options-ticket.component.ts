@@ -167,4 +167,12 @@ export class OptionsTicketComponent implements OnInit {
 
     this.popoverController.dismiss();
   }
+
+  public openContract(): void {
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.ticket.in? 'purchase' : 'sales'}/${this.ticket.contractRef.id}`);
+  }
+
+  public openContact(): void {
+    this.navController.navigateForward(`dashboard/directory/contact/${this.ticket.clientRef.id}`)
+  }
 }

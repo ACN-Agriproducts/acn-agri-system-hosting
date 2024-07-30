@@ -1002,7 +1002,9 @@
         "Retry": "Retry",
         "Paid": "Paid",
         "drag-drop-message": "Simply drag and drop or click here to choose a file.",
-        "Merge": "Merge"
+        "Merge": "Merge",
+        "Open Contract": "Open Contract",
+        "Open Client": "Open Client"
     },
     "statuses": {
         "Paid": "Paid",
