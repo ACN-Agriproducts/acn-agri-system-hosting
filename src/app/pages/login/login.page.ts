@@ -8,6 +8,7 @@ import { User } from '@shared/classes/user';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Company } from '@shared/classes/company';
 import { Plant } from '@shared/classes/plant';
+import { CompanyService } from '@core/services/company/company.service';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class LoginPage implements OnInit, OnDestroy {
     public alertController: AlertController,
     private db: Firestore,
     private auth: Auth,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private company: CompanyService
   ) {
     this.buildForm();
   }
@@ -53,12 +55,11 @@ export class LoginPage implements OnInit, OnDestroy {
         try{
           const val = await User.getUser(this.db, user.uid);
           const perDoc = await val.getPermissions(val.worksAt[0]);
-
-          const companyDoc = Company.getCompany(this.db, val.worksAt[0]).then(async company => {
-            this.session.set('companyUnit', company.defaultUnit);
+          const companyDoc = this.company.initialize(val.worksAt[0]).then(async () => {
+            await this.session.set('companyUnit', this.company.getCompany().defaultUnit);
 
             if(perDoc?.admin || perDoc?.tickets?.read || perDoc?.inventory?.read){
-              const plants = await Plant.getPlantList(this.db, company.ref.id);
+              const plants = await Plant.getPlantList(this.db, this.company.getCompany().ref.id);
               this.session.set('currentPlant', plants[0].ref.id);
             }
             else {

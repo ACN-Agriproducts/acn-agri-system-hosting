@@ -8,7 +8,7 @@
   <ion-item lines='none' *ngIf="contract.tags.includes('open-purchase')"><b>{{t('Price')}}</b></ion-item>
 </div>
 <div *ngFor="let ticket of ticketList" [ngClass]="contract.tags.includes('open-purchase') ? 'table-price-row' : 'table-row'">
-  <ion-item lines='none'><b>{{ticket.displayId}}</b></ion-item>
+  <ion-item lines='none' (click)="openDialog(ticket)"><b>{{ticket.displayId}}</b></ion-item>
   <ion-item lines='none'>{{ticket.dateOut | date}}</ion-item>
   <ion-item lines='none'>{{ ticket.status | titlecase }}</ion-item>
   <ion-item lines='none'>{{ticket.gross.amount | number}}</ion-item>

@@ -3,6 +3,10 @@
     {{ t('View') }}
     <ion-icon slot='end' name="document-text-outline"></ion-icon>
   </ion-item>
+  <ion-item lines='none' button (click)='openClient()'>
+    {{ t('Open Client') }}
+    <ion-icon slot='end' name="person-outline"></ion-icon>
+  </ion-item>
   <ng-container *ngIf="contract.status == 'pending'">
     <ion-item lines="none" button (click)='acceptContract()'>
       {{ t('Accept') }}
