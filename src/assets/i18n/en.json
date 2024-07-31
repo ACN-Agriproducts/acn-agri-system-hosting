@@ -217,6 +217,7 @@
             "orientation": "orientation",
             "landscape": "landscape",
             "portrait": "portrait",
+            "Supplemental Documents": "Supplemental Documents",
             "chart": {
                 "Pending": "Pending",
                 "Paid": "Paid",
