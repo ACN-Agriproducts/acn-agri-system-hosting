@@ -401,7 +401,8 @@
             "ShrinkWt": "ShrinkWt",
             "Tons": "Tons",
             "CCGE CERTIFICATE" : "CCGE CERTIFICATE",
-            "Storage": "Storage"
+            "Storage": "Storage",
+            "Attachments": "Attachments"
         },
         "report": {
             "Ticket Report": "Ticket Report",
@@ -963,7 +964,10 @@
         "Invoice canceled": "Invoice canceled",
         "Could not cancel the invoice": "Could not cancel the invoice",
         "required": "required",
-        "Required": "Required"
+        "Required": "Required",
+        "drag-drop-message": "Simply drag and drop or click here to choose a file.",
+        "Ticket updated": "Ticket updated",
+        "Could not update the ticket.": "Could not update the ticket."
     },
     "actions": {
         "Cancel": "Cancel",
@@ -1009,7 +1013,8 @@
         "drag-drop-message": "Simply drag and drop or click here to choose a file.",
         "Merge": "Merge",
         "Open Contract": "Open Contract",
-        "Open Client": "Open Client"
+        "Open Client": "Open Client",
+        "Upload Attachments": "Upload Attachments"
     },
     "statuses": {
         "Paid": "Paid",
@@ -1050,5 +1055,10 @@
         "submit": "Submit",
         "New Order": "New Order",
         "plants": "Plants"
-    } 
+    },
+    "document-upload-dialog": {
+        "Document Name": "Document Name",
+        "drag-drop-message": "Simply drag and drop or click here to choose a file.",
+        "Download File": "Download File"
+    }
 }
