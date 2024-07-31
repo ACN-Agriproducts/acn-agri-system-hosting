@@ -1,9 +1,9 @@
 
-<ng-container *transloco="let t, read: 'contracts.info'">
-	<h2 mat-dialog-title>{{ data.docType }} {{ t('Documents') }}</h2>
+<ng-container *transloco="let t, read: 'document-upload-dialog'">
+	<h2 mat-dialog-title>{{ data.docType }}</h2>
 	<mat-dialog-content>
 		<mat-tab-group [(selectedIndex)]="selected" [preserveContent]="true">
-			<mat-tab *ngFor="let file of data.files; let index = index">
+			<mat-tab *ngFor="let file of filesForUpload; let index = index">
 				<ng-template mat-tab-label>
 					<span>{{ file.name ?? "File " + index }}</span>
 					<button mat-icon-button 
@@ -35,13 +35,13 @@
 		</mat-tab-group>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-button color="primary" mat-dialog-close>{{ t('Close') }}</button>
+		<button mat-button color="primary" mat-dialog-close>{{ 'Close' | translocoNested:'actions' }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
 			[disabled]="checkFiles()"
 			(click)="confirm()"
 		>
-			{{ t('Confirm') }}
+			{{ 'Confirm' | translocoNested:'actions' }}
 		</button>
 	</mat-dialog-actions>
 
@@ -51,8 +51,8 @@
 		<ngx-dropzone class="dropzone" (change)="onSelect($event, file)">
 			<ngx-dropzone-label *ngIf="!file.url else preview">
 				<mat-icon>cloud_upload</mat-icon>
-				<h3>{{ t('Upload') }} {{ data.docType }} {{ t('Document') }}(s)</h3>
-				<p>{{ t('Simply drag and drop or click here to choose a file') }}.</p>
+				<h3>{{ 'Upload' | translocoNested:'actions' }} {{ data.docType }}</h3>
+				<p>{{ t('drag-drop-message') }}</p>
 			</ngx-dropzone-label>
 			<ng-template #preview>
 				<div class="custom-preview">

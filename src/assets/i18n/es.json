@@ -217,6 +217,7 @@
             "orientation": "orientación",
             "landscape": "horizontal",
             "portrait": "vertical",
+            "Supplemental Documents": "Documentos Complementarios",
             "chart": {
                 "Pending": "Pendiente",
                 "Paid": "Pagado",
@@ -401,7 +402,8 @@
             "ShrinkWt": "Peso con Mermas",
             "Tons": "Toneladas",
             "CCGE CERTIFICATE" : "",
-            "Storage": "Almacenamiento"
+            "Storage": "Almacenamiento",
+            "Attachments": "Archivos Adjuntos"
         },
         "report": {
             "Ticket Report": "Reporte de Boletas",
@@ -959,7 +961,10 @@
         "Invoice canceled": "Factura cancelada",
         "Could not cancel the invoice": "No se pudo cancelar la factura",
         "required": "requerido(a)",
-        "Required": "Requerido(a)"
+        "Required": "Requerido(a)",
+        "drag-drop-message": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
+        "Ticket updated": "Boleta actualizada",
+        "Could not update the ticket.": "No se pudo agregar la boleta."
     },
     "actions": {
         "Cancel": "Cancelar",
@@ -1005,7 +1010,8 @@
         "drag-drop-message": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
         "Merge": "Unir",
         "Open Contract": "Abrir Contrato",
-        "Open Client": "Abrir Cliente"
+        "Open Client": "Abrir Cliente",
+        "Upload Attachments": "Subir Archivos Adjuntos"
     },
     "statuses": {
         "Paid": "Pagado",
@@ -1046,6 +1052,11 @@
         "submit": "Guardar",
         "New Order": "Nueva Orden",
         "plants": "Plantasks"
+    },
+    "document-upload-dialog": {
+        "Document Name": "Nombre del Documento",
+        "drag-drop-message": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
+        "Download File": "Descargar Archivo"
     }
 }
 
