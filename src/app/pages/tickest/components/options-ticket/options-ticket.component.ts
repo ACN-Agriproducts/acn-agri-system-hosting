@@ -2,9 +2,8 @@ import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
-import { ModalTicketComponent } from '../modal-ticket/modal-ticket.component';
 import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { Ticket } from '@shared/classes/ticket';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { FixTicketStorageComponent } from '@shared/components/fix-ticket-storage/fix-ticket-storage.component';
@@ -12,8 +11,10 @@ import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-tick
 import { ChangeTicketContractComponent } from 'src/app/standalone/change-ticket-contract/change-ticket-contract.component';
 import { DiscountsDialogComponent } from '../discounts-dialog/discounts-dialog.component';
 import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
-import { serverTimestamp } from '@angular/fire/firestore';
+import { serverTimestamp, updateDoc } from '@angular/fire/firestore';
 import { TranslocoService } from '@ngneat/transloco';
+import { DialogUploadData, DocumentUploadDialogComponent } from '@shared/components/document-upload-dialog/document-upload-dialog.component';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-options-ticket',
@@ -36,7 +37,8 @@ export class OptionsTicketComponent implements OnInit {
     private navController: NavController,
     private alertController: AlertController,
     private session: SessionInfo,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private snack: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -166,5 +168,44 @@ export class OptionsTicketComponent implements OnInit {
     });
 
     this.popoverController.dismiss();
+  }
+
+  public openContract(): void {
+    this.navController.navigateForward(`dashboard/contracts/contract-info/${this.ticket.in? 'purchase' : 'sales'}/${this.ticket.contractRef.id}`);
+  }
+
+  public openContact(): void {
+    this.navController.navigateForward(`dashboard/directory/contact/${this.ticket.clientRef.id}`)
+  }
+
+  public async uploadAttachments(): Promise<void> {
+    let locationRef = `/companies/${this.session.getCompany()}/plants/${this.session.getPlant()}/tickets/${this.ticket.id}-${this.ticket.in ? 'in': 'out'}/attachments`;
+    
+    this.popoverController.dismiss();
+
+    const dialogData: DialogUploadData = {
+      docType: this.transloco.translate("tickets.table.Attachments"),
+      locationRef,
+      files: this.ticket.attachments,
+      uploadable: true
+    };
+
+    const dialogRef = this.dialog.open(DocumentUploadDialogComponent, {
+      data: dialogData,
+      autoFocus: false
+    });
+    const updateData = await lastValueFrom(dialogRef.afterClosed());
+    if (!updateData) return;
+    
+    updateDoc(this.ticket.ref, {
+      attachments: updateData
+    })
+    .then(() => {
+      this.snack.openTranslated("Ticket updated", "success");
+    })
+    .catch(e => {
+      console.error(e);
+      this.snack.openTranslated("Could not update the ticket.", "error");
+    });
   }
 }

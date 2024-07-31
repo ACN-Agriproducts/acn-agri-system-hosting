@@ -26,6 +26,7 @@ import { registerLocaleData } from '@angular/common';
 import localeMx from '@angular/common/locales/es-MX';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslocoRootModule } from './transloco-root.module';
+import { CompanyService } from '@core/services/company/company.service';
 registerLocaleData(localeMx)
 
 
@@ -81,12 +82,15 @@ registerLocaleData(localeMx)
         StatusBar,
         SplashScreen,
         SessionInfo,
+        CompanyService,
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         {
             provide: APP_INITIALIZER,
-            useFactory: (session: SessionInfo) => { return () => session.load() },
+            useFactory: (session: SessionInfo, company: CompanyService) => { 
+                return () => Promise.all([session.load(), company.initialize()])
+            },
             multi: true,
-            deps: [SessionInfo]
+            deps: [SessionInfo, CompanyService]
         }
     ],
     bootstrap: [AppComponent]

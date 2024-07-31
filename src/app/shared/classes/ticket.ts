@@ -12,9 +12,10 @@ import { DiscountTableRow, DiscountTables } from "./discount-tables";
 import { Product } from "./product";
 import { Price } from "./price";
 import { TicketInfo } from "./liquidation";
+import { FileStorageInfo } from "@shared/components/document-upload-dialog/document-upload-dialog.component";
 
-type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
-type TicketType = "in" | "out";
+export type TicketStatus = "none" | "closed" | "active" | "pending" | "paid";
+export type TicketType = "in" | "out";
 
 export class Ticket extends FirebaseDocInterface{
     public brokenGrain: number;
@@ -89,6 +90,8 @@ export class Ticket extends FirebaseDocInterface{
     public beforeDiscounts: number;
     public netToPay: number;
 
+    public attachments: FileStorageInfo[];
+
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
@@ -111,6 +114,7 @@ export class Ticket extends FirebaseDocInterface{
             this.original_weight = new Mass(null, unit);
             this.dateIn = new Date();
             this.status = "active";
+            this.attachments = [];
 
             return;
         }
@@ -184,6 +188,8 @@ export class Ticket extends FirebaseDocInterface{
 
         this.net = this.gross.subtract(this.tare);
         this.net.amount = Math.round(this.net.amount * 1000) / 1000;
+
+        this.attachments = data.attachments ?? [];
     }
 
     public static converter = {
@@ -257,6 +263,7 @@ export class Ticket extends FirebaseDocInterface{
                 moneyDiscounts: data.moneyDiscounts ?? null,
                 type: data.type ?? null,
 
+                attachments: data.attachments ?? null,
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {

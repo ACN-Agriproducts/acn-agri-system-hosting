@@ -1,6 +1,6 @@
+import { FileStorageInfo } from "@shared/components/document-upload-dialog/document-upload-dialog.component";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Status } from "./company";
-import { FileStorageInfo } from "./liquidation";
 import { Firestore, collection, getDocs, onSnapshot, query, CollectionReference, DocumentData, DocumentReference, Query, QueryConstraint, QueryDocumentSnapshot, SnapshotOptions, QuerySnapshot, Unsubscribe, where } from "@angular/fire/firestore";
 
 export const PAYMENT_TYPES = ["default", "prepay"];

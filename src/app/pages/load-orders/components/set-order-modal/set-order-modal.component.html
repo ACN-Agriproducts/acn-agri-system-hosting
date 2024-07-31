@@ -1,0 +1,54 @@
+<ng-container *transloco="let t, read: 'loadOrders'">
+  <div mat-dialog-content>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('date')}}</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="order.date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('contract')}}</mat-label>
+      <mat-select [(ngModel)]="currentContractID" (ngModelChange)="contractChange()">
+        <mat-optgroup *ngFor="let contractGroup of groupedContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
+          <mat-option *ngFor="let contract of contractGroup.value" [value]="contract.ref.id">
+            {{contract.id + ": " + contract.clientName}}
+          </mat-option>
+        </mat-optgroup>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('transport')}}</mat-label>
+      <mat-select [(ngModel)]="currentTransportID" (ngModelChange)="transportChange()" [disabled]="!currentContract">
+        <mat-option *ngFor="let contact of selectableTransport" [value]="contact.id">{{contact.name | uppercase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('plants')}}</mat-label>
+      <mat-select [(ngModel)]="order.plants" multiple>
+        <mat-option *ngFor="let plant of plants" [value]="plant">{{plant | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('driver')}}</mat-label>
+      <input matInput type="text" [(ngModel)]="order.driver">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <span matPrefix>$</span>
+      <span matSuffix>CWT</span>
+      <mat-label>{{t('freight')}}</mat-label>
+      <input matInput type="number" [(ngModel)]="order.freight.amount">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('truck plates')}}</mat-label>
+      <input matInput type="text" [(ngModel)]="order.carPlates">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{t('box plates')}}</mat-label>
+      <input matInput type="text" [(ngModel)]="order.plates">
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button color="warn" mat-dialog-close>{{t('cancel')}}</button>
+    <button mat-flat-button color="primary" mat-dialog-close="true">{{t('submit')}}</button>
+  </div>
+</ng-container>

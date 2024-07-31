@@ -57,6 +57,19 @@ export class NewUserPage implements OnInit {
       ]
     },
     {
+      section: 'loadOrders',
+      module: [
+        {
+          label: 'Read',
+          controlName: 'read',
+        },
+        {
+          label: 'Write',
+          controlName: 'write',
+        }
+      ]
+    },
+    {
       section: 'inventory',
       module: [
         {
@@ -317,6 +330,10 @@ export class NewUserPage implements OnInit {
         addDocument: [false],
         splitTicket: [false],
         setDiscounts: [false],
+      }),
+      loadOrders: this.fb.group({
+        read: [false],
+        write: [false],
       }),
       inventory: this.fb.group({
         read: [false],

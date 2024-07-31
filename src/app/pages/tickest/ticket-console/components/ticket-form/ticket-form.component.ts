@@ -29,6 +29,7 @@ export class TicketFormComponent implements OnInit {
 
   public contractId: string;
   public currentContract: Contract;
+  public corpusChristiInspection: boolean = false;
 
   public saveTimeout: NodeJS.Timeout;
   public discountChangeFlag: boolean = false;
@@ -158,6 +159,12 @@ export class TicketFormComponent implements OnInit {
     this.ticket.transportState = contact?.state;
     this.ticket.transportStreetAddress = contact?.streetAddress;
     this.ticket.transportZipCode = contact?.zipCode;
+
+    this.saveTicket();
+  }
+
+  async inspectionChange() {
+    this.ticket.moneyDiscounts['inspection'] = this.corpusChristiInspection ? 25 : 0;
 
     this.saveTicket();
   }
