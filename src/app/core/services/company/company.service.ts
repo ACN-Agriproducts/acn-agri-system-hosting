@@ -3,7 +3,6 @@ import { collection, CollectionReference, doc, DocumentReference, Firestore, get
 import { Storage } from '@ionic/storage';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Plant } from '@shared/classes/plant';
-import { AuthenticationService } from '../Authentication/Authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,6 @@ export class CompanyService {
   constructor(
     private db: Firestore,
     private storage: Storage,
-    private auth: AuthenticationService
   ) {}
 
   async initialize(_companyName?: string): Promise<any> {
