@@ -13,6 +13,7 @@ import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 import { Observable } from 'rxjs';
+import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
 const moment = _moment;
 
 declare type sortOptions = 'id' | 'date';
@@ -125,11 +126,6 @@ export class TableComponent implements OnInit, OnDestroy {
     });
   }
 
-  open() {
-    const dialogRef = this.dialog.open(ModalTicketComponent, {
-      autoFocus: false
-    });
-  }
   async presentPopoverTicket(ev: any, ticket: any) {
     ev.preventDefault();
     const popover = await this.popoverController.create({
@@ -150,17 +146,14 @@ export class TableComponent implements OnInit, OnDestroy {
     });
     return await modal.present();
   }
-  public openDialog = async (event, ticketId: string) => {
-    var ticket =  this.paginator.list.find(t => t.ref.id == ticketId);
-
-    const modal = await this.modalController.create({
-      component: ModalTicketComponent,
-      componentProps: {
-        ticket: ticket
-      },
-      cssClass: 'modal-dialog-ticket'
+  public openDialog = async (event, ticket) => {
+    this.dialog.open(TicketDialogComponent, {
+      data: ticket,
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
     });
-    return await modal.present();
   }
   public openAddicture = async () => {
     const modal = await this.modalController.create({
