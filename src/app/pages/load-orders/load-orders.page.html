@@ -1,6 +1,6 @@
 <ng-container *transloco="let t, read: 'loadOrders'">
     <ion-header>
-        <app-header-toolbar titulo="Load Orders"></app-header-toolbar>
+        <app-header-toolbar [titulo]="'layout.'+'load orders' | transloco"></app-header-toolbar>
         <ion-toolbar class="toolbar">
         <button mat-flat-button color="primary" (click)="newOrderDialog()">+ {{t('New Order')}}</button>
         </ion-toolbar>
