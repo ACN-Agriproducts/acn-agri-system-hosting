@@ -3,8 +3,13 @@ import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDia
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Storage, deleteObject, getDownloadURL, getMetadata, ref, uploadBytes } from '@angular/fire/storage';
-import { FileStorageInfo } from '@shared/classes/liquidation';
 import { TranslocoService } from '@ngneat/transloco';
+
+export interface FileStorageInfo {
+  name: string;
+  ref: string;
+  contentType: string;
+}
 
 type DropFileStorageInfo = FileStorageInfo & { 
   url: SafeResourceUrl, 
@@ -15,7 +20,7 @@ type DropFileStorageInfo = FileStorageInfo & {
 export interface DialogUploadData {
   docType: string;
   locationRef: string;
-  readonly files: DropFileStorageInfo[];
+  readonly files: FileStorageInfo[];
   uploadable: boolean;
 }
 
@@ -28,8 +33,9 @@ export class DocumentUploadDialogComponent implements OnInit {
   public selected: number = 0;
   public reader: FileReader = new FileReader();
   public startingFiles: DropFileStorageInfo[] = [];
-  public count: number = this.data.files.length;
+  public count: number = this.data.files.length ?? 0;
   public fileName: string;
+  public filesForUpload: DropFileStorageInfo[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogUploadData,
@@ -46,11 +52,16 @@ export class DocumentUploadDialogComponent implements OnInit {
       return;
     }
 
-    this.data.files.forEach(file => this.getDocumentUrl(file));
-    this.startingFiles = [...this.data.files];
+    this.filesForUpload = this.data.files.map(file => {
+      const newFile = { ...file, url: null, dropfile: null, contentType: null };
+      this.getDocumentUrl(newFile);
+      return newFile;
+    });
+
+    this.startingFiles = [...this.filesForUpload];
     this.fileName = this.data.docType.toLocaleLowerCase().replace(/\s+/g, "-");
 
-    if (this.data.files.length <= 0 && this.data.uploadable) this.addDocument();
+    if (this.filesForUpload.length <= 0 && this.data.uploadable) this.addDocument();
   }
 
   ngOnDestroy() {
@@ -60,10 +71,8 @@ export class DocumentUploadDialogComponent implements OnInit {
   public getDocumentUrl(file: DropFileStorageInfo) {
     getDownloadURL(ref(this.storage, file.ref))
     .then(async res => {
-      // console.log(res)
       file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
       file.url = this.sanitizer.bypassSecurityTrustResourceUrl(res);
-      // console.log(file.url)
       if (file.url == null) throw `The resource could not be secured for use.`;
     })
     .catch(e => {
@@ -83,12 +92,12 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public confirm(): void {
     this.startingFiles.forEach(file => {
-      if (!this.data.files.includes(file)) {
+      if (!this.filesForUpload.includes(file)) {
         deleteObject(ref(this.storage, file.ref));
       }
     });
 
-    this.dialogRef.close(this.data.files.map(file => {
+    this.dialogRef.close(this.filesForUpload.map(file => {
       if (file.dropfile) {
         this.uploadDocument(file);
       }
@@ -111,25 +120,25 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public addDocument() {
-    this.data.files.push({
+    this.filesForUpload.push({
       name: `document (${++this.count})`,
       ref: `${this.data.locationRef}/document${this.count}`,
       url: null,
       dropfile: null,
       contentType: null
     });
-    this.selected = this.data.files.length - 1;
+    this.selected = this.filesForUpload.length - 1;
   }
 
   public async removeDocument(index: number) {
-    this.data.files.splice(index, 1);
-    if (this.selected === this.data.files.length) {
+    this.filesForUpload.splice(index, 1);
+    if (this.selected === this.filesForUpload.length) {
       this.selected -= 1;
     }
   }
 
   public checkFiles() {
-    return this.data.files.some(file => !(file.dropfile || file.url));
+    return this.filesForUpload.some(file => !(file.dropfile || file.url));
   }
 
   public readFileUrl(file: DropFileStorageInfo) {

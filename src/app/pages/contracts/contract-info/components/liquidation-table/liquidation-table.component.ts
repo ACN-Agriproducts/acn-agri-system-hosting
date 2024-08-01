@@ -80,7 +80,7 @@ export class LiquidationTableComponent implements OnInit {
     const uploadable = liquidation.status !== 'cancelled';
 
     const dialogData: DialogUploadData = {
-      docType: this.transloco.translate("contracts.info.Supplemental"),
+      docType: this.transloco.translate("contracts.info.Supplemental Documents"),
       locationRef,
       files,
       uploadable

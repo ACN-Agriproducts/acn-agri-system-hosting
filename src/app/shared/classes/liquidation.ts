@@ -5,8 +5,8 @@ import { Firestore, collection, doc, getDoc, getDocs, onSnapshot, query, Collect
 import { Mass } from "./mass";
 import { Status } from "./company";
 import { Price } from "./price";
-import { DiscountTables } from "./discount-tables";
 import { Invoice } from "./invoice";
+import { FileStorageInfo } from "@shared/components/document-upload-dialog/document-upload-dialog.component";
 
 export type ReportTicket = {
     data: TicketInfo,
@@ -258,10 +258,4 @@ export interface TicketInfo {
     adjustedWeight: Mass;
     beforeDiscounts: number;
     netToPay: number;
-}
-
-export interface FileStorageInfo {
-    name: string;
-    ref: string;
-    contentType: string;
 }

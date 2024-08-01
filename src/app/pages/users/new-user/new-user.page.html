@@ -70,7 +70,7 @@
             <ion-row *ngFor="let item of privilege; let last = last" formGroupName='{{item.section}}'>
               <ion-col size-lg="4" size-sm="12" size-xs="12" class="ion-no-padding">
                 <ion-item lines="none" class="ion-no-padding">
-                  <ion-label class="label-title">{{ t(item.section) | titlecase}}</ion-label>
+                  <ion-label class="label-title">{{ t(item.section) }}</ion-label>
                 </ion-item>
               </ion-col>
               <ion-col size-lg="8" size-sm="12" size-xs="12">
