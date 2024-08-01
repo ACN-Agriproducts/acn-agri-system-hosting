@@ -3,6 +3,7 @@ import { Firestore, orderBy, where } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { ContactInfo, Contract } from '@shared/classes/contract';
+import { ContractsService } from '@shared/model-services/contracts.service';
 
 @Component({
   selector: 'app-contract-payment-reports',
@@ -23,8 +24,7 @@ export class ContractPaymentReportsPage implements OnInit {
   public ready = false;
 
   constructor(
-    private db: Firestore,
-    private session: SessionInfo,
+    private contracts: ContractsService
   ) { }
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class ContractPaymentReportsPage implements OnInit {
     this.clientAccounts = {};
     this.productAccounts = {};
 
-    const contractList = await Contract.getContracts(this.db, this.session.getCompany(), null, where('date', '>', this.queryDate), where('status', 'in', ['active', 'closed', 'paid']));
+    const contractList = await this.contracts.getList({afterDate: this.queryDate, status: ['active', 'closed', 'paid']});
     console.log(contractList);
     
     for(let contract of contractList) {
