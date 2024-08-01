@@ -160,4 +160,8 @@ export class ContractModalOptionsComponent implements OnInit {
       this.snack.openTranslated("Could not update the contract.", "error");
     });
   }
+
+  public openClient(): void {
+    this.navController.navigateForward(`dashboard/directory/contact/${this.contract.client.id}`);
+  }
 }

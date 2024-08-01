@@ -21,6 +21,8 @@ import { PaymentsTableComponent } from './components/payments-table/payments-tab
 import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './components/set-payment-dialog/set-payment-dialog.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ContractChartCardComponent } from './components/contract-chart-card/contract-chart-card.component';
+import { MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+
 
 @NgModule({
   imports: [
@@ -34,7 +36,8 @@ import { ContractChartCardComponent } from './components/contract-chart-card/con
     ReactiveFormsModule,
     ContractModule,
     ContractPrintablesModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatDialogModule
   ],
   declarations: [
     ContractInfoPage,
@@ -48,6 +51,10 @@ import { ContractChartCardComponent } from './components/contract-chart-card/con
     SetPaymentDialogComponent,
     ValidPaymentSelectionDirective,
     ContractChartCardComponent
+  ],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
   ]
 })
 export class ContractInfoPageModule {}

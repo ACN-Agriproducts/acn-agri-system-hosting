@@ -358,7 +358,8 @@
             "brokenGrain": "Grano Quebrado",
             "damagedGrain": "Grano Dañado",
             "price": "Precio",
-            "Discount Info" : "Descuentos"
+            "Discount Info" : "Descuentos",
+            "Corpus Christi Inspection": "Inspeccion de Corpus Christi"
         },
         "table": {
             "Type": "Tipo",
@@ -998,7 +999,9 @@
         "Retry": "Reintentar",
         "Paid": "Pagado",
         "drag-drop-message": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
-        "Merge": "Unir"
+        "Merge": "Unir",
+        "Open Contract": "Abrir Contrato",
+        "Open Client": "Abrir Cliente"
     },
     "statuses": {
         "Paid": "Pagado",
