@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { CollectionReference, Firestore, getDoc, getDocs, limit, query, where } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, getDoc, getDocs, limit, query, where, QueryConstraint, collection, OrderByDirection, orderBy, doc, startAfter } from '@angular/fire/firestore';
 import { CompanyService } from '@core/services/company/company.service';
 import { CompanyContact } from '@shared/classes/company';
-import { Contract, ContractStatus } from '@shared/classes/contract';
+import { Contract, ContractStatus, contractType } from '@shared/classes/contract';
+import { ContractSettings } from '@shared/classes/contract-settings';
 import { Ticket } from '@shared/classes/ticket';
-import { collection } from 'firebase/firestore';
 import { collectionData } from 'rxfire/firestore';
 import { map, Observable } from 'rxjs';
 
@@ -13,6 +13,7 @@ import { map, Observable } from 'rxjs';
 })
 export class ContractsService {
   activeContracts: Observable<Contract[]>;
+  contractSettings: Promise<ContractSettings>;
 
   constructor(
     private company: CompanyService,
@@ -51,4 +52,72 @@ export class ContractsService {
     return ticket.contractRef ? getDoc(ticket.contractRef).then(res => res.data())
       : getDocs(query(this.getCollectionReference(), where('tickets', 'array-contains', ticket.ref), limit(1))).then(result => result.docs[0].data());
   }
+
+  async getContractSettings(date?: Date): Promise<ContractSettings> {
+    if(!date && this.contractSettings) return this.contractSettings;
+
+    const collectionRef = collection(this.company.getCollectionReference(), 'settings').withConverter(ContractSettings.converter);
+
+    const constraints: QueryConstraint[] = [];
+    if(date) constraints.push(where('date', '<=', date));
+    constraints.push(orderBy('date', 'desc'));
+    constraints.push(limit(1));
+
+    const collectionQuery = query(collectionRef, ...constraints);
+    
+    const docPromise = getDocs(collectionQuery).then(snap => {
+      if(snap.empty) return new ContractSettings(doc(collectionRef));
+
+      return snap.docs[0].data();
+    });
+
+    if(!date) this.contractSettings = docPromise;
+    return docPromise;
+  }
+
+  
+  public async getList({
+    count,
+    type,
+    orderField,
+    tags,
+    status,
+    sortOrder = 'desc',
+    startAfterObject,
+    beforeDate,
+    afterDate
+  }: getContractsListParams): Promise<Contract[]> {
+
+    const constraints: QueryConstraint[] = [];
+    
+    if(count) constraints.push(limit(count));
+    if(type) constraints.push(where('type', 'in', type));
+    if(tags) constraints.push(where('tags', 'array-contains-any', tags));
+    if(afterDate) constraints.push(where('date', '>=', afterDate));
+    if(beforeDate) constraints.push(where('date', '<=', beforeDate));
+    if(status) constraints.push(where('status', 'in', status));
+    if(orderField) constraints.push(orderBy(orderField, sortOrder));
+    if(startAfterObject) constraints.push(startAfter(startAfterObject.ref));
+
+    const list = await getDocs(
+      query(
+        this.getCollectionReference(),
+        ...constraints
+      )
+    );
+
+    return list.docs.map(doc => doc.data());
+  }
+}
+
+export type getContractsListParams = {
+  count?: number;
+  type?: string[],
+  orderField?: string,
+  tags?: string[],
+  status?: string[]
+  sortOrder?: OrderByDirection,
+  startAfterObject?: Contract,
+  beforeDate?: Date,
+  afterDate?: Date,
 }

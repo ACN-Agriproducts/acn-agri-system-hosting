@@ -1,0 +1,45 @@
+<div>
+
+</div>
+<ion-card>
+  <ion-item>
+    <ion-text>Date</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>Contract ID</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>Delivered</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>Quantity</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>Price</ion-text>
+  </ion-item>
+  <ion-item>
+    <ion-text>Paid</ion-text>
+  </ion-item>
+</ion-card>
+<ion-card>
+  <div *ngFor="let contract of contracts">
+    <ion-item>
+      <ion-text>{{contract.date}}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-text>{{contract.id}}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-text>{{contract.currentDelivered | massDisplay}}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-text>{{contract.quantity | massDisplay}}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-text>{{contract.price | pricePerUnit | currency}}</ion-text>
+    </ion-item>
+    <ion-item>
+      <ion-text>{{contract.totalPayments | currency}}</ion-text>
+    </ion-item>
+  </div>
+</ion-card>

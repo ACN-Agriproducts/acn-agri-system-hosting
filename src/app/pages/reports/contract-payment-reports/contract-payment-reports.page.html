@@ -1,0 +1,35 @@
+<ion-header *transloco="let t, read: 'contracts.table'">
+  <app-header-toolbar titulo="Contract Payments"></app-header-toolbar>
+  <ion-toolbar class="contract-toolbar">
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="queryDate" (ngModelChange)="getContracts()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Date Start</mat-label>
+        <mat-select >
+          <mat-option value="sale">Sale</mat-option>
+          <mat-option value="purchase">Purchase</mat-option>
+        </mat-select>
+      </mat-form-field> -->
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page-content">
+    <app-section-title title="Products"></app-section-title>
+    <div class="card-section">
+      <app-product-card class="card" *ngFor="let account of productAccounts | keyvalue"
+        [data]="account.value"></app-product-card>
+    </div>
+    <app-section-title title="Clients"></app-section-title>
+    <div class="card-section">
+      <app-client-card class="card" *ngFor="let account of clientAccounts | keyvalue"
+        [data]="account.value"></app-client-card>
+    </div>
+  </div>
+</ion-content>
