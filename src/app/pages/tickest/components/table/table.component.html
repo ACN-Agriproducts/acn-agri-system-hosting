@@ -117,7 +117,7 @@
             </div>
         </div>
         <!-- ================================= -->
-        <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
+        <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item)"
             *ngFor="let item of scaleTickets">
             <div class="item-content ion-hide-lg-up">
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
@@ -255,7 +255,7 @@
                     <ion-button color="tertiary" (click)="openAddicture()">
                         <ion-icon slot="icon-only" name="images-outline"></ion-icon>
                     </ion-button>
-                    <ion-button (click)="openDialog($event, item.ref.id)" color="primary">
+                    <ion-button (click)="openDialog($event, item)" color="primary">
                         <ion-icon slot="icon-only" name="receipt-outline"></ion-icon>
                     </ion-button>
                 </ion-buttons>
@@ -347,7 +347,7 @@
         </div>
         <!-- ================================= -->
         <ng-container *ngFor="let item of paginator?.list">
-            <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item.ref.id)"
+            <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item)"
                 *ngIf="item.status != 'active'" >
                 <div class="item-content ion-hide-lg-up">
                     <ion-item lines="none" class="item-cantidas ion-no-padding">
@@ -486,7 +486,7 @@
                         <ion-button color="tertiary" (click)="openAddicture()">
                             <ion-icon slot="icon-only" name="images-outline"></ion-icon>
                         </ion-button>
-                        <ion-button (click)="openDialog($event, item.ref.id)" color="primary">
+                        <ion-button (click)="openDialog($event, item)" color="primary">
                             <ion-icon slot="icon-only" name="receipt-outline"></ion-icon>
                         </ion-button>
                     </ion-buttons>

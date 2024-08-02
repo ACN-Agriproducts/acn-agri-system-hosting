@@ -19,13 +19,12 @@ export class CompanyService {
   constructor(
     private db: Firestore,
     private storage: Storage,
-    private auth: AuthenticationService
   ) {}
 
   async initialize(_companyName?: string): Promise<any> {
-    if(!this.auth.auth.currentUser) return;
-
     const companyName = _companyName ?? await this.storage.get('currentCompany') as string;
+    if(!companyName) return;
+
     const plantsCollectionRef = collection(this.getCompanyReference(companyName), 'plants').withConverter(Plant.converter);
     const productsCollectionRef = collection(this.getCompanyReference(companyName), 'products').withConverter(Product.converter);    
 
