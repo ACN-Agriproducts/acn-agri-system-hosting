@@ -13,6 +13,7 @@ import { ProductCardComponent } from './components/product-card/product-card.com
 import { ClientCardComponent } from './components/client-card/client-card.component';
 import { ContractsTableComponent } from './components/contracts-table/contracts-table.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ContractPaymentReportsPage,
     ProductCardComponent,
     ClientCardComponent,
-    ContractsTableComponent
+    ContractsTableComponent,
+    ProductDialogComponent
   ]
 })
 export class ContractPaymentReportsPageModule {}

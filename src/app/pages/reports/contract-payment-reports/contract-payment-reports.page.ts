@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, orderBy, where } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { ContactInfo, Contract } from '@shared/classes/contract';
 import { ContractsService } from '@shared/model-services/contracts.service';
+import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
 
 @Component({
   selector: 'app-contract-payment-reports',
@@ -24,7 +26,8 @@ export class ContractPaymentReportsPage implements OnInit {
   public ready = false;
 
   constructor(
-    private contracts: ContractsService
+    private contracts: ContractsService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -38,42 +41,35 @@ export class ContractPaymentReportsPage implements OnInit {
     this.clientAccounts = {};
     this.productAccounts = {};
 
-    const contractList = await this.contracts.getList({afterDate: this.queryDate, status: ['active', 'closed', 'paid']});
+    const contractList = await this.contracts.getList({afterDate: this.queryDate});
     console.log(contractList);
     
     for(let contract of contractList) {
-      let currentClient = this.clientAccounts[contract.clientInfo.ref.id];
-      let currentProduct = this.productAccounts[contract.product.id];
-
-      if(!currentClient) {
-        currentClient = this.clientAccounts[contract.clientInfo.ref.id] = {
-          client: contract.clientInfo,
-          contracts: [],
-          purchase: {
-            pendingToPay: 0,
-            paid: 0
-          },
-          sale: {
-            pendingToPay: 0,
-            paid: 0
-          }
-        };
-      }
-
-      if(!currentProduct) {
-        currentProduct = this.productAccounts[contract.product.id] = {
-          product: contract.product.id,
-          contracts: [],
-          purchase: {
-            pendingToPay: 0,
-            paid: 0
-          },
-          sale: {
-            pendingToPay: 0,
-            paid: 0
-          }
+      let currentClient = this.clientAccounts[contract.clientInfo.ref.id] ??= {
+        client: contract.clientInfo,
+        contracts: [],
+        purchase: {
+          pendingToPay: 0,
+          paid: 0
+        },
+        sale: {
+          pendingToPay: 0,
+          paid: 0
         }
-      }
+      };
+
+      let currentProduct = this.productAccounts[contract.product.id] ??= {
+        product: contract.product.id,
+        contracts: [],
+        purchase: {
+          pendingToPay: 0,
+          paid: 0
+        },
+        sale: {
+          pendingToPay: 0,
+          paid: 0
+        }
+      };
       
       currentClient.contracts.push(contract);
       currentProduct.contracts.push(contract);
@@ -97,6 +93,12 @@ export class ContractPaymentReportsPage implements OnInit {
     }
 
     this.ready = true
+  }
+
+  public openProductDialog(account: ProductAccount) {
+    this.dialog.open(ProductDialogComponent, {
+      data: account
+    });
   }
 }
 
@@ -127,25 +129,11 @@ export interface ProductAccount {
 }
 
 /*
-  purchase
+  Headers?
     date
-    contract
-    name
+    contractID
+    delivered
     quantity
     price
-    deliverry
-    ammount
-    discount
-    comments
-    payment
-    CTA Futuro
-
-  Sale
-    Date
-    Contract
-    Name
-    delivered
-    to deliver
-    discounts
-    payments
+    paid
 */

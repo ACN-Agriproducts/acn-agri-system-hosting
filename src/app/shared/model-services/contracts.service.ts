@@ -86,7 +86,7 @@ export class ContractsService {
     startAfterObject,
     beforeDate,
     afterDate
-  }: getListParams): Promise<Contract[]> {
+  }: getContractsListParams): Promise<Contract[]> {
 
     const constraints: QueryConstraint[] = [];
     
@@ -110,12 +110,12 @@ export class ContractsService {
   }
 }
 
-export type getListParams = {
+export type getContractsListParams = {
   count?: number;
   type?: string[],
   orderField?: string,
   tags?: string[],
-  status: string[]
+  status?: string[]
   sortOrder?: OrderByDirection,
   startAfterObject?: Contract,
   beforeDate?: Date,
