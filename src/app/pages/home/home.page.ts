@@ -8,6 +8,8 @@ import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
 import { DashboardData } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
+import { CompanyService } from '@core/services/company/company.service';
+import { DashboardService } from '@core/services/dashboard/dashboard.service';
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -28,14 +30,16 @@ export class HomePage implements OnInit {
 
   public contract: Contract;
   
-  public products$: Observable<Product[]>;
+  public products: Product[];
   public selectedProduct: Product | "all";
-  public dashboardData: DashboardData;
+  public dashboardData: Promise<DashboardData>;
 
   constructor(
     private session: SessionInfo,
     private db: Firestore,
-    private functions: Functions
+    private functions: Functions,
+    private company: CompanyService,
+    private dashboard: DashboardService
   ) {
   }
 
@@ -43,15 +47,10 @@ export class HomePage implements OnInit {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
 
-    this.contract = new Contract(
-      doc(Contract.getCollectionReference(this.db, this.currentCompany))
-    );
+    this.contract = new Contract(doc(Contract.getCollectionReference(this.db, this.currentCompany)));
 
-    this.products$ = Product.getCollectionSnapshot(this.db, this.currentCompany);
-
-    DashboardData.getLatestDashboardMetrics(this.db, this.currentCompany).then(data => {
-      this.dashboardData = data;
-    });
+    this.products = this.company.getProductsList();
+    this.dashboardData = this.dashboard.getDashboardData();
   }
 
   focusEventHandler(fieldName: string) {
@@ -62,14 +61,14 @@ export class HomePage implements OnInit {
     console.log(this.selectedProduct)
   }
 
-  createDashboardManually() {
-    this.dashboardData = new DashboardData(doc(DashboardData.getCollectionRef(this.db, this.currentCompany)));
-    console.log("Created Dashboard Data:", this.dashboardData);
+  async createDashboardManually() {
+    // this.dashboardData = new DashboardData(doc(DashboardData.getCollectionRef(this.db, this.currentCompany)));
+    console.log("Created Dashboard Data:", await this.dashboardData);
   }
 
-  setDashboardManually() {
-    this.dashboardData.set();
-    console.log("Set Dashboard Data:", this.dashboardData);
+  async setDashboardManually() {
+    // this.dashboardData.set();
+    console.log("Set Dashboard Data:", await this.dashboardData);
   }
 
   testDashboardUpdate() {

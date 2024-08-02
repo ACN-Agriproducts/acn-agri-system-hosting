@@ -17,7 +17,7 @@
             <mat-label>Product</mat-label>
             <mat-select #selectedProductRef [(ngModel)]="selectedProduct" (selectionChange)="test()">
                 <mat-option value="all">All</mat-option>
-                <mat-option *ngFor="let product of products$ | async" [value]="product">{{ product.ref.id }}</mat-option>
+                <mat-option *ngFor="let product of products" [value]="product">{{ product.ref.id }}</mat-option>
             </mat-select>
         </mat-form-field>
 
