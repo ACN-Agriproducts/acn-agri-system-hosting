@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ProductAccount } from '../../contract-payment-reports.page';
+import { ProductDialogComponent } from '../product-dialog/product-dialog.component';
 
 @Component({
   selector: 'app-product-card',
@@ -10,7 +12,9 @@ export class ProductCardComponent implements OnInit {
   @Input() data: ProductAccount; 
   public tableData: TableData[];
 
-  constructor() { }
+  constructor(
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     const tempTableData: TableData[] = [{
@@ -38,7 +42,9 @@ export class ProductCardComponent implements OnInit {
   }
 
   openContractsDialog() {
-    console.log("test");
+    this.dialog.open(ProductDialogComponent, {
+      data: this.data
+    });
   }
 }
 

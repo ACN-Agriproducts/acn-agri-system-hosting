@@ -1,44 +1,50 @@
 <div>
 
 </div>
-<ion-card>
-  <ion-item>
+<ion-card class="table-row">
+  <ion-item lines="none">
     <ion-text>Date</ion-text>
   </ion-item>
-  <ion-item>
+  <ion-item lines="none">
     <ion-text>Contract ID</ion-text>
   </ion-item>
-  <ion-item>
+  <ion-item lines="none">
+    <ion-text>Status</ion-text>
+  </ion-item>
+  <ion-item lines="none">
     <ion-text>Delivered</ion-text>
   </ion-item>
-  <ion-item>
+  <ion-item lines="none">
     <ion-text>Quantity</ion-text>
   </ion-item>
-  <ion-item>
+  <ion-item lines="none">
     <ion-text>Price</ion-text>
   </ion-item>
-  <ion-item>
+  <ion-item lines="none">
     <ion-text>Paid</ion-text>
   </ion-item>
 </ion-card>
 <ion-card>
-  <div *ngFor="let contract of contracts">
-    <ion-item>
-      <ion-text>{{contract.date}}</ion-text>
+  <div *ngFor="let contract of contracts" class="table-row">
+    <ion-item lines="none">
+      <ion-text>{{contract.date | date}}</ion-text>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-text>{{contract.id}}</ion-text>
     </ion-item>
-    <ion-item>
-      <ion-text>{{contract.currentDelivered | massDisplay}}</ion-text>
+    <ion-item lines="none">
+      <ion-text>{{contract.status}}</ion-text>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
+      <ion-text>{{contract.currentDelivered | massDisplay:null:contract.quantity.getUnit()}}</ion-text>
+    </ion-item>
+    <ion-item lines="none">
       <ion-text>{{contract.quantity | massDisplay}}</ion-text>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-text>{{contract.price | pricePerUnit | currency}}</ion-text>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-text>{{contract.totalPayments | currency}}</ion-text>
     </ion-item>
   </div>

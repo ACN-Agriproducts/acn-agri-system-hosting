@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, orderBy, where } from '@angular/fire/firestore';
-import { MatDialog } from '@angular/material/dialog';
-import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Contact } from '@shared/classes/contact';
 import { ContactInfo, Contract } from '@shared/classes/contract';
 import { ContractsService } from '@shared/model-services/contracts.service';
-import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
 
 @Component({
   selector: 'app-contract-payment-reports',
@@ -26,8 +21,7 @@ export class ContractPaymentReportsPage implements OnInit {
   public ready = false;
 
   constructor(
-    private contracts: ContractsService,
-    private dialog: MatDialog
+    private contracts: ContractsService
   ) { }
 
   ngOnInit() {
@@ -93,12 +87,6 @@ export class ContractPaymentReportsPage implements OnInit {
     }
 
     this.ready = true
-  }
-
-  public openProductDialog(account: ProductAccount) {
-    this.dialog.open(ProductDialogComponent, {
-      data: account
-    });
   }
 }
 
