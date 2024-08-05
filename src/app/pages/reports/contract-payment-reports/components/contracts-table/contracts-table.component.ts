@@ -7,7 +7,6 @@ import { Contract } from '@shared/classes/contract';
   styleUrls: ['./contracts-table.component.scss'],
 })
 export class ContractsTableComponent implements OnInit {
-  @Input() title: string;
   @Input() contracts: Contract[];
 
   constructor() { }

@@ -14,6 +14,7 @@ import { ClientCardComponent } from './components/client-card/client-card.compon
 import { ContractsTableComponent } from './components/contracts-table/contracts-table.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { ProductDialogComponent } from './components/product-dialog/product-dial
     IonicModule,
     ContractPaymentReportsPageRoutingModule,
     SharedModule,
-    NgxChartsModule
+    NgxChartsModule,
+    MatDialogModule
   ],
   declarations: [
     ContractPaymentReportsPage,
