@@ -1,4 +1,19 @@
 .table-row {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    position: relative;
+}
+
+.greyout-bar {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: grey;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.greyout-bar:hover {
+    opacity: .2;
 }

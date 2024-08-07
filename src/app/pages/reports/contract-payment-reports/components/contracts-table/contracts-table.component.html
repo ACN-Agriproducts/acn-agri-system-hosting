@@ -22,7 +22,7 @@
   </ion-item>
 </ion-card>
 <ion-card>
-  <div *ngFor="let contract of contracts" class="table-row">
+  <div *ngFor="let contract of contracts" class="table-row" (click)="openContract(contract)">
     <ion-item lines="none">
       <ion-text>{{contract.date | date}}</ion-text>
     </ion-item>
@@ -44,5 +44,7 @@
     <ion-item lines="none">
       <ion-text>{{contract.totalPayments | currency}}</ion-text>
     </ion-item>
+
+    <div class="greyout-bar"></div>
   </div>
 </ion-card>

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Contract } from '@shared/classes/contract';
 import { ProductAccount } from '../../contract-payment-reports.page';
 
@@ -13,7 +13,8 @@ export class ProductDialogComponent implements OnInit {
   saleContracts: Contract[];
   
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ProductAccount
+    @Inject(MAT_DIALOG_DATA) public data: ProductAccount,
+    public dialogRef: MatDialogRef<ProductDialogComponent>
   ) { }
 
   ngOnInit() {

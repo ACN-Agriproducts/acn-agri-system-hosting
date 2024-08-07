@@ -1,10 +1,10 @@
 <div mat-dialog-content>
   <ng-container *ngIf="purchaseContracts.length > 0">
     <h1>Purchase</h1>
-    <app-contracts-table [contracts]="purchaseContracts"></app-contracts-table>
+    <app-contracts-table [contracts]="purchaseContracts" [dialogRef]="dialogRef"></app-contracts-table>
   </ng-container>
   <ng-container *ngIf="saleContracts.length > 0">
     <h1>Sale</h1>
-    <app-contracts-table [contracts]="saleContracts"></app-contracts-table>
+    <app-contracts-table [contracts]="saleContracts" [dialogRef]="dialogRef"></app-contracts-table>
   </ng-container>
 </div>
