@@ -15,6 +15,7 @@ import { ContractsTableComponent } from './components/contracts-table/contracts-
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ProductDialogComponent } from './components/product-dialog/product-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ClientDialogComponent } from './components/client-dialog/client-dialog.component';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     ProductCardComponent,
     ClientCardComponent,
     ContractsTableComponent,
-    ProductDialogComponent
+    ProductDialogComponent,
+    ClientDialogComponent
   ]
 })
 export class ContractPaymentReportsPageModule {}
