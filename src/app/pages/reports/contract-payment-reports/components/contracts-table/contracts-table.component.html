@@ -20,6 +20,9 @@
   <ion-item lines="none">
     <ion-text>Paid</ion-text>
   </ion-item>
+  <ion-item lines="none">
+    <ion-text>To Pay</ion-text>
+  </ion-item>
 </ion-card>
 <ion-card>
   <div *ngFor="let contract of contracts" class="table-row" (click)="openContract(contract)">
@@ -36,13 +39,16 @@
       <ion-text>{{contract.currentDelivered | massDisplay:null:contract.quantity.getUnit()}}</ion-text>
     </ion-item>
     <ion-item lines="none">
-      <ion-text>{{contract.quantity | massDisplay}}</ion-text>
+      <ion-text>{{contract.quantity | massDisplay:3:'mTon'}}</ion-text>
     </ion-item>
     <ion-item lines="none">
-      <ion-text>{{contract.price | pricePerUnit | currency}}</ion-text>
+      <ion-text>{{contract.price | pricePerUnit:'bu':contract.quantity | currency}}</ion-text>
     </ion-item>
     <ion-item lines="none">
       <ion-text>{{contract.totalPayments | currency}}</ion-text>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-text>{{contract.getRemainingToPay() | currency}}</ion-text>
     </ion-item>
 
     <div class="greyout-bar"></div>

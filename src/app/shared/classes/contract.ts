@@ -646,6 +646,16 @@ export class Contract extends FirebaseDocInterface {
         return onSnapshot(collectionQuery, onNext);
     }
 
+    public getCurrentMonetaryValue(): number {
+        return this.price.getPricePerUnit(this.currentDelivered.getUnit(), this.currentDelivered) * this.currentDelivered.get();
+    }
+
+    public getRemainingToPay(): number {
+        if(this.status == 'pending' || this.status == 'paid') return 0;
+
+        return Math.max(this.getCurrentMonetaryValue() - this.totalPayments, 0);
+    }
+
     public static getSnapshotById(db: Firestore, company: string, contractId: string, 
         onNext: (snapshot: DocumentSnapshot<Contract>) => void
     ): Unsubscribe {

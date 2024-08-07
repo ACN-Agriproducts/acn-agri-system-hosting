@@ -36,7 +36,6 @@ export class ContractPaymentReportsPage implements OnInit {
     this.productAccounts = {};
 
     const contractList = await this.contracts.getList({afterDate: this.queryDate});
-    console.log(contractList);
     
     for(let contract of contractList) {
       let currentClient = this.clientAccounts[contract.clientInfo.ref.id] ??= {
@@ -81,7 +80,8 @@ export class ContractPaymentReportsPage implements OnInit {
       currentClient[type].paid += contract.totalPayments;
       currentProduct[type].paid += contract.totalPayments;
 
-      const pending = (contract.status == "paid") ? 0 : contract.currentDelivered.getMassInUnit(contract.price.getUnit()) * contract.price.amount - contract.totalPayments;
+      const pending = contract.getRemainingToPay();
+      if(pending == NaN) console.log(contract);
       currentClient[type].pendingToPay += pending;
       currentProduct[type].pendingToPay += pending;
     }
