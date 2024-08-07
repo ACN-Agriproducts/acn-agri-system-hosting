@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-status-chip',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./status-chip.component.scss'],
 })
 export class StatusChipComponent implements OnInit {
+  @Input() status: string;
 
   constructor() { }
 

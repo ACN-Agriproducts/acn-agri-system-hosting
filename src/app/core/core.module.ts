@@ -1,7 +1,6 @@
 import { SearchPipe } from './pipes/Search/search.pipe';
 import { FormatStringPipe } from './pipes/FormatString/formatString.pipe';
 import { FormatPriceLetterPipe } from './pipes/FormatPriceLetter/FormatPriceLetter.pipe';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectivesCoreModule } from './directive/directives-core.module';
 import { MaterialModule } from './modules/material.module';
 
@@ -10,7 +9,6 @@ import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { IonicStorageModule } from '@ionic/storage';
 import { StateAbbreviationPipe } from './pipes/stateAbbreviation/state-abbreviation.pipe';
 import { AsPipe } from './pipes/Cast/cast-pipe.pipe';
 import { ListFindPipe } from './pipes/list-find/list-find.pipe';
@@ -24,13 +22,14 @@ import { IncludesPipe } from './pipes/includes/includes.pipe';
 import { TranslocoModule } from '@ngneat/transloco';
 import { TranslocoNestedPipe } from './pipes/translocoNested/transloco-nested.pipe';
 import { StatusChipComponent } from './components/status-chip/status-chip/status-chip.component';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   imports: [
     CommonModule,
     ComponentsModule,
     // FormsModule,
-    // IonicModule,
+    IonicModule,
     MaterialModule,
     NgxDropzoneModule,
     DirectivesCoreModule,
@@ -62,7 +61,8 @@ import { StatusChipComponent } from './components/status-chip/status-chip/status
     // IonicStorageModule
     // FormsModule,
     // ReactiveFormsModule,
-    TranslocoNestedPipe
+    TranslocoNestedPipe,
+    StatusChipComponent
   ],
   declarations: [
     FormatPriceLetterPipe,

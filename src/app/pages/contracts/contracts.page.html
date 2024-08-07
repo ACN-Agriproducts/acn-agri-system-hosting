@@ -156,10 +156,7 @@
                             <ion-text>{{contract.date | date}}</ion-text>
                         </ion-item>
                         <ion-item lines="none">
-                            <ion-text class="item-status" 
-                                [ngClass]="contract.status"
-                                >{{t(contract.status)}}
-                            </ion-text>
+                            <app-status-chip [status]="contract.status"></app-status-chip>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">

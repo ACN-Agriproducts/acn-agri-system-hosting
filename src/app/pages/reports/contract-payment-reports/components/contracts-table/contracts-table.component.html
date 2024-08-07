@@ -30,7 +30,7 @@
       <ion-text>{{contract.id}}</ion-text>
     </ion-item>
     <ion-item lines="none">
-      <ion-text>{{contract.status}}</ion-text>
+      <app-status-chip [status]="contract.status"></app-status-chip>
     </ion-item>
     <ion-item lines="none">
       <ion-text>{{contract.currentDelivered | massDisplay:null:contract.quantity.getUnit()}}</ion-text>
