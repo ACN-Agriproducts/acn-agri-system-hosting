@@ -47,10 +47,10 @@
                     <mat-slide-toggle #salesCurrencyToggle color="primary">$</mat-slide-toggle>
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-card-title *ngIf="salesCurrencyToggle.checked else salesAmount">{{ (productsMetrics?.[selectedProduct.ref.id]?.totalSales || 0) | currency }}</mat-card-title>
+                    <mat-card-title *ngIf="salesCurrencyToggle.checked else salesAmount">{{ (productMetricsMap?.[selectedProduct.ref.id]?.totalSales || 0) | currency }}</mat-card-title>
                     <ng-template #salesAmount>
                         <mat-card-title>
-                            {{ ((productsMetrics?.[selectedProduct.ref.id]?.totalSalesAmount | massInUnit:'mTon') || 0) | number }}
+                            {{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalSalesAmount | massInUnit:'mTon') || 0) | number }}
                             &nbsp;
                             <span>{{ "mTon" | unitName }}</span>
                         </mat-card-title>
@@ -64,9 +64,9 @@
                 </mat-card-header>
                 <mat-card-content>
                     <mat-card-title>
-                        <span>{{ ((productsMetrics?.[selectedProduct.ref.id]?.totalToBeDelivered | massInUnit) || 0) | number }}</span>
+                        <span>{{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalToBeDelivered | massInUnit) || 0) | number }}</span>
                         &nbsp;
-                        <span>{{ productsMetrics?.[selectedProduct.ref.id]?.totalToBeReceived.defaultUnits | unitName }}</span>
+                        <span>{{ productMetricsMap?.[selectedProduct.ref.id]?.totalToBeReceived.defaultUnits | unitName }}</span>
                     </mat-card-title>
                 </mat-card-content>
                 <!-- <div>+ {{ 7.8 }}%</div> -->
@@ -78,10 +78,10 @@
                     <mat-slide-toggle #purchasesCurrencyToggle color="primary">$</mat-slide-toggle>
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-card-title *ngIf="purchasesCurrencyToggle.checked else purchasesAmount">{{ (productsMetrics?.[selectedProduct.ref.id]?.totalPurchases || 0) | currency }}</mat-card-title>
+                    <mat-card-title *ngIf="purchasesCurrencyToggle.checked else purchasesAmount">{{ (productMetricsMap?.[selectedProduct.ref.id]?.totalPurchases || 0) | currency }}</mat-card-title>
                     <ng-template #purchasesAmount>
                         <mat-card-title>
-                            {{ ((productsMetrics?.[selectedProduct.ref.id]?.totalPurchasesAmount | massInUnit:'mTon') || 0) | number }}
+                            {{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalPurchasesAmount | massInUnit:'mTon') || 0) | number }}
                             &nbsp;
                             <span>{{ "mTon" | unitName }}</span>
                         </mat-card-title>
@@ -95,9 +95,9 @@
                 </mat-card-header>
                 <mat-card-content>
                     <mat-card-title>
-                        <span>{{ ((productsMetrics?.[selectedProduct.ref.id]?.totalToBeReceived | massInUnit) || 0) | number }}</span>
+                        <span>{{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalToBeReceived | massInUnit) || 0) | number }}</span>
                         &nbsp;
-                        <span>{{ productsMetrics?.[selectedProduct.ref.id]?.totalToBeReceived.defaultUnits | unitName }}</span>
+                        <span>{{ productMetricsMap?.[selectedProduct.ref.id]?.totalToBeReceived.defaultUnits | unitName }}</span>
                     </mat-card-title>
                 </mat-card-content>
                 <!-- <div>- {{ 7.19 }}%</div> -->
@@ -120,7 +120,7 @@
                 <mat-card-content>
                     <ngx-charts-bar-vertical
                         [view]="undefined"
-                        [results]="chartData?.[selectedProduct.ref.id]?.salesAmount"
+                        [results]="productChartData?.[selectedProduct.ref.id]?.saleAmounts"
                         [scheme]="colorScheme"
                         [xAxis]="true"
                         [yAxis]="true"
@@ -132,7 +132,7 @@
                         [showGridLines]="true"
                         [barPadding]="8"
                         [roundDomains]="false"
-                        [yScaleMax]="1000"
+                        [yScaleMax]="250"
                         [noBarWhenZero]="true"
                         [trimXAxisTicks]="false"
                         [trimYAxisTicks]="false"
@@ -150,7 +150,7 @@
                 <mat-card-content>
                     <ngx-charts-bar-vertical
                         [view]="undefined"
-                        [results]="chartData?.[selectedProduct.ref.id]?.purchasesAmount"
+                        [results]="productChartData?.[selectedProduct.ref.id]?.purchaseAmounts"
                         [scheme]="colorScheme"
                         [xAxis]="true"
                         [yAxis]="true"
@@ -162,7 +162,7 @@
                         [showGridLines]="true"
                         [barPadding]="8"
                         [roundDomains]="false"
-                        [yScaleMax]="1000"
+                        [yScaleMax]="250"
                         [noBarWhenZero]="true"
                         [trimXAxisTicks]="false"
                         [trimYAxisTicks]="false"

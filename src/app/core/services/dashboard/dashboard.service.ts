@@ -1,10 +1,30 @@
 import { Injectable } from '@angular/core';
 import { collection, CollectionReference, Firestore, getDocs, limit, orderBy, query } from '@angular/fire/firestore';
 import { CompanyService } from '../company/company.service';
-import { DashboardData, ProductsMetrics } from '@shared/classes/dashboard-data';
+import { DashboardData, ProductMetricsMap } from '@shared/classes/dashboard-data';
 import { ContractsService } from '@shared/model-services/contracts.service';
 import { Mass } from '@shared/classes/mass';
 import { Contract } from '@shared/classes/contract';
+
+interface ProductChartData {
+  [productName: string]: {
+    saleAmounts: {
+      name: string;
+      value: number;
+    }[],
+    purchaseAmounts: {
+      name: string;
+      value: number;
+    }[]
+  }
+}
+
+interface ProductChartDataWithMaps {
+  [productName: string]: {
+    saleAmounts: Map<string, number>,
+    purchaseAmounts: Map<string, number>
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -25,29 +45,24 @@ export class DashboardService {
   //   return getDocs(colQuery).then(result => result.docs[0]?.data());
   // }
 
-  public async getDashboardData(startDate: Date, endDate: Date = new Date()): Promise<{productsMetrics: ProductsMetrics, chartData: any}> {
+  public async getDashboardData(startDate: Date, endDate: Date = new Date()): Promise<{productMetricsMap: ProductMetricsMap, productChartData: ProductChartData}> {
     this.normalizeDates(startDate, endDate);
 
+    const dateRange: string[] = [];
+    for (const date = new Date(startDate); date <= endDate; date.setMonth(date.getMonth() + 1)) {
+      const dateString = date.toLocaleDateString('en-us', { year: "numeric", month: "short" });
+      dateRange.push(dateString);
+    }
+    
     const contracts = await this.contractsService.getList({ afterDate: startDate, beforeDate: endDate });
-    const productsMetrics: ProductsMetrics = {};
-    const chartData: {
-      [productName: string]: {
-        salesAmount: {
-          name: number,
-          value: number
-        }[],
-        purchasesAmount: {
-          name: number,
-          value: number
-        }[]
-      }
-    } = {};
+    
+    const productMetricsMap: ProductMetricsMap = {};
+    const productChartDataMap: ProductChartDataWithMaps = {};
 
     for (const contract of contracts) {
       const productName = contract.product.id;
-      const normalizedDate = contract.date;
 
-      productsMetrics[productName] ??= {
+      productMetricsMap[productName] ??= {
         totalSales: 0,
         totalPurchases: 0,
         totalToBeDelivered: new Mass(0, contract.quantity.getUnit(), contract.productInfo),
@@ -56,48 +71,53 @@ export class DashboardService {
         totalPurchasesAmount: new Mass(0, contract.quantity.getUnit(), contract.productInfo)
       };
 
-      chartData[productName] ??= {
-        salesAmount: [],
-        purchasesAmount: []
+      productChartDataMap[productName] ??= {
+        saleAmounts: new Map(dateRange.map(date => [date, 0])),
+        purchaseAmounts: new Map(dateRange.map(date => [date, 0]))
       };
 
-      for (let i = 0; i < 12; i++) {
-        chartData[productName].salesAmount[i] ??= { name: i, value: 0 };
-        chartData[productName].purchasesAmount[i] ??= { name: i, value: 0 };
-      }
+      const dateString = contract.date.toLocaleDateString('en-us', { year: "numeric", month: "short" });
+      const productMetrics = productMetricsMap[productName];
 
-      const productMetrics = productsMetrics[productName];
       if (contract.tags?.includes('sale') || contract.type === 'sales') {
         productMetrics.totalSales += contract.getContractedTotalPrice();
         productMetrics.totalSalesAmount = productMetrics.totalSalesAmount.add(contract.getContractedTotal());
         productMetrics.totalToBeDelivered = productMetrics.totalToBeDelivered.add(contract.getPendingToDeliverOrReceive());
 
-        chartData[productName].salesAmount[contract.date.getMonth()].name = contract.date.getMonth();
-        chartData[productName].salesAmount[contract.date.getMonth()].value += contract.getContractedTotal().getMassInUnit('mTon');
+        const sales = productChartDataMap[productName].saleAmounts;
+        sales.set(dateString, sales.get(dateString) + contract.getContractedTotal().getMassInUnit('mTon'));
       }
       else if (contract.tags?.includes('purchase') || contract.type === 'purchase') {
         productMetrics.totalPurchases += contract.getContractedTotalPrice();
         productMetrics.totalPurchasesAmount = productMetrics.totalPurchasesAmount.add(contract.getContractedTotal());
         productMetrics.totalToBeReceived = productMetrics.totalToBeReceived.add(contract.getPendingToDeliverOrReceive());
 
-        chartData[productName].purchasesAmount[contract.date.getMonth()].name = contract.date.getMonth();
-        chartData[productName].purchasesAmount[contract.date.getMonth()].value += contract.getContractedTotal().getMassInUnit('mTon');
+        const purchases = productChartDataMap[productName].purchaseAmounts;
+        purchases.set(dateString, purchases.get(dateString) + contract.getContractedTotal().getMassInUnit('mTon'));
       }
     }
 
-    return { productsMetrics, chartData };
+    const productChartData: ProductChartData = {};
+    for (const productName of Object.keys(productChartDataMap)) {
+      productChartData[productName] ??= {
+        saleAmounts: [],
+        purchaseAmounts: []
+      };
+
+      productChartDataMap[productName].saleAmounts.forEach((value, name) => { productChartData[productName].saleAmounts.push({ name, value })});
+      productChartDataMap[productName].purchaseAmounts.forEach((value, name) => { productChartData[productName].purchaseAmounts.push({ name, value })});
+    }
+
+    return { productMetricsMap, productChartData };
   }
 
-  normalizeDates(startDate: Date, endDate: Date = new Date()) {
-    startDate.setMonth(startDate.getMonth());
-    startDate.setFullYear(startDate.getFullYear());
+  public normalizeDates(startDate: Date, endDate: Date = new Date()) {
     startDate.setDate(1);
     startDate.setHours(0, 0, 0, 0);
 
     if (endDate < startDate) endDate.setTime(startDate.getTime());
 
     endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setFullYear(endDate.getFullYear());
     endDate.setDate(0);
     endDate.setHours(0, 0, 0, 0);
 

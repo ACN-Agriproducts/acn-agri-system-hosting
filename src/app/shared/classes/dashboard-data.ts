@@ -3,7 +3,7 @@ import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Company } from "./company";
 import { Mass } from "./mass";
 
-export interface ProductsMetrics {
+export interface ProductMetricsMap {
     [productName: string]: {
         totalSales: number;
         totalPurchases: number;
@@ -18,7 +18,7 @@ export class DashboardData extends FirebaseDocInterface {
     // monthly date, in the middle of the month
     // EX: JUN 15, 2024
     date: Date;
-    latestMetrics: ProductsMetrics;
+    latestMetrics: ProductMetricsMap;
     // settings: {
     //     [settingName: string]: {
     //         value: any;

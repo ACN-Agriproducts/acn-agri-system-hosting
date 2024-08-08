@@ -3,7 +3,7 @@ import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
-import { DashboardData, ProductsMetrics } from '@shared/classes/dashboard-data';
+import { DashboardData, ProductMetricsMap } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CompanyService } from '@core/services/company/company.service';
 import { DashboardService } from '@core/services/dashboard/dashboard.service';
@@ -59,17 +59,17 @@ export class HomePage implements OnInit {
   public products: Product[];
   public selectedProduct: Product;
 
-  public productsMetrics: ProductsMetrics;
+  public productMetricsMap: ProductMetricsMap;
   public startDate: Date = new Date();
   public endDate: Date;
-  public chartData: {
+  public productChartData: {
     [productName: string]: {
-      salesAmount: {
-        name: number,
+      saleAmounts: {
+        name: string,
         value: number
       }[],
-      purchasesAmount: {
-        name: number,
+      purchaseAmounts: {
+        name: string,
         value: number
       }[]
     }
@@ -119,17 +119,14 @@ export class HomePage implements OnInit {
   }
 
   async setDashboardDataObject() {
-    console.log(this.startDate, this.endDate);
-    // this.productsMetrics = await this.dashboard.getProductsMetrics(this.startDate, this.endDate);
+    // console.log(this.startDate, this.endDate);
 
-    const { productsMetrics, chartData } = await this.dashboard.getDashboardData(this.startDate, this.endDate);
-    this.productsMetrics = productsMetrics;
-    this.chartData = chartData;
-
+    const { productMetricsMap, productChartData } = await this.dashboard.getDashboardData(this.startDate, this.endDate);
+    this.productMetricsMap = productMetricsMap;
+    this.productChartData = productChartData;
     
-    console.log(this.startDate, this.endDate);
-    console.log(this.chartData[this.selectedProduct.ref.id].salesAmount);
-    console.log(this.chartData[this.selectedProduct.ref.id].purchasesAmount);
+    // console.log(this.startDate, this.endDate);
+    console.log(this.productChartData[this.selectedProduct.ref.id])
   }
 }
 
