@@ -47,6 +47,12 @@ export class ContactPage implements OnInit {
 	public contracts: Pagination<FirebaseDocInterface>;
 	public tickets: Pagination<FirebaseDocInterface>;
 
+	public notesButtons = [{
+		icon: 'add',
+		onClick: () => {
+			// TODO Do new note 
+		}
+	}]
 	constructor(
 		private db: Firestore,
 		private route: ActivatedRoute,
@@ -89,7 +95,7 @@ export class ContactPage implements OnInit {
 	public async getContracts(): Promise<void> {
 		const constraints = [
 			where("client", "==", this.contact.ref),
-			orderBy('date')
+			orderBy('date', 'desc')
 		];
 
 		if (await Contract.getContractCount(this.db, this.currentCompany, false, ...constraints) > 0) {

@@ -314,7 +314,8 @@
         "Add New": "Add New",
         "Destination": "Destination",
         "Document Name": "Document Name",
-        "Download File": "Download File"        
+        "Download File": "Download File",
+        "Notes": "Notes"
     },
     "tickets": {
         "Report": "Report",

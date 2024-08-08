@@ -99,8 +99,49 @@
 						</ion-card>
 					</ion-col>
 				</ion-row>
-	
-				<h4><span>{{t('Analytics')}}</span></h4>
+
+				<app-section-title 
+					[title]="t('Notes')" 
+					[suffixButtons]="notesButtons"></app-section-title>
+				<!-- <h4>
+					<span>{{)}}</span>
+				</h4> -->
+				<!-- <button mat-icon-button><mat-icon>add</mat-icon></button> -->
+				<ion-row>
+					<ion-col size-md="4" size-sm="6" size-xs="12">
+						<ion-card>
+							<ion-card-header>
+								<ion-card-subtitle>Aug 8, 2024</ion-card-subtitle>
+							</ion-card-header>
+							<ion-card-content>
+								Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic possimus nostrum accusamus pariatur. Nobis, a maxime? Vitae, eaque eius animi, quod blanditiis ex veritatis accusamus hic quisquam ducimus impedit aut!
+							</ion-card-content>
+						</ion-card>
+
+					</ion-col>
+					<ion-col size-md="4" size-sm="6" size-xs="12">
+						<ion-card>
+							<ion-card-header>
+								<ion-card-subtitle>Aug 8, 2024</ion-card-subtitle>
+							</ion-card-header>
+							<ion-card-content>
+								Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic possimus nostrum accusamus pariatur. Nobis, a maxime? Vitae, eaque eius animi, quod blanditiis ex veritatis accusamus hic quisquam ducimus impedit aut!
+							</ion-card-content>
+						</ion-card>
+					</ion-col>
+					<ion-col size-md="4" size-sm="6" size-xs="12">
+						<ion-card>
+							<ion-card-header>
+								<ion-card-subtitle>Aug 8, 2024</ion-card-subtitle>
+							</ion-card-header>
+							<ion-card-content>
+								Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic possimus nostrum accusamus pariatur. Nobis, a maxime? Vitae, eaque eius animi, quod blanditiis ex veritatis accusamus hic quisquam ducimus impedit aut!
+							</ion-card-content>
+						</ion-card>
+					</ion-col>
+				</ion-row>
+
+				<!-- <h4><span>{{t('Analytics')}}</span></h4>
 				<ion-row>
 					<ion-col>
 						<ion-card>
@@ -111,7 +152,7 @@
 							<div>--</div>
 						</ion-card>
 					</ion-col>
-				</ion-row>
+				</ion-row> -->
 	
 				<ng-template [ngIf]="contracts || tickets">
 					<h4><span>{{t('Documents')}}</span></h4>
