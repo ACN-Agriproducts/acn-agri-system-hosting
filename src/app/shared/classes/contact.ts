@@ -2,6 +2,7 @@ import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryD
 import { ContactInfo } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
+import { Note } from "./note";
 
 export class Contact extends FirebaseDocInterface {
     public _curp: string;
@@ -208,6 +209,10 @@ export class Contact extends FirebaseDocInterface {
 
     public get curp(): string {
         return this._curp;
+    }
+
+    public getNewNote(): Note {
+        return new Note(doc(collection(this.ref, 'notes')));
     }
 }
 

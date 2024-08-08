@@ -9,7 +9,9 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { FirebaseDocInterface, Pagination } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
+import { Note } from '@shared/classes/note';
 import { Ticket } from '@shared/classes/ticket';
+import { NewNoteComponent } from '@shared/components/new-note/new-note/new-note.component';
 import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
 
@@ -50,7 +52,7 @@ export class ContactPage implements OnInit {
 	public notesButtons = [{
 		icon: 'add',
 		onClick: () => {
-			// TODO Do new note 
+			this.newNote();
 		}
 	}]
 	constructor(
@@ -138,6 +140,16 @@ export class ContactPage implements OnInit {
 		this.navController.navigateForward(`dashboard/contracts/contract-info/${this.docsType}/${refId}`);
 	}
 
+	public newNote(): void {
+		const newNote = this.contact.getNewNote();
+		
+		this.dialog.open(NewNoteComponent, {
+			data: newNote,
+			minWidth: '400px',
+		});
+
+
+	}
 
 	public openTicket(refId: string): void {
 		// TBD
