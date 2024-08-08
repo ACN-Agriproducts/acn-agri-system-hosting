@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Firestore, limit, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { Firestore, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -9,7 +9,6 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { FirebaseDocInterface, Pagination } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
-import { Note } from '@shared/classes/note';
 import { Ticket } from '@shared/classes/ticket';
 import { NewNoteComponent } from '@shared/components/new-note/new-note/new-note.component';
 import { lastValueFrom, of } from 'rxjs';
@@ -146,9 +145,13 @@ export class ContactPage implements OnInit {
 		this.dialog.open(NewNoteComponent, {
 			data: newNote,
 			minWidth: '400px',
+		}).afterClosed().subscribe(result => {
+			if(!result) return;
+			
+			newNote.set();
 		});
 
-
+		
 	}
 
 	public openTicket(refId: string): void {
