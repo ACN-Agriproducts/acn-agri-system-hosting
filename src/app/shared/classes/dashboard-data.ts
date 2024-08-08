@@ -1,19 +1,24 @@
 import { collection, CollectionReference, DocumentData, DocumentReference, Firestore, getDocs, getDocsFromServer, limit, orderBy, Query, query, QueryDocumentSnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
 import { Company } from "./company";
+import { Mass } from "./mass";
+
+export interface ProductsMetrics {
+    [productName: string]: {
+        totalSales: number;
+        totalPurchases: number;
+        totalToBeDelivered: Mass;
+        totalToBeReceived: Mass;
+        totalSalesAmount: Mass;
+        totalPurchasesAmount: Mass;
+    }
+}
 
 export class DashboardData extends FirebaseDocInterface {
     // monthly date, in the middle of the month
     // EX: JUN 15, 2024
     date: Date;
-    latestMetrics: {
-        [productName: string]: {
-            totalSales: number;
-            totalPurchases: number;
-            totalToBeDelivered: number;
-            totalToBeReceived: number;
-        }
-    }
+    latestMetrics: ProductsMetrics;
     // settings: {
     //     [settingName: string]: {
     //         value: any;
@@ -52,16 +57,5 @@ export class DashboardData extends FirebaseDocInterface {
             return new DashboardData(snapshot);
         }
     };
-
-    public static getCollectionRef = (db: Firestore, company: string): CollectionReference<DashboardData> => {
-        return collection(Company.getCompanyRef(db, company), 'dashboard-data').withConverter(DashboardData.converter);
-    }
-
-    public static getLatestDashboardMetrics(db: Firestore, company: string): Promise<DashboardData> {
-        const colQuery = query(DashboardData.getCollectionRef(db, company), orderBy('date', 'desc'), limit(1));
-        return getDocs(colQuery).then(result => {
-            return result.docs[0].data()
-        });
-    }
 
 }

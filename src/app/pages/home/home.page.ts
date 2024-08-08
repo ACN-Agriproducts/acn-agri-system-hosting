@@ -1,15 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
-import { Observable } from 'rxjs';
-import { Plant } from '@shared/classes/plant';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
-import { DashboardData } from '@shared/classes/dashboard-data';
+import { DashboardData, ProductsMetrics } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CompanyService } from '@core/services/company/company.service';
 import { DashboardService } from '@core/services/dashboard/dashboard.service';
+import { MatDatepicker } from '@angular/material/datepicker';
+
+import * as moment from 'moment';
+import { Moment } from 'moment';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { FormControl } from '@angular/forms';
+import { Mass, units } from '@shared/classes/mass';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 export interface Item {
   createdAt: Date;
   employees: DocumentReference[];
@@ -20,6 +38,14 @@ export interface Item {
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class HomePage implements OnInit {
   public permissions: any;
@@ -31,8 +57,26 @@ export class HomePage implements OnInit {
   public contract: Contract;
   
   public products: Product[];
-  public selectedProduct: Product | "all";
-  public dashboardData: Promise<DashboardData>;
+  public selectedProduct: Product;
+
+  public productsMetrics: ProductsMetrics;
+  public startDate: Date = new Date();
+  public endDate: Date;
+  public chartData: {
+    [productName: string]: {
+      salesAmount: {
+        name: number,
+        value: number
+      }[],
+      purchasesAmount: {
+        name: number,
+        value: number
+      }[]
+    }
+  }
+  public colorScheme: any = {
+    domain: ["#437b40"]
+  }
 
   constructor(
     private session: SessionInfo,
@@ -46,32 +90,59 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
-
     this.contract = new Contract(doc(Contract.getCollectionReference(this.db, this.currentCompany)));
-
     this.products = this.company.getProductsList();
-    this.dashboardData = this.dashboard.getDashboardData();
+
+    this.selectedProduct = this.products.find(p => p.ref.id === "Yellow Corn");
+
+    this.setDashboardDataObject();
   }
 
   focusEventHandler(fieldName: string) {
     console.log(fieldName);
   }
 
-  test() {
-    console.log(this.selectedProduct)
-  }
-
-  async createDashboardManually() {
-    // this.dashboardData = new DashboardData(doc(DashboardData.getCollectionRef(this.db, this.currentCompany)));
-    console.log("Created Dashboard Data:", await this.dashboardData);
-  }
-
-  async setDashboardManually() {
-    // this.dashboardData.set();
-    console.log("Set Dashboard Data:", await this.dashboardData);
-  }
-
   testDashboardUpdate() {
     httpsCallable(this.functions, 'schedules-dashboardMetricsUpdateLocal')("UPDATE DASHBOARD WITH NEW DOCUMENT");
+  }
+
+  setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>, setStart?: boolean): void {
+    const ctrlValue = moment();
+    ctrlValue.month(normalizedMonthAndYear.month());
+    ctrlValue.year(normalizedMonthAndYear.year());
+
+    if (setStart) this.startDate = ctrlValue.toDate();
+    else this.endDate = ctrlValue.toDate();
+
+    datepicker.close();
+    this.setDashboardDataObject();
+  }
+
+  async setDashboardDataObject() {
+    console.log(this.startDate, this.endDate);
+    // this.productsMetrics = await this.dashboard.getProductsMetrics(this.startDate, this.endDate);
+
+    const { productsMetrics, chartData } = await this.dashboard.getDashboardData(this.startDate, this.endDate);
+    this.productsMetrics = productsMetrics;
+    this.chartData = chartData;
+
+    
+    console.log(this.startDate, this.endDate);
+    console.log(this.chartData[this.selectedProduct.ref.id].salesAmount);
+    console.log(this.chartData[this.selectedProduct.ref.id].purchasesAmount);
+  }
+}
+
+@Pipe({ name: 'aggregateDashboardData' })
+class AggregateDashboardDataPipe implements PipeTransform {
+  transform(dashboardData: DashboardData, fieldName: string): any {
+    return;
+  }
+}
+
+@Pipe({ name: 'unitName' })
+export class UnitNamePipe implements PipeTransform {
+  transform(unit: units): string {
+    return Mass.getUnitFullName(unit);
   }
 }
