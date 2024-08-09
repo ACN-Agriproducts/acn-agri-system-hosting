@@ -7,20 +7,14 @@ export class Note extends FirebaseDocInterface {
     public text: string;
     public date: Date;
 
-    constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
-        let snapshot;
-        if(snapshotOrRef instanceof QueryDocumentSnapshot) {
-            snapshot = snapshotOrRef
-        }
-        
+    constructor(snapshot?: QueryDocumentSnapshot<any>) {       
         super(snapshot, Note.converter);
-        const data = snapshot?.data();
-
-        if(snapshotOrRef instanceof DocumentReference) {
+        if(!snapshot) {
             this.text = '';
-            this.ref = snapshotOrRef.withConverter(Note.converter);
             return;
         }
+
+        const data = snapshot?.data();
 
         this.author = (data.author as DocumentReference).withConverter(User.converter);
         this.text = data.text;

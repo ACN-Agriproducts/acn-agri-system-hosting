@@ -144,7 +144,7 @@ export class ContactPage implements OnInit {
 	}
 
 	public newNote(): void {
-		const newNote = this.contact.getNewNote();
+		const newNote = new Note();
 		newNote.author = doc(this.db, `users/${this.session.getUser().uid}`).withConverter(User.converter);
 		
 		this.dialog.open(NewNoteComponent, {

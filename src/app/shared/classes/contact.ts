@@ -211,13 +211,10 @@ export class Contact extends FirebaseDocInterface {
         return this._curp;
     }
 
-    public getNewNote(): Note {
-        return new Note(doc(collection(this.ref, 'notes')));
-    }
-
     public addNote(note: Note): Promise<void> {
         note.date = new Date();
-        console.log(note);
+        note.ref = doc(collection(this.ref, 'notes')).withConverter(Note.converter);
+
         return note.set();
     }
 
