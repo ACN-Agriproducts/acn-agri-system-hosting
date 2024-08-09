@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { collection, CollectionReference, Firestore, getDocs, limit, orderBy, query } from '@angular/fire/firestore';
+import { collection, CollectionReference } from '@angular/fire/firestore';
 import { CompanyService } from '../company/company.service';
 import { DashboardData, ProductMetrics } from '@shared/classes/dashboard-data';
 import { ContractsService } from '@shared/model-services/contracts.service';
 import { Mass } from '@shared/classes/mass';
-import { Contract } from '@shared/classes/contract';
 
-interface ProductChartData {
+export interface ProductChartData {
   [productName: string]: {
     saleAmounts: {
       name: string;
@@ -31,7 +30,6 @@ interface ProductChartDataWithMaps {
 })
 export class DashboardService {
   constructor(
-    private db: Firestore,
     private company: CompanyService,
     private contractsService: ContractsService,
   ) {}
@@ -62,7 +60,7 @@ export class DashboardService {
     for (const contract of contracts) {
       const productName = contract.product.id;
 
-      productMetrics[productName] ??= {
+      const metrics = productMetrics[productName] ??= {
         totalSales: 0,
         totalPurchases: 0,
         totalToBeDelivered: new Mass(0, contract.quantity.getUnit(), contract.productInfo),
@@ -77,7 +75,6 @@ export class DashboardService {
       };
 
       const dateString = contract.date.toLocaleDateString('en-us', { year: "numeric", month: "short" });
-      const metrics = productMetrics[productName];
 
       if (contract.tags?.includes('sale') || contract.type === 'sales') {
         metrics.totalSales += contract.getContractedTotalPrice();

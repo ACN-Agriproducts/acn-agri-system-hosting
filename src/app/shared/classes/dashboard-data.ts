@@ -1,6 +1,5 @@
-import { collection, CollectionReference, DocumentData, DocumentReference, Firestore, getDocs, getDocsFromServer, limit, orderBy, Query, query, QueryDocumentSnapshot, SnapshotOptions, where } from "@angular/fire/firestore";
+import { DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions } from "@angular/fire/firestore";
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Company } from "./company";
 import { Mass } from "./mass";
 
 export interface ProductMetrics {
@@ -50,7 +49,7 @@ export class DashboardData extends FirebaseDocInterface {
         toFirestore(data: DashboardData): DocumentData {
             return {
                 date: data.date,
-                latestMetrics: data.latestMetrics,
+                // latestMetrics: data.latestMetrics,
             };
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): DashboardData {

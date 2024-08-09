@@ -3,7 +3,6 @@ import { collection, CollectionReference, doc, DocumentReference, Firestore, get
 import { Storage } from '@ionic/storage';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { Plant } from '@shared/classes/plant';
-import { AuthenticationService } from '../Authentication/Authentication.service';
 import { Product } from '@shared/classes/product';
 
 @Injectable({

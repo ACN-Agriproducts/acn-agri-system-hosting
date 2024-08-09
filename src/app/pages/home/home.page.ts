@@ -2,18 +2,16 @@ import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
-import { Product } from '@shared/classes/product';
-import { DashboardData, ProductMetrics } from '@shared/classes/dashboard-data';
+import { ProductMetrics } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CompanyService } from '@core/services/company/company.service';
-import { DashboardService } from '@core/services/dashboard/dashboard.service';
+import { DashboardService, ProductChartData } from '@core/services/dashboard/dashboard.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { FormControl } from '@angular/forms';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Mass, units } from '@shared/classes/mass';
 
 export const MY_FORMATS = {
@@ -62,18 +60,7 @@ export class HomePage implements OnInit {
   public productMetricsMap: ProductMetrics;
   public startDate: Date = new Date();
   public endDate: Date;
-  public productChartData: {
-    [productName: string]: {
-      saleAmounts: {
-        name: string,
-        value: number
-      }[],
-      purchaseAmounts: {
-        name: string,
-        value: number
-      }[]
-    }
-  }
+  public productChartData: ProductChartData;
   public colorScheme: any = {
     domain: ["#437b40"]
   }
@@ -93,7 +80,7 @@ export class HomePage implements OnInit {
     this.contract = new Contract(doc(Contract.getCollectionReference(this.db, this.currentCompany)));
     this.products = this.company.getProductsNamesList();
 
-    this.selectedProduct = "Yellow Corn";
+    this.selectedProduct = this.products[this.products.length - 1];
 
     this.setDashboardDataObject();
   }
@@ -102,9 +89,9 @@ export class HomePage implements OnInit {
     console.log(fieldName);
   }
 
-  testDashboardUpdate() {
-    httpsCallable(this.functions, 'schedules-dashboardMetricsUpdateLocal')("UPDATE DASHBOARD WITH NEW DOCUMENT");
-  }
+  // testDashboardUpdate() {
+  //   httpsCallable(this.functions, 'schedules-dashboardMetricsUpdateLocal')("UPDATE DASHBOARD WITH NEW DOCUMENT");
+  // }
 
   setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>, setStart?: boolean): void {
     const ctrlValue = moment();
@@ -119,13 +106,9 @@ export class HomePage implements OnInit {
   }
 
   async setDashboardDataObject() {
-    console.log(this.startDate, this.endDate);
-
     const dashboardProductData = await this.dashboard.getDashboardData(this.startDate, this.endDate);
     this.productMetricsMap = dashboardProductData.productMetrics;
     this.productChartData = dashboardProductData.productChartData;
-    
-    console.log(this.startDate, this.endDate);
   }
 }
 
