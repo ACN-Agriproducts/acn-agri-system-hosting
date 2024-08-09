@@ -93,7 +93,6 @@ export class HomePage implements OnInit {
     this.contract = new Contract(doc(Contract.getCollectionReference(this.db, this.currentCompany)));
     this.products = this.company.getProductsNamesList();
 
-    // this.selectedProduct = this.products.find(p => p.ref.id === "Yellow Corn");
     this.selectedProduct = "Yellow Corn";
 
     this.setDashboardDataObject();
