@@ -30,7 +30,9 @@
         "End Month": "Mes Final",
         "Pending to Deliver": "Pendiente de Entregar",
         "Pending to Receive": "Pendiente de Recibir",
-        "Product Overview": "Resumen"
+        "Product Overview": "Resumen",
+        "Month": "Mes",
+        "Metric Tons": "Toneladas Métricas"
     },
     "contracts": {
         "Signed Contract": "Contrato Firmado",

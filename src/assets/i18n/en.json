@@ -30,7 +30,9 @@
         "End Month": "End Month",
         "Pending to Deliver": "Pending to Deliver",
         "Pending to Receive": "Pending to Receive",
-        "Product Overview": "Product Overview"
+        "Product Overview": "Product Overview",
+        "Month": "Month",
+        "Metric Tons": "Metric Tons"
     },
     "contracts": {
         "Signed Contract": "Signed Contract",
