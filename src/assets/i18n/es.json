@@ -22,6 +22,16 @@
         "signout": "Salir",
         "load orders": "Órdenes de Carga"
     },
+    "dashboard": {
+        "Product": "Producto",
+        "Sales": "Ventas",
+        "Purchases": "Compras",
+        "Start Month": "Mes de Inicio",
+        "End Month": "Mes Final",
+        "Pending to Deliver": "Pendiente de Entregar",
+        "Pending to Receive": "Pendiente de Recibir",
+        "Product Overview": "Resumen"
+    },
     "contracts": {
         "Signed Contract": "Contrato Firmado",
         "table": {

@@ -4,13 +4,13 @@
     <div class="main-layout-container">
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
     
-        <app-section-title [title]="'Product Overview'"></app-section-title>
+        <app-section-title [title]="t('Product Overview')"></app-section-title>
 
         <!-- <button mat-button (click)="testDashboardUpdate()">Test Dashboard Update</button> -->
     
         <div class="product-overview-selectors">
             <mat-form-field appearance="outline">
-                <mat-label>Product</mat-label>
+                <mat-label>{{ t("Product") }}</mat-label>
                 <mat-select [(value)]="selectedProduct">
                     <!-- <mat-option [value]="products">All</mat-option> -->
                     <mat-option *ngFor="let product of products" [value]="product">{{ product }}</mat-option>
@@ -18,7 +18,7 @@
             </mat-form-field>
     
             <mat-form-field appearance="outline">
-                <mat-label>Start Month</mat-label>
+                <mat-label>{{ t("Start Month") }}</mat-label>
                 <input matInput [matDatepicker]="startDp" [(ngModel)]="startDate">
                 <mat-datepicker-toggle matSuffix [for]="startDp"></mat-datepicker-toggle>
                 <mat-datepicker #startDp
@@ -29,7 +29,7 @@
             </mat-form-field>
     
             <mat-form-field appearance="outline" *ngIf="true">
-                <mat-label>End Month</mat-label>
+                <mat-label>{{ t("End Month") }}</mat-label>
                 <input matInput [matDatepicker]="endDp" [(ngModel)]="endDate">
                 <mat-datepicker-toggle matSuffix [for]="endDp"></mat-datepicker-toggle>
                 <mat-datepicker #endDp
@@ -43,7 +43,7 @@
         <div class="amount-cards-container">
             <mat-card>
                 <mat-card-header>
-                    <mat-card-subtitle>Sales</mat-card-subtitle>
+                    <mat-card-subtitle>{{ t("Sales") }}</mat-card-subtitle>
                     <mat-slide-toggle #salesCurrencyToggle color="primary">$</mat-slide-toggle>
                 </mat-card-header>
                 <mat-card-content>
@@ -60,7 +60,7 @@
             </mat-card>
             <mat-card>
                 <mat-card-header>
-                    <mat-card-subtitle>Pending to Deliver</mat-card-subtitle>
+                    <mat-card-subtitle>{{ t("Pending to Deliver") }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                     <mat-card-title>
@@ -74,7 +74,7 @@
             </mat-card>
             <mat-card>
                 <mat-card-header>
-                    <mat-card-subtitle>Purchases</mat-card-subtitle>
+                    <mat-card-subtitle>{{ t("Purchases") }}</mat-card-subtitle>
                     <mat-slide-toggle #purchasesCurrencyToggle color="primary">$</mat-slide-toggle>
                 </mat-card-header>
                 <mat-card-content>
@@ -91,7 +91,7 @@
             </mat-card>
             <mat-card>
                 <mat-card-header>
-                    <mat-card-subtitle>Pending to Receive</mat-card-subtitle>
+                    <mat-card-subtitle>{{ t("Pending to Receive") }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                     <mat-card-title>
@@ -107,7 +107,7 @@
         <div class="charts-row-1">
             <mat-card>
                 <mat-card-header>
-                    <div mat-card-title>Sales</div>
+                    <div mat-card-title>{{ t("Sales") }}</div>
                 </mat-card-header>
                 <mat-card-content>
                     <ngx-charts-bar-vertical
@@ -130,7 +130,7 @@
             </mat-card>
             <mat-card>
                 <mat-card-header>
-                    <div mat-card-title>Purchases</div>
+                    <div mat-card-title>{{ t("Purchases") }}</div>
                 </mat-card-header>
                 <mat-card-content>
                     <ngx-charts-bar-vertical

@@ -22,6 +22,16 @@
         "signout": "Sign out",
         "load orders": "Load Orders"
     },
+    "dashboard": {
+        "Product": "Product",
+        "Sales": "Sales",
+        "Purchases": "Purchases",
+        "Start Month": "Start Month",
+        "End Month": "End Month",
+        "Pending to Deliver": "Pending to Deliver",
+        "Pending to Receive": "Pending to Receive",
+        "Product Overview": "Product Overview"
+    },
     "contracts": {
         "Signed Contract": "Signed Contract",
         "table": {
