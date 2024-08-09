@@ -1,7 +1,147 @@
 <app-header-toolbar titulo="Dashboard"></app-header-toolbar>
 
-<ion-content class="ion-padding">
-    <div class="main-grid">
+<ion-content class="ion-padding" *transloco="let t; read: 'dashboard'">
+    <div class="main-layout-container">
         <app-needs-admin-attention *ngIf="permissions?.admin && currentCompany" [company]="currentCompany"></app-needs-admin-attention>
+    
+        <app-section-title [title]="t('Product Overview')"></app-section-title>
+
+        <!-- <button mat-button (click)="testDashboardUpdate()">Test Dashboard Update</button> -->
+    
+        <div class="product-overview-selectors">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ t("Product") }}</mat-label>
+                <mat-select [(value)]="selectedProduct">
+                    <!-- <mat-option [value]="products">All</mat-option> -->
+                    <mat-option *ngFor="let product of products" [value]="product">{{ product }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline">
+                <mat-label>{{ t("Start Month") }}</mat-label>
+                <input matInput [matDatepicker]="startDp" [(ngModel)]="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startDp"></mat-datepicker-toggle>
+                <mat-datepicker #startDp
+                    startView="multi-year"
+                    (monthSelected)="setMonthAndYear($event, startDp, true)"
+                    panelClass="example-month-picker">
+                </mat-datepicker>
+            </mat-form-field>
+    
+            <mat-form-field appearance="outline" *ngIf="true">
+                <mat-label>{{ t("End Month") }}</mat-label>
+                <input matInput [matDatepicker]="endDp" [(ngModel)]="endDate">
+                <mat-datepicker-toggle matSuffix [for]="endDp"></mat-datepicker-toggle>
+                <mat-datepicker #endDp
+                    startView="multi-year"
+                    (monthSelected)="setMonthAndYear($event, endDp)"
+                    panelClass="example-month-picker">
+                </mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div class="amount-cards-container">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>{{ t("Sales") }}</mat-card-subtitle>
+                    <mat-slide-toggle #salesCurrencyToggle color="primary">$</mat-slide-toggle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title *ngIf="salesCurrencyToggle.checked else salesAmount">{{ (productMetricsMap?.[selectedProduct]?.totalSales || 0) | currency }}</mat-card-title>
+                    <ng-template #salesAmount>
+                        <mat-card-title>
+                            {{ ((productMetricsMap?.[selectedProduct]?.totalSalesAmount | massInUnit:'mTon') || 0) | number }} mTon
+                        </mat-card-title>
+                    </ng-template>
+                </mat-card-content>
+                <!-- <div>+ {{ 2.34 }}%</div> -->
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>{{ t("Pending to Deliver") }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>
+                        {{ ((productMetricsMap?.[selectedProduct]?.totalToBeDelivered | massInUnit:'mTon') || 0) | number }} mTon
+                    </mat-card-title>
+                </mat-card-content>
+                <!-- <div>+ {{ 7.8 }}%</div> -->
+                <div></div>
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>{{ t("Purchases") }}</mat-card-subtitle>
+                    <mat-slide-toggle #purchasesCurrencyToggle color="primary">$</mat-slide-toggle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title *ngIf="purchasesCurrencyToggle.checked else purchasesAmount">{{ (productMetricsMap?.[selectedProduct]?.totalPurchases || 0) | currency }}</mat-card-title>
+                    <ng-template #purchasesAmount>
+                        <mat-card-title>
+                            {{ ((productMetricsMap?.[selectedProduct]?.totalPurchasesAmount | massInUnit:'mTon') || 0) | number }} mTon
+                        </mat-card-title>
+                    </ng-template>
+                </mat-card-content>
+                <!-- <div>- {{ 3.34 }}%</div> -->
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-subtitle>{{ t("Pending to Receive") }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card-title>
+                        {{ ((productMetricsMap?.[selectedProduct]?.totalToBeReceived | massInUnit:'mTon') || 0) | number }} mTon
+                    </mat-card-title>
+                </mat-card-content>
+                <!-- <div>- {{ 7.19 }}%</div> -->
+            </mat-card>
+        </div>
+
+        <div class="charts-row-1">
+            <mat-card>
+                <mat-card-header>
+                    <div mat-card-title>{{ t("Sales") }}</div>
+                </mat-card-header>
+                <mat-card-content>
+                    <ngx-charts-bar-vertical
+                        [results]="productChartData?.[selectedProduct]?.saleAmounts"
+                        [scheme]="colorScheme"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        [showXAxisLabel]="true"
+                        [showYAxisLabel]="true"
+                        [xAxisLabel]="t('Month')"
+                        [yAxisLabel]="t('Metric Tons')"
+                        [barPadding]="8"
+                        [roundDomains]="true"
+                        [yScaleMax]="250"
+                        [rotateXAxisTicks]="true"
+                        [roundEdges]="false"
+                    >
+                    </ngx-charts-bar-vertical>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <mat-card-header>
+                    <div mat-card-title>{{ t("Purchases") }}</div>
+                </mat-card-header>
+                <mat-card-content>
+                    <ngx-charts-bar-vertical
+                        [results]="productChartData?.[selectedProduct]?.purchaseAmounts"
+                        [scheme]="colorScheme"
+                        [xAxis]="true"
+                        [yAxis]="true"
+                        [showXAxisLabel]="true"
+                        [showYAxisLabel]="true"
+                        [xAxisLabel]="t('Month')"
+                        [yAxisLabel]="t('Metric Tons')"
+                        [barPadding]="8"
+                        [roundDomains]="true"
+                        [yScaleMax]="250"
+                        [rotateXAxisTicks]="true"
+                        [roundEdges]="false"
+                    ></ngx-charts-bar-vertical>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 </ion-content>

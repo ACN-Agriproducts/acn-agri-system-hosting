@@ -2,7 +2,7 @@ import { collection, CollectionReference, doc, DocumentData, DocumentReference, 
 import { BankInfo, Contact } from "./contact";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
-import { Mass } from "./mass";
+import { Mass, units } from "./mass";
 import { Price } from "./price";
 import { Product } from "./product";
 import { ContractSettings } from "./contract-settings";
@@ -651,6 +651,36 @@ export class Contract extends FirebaseDocInterface {
     ): Unsubscribe {
         const docRef = doc(Contract.getCollectionReference(db, company), contractId)
         return onSnapshot(docRef, onNext);
+    }
+
+    public getContractedTotalPrice(): number {
+        const total = this.getContractedTotal();
+        return total.get() * this.price.getPricePerUnit(total.getUnit(), total);
+    }
+
+    public getContractedTotal(): Mass {
+        switch(this.status) {
+            case "pending":
+                return this.quantity;
+            case "active":
+                return this.currentDelivered.get() > this.quantity.get() ? this.currentDelivered : this.quantity;
+            case "closed":
+            case "paid":
+                return this.currentDelivered;
+            default:
+                return new Mass(0, this.quantity.getUnit(), this.productInfo);
+        }
+    }
+
+    public getPendingToDeliverOrReceive(): Mass {
+        switch(this.status) {
+            case "pending":
+                return this.quantity;
+            case "active":
+                return this.quantity.subtract(this.currentDelivered);
+            default:
+                return new Mass(0, this.quantity.getUnit(), this.productInfo);
+        }
     }
 }
 
