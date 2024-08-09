@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Firestore, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { doc, Firestore, orderBy, Query, query, where } from '@angular/fire/firestore';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -9,7 +9,9 @@ import { Contact } from '@shared/classes/contact';
 import { Contract } from '@shared/classes/contract';
 import { FirebaseDocInterface, Pagination } from '@shared/classes/FirebaseDocInterface';
 import { units } from '@shared/classes/mass';
+import { Note } from '@shared/classes/note';
 import { Ticket } from '@shared/classes/ticket';
+import { User } from '@shared/classes/user';
 import { NewNoteComponent } from '@shared/components/new-note/new-note/new-note.component';
 import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
@@ -39,6 +41,7 @@ export class ContactPage implements OnInit {
 	);
 
 	public contact: Contact;
+	public notes: Promise<Note[]>;
 	public contactType: null | string[] = [];
 	public currentCompany: string;
 	public currentPlant: string;
@@ -72,6 +75,7 @@ export class ContactPage implements OnInit {
 		Contact.getDoc(this.db, this.currentCompany, this.id)
 		.then(async contact => {
 			this.contact = contact;
+			this.notes = contact.getNotes();
 			this.ready = this.contact != null;
 			if (!this.ready) throw 'Contact could not be loaded';
 
@@ -141,17 +145,22 @@ export class ContactPage implements OnInit {
 
 	public newNote(): void {
 		const newNote = this.contact.getNewNote();
+		newNote.author = doc(this.db, `users/${this.session.getUser().uid}`).withConverter(User.converter);
 		
 		this.dialog.open(NewNoteComponent, {
 			data: newNote,
 			minWidth: '400px',
 		}).afterClosed().subscribe(result => {
 			if(!result) return;
-			
-			newNote.set();
-		});
-
-		
+			 
+			this.contact.addNote(newNote).then(async () => {
+				(await this.notes).unshift(newNote);
+				this.snack.open("Success", 'success');
+			}).catch(error => {
+				console.error(error);
+				this.snack.open("Error", 'error');
+			});
+		})
 	}
 
 	public openTicket(refId: string): void {

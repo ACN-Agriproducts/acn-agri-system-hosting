@@ -18,6 +18,7 @@ export class Note extends FirebaseDocInterface {
 
         if(snapshotOrRef instanceof DocumentReference) {
             this.text = '';
+            this.ref = snapshotOrRef.withConverter(Note.converter);
             return;
         }
 

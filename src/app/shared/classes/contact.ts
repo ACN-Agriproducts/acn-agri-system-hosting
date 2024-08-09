@@ -1,4 +1,4 @@
-import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, updateDoc, QueryConstraint, query, getDocs } from "@angular/fire/firestore";
+import { Firestore, CollectionReference, DocumentData, DocumentReference, QueryDocumentSnapshot, SnapshotOptions, collection, doc, getDoc, updateDoc, QueryConstraint, query, getDocs, orderBy } from "@angular/fire/firestore";
 import { ContactInfo } from "./contract";
 
 import { FirebaseDocInterface } from "./FirebaseDocInterface";
@@ -213,6 +213,21 @@ export class Contact extends FirebaseDocInterface {
 
     public getNewNote(): Note {
         return new Note(doc(collection(this.ref, 'notes')));
+    }
+
+    public addNote(note: Note): Promise<void> {
+        note.date = new Date();
+        console.log(note);
+        return note.set();
+    }
+
+    public getNotes(): Promise<Note[]> {
+        const colRef = collection(this.ref, 'notes').withConverter(Note.converter);
+        const docsPromise = getDocs(query(colRef, orderBy('date', 'desc')));
+
+        return docsPromise.then(result => {
+            return result.docs.map(doc => doc.data())
+        });
     }
 }
 
