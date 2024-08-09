@@ -3,7 +3,7 @@ import { doc, DocumentReference, Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contract } from '@shared/classes/contract';
 import { Product } from '@shared/classes/product';
-import { DashboardData, ProductMetricsMap } from '@shared/classes/dashboard-data';
+import { DashboardData, ProductMetrics } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CompanyService } from '@core/services/company/company.service';
 import { DashboardService } from '@core/services/dashboard/dashboard.service';
@@ -56,10 +56,10 @@ export class HomePage implements OnInit {
 
   public contract: Contract;
   
-  public products: Product[];
-  public selectedProduct: Product;
+  public products: string[];
+  public selectedProduct: string;
 
-  public productMetricsMap: ProductMetricsMap;
+  public productMetricsMap: ProductMetrics;
   public startDate: Date = new Date();
   public endDate: Date;
   public productChartData: {
@@ -91,9 +91,10 @@ export class HomePage implements OnInit {
     this.permissions = this.session.getPermissions();
     this.currentCompany = this.session.getCompany();
     this.contract = new Contract(doc(Contract.getCollectionReference(this.db, this.currentCompany)));
-    this.products = this.company.getProductsList();
+    this.products = this.company.getProductsNamesList();
 
-    this.selectedProduct = this.products.find(p => p.ref.id === "Yellow Corn");
+    // this.selectedProduct = this.products.find(p => p.ref.id === "Yellow Corn");
+    this.selectedProduct = "Yellow Corn";
 
     this.setDashboardDataObject();
   }
@@ -119,21 +120,13 @@ export class HomePage implements OnInit {
   }
 
   async setDashboardDataObject() {
-    // console.log(this.startDate, this.endDate);
+    console.log(this.startDate, this.endDate);
 
-    const { productMetricsMap, productChartData } = await this.dashboard.getDashboardData(this.startDate, this.endDate);
-    this.productMetricsMap = productMetricsMap;
-    this.productChartData = productChartData;
+    const dashboardProductData = await this.dashboard.getDashboardData(this.startDate, this.endDate);
+    this.productMetricsMap = dashboardProductData.productMetrics;
+    this.productChartData = dashboardProductData.productChartData;
     
-    // console.log(this.startDate, this.endDate);
-    console.log(this.productChartData[this.selectedProduct.ref.id])
-  }
-}
-
-@Pipe({ name: 'aggregateDashboardData' })
-class AggregateDashboardDataPipe implements PipeTransform {
-  transform(dashboardData: DashboardData, fieldName: string): any {
-    return;
+    console.log(this.startDate, this.endDate);
   }
 }
 

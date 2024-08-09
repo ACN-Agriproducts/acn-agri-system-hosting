@@ -13,7 +13,7 @@
                 <mat-label>Product</mat-label>
                 <mat-select [(value)]="selectedProduct">
                     <!-- <mat-option [value]="products">All</mat-option> -->
-                    <mat-option *ngFor="let product of products" [value]="product">{{ product.ref.id }}</mat-option>
+                    <mat-option *ngFor="let product of products" [value]="product">{{ product }}</mat-option>
                 </mat-select>
             </mat-form-field>
     
@@ -47,10 +47,10 @@
                     <mat-slide-toggle #salesCurrencyToggle color="primary">$</mat-slide-toggle>
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-card-title *ngIf="salesCurrencyToggle.checked else salesAmount">{{ (productMetricsMap?.[selectedProduct.ref.id]?.totalSales || 0) | currency }}</mat-card-title>
+                    <mat-card-title *ngIf="salesCurrencyToggle.checked else salesAmount">{{ (productMetricsMap?.[selectedProduct]?.totalSales || 0) | currency }}</mat-card-title>
                     <ng-template #salesAmount>
                         <mat-card-title>
-                            {{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalSalesAmount | massInUnit:'mTon') || 0) | number }}
+                            {{ ((productMetricsMap?.[selectedProduct]?.totalSalesAmount | massInUnit:'mTon') || 0) | number }}
                             &nbsp;
                             <span>{{ "mTon" | unitName }}</span>
                         </mat-card-title>
@@ -64,9 +64,9 @@
                 </mat-card-header>
                 <mat-card-content>
                     <mat-card-title>
-                        <span>{{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalToBeDelivered | massInUnit) || 0) | number }}</span>
+                        <span>{{ ((productMetricsMap?.[selectedProduct]?.totalToBeDelivered | massInUnit) || 0) | number }}</span>
                         &nbsp;
-                        <span>{{ productMetricsMap?.[selectedProduct.ref.id]?.totalToBeReceived.defaultUnits | unitName }}</span>
+                        <span>{{ productMetricsMap?.[selectedProduct]?.totalToBeReceived.defaultUnits | unitName }}</span>
                     </mat-card-title>
                 </mat-card-content>
                 <!-- <div>+ {{ 7.8 }}%</div> -->
@@ -78,10 +78,10 @@
                     <mat-slide-toggle #purchasesCurrencyToggle color="primary">$</mat-slide-toggle>
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-card-title *ngIf="purchasesCurrencyToggle.checked else purchasesAmount">{{ (productMetricsMap?.[selectedProduct.ref.id]?.totalPurchases || 0) | currency }}</mat-card-title>
+                    <mat-card-title *ngIf="purchasesCurrencyToggle.checked else purchasesAmount">{{ (productMetricsMap?.[selectedProduct]?.totalPurchases || 0) | currency }}</mat-card-title>
                     <ng-template #purchasesAmount>
                         <mat-card-title>
-                            {{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalPurchasesAmount | massInUnit:'mTon') || 0) | number }}
+                            {{ ((productMetricsMap?.[selectedProduct]?.totalPurchasesAmount | massInUnit:'mTon') || 0) | number }}
                             &nbsp;
                             <span>{{ "mTon" | unitName }}</span>
                         </mat-card-title>
@@ -95,22 +95,14 @@
                 </mat-card-header>
                 <mat-card-content>
                     <mat-card-title>
-                        <span>{{ ((productMetricsMap?.[selectedProduct.ref.id]?.totalToBeReceived | massInUnit) || 0) | number }}</span>
+                        <span>{{ ((productMetricsMap?.[selectedProduct]?.totalToBeReceived | massInUnit) || 0) | number }}</span>
                         &nbsp;
-                        <span>{{ productMetricsMap?.[selectedProduct.ref.id]?.totalToBeReceived.defaultUnits | unitName }}</span>
+                        <span>{{ productMetricsMap?.[selectedProduct]?.totalToBeReceived.defaultUnits | unitName }}</span>
                     </mat-card-title>
                 </mat-card-content>
                 <!-- <div>- {{ 7.19 }}%</div> -->
             </mat-card>
         </div>
-
-        <!-- <mat-form-field appearance="outline" #exchangeType>
-            <mat-label>Exchange Type</mat-label>
-            <mat-select value="sales">
-                <mat-option value="sales">Sales</mat-option>
-                <mat-option value="purchase">Purchase</mat-option>
-            </mat-select>
-        </mat-form-field> -->
 
         <div class="charts-row-1">
             <mat-card>
@@ -119,26 +111,19 @@
                 </mat-card-header>
                 <mat-card-content>
                     <ngx-charts-bar-vertical
-                        [view]="undefined"
-                        [results]="productChartData?.[selectedProduct.ref.id]?.saleAmounts"
+                        [results]="productChartData?.[selectedProduct]?.saleAmounts"
                         [scheme]="colorScheme"
                         [xAxis]="true"
                         [yAxis]="true"
                         [showXAxisLabel]="true"
                         [showYAxisLabel]="true"
-                        [tooltipDisabled]="false"
                         [xAxisLabel]="'Month'"
                         [yAxisLabel]="'Metric Tons'"
-                        [showGridLines]="true"
                         [barPadding]="8"
-                        [roundDomains]="false"
+                        [roundDomains]="true"
                         [yScaleMax]="250"
-                        [noBarWhenZero]="true"
-                        [trimXAxisTicks]="false"
-                        [trimYAxisTicks]="false"
                         [rotateXAxisTicks]="true"
-                        [maxXAxisTickLength]="16"
-                        [maxYAxisTickLength]="16"
+                        [roundEdges]="false"
                     >
                     </ngx-charts-bar-vertical>
                 </mat-card-content>
@@ -149,26 +134,19 @@
                 </mat-card-header>
                 <mat-card-content>
                     <ngx-charts-bar-vertical
-                        [view]="undefined"
-                        [results]="productChartData?.[selectedProduct.ref.id]?.purchaseAmounts"
+                        [results]="productChartData?.[selectedProduct]?.purchaseAmounts"
                         [scheme]="colorScheme"
                         [xAxis]="true"
                         [yAxis]="true"
                         [showXAxisLabel]="true"
                         [showYAxisLabel]="true"
-                        [tooltipDisabled]="false"
                         [xAxisLabel]="'Month'"
                         [yAxisLabel]="'Metric Tons'"
-                        [showGridLines]="true"
                         [barPadding]="8"
-                        [roundDomains]="false"
+                        [roundDomains]="true"
                         [yScaleMax]="250"
-                        [noBarWhenZero]="true"
-                        [trimXAxisTicks]="false"
-                        [trimYAxisTicks]="false"
                         [rotateXAxisTicks]="true"
-                        [maxXAxisTickLength]="16"
-                        [maxYAxisTickLength]="16"
+                        [roundEdges]="false"
                     ></ngx-charts-bar-vertical>
                 </mat-card-content>
             </mat-card>

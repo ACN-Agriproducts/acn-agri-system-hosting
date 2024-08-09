@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { collection, CollectionReference, Firestore, getDocs, limit, orderBy, query } from '@angular/fire/firestore';
 import { CompanyService } from '../company/company.service';
-import { DashboardData, ProductMetricsMap } from '@shared/classes/dashboard-data';
+import { DashboardData, ProductMetrics } from '@shared/classes/dashboard-data';
 import { ContractsService } from '@shared/model-services/contracts.service';
 import { Mass } from '@shared/classes/mass';
 import { Contract } from '@shared/classes/contract';
@@ -45,7 +45,7 @@ export class DashboardService {
   //   return getDocs(colQuery).then(result => result.docs[0]?.data());
   // }
 
-  public async getDashboardData(startDate: Date, endDate: Date = new Date()): Promise<{productMetricsMap: ProductMetricsMap, productChartData: ProductChartData}> {
+  public async getDashboardData(startDate: Date, endDate: Date = new Date()): Promise<{productMetrics: ProductMetrics, productChartData: ProductChartData}> {
     this.normalizeDates(startDate, endDate);
 
     const dateRange: string[] = [];
@@ -56,13 +56,13 @@ export class DashboardService {
     
     const contracts = await this.contractsService.getList({ afterDate: startDate, beforeDate: endDate });
     
-    const productMetricsMap: ProductMetricsMap = {};
-    const productChartDataMap: ProductChartDataWithMaps = {};
+    const productMetrics: ProductMetrics = {};
+    const productChartDataMaps: ProductChartDataWithMaps = {};
 
     for (const contract of contracts) {
       const productName = contract.product.id;
 
-      productMetricsMap[productName] ??= {
+      productMetrics[productName] ??= {
         totalSales: 0,
         totalPurchases: 0,
         totalToBeDelivered: new Mass(0, contract.quantity.getUnit(), contract.productInfo),
@@ -71,44 +71,44 @@ export class DashboardService {
         totalPurchasesAmount: new Mass(0, contract.quantity.getUnit(), contract.productInfo)
       };
 
-      productChartDataMap[productName] ??= {
+      productChartDataMaps[productName] ??= {
         saleAmounts: new Map(dateRange.map(date => [date, 0])),
         purchaseAmounts: new Map(dateRange.map(date => [date, 0]))
       };
 
       const dateString = contract.date.toLocaleDateString('en-us', { year: "numeric", month: "short" });
-      const productMetrics = productMetricsMap[productName];
+      const metrics = productMetrics[productName];
 
       if (contract.tags?.includes('sale') || contract.type === 'sales') {
-        productMetrics.totalSales += contract.getContractedTotalPrice();
-        productMetrics.totalSalesAmount = productMetrics.totalSalesAmount.add(contract.getContractedTotal());
-        productMetrics.totalToBeDelivered = productMetrics.totalToBeDelivered.add(contract.getPendingToDeliverOrReceive());
+        metrics.totalSales += contract.getContractedTotalPrice();
+        metrics.totalSalesAmount = metrics.totalSalesAmount.add(contract.getContractedTotal());
+        metrics.totalToBeDelivered = metrics.totalToBeDelivered.add(contract.getPendingToDeliverOrReceive());
 
-        const sales = productChartDataMap[productName].saleAmounts;
+        const sales = productChartDataMaps[productName].saleAmounts;
         sales.set(dateString, sales.get(dateString) + contract.getContractedTotal().getMassInUnit('mTon'));
       }
       else if (contract.tags?.includes('purchase') || contract.type === 'purchase') {
-        productMetrics.totalPurchases += contract.getContractedTotalPrice();
-        productMetrics.totalPurchasesAmount = productMetrics.totalPurchasesAmount.add(contract.getContractedTotal());
-        productMetrics.totalToBeReceived = productMetrics.totalToBeReceived.add(contract.getPendingToDeliverOrReceive());
+        metrics.totalPurchases += contract.getContractedTotalPrice();
+        metrics.totalPurchasesAmount = metrics.totalPurchasesAmount.add(contract.getContractedTotal());
+        metrics.totalToBeReceived = metrics.totalToBeReceived.add(contract.getPendingToDeliverOrReceive());
 
-        const purchases = productChartDataMap[productName].purchaseAmounts;
+        const purchases = productChartDataMaps[productName].purchaseAmounts;
         purchases.set(dateString, purchases.get(dateString) + contract.getContractedTotal().getMassInUnit('mTon'));
       }
     }
 
     const productChartData: ProductChartData = {};
-    for (const productName of Object.keys(productChartDataMap)) {
+    for (const productName of Object.keys(productChartDataMaps)) {
       productChartData[productName] ??= {
         saleAmounts: [],
         purchaseAmounts: []
       };
 
-      productChartDataMap[productName].saleAmounts.forEach((value, name) => { productChartData[productName].saleAmounts.push({ name, value })});
-      productChartDataMap[productName].purchaseAmounts.forEach((value, name) => { productChartData[productName].purchaseAmounts.push({ name, value })});
+      productChartDataMaps[productName].saleAmounts.forEach((value, name) => { productChartData[productName].saleAmounts.push({ name, value })});
+      productChartDataMaps[productName].purchaseAmounts.forEach((value, name) => { productChartData[productName].purchaseAmounts.push({ name, value })});
     }
 
-    return { productMetricsMap, productChartData };
+    return { productMetrics, productChartData };
   }
 
   public normalizeDates(startDate: Date, endDate: Date = new Date()) {
