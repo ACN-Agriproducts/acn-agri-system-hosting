@@ -31,6 +31,7 @@ import { PrintableDialogComponent } from './components/printable-dialog/printabl
 import { DocumentUploadDialogComponent } from './components/document-upload-dialog/document-upload-dialog.component';
 import { TemplateRefModule } from './template-ref';
 import { TableHeaderUnitSelectComponent } from './components/table-header-unit-select/table-header-unit-select.component';
+import { NewNoteComponent } from './components/new-note/new-note/new-note.component';
 
 @NgModule({
   imports: [
@@ -89,7 +90,8 @@ import { TableHeaderUnitSelectComponent } from './components/table-header-unit-s
     pricerPerUnitPipe,
     PrintableDialogComponent,
     DocumentUploadDialogComponent,
-    TableHeaderUnitSelectComponent
+    TableHeaderUnitSelectComponent,
+    NewNoteComponent
   ]
 })
 export class SharedModule {}
