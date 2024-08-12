@@ -193,7 +193,7 @@ export class ContactPage implements OnInit {
 		this.contact.metacontacts.forEach(metaContact => {
 			metacontacts.push({ ...metaContact });
 		});
-		const contactCopy = { ...this.contact, metacontacts: metacontacts };
+		const contactCopy = { contact: {...this.contact}, metacontacts: metacontacts };
 
 		const dialogRef = this.dialog.open(EditContactDialogComponent, {
 			autoFocus: false,
