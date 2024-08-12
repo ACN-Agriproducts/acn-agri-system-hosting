@@ -652,6 +652,37 @@ export class Contract extends FirebaseDocInterface {
         const docRef = doc(Contract.getCollectionReference(db, company), contractId)
         return onSnapshot(docRef, onNext);
     }
+
+    public getContractedTotalPrice(): number {
+        return this.price.getTotalPrice(this.getContractedTotal());
+    }
+
+    public getContractedTotal(): Mass {
+        switch(this.status) {
+            case "pending":
+                return this.quantity;
+            case "active":
+                return this.currentDelivered.get() > this.quantity.get() ? this.currentDelivered : this.quantity;
+            case "closed":
+            case "paid":
+                return this.currentDelivered;
+            default:
+                return new Mass(0, this.quantity.getUnit(), this.productInfo);
+        }
+    }
+
+    public getPendingToDeliverOrReceive(): Mass {
+        if (this.isOpen) return new Mass(0, this.quantity.getUnit(), this.productInfo);
+
+        switch(this.status) {
+            case "pending":
+                return this.quantity;
+            case "active":
+                return this.quantity.subtract(this.currentDelivered);
+            default:
+                return new Mass(0, this.quantity.getUnit(), this.productInfo);
+        }
+    }
 }
 
 export interface DeliveryDates {
