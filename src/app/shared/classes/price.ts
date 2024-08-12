@@ -31,6 +31,10 @@ export class Price {
     public getUnit(): units {
         return this.unit;
     }
+
+    public getTotalPrice(mass: Mass): number {
+        return mass.get() * this.getPricePerUnit(mass.getUnit(), mass);
+    }
 }
 
 @Pipe({
