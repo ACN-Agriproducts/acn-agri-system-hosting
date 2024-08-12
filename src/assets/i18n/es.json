@@ -326,7 +326,8 @@
         "Add New": "Agregar Nuevo",
         "Destination": "Destino",
         "Document Name": "Nombre del Documento",
-        "Download File": "Descargar Archivo"
+        "Download File": "Descargar Archivo",
+        "Notes": "Notas"
     },
     "tickets": {
         "Report": "Reporte",
