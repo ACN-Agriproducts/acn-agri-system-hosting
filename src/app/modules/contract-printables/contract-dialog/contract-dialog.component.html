@@ -1,4 +1,4 @@
 
-<app-printable-dialog>
+<app-printable-dialog [printStyle]="{'@page': { margin: '1in' }}">
     <app-printable-contract [contract]="data"></app-printable-contract>
 </app-printable-dialog>
