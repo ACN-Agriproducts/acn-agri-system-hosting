@@ -3,7 +3,7 @@
 	<h2 mat-dialog-title>{{ data.docType }}</h2>
 	<mat-dialog-content>
 		<mat-tab-group [(selectedIndex)]="selected" [preserveContent]="true">
-			<mat-tab *ngFor="let file of filesForUpload; let index = index">
+			<mat-tab *ngFor="let file of newDisplayFiles; let index = index">
 				<ng-template mat-tab-label>
 					<span>{{ file.name ?? "File " + index }}</span>
 					<button mat-icon-button 
@@ -35,7 +35,7 @@
 		</mat-tab-group>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-button color="primary" mat-dialog-close>{{ 'Close' | translocoNested:'actions' }}</button>
+		<button mat-button color="primary" mat-dialog-close>{{ 'Cancel' | translocoNested:'actions' }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
 			[disabled]="checkFiles()"
@@ -68,7 +68,7 @@
 					</div>
 					<ngx-dropzone-label class="file-label">{{ file.dropfile.name }} ({{ file.dropfile.type }})</ngx-dropzone-label>
 				</div>
-			</ng-template>
+			</ng-template> 
 		</ngx-dropzone>
 	</ng-template>
 
