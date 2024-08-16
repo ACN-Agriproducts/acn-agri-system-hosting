@@ -85,8 +85,9 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public onDropzoneSelect(event: any, displayFile: FileDisplayInfo): void {
     displayFile.dropfile = event.addedFiles[0];
-    if (!this.hasExtension(displayFile.ref)) displayFile.ref = displayFile.ref + this.getExtension(displayFile.dropfile.type);
     this.readFileUrl(displayFile);
+    if (!this.hasExtension(displayFile.ref)) displayFile.ref = displayFile.ref + this.getExtension(displayFile.dropfile.type);
+    console.log(this.newDisplayFiles)
   }
 
   public onDropzoneRemove(displayFile: FileDisplayInfo): void {
@@ -170,8 +171,9 @@ export class DocumentUploadDialogComponent implements OnInit {
     switch (contentType) {
       case 'image/jpeg': return ".jpg";
       case 'image/png': return ".png";
-      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': return ".docx";
       case 'application/pdf': return ".pdf";
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': return ".docx";
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': return ".xlsx";
       default: return ".txt";
     }
   }
