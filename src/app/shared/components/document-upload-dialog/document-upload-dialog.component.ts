@@ -87,7 +87,6 @@ export class DocumentUploadDialogComponent implements OnInit {
     displayFile.dropfile = event.addedFiles[0];
     this.readFileUrl(displayFile);
     if (!this.hasExtension(displayFile.ref)) displayFile.ref = displayFile.ref + this.getExtension(displayFile.dropfile.type);
-    console.log(this.newDisplayFiles)
   }
 
   public onDropzoneRemove(displayFile: FileDisplayInfo): void {
