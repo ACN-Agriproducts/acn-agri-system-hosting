@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
-import { Storage, deleteObject, getDownloadURL, getMetadata, getStream, ref, uploadBytes } from '@angular/fire/storage';
+import { Storage, deleteObject, getDownloadURL, getMetadata, ref, uploadBytes } from '@angular/fire/storage';
 import { TranslocoService } from '@ngneat/transloco';
 
 export interface FileStorageInfo {
@@ -50,8 +50,6 @@ export class DocumentUploadDialogComponent implements OnInit {
       return;
     }
 
-    console.log(this.data.files)
-
     this.oldDisplayFiles = this.data.files.map(file => {
       const displayFile = this.newDisplayFile(file);
       this.setDisplayFile(displayFile);
@@ -60,7 +58,7 @@ export class DocumentUploadDialogComponent implements OnInit {
 
     this.newDisplayFiles = [...this.oldDisplayFiles];
 
-    if (this.oldDisplayFiles.length <= 0 && this.data.uploadable) this.addDocument();
+    if (this.oldDisplayFiles.length <= 0 && this.data.uploadable) this.addFile();
   }
 
   ngOnDestroy() {
@@ -85,52 +83,46 @@ export class DocumentUploadDialogComponent implements OnInit {
     });
   }
 
-  public onSelect(event: any, displayFile: FileDisplayInfo): void {
+  public onDropzoneSelect(event: any, displayFile: FileDisplayInfo): void {
     displayFile.dropfile = event.addedFiles[0];
-    displayFile.ref = displayFile.ref + this.getExtension(displayFile.dropfile.type);
+    if (!this.hasExtension(displayFile.ref)) displayFile.ref = displayFile.ref + this.getExtension(displayFile.dropfile.type);
     this.readFileUrl(displayFile);
   }
 
-  public onRemove(displayFile: FileDisplayInfo): void {
+  public onDropzoneRemove(displayFile: FileDisplayInfo): void {
     displayFile.dropfile = null;
     displayFile.url = null;
   }
 
   public confirm(): void {
     this.deleteOldFiles();
-    const newFiles = this.uploadNewFiles();
+    this.uploadNewFiles();
+    const newFiles = this.newDisplayFiles.map(displayFile => ({ ref: displayFile.ref, name: displayFile.name }));
     this.dialogRef.close(newFiles);
   }
 
   public deleteOldFiles(): void {
-    this.oldDisplayFiles.forEach(displayFile => {
-      if (!this.newDisplayFiles.includes(displayFile)) {
-        this.deleteFile(displayFile.ref);
-      }
-    });
+    for (const displayFile of this.oldDisplayFiles) {
+      if (!this.newDisplayFiles.includes(displayFile)) this.deleteFile(displayFile.ref);
+    }
   }
 
   public deleteFile(fileRef: string): void {
     deleteObject(ref(this.storage, fileRef));
   }
 
-  public uploadNewFiles(): FileStorageInfo[] {
-    return this.newDisplayFiles.map(displayFile => {
-      this.uploadFile(displayFile);
-      return {
-        ref: displayFile.ref,
-        name: displayFile.name,
-      }
-    })
+  public uploadNewFiles(): void {
+    this.newDisplayFiles = this.newDisplayFiles.filter(displayFile => displayFile.url || displayFile.dropfile);
+    for (const displayFile of this.newDisplayFiles) {
+      if (displayFile.dropfile) 
+        this.uploadFile(displayFile);
+    }
   }
 
   public uploadFile(displayFile: FileDisplayInfo): void {
-    if (!displayFile.dropfile) return;
-
     uploadBytes(ref(this.storage, displayFile.ref), displayFile.dropfile)
     .then(res => {
       displayFile.ref = res.ref.fullPath;
-      console.log(displayFile)
     })
     .catch(error => {
       console.error(error);
@@ -138,24 +130,28 @@ export class DocumentUploadDialogComponent implements OnInit {
     });
   }
 
-  public addDocument(): void {
+  public addFile(): void {
     const newDisplayFile = this.newDisplayFile({
-      name: `document (${++this.count})`,
-      ref: `${this.data.locationRef}/document${this.count}`,
+      name: `document (${this.getUniqueFileNumber()})`,
+      ref: `${this.data.locationRef}/document${this.getUniqueFileNumber()}`,
     });
     this.newDisplayFiles.push(newDisplayFile);
     this.selected = this.newDisplayFiles.length - 1;
   }
 
-  public removeDocument(index: number): void {
+  public removeFile(index: number): void {
     this.newDisplayFiles.splice(index, 1);
     if (this.selected === this.newDisplayFiles.length) {
-      this.selected -= 1;
+      this.selected--;
+    }
+    if (this.newDisplayFiles.length === 0) {
+      this.addFile();
     }
   }
 
   public checkFiles(): boolean {
-    return this.newDisplayFiles.some(file => !(file.dropfile || file.url));
+    return false;
+    return this.newDisplayFiles.some(displayFile => !(displayFile.dropfile || displayFile.url));
   }
 
   public readFileUrl(displayFile: FileDisplayInfo): void {
@@ -193,6 +189,16 @@ export class DocumentUploadDialogComponent implements OnInit {
   public hasExtension(fileRef: string): boolean {
     const extensionRegex = /\.[0-9a-z]+$/i;
     return extensionRegex.test(fileRef);
+  }
+
+  public getUniqueFileNumber(): number {
+    let maxNum = 0;
+    const parenthesisNum = /\d/;
+    for (const displayFile of this.newDisplayFiles) {
+      const fileNameNum = +parenthesisNum.exec(displayFile.name);
+      if (fileNameNum > maxNum) maxNum = fileNameNum;
+    }
+    return maxNum + 1;
   }
 
   // public async getUrlData(file: FileDisplayInfo, rawUrl: string) {
