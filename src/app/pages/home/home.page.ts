@@ -112,9 +112,15 @@ export class HomePage implements OnInit {
 
   async setDashboardDataObject() {
     this.minDate = (await this.session.getCompanyObject()).createdAt;
+
     const dashboardProductData = await this.dashboard.getDashboardData(this.startDate, this.endDate);
     this.productMetricsMap = dashboardProductData.productMetrics;
     this.productChartData = dashboardProductData.productChartData;
+  }
+
+  getBarPadding(data: any): number {
+    if ((data?.length ?? 2) > 1) return 8;
+    return 500;
   }
 }
 
