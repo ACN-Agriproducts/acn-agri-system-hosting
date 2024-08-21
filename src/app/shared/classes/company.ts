@@ -37,7 +37,7 @@ export class Company extends FirebaseDocInterface {
         super(snapshot, Company.converter);
         const data = snapshot.data();
 
-        this.createdAt =  data.createdAt;
+        this.createdAt =  data.createdAt.toDate();
         this.extraContactTypes = data.extraContactTypes ?? [];
         this.employees =  data.employees;
         this.name =  data.name;

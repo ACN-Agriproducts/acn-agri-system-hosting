@@ -6,13 +6,14 @@ import { ProductMetrics } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CompanyService } from '@core/services/company/company.service';
 import { DashboardService, ProductChartData } from '@core/services/dashboard/dashboard.service';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Mass, units } from '@shared/classes/mass';
+import { Company } from '@shared/classes/company';
 
 export const MY_FORMATS = {
   parse: {
@@ -65,6 +66,10 @@ export class HomePage implements OnInit {
     domain: ["#437b40"]
   }
 
+  public currentCompanyObject: Promise<Company>;
+  public minDate: Date;
+  public maxDate: Date = new Date();
+
   constructor(
     private session: SessionInfo,
     private db: Firestore,
@@ -106,6 +111,7 @@ export class HomePage implements OnInit {
   }
 
   async setDashboardDataObject() {
+    this.minDate = (await this.session.getCompanyObject()).createdAt;
     const dashboardProductData = await this.dashboard.getDashboardData(this.startDate, this.endDate);
     this.productMetricsMap = dashboardProductData.productMetrics;
     this.productChartData = dashboardProductData.productChartData;

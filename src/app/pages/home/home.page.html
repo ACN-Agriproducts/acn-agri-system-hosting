@@ -20,7 +20,7 @@
             <div class="date-selectors">
                 <mat-form-field appearance="outline" class="date-selector">
                     <mat-label>{{ t("Start Month") }}</mat-label>
-                    <input matInput [matDatepicker]="startDp" [(ngModel)]="startDate">
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="startDp" [(ngModel)]="startDate" (dateChange)="setMonthAndYear($event.value, startDp, true)">
                     <mat-datepicker-toggle matSuffix [for]="startDp"></mat-datepicker-toggle>
                     <mat-datepicker #startDp
                         startView="multi-year"
@@ -31,7 +31,7 @@
 
                 <mat-form-field appearance="outline" *ngIf="true" class="date-selector">
                     <mat-label>{{ t("End Month") }}</mat-label>
-                    <input matInput [matDatepicker]="endDp" [(ngModel)]="endDate">
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="endDp" [(ngModel)]="endDate" (dateChange)="setMonthAndYear($event.value, endDp)">
                     <mat-datepicker-toggle matSuffix [for]="endDp"></mat-datepicker-toggle>
                     <mat-datepicker #endDp
                         startView="multi-year"
