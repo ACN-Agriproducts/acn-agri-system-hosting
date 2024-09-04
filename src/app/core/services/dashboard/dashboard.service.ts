@@ -44,8 +44,6 @@ export class DashboardService {
   // }
 
   public async getDashboardData(startDate: Date, endDate: Date = new Date()): Promise<{productMetrics: ProductMetrics, productChartData: ProductChartData}> {
-    this.normalizeDates(startDate, endDate);
-
     const dateRange: string[] = [];
     for (const date = new Date(startDate); date <= endDate; date.setMonth(date.getMonth() + 1)) {
       const dateString = date.toLocaleDateString('en-us', { year: "numeric", month: "short" });
@@ -106,19 +104,5 @@ export class DashboardService {
     }
 
     return { productMetrics, productChartData };
-  }
-
-  public normalizeDates(startDate: Date, endDate: Date = new Date()) {
-    startDate.setDate(1);
-    startDate.setHours(0, 0, 0, 0);
-
-    if (endDate < startDate) endDate.setTime(startDate.getTime());
-
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(0);
-    endDate.setHours(0, 0, 0, 0);
-
-    const today = new Date();
-    if (endDate > today) endDate.setTime(today.getTime());
   }
 }
