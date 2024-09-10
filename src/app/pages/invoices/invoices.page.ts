@@ -150,31 +150,75 @@ export class InvoicesPage implements OnInit {
   }
 
   async exportInvoices() {
-    const invoices = await Invoice.getDocs(this.db, this.session.getCompany(), where("buyer.name", "in", ["AGROPECUARIA LA CAPILLA DEL NORESTE", "AGROPECUARIA LA CAPILLA DEL NORESTE SA DE CV", "Agropecuaria la Capilla del Noreste SA de CV", "AGROPECUARIA LA CAPILLA DEL NORESTE S.A. DE C.V."]));
+    let invoices = await Invoice.getDocs(this.db, this.session.getCompany());
+    const exludedInvoices = invoices.filter(i => !(i.isExportInvoice || i.items.some(item => item.affectsInventory)) || i.status == 'cancelled');
+    invoices = invoices.filter(i => (i.isExportInvoice || i.items.some(item => item.affectsInventory)) && i.status != 'cancelled');
     invoices.sort((a,b) => b.id - a.id);
 
-    const workbook = new Excel.Workbook();
-    const sheet = workbook.addWorksheet();
+    const sheetData: {[product: string]: Invoice[]} = {};
 
-    sheet.columns = [
+    for(const invoice of invoices) {
+      if(invoice.isExportInvoice) {
+        (sheetData[invoice.exportInfo.product] ??= []).push(invoice);
+      }
+      else {
+        const products: string[] = [];
+        for(const item of invoice.items) {
+          if(!item.affectsInventory) continue;
+          
+          for(const invInfo of item.inventoryInfo) {
+            if(products.includes(invInfo.product)) continue;
+            (sheetData[invInfo.product] ??= []).push(invoice);
+            products.push(invInfo.product);
+          }
+        }
+      }
+    }
+
+    const workbook = new Excel.Workbook();
+
+    for(const product in sheetData) {
+      const sheet = workbook.addWorksheet(product);
+  
+      sheet.columns = [
+        { header: "ID"},
+        { header: "FECHA"},
+        { header: "NOMBRE"},
+        { header: "ESTATUS"},
+        { header: "CANTIDAD"},
+        { header: "MONTO"},
+      ];
+  
+      console.log(product);
+      console.table(sheetData[product], ["id", "date", "buyer", "exportInfo", "total"])
+  
+      sheet.addRows(sheetData[product].map(invoice => [
+        invoice.id,
+        invoice.date,
+        invoice.buyer.name,
+        invoice.status,
+        invoice.getProductQuantity(product).getMassInUnit('mTon'),
+        invoice.total
+      ]));
+    }
+
+    const fSheet = workbook.addWorksheet('Filtered Out');
+    fSheet.columns = [
       { header: "ID"},
       { header: "FECHA"},
       { header: "NOMBRE"},
-      { header: "PRODUCT"},
-      { header: "CANTIDAD"},
       { header: "MONTO"},
+      { header: "ESTATUS"}
     ];
 
-    console.table(invoices, ["id", "date", "buyer", "exportInfo", "total"])
-
-    sheet.addRows(invoices.map(invoice => [
+    fSheet.addRows(exludedInvoices.map(invoice => [
       invoice.id,
       invoice.date,
       invoice.buyer.name,
-      invoice.exportInfo?.product,
-      invoice.exportInfo?.quantity.getMassInUnit('mTon'),
-      invoice.total
+      invoice.total,
+      invoice.status
     ]));
+
 
     workbook.xlsx.writeBuffer().then((data) => {
 			const blob = new Blob([data], {
