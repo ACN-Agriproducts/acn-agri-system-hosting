@@ -977,7 +977,8 @@
         "Required": "Requerido(a)",
         "drag-drop-message": "Simplemente arrastre y suelte o haga clic aquí para elegir un archivo.",
         "Ticket updated": "Boleta actualizada",
-        "Could not update the ticket.": "No se pudo agregar la boleta."
+        "Could not update the ticket.": "No se pudo agregar la boleta.",
+        "Could not retrieve the resource url.": "No se pudo recuperar la url del recurso."
     },
     "actions": {
         "Cancel": "Cancelar",
