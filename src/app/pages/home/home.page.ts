@@ -6,13 +6,14 @@ import { ProductMetrics } from '@shared/classes/dashboard-data';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { CompanyService } from '@core/services/company/company.service';
 import { DashboardService, ProductChartData } from '@core/services/dashboard/dashboard.service';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { Mass, units } from '@shared/classes/mass';
+import { Company } from '@shared/classes/company';
 
 export const MY_FORMATS = {
   parse: {
@@ -65,6 +66,10 @@ export class HomePage implements OnInit {
     domain: ["#437b40"]
   }
 
+  public currentCompanyObject: Promise<Company>;
+  public minDate: Date;
+  public maxDate: Date = new Date();
+
   constructor(
     private session: SessionInfo,
     private db: Firestore,
@@ -81,7 +86,9 @@ export class HomePage implements OnInit {
     this.products = this.company.getProductsNamesList();
 
     this.selectedProduct = this.products[this.products.length - 1];
+    this.setMinDate();
 
+    this.normalizeDates();
     this.setDashboardDataObject();
   }
 
@@ -93,7 +100,7 @@ export class HomePage implements OnInit {
   //   httpsCallable(this.functions, 'schedules-dashboardMetricsUpdateLocal')("UPDATE DASHBOARD WITH NEW DOCUMENT");
   // }
 
-  setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>, setStart?: boolean): void {
+  public setMonthAndYear(normalizedMonthAndYear: Moment, datepicker: MatDatepicker<Moment>, setStart?: boolean): void {
     const ctrlValue = moment();
     ctrlValue.month(normalizedMonthAndYear.month());
     ctrlValue.year(normalizedMonthAndYear.year());
@@ -102,13 +109,41 @@ export class HomePage implements OnInit {
     else this.endDate = ctrlValue.toDate();
 
     datepicker.close();
+
+    this.normalizeDates();
     this.setDashboardDataObject();
   }
 
-  async setDashboardDataObject() {
+  public async setDashboardDataObject() {
     const dashboardProductData = await this.dashboard.getDashboardData(this.startDate, this.endDate);
+    
     this.productMetricsMap = dashboardProductData.productMetrics;
     this.productChartData = dashboardProductData.productChartData;
+  }
+
+  public async setMinDate() {
+    this.minDate = (await this.session.getCompanyObject()).createdAt;
+  }
+
+  public getBarPadding(data: any): number {
+    if ((data?.length ?? 2) > 1) return 8;
+    return 500;
+  }
+
+  public normalizeDates() {
+    this.endDate ??= new Date();
+
+    this.startDate.setDate(1);
+    this.startDate.setHours(0, 0, 0, 0);
+
+    if (this.endDate.getTime() < this.startDate.getTime()) this.endDate = new Date(this.startDate);
+
+    this.endDate.setMonth(this.endDate.getMonth() + 1);
+    this.endDate.setDate(0);
+    this.endDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    if (this.endDate > today) this.endDate.setTime(today.getTime());
   }
 }
 

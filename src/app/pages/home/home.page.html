@@ -9,7 +9,7 @@
         <!-- <button mat-button (click)="testDashboardUpdate()">Test Dashboard Update</button> -->
     
         <div class="product-overview-selectors">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="product-selector">
                 <mat-label>{{ t("Product") }}</mat-label>
                 <mat-select [(value)]="selectedProduct">
                     <!-- <mat-option [value]="products">All</mat-option> -->
@@ -17,27 +17,29 @@
                 </mat-select>
             </mat-form-field>
     
-            <mat-form-field appearance="outline">
-                <mat-label>{{ t("Start Month") }}</mat-label>
-                <input matInput [matDatepicker]="startDp" [(ngModel)]="startDate">
-                <mat-datepicker-toggle matSuffix [for]="startDp"></mat-datepicker-toggle>
-                <mat-datepicker #startDp
-                    startView="multi-year"
-                    (monthSelected)="setMonthAndYear($event, startDp, true)"
-                    panelClass="example-month-picker">
-                </mat-datepicker>
-            </mat-form-field>
-    
-            <mat-form-field appearance="outline" *ngIf="true">
-                <mat-label>{{ t("End Month") }}</mat-label>
-                <input matInput [matDatepicker]="endDp" [(ngModel)]="endDate">
-                <mat-datepicker-toggle matSuffix [for]="endDp"></mat-datepicker-toggle>
-                <mat-datepicker #endDp
-                    startView="multi-year"
-                    (monthSelected)="setMonthAndYear($event, endDp)"
-                    panelClass="example-month-picker">
-                </mat-datepicker>
-            </mat-form-field>
+            <div class="date-selectors">
+                <mat-form-field appearance="outline" class="date-selector">
+                    <mat-label>{{ t("Start Month") }}</mat-label>
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="startDp" [(ngModel)]="startDate" (dateChange)="setMonthAndYear($event.value, startDp, true)">
+                    <mat-datepicker-toggle matSuffix [for]="startDp"></mat-datepicker-toggle>
+                    <mat-datepicker #startDp
+                        startView="multi-year"
+                        (monthSelected)="setMonthAndYear($event, startDp, true)"
+                        panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="true" class="date-selector">
+                    <mat-label>{{ t("End Month") }}</mat-label>
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="endDp" [(ngModel)]="endDate" (dateChange)="setMonthAndYear($event.value, endDp)">
+                    <mat-datepicker-toggle matSuffix [for]="endDp"></mat-datepicker-toggle>
+                    <mat-datepicker #endDp
+                        startView="multi-year"
+                        (monthSelected)="setMonthAndYear($event, endDp)"
+                        panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
+            </div>
         </div>
 
         <div class="amount-cards-container">
@@ -66,7 +68,6 @@
                     </mat-card-title>
                 </mat-card-content>
                 <!-- <div>+ {{ 7.8 }}%</div> -->
-                <div></div>
             </mat-card>
             <mat-card>
                 <mat-card-header>
@@ -111,7 +112,7 @@
                         [showYAxisLabel]="true"
                         [xAxisLabel]="t('Month')"
                         [yAxisLabel]="t('Metric Tons')"
-                        [barPadding]="8"
+                        [barPadding]="getBarPadding(productChartData?.[selectedProduct]?.saleAmounts)"
                         [roundDomains]="true"
                         [yScaleMax]="250"
                         [rotateXAxisTicks]="true"
@@ -134,7 +135,7 @@
                         [showYAxisLabel]="true"
                         [xAxisLabel]="t('Month')"
                         [yAxisLabel]="t('Metric Tons')"
-                        [barPadding]="8"
+                        [barPadding]="getBarPadding(productChartData?.[selectedProduct]?.purchaseAmounts)"
                         [roundDomains]="true"
                         [yScaleMax]="250"
                         [rotateXAxisTicks]="true"
