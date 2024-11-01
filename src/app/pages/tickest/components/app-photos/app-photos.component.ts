@@ -13,8 +13,6 @@ export class AppPhotosComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: string[]
   ) { }
 
-  ngOnInit() {
-    console.log(this.data);
-  }
+  ngOnInit() {}
 
 }

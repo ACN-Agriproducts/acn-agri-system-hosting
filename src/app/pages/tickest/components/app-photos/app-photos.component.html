@@ -1,5 +1,5 @@
 
-<h2 mat-dialog-title>Photos</h2>
+<h2 mat-dialog-title>{{ "Ticket Photos" | translocoNested:'tickets.table' }}</h2>
 
 <mat-dialog-content>
   <div class="photo-grid">
@@ -8,5 +8,5 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button color="primary" mat-dialog-close>Close</button>
+  <button mat-button color="primary" mat-dialog-close>{{ "Close" | translocoNested:'actions' }}</button>
 </mat-dialog-actions>

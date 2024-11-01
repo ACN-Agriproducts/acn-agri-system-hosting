@@ -416,7 +416,8 @@
             "Tons": "Tons",
             "CCGE CERTIFICATE" : "CCGE CERTIFICATE",
             "Storage": "Storage",
-            "Attachments": "Attachments"
+            "Attachments": "Attachments",
+            "Ticket Photos": "Ticket Photos"
         },
         "report": {
             "Ticket Report": "Ticket Report",
@@ -1028,7 +1029,8 @@
         "Merge": "Merge",
         "Open Contract": "Open Contract",
         "Open Client": "Open Client",
-        "Upload Attachments": "Upload Attachments"
+        "Upload Attachments": "Upload Attachments",
+        "View Plate Photos": "View Plate Photos"
     },
     "statuses": {
         "Paid": "Paid",
