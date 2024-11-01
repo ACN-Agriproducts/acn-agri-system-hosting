@@ -1,0 +1,12 @@
+
+<h2 mat-dialog-title>Photos</h2>
+
+<mat-dialog-content>
+  <div class="photo-grid">
+    <img *ngFor="let photo of data" [src]="photo">
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button color="primary" mat-dialog-close>Close</button>
+</mat-dialog-actions>
