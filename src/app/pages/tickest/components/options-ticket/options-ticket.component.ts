@@ -214,7 +214,7 @@ export class OptionsTicketComponent implements OnInit {
 
     this.dialog.open(AppPhotosComponent, {
       data: {
-        photos: await Promise.all(this.ticket.imageLinks.map(async path => await getDownloadURL(ref(this.storage, path)))),
+        photos: await this.ticket.getImageLinks(this.storage),
         id: this.ticket.id,
         plates: this.ticket.plates
       },

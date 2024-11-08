@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { arrayUnion, Firestore } from '@angular/fire/firestore';
+import { arrayUnion, Firestore, setDoc } from '@angular/fire/firestore';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { CompanyContact } from '@shared/classes/company';
@@ -171,7 +171,7 @@ export class TicketFormComponent implements OnInit {
 
   saveTicket() {
     clearTimeout(this.saveTimeout);
-    this.saveTimeout = setTimeout(() => this.ticket.set(), 5000);
+    this.saveTimeout = setTimeout(() => setDoc(this.ticket.ref, this.ticket, {merge: true}), 5000);
   }
 
   groupContract() 
