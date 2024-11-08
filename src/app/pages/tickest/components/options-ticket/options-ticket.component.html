@@ -9,7 +9,7 @@
       {{ t('Add Picture') }}
       <ion-icon slot="end" name="images-outline"></ion-icon>
     </ion-item>
-    <ion-item button (click)="viewAppPhotos()">
+    <ion-item button (click)="viewAppPhotos()" *ngIf="ticket.imageLinks?.length > 0">
       {{ t('View Plate Photos') }}
       <ion-icon slot="end" name="images-outline"></ion-icon>
     </ion-item>

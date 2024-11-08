@@ -24,6 +24,7 @@ import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-tick
 import { DiscountsDialogComponent } from './components/discounts-dialog/discounts-dialog.component';
 import { AppPhotosComponent } from './components/app-photos/app-photos.component';
 import { MatDialog } from '@angular/material/dialog';
+import { PhotoDialogComponent } from './components/photo-dialog/photo-dialog.component';
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MatDialog } from '@angular/material/dialog';
     OptionsTicketComponent,
     TicketReportDialogComponent,
     DiscountsDialogComponent,
-    AppPhotosComponent
+    AppPhotosComponent,
+    PhotoDialogComponent
   ],
   providers: [
     { provide: MAT_DIALOG_DATA, useValue: {} },

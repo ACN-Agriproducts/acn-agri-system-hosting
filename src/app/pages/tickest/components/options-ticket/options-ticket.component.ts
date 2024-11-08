@@ -211,13 +211,14 @@ export class OptionsTicketComponent implements OnInit {
 
   public async viewAppPhotos() {
     this.popoverController.dismiss();
-    
-    this.dialog.open(AppPhotosComponent, {
-      data: await Promise.all(this.ticket.imageLinks.map(async path => await getDownloadURL(ref(this.storage, path)))),
-    });
-  }
 
-  public getPhotoUrls() {
-    return Promise.all(this.ticket.imageLinks.map(async path => await getDownloadURL(ref(this.storage, path))));
+    this.dialog.open(AppPhotosComponent, {
+      data: {
+        photos: await Promise.all(this.ticket.imageLinks.map(async path => await getDownloadURL(ref(this.storage, path)))),
+        id: this.ticket.id,
+        plates: this.ticket.plates
+      },
+      maxWidth: "700px"
+    });
   }
 }
