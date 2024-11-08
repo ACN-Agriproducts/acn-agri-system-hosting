@@ -99,6 +99,28 @@ export class Invoice extends FirebaseDocInterface {
         return this.ref.parent.withConverter(Invoice.converter);
     }
 
+    public getProductQuantity(productName: string): Mass {
+        const result = new Mass(0, 'lbs');
+        if(this.isExportInvoice) {
+            if(this.exportInfo.product != productName) return result;
+            
+            return this.exportInfo.quantity;
+        }
+        else {
+            for(const item of this.items) {
+                if(!item.affectsInventory) continue;
+
+                for(const info of item.inventoryInfo) {
+                    if(info.product != productName) continue;
+
+                    result.amount += info.quantity;
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static getCollectionReference(db: Firestore, company: string): CollectionReference<Invoice> {
         return collection(db, `companies/${company}/invoices`).withConverter(Invoice.converter);
     }
