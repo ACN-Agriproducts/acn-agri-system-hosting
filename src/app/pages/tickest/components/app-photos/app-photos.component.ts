@@ -21,7 +21,7 @@ export class AppPhotosComponent implements OnInit {
   viewPhoto(index: number) {
     this.dialog.open(PhotoDialogComponent, {
       data: { photos: this.data.photos, index },
-      maxWidth: "900px"
+      maxWidth: "1000px"
     });
   }
 
