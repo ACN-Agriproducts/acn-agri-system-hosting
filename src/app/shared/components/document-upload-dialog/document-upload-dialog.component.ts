@@ -135,9 +135,10 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public addFile(): void {
+    const newFileNum = this.getUniqueFileNumber();
     const newDisplayFile = this.newDisplayFile({
-      name: `document (${this.getUniqueFileNumber()})`,
-      ref: `${this.data.locationRef}/document${this.getUniqueFileNumber()}`,
+      name: `document (${newFileNum})`,
+      ref: `${this.data.locationRef}/document${newFileNum}`,
     });
     this.newDisplayFiles.push(newDisplayFile);
     this.selected = this.newDisplayFiles.length - 1;
