@@ -8,12 +8,11 @@ import { TranslocoService } from '@ngneat/transloco';
 export interface FileStorageInfo {
   name: string;
   ref: string;
-  contentType: string;
 }
 
-type DropFileStorageInfo = FileStorageInfo & { 
-  url: SafeResourceUrl, 
-  dropfile: File,
+type FileDisplayInfo = FileStorageInfo & { 
+  url: SafeResourceUrl;
+  dropfile: File;
   contentType: string;
 };
 
@@ -32,10 +31,9 @@ export interface DialogUploadData {
 export class DocumentUploadDialogComponent implements OnInit {
   public selected: number = 0;
   public reader: FileReader = new FileReader();
-  public startingFiles: DropFileStorageInfo[] = [];
+  public oldDisplayFiles: FileDisplayInfo[] = [];
   public count: number = this.data.files.length ?? 0;
-  public fileName: string;
-  public filesForUpload: DropFileStorageInfo[] = [];
+  public newDisplayFiles: FileDisplayInfo[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogUploadData,
@@ -52,66 +50,85 @@ export class DocumentUploadDialogComponent implements OnInit {
       return;
     }
 
-    this.filesForUpload = this.data.files.map(file => {
-      const newFile = { ...file, url: null, dropfile: null, contentType: null };
-      this.getDocumentUrl(newFile);
-      return newFile;
+    this.oldDisplayFiles = this.data.files.map(file => {
+      const displayFile = this.newDisplayFile(file);
+      this.setDisplayFile(displayFile);
+      return displayFile;
     });
 
-    this.startingFiles = [...this.filesForUpload];
-    this.fileName = this.data.docType.toLocaleLowerCase().replace(/\s+/g, "-");
+    this.newDisplayFiles = [...this.oldDisplayFiles];
 
-    if (this.filesForUpload.length <= 0 && this.data.uploadable) this.addDocument();
+    if (this.oldDisplayFiles.length <= 0 && this.data.uploadable) this.addFile();
   }
 
   ngOnDestroy() {
     delete this.reader;
   }
 
-  public getDocumentUrl(file: DropFileStorageInfo) {
-    getDownloadURL(ref(this.storage, file.ref))
+  public async setDisplayFile(displayFile: FileDisplayInfo): Promise<void> {
+    const storageRef = ref(this.storage, displayFile.ref);
+    const metadata = await getMetadata(storageRef);
+    displayFile.contentType = metadata.contentType;
+
+    getDownloadURL(storageRef)
     .then(async res => {
-      file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
-      file.url = this.sanitizer.bypassSecurityTrustResourceUrl(res);
-      if (file.url == null) throw `The resource could not be secured for use.`;
+      const downloadURL = this.sanitizer.bypassSecurityTrustResourceUrl(res);
+      if (downloadURL == null) throw `The resource could not be secured for use.`;
+
+      displayFile.url = downloadURL;
     })
     .catch(e => {
       console.error(e);
-      this.snack.openTranslated(`The resource could not be secured for use.`, 'error');
+      this.snack.openTranslated(`Could not retrieve the resource url.`, 'error');
     });
   }
 
-  public onSelect(event: any, file: DropFileStorageInfo): void {
-    file.dropfile = event.addedFiles[0];
-    this.readFileUrl(file);
+  public onDropzoneSelect(event: any, displayFile: FileDisplayInfo): void {
+    displayFile.dropfile = event.addedFiles[0];
+    this.readFileUrl(displayFile);
+    if (!this.hasExtension(displayFile.ref)) displayFile.ref = displayFile.ref + this.getExtension(displayFile.dropfile.type);
   }
 
-  public onRemove(file: DropFileStorageInfo): void {
-    file.dropfile = file.url = null;
+  public onDropzoneRemove(displayFile: FileDisplayInfo): void {
+    displayFile.dropfile = null;
+    displayFile.url = null;
   }
 
   public confirm(): void {
-    this.startingFiles.forEach(file => {
-      if (!this.filesForUpload.includes(file)) {
-        deleteObject(ref(this.storage, file.ref));
-      }
-    });
-
-    this.dialogRef.close(this.filesForUpload.map(file => {
-      if (file.dropfile) {
-        this.uploadDocument(file);
-      }
-      return {
-        ref: file.ref,
-        name: file.name,
-      }
-    }));
+    this.deleteOldFiles();
+    this.uploadNewFiles();
+    const newFiles = this.newDisplayFiles.map(displayFile => ({ ref: displayFile.ref, name: displayFile.name }));
+    this.dialogRef.close(newFiles);
   }
 
-  public async uploadDocument(file: DropFileStorageInfo) {
-    uploadBytes(ref(this.storage, file.ref), file.dropfile)
-    .then(uploadRef => {
-      file.ref = uploadRef.ref.fullPath;
+  public deleteOldFiles(): void {
+    for (const displayFile of this.oldDisplayFiles) {
+      if (!this.newDisplayFiles.includes(displayFile)) this.deleteStorageFile(displayFile.ref);
+    }
+  }
+
+  public deleteStorageFile(fileRef: string): void {
+    deleteObject(ref(this.storage, fileRef));
+  }
+
+  public uploadNewFiles(): void {
+    for (let i = this.newDisplayFiles.length - 1; i >= 0; i--) {
+      const displayFile = this.newDisplayFiles[i];
+
+      if (!displayFile.url && !displayFile.dropfile) {
+        this.deleteStorageFile(displayFile.ref);
+        this.removeFile(i);
+      }
+      else if (displayFile.dropfile) {
+        this.uploadFile(displayFile);
+      }
+    }
+  }
+
+  public uploadFile(displayFile: FileDisplayInfo): void {
+    uploadBytes(ref(this.storage, displayFile.ref), displayFile.dropfile)
+    .then(res => {
+      displayFile.ref = res.ref.fullPath;
     })
     .catch(error => {
       console.error(error);
@@ -119,41 +136,75 @@ export class DocumentUploadDialogComponent implements OnInit {
     });
   }
 
-  public addDocument() {
-    this.filesForUpload.push({
-      name: `document (${++this.count})`,
-      ref: `${this.data.locationRef}/document${this.count}`,
-      url: null,
-      dropfile: null,
-      contentType: null
+  public addFile(): void {
+    const newFileNum = this.getUniqueFileNumber();
+    const newDisplayFile = this.newDisplayFile({
+      name: `document (${newFileNum})`,
+      ref: `${this.data.locationRef}/document${newFileNum}`,
     });
-    this.selected = this.filesForUpload.length - 1;
+    this.newDisplayFiles.push(newDisplayFile);
+    this.selected = this.newDisplayFiles.length - 1;
   }
 
-  public async removeDocument(index: number) {
-    this.filesForUpload.splice(index, 1);
-    if (this.selected === this.filesForUpload.length) {
-      this.selected -= 1;
+  public removeFile(index: number): void {
+    this.newDisplayFiles.splice(index, 1);
+    if (this.selected === this.newDisplayFiles.length) {
+      this.selected--;
+    }
+    if (this.newDisplayFiles.length === 0) {
+      this.addFile();
     }
   }
 
-  public checkFiles() {
-    return this.filesForUpload.some(file => !(file.dropfile || file.url));
-  }
-
-  public readFileUrl(file: DropFileStorageInfo) {
+  public readFileUrl(displayFile: FileDisplayInfo): void {
     this.reader.onload = async () => {
-      file.contentType = file.dropfile.type;
-      file.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.reader.result as string);
+      displayFile.contentType = displayFile.dropfile.type;
+      displayFile.url = this.sanitizer.bypassSecurityTrustResourceUrl(this.reader.result as string);
     }
-    this.reader.readAsDataURL(file.dropfile);
+    this.reader.readAsDataURL(displayFile.dropfile);
   }
 
-  public checkIfMsDoc(type: string) {
+  public checkIfMsDoc(type: string): boolean {
     return type?.replace("application/", "").startsWith("vnd.openxmlformats-officedocument");
   }
 
-  // public async getUrlData(file: DropFileStorageInfo, rawUrl: string) {
+  public getExtension(contentType: string): string {
+    switch (contentType) {
+      case 'image/jpeg': return ".jpg";
+      case 'image/png': return ".png";
+      case 'application/pdf': return ".pdf";
+      case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': return ".docx";
+      case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': return ".xlsx";
+      default: return ".txt";
+    }
+  }
+
+  public newDisplayFile(file?: FileStorageInfo | FileDisplayInfo): FileDisplayInfo {
+    if (!file) file = { ref: null, name: null };
+    return {
+      url: null,
+      dropfile: null,
+      contentType: null,
+     ...file
+    };
+  }
+
+  public hasExtension(fileRef: string): boolean {
+    const extensionRegex = /\.[0-9a-z]+$/i;
+    return extensionRegex.test(fileRef);
+  }
+
+  public getUniqueFileNumber(): number {
+    let maxNum = 0;
+    const parenthesisNum = /\d+/;
+    for (const displayFile of this.newDisplayFiles) {
+      const fileNameNum = +parenthesisNum.exec(displayFile.name);
+      if (fileNameNum > maxNum) maxNum = fileNameNum;
+    }
+    return maxNum + 1;
+  }
+
+  // public async getUrlData(file: FileDisplayInfo, rawUrl: string) {
   //   file.contentType = (await getMetadata(ref(this.storage, file.ref))).contentType;
   //   if (this.checkIfMsDoc(file.contentType)) {
   //     file.url = this.sanitizer.bypassSecurityTrustResourceUrl(`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURI(rawUrl)}`);

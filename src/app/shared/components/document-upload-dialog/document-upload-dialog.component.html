@@ -3,20 +3,20 @@
 	<h2 mat-dialog-title>{{ data.docType }}</h2>
 	<mat-dialog-content>
 		<mat-tab-group [(selectedIndex)]="selected" [preserveContent]="true">
-			<mat-tab *ngFor="let file of filesForUpload; let index = index">
+			<mat-tab *ngFor="let file of newDisplayFiles; let index = index">
 				<ng-template mat-tab-label>
 					<span>{{ file.name ?? "File " + index }}</span>
 					<button mat-icon-button 
 						*ngIf="data.uploadable" 
 						class="remove-document" 
-						(click)="removeDocument(index); $event.stopPropagation()"
+						(click)="removeFile(index); $event.stopPropagation()"
 					>
 						<mat-icon>close</mat-icon>
 					</button>
 				</ng-template>
 				<div class="document">
 					<ng-container *ngTemplateOutlet="file.url ? preview : upload; context { $implicit: file }"></ng-container>
-					<button mat-mini-fab class="remove-file" color="warn" *ngIf="file.url && data.uploadable" (click)="onRemove(file)">
+					<button mat-mini-fab class="remove-file" color="warn" *ngIf="file.url && data.uploadable" (click)="onDropzoneRemove(file)">
 						<mat-icon>delete</mat-icon>
 					</button>
 				</div>
@@ -27,7 +27,7 @@
 			</mat-tab>
 			<mat-tab disabled *ngIf="data.uploadable">
 				<ng-template mat-tab-label>
-					<button mat-icon-button class="add-document" color="primary" (click)="addDocument(); $event.stopPropagation()">
+					<button mat-icon-button class="add-document" color="primary" (click)="addFile(); $event.stopPropagation()">
 						<mat-icon>add</mat-icon>
 					</button>
 				</ng-template>
@@ -35,10 +35,9 @@
 		</mat-tab-group>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-button color="primary" mat-dialog-close>{{ 'Close' | translocoNested:'actions' }}</button>
+		<button mat-button color="primary" mat-dialog-close>{{ 'Cancel' | translocoNested:'actions' }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
-			[disabled]="checkFiles()"
 			(click)="confirm()"
 		>
 			{{ 'Confirm' | translocoNested:'actions' }}
@@ -48,7 +47,7 @@
 	
 	<!-- TEMPLATES -->
 	<ng-template #upload let-file>
-		<ngx-dropzone class="dropzone" (change)="onSelect($event, file)">
+		<ngx-dropzone class="dropzone" (change)="onDropzoneSelect($event, file)">
 			<ngx-dropzone-label *ngIf="!file.url else preview">
 				<mat-icon>cloud_upload</mat-icon>
 				<h3>{{ 'Upload' | translocoNested:'actions' }} {{ data.docType }}</h3>
@@ -60,7 +59,7 @@
 						<button mat-icon-button
 							color="warn"
 							class="remove"
-							(click)="onRemove(file); $event.stopPropagation()"
+							(click)="onDropzoneRemove(file); $event.stopPropagation()"
 						>
 							<mat-icon>cancel</mat-icon>
 						</button>
@@ -68,7 +67,7 @@
 					</div>
 					<ngx-dropzone-label class="file-label">{{ file.dropfile.name }} ({{ file.dropfile.type }})</ngx-dropzone-label>
 				</div>
-			</ng-template>
+			</ng-template> 
 		</ngx-dropzone>
 	</ng-template>
 
