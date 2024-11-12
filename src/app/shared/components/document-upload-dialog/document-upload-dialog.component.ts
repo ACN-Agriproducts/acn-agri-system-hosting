@@ -112,12 +112,14 @@ export class DocumentUploadDialogComponent implements OnInit {
   }
 
   public uploadNewFiles(): void {
-    for (const [index, displayFile] of this.newDisplayFiles.entries()) {
+    for (let i = this.newDisplayFiles.length - 1; i >= 0; i--) {
+      const displayFile = this.newDisplayFiles[i];
+
       if (!displayFile.url && !displayFile.dropfile) {
         this.deleteStorageFile(displayFile.ref);
-        this.removeFile(index);
+        this.removeFile(i);
       }
-      else if (displayFile.dropfile){
+      else if (displayFile.dropfile) {
         this.uploadFile(displayFile);
       }
     }
@@ -194,7 +196,7 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public getUniqueFileNumber(): number {
     let maxNum = 0;
-    const parenthesisNum = /\d/;
+    const parenthesisNum = /\d+/;
     for (const displayFile of this.newDisplayFiles) {
       const fileNameNum = +parenthesisNum.exec(displayFile.name);
       if (fileNameNum > maxNum) maxNum = fileNameNum;
