@@ -103,19 +103,23 @@ export class DocumentUploadDialogComponent implements OnInit {
 
   public deleteOldFiles(): void {
     for (const displayFile of this.oldDisplayFiles) {
-      if (!this.newDisplayFiles.includes(displayFile)) this.deleteFile(displayFile.ref);
+      if (!this.newDisplayFiles.includes(displayFile)) this.deleteStorageFile(displayFile.ref);
     }
   }
 
-  public deleteFile(fileRef: string): void {
+  public deleteStorageFile(fileRef: string): void {
     deleteObject(ref(this.storage, fileRef));
   }
 
   public uploadNewFiles(): void {
-    this.newDisplayFiles = this.newDisplayFiles.filter(displayFile => displayFile.url || displayFile.dropfile);
-    for (const displayFile of this.newDisplayFiles) {
-      if (displayFile.dropfile) 
+    for (const [index, displayFile] of this.newDisplayFiles.entries()) {
+      if (!displayFile.url && !displayFile.dropfile) {
+        this.deleteStorageFile(displayFile.ref);
+        this.removeFile(index);
+      }
+      else if (displayFile.dropfile){
         this.uploadFile(displayFile);
+      }
     }
   }
 
@@ -147,11 +151,6 @@ export class DocumentUploadDialogComponent implements OnInit {
     if (this.newDisplayFiles.length === 0) {
       this.addFile();
     }
-  }
-
-  public checkFiles(): boolean {
-    return false;
-    return this.newDisplayFiles.some(displayFile => !(displayFile.dropfile || displayFile.url));
   }
 
   public readFileUrl(displayFile: FileDisplayInfo): void {

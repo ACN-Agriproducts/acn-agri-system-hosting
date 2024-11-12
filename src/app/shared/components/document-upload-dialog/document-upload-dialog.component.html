@@ -38,7 +38,6 @@
 		<button mat-button color="primary" mat-dialog-close>{{ 'Cancel' | translocoNested:'actions' }}</button>
 		<button mat-button color="primary"
 			*ngIf="data.uploadable"
-			[disabled]="checkFiles()"
 			(click)="confirm()"
 		>
 			{{ 'Confirm' | translocoNested:'actions' }}
