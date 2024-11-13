@@ -982,7 +982,8 @@
         "Required": "Required",
         "drag-drop-message": "Simply drag and drop or click here to choose a file.",
         "Ticket updated": "Ticket updated",
-        "Could not update the ticket.": "Could not update the ticket."
+        "Could not update the ticket.": "Could not update the ticket.",
+        "Could not retrieve the resource url.": "Could not retrieve the resource url."
     },
     "actions": {
         "Cancel": "Cancel",
