@@ -18,13 +18,11 @@ export class PhotoDialogComponent implements OnInit {
   }
 
   previousPhoto() {
-    if (!this.photoIndex) return;
-    this.photoIndex--;
+    if (this.photoIndex > 0) this.photoIndex--;
   }
 
   nextPhoto() {
-    if (this.photoIndex >= this.data.photos.length - 1) return;
-    this.photoIndex++;
+    if (this.photoIndex < this.data.photos.length - 1) this.photoIndex++;
   }
 
 }
