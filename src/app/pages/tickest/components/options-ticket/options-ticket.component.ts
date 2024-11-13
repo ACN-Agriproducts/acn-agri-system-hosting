@@ -218,7 +218,8 @@ export class OptionsTicketComponent implements OnInit {
         id: this.ticket.id,
         plates: this.ticket.plates
       },
-      maxWidth: "800px"
+      maxWidth: "800px",
+      autoFocus: false
     });
   }
 }
