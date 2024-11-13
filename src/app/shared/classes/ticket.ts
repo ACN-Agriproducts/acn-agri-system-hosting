@@ -212,7 +212,6 @@ export class Ticket extends FirebaseDocInterface{
                 grade: data.grade ?? null,
                 gross: data.gross?.get() ?? null,
                 id: data.id ?? null,
-                imageLinks: data.imageLinks ?? null,
                 impurities: data.impurities ?? null,
                 in: data.in ?? null,
                 lot: data.lot ?? null,

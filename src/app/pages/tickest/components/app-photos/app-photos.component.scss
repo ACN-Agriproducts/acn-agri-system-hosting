@@ -1,0 +1,42 @@
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.ticket-info {
+    padding: 12px;
+    background-color: var(--ion-color-primary-light);
+    color: var(--ion-color-primary);
+    margin-bottom: 16px;
+}
+
+.fill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+
+    cursor: pointer;
+      
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+  
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.fill img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.dialog-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

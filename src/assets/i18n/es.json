@@ -416,7 +416,8 @@
             "Tons": "Toneladas",
             "CCGE CERTIFICATE" : "",
             "Storage": "Almacenamiento",
-            "Attachments": "Archivos Adjuntos"
+            "Attachments": "Archivos Adjuntos",
+            "Ticket Photos": "Fotos de Boleta"
         },
         "report": {
             "Ticket Report": "Reporte de Boletas",
@@ -1025,7 +1026,8 @@
         "Merge": "Unir",
         "Open Contract": "Abrir Contrato",
         "Open Client": "Abrir Cliente",
-        "Upload Attachments": "Subir Archivos Adjuntos"
+        "Upload Attachments": "Subir Archivos Adjuntos",
+        "View Plate Photos": "Ver Fotos de Placa"
     },
     "statuses": {
         "Paid": "Pagado",

@@ -1,0 +1,17 @@
+
+<h2 mat-dialog-title class="dialog-title">
+  <span>{{ "Ticket Photos" | translocoNested:'tickets.table' }} - # {{ data.id }}</span>
+  <button mat-icon-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<div class="ticket-info">{{ "Plates" | translocoNested:'tickets.table' }}: &nbsp;<b>{{ data.plates }}</b></div>
+
+<mat-dialog-content>
+  <div class="photo-grid">
+    <div *ngFor="let photo of data.photos; let index = index" class="fill" (click)="viewPhoto(index)">
+      <img [src]="photo">
+    </div>
+  </div>
+</mat-dialog-content>

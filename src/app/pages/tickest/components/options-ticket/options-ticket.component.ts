@@ -2,7 +2,7 @@ import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
-import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
+import { getDownloadURL, ref, Storage, StorageReference } from '@angular/fire/storage';
 import { lastValueFrom, Observable } from 'rxjs';
 import { Ticket } from '@shared/classes/ticket';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -15,6 +15,7 @@ import { serverTimestamp, updateDoc } from '@angular/fire/firestore';
 import { TranslocoService } from '@ngneat/transloco';
 import { DialogUploadData, DocumentUploadDialogComponent } from '@shared/components/document-upload-dialog/document-upload-dialog.component';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { AppPhotosComponent } from '../app-photos/app-photos.component';
 
 @Component({
   selector: 'app-options-ticket',
@@ -27,7 +28,6 @@ export class OptionsTicketComponent implements OnInit {
   public downloadString: string;
   public userPermissions: any;
   private userName: string;
-
 
   constructor(
     public dialog: MatDialog,
@@ -206,6 +206,20 @@ export class OptionsTicketComponent implements OnInit {
     .catch(e => {
       console.error(e);
       this.snack.openTranslated("Could not update the ticket.", "error");
+    });
+  }
+
+  public async viewAppPhotos() {
+    this.popoverController.dismiss();
+
+    this.dialog.open(AppPhotosComponent, {
+      data: {
+        photos: await this.ticket.getImageLinks(this.storage),
+        id: this.ticket.id,
+        plates: this.ticket.plates
+      },
+      maxWidth: "800px",
+      autoFocus: false
     });
   }
 }
