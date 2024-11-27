@@ -7,9 +7,9 @@
         <mat-optgroup label="-- Client Contracts --" *ngIf="(possibleContracts | async)?.client.length > 0">
           <mat-option *ngFor="let contract of (possibleContracts | async)?.client" [value]="contract">{{contract.id}}</mat-option>
         </mat-optgroup>
-        <mat-optgroup label="-- Other Contracts --" *ngIf="(possibleContracts | async)?.other.length > 0">
-          <mat-option *ngFor="let contract of (possibleContracts | async)?.other" [value]="contract">{{ contract.id }}</mat-option>
-        </mat-optgroup>
+        <mat-option *ngFor="let contract of (possibleContracts | async)?.other" [value]="contract">
+          {{ contract.id }}  &nbsp;  {{ contract.clientName }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
     <div class="contract-container" *ngIf="contract">
