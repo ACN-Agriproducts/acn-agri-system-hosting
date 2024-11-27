@@ -25,7 +25,6 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class ChangeTicketContractComponent implements OnInit {
   public contract: Contract;
-  // public possibleContracts: Promise<Contract[]>;
   public possibleContracts: Promise<{ client: Contract[], other: Contract[] }>;
   public newContract: Contract;
   public displayUnit: units;
@@ -42,17 +41,6 @@ export class ChangeTicketContractComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.data);
-    // this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
-    //   this.contract = ticketContract;
-    //   this.data.net.defineBushels(ticketContract.productInfo);
-    //   return Contract.getContracts(
-    //     this.db, this.session.getCompany(), ticketContract.type,
-    //     where('client', '==', ticketContract.client),
-    //     where('status', '==', 'active'),
-    //     where('product', '==', ticketContract.product),
-    //     where(documentId(), "!=", ticketContract.ref.id));
-    // });
-
     this.possibleContracts = this.data.getContract(this.db).then(ticketContract => {
       this.contract = ticketContract;
       this.data.net.defineBushels(ticketContract.productInfo);

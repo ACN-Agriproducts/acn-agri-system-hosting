@@ -4,11 +4,10 @@
     <mat-form-field>
       <mat-label>{{ t('New Contract') }}</mat-label>
       <mat-select [(ngModel)]="newContract">
-        <!-- <mat-option *ngFor="let contract of possibleContracts | async" [value]="contract">{{ contract.id }}</mat-option> -->
-        <mat-optgroup label="-- Client Contracts --">
+        <mat-optgroup label="-- Client Contracts --" *ngIf="(possibleContracts | async)?.client.length > 0">
           <mat-option *ngFor="let contract of (possibleContracts | async)?.client" [value]="contract">{{contract.id}}</mat-option>
         </mat-optgroup>
-        <mat-optgroup label="-- Other Contracts --">
+        <mat-optgroup label="-- Other Contracts --" *ngIf="(possibleContracts | async)?.other.length > 0">
           <mat-option *ngFor="let contract of (possibleContracts | async)?.other" [value]="contract">{{ contract.id }}</mat-option>
         </mat-optgroup>
       </mat-select>
