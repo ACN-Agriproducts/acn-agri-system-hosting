@@ -25,7 +25,7 @@ import { Ticket } from '@shared/classes/ticket';
 })
 export class ChangeTicketContractComponent implements OnInit {
   public contract: Contract;
-  public possibleContracts: Promise<Contract[]>;
+  public possibleContracts: Promise<{ client: Contract[], other: Contract[] }>;
   public newContract: Contract;
   public displayUnit: units;
   public language: string;
@@ -46,10 +46,23 @@ export class ChangeTicketContractComponent implements OnInit {
       this.data.net.defineBushels(ticketContract.productInfo);
       return Contract.getContracts(
         this.db, this.session.getCompany(), ticketContract.type,
-        where('client', '==', ticketContract.client),
         where('status', '==', 'active'),
         where('product', '==', ticketContract.product),
         where(documentId(), "!=", ticketContract.ref.id));
+    })
+    .then(possibleContracts => {
+      const clientContracts = [];
+      const otherContracts = [];
+
+      for (const contract of possibleContracts) {
+        if (contract.client.id == this.contract.client.id) clientContracts.push(contract);
+        else otherContracts.push(contract);
+      }
+
+      return {
+        client: clientContracts,
+        other: otherContracts
+      }
     });
 
     this.displayUnit = this.session.getDisplayUnit();
