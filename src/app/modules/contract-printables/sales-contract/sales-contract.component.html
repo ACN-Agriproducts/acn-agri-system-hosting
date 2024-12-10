@@ -35,9 +35,11 @@
       <div class='column-size-3' *ngIf="contractForm.date">
         <b><span [printableField]="'id'">{{ contractForm.id || 0 }}</span>-{{ contractForm.date.getFullYear() % 100 }}</b><br>
         <!-- {{ contractForm.price | getPricePerUnit:"bu":product }} -->
-        {{ (contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) - contractForm.market_price | number:"0.5-5" }}<br>
-        <span [printableField]="'market_price'">{{ contractForm.market_price | number:"0.5-5" }}</span><br>
+        <span [printableField]="'base'">{{ contractForm.base | number:"0.5-5" }}</span><br>
+        <span [printableField]="'market_price'">{{ (contractForm.market_price | number:"0.5-5") ?? (contractForm.futurePriceInfo.expirationMonth | date:"MMM YYYY" | uppercase) }}</span><br>
         <span [printableField]="'price.amount'">{{ contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:"0.5-5" }}</span><br>
+        <span *ngIf="contractForm.price.amount">&nbsp;/&nbsp;BU</span>
+        <br>
         <span [printableField]="'date'">{{ contractForm.date | date:'MM/dd/YYYY' }}</span><br>
         <br>
         <br>
@@ -116,12 +118,12 @@
           </ng-container>
         </div>
         <div class='column-size-2 text-align-right' [printableField]="'price.amount'">
-          ${{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}<br>
-          ${{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:'0.5-5' }}
+          ${{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' }}<br>
+          ${{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' }}
         </div>
         <div class='column-size-2 text-align-right'>
-          CWT<br>
-          M. TON
+          &nbsp;/&nbsp;CWT<br>
+          &nbsp;/&nbsp;M. TON
         </div>
       </div>
     </div>

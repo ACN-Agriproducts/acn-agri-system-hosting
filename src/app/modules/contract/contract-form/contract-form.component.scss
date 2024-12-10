@@ -96,3 +96,14 @@ mat-card-content {
         flex: 2 0 0;
     }
 }
+
+.price-fields {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+
+    .flat-price {
+        display: flex;
+        gap: 1rem;
+    }
+}
