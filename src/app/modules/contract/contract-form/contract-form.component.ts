@@ -287,25 +287,25 @@ export class ContractFormComponent implements OnInit {
   setFuturePrice() {
     if (this.contract.price.amount && this.contract.price.unit) {
       this.contract.base = this.contract.price.getPricePerUnit('bu', this.contract.quantity) - this.contract.market_price;
-      this.contract.base = parseFloat(this.contract.base.toFixed(3));
+      this.contract.base = parseFloat(this.contract.base.toFixed(5));
     }
     else if (this.contract.base) {
-      this.contract.price.amount = parseFloat((this.contract.market_price + this.contract.base).toFixed(3));
+      this.contract.price.amount = parseFloat((this.contract.market_price + this.contract.base).toFixed(5));
       this.contract.price.unit = 'bu';
     }
   }
 
   setBasePrice() {
     if (this.contract.market_price) {
-      this.contract.price.amount = parseFloat((this.contract.market_price + this.contract.base).toFixed(3));
+      this.contract.price.amount = parseFloat((this.contract.market_price + this.contract.base).toFixed(5));
       this.contract.price.unit = 'bu';
     }
   }
 
   setFlatPrice() {
-    if (this.contract.market_price && this.contract.price.unit) {
+    if (this.contract.market_price && this.contract.price.amount && this.contract.price.unit) {
       this.contract.base = this.contract.price.getPricePerUnit('bu', this.contract.quantity) - this.contract.market_price;
-      this.contract.base = parseFloat(this.contract.base.toFixed(3));
+      this.contract.base = parseFloat(this.contract.base.toFixed(5));
     }
   }
 }

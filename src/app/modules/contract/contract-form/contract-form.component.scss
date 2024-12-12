@@ -16,7 +16,7 @@ mat-card {
     box-sizing: border-box;
 }
 
-mat-card-content {
+mat-card-content, .price-fields {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
@@ -97,13 +97,7 @@ mat-card-content {
     }
 }
 
-.price-fields {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+.flat-price {
+    display: flex;
     gap: 1rem;
-
-    .flat-price {
-        display: flex;
-        gap: 1rem;
-    }
 }

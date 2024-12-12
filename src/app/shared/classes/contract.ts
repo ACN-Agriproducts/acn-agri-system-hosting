@@ -307,6 +307,10 @@ export class Contract extends FirebaseDocInterface {
 
         this.progress = data.progress ?? this.currentDelivered.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) / this.quantity.getMassInUnit(FirebaseDocInterface.session.getDefaultUnit()) * 100;
         this.paidProgress = this.totalPayments / this.currentDelivered.getMassInUnit(this.price.getUnit()) * this.price.amount * 100;
+
+        if (!this.base && this.market_price && this.price.amount && this.price.unit) {
+            this.base = parseFloat((this.price.getPricePerUnit('bu', this.quantity) - this.market_price).toFixed(5));
+        }
     }
 
     public static converter = {
