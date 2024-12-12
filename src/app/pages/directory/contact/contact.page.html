@@ -163,7 +163,7 @@
 									</div>
 									<div class="table-row" [class.odd]="odd"
 										*ngFor="let doc of getCurrentList()?.list; let odd = odd"
-										(click)="openContract(doc.ref.id)"
+										(dblclick)="openContract(doc.ref.id)"
 									>
 										<span>{{ doc["id"] }}</span>
 										<span>{{ doc["type"] | titlecase }}</span>
@@ -188,7 +188,7 @@
 									</div>
 									<div class="table-row" [class.odd]="odd"
 										*ngFor="let doc of tickets?.list; let odd = odd"
-										(click)="openTicket(doc.ref.id)"
+										(click)="openTicket(doc.snapshot)"
 									>
 										<span>{{ doc["id"] }}</span>
 										<span>{{ doc["dateOut"] | date }}</span>

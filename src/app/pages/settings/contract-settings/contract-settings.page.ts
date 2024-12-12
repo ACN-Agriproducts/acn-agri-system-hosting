@@ -26,7 +26,8 @@ export class ContractSettingsPage implements OnInit {
     "bank-info",
     "payment-delays",
     "exchange-rate",
-    "quantity-field"
+    "quantity-field",
+    "price"
   ]
 
   constructor(

@@ -17,6 +17,8 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Router } from '@angular/router';
 import { Functions } from '@angular/fire/functions';
 import { httpsCallable } from 'firebase/functions';
+import { Price } from '@shared/classes/price';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-contract-form',
@@ -277,8 +279,33 @@ export class ContractFormComponent implements OnInit {
   }
 
   // Will not be used this time, but will keep just in case
-  fieldChange(fieldName: string, nestedField: string) {
+  fieldChange(fieldName: string, nestedField?: string) {
     if(nestedField) fieldName = fieldName.concat('.', nestedField);
     if(this.fieldChangeFuncs.has(fieldName)) this.fieldChangeFuncs.get(fieldName)();
+  }
+
+  setFuturePrice() {
+    if (this.contract.price.amount && this.contract.price.unit) {
+      this.contract.base = this.contract.price.getPricePerUnit('bu', this.contract.quantity) - this.contract.market_price;
+      this.contract.base = parseFloat(this.contract.base.toFixed(5));
+    }
+    else if (this.contract.base) {
+      this.contract.price.amount = parseFloat((this.contract.market_price + this.contract.base).toFixed(5));
+      this.contract.price.unit = 'bu';
+    }
+  }
+
+  setBasePrice() {
+    if (this.contract.market_price) {
+      this.contract.price.amount = parseFloat((this.contract.market_price + this.contract.base).toFixed(5));
+      this.contract.price.unit = 'bu';
+    }
+  }
+
+  setFlatPrice() {
+    if (this.contract.market_price && this.contract.price.amount && this.contract.price.unit) {
+      this.contract.base = this.contract.price.getPricePerUnit('bu', this.contract.quantity) - this.contract.market_price;
+      this.contract.base = parseFloat(this.contract.base.toFixed(5));
+    }
   }
 }

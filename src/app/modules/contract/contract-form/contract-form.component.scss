@@ -16,7 +16,7 @@ mat-card {
     box-sizing: border-box;
 }
 
-mat-card-content {
+mat-card-content, .price-fields {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
@@ -95,4 +95,9 @@ mat-card-content {
     #exchange-rate-number {
         flex: 2 0 0;
     }
+}
+
+.flat-price {
+    display: flex;
+    gap: 1rem;
 }

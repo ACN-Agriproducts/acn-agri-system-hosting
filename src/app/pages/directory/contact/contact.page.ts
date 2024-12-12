@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { doc, Firestore, orderBy, Query, query, where } from '@angular/fire/firestore';
+import { doc, DocumentReference, Firestore, orderBy, Query, query, QueryDocumentSnapshot, where } from '@angular/fire/firestore';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -15,6 +15,7 @@ import { User } from '@shared/classes/user';
 import { NewNoteComponent } from '@shared/components/new-note/new-note/new-note.component';
 import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
+import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
 
 @Component({
 	selector: 'app-contact',
@@ -116,7 +117,7 @@ export class ContactPage implements OnInit {
 	public async getTickets(): Promise<void> {
 		const constraints = [
 			where("truckerId", "==", this.id),
-			orderBy('dateOut')
+			orderBy('dateOut', 'desc')
 		];
 
 		if (await Ticket.getTicketCount(this.db, this.currentCompany, this.currentPlant, ...constraints) > 0) {
@@ -163,8 +164,15 @@ export class ContactPage implements OnInit {
 		})
 	}
 
-	public openTicket(refId: string): void {
-		// TBD
+	public openTicket(snap: QueryDocumentSnapshot): void {
+		const ticket = new Ticket(snap);
+		this.dialog.open(TicketDialogComponent, {
+			data: ticket,
+			panelClass: "borderless-dialog",
+			minWidth: "80%",
+			maxWidth: "100%",
+			height: "75vh"
+		});
 	}
 
 	public changeDocuments(event: any): void {
@@ -239,10 +247,7 @@ export class ContactPage implements OnInit {
 	}
 
 	public async infiniteDocuments(event: any) {
-		console.log(this.getCurrentList())
 		this.getCurrentList()?.getNext(snapshot => {
-			console.log(snapshot)
-			console.log(snapshot.docs.length);
 			event.target.complete();
 			if (snapshot.docs.length < this.docStep) {
 				this.infiniteScroll.disabled = true;

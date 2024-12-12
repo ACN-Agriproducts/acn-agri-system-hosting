@@ -98,8 +98,8 @@
 <ng-template typeTemplate="primitive" let-data>
   <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
     <mat-label>{{data.label}}</mat-label>
-    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
-    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}&nbsp;</span>
+    <span matSuffix *ngIf="data.suffix">&nbsp;{{data.suffix}}</span>
     
     <mat-select 
       *ngSwitchCase="'select'" 
@@ -176,8 +176,8 @@
 <ng-template typeTemplate="nested-primitive" let-data>
   <mat-form-field [ngClass]="data | getFieldClass" [ngSwitch]="data.primitiveType">
     <mat-label>{{data.label}}</mat-label>
-    <span matPrefix *ngIf="data.prefix">{{data.prefix}}</span>
-    <span matSuffix *ngIf="data.suffix">{{data.suffix}}</span>
+    <span matPrefix *ngIf="data.prefix">{{data.prefix}}&nbsp;</span>
+    <span matSuffix *ngIf="data.suffix">&nbsp;{{data.suffix}}</span>
     
     <mat-select 
       *ngSwitchCase="'select'" 
@@ -491,6 +491,76 @@
         (focusout)="selectedFieldEvent.emit(null)"
         type="number">
     </mat-form-field>
+  </div>
+</ng-template>
+
+<ng-template typeTemplate="price" let-data>
+  <div class="price-fields" [ngClass]="data | getFieldClass">
+    <mat-form-field id="future-month-picker" class="span-4" appFutureDateFormat>
+      <mat-label>Futures Month</mat-label>
+      <mat-select
+        [(ngModel)]="contract.futurePriceInfo.expirationMonth"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('market_price')"
+        (focusout)="selectedFieldEvent.emit(null)">
+        <mat-option *ngFor="let option of futureOptions" [value]="option.value">
+          {{option.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field id="price-amount" class="span-2">
+      <mat-label>Future Price</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input
+      matInput
+      [(ngModel)]="contract.market_price"
+      (ngModelChange)="setFuturePrice()"
+      type="number"
+      [disabled]="contract.status != 'pending'"
+      (focus)="selectedFieldEvent.emit('market_price')"
+      (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <mat-form-field id="base-price" class="span-2">
+      <mat-label>Base</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input
+        matInput
+        [(ngModel)]="contract.base"
+        (ngModelChange)="setBasePrice()"
+        type="number"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('base')"
+        (focusout)="selectedFieldEvent.emit(null)">
+    </mat-form-field>
+    <div class="flat-price span-4">
+      <mat-form-field id="amount">
+        <mat-label>Flat Price</mat-label>
+        <span matPrefix>$&nbsp;</span>
+        <input
+        matInput
+        [(ngModel)]="contract.price.amount"
+        (ngModelChange)="setFlatPrice()"
+        type="number"
+        [disabled]="contract.status != 'pending'"
+        (focus)="selectedFieldEvent.emit('price.amount')"
+        (focusout)="selectedFieldEvent.emit(null)">
+      </mat-form-field>
+      <mat-form-field id="unit">
+        <mat-label>Unit</mat-label>
+        <mat-select
+          [(ngModel)]="contract.price.unit"
+          (ngModelChange)="setFlatPrice()"
+          [disabled]="contract.status != 'pending'"
+          (focus)="selectedFieldEvent.emit('price.amount')"
+          (focusout)="selectedFieldEvent.emit(null)">
+          <mat-option value="lbs">Lbs</mat-option>
+          <mat-option value="mTon">mTon</mat-option>
+          <mat-option value="CWT">CWT</mat-option>
+          <mat-option value="bu">Bushels</mat-option>
+          <mat-option value="tn">Short Tons</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 </ng-template>
 
