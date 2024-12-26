@@ -23,6 +23,7 @@ import { TranslatePipe } from './pipes/translate/translate.pipe';
 import { IncludesPipe } from './pipes/includes/includes.pipe';
 import { TranslocoModule } from '@ngneat/transloco';
 import { TranslocoNestedPipe } from './pipes/translocoNested/transloco-nested.pipe';
+import { ReportOptionsComponent } from './components/report-options/report-options.component';
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { TranslocoNestedPipe } from './pipes/translocoNested/transloco-nested.pi
     TranslatePipe,
     IncludesPipe,
     TranslocoNestedPipe,
+    ReportOptionsComponent
   ]
 })
 export class CoreModule { }

@@ -12,6 +12,7 @@ import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
+import { ReportService } from '@core/services/report/report.service';
 
 @Component({
   selector: 'app-contracts',
@@ -55,7 +56,8 @@ export class ContractsPage implements AfterViewInit {
     private db: Firestore,
     private session: SessionInfo,
     private navController: NavController,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private reportService: ReportService
   ) { }
 
   ngAfterViewInit() {
@@ -344,5 +346,9 @@ export class ContractsPage implements AfterViewInit {
 
   public tableTranslate(key: string): string {
     return this.transloco.translate("contracts.table." + key);
+  }
+
+  public openReportOptions() {
+    this.reportService.run();
   }
 }
