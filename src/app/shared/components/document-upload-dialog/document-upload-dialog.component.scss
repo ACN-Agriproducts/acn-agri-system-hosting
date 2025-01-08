@@ -3,6 +3,7 @@
 	box-sizing: border-box;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version. */
 mat-dialog-content {
 	display: flex;
 	height: 700px;
@@ -151,12 +152,12 @@ mat-tab-label {
 			background: rgb(200, 0, 0);
 		}
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 	.mat-form-field-appearance-outline .mat-form-field-outline {
 		background-color: var(--ion-color-light);
 		color: #717386;
 	}
-
+	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 	.mat-form-field-suffix:has(button) {
 		align-self: center;
 	}

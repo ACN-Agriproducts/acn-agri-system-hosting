@@ -3,7 +3,7 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { DiscountTable, DiscountTableHeader } from '@shared/classes/discount-tables';
 import { UNIT_LIST, unitNameMap } from '@shared/classes/mass';

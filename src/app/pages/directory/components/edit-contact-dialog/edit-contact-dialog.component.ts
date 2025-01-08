@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { MatLegacyChip as MatChip } from '@angular/material/legacy-chips';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact, MetaContact } from '@shared/classes/contact';
 import { lastValueFrom } from 'rxjs';

@@ -8,7 +8,7 @@ import { PrintableInvoiceComponent } from '@shared/printable/printable-invoice/p
 import { Invoice } from '@shared/classes/invoice';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { UploadDialogData, UploadDocumentDialogComponent } from '@shared/components/upload-document-dialog/upload-document-dialog.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { lastValueFrom } from 'rxjs';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { InvoiceDialogComponent } from '@shared/printable/printable-invoice/invoice-dialog/invoice-dialog.component';

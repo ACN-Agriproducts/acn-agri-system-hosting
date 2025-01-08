@@ -8,7 +8,7 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Liquidation } from '@shared/classes/liquidation';
 import { Payment } from '@shared/classes/payment';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SetPaymentDialogComponent } from './components/set-payment-dialog/set-payment-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { ContractDialogComponent } from 'src/app/modules/contract-printables/contract-dialog/contract-dialog.component';

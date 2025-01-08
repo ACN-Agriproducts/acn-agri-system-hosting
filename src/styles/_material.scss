@@ -1,36 +1,45 @@
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-calendar-body-selected,
-.mat-form-field.mat-focused .mat-form-field-ripple {
+.mat-mdc-form-field.mat-focused .mat-form-field-ripple {
   background-color: var(--ion-color-primary);
 }
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-datepicker-toggle-active,
-.mat-form-field.mat-focused .mat-form-field-label {
+.mat-mdc-form-field.mat-focused .mat-form-field-label {
   color: var(--ion-color-primary);
 }
-.mat-input-element {
+.mat-mdc-input-element {
   caret-color: var(--ion-color-primary);
 }
 .mat-simple-snackbar-action {
   color: var(--ion-color-tertiary) !important;
 }
-.mat-primary .mat-option.mat-selected:not(.mat-option-disabled),
-.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
+.mat-primary .mat-mdc-option.mat-selected:not(.mat-option-disabled),
+.mat-mdc-form-field.mat-focused.mat-primary .mat-select-arrow {
   color: var(--ion-color-primary);
 }
 
 .input-small-mat {
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-flex {
     padding: 0 8px !important;
     align-items: center !important;
     border-radius: 4px !important;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-wrapper {
     padding: 0;
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-underline {
       display: none;
     }
   }
 }
 .input-small-mat-label{
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-infix{
     padding: 0;
     margin: 0;

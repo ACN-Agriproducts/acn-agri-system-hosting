@@ -33,7 +33,7 @@ ion-content{
     font-size: 20px !important;
   }
 }
-.mat-dialog-content {
+.mat-mdc-dialog-content {
   .item-detail {
     display: grid;
     grid-template-columns: auto auto auto;
@@ -115,7 +115,7 @@ ion-content{
   }
 }
 
-.content-header,.mat-dialog-content{
+.content-header,.mat-mdc-dialog-content{
   padding: 16px;
   display: grid;
   justify-content: stretch;

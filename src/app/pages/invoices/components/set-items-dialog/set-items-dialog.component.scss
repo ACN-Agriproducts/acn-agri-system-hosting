@@ -1,4 +1,5 @@
 
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version.*/
 mat-dialog-content {
     display: flex;
     flex-direction: column;
@@ -15,12 +16,13 @@ form {
 mat-drawer-container {
     flex: 1 0 auto;
     background-color: unset;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of select that may no longer apply for the MDC version.*/
     mat-select-list {
         background-color: var(--ion-color-light);
     };
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version.*/
 mat-option, .mat-list-item  {
     font-size: 1em;
 }
@@ -66,7 +68,7 @@ mat-checkbox {
     flex-grow: 1;
     overflow-y: auto;
     max-height: 225px;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-appearance-fill .mat-form-field-flex,
     .mat-form-field-outline-start,
     .mat-form-field-outline-gap,
@@ -101,6 +103,7 @@ mat-grid-tile:has(button) {
     }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version.*/
 mat-dialog-actions {
     display: flex;
     justify-content: space-between;

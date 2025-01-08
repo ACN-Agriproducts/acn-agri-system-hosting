@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { DiscountTable, DiscountTables } from '@shared/classes/discount-tables';
 import { Product } from '@shared/classes/product';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { SetDiscountTableDialogComponent } from './components/set-discount-table-dialog/set-discount-table-dialog.component';
 import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';

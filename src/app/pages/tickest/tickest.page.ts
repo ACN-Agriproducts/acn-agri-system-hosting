@@ -1,5 +1,5 @@
 import { FiltersComponent } from './components/filters/filters.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController } from '@ionic/angular';
 import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';

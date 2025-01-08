@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '@core/components/confirmation-dialog/confirmation-dialog.component';
 import { TranslocoService } from '@ngneat/transloco';
 import { lastValueFrom } from 'rxjs';

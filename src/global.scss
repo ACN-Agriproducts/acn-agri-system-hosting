@@ -169,6 +169,9 @@ ion-content {
 }
 
 .borderless-dialog {
+  /*
+ TODO(mdc-migration): The following rule targets internal classes of dialog that may no longer apply for the MDC version.
+ */
   mat-dialog-container {
     padding: 0 !important;
   }

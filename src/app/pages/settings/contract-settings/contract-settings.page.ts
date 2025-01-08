@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { addDoc, doc, Firestore } from '@angular/fire/firestore';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { ContractSettings } from '@shared/classes/contract-settings';

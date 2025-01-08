@@ -1,6 +1,6 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
 import { getDownloadURL, ref, Storage, StorageReference } from '@angular/fire/storage';
 import { lastValueFrom, Observable } from 'rxjs';
