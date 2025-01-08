@@ -12,7 +12,7 @@ import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
-import { ReportService } from '@core/services/report/report.service';
+import { ReportService } from '@shared/services/report/report.service';
 
 @Component({
   selector: 'app-contracts',

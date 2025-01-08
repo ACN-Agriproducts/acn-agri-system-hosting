@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Report Options</h2>
+
+<mat-dialog-content>
+  <label>Generate Report By:</label>
+  <mat-radio-group class="radio-group" [(ngModel)]="reportQueryType">
+    <mat-radio-button class="radio-button" value="date-range">Date Range</mat-radio-button>
+    <mat-radio-button class="radio-button" value="id-range">ID Range</mat-radio-button>
+    <mat-radio-button class="radio-button" value="ytd">Year to Date</mat-radio-button>
+  </mat-radio-group>
+  <div *ngIf="reportQueryType==='date-range'">
+    <mat-form-field>
+      <mat-label>Date Range:</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Start Date">
+        <mat-error>Date Range is required.</mat-error>
+        <input matEndDate placeholder="End Date">
+        <mat-error>Please enter a valid date range (YYYY-MM-DD - YYYY-MM-DD).</mat-error>
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker>
+        <mat-date-range-picker-actions>
+          <button mat-raised-button matDateRangePickerCancel color="warn">Cancel</button>
+          <button mat-button matDateRangePickerApply color="primary">Apply</button>
+        </mat-date-range-picker-actions>
+      </mat-date-range-picker>
+    </mat-form-field>
+  </div>
+  <label>Report Type:</label>
+  <mat-radio-group class="radio-group" [(ngModel)]="reportType">
+    <mat-radio-button class="radio-button" value="print">Print Preview</mat-radio-button>
+    <mat-radio-button class="radio-button" value="excel">Download Excel</mat-radio-button>
+  </mat-radio-group>
+</mat-dialog-content>

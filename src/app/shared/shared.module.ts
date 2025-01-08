@@ -32,6 +32,7 @@ import { DocumentUploadDialogComponent } from './components/document-upload-dial
 import { TemplateRefModule } from './template-ref';
 import { TableHeaderUnitSelectComponent } from './components/table-header-unit-select/table-header-unit-select.component';
 import { NewNoteComponent } from './components/new-note/new-note/new-note.component';
+import { ReportOptionsComponent } from './components/report-options/report-options.component';
 
 @NgModule({
   imports: [
@@ -91,7 +92,8 @@ import { NewNoteComponent } from './components/new-note/new-note/new-note.compon
     PrintableDialogComponent,
     DocumentUploadDialogComponent,
     TableHeaderUnitSelectComponent,
-    NewNoteComponent
+    NewNoteComponent,
+    ReportOptionsComponent
   ]
 })
 export class SharedModule {}

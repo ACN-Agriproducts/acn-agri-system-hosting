@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ReportOptionsComponent } from '@core/components/report-options/report-options.component';
+import { ReportOptionsComponent } from '@shared/components/report-options/report-options.component';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable({
@@ -44,8 +44,6 @@ export class ReportService {
 
   public openOptionsDialog() {
     const dialogRef = this.dialog.open(ReportOptionsComponent, {
-      width: '900px',
-      height: '600px',
       autoFocus: false,
       data: {
         exportFormat: this.exportFormat
@@ -57,6 +55,7 @@ export class ReportService {
 
   public openPreviewDialog() {
     // open report dialog
+    // const dialogRef = this.dialog.open();
   }
 
   public downloadExcel() {
