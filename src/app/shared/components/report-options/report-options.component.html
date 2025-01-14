@@ -20,7 +20,7 @@
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker>
         <mat-date-range-picker-actions>
-          <button mat-raised-button matDateRangePickerCancel color="warn">Cancel</button>
+          <button mat-button matDateRangePickerCancel>Cancel</button>
           <button mat-button matDateRangePickerApply color="primary">Apply</button>
         </mat-date-range-picker-actions>
       </mat-date-range-picker>
@@ -32,3 +32,8 @@
     <mat-radio-button class="radio-button" value="excel">Download Excel</mat-radio-button>
   </mat-radio-group>
 </mat-dialog-content>
+
+<mat-dialog-actions *transloco="let t; read: 'actions'" align="end">
+  <button mat-button mat-dialog-close color="primary">{{ t('Cancel') }}</button>
+  <button mat-button [mat-dialog-close]="{ queryType: reportQueryType, reportType: reportType }" [disabled]="!reportQueryType || !reportType" color="primary">{{ t('Generate') }}</button>
+</mat-dialog-actions>

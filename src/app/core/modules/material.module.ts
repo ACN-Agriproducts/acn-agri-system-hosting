@@ -50,6 +50,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import {CdkScrollableModule} from '@angular/cdk/scrolling';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import {LayoutModule} from '@angular/cdk/layout';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
   imports: [
@@ -92,7 +93,8 @@ import {LayoutModule} from '@angular/cdk/layout';
     PlatformModule,
     CdkScrollableModule,
     ScrollingModule,
-    LayoutModule
+    LayoutModule,
+    MatMomentDateModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -133,7 +135,8 @@ import {LayoutModule} from '@angular/cdk/layout';
     MatTreeModule,
     PlatformModule,
     CdkScrollableModule,
-    LayoutModule
+    LayoutModule,
+    MatMomentDateModule
   ],
 })
 export class MaterialModule { }
