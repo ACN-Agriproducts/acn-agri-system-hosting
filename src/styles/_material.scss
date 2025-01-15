@@ -54,3 +54,10 @@
 .mat-card-header-text {
   margin: 0 !important;
 }
+
+.mat-mdc-form-field-infix,
+.mat-mdc-select-value-text,
+.mat-mdc-option,
+mat-label {
+    font-size: 14px;
+}

@@ -8,18 +8,9 @@
 //     grid-auto-rows: 150px;
 // }
 
-:host {
-    ::ng-deep {
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-        .mat-form-field-outline-start,
-        .mat-form-field-outline-gap,
-        .mat-form-field-outline-end {
-            background-color: white;
-        }
-        /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-        .mat-form-field-wrapper {
-            padding-bottom: 0;
-        }
+:host ::ng-deep {
+    .mat-mdc-text-field-wrapper {
+        background-color: white;
     }
 }
 

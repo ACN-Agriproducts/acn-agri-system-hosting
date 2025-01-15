@@ -107,12 +107,6 @@ mat-card-content, .price-fields {
     .mdc-text-field--filled {
         background-color: transparent;
     }
-    .mat-mdc-form-field-infix,
-    .mat-mdc-select-value-text,
-    .mat-mdc-option,
-    mat-label {
-        font-size: 14px;
-    }
     // Manipulate initial background color
     .mdc-text-field--filled:not(.mdc-text-field--disabled) {
         background-color: transparent;
