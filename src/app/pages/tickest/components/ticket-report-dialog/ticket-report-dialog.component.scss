@@ -64,3 +64,13 @@ app-printable-ticket, .ticket-report-table {
         margin: 0.5in;
     } 
 }
+
+.id-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+mat-dialog-actions mat-spinner {
+    margin-left: 12px;
+}

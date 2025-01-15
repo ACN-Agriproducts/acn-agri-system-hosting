@@ -47,10 +47,10 @@
     padding: 8px 0;
   }
 }
-.mat-raised-button:not([class*=mat-elevation-z]){
-  box-shadow: none;
-  background-color: #FFF;
-}
+// .mat-raised-button:not([class*=mat-elevation-z]){
+//   box-shadow: none;
+//   background-color: #FFF;
+// }
 .mat-card-header-text {
   margin: 0 !important;
 }
@@ -60,4 +60,9 @@
 .mat-mdc-option,
 mat-label {
     font-size: 14px;
+}
+
+// temporary fix for problem with text in buttons being set to white by default
+button[mat-button] {
+  color: black;
 }

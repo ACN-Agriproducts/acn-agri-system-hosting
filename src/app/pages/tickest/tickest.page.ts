@@ -63,7 +63,7 @@ export class TickestPage implements OnInit {
 
   async openTicketReportDialog(): Promise<void> {
     const dialog = await this.dialog.open(TicketReportDialogComponent, {
-      width: '350px',
+      minWidth: '400px',
       data: {currentPlant: this.currentPlant}
     });
   }
