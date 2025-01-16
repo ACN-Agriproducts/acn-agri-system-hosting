@@ -417,7 +417,8 @@
             "CCGE CERTIFICATE" : "CCGE CERTIFICATE",
             "Storage": "Storage",
             "Attachments": "Attachments",
-            "Ticket Photos": "Ticket Photos"
+            "Ticket Photos": "Ticket Photos",
+            "Lot #": "Lot #"
         },
         "report": {
             "Ticket Report": "Ticket Report",

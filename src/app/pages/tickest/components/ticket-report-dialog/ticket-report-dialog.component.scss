@@ -64,3 +64,17 @@ app-printable-ticket, .ticket-report-table {
         margin: 0.5in;
     } 
 }
+
+
+.printable-company-header {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+
+    #company-logo {
+        max-width: 20%;
+    }
+    .company-name {
+        text-transform: uppercase;
+    }
+}

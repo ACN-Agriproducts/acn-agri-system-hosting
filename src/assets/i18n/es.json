@@ -417,7 +417,8 @@
             "CCGE CERTIFICATE" : "",
             "Storage": "Almacenamiento",
             "Attachments": "Archivos Adjuntos",
-            "Ticket Photos": "Fotos de Boleta"
+            "Ticket Photos": "Fotos de Boleta",
+            "Lot #": "Lote #"
         },
         "report": {
             "Ticket Report": "Reporte de Boletas",

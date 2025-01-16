@@ -131,6 +131,10 @@
 </mat-dialog-actions>
 
 <div class="printable" id="printable-report" >
+  <div class="printable-company-header">
+    <img id='company-logo' [src]='logoURL'>
+    <h1 class="company-name">{{ (companyDoc$ | async).name }}</h1>
+  </div>
   <div class="product-div" *ngFor="let ticketList of productTicketLists | keyvalue">
     <h2>{{ticketList.key}}</h2>
     <table class='ticket-report-table' id="{{ticketList.key}}" *transloco="let t; read: 'tickets.table'">

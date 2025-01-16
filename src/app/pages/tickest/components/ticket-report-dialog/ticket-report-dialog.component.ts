@@ -11,6 +11,8 @@ import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { Mass } from '@shared/classes/mass';
 import { units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
+import { Product } from '@shared/classes/product';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -19,6 +21,9 @@ import { TranslocoService } from '@ngneat/transloco';
 })
 export class TicketReportDialogComponent implements OnInit {
   private currentCompany: string;
+  public productsList: Promise<Product[]>;
+  public companyDoc$: Promise<Company>;
+  public logoURL: string = '';
 
   public reportType: ReportType;
   public inTicket: boolean;
@@ -77,10 +82,17 @@ export class TicketReportDialogComponent implements OnInit {
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
     this.displayUnit = this.session.getDefaultUnit();
+    this.productsList = Product.getProductList(this.db, this.currentCompany);
+
+    this.companyDoc$ = this.session.getCompanyObject();
+    this.companyDoc$.then(async doc => {
+      this.logoURL = await doc.getLogoURL(this.db);
+    });
   }
 
   async generateReport(): Promise<void> {
     await this.getReportTickets();
+    console.log(this.ticketList)
   }
 
   public translateTable(key: string): string {
@@ -288,10 +300,12 @@ export class TicketReportDialogComponent implements OnInit {
         const sorterTicketList = result.sort((a, b) => a.id - b.id);
         this.ticketList = sorterTicketList;
 
-        sorterTicketList.forEach(ticketSnap => {
+        sorterTicketList.forEach(async ticketSnap => {
           if(ticketSnap.void){
             return;
           }
+
+          ticketSnap.defineBushels((await this.productsList).find(product => product.getName() === ticketSnap.productName));
 
           //Check if product list exists
           if(tempTicketList[ticketSnap.productName] == null) {
