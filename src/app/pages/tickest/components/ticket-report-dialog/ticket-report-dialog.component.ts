@@ -296,7 +296,8 @@ export class TicketReportDialogComponent implements OnInit {
     return Ticket.getTickets(this.db, this.currentCompany, this.data.currentPlant, ...this.getFirebaseQueryFn()).then(async result => {
         const tempTicketList = {};
 
-        const sorterTicketList = result.sort((a, b) => a.id - b.id);
+        const removeScaleTickets = result.filter(t => t.status !== 'active');
+        const sorterTicketList = removeScaleTickets.sort((a, b) => a.id - b.id);
         this.ticketList = sorterTicketList;
 
         sorterTicketList.forEach(async ticketSnap => {
@@ -304,7 +305,8 @@ export class TicketReportDialogComponent implements OnInit {
             return;
           }
 
-          ticketSnap.defineBushels((await this.productsList).find(product => product.getName() === ticketSnap.productName));
+          const product = (await this.productsList).find(product => product.getName() === ticketSnap.productName);
+          ticketSnap.defineBushels(product);
 
           //Check if product list exists
           if(tempTicketList[ticketSnap.productName] == null) {
@@ -316,12 +318,12 @@ export class TicketReportDialogComponent implements OnInit {
 
           // check if totals lists exist
           if(!this.totals.products.net[ticketSnap.productName]){
-            this.totals.products.net[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit());
-            this.totals.products.dryWeight[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit());
+            this.totals.products.net[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit(), product);
+            this.totals.products.dryWeight[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit(), product);
           }
           if(!this.totals.inventory.net[ticketSnap.tank]) {
-            this.totals.inventory.net[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit());
-            this.totals.inventory.dryWeight[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit());
+            this.totals.inventory.net[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit(), product);
+            this.totals.inventory.dryWeight[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit(), product);
           }
 
           // Add to totals lists

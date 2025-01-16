@@ -158,22 +158,23 @@
         <td>{{ticket.contractID}}</td>
         <td>{{ticket.lot}}</td>
         <td>{{ticket.tank}}</td>
-        <td>{{ticket.gross | massInUnit:displayUnit}}</td>
-        <td>{{ticket.tare | massInUnit:displayUnit}}</td>
-        <td>{{ticket.net | massInUnit:displayUnit}}</td>
+        <td style="text-align: right;">{{ticket.gross | massInUnit:displayUnit | number:'0.3'}}</td>
+        <td style="text-align: right;">{{ticket.tare | massInUnit:displayUnit  | number:'0.3'}}</td>
+        <td style="text-align: right;">{{ticket.net | massInUnit:displayUnit  | number:'0.3'}}</td>
         <td>{{ticket.moisture | number:'0.1'}}</td>
         <td>{{ticket.plates}}</td>
 
       </tr>
-      <tr>
-        <td></td>
-        <td></td>
+      <tr class="totals-row">
         <td>{{ t('Totals') }}</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td>{{totals.products.net[ticketList.key] | massInUnit:displayUnit}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td style="text-align: right;">{{totals.products.net[ticketList.key] | massInUnit:displayUnit | number:'0.0-3'}}</td>
         <td></td>
         <td></td>
       </tr>
