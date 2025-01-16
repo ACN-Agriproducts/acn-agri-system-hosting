@@ -92,7 +92,6 @@ export class TicketReportDialogComponent implements OnInit {
 
   async generateReport(): Promise<void> {
     await this.getReportTickets();
-    console.log(this.ticketList)
   }
 
   public translateTable(key: string): string {
