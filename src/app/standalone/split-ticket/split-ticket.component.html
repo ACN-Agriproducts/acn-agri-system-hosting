@@ -48,7 +48,7 @@
           <span><b>{{ t('Contract ID') }}:</b></span>
           <span *ngIf="first; else contractField"><b>{{data.contractID}}</b></span>
           <ng-template #contractField>
-            <mat-form-field>
+            <mat-form-field subscriptSizing="dynamic">
               <mat-select [(ngModel)]="ticket.contractId" (ngModelChange)="ticketContractChange()">
                 <mat-option *ngFor="let contract of possibleContracts" [value]="contract.ref.id">{{contract.id}}</mat-option>
               </mat-select>
@@ -67,7 +67,7 @@
           <span>{{ t('Net') }}:</span>
           <span *ngIf="first; else netField">{{ticket.net}}</span>
           <ng-template #netField>
-            <mat-form-field>
+            <mat-form-field subscriptSizing="dynamic">
               <input
                 matInput
                 type="number"
@@ -80,7 +80,7 @@
         </div>
         <div class="card-row">
           <span>{{ t('Lot') }}:</span>
-          <mat-form-field>
+          <mat-form-field subscriptSizing="dynamic">
             <input matInput [(ngModel)]="ticket.lot">
           </mat-form-field>
         </div>

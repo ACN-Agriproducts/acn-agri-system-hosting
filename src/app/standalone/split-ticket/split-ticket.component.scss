@@ -38,3 +38,26 @@ mat-form-field {
 ::ng-deep .mat-form-field-wrapper{
     margin-bottom: -1.25em;
 }
+
+:host {
+    mat-dialog-content *:not(mat-icon) {
+        font-size: small;
+    }
+
+    ::ng-deep {
+        .mdc-text-field--filled {
+            background-color: transparent;
+        }
+        // Manipulate initial background colorr
+        .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+            background-color: transparent;
+        }
+        // Manipulate background color on hover and focus
+        .mat-mdc-form-field-focus-overlay {
+            background-color: transparent;
+        }
+        mat-form-field {
+            height: 2.5rem;
+        }
+    }
+}

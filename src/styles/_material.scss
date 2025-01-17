@@ -66,3 +66,17 @@ mat-label {
 button[mat-button] {
   color: black;
 }
+
+mat-form-field.appearance-legacy {
+  .mdc-text-field--filled {
+    background-color: transparent;
+  }
+  // Manipulate initial background colorr
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+      background-color: transparent;
+  }
+  // Manipulate background color on hover and focus
+  .mat-mdc-form-field-focus-overlay {
+      background-color: transparent;
+  }
+}

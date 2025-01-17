@@ -172,10 +172,12 @@ export class OptionsTicketComponent implements OnInit {
 
   public openContract(): void {
     this.navController.navigateForward(`dashboard/contracts/contract-info/${this.ticket.in? 'purchase' : 'sales'}/${this.ticket.contractRef.id}`);
+    this.popoverController.dismiss();
   }
 
   public openContact(): void {
-    this.navController.navigateForward(`dashboard/directory/contact/${this.ticket.clientRef.id}`)
+    this.navController.navigateForward(`dashboard/directory/contact/${this.ticket.clientRef.id}`);
+    this.popoverController.dismiss();
   }
 
   public async uploadAttachments(): Promise<void> {
