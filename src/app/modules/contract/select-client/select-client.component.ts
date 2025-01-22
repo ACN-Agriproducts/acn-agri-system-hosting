@@ -10,7 +10,8 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   templateUrl: './select-client.component.html',
   styleUrls: ['./select-client.component.scss'],
 })
-export class SelectClientComponent implements OnInit {
+export class 
+SelectClientComponent implements OnInit {
   public clientSelected: Contact;
   public clientsList: CompanyContact[];
   public searchString: string;

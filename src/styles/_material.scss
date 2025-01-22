@@ -63,7 +63,7 @@ mat-label {
 }
 
 // temporary fix for problem with text in buttons being set to white by default
-button[mat-button] {
+button[mat-button], button[mat-stroked-button], button[mat-flat-button] {
   color: black;
 }
 
