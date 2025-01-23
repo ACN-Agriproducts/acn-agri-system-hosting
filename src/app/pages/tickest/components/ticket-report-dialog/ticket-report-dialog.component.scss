@@ -45,13 +45,18 @@ h3 {
 }
 
 th, td {
-    border: 1px black solid;
     font-size: small;
 
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+tr:not(.totals-row) {
+    th, td {
+        border: 1px black solid;
+    }
 }
 
 app-printable-ticket, .ticket-report-table {
@@ -63,4 +68,26 @@ app-printable-ticket, .ticket-report-table {
         display: none;
         margin: 0.5in;
     } 
+}
+
+
+.printable-company-header {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+
+    #company-logo {
+        max-width: 20%;
+    }
+    .company-name {
+        text-transform: uppercase;
+    }
+}
+
+tr.totals-row {
+    font-weight: bold;  
+}
+
+td.num {
+    text-align: right;
 }

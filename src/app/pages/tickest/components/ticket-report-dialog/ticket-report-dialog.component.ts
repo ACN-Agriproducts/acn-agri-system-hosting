@@ -11,6 +11,8 @@ import { getDownloadURL, ref, Storage } from '@angular/fire/storage';
 import { Mass } from '@shared/classes/mass';
 import { units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
+import { Product } from '@shared/classes/product';
+import { Company } from '@shared/classes/company';
 
 @Component({
   selector: 'app-ticket-report-dialog',
@@ -19,6 +21,9 @@ import { TranslocoService } from '@ngneat/transloco';
 })
 export class TicketReportDialogComponent implements OnInit {
   private currentCompany: string;
+  public productsList: Promise<Product[]>;
+  public companyDoc$: Promise<Company>;
+  public logoURL: string = '';
 
   public reportType: ReportType;
   public inTicket: boolean;
@@ -77,6 +82,12 @@ export class TicketReportDialogComponent implements OnInit {
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
     this.displayUnit = this.session.getDefaultUnit();
+    this.productsList = Product.getProductList(this.db, this.currentCompany);
+
+    this.companyDoc$ = this.session.getCompanyObject();
+    this.companyDoc$.then(async doc => {
+      this.logoURL = await doc.getLogoURL(this.db);
+    });
   }
 
   async generateReport(): Promise<void> {
@@ -285,13 +296,17 @@ export class TicketReportDialogComponent implements OnInit {
     return Ticket.getTickets(this.db, this.currentCompany, this.data.currentPlant, ...this.getFirebaseQueryFn()).then(async result => {
         const tempTicketList = {};
 
-        const sorterTicketList = result.sort((a, b) => a.id - b.id);
+        const removeScaleTickets = result.filter(t => t.status !== 'active');
+        const sorterTicketList = removeScaleTickets.sort((a, b) => a.id - b.id);
         this.ticketList = sorterTicketList;
 
-        sorterTicketList.forEach(ticketSnap => {
+        sorterTicketList.forEach(async ticketSnap => {
           if(ticketSnap.void){
             return;
           }
+
+          const product = (await this.productsList).find(product => product.getName() === ticketSnap.productName);
+          ticketSnap.defineBushels(product);
 
           //Check if product list exists
           if(tempTicketList[ticketSnap.productName] == null) {
@@ -303,12 +318,12 @@ export class TicketReportDialogComponent implements OnInit {
 
           // check if totals lists exist
           if(!this.totals.products.net[ticketSnap.productName]){
-            this.totals.products.net[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit());
-            this.totals.products.dryWeight[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit());
+            this.totals.products.net[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit(), product);
+            this.totals.products.dryWeight[ticketSnap.productName] = new Mass(0, this.session.getDefaultUnit(), product);
           }
           if(!this.totals.inventory.net[ticketSnap.tank]) {
-            this.totals.inventory.net[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit());
-            this.totals.inventory.dryWeight[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit());
+            this.totals.inventory.net[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit(), product);
+            this.totals.inventory.dryWeight[ticketSnap.tank] = new Mass(0, this.session.getDefaultUnit(), product);
           }
 
           // Add to totals lists
