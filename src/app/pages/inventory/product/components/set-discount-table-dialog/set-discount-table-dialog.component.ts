@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { DiscountTable, DiscountTableHeader } from '@shared/classes/discount-tables';

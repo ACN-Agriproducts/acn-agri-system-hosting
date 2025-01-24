@@ -19,14 +19,14 @@
             </div>
             <mat-form-field appearance="fill">
                 <mat-label>{{ standardConfig ? t("Additional Headers") : t("Headers") }}</mat-label>
-                <mat-chip-list #chipList
+                <mat-chip-grid #chipList
                     class="mat-chip-list-stacked"
                     cdkDropList
                     cdkDropListOrientation="vertical"
                     (cdkDropListDropped)="drop($event)"
                     multiple
                 >
-                    <mat-chip
+                    <mat-chip-row
                         cdkDrag
                         *ngFor="let header of table.headers"
                         (removed)="remove(header)"
@@ -49,8 +49,8 @@
                                 {{ t("Mark as Price Discount") }}
                             </button>
                         </mat-menu>
-                    </mat-chip>
-                </mat-chip-list>
+                    </mat-chip-row>
+                </mat-chip-grid>
                 <input [placeholder]="t('New header') + '...'"
                     [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

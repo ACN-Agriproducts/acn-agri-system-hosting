@@ -3,26 +3,22 @@
 	
 	<mat-dialog-content>
 		<form #contactForm="ngForm">
+			<mat-form-field appearance="fill">
+				<mat-label>{{t('Name')}}</mat-label>
+				<input matInput required [(ngModel)]="data.contact.name" name="name">
+				<mat-error>{{t('Name is')}} <strong>{{t('required')}}</strong></mat-error>
+			</mat-form-field>
+
+			<div class="chip-row">
+				<mat-chip-listbox multiple [(ngModel)]="data.contact.tags" name="tags">
+					<mat-chip-option value="client" (click)="chipToggle('client')">{{t('Client')}}</mat-chip-option>
+					<mat-chip-option value="trucker" (click)="chipToggle('trucker')">{{t('Trucker')}}</mat-chip-option>
+					<mat-chip-option *ngFor="let tag of data.otherTags" [value]="tag" (click)="chipToggle(tag)">{{tag | titlecase}}</mat-chip-option>
+				</mat-chip-listbox>
+				<button mat-icon-button (click)="newTagDialog()"><mat-icon>add</mat-icon></button>
+			</div>
+			 
 			<mat-grid-list cols="12" rowHeight="70px" gutterSize="10px">
-				<mat-grid-tile colspan="12">
-					<mat-form-field appearance="fill">
-						<mat-label>{{t('Name')}}</mat-label>
-						<input matInput required [(ngModel)]="data.contact.name" name="name">
-						<mat-error>{{t('Name is')}} <strong>{{t('required')}}</strong></mat-error>
-					</mat-form-field>
-				</mat-grid-tile>
-	
-				<mat-grid-tile colspan="12">
-					<div class="chip-row">
-						<mat-chip-list multiple [(ngModel)]="data.contact.tags" name="tags">
-							<mat-chip value="client" #c="matChip" (click)="chipToggle(c, 'client')">{{t('Client')}}</mat-chip>
-							<mat-chip value="trucker" #tc="matChip" (click)="chipToggle(tc, 'trucker')">{{t('Trucker')}}</mat-chip>
-							<mat-chip *ngFor="let tag of data.otherTags" [value]="tag" #oc="matChip" (click)="chipToggle(oc, tag)">{{tag | titlecase}}</mat-chip>
-						</mat-chip-list>
-						<button mat-icon-button (click)="newTagDialog()"><mat-icon>add</mat-icon></button>
-					</div>
-				</mat-grid-tile>
-	
 				<mat-grid-tile colspan="12">
 					<mat-form-field appearance="fill">
 						<mat-label>{{t('Street Address')}}</mat-label>
@@ -121,7 +117,7 @@
 							matTooltip="Make Primary" 
 							*ngIf="!contact.isPrimary"
 							(click)="promoteToPrimary(contact)"><mat-icon>publish</mat-icon></button>
-						<mat-form-field appearance="fill">
+						<mat-form-field appearance="fill" class="background-white">
 							<mat-label>{{t('Name')}}</mat-label>
 							<input matInput [(ngModel)]="contact.name" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Name is')}} <strong>{{t('required')}}</strong></mat-error>
@@ -129,12 +125,13 @@
 						<button 
 							mat-icon-button 
 							matTooltip="delete" 
+							color="warn"
 							*ngIf="data.contact.metacontacts.length > 1"
 							(click)="removeMetacontact(index)"><mat-icon>delete</mat-icon></button>
 					</mat-grid-tile>
 	
 					<mat-grid-tile colspan="3">
-						<mat-form-field appearance="fill">
+						<mat-form-field appearance="fill" class="background-white">
 							<mat-label>{{t('Phone Number')}}</mat-label>
 							<input matInput [(ngModel)]="contact.phone" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Phone number is')}} <strong>{{t('required')}}</strong></mat-error>
@@ -142,7 +139,7 @@
 					</mat-grid-tile>
 	
 					<mat-grid-tile colspan="6">
-						<mat-form-field appearance="fill">
+						<mat-form-field appearance="fill" class="background-white">
 							<mat-label>{{t('Email')}}</mat-label>
 							<input matInput [(ngModel)]="contact.email" [ngModelOptions]="{standalone: true}">
 							<mat-error>{{t('Email is')}} <strong>{{t('required')}}</strong></mat-error>

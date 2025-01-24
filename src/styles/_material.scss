@@ -73,11 +73,11 @@ mat-form-field.appearance--legacy {
   }
   // Manipulate initial background color
   .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-      background-color: transparent;
+    background-color: transparent;
   }
   // Manipulate background color on hover and focus
   .mat-mdc-form-field-focus-overlay {
-      background-color: transparent;
+    background-color: transparent;
   }
   
   &.dotted--disabled {
@@ -86,5 +86,11 @@ mat-form-field.appearance--legacy {
       border-bottom-color: rgb(0 0 0 / 25%);
       border-bottom-width: 2px;
     }
+  }
+}
+
+mat-form-field.background-white {
+  .mat-mdc-text-field-wrapper {
+    background-color: white;
   }
 }
