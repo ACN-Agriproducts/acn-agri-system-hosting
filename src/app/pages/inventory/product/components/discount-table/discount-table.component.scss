@@ -1,14 +1,14 @@
 
+:host * {
+    box-sizing: border-box;
+}
+
 .collection {
     margin: 0;
     padding: 0;
 
     li {
         list-style: none;
-    }
-
-    * {
-        box-sizing: border-box;
     }
 
     mat-card {
@@ -51,34 +51,36 @@
 
 .row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
     font-size: 0.9em;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
 
     &.add-item {
         display: flex;
         justify-content: flex-end;
 
         button {
-            margin: 10px;
+            margin: 8px;
         }
     }
 }
 
 .cell {
-    padding: 15px;
+    padding: 16px;
 
     &.options {
-        padding: none;
+        padding: 8px 0;
         justify-content: center;
+        min-width: 56px;
     }
 
     max-width: 100%;
 
     display: flex;
     align-items: center;
+    justify-content: center;
 
     &:has(input) {
-        padding: 0 15px;
+        padding: 0 16px;
     }
 }
 
@@ -87,8 +89,8 @@
     color: var(--ion-color-primary);
     font-weight: bold;
     font-size: 1.1em;
-    padding: 15px;
-    margin-bottom: 10px;
+    padding: 16px;
+    margin-bottom: 8px;
 }
 
 .body-card {
@@ -106,6 +108,10 @@
 
     mat-form-field {
         pointer-events: all;
+
+        input {
+            font-size: 0.9em;
+        }
     }
 
     mat-icon[cdkDragHandle] {
@@ -124,34 +130,32 @@ div[cdkDropList] {
 	align-items: center;
 
 	&:has(mat-card-title) {
-		margin-bottom: 15px;
+		margin-bottom: 16px;
 		mat-card-title { margin: 0 }
 	}
 }
 
 .discount-table {
-	margin: 10px;
+	margin: 8px;
 
-	.discount-table-header mat-form-field {
-		color: var(--ion-color-step-850, #262626);
-		margin: 0px;
-		padding: 0px;
-		font-size: 20px;
-		font-weight: 500;
-		line-height: 1.2;
-	}
-	/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
-	::ng-deep .mat-form-field-underline {
-		display: none !important;
-	}
-}
-
-.action-bar {
-	display: flex;
-	gap: 10px;
-	align-items: center;
+	// .discount-table-header mat-form-field {
+	// 	color: var(--ion-color-step-850, #262626);
+	// 	margin: 0px;
+	// 	padding: 0px;
+	// 	font-size: 20px;
+	// 	font-weight: 500;
+	// 	line-height: 1.2;
+	// }
 }
 
 .invisible {
 	visibility: hidden;
+}
+
+.table-data-cells {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 8px;
+    // width: 100%;
+    flex: 1 1 auto;
 }

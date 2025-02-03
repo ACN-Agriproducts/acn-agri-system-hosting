@@ -51,7 +51,9 @@ export class ProductPage implements OnInit {
   async setTable(table?: DiscountTable) {
     const dialogRef = this.dialog.open(SetDiscountTableDialogComponent, {
       data: table,
-      autoFocus: false
+      autoFocus: false,
+      minWidth: "500px",
+      width: "35vw"
     });
 
     const result = await lastValueFrom(dialogRef.afterClosed());

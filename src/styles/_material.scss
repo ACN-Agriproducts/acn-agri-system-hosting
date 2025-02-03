@@ -59,11 +59,11 @@
 .mat-mdc-select-value-text,
 .mat-mdc-option,
 mat-label {
-    font-size: 14px;
+  font-size: 14px;
 }
 
 // temporary fix for problem with text in buttons being set to white by default
-button[mat-button], button[mat-stroked-button], button[mat-flat-button] {
+button[mat-button], button[mat-stroked-button], button[mat-flat-button], button[mat-raised-button] {
   color: black;
 }
 
@@ -87,10 +87,52 @@ mat-form-field.appearance--legacy {
       border-bottom-width: 2px;
     }
   }
+
+  &.no-underline {
+    .mdc-line-ripple::before, .mdc-line-ripple::after {
+      border-bottom: unset;
+    }
+  }
 }
 
 mat-form-field.background-white {
   .mat-mdc-text-field-wrapper {
     background-color: white;
+  }
+}
+
+mat-dialog-actions.justify-end {
+  justify-content: flex-end;
+}
+
+mat-chip-grid.mat-mdc-chip-set-stacked {
+  &.vertical-drag-chips {
+    .mdc-evolution-chip-set__chips {
+      flex-direction: column;
+    }
+  }
+
+  mat-chip-row.max-width-fit-content {
+    max-width: fit-content;
+  }
+}
+
+
+mat-form-field.horizontal-scroll-input-chips {
+  mat-chip-grid {
+    overflow-x: auto;
+  }
+  .mdc-evolution-chip-set__chips {
+    flex-flow: nowrap;
+  }
+  input.mat-mdc-chip-input {
+    line-height: 2;
+    margin-top: 10px;
+  }
+}
+
+mat-form-field.no-subscript {
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 0;
   }
 }
