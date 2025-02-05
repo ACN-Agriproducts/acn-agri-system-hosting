@@ -252,7 +252,9 @@
             "Quantity must be positive": "Quantity must be positive",
             "Market Price is required": "Market Price is required",
             "Quantity": "Quantity",
-            "Price": "Price"
+            "Price": "Price",
+            "Future Price": "Future Price",
+            "Base Price": "Base Price"
         }
     },
     "directory": {
