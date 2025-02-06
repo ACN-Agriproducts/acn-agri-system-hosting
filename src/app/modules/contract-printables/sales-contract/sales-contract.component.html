@@ -118,8 +118,18 @@
           </ng-container>
         </div>
         <div class='column-size-2 text-align-right' [printableField]="'price.amount'">
-          ${{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' }}<br>
-          ${{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' }}
+          $&nbsp;{{ ((contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) ?? 0) <= 0 
+            ? 
+            '--' 
+            : 
+            contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' 
+          }}<br>
+          $&nbsp;{{ ((contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) ?? 0) <= 0 
+            ? 
+            '--' 
+            : 
+            contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' 
+          }}
         </div>
         <div class='column-size-2 text-align-right'>
           &nbsp;/&nbsp;CWT<br>
@@ -144,8 +154,14 @@
       <div class='column-size-2'>
         <div id='total'>
           <span><b>$</b></span>
-          <span><b>{{ !contractForm.isOpen || contractForm.status == 'closed'? ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * 
-            (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) | number:'1.2-2') : '-' }}</b></span>
+          <span><b>{{ 
+            ((!contractForm.isOpen || contractForm.status == 'closed') && 
+              ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) > 0) 
+            ) ? 
+              ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) | number:'1.2-2') 
+            : 
+              '--' 
+          }}</b></span>
         </div>
       </div>
     </div>
