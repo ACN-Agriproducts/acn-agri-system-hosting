@@ -189,8 +189,14 @@
     
     <p>The Buyer is purchasing the following Goods from the Seller: <span [printableField]="'product'">{{ contractForm.product?.id }}</span>	</p>
     
-    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ !contractForm.isOpen || contractForm.status == 'closed'? ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
-      (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2') : '-' }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ 
+      ((!contractForm.isOpen || contractForm.status == 'closed') && 
+        ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) > 0) 
+      ) ? 
+        ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) | number:'1.2-2') 
+      : 
+        '--' 
+      }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
     <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods: <br>
     •	<br>
