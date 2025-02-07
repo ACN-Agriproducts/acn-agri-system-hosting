@@ -41,7 +41,7 @@
           <span *ngIf="contractForm.price.amount">&nbsp;/&nbsp;BU</span>
         </span><br>
         <ng-template #altPriceFormat>
-          <span [printableField]="'price.amount'" *ngIf="contractForm.base && contractForm.futurePriceInfo.expirationMonth">{{ (contractForm.base * 100 | number:'0.0') + 'C' + MONTH_CODES[contractForm.futurePriceInfo.expirationMonth | date:"MMM" | uppercase] + (contractForm.futurePriceInfo.expirationMonth | date:"YY") }}</span>
+          <span [printableField]="'price.amount'">{{ (contractForm.base * 100 | number:'0.0') + 'C' + MONTH_CODES[contractForm.futurePriceInfo.expirationMonth | date:"MMM" | uppercase] + (contractForm.futurePriceInfo.expirationMonth | date:"YY") }}</span>
         </ng-template>
         <span [printableField]="'date'">{{ contractForm.date | date:'MM/dd/YYYY' }}</span><br>
         <br>
