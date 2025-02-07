@@ -14,6 +14,15 @@ import { Payment } from "./payment";
 export declare type contractType = string | boolean;
 export declare type ContractStatus = 'pending' | 'active' | 'closed' | 'cancelled' | 'paid';
 
+const MONTHS_LIST = ['March', 'May', 'July', 'September', 'December'];
+export const MONTH_CODES = {
+  MAR: 'H',
+  MAY: 'K',
+  JUL: 'N',
+  SEP: 'U',
+  DEC: 'Z'
+};
+
 export class Contract extends FirebaseDocInterface {
     aflatoxin: number;
     bankInfo: BankInfo[];

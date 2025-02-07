@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { Contract } from '@shared/classes/contract';
+import { Contract, MONTH_CODES } from '@shared/classes/contract';
 import { PrintableContractUtilitiesService } from '../printable-contract-utilities.service';
 import { FocusedFieldDirective } from '../printable-contract.component';
 import { ContractSettings } from '@shared/classes/contract-settings';
@@ -22,6 +22,8 @@ export class PurchaseContractComponent implements OnInit, OnChanges {
   private focusedFields: FocusedFieldDirective[] = [];
 
   readonly contractType: string = 'purchase';
+
+  readonly MONTH_CODES = MONTH_CODES;
 
   @Input() company: Company;
 
