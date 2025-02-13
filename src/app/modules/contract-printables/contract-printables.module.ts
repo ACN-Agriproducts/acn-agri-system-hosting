@@ -9,7 +9,7 @@ import { PurchaseUnfixedPriceComponent } from './purchase-unfixed-price/purchase
 import { PurchaseToDepositComponent } from './purchase-to-deposit/purchase-to-deposit.component';
 import { PurchaseFixedPriceComponent } from './purchase-fixed-price/purchase-fixed-price.component';
 import { PurchaseContractComponent } from './purchase-contract/purchase-contract.component';
-import { ContractIdPipe, CurrencySplitPipe, ExchangeRateFieldPipe, NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable-contract-utilities.service';
+import { ContractIdPipe, CurrencySplitPipe, ExchangeRateFieldPipe, FlatPricePipe, MaskValuePipe, MaskZerosPipe, NumberNameSpanishPipe, SelectFieldDisplayPipe } from './printable-contract-utilities.service';
 import { CoreModule } from '@core/core.module';
 import { SharedModule } from '@shared/shared.module';
 import { ContractDialogComponent } from './contract-dialog/contract-dialog.component';
@@ -33,7 +33,10 @@ import { ContractDialogComponent } from './contract-dialog/contract-dialog.compo
     CurrencySplitPipe,
     FocusedFieldDirective,
     ContractIdPipe,
-    ContractDialogComponent
+    ContractDialogComponent,
+    FlatPricePipe,
+    MaskZerosPipe,
+    MaskValuePipe
   ],
   exports: [
     PrintableContractComponent
