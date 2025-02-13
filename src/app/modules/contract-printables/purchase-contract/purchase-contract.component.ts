@@ -23,8 +23,6 @@ export class PurchaseContractComponent implements OnInit, OnChanges {
 
   readonly contractType: string = 'purchase';
 
-  readonly MONTH_CODES = MONTH_CODES;
-
   @Input() company: Company;
 
   constructor(public utils: PrintableContractUtilitiesService) {}
