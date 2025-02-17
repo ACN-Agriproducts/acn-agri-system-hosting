@@ -79,7 +79,9 @@
                 "Delivered": "Delivered",
                 "Total": "Total",
                 "Trend": "Trend"
-            }
+            },
+            "active & pending": "active & pending",
+            "Active & Pending": "Active & Pending"
         },
         "new": {
             "contract info": "Contract Info",
