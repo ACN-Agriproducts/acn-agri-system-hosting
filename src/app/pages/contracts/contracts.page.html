@@ -12,10 +12,18 @@
                 <mat-label>{{t('Status')}}</mat-label>
                 <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,canceled,paid">
                     <mat-option value="active,closed,pending,canceled,paid">{{t('all') | titlecase}}</mat-option>
-                    <mat-option value="active">{{t('active') | titlecase}}</mat-option>
-                    <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
-                    <mat-option value="closed,paid">{{t('closed') | titlecase}}</mat-option>
-                    <mat-option value="active,pending">{{ t("Active & Pending") }}</mat-option>
+                    <mat-divider></mat-divider>
+                    <!-- <mat-optgroup label="----------------------------------------"> -->
+                        <mat-option value="active">{{t('active') | titlecase}}</mat-option>
+                        <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
+                        <mat-option value="closed">{{t('closed') | titlecase}}</mat-option>
+                        <mat-option value="paid">{{t('paid') | titlecase}}</mat-option>                        
+                    <!-- </mat-optgroup> -->
+                    <!-- <mat-optgroup label="----------------------------------------"> -->
+                        <mat-divider></mat-divider>
+                        <mat-option value="active,pending">{{ t("Active & Pending") }}</mat-option>
+                        <mat-option value="closed,paid">{{ t("Closed & Paid") }}</mat-option>
+                    <!-- </mat-optgroup> -->
                 </mat-select>
             </mat-form-field>
         </div>
@@ -177,7 +185,7 @@
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getQuantityTooltip(contract)"
-                                matTooltipClass="multiline-tooltip">zz
+                                matTooltipClass="multiline-tooltip">
                                 {{!contract.isOpen || contract.status == 'closed' || contract.status == 'paid' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-'}}
                             </ion-text>
                         </ion-item>

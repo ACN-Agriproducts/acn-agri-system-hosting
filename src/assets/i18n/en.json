@@ -80,8 +80,8 @@
                 "Total": "Total",
                 "Trend": "Trend"
             },
-            "active & pending": "active & pending",
-            "Active & Pending": "Active & Pending"
+            "Active & Pending": "Active & Pending",
+            "Closed & Paid": "Closed & Paid"
         },
         "new": {
             "contract info": "Contract Info",
