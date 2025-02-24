@@ -38,7 +38,7 @@
         <span [printableField]="'market_price'">{{ (contractForm.market_price | number:"0.5") ?? (contractForm.futurePriceInfo.expirationMonth | date:"MMM YYYY" | uppercase) }}</span><br>
         <span [printableField]="'price.amount'" *ngIf="contractForm.price?.amount > 0 else altPriceFormat">{{ contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:"0.5" | maskZeros }}&nbsp;/&nbsp;BU</span>
         <ng-template #altPriceFormat>
-          <span [printableField]="'price.amount'">{{ contractForm.futurePriceInfo.expirationMonth | flatPrice:contractForm.base:contractForm.product?.id | maskZeros }}</span>
+          <span [printableField]="'price.amount'">{{ contractForm.futurePriceInfo.expirationMonth | flatPrice:contractForm.base:contractForm.product?.id }}</span>
         </ng-template>
         <br>
         <span [printableField]="'date'">{{ contractForm.date | date:'MM/dd/YYYY' }}</span><br>
