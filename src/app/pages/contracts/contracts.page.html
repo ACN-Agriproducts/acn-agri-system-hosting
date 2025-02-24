@@ -13,17 +13,13 @@
                 <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,canceled,paid">
                     <mat-option value="active,closed,pending,canceled,paid">{{t('all') | titlecase}}</mat-option>
                     <mat-divider></mat-divider>
-                    <!-- <mat-optgroup label="----------------------------------------"> -->
-                        <mat-option value="active">{{t('active') | titlecase}}</mat-option>
-                        <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
-                        <mat-option value="closed">{{t('closed') | titlecase}}</mat-option>
-                        <mat-option value="paid">{{t('paid') | titlecase}}</mat-option>                        
-                    <!-- </mat-optgroup> -->
-                    <!-- <mat-optgroup label="----------------------------------------"> -->
-                        <mat-divider></mat-divider>
-                        <mat-option value="active,pending">{{ t("Active & Pending") }}</mat-option>
-                        <mat-option value="closed,paid">{{ t("Closed & Paid") }}</mat-option>
-                    <!-- </mat-optgroup> -->
+                    <mat-option value="active">{{t('active') | titlecase}}</mat-option>
+                    <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
+                    <mat-option value="closed">{{t('closed') | titlecase}}</mat-option>
+                    <mat-option value="paid">{{t('paid') | titlecase}}</mat-option>                        
+                    <mat-divider></mat-divider>
+                    <mat-option value="active,pending">{{ t("Active & Pending") }}</mat-option>
+                    <mat-option value="closed,paid">{{ t("Closed & Paid") }}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
