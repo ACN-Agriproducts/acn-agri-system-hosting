@@ -12,7 +12,6 @@
                 <mat-label>{{t('Status')}}</mat-label>
                 <mat-select (selectionChange)="segmentChanged($event)" value="active,closed,pending,canceled,paid">
                     <mat-option value="active,closed,pending,canceled,paid">{{t('all') | titlecase}}</mat-option>
-                    <mat-divider></mat-divider>
                     <mat-option value="active">{{t('active') | titlecase}}</mat-option>
                     <mat-option value="pending">{{t('pending') | titlecase}}</mat-option>
                     <mat-option value="closed">{{t('closed') | titlecase}}</mat-option>
