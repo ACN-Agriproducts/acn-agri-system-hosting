@@ -79,7 +79,9 @@
                 "Delivered": "Delivered",
                 "Total": "Total",
                 "Trend": "Trend"
-            }
+            },
+            "Active & Pending": "Active & Pending",
+            "Closed & Paid": "Closed & Paid"
         },
         "new": {
             "contract info": "Contract Info",
@@ -252,7 +254,11 @@
             "Quantity must be positive": "Quantity must be positive",
             "Market Price is required": "Market Price is required",
             "Quantity": "Quantity",
-            "Price": "Price"
+            "Price": "Price",
+            "Future Price": "Future Price",
+            "Base Price": "Base Price",
+            "Base Price is required": "Base Price is required",
+            "Future Price is required": "Future Price is required"
         }
     },
     "directory": {

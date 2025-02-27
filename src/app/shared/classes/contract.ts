@@ -777,3 +777,30 @@ export interface Exectuive {
     name: string,
     ref: DocumentReference
 }
+
+export const MONTH_CODES = {
+    JAN: 'F',
+    FEB: 'G',
+    MAR: 'H',
+    APR: 'J',
+    MAY: 'K',
+    JUN: 'M',
+    JUL: 'N',
+    AUG: 'Q',
+    SEP: 'U',
+    OCT: 'V',
+    NOV: 'X',
+    DEC: 'Z'
+};
+
+export const PRODUCT_CODES = {
+    "yellow corn": 'C',
+    "soybean": 'S',
+    "hard red winter wheat": 'KE',
+    "rough rice": 'R',
+    "sorghum": 'SOR'
+};
+
+const PRODUCT_CODES_DAILY_LAST_PRICE = {
+    "hard red winter wheat": 'KW'
+};

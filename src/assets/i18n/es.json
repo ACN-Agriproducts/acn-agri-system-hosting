@@ -79,7 +79,9 @@
                 "Delivered": "Entregado",
                 "Total": "Total",
                 "Trend": "Tendencia"
-            }
+            },
+            "Active & Pending": "Activo y Pendiente",
+            "Closed & Paid": "Cerrado y Pagado"
         },
         "new": {
             "contract info": "Información de Contrato",
@@ -252,7 +254,11 @@
             "Quantity must be positive": "La cantidad debe ser positiva",
             "Market Price is required": "El precio de mercado es requerido",
             "Quantity": "Cantidad",
-            "Price": "Precio"
+            "Price": "Precio",
+            "Future Price": "Precio Futuro",
+            "Base Price": "Precio Base",
+            "Base Price is required": "El precio base es requerido",
+            "Future Price is required": "El precio futuro es requerido"
         }
     },
     "directory": {

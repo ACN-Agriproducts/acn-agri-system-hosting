@@ -124,7 +124,8 @@ export class ContractModalOptionsComponent implements OnInit {
       price: this.contract.price.amount,
       priceUnit: this.contract.price.unit,
       quantity: this.contract.quantity.amount,
-      quantityUnits: this.contract.quantity.defaultUnits
+      quantityUnits: this.contract.quantity.defaultUnits,
+      basePrice: this.contract.base
     };
 
     if(this.contract.isOpen && isClosing) {
@@ -145,7 +146,8 @@ export class ContractModalOptionsComponent implements OnInit {
       price: newFieldData?.price ?? requiredFieldData.price,
       priceUnit: newFieldData?.priceUnit ?? requiredFieldData.priceUnit,
       quantity: newFieldData?.quantity ?? requiredFieldData.quantity,
-      quantityUnits: newFieldData?.quantityUnits ?? requiredFieldData.quantityUnits
+      quantityUnits: newFieldData?.quantityUnits ?? requiredFieldData.quantityUnits,
+      base: newFieldData?.basePrice ?? requiredFieldData.basePrice
     })
     .then(() => {
       this.snack.openTranslated("Contract updated", "success");
@@ -154,6 +156,7 @@ export class ContractModalOptionsComponent implements OnInit {
       this.contract.price.unit = requiredFieldData.priceUnit;
       this.contract.quantity.amount = requiredFieldData.quantity;
       this.contract.quantity.defaultUnits = requiredFieldData.quantityUnits;
+      this.contract.base = requiredFieldData.basePrice;
     })
     .catch(error => {
       console.error(error);
