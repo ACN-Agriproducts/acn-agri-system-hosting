@@ -256,7 +256,9 @@
             "Quantity": "Cantidad",
             "Price": "Precio",
             "Future Price": "Precio Futuro",
-            "Base Price": "Precio Base"
+            "Base Price": "Precio Base",
+            "Base Price is required": "El precio base es requerido",
+            "Future Price is required": "El precio futuro es requerido"
         }
     },
     "directory": {
