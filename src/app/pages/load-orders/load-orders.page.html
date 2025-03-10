@@ -62,6 +62,7 @@
                     </ion-button>
                     <mat-menu #menu>
                         <!-- TODO ADD NGIF -->
+                        <button mat-menu-item (click)="openOrder()">{{ t('Open') }}</button>
                         <button mat-menu-item (click)="editOrderDialog(loadOrder)">{{t('edit')}}</button>
                         <button mat-menu-item (click)="cancelOrder(loadOrder)" *ngIf="loadOrder.status == 'pending'">{{t('cancel')}}</button>
                     </mat-menu>

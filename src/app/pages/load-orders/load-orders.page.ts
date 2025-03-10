@@ -73,4 +73,8 @@ export class LoadOrdersPage implements OnInit {
       this.snack.open('There has been an error', 'error');
     });
   }
+
+  openOrder() {
+    // this.dialog.open()
+  }
 }
