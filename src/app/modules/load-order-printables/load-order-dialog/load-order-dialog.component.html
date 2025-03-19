@@ -1,3 +1,4 @@
-<p>
-  load-order-dialog works!
-</p>
+
+<app-printable-dialog [printStyle]="{'@page': { margin: '1in' }}">
+  <app-printable-load-order [order]="data"></app-printable-load-order>
+</app-printable-dialog>

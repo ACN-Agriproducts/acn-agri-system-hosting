@@ -1072,7 +1072,8 @@
         "box plates": "Box Plates",
         "submit": "Submit",
         "New Order": "New Order",
-        "plants": "Plants"
+        "plants": "Plants",
+        "Open": "Open"
     },
     "document-upload-dialog": {
         "Document Name": "Document Name",

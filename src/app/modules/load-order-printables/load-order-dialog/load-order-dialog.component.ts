@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { LoadOrder } from '@shared/classes/load-orders.model';
 
 @Component({
   selector: 'app-load-order-dialog',
@@ -6,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./load-order-dialog.component.scss'],
 })
 export class LoadOrderDialogComponent implements OnInit {
-
-  constructor() { }
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: LoadOrder
+  ) {}
 
   ngOnInit() {}
 

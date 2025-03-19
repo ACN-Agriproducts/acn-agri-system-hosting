@@ -5,6 +5,8 @@ import { LoadOrder } from '@shared/classes/load-orders.model';
 import { LoadOrderService } from '@shared/model-services/load-order.service';
 import { SetOrderModalComponent } from './components/set-order-modal/set-order-modal.component';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { LoadOrderDialogComponent } from 'src/app/modules/load-order-printables/load-order-dialog/load-order-dialog.component';
+
 
 @Component({
   selector: 'app-load-orders',
@@ -19,7 +21,7 @@ export class LoadOrdersPage implements OnInit {
     private company: CompanyService,
     private loadOrders: LoadOrderService,
     private dialog: MatDialog,
-    private snack: SnackbarService
+    private snack: SnackbarService,
   ) { }
 
   ngOnInit() {
@@ -74,7 +76,18 @@ export class LoadOrdersPage implements OnInit {
     });
   }
 
-  openOrder() {
-    // this.dialog.open()
+  openOrder(order: LoadOrder) {
+    const dialogRef = this.dialog.open(LoadOrderDialogComponent, {
+      data: order,
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(!result) return;
+    });
   }
+
 }

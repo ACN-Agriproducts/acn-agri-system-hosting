@@ -1068,7 +1068,8 @@
         "box plates": "Placas de Caja",
         "submit": "Guardar",
         "New Order": "Nueva Orden",
-        "plants": "Plantasks"
+        "plants": "Plantas",
+        "Open": "Abrir"
     },
     "document-upload-dialog": {
         "Document Name": "Nombre del Documento",
