@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Firestore } from '@angular/fire/firestore';
+import { CompanyService } from '@core/services/company/company.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
+import { Company } from '@shared/classes/company';
 import { LoadOrder } from '@shared/classes/load-orders.model';
 
 @Component({
@@ -9,10 +13,20 @@ import { LoadOrder } from '@shared/classes/load-orders.model';
 export class PrintableLoadOrderComponent implements OnInit {
   @Input() order: LoadOrder;
 
-  constructor() { }
+  public companyDoc$: Promise<Company>;
+  public logoUrl: string;
+
+  constructor(
+    private db: Firestore,
+    private session: SessionInfo
+  ) { }
 
   ngOnInit() {
-    console.log(this.order)
+    this.companyDoc$ = this.session.getCompanyObject();
+    this.companyDoc$.then(async doc => {
+      console.log(doc)
+      this.logoUrl = await doc.getLogoURL(this.db);
+    });
   }
 
 }

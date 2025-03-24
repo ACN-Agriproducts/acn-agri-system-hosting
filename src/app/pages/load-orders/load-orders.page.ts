@@ -77,16 +77,12 @@ export class LoadOrdersPage implements OnInit {
   }
 
   openOrder(order: LoadOrder) {
-    const dialogRef = this.dialog.open(LoadOrderDialogComponent, {
+    this.dialog.open(LoadOrderDialogComponent, {
       data: order,
       panelClass: "borderless-dialog",
       minWidth: "80%",
       maxWidth: "100%",
       height: "75vh"
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(!result) return;
     });
   }
 

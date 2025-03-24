@@ -1,13 +1,118 @@
 
 <div class="page-style main">
-  <div class="header-section">
-    <div class="logo">
-      <img id='company-logo' src='https://firebasestorage.googleapis.com/v0/b/business-manager-c488c.appspot.com/o/logo%2Flogo.png?alt=media&token=a8611727-2fcf-45fa-8861-42b290376789'>
-      <h1><b>LOAD ORDER</b></h1>
-      <div class="load-order-id">
-        <span>No.</span>
-        <span>{{ order.id }}</span>
+  <div class="header">
+    <div class="company-letterhead">
+      <img id='logo' [src]="logoUrl">
+      <div class="address">
+        <span>{{ (companyDoc$ | async).name }}</span>
+        <span *ngFor="let line of (companyDoc$ | async)?.address">{{ line }}</span>
+      </div>
+    </div>
+    <div class="title-section">
+      <span><b>LOAD ORDER</b></span>
+      <div class="id-section">
+        <span class="normal-case">No.</span>
+        <span class="id">{{ order.id }}</span>
       </div>
     </div>
   </div>
+  <table>
+    <colgroup>
+      <col width="164px">
+      <col width="164px">
+      <col width="470px">
+      <col width="317px">
+      <col width="164px">
+      <col width="164px">
+      <col width="164px">
+    </colgroup>
+    <tr class="section-headers">
+      <th colspan="3">Transport</th>
+      <th colspan="4">Product & Weight</th>
+    </tr>
+    <tr>
+      <th colspan="2">Transport Name:</th>
+      <td>{{ order.clientName }}</td>
+      <th>Commodity:</th>
+      <td colspan="3">{{ order.product }}</td>
+    </tr>
+    <tr>
+      <th colspan="2">Driver Name:</th>
+      <td></td>
+      <th>Grade:</th>
+      <td colspan="3"></td>
+    </tr>
+    <tr>
+      <th rowspan="2">Plates:</th>
+      <th>Truck:</th>
+      <td></td>
+      <th colspan="2">Loading:</th>
+      <th colspan="2">Unloading:</th>
+    </tr>
+    <tr>
+      <th>Trailer:</th>
+      <td></td>
+      <th>Gross:</th>
+      <td></td>
+      <th>Gross:</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th colspan="2">Unit Type:</th>
+      <td></td>
+      <th>Tare:</th>
+      <td></td>
+      <th>Tare:</th>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="whitespace-cell"></td>
+      <th>Net:</th>
+      <td></td>
+      <th>Net:</th>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="whitespace-cell"></td>
+      <th>Loss:</th>
+      <td colspan="3"></td>
+    </tr>
+
+    <!-- ----------------------------------------------------------- -->
+
+    <tr class="section-headers">
+      <th colspan="3">Transported From</th>
+      <th colspan="4">Transported To</th>
+    </tr>
+    <tr>
+      <th colspan="2">Seller:</th>
+      <td></td>
+      <th>Buyer:</th>
+      <td colspan="3"></td>
+    </tr>
+    <tr>
+      <th colspan="2">Contract No:</th>
+      <td></td>
+      <th>Contract No:</th>
+      <td colspan="3"></td>
+    </tr>
+    <tr>
+      <th colspan="2">Warehouse:</th>
+      <td></td>
+      <th>Warehouse:</th>
+      <td colspan="3"></td>
+    </tr>
+    <tr>
+      <th colspan="2">Address:</th>
+      <td></td>
+      <th>Address:</th>
+      <td colspan="3"></td>
+    </tr>
+    <tr>
+      <th colspan="2">Date Loaded:</th>
+      <td></td>
+      <th>Date Unloaded:</th>
+      <td colspan="3"></td>
+    </tr>
+  </table>
 </div>

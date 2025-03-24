@@ -1,236 +1,133 @@
 
 @font-face {
-	font-family: "Arial Nova Cond"; 
-	src: url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.eot"); 
+	font-family: "Arial Nova Cond";
+	src: url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.eot");
 	src: url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.woff") format("woff"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/e02bdd9828bed1e2490bdf94662dbba8.svg#Arial Nova Cond") format("svg");
 }
 
-@counter-style letter-paren {
-	system: alphabetic;
-	symbols: a b c d e f g h i j k;
-	suffix: ") ";
-  }
-
-$border-black: 1pt solid black;
-$text-highlight: #F2F2F2;
-
-.page-style {
-	break-after: always;
-	background-color: white;
-	font-family: Arial, Helvetica, sans-serif;
-	color: black !important;
-}
-
-.text-align-justify {
-	text-align: justify;
-}
-.text-align-center {
-	text-align: center;
-}
-.text-align-left {
-	text-align: left;
-}
-.text-align-right {
-	text-align: right;
-}
-
-.main {
-	font-size: 10pt;
-	ol { margin: unset }
-}
-
-.introduction {
-	font-size: 9pt;
+:host * {
+    box-sizing: border-box;
+	color: black;
 	text-transform: uppercase;
+	font-family: "Arial Nova Cond";
 }
 
-.fill-line {
-	display: inline-block;
-	border-bottom: 1pt solid black;
-	min-width: 4em;
-	line-height: 90%;
-	text-align: center;
+:host > .canceled-watermark:before {
+    content: "CANCELED";
+    font-size: 100px;
+    color: gray;
+    opacity: 0.2;
+    text-align: center;
+    position: relative;
+    display: block;
+    transform: rotate(-45deg);
+    align-self: center;
+    justify-self: center;
+    top: 50%;
+    letter-spacing: 15px;
+    font-weight: 500;
 }
 
-.section-header-spaced {
-	letter-spacing: 0.25em;
-	font-weight: bold;
+:host {
+    display: block;
+    background-color: white;
 }
 
-.header {
-	font-weight: bold;
-}
-
-.declarations {
-	padding-inline-start: 20px;
-	ol { padding-inline-start: 10px }
-}
-.letter-parenthesis-list {
-	list-style-type: letter-paren;
-}
-
-.product-info {
-	display: grid;
-	grid-template-columns: repeat(6, 1fr);
-	font-size: 8pt;
-	margin: 5px 0;
-	background-color: $text-highlight;
-	page-break-inside: avoid;
-}
-.product-info-item {
-	border-left: $border-black;
-	padding: 0 10px;
-
-	&:last-child {
-		border-right: $border-black;
-	}
-}
-
-.text-highlight {
-	background-color: $text-highlight;
-}
-
-.signatures {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 7%;
-	margin: 20px;
-	font-weight: bold;
-	page-break-inside: avoid;
-	text-align: center;
-
-	.party-signature {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.signature-line {
-		height: 40px;
-		border-bottom: $border-black;
-	}
-}
-
-.confirmation {
-	font-family: Arial Narrow;
-}
-
-.anexo-1 {
-	font-size: 8pt;
-	text-transform: uppercase;
-
-	.page-header {
-		font-size: 10pt;
-		.company-name {
-			font-family: "Arial Nova Cond";
-		}
-		.contract-version {
-			font-family: "Calibri";
-		}
-		.contract-id {
-			text-transform: none;
-			font-family: "Calibri Math";
-			.emphasis { color: rgb(225, 0, 0) }
-		}
-	}
-	.page-title {
-		font-size: 11pt;
-		font-weight: bold;
-	}
-}
-
-.party-title {
-	font-weight: bold;
-}
-
-.party-info {
-	display: flex;
-	flex-flow: column nowrap;
-	margin-bottom: 20px;
-}
-.party-role {
-	font-size: 9pt;
-	font-weight: bold;
-}
-.party-name {
-	background-color: $text-highlight;
-	color: #2F5496;
-	font-weight: bold;
-}
-
-.contract-info {
-	margin-bottom: 20px;
-}
-.contract-info-row {
-	display: grid;
-	grid-template-columns: 1fr 2fr;
-	gap: 20px;
-
-	> * {
-		align-self: center;
-	}
-	> :first-child {
-		font-size: 9pt;
-		font-weight: bold;
-	}
-	> :last-child {
-		font-size: 8pt;
-		&.period {
-			display: flex;
-			white-space: nowrap;
-			gap: 20px;
-		}
-		&.banks-and-accounts-grid {
-			font-size: 7pt;
-			> div {
-				display: grid;
-				grid-template-columns: 1fr 1fr 1fr;
-				&:first-child,
-				> :first-child { font-weight: bold }
-			}
-		}
-	}
-	&:nth-child(even) {
-		background-color: $text-highlight;
-	}
-}
-
-.focused {
-    background-color: yellow;
-}
-
-.white-space-wrap {
-	white-space: pre-wrap;
-}
-
-@media screen {
-	:host {
-		display: flex;
-		flex-flow: row wrap;
-		gap: 30px;
-		line-height: 100%;
-		justify-content: center;
-	}
-
-	.page-style {
-		width: 8.5in;
-		padding: 0.5in;
-		box-sizing: border-box;
-	}
-
-	.page-standard-height {
-		height: 11in;
+@media not print {
+    :host.portrait, .portrait {
+        min-height: 11in;
+        min-width: 8.5in;
+        padding: 0.75in;
+        height: 11in;
+        width: 8.5in;
+    }
+    :host.landscape, .landscape {
+        min-height: 8.5in;
+        min-width: 11in;
+        padding: 0.75in;
+        height: 8.5in;
+        width: 11in;
+    }
+	:host.A5, .A5 {
+		min-height: 5.83in;
+		min-width: 8.27in;
+		padding: 0.25in;
+		height: 5.83in;
+		width: 8.27in;
 	}
 }
 
 @media print {
-	.product-info,
-	.buyer-seller-name,
-	.contract-info-row,
-	.text-highlight {
-		print-color-adjust: exact;
+    :host * {
+        print-color-adjust: exact;
+    }
+}
+
+@page {
+	size: A5 auto;
+}
+
+#logo {
+    max-width: 30%;
+	margin-left: 50px;
+}
+
+.company-letterhead {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 24px;
+}
+
+.address {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 8pt;
+	line-height: 15px;
+}
+
+.title-section {
+	display: flex;
+	justify-content: space-between;
+	font-size: 18pt;
+	border-bottom: 0.5px solid black;
+	padding: 3px 12px;
+}
+
+.id-section {
+	display: flex;
+    justify-content: space-between;
+	width: 100px;
+}
+
+.id {
+	color: red;
+	font-size: 16pt;
+}
+
+.normal-case {
+	text-transform: none;
+}
+
+table {
+	th, td {
+		text-align: start;
+		padding: 3px 12px;
+		font-size: 11pt;
+
+		&:not(.section-headers th, .whitespace-cell) {
+			border: 0.5px solid black;
+		}
 	}
 
-    .page-style {
-		page-break-after: always;
+	.section-headers th {
+		text-align: center;
+		font-size: 12pt;
+		padding-top: 15px;
+	}
+
+	th:not(.section-headers th) {
+		background-color: var(--lightlightgrey);
 	}
 }
