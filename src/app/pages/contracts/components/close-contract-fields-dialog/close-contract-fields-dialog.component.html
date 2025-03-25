@@ -41,7 +41,6 @@
 					<span matPrefix>$ &nbsp;</span>
 					<input
 						matInput
-						required
 						appPositive
 						[(ngModel)]="data.price"
 						#price="ngModel"
@@ -68,19 +67,32 @@
 					</mat-select>
 				</mat-form-field>
 			</mat-grid-tile>
-			<mat-grid-tile colspan="6">
+			<mat-grid-tile colspan="3">
 				<mat-form-field appearance="fill">
-					<mat-label>{{ t('Market Price') }}</mat-label>
+					<mat-label>{{ t('Future Price') }}</mat-label>
 					<span matPrefix>$ &nbsp;</span>
 					<input
 						matInput
-						required
 						[(ngModel)]="data.marketPrice"
 						#marketPrice="ngModel"
 						name="marketPrice"
 						type="number"
 					>
-					<mat-error>{{ t('Market Price is required') }}</mat-error>
+					<mat-error>{{ t('Future Price is required') }}</mat-error>
+				</mat-form-field>
+			</mat-grid-tile>
+			<mat-grid-tile colspan="3">
+				<mat-form-field appearance="fill">
+					<mat-label>{{ t('Base Price') }}</mat-label>
+					<span matPrefix>$ &nbsp;</span>
+					<input
+						matInput
+						[(ngModel)]="data.basePrice"
+						#basePrice="ngModel"
+						name="basePrice"
+						type="number"
+					>
+					<mat-error>{{ t('Base Price is required') }}</mat-error>
 				</mat-form-field>
 			</mat-grid-tile>
 		</mat-grid-list>

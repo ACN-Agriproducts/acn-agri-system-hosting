@@ -18,7 +18,7 @@ export class CloseContractFieldsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.snack.openTranslated("Required fields must be filled before closing.", 'error');
+    this.snack.openTranslated("Required fields must be filled before closing.");
   }
 
   public confirm(): void {
