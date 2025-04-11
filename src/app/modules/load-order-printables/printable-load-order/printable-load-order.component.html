@@ -1,117 +1,132 @@
 
 <div class="page-style main">
-  <div class="header">
-    <div class="company-letterhead">
-      <img id='logo' [src]="logoUrl">
+  <div class="company-letterhead">
+    <div id="logo" class="logo-demo"></div>
+    <div class="address">
+      <span>{{ (companyDoc$ | async).name }}</span>
+      <span *ngFor="let line of (companyDoc$ | async)?.address">{{ line }}</span>
+    </div>
+  </div>
+  <div class="title-section">
+    <div class="document-title"><b>LOAD ORDER</b></div>
+    <div class="id-section">
+      <span class="normal-case">No.</span>
+      <span class="id">{{ order.id }}</span>
+    </div>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------- -->
+  <!-- <div class="header-2">
+    <div id="logo" class="logo-demo"></div>
+    <div class="header-text">
       <div class="address">
         <span>{{ (companyDoc$ | async).name }}</span>
         <span *ngFor="let line of (companyDoc$ | async)?.address">{{ line }}</span>
       </div>
-    </div>
-    <div class="title-section">
-      <span><b>LOAD ORDER</b></span>
-      <div class="id-section">
-        <span class="normal-case">No.</span>
-        <span class="id">{{ order.id }}</span>
+      <div class="title-section">
+        <div class="document-title"><b>LOAD ORDER</b></div>
+        <div class="id-section">
+          <span class="normal-case">No.</span>
+          <span class="id">{{ order.id }}</span>
+        </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <table>
     <colgroup>
-      <col width="164px">
-      <col width="164px">
-      <col width="470px">
-      <col width="317px">
-      <col width="164px">
-      <col width="164px">
-      <col width="164px">
+      <col width="80px">
+      <col width="80px">
+      <col width="480px">
+      <col width="190px">
+      <col width="200px">
+      <col width="80px">
+      <col width="200px">
     </colgroup>
     <tr class="section-headers">
-      <th colspan="3">Transport</th>
-      <th colspan="4">Product & Weight</th>
+      <th scope="col" colspan="3">Transport</th>
+      <th scope="col" colspan="4">Product & Weight</th>
     </tr>
     <tr>
-      <th colspan="2">Transport Name:</th>
-      <td>{{ order.clientName }}</td>
-      <th>Commodity:</th>
-      <td colspan="3">{{ order.product }}</td>
+      <th scope="row" colspan="2">Transport Name:</th>
+      <td>{{ order.transportName }}</td>
+      <th scope="row">Commodity:</th>
+      <td colspan="3">{{ order.productName }}</td>
     </tr>
     <tr>
-      <th colspan="2">Driver Name:</th>
-      <td></td>
-      <th>Grade:</th>
+      <th scope="row" colspan="2">Driver Name:</th>
+      <td>{{ order.driver }}</td>
+      <th scope="row">Grade:</th>
       <td colspan="3"></td>
     </tr>
     <tr>
-      <th rowspan="2">Plates:</th>
-      <th>Truck:</th>
-      <td></td>
-      <th colspan="2">Loading:</th>
-      <th colspan="2">Unloading:</th>
+      <th scope="row" rowspan="2">Plates:</th>
+      <th scope="row">Truck:</th>
+      <td>{{ order.carPlates }}</td>
+      <th scope="row" colspan="2">Loading:</th>
+      <th scope="row" colspan="2">Unloading:</th>
     </tr>
     <tr>
-      <th>Trailer:</th>
+      <th scope="row">Trailer:</th>
+      <td>{{ order.plates }}</td>
+      <th scope="row">Gross:</th>
       <td></td>
-      <th>Gross:</th>
-      <td></td>
-      <th>Gross:</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th colspan="2">Unit Type:</th>
-      <td></td>
-      <th>Tare:</th>
-      <td></td>
-      <th>Tare:</th>
+      <th scope="row">Gross:</th>
       <td></td>
     </tr>
     <tr>
-      <td colspan="3" class="whitespace-cell"></td>
-      <th>Net:</th>
+      <th scope="row" colspan="2">Unit Type:</th>
       <td></td>
-      <th>Net:</th>
+      <th scope="row">Tare:</th>
+      <td></td>
+      <th scope="row">Tare:</th>
       <td></td>
     </tr>
     <tr>
       <td colspan="3" class="whitespace-cell"></td>
-      <th>Loss:</th>
+      <th scope="row">Net:</th>
+      <td></td>
+      <th scope="row">Net:</th>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3" class="whitespace-cell"></td>
+      <th scope="row">Loss:</th>
       <td colspan="3"></td>
     </tr>
 
     <!-- ----------------------------------------------------------- -->
 
     <tr class="section-headers">
-      <th colspan="3">Transported From</th>
-      <th colspan="4">Transported To</th>
+      <th scope="col" colspan="3">Transported From</th>
+      <th scope="col" colspan="4">Transported To</th>
     </tr>
     <tr>
-      <th colspan="2">Seller:</th>
-      <td></td>
-      <th>Buyer:</th>
+      <th scope="row" colspan="2">Seller:</th>
+      <td>{{ order.clientName }}</td>
+      <th scope="row">Buyer:</th>
       <td colspan="3"></td>
     </tr>
     <tr>
-      <th colspan="2">Contract No:</th>
+      <th scope="row" colspan="2">Contract No:</th>
       <td></td>
-      <th>Contract No:</th>
+      <th scope="row">Contract No:</th>
       <td colspan="3"></td>
     </tr>
     <tr>
-      <th colspan="2">Warehouse:</th>
+      <th scope="row" colspan="2">Warehouse:</th>
       <td></td>
-      <th>Warehouse:</th>
+      <th scope="row">Warehouse:</th>
       <td colspan="3"></td>
     </tr>
     <tr>
-      <th colspan="2">Address:</th>
+      <th scope="row" colspan="2">Address:</th>
       <td></td>
-      <th>Address:</th>
+      <th scope="row">Address:</th>
       <td colspan="3"></td>
     </tr>
     <tr>
-      <th colspan="2">Date Loaded:</th>
+      <th scope="row" colspan="2">Date Loaded:</th>
       <td></td>
-      <th>Date Unloaded:</th>
+      <th scope="row">Date Unloaded:</th>
       <td colspan="3"></td>
     </tr>
   </table>

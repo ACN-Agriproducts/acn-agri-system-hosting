@@ -1,5 +1,9 @@
-div {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+
+section {
+    display: flex;
+    gap: 24px;
+}
+
+h2[mat-dialog-title] {
+    font-size: 1.5rem;
 }

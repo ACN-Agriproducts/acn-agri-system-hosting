@@ -34,7 +34,9 @@ export class LoadOrdersPage implements OnInit {
     newLoadOrder.plants = this.company.getPlantsNamesList();
 
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
-      data: newLoadOrder
+      data: newLoadOrder,
+      autoFocus: false,
+      maxWidth: "800px"
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -52,7 +54,9 @@ export class LoadOrdersPage implements OnInit {
 
   editOrderDialog(order: LoadOrder) {
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
-      data: order
+      data: order,
+      autoFocus: false,
+      maxWidth: "800px"
     });
 
     dialogRef.afterClosed().subscribe(result => {
