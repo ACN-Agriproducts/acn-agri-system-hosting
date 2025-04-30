@@ -34,6 +34,8 @@ export class TicketFormComponent implements OnInit {
   public saveTimeout: NodeJS.Timeout;
   public discountChangeFlag: boolean = false;
 
+  public isScale: boolean;
+
   constructor(
     public dialog: MatDialog,
     public db: Firestore,
@@ -58,6 +60,8 @@ export class TicketFormComponent implements OnInit {
     });
 
     this.loadTransport();
+
+    this.isScale = this.session.getUser().currentPermissions.isScale;
   }
 
   async contractChange() { 
@@ -170,8 +174,10 @@ export class TicketFormComponent implements OnInit {
   }
 
   saveTicket() {
+    if (!this.isScale) return;
+
     clearTimeout(this.saveTimeout);
-    this.saveTimeout = setTimeout(() => setDoc(this.ticket.ref, this.ticket, {merge: true}), 5000);
+    this.saveTimeout = setTimeout(() => this.setTicket(), 5000);
   }
 
   groupContract() 
@@ -200,6 +206,10 @@ export class TicketFormComponent implements OnInit {
       }
     }
   }
+
+  setTicket() {
+    setDoc(this.ticket.ref, this.ticket, {merge: true});
+  }
 }
 
 interface GroupedContracts {
@@ -218,7 +228,6 @@ export class WeightDiscountIteratorPipe implements PipeTransform {
         data[key] = value[key];
     }
 
-    console.log(data);
     return data;
   }
 
