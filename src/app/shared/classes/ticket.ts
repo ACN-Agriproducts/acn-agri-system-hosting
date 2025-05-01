@@ -407,10 +407,10 @@ export class Ticket extends FirebaseDocInterface{
             
             table.headers.forEach(header => {
                 if (header.type === 'price-discount') {
-                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], table.unit), this.net);
+                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData?.[header.name] ?? 0, table.unit), this.net);
                 }
                 else if (header.type === 'weight-discount') {
-                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], table.unit ?? this.gross.defaultUnits, this.net);
+                    this.weightDiscounts.setDiscount(discountName, rowData?.[header.name] ?? 0, table.unit ?? this.gross.defaultUnits, this.net);
                 }
             });
         }
@@ -587,6 +587,7 @@ export class WeightDiscounts {
     }
 
     public setDiscount(discountName: string, percentage: number = 0, tableUnit: units, weight: Mass): void {
+        
         this[discountName] ??= new Mass(0, tableUnit, weight.conversions.get('bu'));
 
         const discountWeight = (percentage / 100) * weight.get();
