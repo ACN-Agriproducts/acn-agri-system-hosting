@@ -587,7 +587,6 @@ export class WeightDiscounts {
     }
 
     public setDiscount(discountName: string, percentage: number = 0, tableUnit: units, weight: Mass): void {
-        
         this[discountName] ??= new Mass(0, tableUnit, weight.conversions.get('bu'));
 
         const discountWeight = (percentage / 100) * weight.get();
