@@ -23,14 +23,19 @@ export class CompanyService {
   async initialize(_companyName?: string): Promise<any> {
     const companyName = _companyName ?? await this.storage.get('currentCompany') as string;
     if(!companyName) return;
+    
+    const companyRef = this.getCompanyReference(companyName);
 
-    const plantsCollectionRef = collection(this.getCompanyReference(companyName), 'plants').withConverter(Plant.converter);
-    const productsCollectionRef = collection(this.getCompanyReference(companyName), 'products').withConverter(Product.converter);    
+    const plantsCollectionRef = collection(companyRef, 'plants').withConverter(Plant.converter);
+    const productsCollectionRef = collection(companyRef, 'products').withConverter(Product.converter);
 
     return Promise.all([
-      getDoc(this.getCompanyReference(companyName)).then(val => this.company = val.data()),
-      getDocs(plantsCollectionRef).then(list => this.plantsList = list.docs.map(p => p.data())),
-      getDocs(productsCollectionRef).then(list => this.productsList = list.docs.map(p => p.data()))
+      getDoc(companyRef).then(val => this.company = val.data()),
+      getDocs(plantsCollectionRef).then(list => {
+        this.plantsList = list.docs.map(p => p.data());
+        this.currentPlant = this.plantsList[0];
+      }),
+      getDocs(productsCollectionRef).then(list => this.productsList = list.docs.map(p => p.data())),
     ]);
   }
 

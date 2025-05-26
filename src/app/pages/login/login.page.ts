@@ -93,8 +93,6 @@ export class LoginPage implements OnInit, OnDestroy {
       else {
         this.session.clear();
       }
-
-      console
     })
   }
   public submit = (event: any): void => {

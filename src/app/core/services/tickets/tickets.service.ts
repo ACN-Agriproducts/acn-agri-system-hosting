@@ -1,21 +1,38 @@
-import { Injectable } from '@angular/core';
-import { getDoc, orderBy, query, where, collection, CollectionReference, OrderByDirection, QueryConstraint, limit, startAfter, getDocs } from '@angular/fire/firestore';
+import { Injectable, OnDestroy } from '@angular/core';
+import { getDoc, orderBy, query, where, collection, CollectionReference, OrderByDirection, QueryConstraint, limit, startAfter, getDocs, Unsubscribe, collectionData } from '@angular/fire/firestore';
 import { Contract } from '@shared/classes/contract';
 import { Plant } from '@shared/classes/plant';
 import { Ticket, TicketType } from '@shared/classes/ticket';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CompanyService } from '../company/company.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TicketsService {
+export class TicketsService implements OnDestroy{
+  public unsubs: Unsubscribe[] = [];
+
+  /**
+   * A cache to store commonly queued arrays of tickets.
+   */
+  public activeTicketCache: {
+    [plant: string]: {
+      "in": Observable<Ticket[]>,
+      "out": Observable<Ticket[]>
+    }
+  } = {
+    "progreso": {
+      "in": null,
+      "out": null
+    }
+  };
+
   constructor(
-    private company: CompanyService,
-  ) { }
+    private company: CompanyService
+  ) {}
 
   public getCollectionReference(plant: Plant = this.company.getCurrentPlant()): CollectionReference<Ticket> {
-    return collection(this.company.getCurrentPlant().ref, 'tickets').withConverter(Ticket.converter);
+    return collection(plant.ref, 'tickets').withConverter(Ticket.converter);
   }
 
   public getTicketsByContract(Contract: Contract): Promise<Ticket[]> {
@@ -59,4 +76,21 @@ export class TicketsService {
 
     return list.docs.map(doc => doc.data());
   }
+
+  public getActiveTicketsObs(inTicket: boolean, plant: Plant = this.company.getCurrentPlant()): Observable<Ticket[]> {
+    this.activeTicketCache[plant.ref.id][inTicket ? "in" : "out"] ??= collectionData(
+      query(
+        this.getCollectionReference(plant),
+        where('status', '==', 'active'),
+        where('in', '==', inTicket)
+      )
+    ).pipe(map(tickets => tickets.sort((a, b) => a.id - b.id)));
+
+    return this.activeTicketCache[plant.ref.id][inTicket ? "in" : "out"];
+  }
+
+  ngOnDestroy(): void {
+    this.unsubs.forEach(unsub => unsub());
+  }
+  
 }

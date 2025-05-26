@@ -118,7 +118,7 @@
         </div>
         <!-- ================================= -->
         <div class="content-row ion-hide-sm-down" (contextmenu)="presentPopoverTicket($event, item)" (dblclick)="openDialog($event, item)"
-            *ngFor="let item of scaleTickets">
+            *ngFor="let item of scaleTickets | async">
             <div class="item-content ion-hide-lg-up">
                 <ion-item lines="none" class="item-cantidas ion-no-padding">
                     <div class="content-item-text">
@@ -230,7 +230,7 @@
         </div>
     </ion-card>
     <div class="ion-hide-sm-up">
-        <ion-card class="item-card" *ngFor="let item of scaleTickets">
+        <ion-card class="item-card" *ngFor="let item of scaleTickets | async">
             <ion-item lines="none" button (click)="openDetails($event)">
                 <ion-label slot="start">
                     <h2>{{ t('Ticket') }} # <span>{{item.displayId}}</span></h2>

@@ -6,7 +6,7 @@ import { OptionsTicketComponent } from './../options-ticket/options-ticket.compo
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { PopoverController, ModalController, IonInfiniteScroll } from '@ionic/angular';
 import { Ticket } from '@shared/classes/ticket';
-import { Firestore, limit, onSnapshot, orderBy, where } from '@angular/fire/firestore';
+import { Firestore, limit, onSnapshot, orderBy, Unsubscribe, where } from '@angular/fire/firestore';
 import { Plant } from '@shared/classes/plant';
 import { Pagination } from '@shared/classes/FirebaseDocInterface';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -14,6 +14,8 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import * as _moment from 'moment';
 import { Observable } from 'rxjs';
 import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
+import { TicketsService } from '@core/services/tickets/tickets.service';
+import { CompanyService } from '@core/services/company/company.service';
 const moment = _moment;
 
 declare type sortOptions = 'id' | 'date';
@@ -26,7 +28,7 @@ declare type sortOptions = 'id' | 'date';
 export class TableComponent implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
-  public scaleTickets: Ticket[];
+  public scaleTickets: Observable<Ticket[]>;
   public paginator: Pagination<Ticket>;
   public plantList: Plant[] = [];
   public currentCompany: string;
@@ -44,7 +46,9 @@ export class TableComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private modalController: ModalController,
     private db: Firestore,
-    private session: SessionInfo
+    private session: SessionInfo,
+    private ticketsService: TicketsService,
+    private company: CompanyService
   ) { }
 
   ngOnInit(): void {
@@ -57,14 +61,13 @@ export class TableComponent implements OnInit, OnDestroy {
 
       this.getTickets();
     });
+    
   }
 
   async getTickets(){
-    onSnapshot(Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), where('status', '==', 'active'), where('in', '==', this.inTicket)), next => {
-      this.scaleTickets = next.docs.sort((a, b) => a.data().id - b.data().id).map(t => t.data());
-    });
-
-    const lastIdPromise = Ticket.getTickets(this.db, this.session.getCompany(), this.session.getPlant(), where('in', '==', this.inTicket), orderBy('id', 'desc'), limit(1));
+    this.scaleTickets = this.ticketsService.getActiveTicketsObs(this.inTicket);
+    
+    const lastIdPromise = Ticket.getTickets(this.db, this.session.getCompany(), this.currentPlant, where('in', '==', this.inTicket), orderBy('id', 'desc'), limit(1));
     const lastId = (await lastIdPromise)[0]?.id ?? 0;
     this.ticketRangeUpper = Math.floor(lastId / 100) + 1;
     this.idRangeList = Array(this.ticketRangeUpper).fill(0).map((x, i) => this.ticketRangeUpper - i);
@@ -93,7 +96,7 @@ export class TableComponent implements OnInit, OnDestroy {
     startDate.setHours(0,0,0,0);
     endDate.setHours(23,59,59,59);
 
-    const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(),
+    const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.currentPlant,
       where('in', '==', this.inTicket),
       where('dateOut', '>=', startDate),
       where('dateOut', '<=', endDate),
@@ -106,7 +109,7 @@ export class TableComponent implements OnInit, OnDestroy {
   async ticketIdSort() {
     this.infiniteScroll.disabled = true;
 
-    const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.session.getPlant(), 
+    const colRef = Ticket.getCollectionReference(this.db, this.session.getCompany(), this.currentPlant, 
       where('in', '==', this.inTicket),
       where('id', '<', this.ticketRangeUpper * 100), 
       where('id', '>=', (this.ticketRangeUpper - 1) * 100), 
@@ -172,6 +175,6 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.paginator?.end();
+    this.paginator?.end();
   }
 }

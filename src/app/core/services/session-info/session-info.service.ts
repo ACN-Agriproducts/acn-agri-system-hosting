@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Auth, authState } from '@angular/fire/auth';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Auth, Unsubscribe } from '@angular/fire/auth';
 import { doc, Firestore, getDoc, getDocs, QuerySnapshot, where } from '@angular/fire/firestore';
 import { Storage } from '@ionic/storage';
 import { TranslocoService } from '@ngneat/transloco';
@@ -25,7 +25,7 @@ export declare type langOpts = 'en' | 'es';
 @Injectable({
   providedIn: 'root'
 })
-export class SessionInfo {
+export class SessionInfo implements OnDestroy {
   private company: string;
   private plant: string;
   private user: UserInterface;
@@ -36,6 +36,7 @@ export class SessionInfo {
   private companyObject$: Promise<Company>;
 
   private keyMap: Map<keyOpts, string>;
+  private unsubs: Unsubscribe[] = [];
 
   constructor(
     private localStorage: Storage,
@@ -70,7 +71,7 @@ export class SessionInfo {
     }));
     
     localPromises.push(this.localStorage.get('currentPlant').then(val => {
-      return this.plant = val;
+      this.plant = val;
     }));
 
     localPromises.push(this.localStorage.get('user').then(async val => {
@@ -101,11 +102,11 @@ export class SessionInfo {
 
       else dbPromises.plants = getDocs(Plant.getCollectionReference(this.db, this.company).withConverter(null)).then(plants => {
         if(plants.docs.some(p => p.ref.id == this.plant)) return plants;
-        this.plant = plants[0].ref.id;
-  
+        this.plant = plants.docs[0].ref.id;
+
         return plants;
       });
-  
+
       //dbPromises.user = User.getUser(this.db, this.user.uid); // Add user unit
   
       if(!this.companyUnit || !this.companyDisplayUnit) {
@@ -130,7 +131,7 @@ export class SessionInfo {
       }
     });
 
-    
+    this.unsubs.push(unsubAuth);
 
     return Promise.all(localPromises).then(() => {});
   }
@@ -211,5 +212,9 @@ export class SessionInfo {
     this.user = null;
 
     return this.localStorage.clear();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubs.forEach(unsubscribe => unsubscribe());
   }
 }
