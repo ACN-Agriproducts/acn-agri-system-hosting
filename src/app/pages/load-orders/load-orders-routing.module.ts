@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: LoadOrdersPage
+  },
+  {
+    path: 'set-load-orders',
+    loadChildren: () => import('./set-load-orders/set-load-orders.module').then( m => m.SetLoadOrdersPageModule)
   }
+
 ];
 
 @NgModule({

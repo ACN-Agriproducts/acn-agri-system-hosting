@@ -6,6 +6,7 @@ import { LoadOrderService } from '@shared/model-services/load-order.service';
 import { SetOrderModalComponent } from './components/set-order-modal/set-order-modal.component';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { LoadOrderDialogComponent } from 'src/app/modules/load-order-printables/load-order-dialog/load-order-dialog.component';
+import { NavController } from '@ionic/angular';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class LoadOrdersPage implements OnInit {
     private loadOrders: LoadOrderService,
     private dialog: MatDialog,
     private snack: SnackbarService,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -36,7 +38,8 @@ export class LoadOrdersPage implements OnInit {
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
       data: newLoadOrder,
       autoFocus: false,
-      maxWidth: "800px"
+      maxWidth: "800px",
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -56,7 +59,8 @@ export class LoadOrdersPage implements OnInit {
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
       data: order,
       autoFocus: false,
-      maxWidth: "800px"
+      maxWidth: "800px",
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -88,6 +92,14 @@ export class LoadOrdersPage implements OnInit {
       maxWidth: "100%",
       height: "75vh"
     });
+  }
+
+  newOrder() {
+    this.navController.navigateForward('dashboard/load-orders/set-load-orders');
+  }
+
+  editOrder(order: LoadOrder) {
+    console.log(order.id);
   }
 
 }

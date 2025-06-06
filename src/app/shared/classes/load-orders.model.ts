@@ -20,7 +20,7 @@ export class LoadOrder extends FirebaseDocInterface {
     freight: Price;
     plants: string[];
     carPlates: string;
-    plates: string;
+    plates: string | string[];
     ticketRef: DocumentReference<Ticket>;
     ticketID: number;
 
@@ -38,12 +38,12 @@ export class LoadOrder extends FirebaseDocInterface {
     
     sellerName: string;
     buyerName: string;
-    sellerContractID: string;
-    buyerContractID: string;
+    sellerContractId: string;
+    buyerContractId: string;
     sellerWarehouse: string;
     buyerWarehouse: string;
-    sellerAddress: string;
-    buyerAddress: string;
+    sellerAddress: string | string[];
+    buyerAddress: string | string[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);

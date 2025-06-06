@@ -3,10 +3,10 @@
   <div class="company-letterhead">
     <div id="logo" class="logo-demo"></div>
     <div class="address">
-      <span>{{ (companyDoc$ | async).name }}</span>
+      <span>{{ (companyDoc$ | async)?.name }}</span>
       <span *ngFor="let line of (companyDoc$ | async)?.address">{{ line }}</span>
     </div>
-  </div>
+  </div> 
   <div class="title-section">
     <div class="document-title"><b>LOAD ORDER</b></div>
     <div class="id-section">
@@ -55,7 +55,7 @@
       <th scope="row" colspan="2">Driver Name:</th>
       <td>{{ order.driver }}</td>
       <th scope="row">Grade:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ order.productGrade }}</td>
     </tr>
     <tr>
       <th scope="row" rowspan="2">Plates:</th>
@@ -68,29 +68,29 @@
       <th scope="row">Trailer:</th>
       <td>{{ order.plates }}</td>
       <th scope="row">Gross:</th>
-      <td></td>
+      <td>{{ order.loadingGross | number }}</td>
       <th scope="row">Gross:</th>
-      <td></td>
+      <td>{{ order.unloadingGross | number }}</td>
     </tr>
     <tr>
       <th scope="row" colspan="2">Unit Type:</th>
-      <td></td>
+      <td>{{ order.unitType }}</td>
       <th scope="row">Tare:</th>
-      <td></td>
+      <td>{{ order.loadingTare | number }}</td>
       <th scope="row">Tare:</th>
-      <td></td>
+      <td>{{ order.unloadingTare | number }}</td>
     </tr>
     <tr>
       <td colspan="3" class="whitespace-cell"></td>
       <th scope="row">Net:</th>
-      <td></td>
+      <td>{{ order.loadingGross - order.loadingTare | number }}</td>
       <th scope="row">Net:</th>
-      <td></td>
+      <td>{{ order.unloadingGross - order.unloadingTare | number }}</td>
     </tr>
     <tr>
       <td colspan="3" class="whitespace-cell"></td>
       <th scope="row">Loss:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ (order.loadingGross - order.loadingTare) - (order.unloadingGross - order.unloadingTare) | number }}</td>
     </tr>
 
     <!-- ----------------------------------------------------------- -->
@@ -101,33 +101,33 @@
     </tr>
     <tr>
       <th scope="row" colspan="2">Seller:</th>
-      <td>{{ order.clientName }}</td>
+      <td>{{ order.sellerName }}</td>
       <th scope="row">Buyer:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ order.buyerName }}</td>
     </tr>
     <tr>
       <th scope="row" colspan="2">Contract No:</th>
-      <td></td>
+      <td>{{ order.sellerContractId }}</td>
       <th scope="row">Contract No:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ order.buyerContractId }}</td>
     </tr>
     <tr>
       <th scope="row" colspan="2">Warehouse:</th>
-      <td></td>
+      <td>{{ order.sellerWarehouse }}</td>
       <th scope="row">Warehouse:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ order.buyerWarehouse }}</td>
     </tr>
     <tr>
       <th scope="row" colspan="2">Address:</th>
-      <td></td>
+      <td>{{ order.sellerAddress }}</td>
       <th scope="row">Address:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ order.buyerAddress }}</td>
     </tr>
     <tr>
       <th scope="row" colspan="2">Date Loaded:</th>
-      <td></td>
+      <td>{{ order.dateLoaded | date }}</td>
       <th scope="row">Date Unloaded:</th>
-      <td colspan="3"></td>
+      <td colspan="3">{{ order.dateUnloaded | date }}</td>
     </tr>
   </table>
 </div>

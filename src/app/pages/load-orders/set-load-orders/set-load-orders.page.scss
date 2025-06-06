@@ -1,0 +1,50 @@
+
+:host * {
+    box-sizing: border-box;
+}
+
+:has(>.subsection) {
+    display: flex;
+    gap: 12px;
+}
+
+.layout--set-order {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.card-row {
+    display: flex;
+    gap: 12px;
+    
+    mat-card {
+        margin: 0;
+    }
+}
+
+.order-form {
+    flex: 1 1 578px;
+    max-width: 1028px;
+    margin: 12px;
+
+    > :not(:last-child) {
+        margin-bottom: 12px;   
+    }
+}
+
+mat-card, .card-row {
+    // margin: 12px;
+}
+
+:host app-printable-load-order {
+    margin: 12px;
+    // transform: scale(0.8);
+    zoom:  80%;
+    height: min-content;
+}
+
+.init-orders-section {
+    display: flex;
+    gap: 12px;
+}

@@ -40,6 +40,10 @@
         padding: 0.75in;
         height: 11in;
         width: 8.5in;
+
+		@page {
+			size: portrait;
+		}
     }
     :host.landscape, .landscape {
         min-height: 8.5in;
@@ -47,6 +51,10 @@
         padding: 0.75in;
         height: 8.5in;
         width: 11in;
+
+		@page {
+			size: landscape;
+		}
     }
 	:host.A5, .A5 {
 		min-height: 5.83in;
@@ -54,6 +62,10 @@
 		padding: 0.25in;
 		height: 5.83in;
 		width: 8.27in;
+
+		@page {
+			size: A5 auto;
+		}
 	}
 }
 
@@ -63,9 +75,9 @@
     }
 }
 
-@page {
-	size: A5 auto;
-}
+// @page {
+// 	size: A5 auto;
+// }
 
 #logo {
     max-width: 30%;
