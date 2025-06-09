@@ -380,7 +380,8 @@
             "damagedGrain": "Damaged Grain",
             "price": "Price",
             "Discount Info" : "Discount Info",
-            "Corpus Christi Inspection": "Corpus Christi Inspection"
+            "Corpus Christi Inspection": "Corpus Christi Inspection",
+            "Infested": "Infested"
         },
         "table": {
             "Type": "Type",

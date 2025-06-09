@@ -127,7 +127,10 @@
       </mat-card-header>
   
       <mat-card-content>
-        <mat-checkbox [(ngModel)]="corpusChristiInspection" (ngModelChange)="inspectionChange()">{{t('Corpus Christi Inspection')}}</mat-checkbox>
+        <div class="stacked-checkboxes">
+          <mat-checkbox [(ngModel)]="corpusChristiInspection" (ngModelChange)="inspectionChange()">{{t('Corpus Christi Inspection')}}</mat-checkbox>
+          <mat-checkbox [(ngModel)]="ticket.infested" (ngModelChange)="saveTicket()">{{ t('Infested') }}</mat-checkbox>
+        </div>
         <mat-form-field appearance="fill" *ngIf="currentContract?.tags.includes('open-purchase')">
           <mat-label>{{t('price')}}</mat-label>
           <input matInput type="number" [(ngModel)]="ticket.price" (ngModelChange)="saveTicket()">

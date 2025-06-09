@@ -92,6 +92,8 @@ export class Ticket extends FirebaseDocInterface{
 
     public attachments: FileStorageInfo[];
 
+    public infested: boolean;
+
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
@@ -190,6 +192,8 @@ export class Ticket extends FirebaseDocInterface{
         this.net.amount = Math.round(this.net.amount * 1000) / 1000;
 
         this.attachments = data.attachments ?? [];
+
+        this.infested = data.infested;
     }
 
     public static converter = {
@@ -263,6 +267,8 @@ export class Ticket extends FirebaseDocInterface{
                 type: data.type ?? null,
 
                 attachments: data.attachments ?? null,
+
+                infested: data.infested ?? null
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
