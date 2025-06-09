@@ -58,3 +58,8 @@
 .mat-checkbox {
     margin-bottom: 0.5rem;
 }
+
+.stacked-checkboxes {
+    display: flex;
+    flex-flow: column nowrap;
+}
