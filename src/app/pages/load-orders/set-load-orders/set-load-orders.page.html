@@ -21,10 +21,18 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>#</mat-label>
-            <input matInput type="number" [(ngModel)]="orderCount">
-          </mat-form-field>
+          <div class="order-count-incrementer">
+            <button mat-icon-button class="square-button" (click)="changeOrderCount(-1)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <mat-form-field appearance="outline">
+              <mat-label>Amount</mat-label>
+              <input matInput type="number" [(ngModel)]="orderCount">
+            </mat-form-field>
+            <button mat-icon-button class="square-button" (click)="changeOrderCount(1)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
         </div>
         <div>
           <mat-card>

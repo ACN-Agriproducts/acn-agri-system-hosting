@@ -39,7 +39,7 @@ export class SetLoadOrdersPage implements OnInit {
   public filteredTransportList: Observable<CompanyContact[]>;
   public loadingNet: number;
   public unloadingNet: number;
-  public orderCount: number;
+  public orderCount: number = 1;
 
   constructor(
     private loadOrders: LoadOrderService,
@@ -190,5 +190,12 @@ export class SetLoadOrdersPage implements OnInit {
   testLog(separator: string, ...value: any) {
     console.log("##########  ", separator ?? "", "  ##########")
     console.log(value)
+  }
+
+  changeOrderCount(change: number) {
+    const newCount = this.orderCount + change;
+    if (newCount <= 0) return;
+
+    this.orderCount = newCount;
   }
 }
