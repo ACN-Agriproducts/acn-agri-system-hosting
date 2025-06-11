@@ -17,9 +17,13 @@
 .card-row {
     display: flex;
     gap: 12px;
-    
-    mat-card {
-        margin: 0;
+
+    .transport-card {
+        flex: 1 0 45%;
+    }
+
+    .product-weight-card {
+        flex: 1 1 auto;
     }
 }
 
@@ -33,15 +37,13 @@
     }
 }
 
-mat-card, .card-row {
-    // margin: 12px;
-}
-
 :host app-printable-load-order {
     margin: 12px;
-    // transform: scale(0.8);
-    zoom:  80%;
+    zoom:  85%;
     height: min-content;
+
+    position: sticky;
+    top: 20px;
 }
 
 .init-orders-section {
@@ -83,4 +85,10 @@ input[type=number] {
     .init-orders-section .mat-form-field-outline {
         background-color: white;
     }
+}
+
+.card-checkbox {
+    margin: 0 0 18px 0;
+    width: 100%;
+    text-align: center;
 }

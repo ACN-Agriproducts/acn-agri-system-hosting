@@ -164,12 +164,9 @@ export class SetLoadOrdersPage implements OnInit {
       this.order.sellerAddress = this.company.getCompany().address;
       
       this.order.buyerName = this.currentContract.clientName;
-      // this.order.buyerContractId
-      // this.order.buyerWarehouse
+      this.order.buyerContractId = "";
+      this.order.buyerWarehouse = "";
       this.order.buyerAddress = this.currentContract.clientInfo.streetAddress;
-
-      this.sellerControl.setValue(this.order.sellerName);
-      this.buyerControl.setValue(this.order.buyerName);
     }
     else if (this.currentContract.type === "purchase" || this.currentContract.tags.includes("purchase")) {
       this.order.buyerName = this.currentCompanyName;
@@ -178,13 +175,16 @@ export class SetLoadOrdersPage implements OnInit {
       this.order.buyerAddress = this.company.getCompany().address;
 
       this.order.sellerName = this.currentContract.clientName;
-      // this.order.buyerContractId
-      // this.order.buyerWarehouse
+      this.order.sellerContractId = "";
+      this.order.sellerWarehouse = "";
       this.order.sellerAddress = this.currentContract.clientInfo.streetAddress;
     }
 
     this.order.productName = this.currentContract.productInfo.name;
     this.order.productGrade = this.currentContract.grade;
+
+    this.sellerControl.setValue(this.order.sellerName);
+    this.buyerControl.setValue(this.order.buyerName);
   }
 
   testLog(separator: string, ...value: any) {
