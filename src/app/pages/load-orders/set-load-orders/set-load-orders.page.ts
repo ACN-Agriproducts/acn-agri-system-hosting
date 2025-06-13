@@ -23,7 +23,7 @@ export class SetLoadOrdersPage implements OnInit {
   contractsList: Observable<Contract[]>;
   selectableTransport: CompanyContact[];
 
-  currentTransportID: string;
+  currentTransportName: string;
   currentTransport: CompanyContact;
   currentContract: Contract;
   currentContractRefId: string;
@@ -60,7 +60,7 @@ export class SetLoadOrdersPage implements OnInit {
 
     if(this.order.transportRef) {
       this.currentTransport = this.company.getContactsList().find(contact => contact.id == this.order.transportRef.id)
-      this.currentTransportID = this.currentTransport.id;
+      this.currentTransportName = this.currentTransport.id;
     }
 
     if(this.order.contractRef) {
@@ -96,11 +96,9 @@ export class SetLoadOrdersPage implements OnInit {
   }
 
   transportChange() {
-    console.log(this.currentTransport, this.order.transportName, this.order.transportRef)
-    this.currentTransport = this.selectableTransport.find(contact => contact.id == this.currentTransportID);
+    this.currentTransport = this.selectableTransport.find(contact => contact.name == this.currentTransportName);
     this.order.transportName = this.currentTransport?.name;
     this.order.transportRef = this.currentContract?.truckers.find(trucker => trucker.trucker.id == this.currentTransport?.id)?.trucker;
-    console.log(this.currentTransportID, this.currentTransport, this.order.transportName, this.order.transportRef)
   }
 
   itemName(index: number, item: any) {
@@ -138,7 +136,7 @@ export class SetLoadOrdersPage implements OnInit {
       startWith(''),
       map(value => this._filterTransports(value || ''))
     );
-    this.transportControl.valueChanges.subscribe(value => this.currentTransportID = value);
+    this.transportControl.valueChanges.subscribe(value => this.currentTransportName = value);
   }
 
   updateSelectableTransportList() {
