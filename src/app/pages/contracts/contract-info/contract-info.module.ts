@@ -22,6 +22,7 @@ import { SetPaymentDialogComponent, ValidPaymentSelectionDirective } from './com
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ContractChartCardComponent } from './components/contract-chart-card/contract-chart-card.component';
 import { MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { LoadOrderPrintablesModule } from 'src/app/modules/load-order-printables/load-order-printables.module';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDial
     ContractModule,
     ContractPrintablesModule,
     NgxChartsModule,
-    MatDialogModule
+    MatDialogModule,
+    LoadOrderPrintablesModule
   ],
   declarations: [
     ContractInfoPage,

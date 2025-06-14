@@ -1,0 +1,234 @@
+
+<ng-container *transloco="let t, read: 'loadOrders'">
+  <ion-header>
+    <app-header-toolbar [titulo]="'Set Load Orders'"></app-header-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <div class="layout--set-order">
+      <div class="order-form">
+        <div class="init-orders-section">
+          <mat-form-field appearance="outline">
+            <mat-label>Contract</mat-label>
+            <mat-select [(ngModel)]="currentContractRefId" (ngModelChange)="contractChange()">
+              <mat-option>None</mat-option>
+              <mat-optgroup *ngFor="let contractGroup of groupedContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
+                <mat-option *ngFor="let contract of contractGroup.value" [value]="contract.ref.id">
+                  {{contract.id + ": " + contract.clientName}}
+                </mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+          <div class="order-count-incrementer">
+            <button mat-icon-button class="square-button" (click)="changeOrderCount(-1)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <mat-form-field appearance="outline">
+              <mat-label>Amount</mat-label>
+              <input matInput type="number" [(ngModel)]="orderCount">
+            </mat-form-field>
+            <button mat-icon-button class="square-button" (click)="changeOrderCount(1)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <mat-card>
+          <div class="subsection">
+            <h3>Shipped From</h3>
+            <form #sellerForm="ngForm">
+              <mat-form-field appearance="fill">
+                <mat-label>Shipper</mat-label>
+                <input matInput type="text" [matAutocomplete]="sellerAuto" [formControl]="sellerControl">
+                <mat-autocomplete #sellerAuto="matAutocomplete" autoActiveFirstOption>
+                  <mat-option [value]="currentCompanyName" *ngIf="order.buyerName !== currentCompanyName">{{ currentCompanyName }}</mat-option>
+                  <mat-option *ngFor="let contact of sellerFilteredContacts | async; trackBy: itemName" [value]="contact.name" [disabled]="contact.name === order.buyerName">
+                    {{ contact.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+            <!-- <mat-form-field appearance="fill" *ngIf="order.sellerName === currentCompanyName else sellerContractManualInput">
+              <mat-label>{{t('contract')}}</mat-label>
+              <mat-select [(ngModel)]="currentContractRefId" (ngModelChange)="sellerContractChange()">
+                <mat-option>None</mat-option>
+                <mat-optgroup *ngFor="let contractGroup of groupedContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
+                  <mat-option *ngFor="let contract of contractGroup.value" [value]="contract.ref.id">
+                    {{contract.id + ": " + contract.clientName}}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+            <ng-template #sellerContractManualInput>
+              <mat-form-field appearance="fill">
+                <mat-label>Contract ID</mat-label>
+                <input matInput type="text" [(ngModel)]="order.sellerContractId">
+              </mat-form-field>
+            </ng-template> -->
+            <mat-form-field appearance="fill">
+              <mat-label>Contract ID</mat-label>
+              <input matInput type="text" [(ngModel)]="order.sellerContractId">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Warehouse</mat-label>
+              <input matInput type="text" [(ngModel)]="order.sellerWarehouse">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Address</mat-label>
+              <input matInput type="text" [(ngModel)]="order.sellerAddress">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Date Loaded</mat-label>
+              <input matInput [matDatepicker]="dateLoadedPicker" [(ngModel)]="order.dateLoaded">
+              <mat-datepicker-toggle matSuffix [for]="dateLoadedPicker"></mat-datepicker-toggle>
+              <mat-datepicker #dateLoadedPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <mat-divider [vertical]="true"></mat-divider>
+          <div class="subsection">
+            <h3>Shipped To</h3>
+            <form #buyerForm="ngForm">
+              <mat-form-field appearance="fill">
+                <mat-label>Consignee</mat-label>
+                <input matInput type="text" [matAutocomplete]="buyerAuto" [formControl]="buyerControl">
+                <mat-autocomplete #buyerAuto="matAutocomplete" autoActiveFirstOption>
+                  <mat-option [value]="currentCompanyName" *ngIf="order.sellerName !== currentCompanyName">{{ currentCompanyName }}</mat-option>
+                  <mat-option *ngFor="let contact of buyerFilteredContacts | async; trackBy: itemName" [value]="contact.name" [disabled]="contact.name === order.sellerName">
+                    {{ contact.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+            <!-- <mat-form-field appearance="fill" *ngIf="order.buyerName === currentCompanyName else buyerContractManualInput">
+              <mat-label>{{t('contract')}}</mat-label>
+              <mat-select [(ngModel)]="currentContractRefId" (ngModelChange)="contractChange()">
+                <mat-option>None</mat-option>
+                <mat-optgroup *ngFor="let contractGroup of groupedContracts | async | keyvalue" [label]="contractGroup.key | titlecase">
+                  <mat-option *ngFor="let contract of contractGroup.value" [value]="contract.ref.id">
+                    {{contract.id + ": " + contract.clientName}}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+            <ng-template #buyerContractManualInput>
+              <mat-form-field appearance="fill">
+                <mat-label>Contract ID</mat-label>
+                <input matInput type="text" [(ngModel)]="order.buyerContractId">
+              </mat-form-field>
+            </ng-template> -->
+            <mat-form-field appearance="fill">
+              <mat-label>Contract ID</mat-label>
+              <input matInput type="text" [(ngModel)]="order.buyerContractId">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Warehouse</mat-label>
+              <input matInput type="text" [(ngModel)]="order.buyerWarehouse">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Address</mat-label>
+              <input matInput type="text" [(ngModel)]="order.buyerAddress">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Date Unloaded</mat-label>
+              <input matInput [matDatepicker]="dateUnloadedPicker" [(ngModel)]="order.dateUnloaded" [min]="order.dateLoaded">
+              <mat-datepicker-toggle matSuffix [for]="dateUnloadedPicker"></mat-datepicker-toggle>
+              <mat-datepicker #dateUnloadedPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </mat-card>
+        <mat-card class="product-weight-card">
+          <h3>Product<span *ngIf="false"> & Weight</span></h3>
+          <div class="form-field-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Commodity</mat-label>
+              <mat-select [(ngModel)]="order.productName">
+                <mat-option *ngFor="let product of productsList" [value]="product">{{ product }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Grade</mat-label>
+              <mat-select [(ngModel)]="order.productGrade">
+                <mat-option [value]="2">U.S. GRADE 2 OR BETTER</mat-option>
+                <mat-option [value]="3">GRADE 3</mat-option>
+                <mat-option [value]="4">GRADE 4</mat-option>
+                <mat-option value="SAMPLE">SAMPLE GRADE</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <ng-container *ngIf="false">
+            <mat-checkbox #includeWeights class="card-checkbox">Include Weight Info.</mat-checkbox>
+            <div *ngIf="includeWeights.checked">
+              <div class="subsection">
+                <h4>Loading</h4>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gross</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.loadingGross" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Tare</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.loadingTare" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Net</mat-label>
+                  <input matInput type="number" [(ngModel)]="loadingNet">
+                </mat-form-field>
+              </div>
+              <div class="subsection">
+                <h4>Unloading</h4>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gross</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.unloadingGross" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Tare</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.unloadingTare" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Net</mat-label>
+                  <input matInput type="number" [(ngModel)]="unloadingNet">
+                </mat-form-field>
+              </div>
+            </div>
+          </ng-container>
+        </mat-card>
+        <mat-card class="transport-card">
+          <h3>Transport</h3>
+          <div class="form-field-row">
+            <mat-form-field appearance="fill">
+              <mat-label>{{t('transport')}}</mat-label>
+              <input matInput type="text" [matAutocomplete]="transportAuto" [formControl]="transportControl" (ngModelChange)="transportChange()">
+              <mat-autocomplete #transportAuto="matAutocomplete" autoActiveFirstOption>
+                <mat-option *ngFor="let contact of filteredTransportList | async; trackBy: itemName" [value]="contact.name">
+                  {{ contact?.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>{{t('driver')}}</mat-label>
+              <input matInput type="text" [(ngModel)]="order.driver">
+            </mat-form-field>
+          </div>
+          <div class="form-field-row">
+            <mat-form-field appearance="fill" class="truck-plates">
+              <mat-label>{{t('truck plates')}}</mat-label>
+              <input matInput type="text" [(ngModel)]="order.carPlates">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="box-plates">
+              <mat-label>{{t('box plates')}}</mat-label>
+              <input matInput type="text" [(ngModel)]="order.plates">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="unit-type">
+              <mat-label>Unit Type</mat-label>
+              <mat-select [(ngModel)]="order.unitType">
+                <mat-option value="single">Single</mat-option>
+                <mat-option value="double">Double</mat-option>
+                <mat-option value="hopper">Hopper</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card>
+      </div>
+
+      <app-printable-load-order [order]="order" class="A5"></app-printable-load-order>
+    </div>
+  </ion-content>
+</ng-container>

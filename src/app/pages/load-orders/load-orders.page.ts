@@ -5,6 +5,9 @@ import { LoadOrder } from '@shared/classes/load-orders.model';
 import { LoadOrderService } from '@shared/model-services/load-order.service';
 import { SetOrderModalComponent } from './components/set-order-modal/set-order-modal.component';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { LoadOrderDialogComponent } from 'src/app/modules/load-order-printables/load-order-dialog/load-order-dialog.component';
+import { NavController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-load-orders',
@@ -19,7 +22,8 @@ export class LoadOrdersPage implements OnInit {
     private company: CompanyService,
     private loadOrders: LoadOrderService,
     private dialog: MatDialog,
-    private snack: SnackbarService
+    private snack: SnackbarService,
+    private navController: NavController
   ) { }
 
   ngOnInit() {
@@ -32,7 +36,10 @@ export class LoadOrdersPage implements OnInit {
     newLoadOrder.plants = this.company.getPlantsNamesList();
 
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
-      data: newLoadOrder
+      data: newLoadOrder,
+      autoFocus: false,
+      maxWidth: "800px",
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -50,7 +57,10 @@ export class LoadOrdersPage implements OnInit {
 
   editOrderDialog(order: LoadOrder) {
     const dialogRef = this.dialog.open(SetOrderModalComponent, {
-      data: order
+      data: order,
+      autoFocus: false,
+      maxWidth: "800px",
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -73,4 +83,23 @@ export class LoadOrdersPage implements OnInit {
       this.snack.open('There has been an error', 'error');
     });
   }
+
+  openOrder(order: LoadOrder) {
+    this.dialog.open(LoadOrderDialogComponent, {
+      data: order,
+      panelClass: "borderless-dialog",
+      minWidth: "80%",
+      maxWidth: "100%",
+      height: "75vh"
+    });
+  }
+
+  newOrder() {
+    this.navController.navigateForward('dashboard/load-orders/set-load-orders');
+  }
+
+  editOrder(order: LoadOrder) {
+    console.log(order.id);
+  }
+
 }

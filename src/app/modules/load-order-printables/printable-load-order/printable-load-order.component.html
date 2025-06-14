@@ -1,0 +1,133 @@
+
+<div class="page-style main">
+  <div class="company-letterhead">
+    <div id="logo" class="logo-demo"></div>
+    <div class="address">
+      <span>{{ (companyDoc$ | async)?.name }}</span>
+      <span *ngFor="let line of (companyDoc$ | async)?.address">{{ line }}</span>
+    </div>
+  </div> 
+  <div class="title-section">
+    <div class="document-title"><b>LOAD ORDER</b></div>
+    <div class="id-section">
+      <span class="normal-case">No.</span>
+      <span class="id">{{ order.id }}</span>
+    </div>
+  </div>
+  <!-- ---------------------------------------------------------------------------------------- -->
+  <!-- <div class="header-2">
+    <div id="logo" class="logo-demo"></div>
+    <div class="header-text">
+      <div class="address">
+        <span>{{ (companyDoc$ | async).name }}</span>
+        <span *ngFor="let line of (companyDoc$ | async)?.address">{{ line }}</span>
+      </div>
+      <div class="title-section">
+        <div class="document-title"><b>LOAD ORDER</b></div>
+        <div class="id-section">
+          <span class="normal-case">No.</span>
+          <span class="id">{{ order.id }}</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <table>
+    <colgroup>
+      <col width="80px">
+      <col width="80px">
+      <col width="480px">
+      <col width="190px">
+      <col width="200px">
+      <col width="80px">
+      <col width="200px">
+    </colgroup>
+    <tr class="section-headers">
+      <th scope="col" colspan="3">Transport</th>
+      <th scope="col" colspan="4">Product & Weight</th>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Transport Name:</th>
+      <td>{{ order.transportName }}</td>
+      <th scope="row">Commodity:</th>
+      <td colspan="3">{{ order.productName }}</td>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Driver Name:</th>
+      <td>{{ order.driver }}</td>
+      <th scope="row">Grade:</th>
+      <td colspan="3"><span *ngIf="order.productGrade">U.S. GRADE {{ order.productGrade }} OR BETTER</span></td>
+    </tr>
+    <tr>
+      <th scope="row" rowspan="2">Plates:</th>
+      <th scope="row">Truck:</th>
+      <td>{{ order.carPlates }}</td>
+      <th scope="row" colspan="2">Loading:</th>
+      <th scope="row" colspan="2">Unloading:</th>
+    </tr>
+    <tr>
+      <th scope="row">Trailer:</th>
+      <td>{{ order.plates }}</td>
+      <th scope="row">Gross:</th>
+      <td>{{ order.loadingGross | number }}</td>
+      <th scope="row">Gross:</th>
+      <td>{{ order.unloadingGross | number }}</td>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Unit Type:</th>
+      <td>{{ order.unitType }}</td>
+      <th scope="row">Tare:</th>
+      <td>{{ order.loadingTare | number }}</td>
+      <th scope="row">Tare:</th>
+      <td>{{ order.unloadingTare | number }}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="whitespace-cell"></td>
+      <th scope="row">Net:</th>
+      <td>{{ order.loadingGross - order.loadingTare | number }}</td>
+      <th scope="row">Net:</th>
+      <td>{{ order.unloadingGross - order.unloadingTare | number }}</td>
+    </tr>
+    <tr>
+      <td colspan="3" class="whitespace-cell"></td>
+      <th scope="row">Loss:</th>
+      <td colspan="3">{{ (order.loadingGross - order.loadingTare) - (order.unloadingGross - order.unloadingTare) | number }}</td>
+    </tr>
+
+    <!-- ----------------------------------------------------------- -->
+
+    <tr class="section-headers">
+      <th scope="col" colspan="3">Transported From</th>
+      <th scope="col" colspan="4">Transported To</th>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Seller:</th>
+      <td>{{ order.sellerName }}</td>
+      <th scope="row">Buyer:</th>
+      <td colspan="3">{{ order.buyerName }}</td>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Contract No:</th>
+      <td>{{ order.sellerContractId }}</td>
+      <th scope="row">Contract No:</th>
+      <td colspan="3">{{ order.buyerContractId }}</td>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Warehouse:</th>
+      <td>{{ order.sellerWarehouse }}</td>
+      <th scope="row">Warehouse:</th>
+      <td colspan="3">{{ order.buyerWarehouse }}</td>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Address:</th>
+      <td>{{ order.sellerAddress }}</td>
+      <th scope="row">Address:</th>
+      <td colspan="3">{{ order.buyerAddress }}</td>
+    </tr>
+    <tr>
+      <th scope="row" colspan="2">Date Loaded:</th>
+      <td>{{ order.dateLoaded | date }}</td>
+      <th scope="row">Date Unloaded:</th>
+      <td colspan="3">{{ order.dateUnloaded | date }}</td>
+    </tr>
+  </table>
+</div>

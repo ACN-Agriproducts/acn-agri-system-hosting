@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { collection, CollectionReference, doc, Firestore, getDocs, getDocsFromServer, limit, query, QueryConstraint, setDoc, startAfter, orderBy, getCountFromServer, updateDoc } from '@angular/fire/firestore';
+import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { LoadOrder, LoadOrderStatus } from '@shared/classes/load-orders.model';
+import { LoadOrderDialogComponent } from 'src/app/modules/load-order-printables/load-order-dialog/load-order-dialog.component';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { LoadOrder, LoadOrderStatus } from '@shared/classes/load-orders.model';
 export class LoadOrderService {
   constructor(
     private db: Firestore,
-    private session: SessionInfo
+    private session: SessionInfo,
   ) { }
 
   public getCollectionReference(): CollectionReference<LoadOrder> {

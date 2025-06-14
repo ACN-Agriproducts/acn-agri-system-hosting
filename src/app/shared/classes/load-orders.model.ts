@@ -20,9 +20,30 @@ export class LoadOrder extends FirebaseDocInterface {
     freight: Price;
     plants: string[];
     carPlates: string;
-    plates: string;
+    plates: string | string[];
     ticketRef: DocumentReference<Ticket>;
     ticketID: number;
+
+    productName: string;
+    productGrade: string | number;
+    unitType: string;
+    loadingGross: number;
+    loadingTare: number;
+    loadingNet: number;
+    unloadingGross: number;
+    unloadingTare: number;
+    unloadingNet: number;
+    dateLoaded: Date;
+    dateUnloaded: Date;
+    
+    sellerName: string;
+    buyerName: string;
+    sellerContractId: string;
+    buyerContractId: string;
+    sellerWarehouse: string;
+    buyerWarehouse: string;
+    sellerAddress: string | string[];
+    buyerAddress: string | string[];
 
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
@@ -56,6 +77,7 @@ export class LoadOrder extends FirebaseDocInterface {
         this.plates = data.plates;
         this.ticketRef = data.ticketRef?.withConverter(Ticket.converter);
         this.ticketID = data.ticketID;
+        this.productName = data.productName;
     }
 
     public static converter = {
@@ -78,6 +100,7 @@ export class LoadOrder extends FirebaseDocInterface {
                 plates: data.plates ?? null,
                 ticketRef: data.ticketRef ?? null,
                 ticketID: data.ticketID ?? null,
+                productName: data.productName ?? null
             };
 
             console.log("###", fireData);

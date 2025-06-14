@@ -1,0 +1,114 @@
+
+:host * {
+    box-sizing: border-box;
+}
+
+:has(>.subsection) {
+    display: flex;
+    gap: 12px;
+}
+
+.layout--set-order {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.card-row {
+    display: flex;
+    gap: 12px;
+}
+
+.order-form {
+    flex: 1 1 578px;
+    max-width: 920px;
+    margin: 12px;
+    justify-content: center;
+
+    > :not(:last-child) {
+        margin-bottom: 12px;   
+    }
+}
+
+:host app-printable-load-order {
+    margin: 12px;
+    zoom:  85%;
+    height: min-content;
+
+    position: sticky;
+    top: 15%;
+}
+
+.init-orders-section {
+    display: flex;
+    gap: 12px;
+    font-size: 1rem;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.order-count-incrementer {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1.34375em;
+
+    .square-button {
+        background-color: green;
+        border-radius: 4px;
+        height: 58px;
+        color: white;
+    }
+}
+
+::ng-deep {
+    .order-count-incrementer .mat-form-field-wrapper {
+        padding: 0;
+    }
+
+    .init-orders-section .mat-form-field-outline {
+        background-color: white;
+    }
+}
+
+.card-checkbox {
+    margin: 0 0 18px 0;
+    // width: 100%;
+    // text-align: center;
+}
+
+.form-field-row {
+    display: flex;
+    gap: 12px;
+}
+
+.transport-card .form-field-row {
+    .truck-plates {
+        flex: 1 2 auto;
+    }
+    
+    .unit-type {
+        flex: 1 2 auto;
+    }
+}
+
+.transport-card {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-weight-card {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}

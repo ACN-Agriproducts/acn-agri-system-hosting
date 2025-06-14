@@ -1,28 +1,32 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CompanyService } from '@core/services/company/company.service';
+import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { CompanyContact } from '@shared/classes/company';
 import { Contract } from '@shared/classes/contract';
 import { LoadOrder } from '@shared/classes/load-orders.model';
 import { ContractsService } from '@shared/model-services/contracts.service';
-import { first, lastValueFrom, map, Observable, startWith } from 'rxjs';
+import { LoadOrderService } from '@shared/model-services/load-order.service';
+import { first, map, Observable, startWith } from 'rxjs';
 
 @Component({
-  selector: 'app-set-order-modal',
-  templateUrl: './set-order-modal.component.html',
-  styleUrls: ['./set-order-modal.component.scss'],
+  selector: 'app-set-load-orders',
+  templateUrl: './set-load-orders.page.html',
+  styleUrls: ['./set-load-orders.page.scss'],
 })
-export class SetOrderModalComponent implements OnInit {
+export class SetLoadOrdersPage implements OnInit {
+  public order: LoadOrder;
+  public orders: LoadOrder[];
+
   plants: string[];
   groupedContracts: Observable<{[type: string]: Contract[]}>;
   contractsList: Observable<Contract[]>;
   selectableTransport: CompanyContact[];
 
-  currentTransportID: string;
+  currentTransportName: string;
   currentTransport: CompanyContact;
   currentContract: Contract;
-  currentContractID: string;
+  currentContractRefId: string;
 
   public productsList: string[];
   public contactsList: CompanyContact[];
@@ -33,27 +37,34 @@ export class SetOrderModalComponent implements OnInit {
   public currentCompanyName: string;
   public transportControl = new FormControl('');
   public filteredTransportList: Observable<CompanyContact[]>;
-  public sellerContractId: string;
-  public buyerContractId: string;
+  public loadingNet: number;
+  public unloadingNet: number;
+  public orderCount: number = 1;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public order: LoadOrder,
+    private loadOrders: LoadOrderService,
     private company: CompanyService,
-    private contracts: ContractsService
-  ) { }
+    private contracts: ContractsService,
+    private session: SessionInfo
+  ) {}
 
   ngOnInit() {
+    this.order = this.loadOrders.createNew();
+    this.order.plants = this.company.getPlantsNamesList();
+
     console.log(this.order);
 
     this.plants = this.company.getPlantsNamesList();
     this.groupedContracts = this.contracts.getActiveGrouped();
     this.contractsList = this.contracts.getActive();
+
     if(this.order.transportRef) {
       this.currentTransport = this.company.getContactsList().find(contact => contact.id == this.order.transportRef.id)
-      this.currentTransportID = this.currentTransport.id;
-    };
+      this.currentTransportName = this.currentTransport.id;
+    }
+
     if(this.order.contractRef) {
-      this.currentContractID = this.order.contractRef.id;
+      this.currentContractRefId = this.order.contractRef.id;
       this.contractChange();
     }
 
@@ -69,8 +80,8 @@ export class SetOrderModalComponent implements OnInit {
 
   async contractChange() {
     this.contractsList.pipe(first()).subscribe(list => {
-      this.currentContract = list.find(contract => contract.ref.id == this.currentContractID) ?? null;
-      this.currentContractID = this.currentContract?.ref.id ?? null;
+      this.currentContract = list.find(contract => contract.ref.id == this.currentContractRefId) ?? null;
+      this.currentContractRefId = this.currentContract?.ref.id ?? null;
 
       this.updateSelectableTransportList();
 
@@ -79,15 +90,15 @@ export class SetOrderModalComponent implements OnInit {
       this.order.contractTags = this.currentContract?.tags ?? null;
       this.order.contractID = this.currentContract?.id ?? null;
       this.order.freight.amount = this.currentContract?.default_freight ?? 0;
+
+      this.assignPartyData();
     });
   }
 
   transportChange() {
-    console.log(this.currentTransport, this.order.transportName, this.order.transportRef)
-    this.currentTransport = this.selectableTransport.find(contact => contact.id == this.currentTransportID);
+    this.currentTransport = this.selectableTransport.find(contact => contact.name == this.currentTransportName);
     this.order.transportName = this.currentTransport?.name;
     this.order.transportRef = this.currentContract?.truckers.find(trucker => trucker.trucker.id == this.currentTransport?.id)?.trucker;
-    console.log(this.currentTransportID, this.currentTransport, this.order.transportName, this.order.transportRef)
   }
 
   itemName(index: number, item: any) {
@@ -125,7 +136,7 @@ export class SetOrderModalComponent implements OnInit {
       startWith(''),
       map(value => this._filterTransports(value || ''))
     );
-    this.transportControl.valueChanges.subscribe(value => this.currentTransportID = value);
+    this.transportControl.valueChanges.subscribe(value => this.currentTransportName = value);
   }
 
   updateSelectableTransportList() {
@@ -138,8 +149,53 @@ export class SetOrderModalComponent implements OnInit {
     this.transportControl.updateValueAndValidity({ onlySelf: false, emitEvent: true });
   }
 
+  updateNet() {
+    this.loadingNet = this.order.loadingGross - this.order.loadingTare;
+    this.unloadingNet = this.order.unloadingGross - this.order.unloadingTare;
+  }
+
+  assignPartyData() {
+    if (this.currentContract.type === "sales" || this.currentContract.tags.includes('sales')) {
+      this.order.sellerName = this.currentCompanyName;
+      this.order.sellerContractId = this.currentContract.id.toString();
+      this.order.sellerWarehouse = this.session.getPlant();
+      this.order.sellerAddress = this.company.getCompany().address;
+      
+      this.order.buyerName = this.currentContract.clientName;
+      this.order.buyerContractId = "";
+      this.order.buyerWarehouse = "";
+      this.order.buyerAddress = this.currentContract.clientInfo.streetAddress;
+    }
+    else if (this.currentContract.type === "purchase" || this.currentContract.tags.includes("purchase")) {
+      this.order.buyerName = this.currentCompanyName;
+      this.order.buyerContractId = this.currentContract.id.toString();
+      this.order.buyerWarehouse = this.session.getPlant();
+      this.order.buyerAddress = this.company.getCompany().address;
+
+      this.order.sellerName = this.currentContract.clientName;
+      this.order.sellerContractId = "";
+      this.order.sellerWarehouse = "";
+      this.order.sellerAddress = this.currentContract.clientInfo.streetAddress;
+    }
+
+    this.order.productName = this.currentContract.productInfo.name;
+    this.order.productGrade = this.currentContract.grade;
+
+    this.sellerControl.setValue(this.order.sellerName);
+    this.buyerControl.setValue(this.order.buyerName);
+
+    this.transportControl.reset();
+  }
+
   testLog(separator: string, ...value: any) {
     console.log("##########  ", separator ?? "", "  ##########")
     console.log(value)
+  }
+
+  changeOrderCount(change: number) {
+    const newCount = this.orderCount + change;
+    if (newCount <= 0) return;
+
+    this.orderCount = newCount;
   }
 }

@@ -117,7 +117,7 @@ export class ContractInfoPage implements OnInit, OnDestroy {
     });
   }
 
-  openContract() {
+  openContract() { 
     this.dialog.open(ContractDialogComponent, {
       data: this.currentContract,
       panelClass: "borderless-dialog",

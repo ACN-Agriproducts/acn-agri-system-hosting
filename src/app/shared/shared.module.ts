@@ -32,6 +32,7 @@ import { DocumentUploadDialogComponent } from './components/document-upload-dial
 import { TemplateRefModule } from './template-ref';
 import { TableHeaderUnitSelectComponent } from './components/table-header-unit-select/table-header-unit-select.component';
 import { NewNoteComponent } from './components/new-note/new-note/new-note.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { NewNoteComponent } from './components/new-note/new-note/new-note.compon
     IonicModule,
     CoreModule,
     NgxDropzoneModule,
-    NgxPrintModule
+    NgxPrintModule,
+    MatDialogModule
   ],
   exports: [
     ToolbarComponent,
