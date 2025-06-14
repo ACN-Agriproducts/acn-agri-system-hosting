@@ -183,6 +183,8 @@ export class SetLoadOrdersPage implements OnInit {
 
     this.sellerControl.setValue(this.order.sellerName);
     this.buyerControl.setValue(this.order.buyerName);
+
+    this.transportControl.reset();
   }
 
   testLog(separator: string, ...value: any) {

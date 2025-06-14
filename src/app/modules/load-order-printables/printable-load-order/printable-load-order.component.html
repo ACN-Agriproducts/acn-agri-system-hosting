@@ -55,7 +55,7 @@
       <th scope="row" colspan="2">Driver Name:</th>
       <td>{{ order.driver }}</td>
       <th scope="row">Grade:</th>
-      <td colspan="3">U.S. {{ order.productGrade }} OR BETTER</td>
+      <td colspan="3"><span *ngIf="order.productGrade">U.S. GRADE {{ order.productGrade }} OR BETTER</span></td>
     </tr>
     <tr>
       <th scope="row" rowspan="2">Plates:</th>

@@ -136,87 +136,95 @@
           </div>
         </mat-card>
         <mat-card class="product-weight-card">
-          <h3>Product & Weight</h3>
-          <mat-form-field appearance="fill">
-            <mat-label>Commodity</mat-label>
-            <mat-select [(ngModel)]="order.productName">
-              <mat-option *ngFor="let product of productsList" [value]="product">{{ product }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Grade</mat-label>
-            <mat-select [(ngModel)]="order.productGrade">
-              <mat-option [value]="2">U.S. GRADE 2 OR BETTER</mat-option>
-              <mat-option [value]="3">GRADE 3</mat-option>
-              <mat-option [value]="4">GRADE 4</mat-option>
-              <mat-option value="SAMPLE">SAMPLE GRADE</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-checkbox #includeWeights class="card-checkbox">Include Weight Info.</mat-checkbox>
-          <div *ngIf="includeWeights.checked">
-            <div class="subsection">
-              <h4>Loading</h4>
-              <mat-form-field appearance="fill">
-                <mat-label>Gross</mat-label>
-                <input matInput type="number" [(ngModel)]="order.loadingGross" (ngModelChange)="updateNet()">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Tare</mat-label>
-                <input matInput type="number" [(ngModel)]="order.loadingTare" (ngModelChange)="updateNet()">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Net</mat-label>
-                <input matInput type="number" [(ngModel)]="loadingNet">
-              </mat-form-field>
-            </div>
-            <div class="subsection">
-              <h4>Unloading</h4>
-              <mat-form-field appearance="fill">
-                <mat-label>Gross</mat-label>
-                <input matInput type="number" [(ngModel)]="order.unloadingGross" (ngModelChange)="updateNet()">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Tare</mat-label>
-                <input matInput type="number" [(ngModel)]="order.unloadingTare" (ngModelChange)="updateNet()">
-              </mat-form-field>
-              <mat-form-field appearance="fill">
-                <mat-label>Net</mat-label>
-                <input matInput type="number" [(ngModel)]="unloadingNet">
-              </mat-form-field>
-            </div>
+          <h3>Product<span *ngIf="false"> & Weight</span></h3>
+          <div class="form-field-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Commodity</mat-label>
+              <mat-select [(ngModel)]="order.productName">
+                <mat-option *ngFor="let product of productsList" [value]="product">{{ product }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Grade</mat-label>
+              <mat-select [(ngModel)]="order.productGrade">
+                <mat-option [value]="2">U.S. GRADE 2 OR BETTER</mat-option>
+                <mat-option [value]="3">GRADE 3</mat-option>
+                <mat-option [value]="4">GRADE 4</mat-option>
+                <mat-option value="SAMPLE">SAMPLE GRADE</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
+          <ng-container *ngIf="false">
+            <mat-checkbox #includeWeights class="card-checkbox">Include Weight Info.</mat-checkbox>
+            <div *ngIf="includeWeights.checked">
+              <div class="subsection">
+                <h4>Loading</h4>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gross</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.loadingGross" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Tare</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.loadingTare" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Net</mat-label>
+                  <input matInput type="number" [(ngModel)]="loadingNet">
+                </mat-form-field>
+              </div>
+              <div class="subsection">
+                <h4>Unloading</h4>
+                <mat-form-field appearance="fill">
+                  <mat-label>Gross</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.unloadingGross" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Tare</mat-label>
+                  <input matInput type="number" [(ngModel)]="order.unloadingTare" (ngModelChange)="updateNet()">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                  <mat-label>Net</mat-label>
+                  <input matInput type="number" [(ngModel)]="unloadingNet">
+                </mat-form-field>
+              </div>
+            </div>
+          </ng-container>
         </mat-card>
         <mat-card class="transport-card">
           <h3>Transport</h3>
-          <mat-form-field appearance="fill">
-            <mat-label>{{t('transport')}}</mat-label>
-            <input matInput type="text" [matAutocomplete]="transportAuto" [formControl]="transportControl" (ngModelChange)="transportChange()">
-            <mat-autocomplete #transportAuto="matAutocomplete" autoActiveFirstOption>
-              <mat-option *ngFor="let contact of filteredTransportList | async; trackBy: itemName" [value]="contact.name">
-                {{ contact?.name }}
-              </mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>{{t('driver')}}</mat-label>
-            <input matInput type="text" [(ngModel)]="order.driver">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>{{t('truck plates')}}</mat-label>
-            <input matInput type="text" [(ngModel)]="order.carPlates">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>{{t('box plates')}}</mat-label>
-            <input matInput type="text" [(ngModel)]="order.plates">
-          </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Unit Type</mat-label>
-            <mat-select [(ngModel)]="order.unitType">
-              <mat-option value="single">Single</mat-option>
-              <mat-option value="double">Double</mat-option>
-              <mat-option value="hopper">Hopper</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div class="form-field-row">
+            <mat-form-field appearance="fill">
+              <mat-label>{{t('transport')}}</mat-label>
+              <input matInput type="text" [matAutocomplete]="transportAuto" [formControl]="transportControl" (ngModelChange)="transportChange()">
+              <mat-autocomplete #transportAuto="matAutocomplete" autoActiveFirstOption>
+                <mat-option *ngFor="let contact of filteredTransportList | async; trackBy: itemName" [value]="contact.name">
+                  {{ contact?.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>{{t('driver')}}</mat-label>
+              <input matInput type="text" [(ngModel)]="order.driver">
+            </mat-form-field>
+          </div>
+          <div class="form-field-row">
+            <mat-form-field appearance="fill" class="truck-plates">
+              <mat-label>{{t('truck plates')}}</mat-label>
+              <input matInput type="text" [(ngModel)]="order.carPlates">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="box-plates">
+              <mat-label>{{t('box plates')}}</mat-label>
+              <input matInput type="text" [(ngModel)]="order.plates">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="unit-type">
+              <mat-label>Unit Type</mat-label>
+              <mat-select [(ngModel)]="order.unitType">
+                <mat-option value="single">Single</mat-option>
+                <mat-option value="double">Double</mat-option>
+                <mat-option value="hopper">Hopper</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </mat-card>
       </div>
 
