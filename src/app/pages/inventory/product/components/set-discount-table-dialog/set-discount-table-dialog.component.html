@@ -6,9 +6,13 @@
             <div class="form-field-group">
                 <mat-form-field appearance="fill">
                     <mat-label>{{ t('Field Name') }}</mat-label>
-                    <mat-select [(ngModel)]="table.fieldName" (selectionChange)="setName($event.value)" name="fieldName" required>
+                    <!-- <mat-select [(ngModel)]="table.fieldName" (selectionChange)="setName($event.value)" name="fieldName" required>
                         <mat-option *ngFor="let discountField of discountFieldsList" [value]="discountField">{{ discountField }}</mat-option>
-                    </mat-select>
+                    </mat-select> -->
+                    <input matInput type="text" [matAutocomplete]="discountFieldNameAuto" [(ngModel)]="table.fieldName" name="fieldName" required>
+                    <mat-autocomplete #discountFieldNameAuto="matAutocomplete" (optionSelected)="setName($event)">
+                        <mat-option *ngFor="let discountField of discountFieldsList" [value]="discountField">{{ discountField }}</mat-option>
+                    </mat-autocomplete>
                     <mat-error>{{ t('Required') }}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="fill">
