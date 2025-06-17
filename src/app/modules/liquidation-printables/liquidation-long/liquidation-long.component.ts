@@ -74,3 +74,21 @@ export class WeightDiscountsPipe implements PipeTransform {
   }
 
 }
+
+@Pipe({
+  name: 'nonZeroDiscounts'
+})
+export class NonZeroDiscountsPipe implements PipeTransform {
+
+  transform(discounts: WeightDiscounts): { [key: string]: Mass } {
+    const nonZeroDiscounts: { [key: string]: Mass } = {};
+
+    for (const [key, discount] of Object.entries(discounts)) {
+      if (discount.get() < 0) return;
+      nonZeroDiscounts[key] = discount;
+    }
+
+    return nonZeroDiscounts;
+  }
+
+}

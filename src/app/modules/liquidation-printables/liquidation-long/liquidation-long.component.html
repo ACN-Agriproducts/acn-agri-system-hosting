@@ -28,6 +28,10 @@
             <col class="one-fr"> <!-- DRYING: CWT -->
             <col class="one-fr"> <!-- DAMAGE: % -->
             <col class="one-fr"> <!-- DAMAGE: CWT -->
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
+                <col class="one-fr">
+                <col class="one-fr">
+            </ng-container>
             <col class="one-and-half-fr"> <!-- ADJUSTED WEIGHT -->
             <col class="one-fr"> <!-- PRICE -->
             <col class="two-fr" 
@@ -55,6 +59,7 @@
             <th [lang]="language" colspan="2">{{ t('Moisture') | uppercase }}</th>
             <th [lang]="language" colspan="2">{{ t('Drying') | uppercase }}</th>
             <th [lang]="language" colspan="2">{{ t('Damage') | uppercase }}</th>
+            <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
             <th [lang]="language" rowspan="2">
                 {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}<br>
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-table-header-unit-select>
@@ -96,6 +101,12 @@
             <th [lang]="language">
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="damagedGrain"></app-table-header-unit-select>
             </th>
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
+                <th [lang]="language">{{ t('Amount') | uppercase }}</th>
+                <th [lang]="language">
+                    <app-table-header-unit-select [displayUnits]="data.displayUnits" [fieldname]="discount.key"></app-table-header-unit-select>
+                </th>
+            </ng-container>
         </tr>
         <tr *ngFor="let ticket of data.selectedTickets; even as even">
             <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.dateIn | date:'shortDate' }}</td>
@@ -109,6 +120,10 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.dryWeightPercent | massInUnit:data.displayUnits.get('dryWeight') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.damagedGrain ?? 0 | number:'1.1' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts.damagedGrain | massInUnit:data.displayUnits.get('damagedGrain') | number:'1.0-3' }}</td>
+            <ng-container *ngFor="let discount of ticket.weightDiscounts | nonZeroDiscounts | keyvalue">
+                <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket[discount.key] ?? 0 | number:'1.1' }}</td>
+                <td [class.odd]='!even' [class.even]='even' class='right'>{{ discount.value | massInUnit:data.displayUnits.get(discount.key) | number:'1.0-3' }}</td>
+            </ng-container>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.adjustedWeight | massInUnit:data.displayUnits.get('adjustedWeight') | number:'1.0-3' }}</td> <!-- ADJUSTED WEIGHT -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (((ticket.price ?? data.contract.price) | pricePerUnit:data.displayUnits.get('price'):data.contract.quantity) ?? 0) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
             <td [class.odd]='!even' [class.even]='even' class='right' 
@@ -140,6 +155,10 @@
             <td class='total-row right'>{{ data.totals.weightDiscounts.dryWeight | massInUnit:data.displayUnits.get('dryWeight') | number:'1.0-3' }}</td>
             <td class='total-row right'></td>
             <td class='total-row right'>{{ data.totals.weightDiscounts.damagedGrain | massInUnit:data.displayUnits.get('damagedGrain') | number:'1.0-3' }}</td>
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
+                <td class='total-row right'></td>
+                <td class="total-row right">{{ discount.value | massInUnit:data.displayUnits.get(discount.key) | number:'1.0-3' }}</td>
+            </ng-container>
             <td class='total-row right'>{{ data.totals.adjustedWeight | massInUnit:data.displayUnits.get('adjustedWeight') | number:'1.0-3' }} </td>
             <td class='total-row right'></td>
             <td class='total-row right' 
