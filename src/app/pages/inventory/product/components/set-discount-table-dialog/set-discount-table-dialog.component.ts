@@ -92,16 +92,12 @@ export class SetDiscountTableDialogComponent implements OnInit {
   }
 
   setName(fieldName: string | MatLegacyAutocompleteSelectedEvent) {
-    console.log("Type: ", typeof fieldName)
-    console.log("Value: ", fieldName)
-    
     if (typeof fieldName === "string") {
       this.table.name = this.titleCasePipe.transform(fieldName);
     }
     else {
       this.table.name = this.titleCasePipe.transform(fieldName.option.value);
     }
-    console.log(this.table)
   }
 
   resetHeaderType(header: DiscountTableHeader) {
