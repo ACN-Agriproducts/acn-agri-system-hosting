@@ -487,13 +487,6 @@ export const WEIGHT_DISCOUNT_FIELDS = [
 ];
 
 /**
- * Weight Discounts:
- *  - weight that is subtracted for reasons such as moisture, drying, or damage to the product
- *  - calculated as a percentage of the weight
- *  - Formula: (Percentage)/100 * (Mass).amount
- */
-
-/**
  * Price Discounts:
  *  - Fixed: just a flat $ amount
  * 
@@ -503,7 +496,6 @@ export const WEIGHT_DISCOUNT_FIELDS = [
  *  - Tax: by percentage of the final amount I'm guessing
  *      --> Formula: (Percentage)/100 * ($ Total)
  */
-
 export class PriceDiscounts {
     public infested: number = 0;
     public musty: number = 0;
@@ -559,6 +551,10 @@ export class PriceDiscounts {
 /**
  * Based on common discounts used by the company. 
  * These discounts are calculated as a percentage of the weight of the product brought in as recorded on the ticket.
+ * 
+ *  - weight that is subtracted for reasons such as moisture, drying, or damage to the product
+ *  - calculated as a percentage of the weight
+ *  - Formula: (Percentage)/100 * (Mass).amount
  */
 export class WeightDiscounts {
     brokenGrain: Mass;
