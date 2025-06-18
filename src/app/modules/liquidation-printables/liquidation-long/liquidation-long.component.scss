@@ -110,3 +110,15 @@ $lightlightgray: rgb(230, 230, 230);
 .portrait :host #liquidation-table col {
     width: auto !important;
 }
+
+.header-with-unit-select-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 8px;
+
+    app-table-header-unit-select {
+        width: 25%;
+    }
+}

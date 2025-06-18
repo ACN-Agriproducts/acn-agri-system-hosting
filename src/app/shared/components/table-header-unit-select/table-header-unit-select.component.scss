@@ -16,8 +16,20 @@
     .mat-input-underline {
         display: none !important;
     }
+
+    // display: flex;
+    // flex-flow: row nowrap;
+    // justify-content: center;
+    // align-items: center;
+    // gap: 4px;
+    // flex: 1 1 auto;
 }
 
 .unit-label {
     display: none;
+}
+
+:host {
+    // max-width: min-content;
+    // width: 25%;
 }

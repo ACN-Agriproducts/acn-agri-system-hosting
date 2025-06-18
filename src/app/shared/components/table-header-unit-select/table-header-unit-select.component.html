@@ -1,8 +1,7 @@
 
 <span class="unit-label">( {{ isPrice ? "$/" : "" }}{{ displayUnits.get(fieldname) | uppercase }} )</span>
 <span class="unit-select">
-    ( 
-    <mat-form-field>
+    ( <mat-form-field>
         <mat-select
             [value]="displayUnits.get(fieldname)"
             (valueChange)="displayUnits.set(fieldname, $event)"
@@ -11,6 +10,5 @@
                 {{ (isPrice ? ("$/" + unit) : unit) | uppercase }}
             </mat-option>
         </mat-select>
-    </mat-form-field>
-        )
+    </mat-form-field> )
 </span>
