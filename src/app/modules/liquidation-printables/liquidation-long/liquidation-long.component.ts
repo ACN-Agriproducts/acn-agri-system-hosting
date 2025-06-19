@@ -9,12 +9,14 @@ import { Company } from '@shared/classes/company';
 import { LiquidationPrintableData } from '../printable-liquidation.component';
 
 const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
-  ["weight", "lbs"],
+  ["scaleUnits", "lbs"],
   ["moisture", "CWT"],
   ["dryWeight", "CWT"],
   ["damagedGrain", "CWT"],
   ["adjustedWeight", "lbs"],
   ["price", "bu"],
+  ["weight", "CWT"],
+  ["totals", "lbs"]
 ]);
 
 @Component({

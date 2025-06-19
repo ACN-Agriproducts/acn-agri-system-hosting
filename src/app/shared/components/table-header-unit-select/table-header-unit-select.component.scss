@@ -11,18 +11,10 @@
 .unit-select {
     .mat-form-field {
         font-weight: bold;
-        width: min(55px, 70%);
-    }
-    .mat-input-underline {
-        display: none !important;
+        width: auto;
     }
 
-    // display: flex;
-    // flex-flow: row nowrap;
-    // justify-content: center;
-    // align-items: center;
-    // gap: 4px;
-    // flex: 1 1 auto;
+    white-space: nowrap;
 }
 
 .unit-label {
@@ -30,6 +22,18 @@
 }
 
 :host {
-    // max-width: min-content;
-    // width: 25%;
+    * { box-sizing: border-box; }
+
+    white-space: nowrap;
+}
+
+::ng-deep {
+    .unit-select {
+        .mat-input-underline {
+            display: none;
+        }
+        .mat-form-field-infix {
+            width: auto;
+        }
+    }
 }
