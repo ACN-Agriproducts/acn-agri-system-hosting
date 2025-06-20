@@ -13,8 +13,6 @@
         font-weight: bold;
         width: auto;
     }
-
-    white-space: nowrap;
 }
 
 .unit-label {
@@ -23,8 +21,6 @@
 
 :host {
     * { box-sizing: border-box; }
-
-    white-space: nowrap;
 }
 
 ::ng-deep {
@@ -36,4 +32,8 @@
             width: auto;
         }
     }
+}
+
+.unit-label, .unit-select {
+    white-space: nowrap;
 }
