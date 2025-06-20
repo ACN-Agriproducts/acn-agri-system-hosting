@@ -113,7 +113,7 @@ $lightlightgray: rgb(230, 230, 230);
 
 .header-with-unit-select-flex {
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
     gap: 4px;

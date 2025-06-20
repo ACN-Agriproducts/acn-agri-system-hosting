@@ -125,7 +125,13 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.netToPay | currency:'USD':'$':'1.3' }}</td> <!-- NET TO PAY -->
         </tr>
         <tr>
-            <td class='total-row center'>{{ t('Totals') | uppercase }} ( {{ data.displayUnits.get('totals') | uppercase }} ):</td>
+            <td class='total-row center'>
+                <div class="header-with-unit-select-flex">
+                    <span>{{ t('Totals') | uppercase }}</span>
+                    <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="totals"></app-table-header-unit-select>
+                    <span>:</span>
+                </div>
+            </td>
             <td class='total-row right'></td>
             <td class='total-row right'>{{ data.totals.gross | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ data.totals.tare | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
