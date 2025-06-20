@@ -22,7 +22,7 @@
             <col class="one-fr"> <!-- WEIGHT: GROSS -->
             <col class="one-fr"> <!-- WEIGHT: TARE -->
             <col class="one-fr"> <!-- WEIGHT: NET -->
-            <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">
                 <col class="one-fr">
                 <col class="one-fr">
             </ng-container>
@@ -52,7 +52,7 @@
                     <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="scaleUnits"></app-table-header-unit-select>
                 </div>
             </th>
-            <th [lang]="language" [attr.colspan]="(data.totals.weightDiscounts | nonZeroDiscounts | keyvalue).length * 2">{{ "Discounts" | uppercase }}</th>
+            <th [lang]="language" [attr.colspan]="(data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue).length * 2">{{ "Discounts" | uppercase }}</th>
             <th [lang]="language" rowspan="3">
                 {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}<br>
                 <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-table-header-unit-select>
@@ -82,10 +82,10 @@
             <th [lang]="language" rowspan="2">{{ t('Gross') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Tare') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Net') | uppercase }}</th>
-            <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
+            <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
         </tr>
         <tr>
-            <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">
                 <th [lang]="language" *ngIf="discount.key === 'weight' else percent">LBS/BU</th>
                 <ng-template #percent>
                     <th [lang]="language">{{ t('%') | uppercase }}</th>
@@ -101,7 +101,7 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.gross | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.tare | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.net | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
-            <ng-container *ngFor="let discount of ticket.weightDiscounts | nonZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of ticket.weightDiscounts | filterOutZeroDiscounts | keyvalue">
                 <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket[discount.key] ?? 0 | number:'1.1' }}</td>
                 <td [class.odd]='!even' [class.even]='even' class='right'>{{ discount.value | massInUnit:data.displayUnits.get(discount.key) | number:'1.0-3' }}</td>
             </ng-container>
@@ -136,7 +136,7 @@
             <td class='total-row right'>{{ data.totals.gross | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ data.totals.tare | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ data.totals.net | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
-            <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">
                 <td class='total-row right'></td>
                 <td class="total-row right">{{ discount.value | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             </ng-container>

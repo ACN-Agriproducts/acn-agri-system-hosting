@@ -78,9 +78,9 @@ export class WeightDiscountsPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'nonZeroDiscounts'
+  name: 'filterOutZeroDiscounts'
 })
-export class NonZeroDiscountsPipe implements PipeTransform {
+export class FilterOutZeroDiscountsPipe implements PipeTransform {
 
   transform(discounts: WeightDiscounts): { [key: string]: Mass } {
     const nonZeroDiscounts: { [key: string]: Mass } = {};
