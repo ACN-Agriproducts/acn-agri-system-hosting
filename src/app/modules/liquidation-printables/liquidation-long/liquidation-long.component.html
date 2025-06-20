@@ -86,7 +86,7 @@
         </tr>
         <tr>
             <ng-container *ngFor="let discount of data.totals.weightDiscounts | nonZeroDiscounts | keyvalue">
-                <th [lang]="language" *ngIf="discount.key === 'weight' else percent">{{ t('Amount') | uppercase }}</th>
+                <th [lang]="language" *ngIf="discount.key === 'weight' else percent">LBS/BU</th>
                 <ng-template #percent>
                     <th [lang]="language">{{ t('%') | uppercase }}</th>
                 </ng-template>
