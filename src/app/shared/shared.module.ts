@@ -30,7 +30,7 @@ import { pricerPerUnitPipe } from './classes/price';
 import { PrintableDialogComponent } from './components/printable-dialog/printable-dialog.component';
 import { DocumentUploadDialogComponent } from './components/document-upload-dialog/document-upload-dialog.component';
 import { TemplateRefModule } from './template-ref';
-import { TableHeaderUnitSelectComponent } from './components/table-header-unit-select/table-header-unit-select.component';
+import { UnitSelectComponent } from './components/unit-select/unit-select.component';
 import { NewNoteComponent } from './components/new-note/new-note/new-note.component';
 
 @NgModule({
@@ -64,7 +64,7 @@ import { NewNoteComponent } from './components/new-note/new-note/new-note.compon
     pricerPerUnitPipe,
     PrintableDialogComponent,
     TemplateRefModule,
-    TableHeaderUnitSelectComponent
+    UnitSelectComponent
   ],
   declarations: [
     ToolbarComponent,
@@ -90,7 +90,7 @@ import { NewNoteComponent } from './components/new-note/new-note/new-note.compon
     pricerPerUnitPipe,
     PrintableDialogComponent,
     DocumentUploadDialogComponent,
-    TableHeaderUnitSelectComponent,
+    UnitSelectComponent,
     NewNoteComponent
   ]
 })

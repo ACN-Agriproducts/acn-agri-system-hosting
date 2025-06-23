@@ -47,19 +47,19 @@
             <th [lang]="language" rowspan="3">{{ (t('Inbound Date')==="Inbound Date" ? "In&shy;bound Date" : t('Inbound Date')) | uppercase }}</th>
             <th [lang]="language" rowspan="3">{{ t('Ticket #') | uppercase }}</th>
             <th [lang]="language" colspan="3">
-                <div class="header-with-unit-select-flex">
+                <div class="header-unit-select-wrapper">
                     <span>{{ t('Weight') | uppercase }}</span>
-                    <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="scaleUnits"></app-table-header-unit-select>
+                    <app-unit-select [displayUnits]="data.displayUnits" fieldname="scaleUnits"></app-unit-select>
                 </div>
             </th>
             <th [lang]="language" [attr.colspan]="(data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue).length * 2">{{ "Discounts" | uppercase }}</th>
             <th [lang]="language" rowspan="3">
                 {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}<br>
-                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-table-header-unit-select>
+                <app-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-unit-select>
             </th>
             <th [lang]="language" rowspan="3">
                 {{ t('Price') | uppercase }}<br>
-                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="price" [isPrice]="true"></app-table-header-unit-select>
+                <app-unit-select [displayUnits]="data.displayUnits" fieldname="price" [isPrice]="true"></app-unit-select>
             </th>
             <th [lang]="language" rowspan="3" 
                 *ngIf="data.totals.priceDiscounts.infested 
@@ -91,7 +91,7 @@
                     <th [lang]="language">{{ t('%') | uppercase }}</th>
                 </ng-template>
                 <th [lang]="language">
-                    <app-table-header-unit-select [displayUnits]="data.displayUnits" [fieldname]="discount.key"></app-table-header-unit-select>
+                    <app-unit-select [displayUnits]="data.displayUnits" [fieldname]="discount.key"></app-unit-select>
                 </th>
             </ng-container>
         </tr>
@@ -126,9 +126,9 @@
         </tr>
         <tr>
             <td class='total-row center'>
-                <div class="header-with-unit-select-flex">
+                <div class="header-unit-select-wrapper">
                     <span>{{ t('Totals') | uppercase }}</span>
-                    <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="totals"></app-table-header-unit-select>
+                    <app-unit-select [displayUnits]="data.displayUnits" fieldname="totals"></app-unit-select>
                     <span>:</span>
                 </div>
             </td>

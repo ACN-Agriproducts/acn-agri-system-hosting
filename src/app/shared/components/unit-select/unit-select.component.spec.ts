@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TableHeaderUnitSelectComponent } from './table-header-unit-select.component';
+import { TableHeaderUnitSelectComponent } from './unit-select.component';
 
 describe('TableHeaderUnitSelectComponent', () => {
   let component: TableHeaderUnitSelectComponent;
