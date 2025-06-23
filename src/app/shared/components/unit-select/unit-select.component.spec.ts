@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TableHeaderUnitSelectComponent } from './unit-select.component';
+import { UnitSelectComponent } from './unit-select.component';
 
-describe('TableHeaderUnitSelectComponent', () => {
-  let component: TableHeaderUnitSelectComponent;
-  let fixture: ComponentFixture<TableHeaderUnitSelectComponent>;
+describe('UnitSelectComponent', () => {
+  let component: UnitSelectComponent;
+  let fixture: ComponentFixture<UnitSelectComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TableHeaderUnitSelectComponent ],
+      declarations: [ UnitSelectComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TableHeaderUnitSelectComponent);
+    fixture = TestBed.createComponent(UnitSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
