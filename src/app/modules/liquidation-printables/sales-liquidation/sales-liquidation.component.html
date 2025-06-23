@@ -33,16 +33,16 @@
             <!-- <th rowspan="2">{{ t('Contract') }}</th> -->
             <th rowspan="1" colspan="3">
                 {{ t('Weight') }}<br>
-                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="weight"></app-table-header-unit-select>
+                <app-unit-select [displayUnits]="data.displayUnits" fieldname="weight"></app-unit-select>
             </th>
             <th rowspan="2">{{ t('Moisture') }} %</th>
             <th rowspan="2">
                 {{ t('Client Weight') }}<br>
-                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="original_weight"></app-table-header-unit-select>
+                <app-unit-select [displayUnits]="data.displayUnits" fieldname="original_weight"></app-unit-select>
             </th>
             <th rowspan="2">
                 {{ t('Price') }}<br>
-                <app-table-header-unit-select [displayUnits]="data.displayUnits" fieldname="price" [isPrice]="true"></app-table-header-unit-select>
+                <app-unit-select [displayUnits]="data.displayUnits" fieldname="price" [isPrice]="true"></app-unit-select>
             </th>
             <th rowspan="2">{{ t('Net to Pay') }} ($)</th>
         </tr>
