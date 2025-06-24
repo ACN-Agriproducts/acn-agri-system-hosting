@@ -203,7 +203,7 @@ export class LiquidationTotals {
 
             for (const key of Object.keys(ticket.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);
-                this.weightDiscounts[key].amount += this.roundAmount(ticket.weightDiscounts[key].amount, 3);
+                this.weightDiscounts[key].amount += this.roundAmount(ticket.weightDiscounts[key].getMassInUnit(ticket.net.getUnit()), 3);
             }
             const tempAdjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
             this.adjustedWeight = this.adjustedWeight.add(tempAdjustedWeight);
@@ -212,8 +212,7 @@ export class LiquidationTotals {
             this.beforeFinalDiscounts += this.roundAmount(tempBeforeFinalDiscounts, 3);
 
             for (const key of Object.keys(ticket.priceDiscounts)) {
-                if (key === 'unitRateDiscounts') continue;
-                this.priceDiscounts[key] += this.roundAmount(ticket.priceDiscounts[key], 3);
+                if (key !== 'unitRateDiscounts') this.priceDiscounts[key] += this.roundAmount(ticket.priceDiscounts[key], 3);
             }
             for (const key of Object.keys(ticket.priceDiscounts.unitRateDiscounts)) {
                 this.priceDiscounts.unitRateDiscounts[key] ??= 0;

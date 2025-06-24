@@ -48,8 +48,6 @@ export class LiquidationLongComponent implements OnInit {
     this.companyDoc$.then(async doc => {
       this.logoURL = await doc.getLogoURL(this.db);
     });
-
-    console.log(this.data)
   }
 
   ngOnDestroy() {
@@ -88,8 +86,7 @@ export class FilterWeightDiscounts implements PipeTransform {
     const nonZeroDiscounts: { [key: string]: Mass } = {};
 
     for (const [key, discount] of Object.entries(discounts)) {
-      if (discount.get() <= 0) continue;
-      nonZeroDiscounts[key] = discount;
+      if (discount.get() > 0) nonZeroDiscounts[key] = discount;
     }
 
     return nonZeroDiscounts;
