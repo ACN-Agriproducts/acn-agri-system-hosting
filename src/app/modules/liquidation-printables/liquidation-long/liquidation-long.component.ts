@@ -48,6 +48,8 @@ export class LiquidationLongComponent implements OnInit {
     this.companyDoc$.then(async doc => {
       this.logoURL = await doc.getLogoURL(this.db);
     });
+
+    console.log(this.data)
   }
 
   ngOnDestroy() {
