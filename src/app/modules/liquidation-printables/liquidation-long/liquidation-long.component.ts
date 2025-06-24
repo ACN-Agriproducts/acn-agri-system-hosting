@@ -78,19 +78,38 @@ export class WeightDiscountsPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'filterOutZeroDiscounts'
+  name: 'filterWeightDiscounts'
 })
-export class FilterOutZeroDiscountsPipe implements PipeTransform {
+export class FilterWeightDiscounts implements PipeTransform {
 
   transform(discounts: WeightDiscounts): { [key: string]: Mass } {
     const nonZeroDiscounts: { [key: string]: Mass } = {};
 
     for (const [key, discount] of Object.entries(discounts)) {
-      if (discount.get() < 0) return;
+      if (discount.get() <= 0) continue;
       nonZeroDiscounts[key] = discount;
     }
 
     return nonZeroDiscounts;
+  }
+
+}
+
+@Pipe({
+  name: 'filterPriceDiscounts'
+})
+export class FilterPriceDiscounts implements PipeTransform {
+
+  transform(discounts: PriceDiscounts): { [key: string]: any } {
+    const newPriceDiscounts: any = {};
+
+    for (const key in discounts) {
+      if (typeof discounts[key] !== 'function' && typeof discounts[key] !== 'object' && discounts[key] > 0) {
+        newPriceDiscounts[key] = discounts[key];
+      }
+    }
+
+    return newPriceDiscounts;
   }
 
 }

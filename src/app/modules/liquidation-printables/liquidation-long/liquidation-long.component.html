@@ -22,9 +22,9 @@
             <col class="one-fr"> <!-- WEIGHT: GROSS -->
             <col class="one-fr"> <!-- WEIGHT: TARE -->
             <col class="one-fr"> <!-- WEIGHT: NET -->
-            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">
-                <col class="one-fr">
-                <col class="one-fr">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">
+                <col class="one-fr"> <!-- WEIGHT DISCOUNT % -->
+                <col class="one-fr"> <!-- WEIGHT DISCOUNT VALUE IN UNIT -->
             </ng-container>
             <col class="one-and-half-fr"> <!-- ADJUSTED WEIGHT -->
             <col class="one-fr"> <!-- PRICE -->
@@ -34,12 +34,9 @@
                     || data.totals.priceDiscounts.sour 
                     || data.totals.priceDiscounts.weathered 
                     || data.totals.priceDiscounts.inspection"> <!-- TOTAL -->
-            <col class="one-fr" *ngIf="data.totals.priceDiscounts.infested"> <!-- INFESTED -->
-            <col class="one-fr" *ngIf="data.totals.priceDiscounts.musty"> <!-- MUSTY -->
-            <col class="one-fr" *ngIf="data.totals.priceDiscounts.sour"> <!-- SOUR -->
-            <col class="one-fr" *ngIf="data.totals.priceDiscounts.weathered"> <!-- BADLY WEATHERED -->
-            <col class="one-fr" *ngIf="data.totals.priceDiscounts.inspection"> <!-- INSPECTION -->
-            <col class="one-fr" *ngIf="data.totals.priceDiscounts.grade"> <!-- GRADE -->
+            <ng-container *ngFor="let discount of data.totals.priceDiscounts | filterPriceDiscounts | keyvalue">
+                <col class="one-fr" *ngIf="discount.value"> <!-- PRICE DISCOUNT -->
+            </ng-container>
             <col *ngFor="let discount of data.totals.priceDiscounts.unitRateDiscounts | keyvalue" class="one-and-half-fr"> <!-- UNIT RATE PRICE DISCOUNTS -->
             <col class="two-fr">  <!-- NET TO PAY -->
         </colgroup>
@@ -52,7 +49,7 @@
                     <app-unit-select [displayUnits]="data.displayUnits" fieldname="scaleUnits"></app-unit-select>
                 </div>
             </th>
-            <th [lang]="language" [attr.colspan]="(data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue).length * 2">{{ "Discounts" | uppercase }}</th>
+            <th [lang]="language" *ngIf="(data.totals.weightDiscounts | filterWeightDiscounts | keyvalue)?.length ?? 0 > 0" [attr.colspan]="(data.totals.weightDiscounts | filterWeightDiscounts | keyvalue).length * 2">{{ "Discounts" | uppercase }}</th>
             <th [lang]="language" rowspan="3">
                 {{ (t('Adjusted Weight')==="Adjusted Weight" ? "Ad&shy;just&shy;ed Weight" : t('Adjusted Weight')) | uppercase }}<br>
                 <app-unit-select [displayUnits]="data.displayUnits" fieldname="adjustedWeight"></app-unit-select>
@@ -68,12 +65,9 @@
                     || data.totals.priceDiscounts.weathered 
                     || data.totals.priceDiscounts.inspection"
             >{{ t('Total ($)') | uppercase }}</th>
-            <th [lang]="language" rowspan="3" *ngIf="data.totals.priceDiscounts.infested">{{ (t('Infested')==="Infested" ? "In&shy;fest&shy;ed" : t('Infested')) | uppercase }}</th>
-            <th [lang]="language" rowspan="3" *ngIf="data.totals.priceDiscounts.musty">{{ t('Musty') | uppercase }}</th>
-            <th [lang]="language" rowspan="3" *ngIf="data.totals.priceDiscounts.sour">{{ t('Sour') | uppercase }}</th>
-            <th [lang]="language" rowspan="3" *ngIf="data.totals.priceDiscounts.weathered">{{ (t('Weathered')==="Weathered" ? "Weath&shy;ered" : t('Weathered')) | uppercase }}</th>
-            <th [lang]="language" rowspan="3" *ngIf="data.totals.priceDiscounts.inspection">{{ (t('Inspection')==="Inspection" ? "In&shy;spect&shy;ion" : t('Inspection')) | uppercase }}</th>
-            <th [lang]="language" rowspan="3" *ngIf="data.totals.priceDiscounts.grade">{{ t('Grade') | uppercase }}</th>
+            <ng-container *ngFor="let discount of data.totals.priceDiscounts | filterPriceDiscounts | keyvalue">
+                <th [lang]="language" rowspan="3" *ngIf="discount.value">{{ t(discount.key | titlecase) | uppercase }}</th>
+            </ng-container>
             <th [lang]="language" rowspan="3"  *ngFor="let discount of data.totals.priceDiscounts.unitRateDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
             <th [lang]="language" rowspan="3">{{ t('Net to Pay ($)') | uppercase }}</th>
     
@@ -82,10 +76,10 @@
             <th [lang]="language" rowspan="2">{{ t('Gross') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Tare') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Net') | uppercase }}</th>
-            <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
+            <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
         </tr>
         <tr>
-            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">
                 <th [lang]="language" *ngIf="discount.key === 'weight' else percent">LBS/BU</th>
                 <ng-template #percent>
                     <th [lang]="language">{{ t('%') | uppercase }}</th>
@@ -101,9 +95,9 @@
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.gross | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.tare | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.net | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
-            <ng-container *ngFor="let discount of ticket.weightDiscounts | filterOutZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">
                 <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket[discount.key] ?? 0 | number:'1.1' }}</td>
-                <td [class.odd]='!even' [class.even]='even' class='right'>{{ discount.value | massInUnit:data.displayUnits.get(discount.key) | number:'1.0-3' }}</td>
+                <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.weightDiscounts[discount.key] | massInUnit:data.displayUnits.get(discount.key) | number:'1.0-3' }}</td>
             </ng-container>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.adjustedWeight | massInUnit:data.displayUnits.get('adjustedWeight') | number:'1.0-3' }}</td> <!-- ADJUSTED WEIGHT -->
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ (((ticket.price ?? data.contract.price) | pricePerUnit:data.displayUnits.get('price'):data.contract.quantity) ?? 0) | currency:'USD':'$':'1.4' }}</td> <!-- PRICE -->
@@ -115,12 +109,9 @@
                     || data.totals.priceDiscounts.inspection
                     || data.totals.priceDiscounts.grade"
             >{{ ticket.beforeDiscounts | currency:'USD':'$':'1.3' }}</td> <!-- Total -->
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.infested">{{ ticket.priceDiscounts.infested | currency:'USD':'$':'1.2-3' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.musty">{{ ticket.priceDiscounts.musty | currency:'USD':'$':'1.2-3' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.sour">{{ ticket.priceDiscounts.sour | currency:'USD':'$':'1.2-3' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.weathered">{{ ticket.priceDiscounts.weathered | currency:'USD':'$':'1.2-3' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.inspection">{{ ticket.priceDiscounts.inspection | currency:'USD':'$':'1.2-3' }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="data.totals.priceDiscounts.grade">{{ ticket.priceDiscounts.grade | currency:'USD':'$':'1.2-3' }}</td>
+            <ng-container *ngFor="let discount of data.totals.priceDiscounts | filterPriceDiscounts | keyvalue">
+                <td [class.odd]='!even' [class.even]='even' class='right' *ngIf="discount.value">{{ ticket.priceDiscounts[discount.key] | currency:'USD':'$':'1.2-3' }}</td>
+            </ng-container>
             <td [class.odd]='!even' [class.even]='even' class='right' *ngFor="let discount of ticket.priceDiscounts.unitRateDiscounts | keyvalue">{{ discount.value | currency:'USD':'$':'1.2-3' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.netToPay | currency:'USD':'$':'1.3' }}</td> <!-- NET TO PAY -->
         </tr>
@@ -136,7 +127,7 @@
             <td class='total-row right'>{{ data.totals.gross | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ data.totals.tare | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             <td class='total-row right'>{{ data.totals.net | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
-            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterOutZeroDiscounts | keyvalue">
+            <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">
                 <td class='total-row right'></td>
                 <td class="total-row right">{{ discount.value | massInUnit:data.displayUnits.get('totals') | number:'1.0-3' }}</td>
             </ng-container>
@@ -149,12 +140,9 @@
                     || data.totals.priceDiscounts.weathered 
                     || data.totals.priceDiscounts.inspection"
             >{{ data.totals.beforeFinalDiscounts | currency:'USD':'$':'1.3' }}</td>
-            <td class='total-row right' *ngIf="data.totals.priceDiscounts.infested">{{ data.totals.priceDiscounts.infested | currency:'USD':'$':'1.2-3' }}</td>
-            <td class='total-row right' *ngIf="data.totals.priceDiscounts.musty">{{ data.totals.priceDiscounts.musty | currency:'USD':'$':'1.2-3' }}</td>
-            <td class='total-row right' *ngIf="data.totals.priceDiscounts.sour">{{ data.totals.priceDiscounts.sour | currency:'USD':'$':'1.2-3' }}</td>
-            <td class='total-row right' *ngIf="data.totals.priceDiscounts.weathered">{{ data.totals.priceDiscounts.weathered | currency:'USD':'$':'1.2-3' }}</td>
-            <td class='total-row right' *ngIf="data.totals.priceDiscounts.inspection">{{ data.totals.priceDiscounts.inspection | currency:'USD':'$':'1.2-3' }}</td>
-            <td class='total-row right' *ngIf="data.totals.priceDiscounts.grade">{{ data.totals.priceDiscounts.grade | currency:'USD':'$':'1.2-3' }}</td>
+            <ng-container *ngFor="let discount of data.totals.priceDiscounts | filterPriceDiscounts | keyvalue">
+                <td class='total-row right' *ngIf="discount.value">{{ discount.value | currency:'USD':'$':'1.2-3' }}</td>
+            </ng-container>
             <td class="total-row right" *ngFor="let discount of data.totals.priceDiscounts.unitRateDiscounts | keyvalue">{{ discount.value | currency:'USD':'$':'1.2-3' }}</td>
             <td class='total-row right'>{{ data.totals.netToPay | currency:'USD':'$':'1.3' }}</td>
         </tr>

@@ -402,14 +402,7 @@ export class Ticket extends FirebaseDocInterface{
     public setDiscounts(discountTables: DiscountTables): void | Error {
         for (const table of discountTables?.tables ?? []) {
             const discountName = table.fieldName;
-
-            let ticketDiscountValue = this[discountName];
-            if (ticketDiscountValue == null) {
-                console.error("Could not find a value for this discount on the ticket. Please make sure the Field Name on the discount table is correct.");
-                ticketDiscountValue = 0;
-            }
-
-            const rowData = table.getTableData(ticketDiscountValue);
+            const rowData = table.getTableData(this[discountName] ?? 0);
             
             table.headers.forEach(header => {
                 if (header.type === 'price-discount') {
