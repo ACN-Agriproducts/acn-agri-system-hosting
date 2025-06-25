@@ -180,9 +180,7 @@ export class Liquidation extends FirebaseDocInterface {
     public defineBushels(contract: Contract) {
         for (const ticket of this.tickets) {
             for (const ticketProp of Object.values(ticket)) {
-                if (ticketProp instanceof Mass) 
-                    ticketProp.defineBushels(contract.productInfo);
-                else if (ticketProp instanceof WeightDiscounts) 
+                if (ticketProp instanceof Mass || ticketProp instanceof WeightDiscounts) 
                     ticketProp.defineBushels(contract.productInfo);
             }
         }
