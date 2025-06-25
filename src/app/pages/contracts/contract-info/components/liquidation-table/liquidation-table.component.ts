@@ -7,6 +7,8 @@ import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { TranslocoService } from '@ngneat/transloco';
 import { Contract } from '@shared/classes/contract';
 import { Liquidation, LiquidationTotals, TicketInfo } from '@shared/classes/liquidation';
+import { Mass } from '@shared/classes/mass';
+import { Ticket } from '@shared/classes/ticket';
 import { DocumentUploadDialogComponent, DialogUploadData } from '@shared/components/document-upload-dialog/document-upload-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { LiquidationDialogComponent } from 'src/app/modules/liquidation-printables/liquidation-dialog/liquidation-dialog.component';
@@ -59,6 +61,8 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public openLiquidation(liquidation: Liquidation) {
+    liquidation.defineBushels(this.contract);
+    
     this.dialog.open(LiquidationDialogComponent, {
       data: {
         selectedTickets: liquidation.tickets,

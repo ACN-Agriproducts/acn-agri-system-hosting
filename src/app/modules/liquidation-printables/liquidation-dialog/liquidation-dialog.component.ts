@@ -5,7 +5,7 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 import { TranslocoService } from '@ngneat/transloco';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 import { PrintableDialogComponent } from '@shared/components/printable-dialog/printable-dialog.component';
-import { LiquidationPrintableData, PrintableLiquidationComponent } from '../printable-liquidation.component';
+import { LiquidationPrintableData } from '../printable-liquidation.component';
 
 import * as Excel from 'exceljs';
 import { ContractSettings } from '@shared/classes/contract-settings';
@@ -41,7 +41,6 @@ export class LiquidationDialogComponent implements OnInit {
       if (this.data.contract.type === "sales" || this.data.contract.tags.includes("sale")) {
         this.selectedFormat = this.liquidationTypes['sales liquidation'];
         this.data.totals = new LiquidationTotals(this.data.selectedTickets, this.data.contract, true);
-
       }
       else if (this.data.contract.type === "purchase" || this.data.contract.tags.includes("purchase")) {
         this.selectedFormat = this.liquidationTypes['liquidation long'];

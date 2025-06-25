@@ -79,6 +79,7 @@ export class Liquidation extends FirebaseDocInterface {
             beforeDiscounts: ticket.beforeDiscounts,
             netToPay: ticket.netToPay
         }));
+
         this.archived = data.archived;
         this.amountPaid = data.amountPaid;
         this.total = data.total;
@@ -174,6 +175,17 @@ export class Liquidation extends FirebaseDocInterface {
 
     public setTotalValue(contract: Contract): void {
         this.total = +(new LiquidationTotals(this.tickets, contract)).netToPay.toFixed(3);
+    }
+
+    public defineBushels(contract: Contract) {
+        for (const ticket of this.tickets) {
+            for (const ticketProp of Object.values(ticket)) {
+                if (ticketProp instanceof Mass) 
+                    ticketProp.defineBushels(contract.productInfo);
+                else if (ticketProp instanceof WeightDiscounts) 
+                    ticketProp.defineBushels(contract.productInfo);
+            }
+        }
     }
 }
 
