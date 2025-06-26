@@ -60,7 +60,7 @@
         <tr>
             <th [lang]="language" rowspan="2">{{ t('Gross') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Tare') | uppercase }}</th>
-            <th [lang]="language" rowspan="2">{{ t('Net') | uppercase }}</th>
+            <th [lang]="language" rowspan="2">{{ t('Net') | uppercase }}<span *ngIf="useOriginWeight"> (ORIGIN)</span></th>
             <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
         </tr>
         <tr>
