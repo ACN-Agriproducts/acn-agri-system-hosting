@@ -32,6 +32,8 @@ export class LiquidationLongComponent implements OnInit {
   public companyDoc$: Promise<Company>;
   public logoURL: string = '';
 
+  public useOriginalWeight: boolean;
+
   readonly units = UNIT_LIST;
 
   constructor(
@@ -48,6 +50,8 @@ export class LiquidationLongComponent implements OnInit {
     this.companyDoc$.then(async doc => {
       this.logoURL = await doc.getLogoURL(this.db);
     });
+
+    this.useOriginalWeight = this.data.contract.type === "purchase" && this.data.contract.paymentTerms.origin === "client-scale";
   }
 
   ngOnDestroy() {

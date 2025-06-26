@@ -144,8 +144,10 @@ export class Liquidation extends FirebaseDocInterface {
         return liquidationDoc.data();
     }
 
-    public static getTicketInfo(ticket: Ticket): TicketInfo {
+    public static getTicketInfo(ticket: Ticket, contract?: Contract): TicketInfo {
         if (ticket == null) return;
+
+        const useOriginWeight = contract?.type === "purchase" && contract?.paymentTerms.origin === "client-scale" && ticket.original_weight.get() > 0;
 
         return {
             damagedGrain: ticket.damagedGrain ?? 0,
@@ -153,16 +155,16 @@ export class Liquidation extends FirebaseDocInterface {
             dateOut: ticket.dateOut,
             displayId: ticket.displayId,
             dryWeightPercent: ticket.dryWeightPercent ?? 0,
-            gross: ticket.gross,
+            gross: useOriginWeight ? null : ticket.gross,
             id: ticket.id,
             moisture: ticket.moisture ?? 0,
-            net: ticket.net,
+            net: useOriginWeight ? ticket.original_weight : ticket.net,
             price: ticket.price ? new Price(ticket.price, ticket.net.defaultUnits) : null,
             priceDiscounts: ticket.priceDiscounts,
             ref: ticket.ref.withConverter(Ticket.converter),
             status: ticket.status,
             subId: ticket.subId ?? "",
-            tare: ticket.tare,
+            tare: useOriginWeight ? null : ticket.tare,
             weight: ticket.weight,
             weightDiscounts: ticket.weightDiscounts,
             original_weight: ticket.original_weight,

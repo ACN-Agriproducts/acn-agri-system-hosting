@@ -69,7 +69,7 @@ export class SetLiquidationPage implements OnInit {
       this.tickets = (await contract.getTickets()).map(ticket  => {
         ticket.setLiquidationData(this.discountTables, contract);
         return {
-          data: Liquidation.getTicketInfo(ticket),
+          data: Liquidation.getTicketInfo(ticket, contract),
           inReport: false
         }
       });
