@@ -6,6 +6,7 @@ import { CoreModule } from '@core/core.module';
 import { SharedModule } from "../../shared/shared.module";
 import { LiquidationDialogComponent } from './liquidation-dialog/liquidation-dialog.component';
 import { SalesLiquidationComponent } from './sales-liquidation/sales-liquidation.component';
+import { ContractPrintablesModule } from '../contract-printables/contract-printables.module';
 
 
 @NgModule({

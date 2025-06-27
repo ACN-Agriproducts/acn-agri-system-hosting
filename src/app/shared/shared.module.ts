@@ -32,6 +32,7 @@ import { DocumentUploadDialogComponent } from './components/document-upload-dial
 import { TemplateRefModule } from './template-ref';
 import { UnitSelectComponent } from './components/unit-select/unit-select.component';
 import { NewNoteComponent } from './components/new-note/new-note/new-note.component';
+import { PrintablePipesModule } from './pipes/printable-pipes/printable-pipes.pipe';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { NewNoteComponent } from './components/new-note/new-note/new-note.compon
     pricerPerUnitPipe,
     PrintableDialogComponent,
     TemplateRefModule,
-    UnitSelectComponent
+    UnitSelectComponent,
+    PrintablePipesModule
   ],
   declarations: [
     ToolbarComponent,

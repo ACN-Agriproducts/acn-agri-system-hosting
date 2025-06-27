@@ -60,7 +60,7 @@
         <tr>
             <th [lang]="language" rowspan="2">{{ t('Gross') | uppercase }}</th>
             <th [lang]="language" rowspan="2">{{ t('Tare') | uppercase }}</th>
-            <th [lang]="language" rowspan="2">{{ t('Net') | uppercase }}<span *ngIf="useOriginWeight"> (ORIGIN)</span></th>
+            <th [lang]="language" rowspan="2">{{ t('Net') | uppercase }}<span *ngIf="useOriginWeight"> ({{ t("Origin") | uppercase }})</span></th>
             <th [lang]="language" colspan="2" *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">{{ discount.key | uppercase }}</th>
         </tr>
         <tr>
@@ -77,8 +77,8 @@
         <tr *ngFor="let ticket of data.selectedTickets; even as even">
             <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.dateIn | date:'shortDate' }}</td>
             <td [class.odd]='!even' [class.even]='even' class='center'>{{ ticket.displayId }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.gross | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3') || "--" }}</td>
-            <td [class.odd]='!even' [class.even]='even' class='right'>{{ (ticket.tare | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3') || "--" }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.gross | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' | maskZeros }}</td>
+            <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.tare | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' | maskZeros }}</td>
             <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket.net | massInUnit:data.displayUnits.get('scaleUnits') | number:'1.0-3' }}</td>
             <ng-container *ngFor="let discount of data.totals.weightDiscounts | filterWeightDiscounts | keyvalue">
                 <td [class.odd]='!even' [class.even]='even' class='right'>{{ ticket[discount.key] ?? 0 | number:'1.1' }}</td>
