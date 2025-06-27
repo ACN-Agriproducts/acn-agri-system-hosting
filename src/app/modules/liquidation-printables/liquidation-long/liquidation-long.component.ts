@@ -9,12 +9,14 @@ import { Company } from '@shared/classes/company';
 import { LiquidationPrintableData } from '../printable-liquidation.component';
 
 const DEFAULT_DISPLAY_UNITS: Map<string, units> = new Map<string, units>([
-  ["weight", "lbs"],
+  ["scaleUnits", "lbs"],
   ["moisture", "CWT"],
   ["dryWeight", "CWT"],
   ["damagedGrain", "CWT"],
   ["adjustedWeight", "lbs"],
   ["price", "bu"],
+  ["weight", "CWT"],
+  ["totals", "lbs"]
 ]);
 
 @Component({
@@ -29,6 +31,8 @@ export class LiquidationLongComponent implements OnInit {
   public language: string;
   public companyDoc$: Promise<Company>;
   public logoURL: string = '';
+
+  public useOriginWeight: boolean;
 
   readonly units = UNIT_LIST;
 
@@ -46,6 +50,10 @@ export class LiquidationLongComponent implements OnInit {
     this.companyDoc$.then(async doc => {
       this.logoURL = await doc.getLogoURL(this.db);
     });
+
+    this.useOriginWeight = this.data.contract.type === "purchase" 
+      && this.data.contract.paymentTerms.origin === "client-scale" 
+      && this.data.totals.original_weight.get() > 0;
   }
 
   ngOnDestroy() {
@@ -71,6 +79,42 @@ export class WeightDiscountsPipe implements PipeTransform {
 
   transform(discounts: WeightDiscounts, product: Product | ProductInfo): Mass {
     return discounts.totalMass(product);
+  }
+
+}
+
+@Pipe({
+  name: 'filterWeightDiscounts'
+})
+export class FilterWeightDiscounts implements PipeTransform {
+
+  transform(discounts: WeightDiscounts): { [key: string]: Mass } {
+    const nonZeroDiscounts: { [key: string]: Mass } = {};
+
+    for (const [key, discount] of Object.entries(discounts)) {
+      if (discount.get() > 0) nonZeroDiscounts[key] = discount;
+    }
+
+    return nonZeroDiscounts;
+  }
+
+}
+
+@Pipe({
+  name: 'filterPriceDiscounts'
+})
+export class FilterPriceDiscounts implements PipeTransform {
+
+  transform(discounts: PriceDiscounts): { [key: string]: any } {
+    const newPriceDiscounts: any = {};
+
+    for (const key in discounts) {
+      if (typeof discounts[key] !== 'function' && typeof discounts[key] !== 'object' && discounts[key] > 0) {
+        newPriceDiscounts[key] = discounts[key];
+      }
+    }
+
+    return newPriceDiscounts;
   }
 
 }

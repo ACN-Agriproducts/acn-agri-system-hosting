@@ -1,0 +1,39 @@
+
+@media print {
+    .unit-select {
+        display: none;
+    }
+    .unit-label {
+        display: block !important;
+    }
+}
+
+.unit-select {
+    .mat-form-field {
+        font-weight: bold;
+        width: auto;
+    }
+}
+
+.unit-label {
+    display: none;
+}
+
+:host {
+    * { box-sizing: border-box; }
+}
+
+::ng-deep {
+    .unit-select {
+        .mat-input-underline {
+            display: none;
+        }
+        .mat-form-field-infix {
+            width: auto;
+        }
+    }
+}
+
+.unit-label, .unit-select {
+    white-space: nowrap;
+}

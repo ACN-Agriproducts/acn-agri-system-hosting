@@ -59,6 +59,8 @@ export class LiquidationTableComponent implements OnInit {
   }
 
   public openLiquidation(liquidation: Liquidation) {
+    liquidation.defineBushels(this.contract);
+    
     this.dialog.open(LiquidationDialogComponent, {
       data: {
         selectedTickets: liquidation.tickets,

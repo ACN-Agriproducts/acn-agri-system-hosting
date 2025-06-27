@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { TitleCasePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { MatLegacyAutocompleteSelectedEvent } from '@angular/material/legacy-autocomplete';
 import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
@@ -90,8 +91,10 @@ export class SetDiscountTableDialogComponent implements OnInit {
     }
   }
 
-  setName(fieldName: string) {
-    this.table.name = this.titleCasePipe.transform(fieldName);
+  setName(fieldName: string | MatLegacyAutocompleteSelectedEvent) {
+    this.table.name = typeof fieldName === "string"
+    ? this.titleCasePipe.transform(fieldName)
+    : this.titleCasePipe.transform(fieldName.option.value);
   }
 
   resetHeaderType(header: DiscountTableHeader) {
