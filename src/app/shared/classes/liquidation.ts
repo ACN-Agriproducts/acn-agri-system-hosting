@@ -206,12 +206,11 @@ export class LiquidationTotals {
         this.gross = this.tare = this.net = this.adjustedWeight = this.original_weight = new Mass(0, FirebaseDocInterface.session.getDefaultUnit(), contract.productInfo);
         tickets.forEach(ticket => {
             const price = ticket.price ?? contract.price;
-            const massToUse = ticket.original_weight?.get() > 0 ? ticket.original_weight : ticket.net;
 
             this.gross = this.gross.add(ticket.gross);
             this.tare = this.tare.add(ticket.tare);
-            this.net = this.net.add(contract.paymentTerms.origin === "client-scale" && contract.type === "purchase" ? massToUse : ticket.net);
             this.original_weight = this.original_weight.add(ticket.original_weight);
+            this.net = this.net.add(ticket.net);
 
             for (const key of Object.keys(ticket.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);
@@ -232,7 +231,7 @@ export class LiquidationTotals {
             }
 
             if (isSalesLiquidation) {
-                this.netToPay += this.roundAmount((massToUse.get() || ticket.net.get()) * (price.getPricePerUnit(massToUse.getUnit(), contract.quantity)), 3);
+                this.netToPay += this.roundAmount((ticket.net.get()) * (price.getPricePerUnit(ticket.net.getUnit(), contract.quantity)), 3);
             }
             else {
                 this.netToPay += this.roundAmount(tempBeforeFinalDiscounts - ticket.priceDiscounts.total(), 3);
