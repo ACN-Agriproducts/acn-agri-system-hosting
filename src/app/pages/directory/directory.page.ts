@@ -11,6 +11,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { ContactService } from '@shared/model-services/contact/contact.service';
 
 @Component({
   selector: 'app-directory',
@@ -36,7 +37,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
     private navController: NavController,
     private session: SessionInfo,
     private snack: SnackbarService,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private contactService: ContactService
   ) { }
 
   ngOnInit() {
@@ -44,7 +46,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.permissions = this.session.getPermissions();
     this.company = Company.getCompanyValueChanges(this.db, this.session.getCompany());
     this.session.getCompanyObject().then(result => {
-      this.contactList = result.contactList.sort((a,b) => {
+      this.contactList = result.contactList.filter(contact => contact.archived).sort((a,b) => {
         if(a.name.toUpperCase() < b.name.toUpperCase()) return -1;
         if(a.name.toUpperCase() > b.name.toUpperCase()) return 1;
         return 0
@@ -263,6 +265,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(TruckerFieldsDialog, {
       data: contact
     });
+  }
+
+  public async archive(companyContact: CompanyContact) {
+    this.contactService.archive(companyContact);
   }
 }
 

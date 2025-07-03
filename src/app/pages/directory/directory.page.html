@@ -29,7 +29,7 @@
 		</div>
 		<ion-card>
 			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactList | search:searchResults:searchQuery:contactType:deliveryCity:contactType)?.length ?? 0 }})</div>
-				<cdk-virtual-scroll-viewport itemSize="64" *ngIf="contactList" minBufferPx="300">
+				<cdk-virtual-scroll-viewport itemSize="64" *ngIf="contactList" minBufferPx="300" maxBufferPx="400">
 					<div class="content-item" (contextmenu)="openOptions($event)"
 						*cdkVirtualFor="let contact of (contactList | search:searchResults:searchQuery:contactType:deliveryCity:contactType); let i = index">
 						<ion-item (click)="nav('dashboard/directory/contact/' + contact.id)" button >
@@ -52,9 +52,9 @@
 								<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 									<ion-icon name="create-outline"></ion-icon>
 								</ion-button>
-								<!-- <ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
+								<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact)">
 									<ion-icon name="archive-outline"></ion-icon>
-								</ion-button> -->
+								</ion-button>
 							</ion-buttons>
 						</ion-item>
 					</div>

@@ -144,6 +144,7 @@ export class CompanyContact {
     id: string;
     tags: string[];
     name: string;
+    archived: boolean;
 
     constructor(data: any) {
         this.id = data.id;
