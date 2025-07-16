@@ -16,6 +16,7 @@ import { NewNoteComponent } from '@shared/components/new-note/new-note/new-note.
 import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
 import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
+import { ContactService } from '@shared/model-services/contact/contact.service';
 
 @Component({
 	selector: 'app-contact',
@@ -65,6 +66,7 @@ export class ContactPage implements OnInit {
 		private snack: SnackbarService,
 		private navController: NavController,
 		private dialog: MatDialog,
+		private contactService: ContactService
 	) { }
 
 	ngOnInit() {
@@ -242,8 +244,11 @@ export class ContactPage implements OnInit {
 		});
 	}
 
-	public archive(): void {
+	public async archive(): Promise<void> {
+		const archived = await this.contactService.archive(this.contact);
+		if (!archived) return;
 
+		this.navController.back();
 	}
 
 	public async infiniteDocuments(event: any) {

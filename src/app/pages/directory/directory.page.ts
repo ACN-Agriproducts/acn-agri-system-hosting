@@ -269,8 +269,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   public async archive(companyContact: CompanyContact) {
-    const newContact = await this.contactService.archive(companyContact);
-    if (!newContact) return;
+    const archived = await this.contactService.archive(companyContact);
+    if (!archived) return;
 
     this.search(this.searchTerms);
   }
