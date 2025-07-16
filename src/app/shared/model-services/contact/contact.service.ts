@@ -1,22 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
+import { collection, CollectionReference, Firestore } from '@angular/fire/firestore';
 import { CompanyService } from '@core/services/company/company.service';
-import { CompanyContact } from '@shared/classes/company';
+import { ConfirmationDialogService } from '@core/services/confirmation-dialog/confirmation-dialog.service';
+import { SnackbarService } from '@core/services/snackbar/snackbar.service';
+import { Company, CompanyContact } from '@shared/classes/company';
 import { Contact } from '@shared/classes/contact';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
-  private contactList: Contact[];
   private companyContactList: CompanyContact[];
 
   constructor(
     private db: Firestore,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private snack: SnackbarService,
+    private confirm: ConfirmationDialogService
   ) { }
 
-  public getList(): CompanyContact[] {
+  public getCollectionReference(): CollectionReference {
+    return collection(this.companyService.getCompanyReference(), 'directory').withConverter(Contact.converter);
+  }
+
+  public getCompanyContacts(): CompanyContact[] {
+    return this.companyContactList ??= this.companyService.getContactsList().filter(contact => !contact.tags.includes('archived'));
+  }
+  
+
+  public getAllCompanyContacts(): CompanyContact[] {
     return this.companyContactList ??= this.companyService.getContactsList();
   }
 
@@ -24,17 +36,28 @@ export class ContactService {
     return Contact.getDoc(this.db, this.companyService.getCompany().name, contactId);
   }
 
-  public async archive(contact: Contact | CompanyContact): Promise<void> {
-    const id = contact instanceof Contact ? contact.ref.id : contact.id;
-    contact = await this.getContactFromId(id);
+  public async archive(contact: Contact | CompanyContact): Promise<boolean> {
+    const confirmed = await this.confirm.openDialog(`archive ${contact.name}`);
+    if (!confirmed) return;
 
-    contact.update({ archived: true })
-    .then(() => {
-        contact.archived = true;
-    })
-    .catch((e) => {
-        contact.archived = false;
-        console.error(e);
-    });
+    const contactToUpdate = contact instanceof CompanyContact ? await this.getContactFromId(contact.id) : contact;
+
+    const newTags = contact.tags;
+    newTags.push("archived");
+
+    let archived: boolean;
+    try {
+      await contactToUpdate.update({ tags: newTags });
+      contact.tags = newTags;
+      this.snack.openTranslated("contact-update-success", "success");
+      archived = true;
+    }
+    catch (e) {
+      console.error(e);
+      this.snack.openTranslated("Could not update the contact.", "error");
+      archived = false;
+    }
+
+    return archived;
   }
 }
