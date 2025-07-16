@@ -17,8 +17,11 @@
 										<ion-button color="primary" (click)="edit()">
 											<ion-icon name="create-outline"></ion-icon>
 										</ion-button>
-										<ion-button color="danger" (click)="archive()">
+										<ion-button color="danger" (click)="archive()" *ngIf="!contact.tags.includes('archived')">
 											<ion-icon name="archive-outline"></ion-icon>
+										</ion-button>
+										<ion-button color="primary" (click)="unarchive()" *ngIf="contact.tags.includes('archived') && permissions.admin">
+											<ion-icon name="arrow-undo-outline"></ion-icon>
 										</ion-button>
 									</ion-buttons>
 								</div>

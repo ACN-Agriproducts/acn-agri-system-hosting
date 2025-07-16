@@ -9,7 +9,7 @@
 					<mat-option>None</mat-option>
 					<mat-option value="client">{{t('Client')}}</mat-option>
 					<mat-option value="trucker">{{t('Trucker')}}</mat-option>
-					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option">{{option | titlecase}}</mat-option>
+					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option" [hidden]="option === 'archived' && !permissions.admin">{{option | titlecase}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field appearance="fill" *ngIf="contactType == 'trucker'">
@@ -52,8 +52,11 @@
 								<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 									<ion-icon name="create-outline"></ion-icon>
 								</ion-button>
-								<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact)">
+								<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact)" *ngIf="!contact.tags.includes('archived')">
 									<ion-icon name="archive-outline"></ion-icon>
+								</ion-button>
+								<ion-button color="primary" (click)="$event.stopPropagation(); unarchive(contact)" *ngIf="contact.tags.includes('archived') && permissions.admin">
+									<ion-icon name="arrow-undo-outline"></ion-icon>
 								</ion-button>
 							</ion-buttons>
 						</ion-item>

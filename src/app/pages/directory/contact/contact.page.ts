@@ -58,7 +58,10 @@ export class ContactPage implements OnInit {
 		onClick: () => {
 			this.newNote();
 		}
-	}]
+	}];
+
+	public permissions;
+
 	constructor(
 		private db: Firestore,
 		private route: ActivatedRoute,
@@ -74,6 +77,7 @@ export class ContactPage implements OnInit {
 		this.currentPlant = this.session.getPlant();
 		this.id = this.route.snapshot.paramMap.get('id');
 		this.displayUnit = this.session.getDisplayUnit();
+		this.permissions = this.session.getPermissions();
 
 		Contact.getDoc(this.db, this.currentCompany, this.id)
 		.then(async contact => {
@@ -247,6 +251,13 @@ export class ContactPage implements OnInit {
 	public async archive(): Promise<void> {
 		const archived = await this.contactService.archive(this.contact);
 		if (!archived) return;
+
+		this.navController.back();
+	}
+
+	public async unarchive(): Promise<void> {
+		const unarchived = await this.contactService.unarchive(this.contact);
+		if (!unarchived) return;
 
 		this.navController.back();
 	}

@@ -274,6 +274,13 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
     this.search(this.searchTerms);
   }
+
+  public async unarchive(companyContact: CompanyContact) {
+    const unarchived = await this.contactService.unarchive(companyContact);
+    if (!unarchived) return;
+
+    this.search(this.searchTerms);
+  }
 }
 
 @Pipe({

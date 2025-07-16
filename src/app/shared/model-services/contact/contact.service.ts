@@ -60,4 +60,29 @@ export class ContactService {
 
     return archived;
   }
+
+  public async unarchive(contact: Contact | CompanyContact): Promise<boolean> {
+    const confirmed = await this.confirm.openDialog(`archive ${contact.name}`);
+    if (!confirmed) return;
+
+    const contactToUpdate = contact instanceof CompanyContact ? await this.getContactFromId(contact.id) : contact;
+
+    const newTags = contact.tags;
+    newTags.splice(newTags.findIndex(tag => tag === 'archived'), 1);
+
+    let unarchived: boolean;
+    try {
+      await contactToUpdate.update({ tags: newTags });
+      contact.tags = newTags;
+      this.snack.openTranslated("contact-update-success", "success");
+      unarchived = true;
+    }
+    catch (e) {
+      console.error(e);
+      this.snack.openTranslated("Could not update the contact.", "error");
+      unarchived = false;
+    }
+
+    return unarchived;
+  }
 }
