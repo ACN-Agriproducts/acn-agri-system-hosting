@@ -703,8 +703,9 @@ export class PaymentTerms {
     constructor(data: any) {
         this.before = data.before;
         this.measurement = data.measurement;
-        this.origin = typeof data.origin == "string" ? data.origin:
-            data.origin ? "own-scale" : "client-scale";
+        this.origin = typeof data.origin == "string" ? data.origin :
+            (data.origin ?? true) ? "own-scale" 
+                : "client-scale";
         this.paymentTerms = data.paymentTerms;
     }
 
