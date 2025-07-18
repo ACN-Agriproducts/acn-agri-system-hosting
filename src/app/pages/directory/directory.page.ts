@@ -127,7 +127,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   public search(event: any): void {
-    const searchValue = typeof event === "string" ? event : event.detail.value;
+    const searchValue = typeof event === "string" ? event : event?.detail.value ?? "";
     this.searchQuery = new RegExp('^' + searchValue.trim().toUpperCase() + '.*', 'i');
   }
 

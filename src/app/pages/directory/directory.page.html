@@ -52,7 +52,7 @@
 								<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 									<ion-icon name="create-outline"></ion-icon>
 								</ion-button>
-								<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact)" *ngIf="!contact.tags.includes('archived')">
+								<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact)" *ngIf="!contact.tags.includes('archived') && (permissions.admin || permissions.directory.archiveContact)">
 									<ion-icon name="archive-outline"></ion-icon>
 								</ion-button>
 								<ion-button color="primary" (click)="$event.stopPropagation(); unarchive(contact)" *ngIf="contact.tags.includes('archived') && permissions.admin">
