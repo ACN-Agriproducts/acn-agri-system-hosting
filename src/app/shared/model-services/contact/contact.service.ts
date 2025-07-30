@@ -62,7 +62,7 @@ export class ContactService {
   }
 
   public async unarchive(contact: Contact | CompanyContact): Promise<boolean> {
-    const confirmed = await this.confirm.openDialog(`archive ${contact.name}`);
+    const confirmed = await this.confirm.openDialog(`unarchive ${contact.name}`);
     if (!confirmed) return;
 
     const contactToUpdate = contact instanceof CompanyContact ? await this.getContactFromId(contact.id) : contact;
