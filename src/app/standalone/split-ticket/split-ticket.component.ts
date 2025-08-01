@@ -69,7 +69,7 @@ export class SplitTicketComponent implements OnInit {
         this.db, 
         this.session.getCompany(), 
         ticketContract.type,
-        where('client', '==', ticketContract.client),
+        // where('client', '==', ticketContract.client),
         where('status', '==', 'active'),
         where('product', '==', ticketContract.product));
     });
