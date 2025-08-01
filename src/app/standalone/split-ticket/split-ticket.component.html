@@ -50,7 +50,8 @@
           <ng-template #contractField>
             <mat-form-field>
               <mat-select [(ngModel)]="ticket.contractId" (ngModelChange)="ticketContractChange()">
-                <mat-option *ngFor="let contract of possibleContracts" [value]="contract.ref.id">{{contract.id}}</mat-option>
+                <mat-select-trigger>{{ contract.id }}</mat-select-trigger>
+                <mat-option *ngFor="let contract of possibleContracts" [value]="contract.ref.id">{{contract.id}}: {{ contract.clientName }}</mat-option>
               </mat-select>
             </mat-form-field>
           </ng-template>
