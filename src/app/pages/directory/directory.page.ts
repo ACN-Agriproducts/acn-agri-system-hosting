@@ -11,6 +11,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { Company, CompanyContact } from '@shared/classes/company';
 import { TruckerFieldsDialog } from './components/trucker-fields-dialog/trucker-fields.dialog';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { ContactService } from '@shared/model-services/contact/contact.service';
 
 @Component({
   selector: 'app-directory',
@@ -28,6 +29,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
   public permissions;
 
+  public searchTerms: string;
+
   @ViewChild(CdkVirtualScrollViewport) view: CdkVirtualScrollViewport;
 
   constructor(
@@ -36,21 +39,18 @@ export class DirectoryPage implements OnInit, OnDestroy {
     private navController: NavController,
     private session: SessionInfo,
     private snack: SnackbarService,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private contactService: ContactService
   ) { }
 
   ngOnInit() {
     this.currentCompany = this.session.getCompany();
     this.permissions = this.session.getPermissions();
     this.company = Company.getCompanyValueChanges(this.db, this.session.getCompany());
-    this.session.getCompanyObject().then(result => {
-      this.contactList = result.contactList.sort((a,b) => {
-        if(a.name.toUpperCase() < b.name.toUpperCase()) return -1;
-        if(a.name.toUpperCase() > b.name.toUpperCase()) return 1;
-        return 0
-      });
-
-      
+    this.contactList = this.contactService.getAllCompanyContacts().sort((a, b) => {
+      if (a.name.toUpperCase() < b.name.toUpperCase()) return -1;
+      if (a.name.toUpperCase() > b.name.toUpperCase()) return 1;
+      return 0;
     });
 
     setTimeout(() => this.view.checkViewportSize(), 1000)
@@ -127,16 +127,19 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   public search(event: any): void {
-    this.searchQuery = new RegExp('^' + event.detail.value.trim().toUpperCase() + '.*', 'i');
+    const searchValue = typeof event === "string" ? event : event?.detail.value ?? "";
+    this.searchQuery = new RegExp('^' + searchValue.trim().toUpperCase() + '.*', 'i');
   }
 
   public searchResults(list: CompanyContact[], searchQuery: RegExp, contactType: string, deliveryCity: string): CompanyContact[] {
     let result = list?.filter(contact => contact?.name?.match(searchQuery)) ?? [];
     if(contactType) result = result.filter(contact => contact.tags.includes(contactType));
+    else result = result.filter(contact => !contact.tags.includes('archived'));
     // if(contactType == "trucker" && deliveryCity) {
     //   const destinationQuery = new RegExp('^' + deliveryCity.trim().toUpperCase() + '.*', 'i')
     //   result = result.filter(contact => contact?.destinations?.some(d => d.toUpperCase().match(destinationQuery)))
     // }
+
     return result;
   }
 
@@ -263,6 +266,20 @@ export class DirectoryPage implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(TruckerFieldsDialog, {
       data: contact
     });
+  }
+
+  public async archive(companyContact: CompanyContact) {
+    const archived = await this.contactService.archive(companyContact);
+    if (!archived) return;
+
+    this.search(this.searchTerms);
+  }
+
+  public async unarchive(companyContact: CompanyContact) {
+    const unarchived = await this.contactService.unarchive(companyContact);
+    if (!unarchived) return;
+
+    this.search(this.searchTerms);
   }
 }
 
