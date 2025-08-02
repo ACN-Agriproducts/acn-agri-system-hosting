@@ -49,8 +49,9 @@
           <span *ngIf="first; else contractField"><b>{{data.contractID}}</b></span>
           <ng-template #contractField>
             <mat-form-field>
-              <mat-select [(ngModel)]="ticket.contractId" (ngModelChange)="ticketContractChange()">
-                <mat-option *ngFor="let contract of possibleContracts" [value]="contract.ref.id">{{contract.id}}</mat-option>
+              <mat-select [(ngModel)]="ticket.contractRefId" (ngModelChange)="ticketContractChange()">
+                <mat-select-trigger>{{ ticket.contractId }}</mat-select-trigger>
+                <mat-option *ngFor="let contract of possibleContracts" [value]="contract.ref.id">{{contract.id}}: {{ contract.clientName }}</mat-option>
               </mat-select>
             </mat-form-field>
           </ng-template>
