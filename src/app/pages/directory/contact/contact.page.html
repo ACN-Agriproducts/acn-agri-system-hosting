@@ -38,12 +38,13 @@
 												|| (contact.state ?? '') != '' || (contact.zipCode ?? '') != ''"
 												[ngIfElse]="noEntry"
 											>
-												<span *ngIf="(contact.streetAddress ?? '') != ''">{{ contact.streetAddress | titlecase }}
+												<span *ngIf="(contact.streetAddress ?? '') != ''">{{ contact.streetAddress }}
 												<br>
 												</span>
 												<span *ngIf="(contact.city ?? '') != ''">{{ contact.city | titlecase }}</span>
 												<span *ngIf="(contact.state ?? '') != ''">, {{ contact.state | titlecase | stateAbbreviation }}</span>
-												<span *ngIf="(contact.zipCode ?? '') != ''">, {{ contact.zipCode }}</span>
+												&nbsp;
+												<span *ngIf="(contact.zipCode ?? '') != ''"> {{ contact.zipCode }}</span>
 											</ng-template>
 										</ion-label>
 									</ion-item>
@@ -71,7 +72,7 @@
 									<ion-item>
 										<ion-icon name="mail-outline" slot="start"></ion-icon>
 										<ion-label>
-											<span *ngIf="(primaryContact?.email ?? '') !== '' else noEntry">{{ primaryContact?.email | lowercase }}</span>
+											<span *ngIf="(primaryContact?.email ?? '') !== '' else noEntry">{{ primaryContact?.email }}</span>
 										</ion-label>
 									</ion-item>
 								</ion-list>
@@ -95,7 +96,7 @@
 										<span *ngIf="(metacontact.phone ?? '') !== '' else noEntry">{{ metacontact.phone }}</span>
 									</div>
 									<div>
-										<span *ngIf="(metacontact.email ?? '') !== '' else noEntry">{{ metacontact.email | lowercase }}</span>
+										<span *ngIf="(metacontact.email ?? '') !== '' else noEntry">{{ metacontact.email }}</span>
 									</div>
 								</div>
 							</ion-card-content>
