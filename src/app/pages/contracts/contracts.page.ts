@@ -12,6 +12,7 @@ import { ContractSettings } from '@shared/classes/contract-settings';
 import { units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
+import { ContractsService } from '@shared/model-services/contracts.service';
 
 @Component({
   selector: 'app-contracts',
@@ -55,7 +56,8 @@ export class ContractsPage implements AfterViewInit {
     private db: Firestore,
     private session: SessionInfo,
     private navController: NavController,
-    private transloco: TranslocoService
+    private transloco: TranslocoService,
+    private contractsService: ContractsService
   ) { }
 
   ngAfterViewInit() {
@@ -344,5 +346,17 @@ export class ContractsPage implements AfterViewInit {
 
   public tableTranslate(key: string): string {
     return this.transloco.translate("contracts.table." + key);
+  }
+
+  public async tempContractScript() {
+    const contracts = await this.contractsService.getList({
+      type: ['purchase'],
+      orderField: 'date',
+      sortOrder: 'asc',
+      afterDate: new Date('10/7/2024'),
+      beforeDate: new Date()
+    });
+
+    console.log(contracts)
   }
 }
