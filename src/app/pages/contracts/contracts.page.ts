@@ -349,6 +349,15 @@ export class ContractsPage implements AfterViewInit {
   }
 
   public async tempContractScript() {
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+    const contractsByMonthMap: {
+      [month: string]: {
+        contracts: { contract: Contract, toBeDelivered: number }[],
+        toBeDeliveredTotal: number
+      }
+    } = {};
+
     const contracts = await this.contractsService.getList({
       type: ['purchase'],
       orderField: 'date',
@@ -357,6 +366,20 @@ export class ContractsPage implements AfterViewInit {
       beforeDate: new Date()
     });
 
-    console.log(contracts)
+    contracts.forEach(contract => {
+      const month = months[contract.date.getMonth()];
+
+      if (!contractsByMonthMap[month]) contractsByMonthMap[month] = {
+        contracts: [],
+        toBeDeliveredTotal: 0
+      };
+
+      const toBeDelivered = contract.quantity.subtract(contract.currentDelivered).get();
+
+      contractsByMonthMap[month].contracts.push({ contract, toBeDelivered });
+      contractsByMonthMap[month].toBeDeliveredTotal += toBeDelivered;
+    });
+
+    console.log(contractsByMonthMap)
   }
 }
