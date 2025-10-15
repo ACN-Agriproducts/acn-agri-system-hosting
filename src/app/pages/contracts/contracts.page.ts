@@ -350,10 +350,11 @@ export class ContractsPage implements AfterViewInit {
 
   public async tempContractScript() {
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
+    const promises: Promise<any>[] = [];
 
     const contractsByMonthMap: {
       [month: string]: {
-        contracts: { contract: Contract, toBeDelivered: number }[],
+        contracts: { [contractId: number]: number }
         toBeDeliveredTotal: number
       }
     } = {};
@@ -366,20 +367,22 @@ export class ContractsPage implements AfterViewInit {
       beforeDate: new Date()
     });
 
-    contracts.forEach(contract => {
+    for (const contract of contracts) {
       const month = months[contract.date.getMonth()];
 
       if (!contractsByMonthMap[month]) contractsByMonthMap[month] = {
-        contracts: [],
+        contracts: {},
         toBeDeliveredTotal: 0
       };
 
       const toBeDelivered = contract.quantity.subtract(contract.currentDelivered).get();
 
-      contractsByMonthMap[month].contracts.push({ contract, toBeDelivered });
-      contractsByMonthMap[month].toBeDeliveredTotal += toBeDelivered;
-    });
+      console.table(await contract.getTickets())
 
-    console.log(contractsByMonthMap)
+      contractsByMonthMap[month].contracts[contract.id] = toBeDelivered;
+      contractsByMonthMap[month].toBeDeliveredTotal += toBeDelivered;
+    }
+
+    console.table(contractsByMonthMap)
   }
 }
