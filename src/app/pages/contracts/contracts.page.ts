@@ -348,41 +348,79 @@ export class ContractsPage implements AfterViewInit {
     return this.transloco.translate("contracts.table." + key);
   }
 
-  public async tempContractScript() {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
-    const promises: Promise<any>[] = [];
-
-    const contractsByMonthMap: {
-      [month: string]: {
-        contracts: { [contractId: number]: number }
-        toBeDeliveredTotal: number
+  public async getYtdToBeDeliveredDataForContracts() {
+    const contractsMap: {
+      [contractId: number]: {
+        contractAmount: number,
+        toBeDeliveredByMonthMap: {
+          [month: typeof months[number]]: number,
+        }
       }
     } = {};
+
+    // test years 2022 - 2023
+    const startDate = new Date();
+    const endDate = new Date();
+
+    startDate.setFullYear(startDate.getFullYear() - 1);
+    startDate.setDate(1);
+    endDate.setDate(1);
+    
+    const months = this.getMonths(startDate, endDate);
 
     const contracts = await this.contractsService.getList({
       type: ['purchase'],
       orderField: 'date',
       sortOrder: 'asc',
-      afterDate: new Date('10/7/2024'),
-      beforeDate: new Date()
+      afterDate: startDate,
+      beforeDate: endDate
     });
 
     for (const contract of contracts) {
-      const month = months[contract.date.getMonth()];
-
-      if (!contractsByMonthMap[month]) contractsByMonthMap[month] = {
-        contracts: {},
-        toBeDeliveredTotal: 0
+      contractsMap[contract.id] = {
+        contractAmount: contract.quantity.get(),
+        toBeDeliveredByMonthMap: {}
       };
 
-      const toBeDelivered = contract.quantity.subtract(contract.currentDelivered).get();
+      for (const month of months) {
+        contractsMap[contract.id].toBeDeliveredByMonthMap[month] = contract.quantity.get();
+      }
 
-      console.table(await contract.getTickets())
+      const tickets = await contract.getTickets();
+      tickets.sort((a, b) => a.dateIn.getTime() - b.dateIn.getTime())
 
-      contractsByMonthMap[month].contracts[contract.id] = toBeDelivered;
-      contractsByMonthMap[month].toBeDeliveredTotal += toBeDelivered;
+      console.log(`SCANNING CONTRACT #${contract.id}...`)
+
+      for (const ticket of tickets) {
+        const ticketMonth = months[ticket.dateIn.getMonth()];
+        contractsMap[contract.id].toBeDeliveredByMonthMap[ticketMonth] -= ticket.net.get();
+      }
     }
 
-    console.table(contractsByMonthMap)
+    return contractsMap;
+  }
+
+  getMonths(startDate: Date, endDate: Date): string[] {
+    const months: string[] = [];
+    
+    for (let tempDate = new Date(startDate); tempDate.getTime() < endDate.getTime(); tempDate.setMonth(tempDate.getMonth() + 1)) {
+      months.push(tempDate.toLocaleDateString('default', { month: 'short' }));
+    }
+
+    return months;
+  }
+
+  outputDataToExcel(data: any) {
+    // const workbook = 
+
+  }
+
+  async tempContractScript() {
+    console.log("STARTING SCRIPT...");
+
+    const toBeDeliveredDataForContracts = await this.getYtdToBeDeliveredDataForContracts();
+    console.log(toBeDeliveredDataForContracts)
+
+    this.outputDataToExcel(toBeDeliveredDataForContracts);
   }
 }
