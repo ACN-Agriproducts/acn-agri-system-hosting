@@ -14,7 +14,7 @@
         <ion-icon slot='end' name="checkmark-outline"></ion-icon>
       </ion-item>
     </ng-container>
-    <ng-container *ngIf="contract.status != 'closed' || contract.pdfReference || userPermissions.admin">
+    <ng-container *ngIf="(contract.status != 'closed' && contract.status != 'paid') || contract.pdfReference || userPermissions.admin">
       <ion-item lines="none" button (click)="signedContract()">
         {{ t('File') }}
         <ion-icon slot='end' name="cloud-upload-outline"></ion-icon>
