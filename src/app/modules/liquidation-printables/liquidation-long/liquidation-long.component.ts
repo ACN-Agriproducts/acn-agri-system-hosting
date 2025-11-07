@@ -54,6 +54,8 @@ export class LiquidationLongComponent implements OnInit {
     this.useOriginWeight = this.data.contract.type === "purchase" 
       && this.data.contract.paymentTerms.origin === "client-scale" 
       && this.data.totals.original_weight.get() > 0;
+
+    console.log(this.data.selectedTickets, this.data.totals.priceDiscounts)
   }
 
   ngOnDestroy() {
