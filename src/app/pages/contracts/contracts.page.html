@@ -174,14 +174,14 @@
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getMassDisplayTooltip(contract.currentDelivered)"
                                 matTooltipClass="multiline-tooltip">
-                                {{contract.currentDelivered | massDisplay:2:displayUnit}}
+                                {{ contract.currentDelivered | massDisplay:2:displayUnit }}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
                                 [matTooltip]="getMassDisplayTooltip(contract.quantity)"
                                 matTooltipClass="multiline-tooltip">
-                                {{!contract.isOpen || contract.status == 'closed' || contract.status == 'paid' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-'}}
+                                {{ !contract.isOpen || contract.status == 'closed' || contract.status == 'paid' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-' }}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
@@ -193,7 +193,7 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark">
-                                {{ !contract.isOpen || contract.status == 'closed' ? ((contract.quantity | massInUnit:contract.price.unit) * (contract.price | pricePerUnit:null:contract.quantity) | currency) : '-'}}
+                                {{ !contract.isOpen || contract.status == 'closed' ? ((contract.quantity | massInUnit:contract.price.unit) * (contract.price | pricePerUnit:null:contract.quantity) | currency) : '-' }}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none" class="ion-hide-md-down">
