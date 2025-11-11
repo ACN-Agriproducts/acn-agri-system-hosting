@@ -172,14 +172,14 @@
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
-                                [matTooltip]="getDeliveredTooltip(contract)"
+                                [matTooltip]="getMassDisplayTooltip(contract.currentDelivered)"
                                 matTooltipClass="multiline-tooltip">
                                 {{contract.currentDelivered | massDisplay:2:displayUnit}}
                             </ion-text>
                         </ion-item>
                         <ion-item lines="none">
                             <ion-text class="item-text-price" color="dark"
-                                [matTooltip]="getQuantityTooltip(contract)"
+                                [matTooltip]="getMassDisplayTooltip(contract.quantity)"
                                 matTooltipClass="multiline-tooltip">
                                 {{!contract.isOpen || contract.status == 'closed' || contract.status == 'paid' ? (contract.quantity | massDisplay:2:displayUnit:contract.quantity.amount:contract.quantity.defaultUnits) : '-'}}
                             </ion-text>

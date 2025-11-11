@@ -1,6 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import { Mass, units } from '@shared/classes/mass';
 
+@Injectable({
+  providedIn: 'root'
+})
 @Pipe({
   name: 'massDisplay'
 })
