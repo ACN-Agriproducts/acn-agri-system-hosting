@@ -316,9 +316,9 @@ export class ContractsPage implements AfterViewInit {
   }
 
   public getMassDisplayTooltip(mass: Mass): string {
-    return `${this.massDisplayPipe.transform(mass, 3, 'lbs')} lbs
-    ${this.massDisplayPipe.transform(mass, 3, 'bu')} bu
-    ${this.massDisplayPipe.transform(mass, 3, 'mTon')} mTon`;
+    return `${this.massDisplayPipe.transform(mass, 3, 'lbs')}
+    ${this.massDisplayPipe.transform(mass, 3, 'bu')}
+    ${this.massDisplayPipe.transform(mass, 3, 'mTon')}`;
   }
 
   public exportSelect(checked: any, contract: Contract) {
