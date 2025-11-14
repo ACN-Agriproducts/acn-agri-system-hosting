@@ -62,7 +62,7 @@ export class ContractModalOptionsComponent implements OnInit {
       docType: this.transloco.translate("contracts." + "Signed Contract"),
       hasDoc: this.contract.pdfReference != null,
       pdfRef,
-      uploadable: this.contract.status !== 'closed'
+      uploadable: (this.contract.status !== 'closed' && this.contract.status != 'paid') || this.userPermissions.admin
     };
 
     const dialogRef = this.dialog.open(UploadDocumentDialogComponent, {
