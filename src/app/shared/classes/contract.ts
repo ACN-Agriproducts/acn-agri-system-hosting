@@ -279,7 +279,13 @@ export class Contract extends FirebaseDocInterface {
         this.futurePriceBase = new Price(data.futurePriceBase, data.futurePriceBaseUnit ?? 'bu');
         this.companyInfo = data.companyInfo;
 
-        this.statusDates = data.statusDates ?? {
+        this.statusDates = data.statusDates ?
+        {
+            active: data.statusDates.active?.toDate(),
+            closed: data.statusDates.closed?.toDate(),
+            cancelled: data.statusDates.cancelled?.toDate(),
+        }
+        : {
             active: null,
             closed: null,
             cancelled: null,
