@@ -141,6 +141,7 @@
       <tr>
         <th>{{ t('Date') }}</th>
         <th>{{ t('ID') }}</th>
+        <th>{{ t('Original Ticket') }}</th>
         <th>{{ t('Client') }}</th>
         <th>{{ t('Contract') }}</th>
         <th>{{ t('Lot #') }}</th>
@@ -150,10 +151,12 @@
         <th>{{ t('Net') }}</th>
         <th>{{ t('Moisture') }}</th>
         <th>{{ t('Plates') }}</th>
+        <th>{{ t('Driver') }}</th>
       </tr>
       <tr *ngFor="let ticket of ticketList.value">
         <td>{{ticket.dateOut | date:'shortDate'}}</td>
         <td>{{ticket.displayId}}</td>
+        <td>{{ticket.original_ticket}}</td>
         <td>{{ticket.clientName}}</td>
         <td>{{ticket.contractID}}</td>
         <td>{{ticket.lot}}</td>
@@ -163,6 +166,7 @@
         <td class="num">{{ticket.net | massInUnit:displayUnit  | number:'0.3'}}</td>
         <td class="num">{{ticket.moisture | number:'0.1'}}</td>
         <td>{{ticket.plates}}</td>
+        <td>{{ticket.driver}}</td>
 
       </tr>
       <tr class="totals-row">
@@ -175,6 +179,7 @@
         <td></td>
         <td></td>
         <td class="num">{{totals.products.net[ticketList.key] | massInUnit:displayUnit | number:'0.0-3'}}</td>
+        <td></td>
         <td></td>
         <td></td>
       </tr>

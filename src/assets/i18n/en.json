@@ -426,7 +426,9 @@
             "Storage": "Storage",
             "Attachments": "Attachments",
             "Ticket Photos": "Ticket Photos",
-            "Lot #": "Lot #"
+            "Lot #": "Lot #",
+            "Original Ticket": "Original Ticket",
+            "Driver": "Driver"
         },
         "report": {
             "Ticket Report": "Ticket Report",
