@@ -426,7 +426,9 @@
             "Storage": "Almacenamiento",
             "Attachments": "Archivos Adjuntos",
             "Ticket Photos": "Fotos de Boleta",
-            "Lot #": "Lote #"
+            "Lot #": "Lote #",
+            "Original Ticket": "Boleta Original",
+            "Driver": "Chofer"
         },
         "report": {
             "Ticket Report": "Reporte de Boletas",
