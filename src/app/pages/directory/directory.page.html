@@ -9,7 +9,7 @@
 					<mat-option>None</mat-option>
 					<mat-option value="client">{{t('Client')}}</mat-option>
 					<mat-option value="trucker">{{t('Trucker')}}</mat-option>
-					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option">{{option | titlecase}}</mat-option>
+					<mat-option *ngFor="let option of (company | async)?.companyTags" [value]="option" [hidden]="option === 'archived' && !permissions.admin">{{option | titlecase}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field appearance="fill" *ngIf="contactType == 'trucker'">
@@ -19,7 +19,7 @@
 					<mat-icon>close</mat-icon>
 				  </button>
 			</mat-form-field>
-			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500"></ion-searchbar>
+			<ion-searchbar clear-icon="close-circle" (ionChange)="search($event)" debounce="500" [(ngModel)]="searchTerms"></ion-searchbar>
 			<ion-button (click)="openNewContact()">
 				<ion-text slot="end">{{t('New Contact')}}</ion-text>
 			</ion-button>
@@ -28,10 +28,10 @@
 			</ion-button> -->
 		</div>
 		<ion-card>
-			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactList | search:searchResults:searchQuery:contactType:deliveryCity:contactType)?.length ?? 0 }})</div>
+			<div class="content-subtitle">{{t('Contacts')}} ({{ (contactList | search:searchResults:searchQuery:contactType:deliveryCity)?.length ?? 0 }})</div>
 				<cdk-virtual-scroll-viewport itemSize="64" *ngIf="contactList" minBufferPx="300">
 					<div class="content-item" (contextmenu)="openOptions($event)"
-						*cdkVirtualFor="let contact of (contactList | search:searchResults:searchQuery:contactType:deliveryCity:contactType); let i = index">
+						*cdkVirtualFor="let contact of (contactList | search:searchResults:searchQuery:contactType:deliveryCity); let i = index">
 						<ion-item (click)="nav('dashboard/directory/contact/' + contact.id)" button >
 							<ion-avatar slot="start">
 								<img src="../../../assets/avatar.svg">
@@ -52,9 +52,12 @@
 								<ion-button color="primary" (click)="$event.stopPropagation(); edit(contact)">
 									<ion-icon name="create-outline"></ion-icon>
 								</ion-button>
-								<!-- <ion-button color="danger" (click)="$event.stopPropagation(); archive(contact.ref.id)">
+								<ion-button color="danger" (click)="$event.stopPropagation(); archive(contact)" *ngIf="!contact.tags.includes('archived') && (permissions.admin || permissions.directory.archiveContact)">
 									<ion-icon name="archive-outline"></ion-icon>
-								</ion-button> -->
+								</ion-button>
+								<ion-button color="primary" (click)="$event.stopPropagation(); unarchive(contact)" *ngIf="contact.tags.includes('archived') && permissions.admin">
+									<ion-icon name="arrow-undo-outline"></ion-icon>
+								</ion-button>
 							</ion-buttons>
 						</ion-item>
 					</div>

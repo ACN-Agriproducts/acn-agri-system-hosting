@@ -16,6 +16,7 @@ import { NewNoteComponent } from '@shared/components/new-note/new-note/new-note.
 import { lastValueFrom, of } from 'rxjs';
 import { EditContactDialogComponent } from '../components/edit-contact-dialog/edit-contact-dialog.component';
 import { TicketDialogComponent } from '@shared/printable/printable-ticket/ticket-dialog/ticket-dialog.component';
+import { ContactService } from '@shared/model-services/contact/contact.service';
 
 @Component({
 	selector: 'app-contact',
@@ -57,7 +58,10 @@ export class ContactPage implements OnInit {
 		onClick: () => {
 			this.newNote();
 		}
-	}]
+	}];
+
+	public permissions;
+
 	constructor(
 		private db: Firestore,
 		private route: ActivatedRoute,
@@ -65,6 +69,7 @@ export class ContactPage implements OnInit {
 		private snack: SnackbarService,
 		private navController: NavController,
 		private dialog: MatDialog,
+		private contactService: ContactService
 	) { }
 
 	ngOnInit() {
@@ -72,6 +77,7 @@ export class ContactPage implements OnInit {
 		this.currentPlant = this.session.getPlant();
 		this.id = this.route.snapshot.paramMap.get('id');
 		this.displayUnit = this.session.getDisplayUnit();
+		this.permissions = this.session.getPermissions();
 
 		Contact.getDoc(this.db, this.currentCompany, this.id)
 		.then(async contact => {
@@ -242,8 +248,18 @@ export class ContactPage implements OnInit {
 		});
 	}
 
-	public archive(): void {
+	public async archive(): Promise<void> {
+		const archived = await this.contactService.archive(this.contact);
+		if (!archived) return;
 
+		this.navController.back();
+	}
+
+	public async unarchive(): Promise<void> {
+		const unarchived = await this.contactService.unarchive(this.contact);
+		if (!unarchived) return;
+
+		this.navController.back();
 	}
 
 	public async infiniteDocuments(event: any) {

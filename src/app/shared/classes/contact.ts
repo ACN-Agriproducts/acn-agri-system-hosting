@@ -21,6 +21,7 @@ export class Contact extends FirebaseDocInterface {
     public notarialActDate: Date;
 
     public bankInfo: BankInfo[];
+    public archived: boolean;
 
     constructor(snapshot: QueryDocumentSnapshot<any> | DocumentReference<any> | ContactInfo, tags?: string[]) {
         if(!(snapshot instanceof QueryDocumentSnapshot) && !(snapshot instanceof DocumentReference)) {
@@ -77,6 +78,8 @@ export class Contact extends FirebaseDocInterface {
             this.notarialAct = null;
             this.notarialActDate = null;
             this.tags = tags ?? [];
+            
+            this.archived = false;
         }
 
         else {
@@ -102,6 +105,8 @@ export class Contact extends FirebaseDocInterface {
             data.metacontacts?.forEach(metacontact => {
                 this.metacontacts.push(this.createMetaContact(metacontact));
             });
+
+            this.archived = data.archived;
         }
     }
 
@@ -123,6 +128,8 @@ export class Contact extends FirebaseDocInterface {
                 zipCode: data.zipCode,
                 notarialAct: data.notarialAct,
                 notarialActDate: data.notarialActDate,
+
+                archived: data.archived
             };
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions): Contact {
