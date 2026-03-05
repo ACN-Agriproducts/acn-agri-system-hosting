@@ -13,7 +13,7 @@
     <div class="flex-content" *ngIf="ready">
       <div class="info-section">
         <app-contract-form id="contract-form" *ngIf="currentContract" [contract]="currentContract"></app-contract-form>
-        <mat-card id="ticket-list" *ngIf="ticketList?.length > 0">
+        <mat-card id="ticket-list" *ngIf="(ticketList?.length ?? 0) > 0">
           <mat-card-header>
             <mat-card-subtitle>{{t("ticket list")}}</mat-card-subtitle>
           </mat-card-header>
@@ -34,7 +34,7 @@
       <div class="info-section">
         <div class="contract-tables">
           <app-contract-chart-card [data]="contractChartData"></app-contract-chart-card>
-          <mat-card *ngIf="ticketList?.length > 0 && (permissions?.admin || permissions?.liquidations?.read)">
+          <mat-card *ngIf="(ticketList?.length ?? 0) > 0 && (permissions?.admin || permissions?.liquidations?.read)">
             <mat-card-header>
               <mat-card-subtitle>{{ t('Liquidations') }}</mat-card-subtitle>
             </mat-card-header>
