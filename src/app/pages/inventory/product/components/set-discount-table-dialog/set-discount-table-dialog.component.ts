@@ -49,7 +49,7 @@ export class SetDiscountTableDialogComponent implements OnInit {
   }
 
   add(event: MatChipInputEvent) {
-    const value = (event.value || '').trim();
+    const value = (event.value || '').trim().toLocaleLowerCase();
     if (value) {
       this.table.headers.push({ name: value });
       this.table.data.forEach(item => item[value] = 0);

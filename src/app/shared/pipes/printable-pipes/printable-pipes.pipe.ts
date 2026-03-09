@@ -34,7 +34,7 @@ export class FlatPricePipe implements PipeTransform {
   name: "maskZeros"
 })
 export class MaskZerosPipe implements PipeTransform {
-  transform(value: string, format?: "NA"): string {
+  transform(value: string | null, format?: "NA"): string {
     const maskedValue = format === "NA" ? "N/A" : "--";
     return (!value || !(+(value?.replace(/,/g, "")))) ? maskedValue : value;
   }

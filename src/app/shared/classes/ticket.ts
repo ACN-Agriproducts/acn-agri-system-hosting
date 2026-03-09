@@ -403,7 +403,6 @@ export class Ticket extends FirebaseDocInterface{
         for (const table of discountTables?.tables ?? []) {
             const discountName = table.fieldName;
             const rowData = table.getTableData(this[discountName] ?? 0);
-            
             table.headers.forEach(header => {
                 if (header.type === 'price-discount') {
                     this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData?.[header.name] ?? 0, table.unit), this.net);
@@ -433,7 +432,7 @@ export class Ticket extends FirebaseDocInterface{
         if (contract.type === "sales" || contract.tags.includes("sale")) {
             ticket.netToPay = Math.round(ticket.net.get() * price.getPricePerUnit(sharedUnit, ticket.net) * 1000) / 1000;
         }
-          else if (contract.type === "purchase" || contract.tags.includes("purchase")) {
+        else if (contract.type === "purchase" || contract.tags.includes("purchase")) {
             ticket.netToPay = Math.round((ticket.beforeDiscounts - ticket.priceDiscounts.total()) * 1000) / 1000;
         }
     }
@@ -539,6 +538,10 @@ export class PriceDiscounts {
             unitRateDiscounts: { ...this.unitRateDiscounts }
         }
     }
+
+    public get(key: string): number {
+        return this[key as keyof typeof this] as number;
+    }
 }
 
 /**
@@ -606,6 +609,10 @@ export class WeightDiscounts {
         });
 
         return data;
+    }
+
+    public get(key: string): Mass {
+        return this[key as keyof typeof this] as Mass;
     }
 }
 
