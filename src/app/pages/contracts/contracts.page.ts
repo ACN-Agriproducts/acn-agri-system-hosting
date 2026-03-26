@@ -345,56 +345,63 @@ export class ContractsPage implements AfterViewInit {
 
 
 
-  public async tempContractScript() {
-    console.log("STARTING SCRIPT...");
+  public async getYtdMonthlyToBeDeliveredExcel(): Promise<void> {
+    const currentDate = new Date();
+    const startDate = new Date();
+    const endDate = new Date();
 
-    const date = new Date();
-    date.setDate(1);
+    startDate.setFullYear(startDate.getFullYear() - 1);
+    startDate.setDate(1);
+    startDate.setHours(0, 0, 0, 0);
 
-    const toBeDeliveredDataForContracts = await this.getYtdToBeDeliveredDataForContracts(date);
-    const workbook = await this.outputYtdDataToExcel(toBeDeliveredDataForContracts, date);
+    endDate.setDate(0);
+    endDate.setHours(23, 59, 59, 999);
 
-    this.downloadExcel(workbook, date);
+    const toBeDeliveredData = await this.getMonthlyToBeDeliveredData(startDate, endDate);
+    const workbook = await this.outputMonthlyToBeDeliveredDataToExcel(toBeDeliveredData, startDate, endDate);
+
+    const filename = `acn_ytd-report_${currentDate.toLocaleDateString('en-US')}`;
+    this.downloadExcel(workbook, filename);
   }
 
-  private async getYtdToBeDeliveredDataForContracts(date: Date): Promise<ContractsMap<YtdToBeDeliveredContractData>> {
-    const contractsMap: ContractsMap<YtdToBeDeliveredContractData> = {};
-
-    const startDate = new Date(date);
-    startDate.setFullYear(startDate.getFullYear() - 1);
+  private async getMonthlyToBeDeliveredData(startDate: Date, endDate: Date): Promise<ContractsMap<MonthlyToBeDeliveredReportData>> {
+    const contractsMap: ContractsMap<MonthlyToBeDeliveredReportData> = {};
 
     const contracts = await this.contractsService.getList({
       type: ['purchase'],
       orderField: 'date',
       sortOrder: 'asc',
-      beforeDate: date,
-      afterDate: startDate
+      afterDate: startDate,
+      beforeDate: endDate
     });
 
-    const months = this.getMonths(startDate, date);
+    const months = this.getMonths(startDate, endDate);
 
     for (const contract of contracts) {
-      contractsMap[contract.id] = await this.getYtdContractData(contract, months);
+      contractsMap[contract.id] = await this.getToBeDeliveredData(contract, months);
     }
 
     return contractsMap;
   }
 
   private getMonths(startDate: Date, endDate: Date): string[] {
-    const months = [];
-    for (let tempDate = new Date(startDate); tempDate.getTime() < endDate.getTime(); tempDate.setMonth(tempDate.getMonth() + 1)) {
-      months.push(tempDate.toLocaleDateString('default', { month: 'short' }));
+    const months: string[] = [];
+
+    for (let tempDate = new Date(endDate); tempDate.getTime() > startDate.getTime(); tempDate.setDate(0)) {
+      months.unshift(tempDate.toISOString());
     }
+
     return months;
   }
 
-  private async getYtdContractData(contract: Contract, months: string[]): Promise<YtdToBeDeliveredContractData> {
+  private async getToBeDeliveredData(contract: Contract, months: string[]): Promise<MonthlyToBeDeliveredReportData> {
     const unitForData = 'bu';
     const numDecimalPlaces = 3;
 
-    const mapContract: YtdToBeDeliveredContractData = {
+    const contractData: MonthlyToBeDeliveredReportData = {
       quantity: parseFloat(contract.quantity.getMassInUnit(unitForData).toFixed(numDecimalPlaces)),
       product: contract.product.id,
+      contractDate: contract.date,
       closedAt: contract.statusDates.closed,
       toBeDeliveredByMonthMap: {}
     };
@@ -404,19 +411,23 @@ export class ContractsPage implements AfterViewInit {
 
     const ticketsByMonthMap: { [month: string]: Ticket[]} = {};
     for (const ticket of tickets) {
-      const ticketMonth = ticket.dateIn.toLocaleDateString('default', { month: 'short' });
-      ticketsByMonthMap[ticketMonth] ??= [];
-      ticketsByMonthMap[ticketMonth].push(ticket);
+      let ticketMonth = new Date(ticket.dateIn);
+      ticketMonth.setMonth(ticketMonth.getMonth() + 1);
+      ticketMonth.setDate(0);
+      ticketMonth.setHours(23, 59, 59, 999);
+
+      const ticketMonthString = ticketMonth.toISOString();
+
+      ticketsByMonthMap[ticketMonthString] ??= [];
+      ticketsByMonthMap[ticketMonthString].push(ticket);
     }
 
-    console.log(`SCANNING CONTRACT #${contract.id}...`)
-
     let toBeDelivered = contract.quantity.getMassInUnit(unitForData);
-    for (let i = -1; i < months.length - 1; i++) {
-      const month = months[i+1];
+    for (const month of months) {
+      const monthDate = new Date(month);
 
-      if (i < (contract.date.getMonth() == 11 ? -1 : contract.date.getMonth())) {
-        mapContract.toBeDeliveredByMonthMap[month] = 0;
+      if (monthDate < contract.date) {
+        contractData.toBeDeliveredByMonthMap[month] = 0;
         continue;
       }
 
@@ -425,51 +436,50 @@ export class ContractsPage implements AfterViewInit {
         toBeDelivered -= ticket.net.getMassInUnit(unitForData);
       }
 
-      mapContract.toBeDeliveredByMonthMap[month] = toBeDelivered < 0 ? 0 : parseFloat(toBeDelivered.toFixed(numDecimalPlaces));
+      contractData.toBeDeliveredByMonthMap[month] = toBeDelivered < 0 ? 0 : parseFloat(toBeDelivered.toFixed(numDecimalPlaces));
     }
 
-    return mapContract;
+    return contractData;
   }
 
-  private async outputYtdDataToExcel(data: any, date: Date): Promise<Excel.Workbook> {
+  private async outputMonthlyToBeDeliveredDataToExcel(data: any, startDate: Date, endDate: Date): Promise<Excel.Workbook> {
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet("YTD To Be Delivered Table");
 
-    worksheet.columns = this.createYtdHeaders(date);
+    worksheet.columns = this.createMonthlyToBeDeliveredHeaders(startDate, endDate);
 
-    this.populateYtdWorksheet(worksheet, data);
-    this.formatYtdHeaders(worksheet);
-    this.formatYtdColumns(worksheet);
+    this.populateMonthlyToBeDeliveredWorksheet(worksheet, data);
+    this.formatHeaders(worksheet);
+    this.formatColumns(worksheet);
 
     return workbook;
   }
 
-  private createYtdHeaders(date: Date) {
+  private createMonthlyToBeDeliveredHeaders(startDate: Date, endDate: Date): Partial<Excel.Column>[] {
     const columns: Partial<Excel.Column>[] = [
       { header: "Contract ID", key: 'contractId' },
       { header: "Product", key: 'product' },
       { header: "Quantity", key: 'quantity', style: { numFmt: '#,##0.00' } },
+      { header: "Opened Date", key: 'contractDate' },
       { header: "Closed Date", key: 'closedAt' },
     ];
 
-    const startDate = new Date(date);
-    startDate.setFullYear(startDate.getFullYear() - 1);
-
-    for (const month of this.getMonths(startDate, date)) {
-      columns.push({ header: month, key: month, style: { numFmt: '#,##0.000;[Red](#,##0);"-";@' } });
+    for (const month of this.getMonths(startDate, endDate)) {
+      const monthHeader = new Date(month).toLocaleDateString('default', { month: 'short', year: 'numeric' });
+      columns.push({ header: monthHeader, key: month, style: { numFmt: '#,##0.000;[Red](#,##0);"-";@' } });
     }
 
     return columns;
   }
 
-  private formatYtdHeaders(worksheet: Excel.Worksheet) {
+  private formatHeaders(worksheet: Excel.Worksheet): void {
     const firstRow = worksheet.getRow(1);
     firstRow.alignment = { horizontal: 'center' };
     firstRow.font = { bold: true };
     firstRow.border = { bottom: { style: 'thick'} };
   }
 
-  private formatYtdColumns(worksheet: Excel.Worksheet) {
+  private formatColumns(worksheet: Excel.Worksheet): void {
     worksheet.columns.forEach(column => {
       const lengths = column.values.map(v => v.toString().length);
       const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
@@ -477,16 +487,17 @@ export class ContractsPage implements AfterViewInit {
     });
   }
 
-  private populateYtdWorksheet(worksheet: Excel.Worksheet, data: ContractsMap<YtdToBeDeliveredContractData>) {
-    for (const [id, ytdToBeDeliveredContractData] of Object.entries(data)) {
+  private populateMonthlyToBeDeliveredWorksheet(worksheet: Excel.Worksheet, data: ContractsMap<MonthlyToBeDeliveredReportData>): void {
+    for (const [id, toBeDeliveredReportData] of Object.entries(data)) {
       const row = {
         contractId: id,
-        quantity: ytdToBeDeliveredContractData.quantity,
-        product: ytdToBeDeliveredContractData.product,
-        closedAt: ytdToBeDeliveredContractData.closedAt?.toLocaleDateString()
+        quantity: toBeDeliveredReportData.quantity,
+        product: toBeDeliveredReportData.product,
+        closedAt: toBeDeliveredReportData.closedAt?.toLocaleDateString(),
+        contractDate: toBeDeliveredReportData.contractDate?.toLocaleDateString()
       };
 
-      for (const [monthKey, toBeDeliveredValue] of Object.entries(ytdToBeDeliveredContractData.toBeDeliveredByMonthMap)) {
+      for (const [monthKey, toBeDeliveredValue] of Object.entries(toBeDeliveredReportData.toBeDeliveredByMonthMap)) {
         row[monthKey] = toBeDeliveredValue;
       }
 
@@ -494,7 +505,7 @@ export class ContractsPage implements AfterViewInit {
     }
   }
 
-  private async downloadExcel (workbook: Excel.Workbook, date: Date): Promise<void> {
+  private async downloadExcel (workbook: Excel.Workbook, filename: string): Promise<void> {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -505,7 +516,7 @@ export class ContractsPage implements AfterViewInit {
 
     a.setAttribute('style', 'display: none');
     a.href = url;
-    a.download = `acn_ytd-report_${date.toLocaleDateString('en-US')}.xlsx`;
+    a.download = `${filename}.xlsx`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
@@ -514,11 +525,12 @@ export class ContractsPage implements AfterViewInit {
 }
 
 type ContractsMap<T> = { [contractId: number]: T };
-type YtdToBeDeliveredContractData = {
+type MonthlyToBeDeliveredReportData = {
   quantity: number,
   toBeDeliveredByMonthMap: {
     [month: string]: number
   },
   product: string,
-  closedAt: Date
+  closedAt: Date,
+  contractDate: Date
 }
