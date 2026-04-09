@@ -364,8 +364,8 @@ export class ContractsPage implements AfterViewInit {
     this.downloadExcel(workbook, filename);
   }
 
-  private async getMonthlyToBeDeliveredData(startDate: Date, endDate: Date): Promise<ContractsMap<MonthlyToBeDeliveredReportData>> {
-    const contractsMap: ContractsMap<MonthlyToBeDeliveredReportData> = {};
+  private async getMonthlyToBeDeliveredData(startDate: Date, endDate: Date): Promise<ContractsMap<MonthlyToBeDeliveredReportContractData>> {
+    const contractsMap: ContractsMap<MonthlyToBeDeliveredReportContractData> = {};
 
     const contracts = await this.contractsService.getList({
       type: ['purchase'],
@@ -394,16 +394,16 @@ export class ContractsPage implements AfterViewInit {
     return months;
   }
 
-  private async getToBeDeliveredData(contract: Contract, months: string[]): Promise<MonthlyToBeDeliveredReportData> {
+  private async getToBeDeliveredData(contract: Contract, months: string[]): Promise<MonthlyToBeDeliveredReportContractData> {
     const unitForData = 'bu';
     const numDecimalPlaces = 3;
 
-    const contractData: MonthlyToBeDeliveredReportData = {
+    const contractData: MonthlyToBeDeliveredReportContractData = {
       quantity: parseFloat(contract.quantity.getMassInUnit(unitForData).toFixed(numDecimalPlaces)),
       product: contract.product.id,
       contractDate: contract.date,
       closedAt: contract.statusDates.closed,
-      toBeDeliveredByMonthMap: {}
+      monthlyToBeDeliveredMap: {}
     };
 
     const tickets = await contract.getTickets();
@@ -411,15 +411,15 @@ export class ContractsPage implements AfterViewInit {
 
     const ticketsByMonthMap: { [month: string]: Ticket[]} = {};
     for (const ticket of tickets) {
-      let ticketMonth = new Date(ticket.dateIn);
+      let ticketMonth: Date | string = new Date(ticket.dateIn);
       ticketMonth.setMonth(ticketMonth.getMonth() + 1);
       ticketMonth.setDate(0);
       ticketMonth.setHours(23, 59, 59, 999);
 
-      const ticketMonthString = ticketMonth.toISOString();
+      ticketMonth = ticketMonth.toISOString();
 
-      ticketsByMonthMap[ticketMonthString] ??= [];
-      ticketsByMonthMap[ticketMonthString].push(ticket);
+      ticketsByMonthMap[ticketMonth] ??= [];
+      ticketsByMonthMap[ticketMonth].push(ticket);
     }
 
     let toBeDelivered = contract.quantity.getMassInUnit(unitForData);
@@ -427,7 +427,7 @@ export class ContractsPage implements AfterViewInit {
       const monthDate = new Date(month);
 
       if (monthDate < contract.date) {
-        contractData.toBeDeliveredByMonthMap[month] = 0;
+        contractData.monthlyToBeDeliveredMap[month] = 0;
         continue;
       }
 
@@ -436,7 +436,7 @@ export class ContractsPage implements AfterViewInit {
         toBeDelivered -= ticket.net.getMassInUnit(unitForData);
       }
 
-      contractData.toBeDeliveredByMonthMap[month] = toBeDelivered < 0 ? 0 : parseFloat(toBeDelivered.toFixed(numDecimalPlaces));
+      contractData.monthlyToBeDeliveredMap[month] = toBeDelivered < 0 ? 0 : parseFloat(toBeDelivered.toFixed(numDecimalPlaces));
     }
 
     return contractData;
@@ -487,8 +487,8 @@ export class ContractsPage implements AfterViewInit {
     });
   }
 
-  private populateMonthlyToBeDeliveredWorksheet(worksheet: Excel.Worksheet, data: ContractsMap<MonthlyToBeDeliveredReportData>): void {
-    for (const [id, toBeDeliveredReportData] of Object.entries(data)) {
+  private populateMonthlyToBeDeliveredWorksheet(worksheet: Excel.Worksheet, contractsMap: ContractsMap<MonthlyToBeDeliveredReportContractData>): void {
+    for (const [id, toBeDeliveredReportData] of Object.entries(contractsMap)) {
       const row = {
         contractId: id,
         quantity: toBeDeliveredReportData.quantity,
@@ -497,7 +497,7 @@ export class ContractsPage implements AfterViewInit {
         contractDate: toBeDeliveredReportData.contractDate?.toLocaleDateString()
       };
 
-      for (const [monthKey, toBeDeliveredValue] of Object.entries(toBeDeliveredReportData.toBeDeliveredByMonthMap)) {
+      for (const [monthKey, toBeDeliveredValue] of Object.entries(toBeDeliveredReportData.monthlyToBeDeliveredMap)) {
         row[monthKey] = toBeDeliveredValue;
       }
 
@@ -525,9 +525,9 @@ export class ContractsPage implements AfterViewInit {
 }
 
 type ContractsMap<T> = { [contractId: number]: T };
-type MonthlyToBeDeliveredReportData = {
+type MonthlyToBeDeliveredReportContractData = {
   quantity: number,
-  toBeDeliveredByMonthMap: {
+  monthlyToBeDeliveredMap: {
     [month: string]: number
   },
   product: string,
