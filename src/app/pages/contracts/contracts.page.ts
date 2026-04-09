@@ -12,7 +12,9 @@ import { ContractSettings } from '@shared/classes/contract-settings';
 import { Mass, units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
+import { ContractsService } from '@shared/model-services/contracts.service';
 import { MassDisplayPipe } from '@core/pipes/mass/mass-display.pipe';
+import { Ticket } from '@shared/classes/ticket';
 
 @Component({
   selector: 'app-contracts',
@@ -57,6 +59,7 @@ export class ContractsPage implements AfterViewInit {
     private session: SessionInfo,
     private navController: NavController,
     private transloco: TranslocoService,
+    private contractsService: ContractsService,
     private massDisplayPipe: MassDisplayPipe
   ) { }
 
@@ -337,4 +340,197 @@ export class ContractsPage implements AfterViewInit {
   public tableTranslate(key: string): string {
     return this.transloco.translate("contracts.table." + key);
   }
+
+
+
+
+
+  public async getYtdMonthlyToBeDeliveredExcel(): Promise<void> {
+    const currentDate = new Date();
+    const startDate = new Date();
+    const endDate = new Date();
+
+    startDate.setFullYear(startDate.getFullYear() - 1);
+    startDate.setDate(1);
+    startDate.setHours(0, 0, 0, 0);
+
+    endDate.setDate(0);
+    endDate.setHours(23, 59, 59, 999);
+
+    const toBeDeliveredData = await this.getMonthlyToBeDeliveredData(startDate, endDate);
+    const workbook = await this.outputMonthlyToBeDeliveredDataToExcel(toBeDeliveredData, startDate, endDate);
+
+    const filename = `acn_ytd-report_${currentDate.toLocaleDateString('en-US')}`;
+    this.downloadExcel(workbook, filename);
+  }
+
+  private async getMonthlyToBeDeliveredData(startDate: Date, endDate: Date): Promise<ContractsMap<MonthlyToBeDeliveredReportContractData>> {
+    const contractsMap: ContractsMap<MonthlyToBeDeliveredReportContractData> = {};
+
+    const contracts = await this.contractsService.getList({
+      type: ['purchase'],
+      orderField: 'date',
+      sortOrder: 'asc',
+      afterDate: startDate,
+      beforeDate: endDate
+    });
+
+    const months = this.getMonths(startDate, endDate);
+
+    for (const contract of contracts) {
+      contractsMap[contract.id] = await this.getToBeDeliveredData(contract, months);
+    }
+
+    return contractsMap;
+  }
+
+  private getMonths(startDate: Date, endDate: Date): string[] {
+    const months: string[] = [];
+
+    for (let tempDate = new Date(endDate); tempDate.getTime() > startDate.getTime(); tempDate.setDate(0)) {
+      months.unshift(tempDate.toISOString());
+    }
+
+    return months;
+  }
+
+  private async getToBeDeliveredData(contract: Contract, months: string[]): Promise<MonthlyToBeDeliveredReportContractData> {
+    const unitForData = 'bu';
+    const numDecimalPlaces = 3;
+
+    const contractData: MonthlyToBeDeliveredReportContractData = {
+      quantity: parseFloat(contract.quantity.getMassInUnit(unitForData).toFixed(numDecimalPlaces)),
+      product: contract.product.id,
+      contractDate: contract.date,
+      closedAt: contract.statusDates.closed,
+      monthlyToBeDeliveredMap: {}
+    };
+
+    const tickets = await contract.getTickets();
+    tickets.sort((a, b) => a.dateIn.getTime() - b.dateIn.getTime());
+
+    const ticketsByMonthMap: { [month: string]: Ticket[]} = {};
+    for (const ticket of tickets) {
+      let ticketMonth: Date | string = new Date(ticket.dateIn);
+      ticketMonth.setMonth(ticketMonth.getMonth() + 1);
+      ticketMonth.setDate(0);
+      ticketMonth.setHours(23, 59, 59, 999);
+
+      ticketMonth = ticketMonth.toISOString();
+
+      ticketsByMonthMap[ticketMonth] ??= [];
+      ticketsByMonthMap[ticketMonth].push(ticket);
+    }
+
+    let toBeDelivered = contract.quantity.getMassInUnit(unitForData);
+    for (const month of months) {
+      const monthDate = new Date(month);
+
+      if (monthDate < contract.date) {
+        contractData.monthlyToBeDeliveredMap[month] = 0;
+        continue;
+      }
+
+      for (const ticket of ticketsByMonthMap[month] ?? []) {
+        ticket.defineBushels(contract.productInfo);
+        toBeDelivered -= ticket.net.getMassInUnit(unitForData);
+      }
+
+      contractData.monthlyToBeDeliveredMap[month] = toBeDelivered < 0 ? 0 : parseFloat(toBeDelivered.toFixed(numDecimalPlaces));
+    }
+
+    return contractData;
+  }
+
+  private async outputMonthlyToBeDeliveredDataToExcel(data: any, startDate: Date, endDate: Date): Promise<Excel.Workbook> {
+    const workbook = new Excel.Workbook();
+    const worksheet = workbook.addWorksheet("YTD To Be Delivered Table");
+
+    worksheet.columns = this.createMonthlyToBeDeliveredHeaders(startDate, endDate);
+
+    this.populateMonthlyToBeDeliveredWorksheet(worksheet, data);
+    this.formatHeaders(worksheet);
+    this.formatColumns(worksheet);
+
+    return workbook;
+  }
+
+  private createMonthlyToBeDeliveredHeaders(startDate: Date, endDate: Date): Partial<Excel.Column>[] {
+    const columns: Partial<Excel.Column>[] = [
+      { header: "Contract ID", key: 'contractId' },
+      { header: "Product", key: 'product' },
+      { header: "Quantity", key: 'quantity', style: { numFmt: '#,##0.00' } },
+      { header: "Opened Date", key: 'contractDate' },
+      { header: "Closed Date", key: 'closedAt' },
+    ];
+
+    for (const month of this.getMonths(startDate, endDate)) {
+      const monthHeader = new Date(month).toLocaleDateString('default', { month: 'short', year: 'numeric' });
+      columns.push({ header: monthHeader, key: month, style: { numFmt: '#,##0.000;[Red](#,##0);"-";@' } });
+    }
+
+    return columns;
+  }
+
+  private formatHeaders(worksheet: Excel.Worksheet): void {
+    const firstRow = worksheet.getRow(1);
+    firstRow.alignment = { horizontal: 'center' };
+    firstRow.font = { bold: true };
+    firstRow.border = { bottom: { style: 'thick'} };
+  }
+
+  private formatColumns(worksheet: Excel.Worksheet): void {
+    worksheet.columns.forEach(column => {
+      const lengths = column.values.map(v => v.toString().length);
+      const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'));
+      column.width = maxLength > 20 ? 20 : maxLength < 10 ? 10 : maxLength;
+    });
+  }
+
+  private populateMonthlyToBeDeliveredWorksheet(worksheet: Excel.Worksheet, contractsMap: ContractsMap<MonthlyToBeDeliveredReportContractData>): void {
+    for (const [id, toBeDeliveredReportData] of Object.entries(contractsMap)) {
+      const row = {
+        contractId: id,
+        quantity: toBeDeliveredReportData.quantity,
+        product: toBeDeliveredReportData.product,
+        closedAt: toBeDeliveredReportData.closedAt?.toLocaleDateString(),
+        contractDate: toBeDeliveredReportData.contractDate?.toLocaleDateString()
+      };
+
+      for (const [monthKey, toBeDeliveredValue] of Object.entries(toBeDeliveredReportData.monthlyToBeDeliveredMap)) {
+        row[monthKey] = toBeDeliveredValue;
+      }
+
+      worksheet.addRow(row);
+    }
+  }
+
+  private async downloadExcel (workbook: Excel.Workbook, filename: string): Promise<void> {
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    });
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.setAttribute('style', 'display: none');
+    a.href = url;
+    a.download = `${filename}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+  }
+}
+
+type ContractsMap<T> = { [contractId: number]: T };
+type MonthlyToBeDeliveredReportContractData = {
+  quantity: number,
+  monthlyToBeDeliveredMap: {
+    [month: string]: number
+  },
+  product: string,
+  closedAt: Date,
+  contractDate: Date
 }
