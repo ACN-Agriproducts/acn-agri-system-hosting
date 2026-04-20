@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Payment } from '@shared/classes/payment';
 import { SetPaymentDialogComponent } from '../set-payment-dialog/set-payment-dialog.component';

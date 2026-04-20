@@ -1,6 +1,6 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { Component, Input, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { PopoverController, ModalController, NavController, AlertController } from '@ionic/angular';
 import { getDownloadURL, ref, Storage, StorageReference } from '@angular/fire/storage';
 import { lastValueFrom, Observable } from 'rxjs';
@@ -172,10 +172,12 @@ export class OptionsTicketComponent implements OnInit {
 
   public openContract(): void {
     this.navController.navigateForward(`dashboard/contracts/contract-info/${this.ticket.in? 'purchase' : 'sales'}/${this.ticket.contractRef.id}`);
+    this.popoverController.dismiss();
   }
 
   public openContact(): void {
-    this.navController.navigateForward(`dashboard/directory/contact/${this.ticket.clientRef.id}`)
+    this.navController.navigateForward(`dashboard/directory/contact/${this.ticket.clientRef.id}`);
+    this.popoverController.dismiss();
   }
 
   public async uploadAttachments(): Promise<void> {

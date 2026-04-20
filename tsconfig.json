@@ -1,14 +1,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    // "ignoreDeprecations": "6.0",
+    "baseUrl": "./", // SOON DEPRECATED
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
+    // "downlevelIteration": true, // SOON DEPRECATED
     "experimentalDecorators": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "node", // SOON DEPRECATED
     "importHelpers": true,
     "target": "ES2022",
     "lib": [
@@ -17,34 +18,34 @@
     ],
     "paths": {
       "@core/*": [
-        "src/app/core/*"
+        "./src/app/core/*"
       ],
       "@shared/*": [
-        "src/app/shared/*"
+        "./src/app/shared/*"
       ],
       "@layout/*": [
-        "src/app/layout/*"
+        "./src/app/layout/*"
       ],
       "@coreServices/*": [
-        "src/app/core/services/*"
+        "./src/app/core/services/*"
       ],
       "@coreModule/*": [
-        "src/app/core/module/*"
+        "./src/app/core/module/*"
       ],
       "@model/*": [
-        "src/app/core/model/*"
+        "./src/app/core/model/*"
       ],
       "@pages/*": [
-        "src/app/pages/*"
+        "./src/app/pages/*"
       ],
       "@enviroment/*": [
-        "src/environments/*"
+        "./src/environments/*"
       ]
     },
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "strict": false
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictTemplates": true
   }

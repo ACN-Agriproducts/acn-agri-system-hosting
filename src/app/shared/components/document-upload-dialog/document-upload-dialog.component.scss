@@ -134,7 +134,7 @@ mat-tab-label {
 	}
 }
 
-::ng-deep {
+:host ::ng-deep {
 	.mat-tab-label:has(.add-document) {
 		min-width: 0;
 		width: min-content;
@@ -152,19 +152,15 @@ mat-tab-label {
 		}
 	}
 
-	.mat-form-field-appearance-outline .mat-form-field-outline {
+	.mat-mdc-text-field-wrapper {
 		background-color: var(--ion-color-light);
-		color: #717386;
-	}
-
-	.mat-form-field-suffix:has(button) {
-		align-self: center;
-	}
+		color: #717386;	
+    }
 
 	.mat-tab-body-content {
 		display: flex;
 		flex-direction: column;
-		padding: 32px 16px 16px;
+		padding: 16px 16px 0px 16px;
 		gap: 32px;
 		height: auto !important;
 	}

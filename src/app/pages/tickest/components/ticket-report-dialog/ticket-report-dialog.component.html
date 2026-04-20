@@ -1,6 +1,6 @@
 <ng-container *transloco="let t; read: 'tickets.report'">
-  <h1>{{ t('Ticket Report') }}</h1>
-  <div class="dialog-content">
+  <h2 mat-dialog-title>{{ t('Ticket Report') }}</h2>
+  <mat-dialog-content>
     <h3>{{ t('Generate report by...') }}</h3>
     <mat-radio-group [(ngModel)]="reportType" [disabled]="reportGenerated">
       <mat-radio-button [value]="getReportType().DateRange">{{ t('Date Range') }}</mat-radio-button>
@@ -87,7 +87,7 @@
           <mat-radio-button value="bu">bu</mat-radio-button>
         </mat-radio-group>
       </div>
-      <div>
+      <div class="id-range">
         <mat-form-field>
           <mat-label>{{ t('Start ID') }}</mat-label>
           <input matInput type="number" [(ngModel)]="startId" [disabled]="reportGenerated">
@@ -108,25 +108,32 @@
         </mat-radio-group>
       </div>
     </div>
-  </div>
+  </mat-dialog-content>
 </ng-container>
   
-<mat-dialog-actions *transloco="let t; read: 'actions'">
+<mat-dialog-actions *transloco="let t; read: 'actions'" align="end">
   <button mat-button mat-dialog-close>{{ t('Cancel') }}</button>
-  <button mat-button (click)="generateReport()" [disabled]="!validateInputs()">{{ t('Generate') }}</button>
+  <button 
+    mat-stroked-button 
+    (click)="generateReport()" 
+    [disabled]="!validateInputs()" 
+    color="primary"
+  >{{ t('Generate') }}</button>
   <button
-    mat-button
+    mat-stroked-button
     *ngIf="reportGenerated && reportOutputType == 0"
     ngxPrint
     [useExistingCss]="true"
     printSectionId="printable-report"
     [printStyle]='{"app-printable-ticket, .ticket-report-table" : { "page-break-after": "always" }}'
-    >{{ t('Print') }}</button>
+    color="primary"
+  >{{ t('Print') }}</button>
   <button
     (click)="createExcelDoc()"
-    mat-button
-    *ngIf="reportGenerated && reportOutputType == 1">
-    {{ t('Download') }}</button>
+    mat-stroked-button
+    *ngIf="reportGenerated && reportOutputType == 1"
+    color="primary"
+  >{{ t('Download') }}</button>
   <mat-spinner [diameter]="20" *ngIf="generatingReport"></mat-spinner>
 </mat-dialog-actions>
 

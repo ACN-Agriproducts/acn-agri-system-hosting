@@ -1,15 +1,11 @@
+
 mat-dialog-content {
-	display: flex;
-	flex-direction: column;
     width: 35vw;
-    min-width: 475px;
+    min-width: 575px;
 }
 
 .action-bar {
-	display: flex;
-	justify-content: space-between;
-	grid-column-end: span 2;
-	margin-inline: 0.5rem;
+	justify-content: flex-end;
 }
 
 mat-grid-tile-header {
@@ -20,13 +16,6 @@ mat-grid-tile-header {
 
 #primary-metacontact ::ng-deep {
 	margin: 0 20px 20px 20px;
-
-	.mat-form-field-appearance-fill .mat-form-field-flex,
-    .mat-form-field-outline-start,
-    .mat-form-field-outline-gap,
-    .mat-form-field-outline-end {
-        background-color: white;
-    }
 }
 
 #new-metacontact-button {
@@ -43,7 +32,7 @@ div:has(> mat-grid-list) {
 	width: 100%;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 18px;
+	margin-bottom: 16px;
 }
 
 .underline {

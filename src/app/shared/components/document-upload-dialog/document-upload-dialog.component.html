@@ -20,7 +20,7 @@
 						<mat-icon>delete</mat-icon>
 					</button>
 				</div>
-				<mat-form-field *ngIf="data.uploadable" appearance="outline">
+				<mat-form-field *ngIf="data.uploadable" appearance="outline" class="document-name">
 					<mat-label>{{ t('Document Name') }}</mat-label>
 					<input matInput [(ngModel)]="file.name">
 				</mat-form-field>
@@ -34,9 +34,9 @@
 			</mat-tab>
 		</mat-tab-group>
 	</mat-dialog-content>
-	<mat-dialog-actions>
-		<button mat-button color="primary" mat-dialog-close>{{ 'Cancel' | translocoNested:'actions' }}</button>
-		<button mat-button color="primary"
+	<mat-dialog-actions align="end">
+		<button mat-button mat-dialog-close>{{ 'Cancel' | translocoNested:'actions' }}</button>
+		<button mat-button 
 			*ngIf="data.uploadable"
 			(click)="confirm()"
 		>

@@ -91,3 +91,14 @@ tr.totals-row {
 td.num {
     text-align: right;
 }
+
+
+.id-range {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+mat-dialog-actions mat-spinner {
+    margin-left: 12px;
+}

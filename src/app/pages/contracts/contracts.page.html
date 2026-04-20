@@ -21,6 +21,9 @@
                     <mat-option value="closed,paid">{{ t("Closed & Paid") }}</mat-option>
                 </mat-select>
             </mat-form-field>
+            <ion-button color="dark" (click)="openReportOptions()">
+                <ion-text>{{ 'reports.Report' | transloco }}</ion-text>
+            </ion-button>
         </div>
     </ion-toolbar>
 </ion-header>

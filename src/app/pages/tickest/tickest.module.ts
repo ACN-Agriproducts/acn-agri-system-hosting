@@ -19,7 +19,7 @@ import { OptionsTicketComponent } from './components/options-ticket/options-tick
 import { TicketReportDialogComponent } from './components/ticket-report-dialog/ticket-report-dialog.component';
 import { SharedModule } from '@shared/shared.module';
 import { NgxPrintModule } from 'ngx-print';
-import { MatLegacyDialogModule as MatDialogModule, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SplitTicketComponent } from 'src/app/standalone/split-ticket/split-ticket.component';
 import { DiscountsDialogComponent } from './components/discounts-dialog/discounts-dialog.component';
 import { AppPhotosComponent } from './components/app-photos/app-photos.component';

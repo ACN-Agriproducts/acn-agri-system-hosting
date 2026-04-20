@@ -1,36 +1,45 @@
+
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-calendar-body-selected,
-.mat-form-field.mat-focused .mat-form-field-ripple {
+.mat-mdc-form-field.mat-focused .mat-form-field-ripple {
   background-color: var(--ion-color-primary);
 }
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
 .mat-datepicker-toggle-active,
-.mat-form-field.mat-focused .mat-form-field-label {
+.mat-mdc-form-field.mat-focused .mat-form-field-label {
   color: var(--ion-color-primary);
 }
-.mat-input-element {
+.mat-mdc-input-element {
   caret-color: var(--ion-color-primary);
 }
 .mat-simple-snackbar-action {
   color: var(--ion-color-tertiary) !important;
 }
-.mat-primary .mat-option.mat-selected:not(.mat-option-disabled),
-.mat-form-field.mat-focused.mat-primary .mat-select-arrow {
+/* TODO(mdc-migration): The following rule targets internal classes of option that may no longer apply for the MDC version. */
+.mat-primary .mat-mdc-option.mat-selected:not(.mat-option-disabled),
+.mat-mdc-form-field.mat-focused.mat-primary .mat-select-arrow {
   color: var(--ion-color-primary);
 }
 
 .input-small-mat {
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-flex {
     padding: 0 8px !important;
     align-items: center !important;
     border-radius: 4px !important;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-wrapper {
     padding: 0;
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
     .mat-form-field-underline {
       display: none;
     }
   }
 }
 .input-small-mat-label{
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
   .mat-form-field-infix{
     padding: 0;
     margin: 0;
@@ -38,10 +47,92 @@
     padding: 8px 0;
   }
 }
-.mat-raised-button:not([class*=mat-elevation-z]){
-  box-shadow: none;
-  background-color: #FFF;
-}
+// .mat-raised-button:not([class*=mat-elevation-z]){
+//   box-shadow: none;
+//   background-color: #FFF;
+// }
 .mat-card-header-text {
   margin: 0 !important;
+}
+
+.mat-mdc-form-field-infix,
+.mat-mdc-select-value-text,
+.mat-mdc-option,
+mat-label {
+  font-size: 14px;
+}
+
+// temporary fix for problem with text in buttons being set to white by default
+button[mat-button], button[mat-stroked-button], button[mat-flat-button], button[mat-raised-button] {
+  color: black;
+}
+
+mat-form-field.appearance--legacy {
+  .mdc-text-field--filled {
+    background-color: transparent;
+  }
+  // Manipulate initial background color
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: transparent;
+  }
+  // Manipulate background color on hover and focus
+  .mat-mdc-form-field-focus-overlay {
+    background-color: transparent;
+  }
+  
+  &.dotted--disabled {
+    .mdc-text-field--disabled .mdc-line-ripple::before {
+      border-bottom-style: dotted;
+      border-bottom-color: rgb(0 0 0 / 25%);
+      border-bottom-width: 2px;
+    }
+  }
+
+  &.no-underline {
+    .mdc-line-ripple::before, .mdc-line-ripple::after {
+      border-bottom: unset;
+    }
+  }
+}
+
+mat-form-field.background-white {
+  .mat-mdc-text-field-wrapper {
+    background-color: white;
+  }
+}
+
+mat-dialog-actions.justify-end {
+  justify-content: flex-end;
+}
+
+mat-chip-grid.mat-mdc-chip-set-stacked {
+  &.vertical-drag-chips {
+    .mdc-evolution-chip-set__chips {
+      flex-direction: column;
+    }
+  }
+
+  mat-chip-row.max-width-fit-content {
+    max-width: fit-content;
+  }
+}
+
+
+mat-form-field.horizontal-scroll-input-chips {
+  mat-chip-grid {
+    overflow-x: auto;
+  }
+  .mdc-evolution-chip-set__chips {
+    flex-flow: nowrap;
+  }
+  input.mat-mdc-chip-input {
+    line-height: 2;
+    margin-top: 10px;
+  }
+}
+
+mat-form-field.no-subscript {
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 0;
+  }
 }

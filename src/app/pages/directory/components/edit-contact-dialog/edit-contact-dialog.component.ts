@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
-import { MatLegacyChip as MatChip } from '@angular/material/legacy-chips';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatChip, MatChipOption } from '@angular/material/chips';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact, MetaContact } from '@shared/classes/contact';
 import { lastValueFrom } from 'rxjs';
@@ -36,15 +36,15 @@ export class EditContactDialogComponent implements OnInit {
     });
   }
 
-  chipToggle(chip: MatChip, tag: string): void {
-    chip.toggleSelected();
+  chipToggle(tag: string): void {
+    // chip.toggleSelected();
 
-    if(this.data.contact.tags.includes(tag)) 
-      this.data.contact.tags.splice(this.data.contact.tags.findIndex(t => t == tag), 1);
-    else 
-      this.data.contact.tags.push(tag);
+    // if(this.data.contact.tags.includes(tag)) 
+    //   this.data.contact.tags.splice(this.data.contact.tags.findIndex(t => t == tag), 1);
+    // else 
+    //   this.data.contact.tags.push(tag);
   }
-
+  
   createNewMetacontact(): void {
     this.data.contact.metacontacts.push({
       email: null,

@@ -11,7 +11,7 @@ import { Product } from '@shared/classes/product';
 import { Contact } from '@shared/classes/contact';
 import { SnackbarService } from '@core/services/snackbar/snackbar.service';
 import { Mass } from '@shared/classes/mass';
-import { MatLegacySelectChange } from '@angular/material/legacy-select';
+import { MatSelectChange } from '@angular/material/select';
 
 
 @Component({
@@ -281,7 +281,7 @@ export class ConfirmInvoicePage implements OnInit {
     delete this.groups[product][client][group];
   }
 
-  exportClientChange(change: MatLegacySelectChange) {
+  exportClientChange(change: MatSelectChange) {
     const contact = change.value as Contact;
     const buyer = this.invoice.buyer;
 
