@@ -69,7 +69,7 @@ export class SplitTicketComponent implements OnInit {
         this.db, 
         this.session.getCompany(), 
         ticketContract.type,
-        where('client', '==', ticketContract.client),
+        // where('client', '==', ticketContract.client),
         where('status', '==', 'active'),
         where('product', '==', ticketContract.product));
     });
@@ -85,8 +85,9 @@ export class SplitTicketComponent implements OnInit {
   newSplitTicket(): SplitTicket {
     return {
       net: 0,
-      contractId: this.contract.ref.id,
-      lot: this.data.lot
+      contractRefId: this.contract.ref.id,
+      lot: this.data.lot,
+      contractId: this.contract.id
     };
   }
 
@@ -112,7 +113,7 @@ export class SplitTicketComponent implements OnInit {
 
     // Calculate newContract objects
     this.newTickets.forEach(ticket => {
-      const c = this.newContracts.find(c => c.docId == ticket.contractId);
+      const c = this.newContracts.find(c => c.docId == ticket.contractRefId);
       originalContract.afterCurrent.amount -= ticket.net;
       c.afterCurrent.amount += ticket.net;
     });
@@ -124,16 +125,18 @@ export class SplitTicketComponent implements OnInit {
     
     this.newTickets.forEach(ticket => {
       // Check if contract is other than original
-      if(contracts.some(c => c.docId == ticket.contractId)) return;
-      const tContract = this.possibleContracts.find(c => c.ref.id == ticket.contractId);
+      if(contracts.some(c => c.docId == ticket.contractRefId)) return;
+      const tContract = this.possibleContracts.find(c => c.ref.id == ticket.contractRefId);
 
       contracts.push({
-        docId: ticket.contractId,
+        docId: ticket.contractRefId,
         id: tContract.id,
         current: new Mass(tContract.currentDelivered.getMassInUnit(this.defaultUnit), this.defaultUnit, tContract.productInfo),
         quantity: new Mass(tContract.quantity.getMassInUnit(this.defaultUnit), this.defaultUnit, tContract.productInfo),
         afterCurrent: new Mass(tContract.currentDelivered.getMassInUnit(this.defaultUnit), this.defaultUnit, tContract.productInfo),
       });
+
+      ticket.contractId = tContract.id;
     });
 
     this.newContracts = contracts;
@@ -169,8 +172,9 @@ export class SplitTicketComponent implements OnInit {
 
 interface SplitTicket {
   net: number;
-  contractId: string;
+  contractRefId: string;
   lot: string;
+  contractId: number;
 }
 
 interface splitContract {

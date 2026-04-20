@@ -92,6 +92,8 @@ export class Ticket extends FirebaseDocInterface{
 
     public attachments: FileStorageInfo[];
 
+    public infested: boolean;
+
     constructor(snapshot: QueryDocumentSnapshot<any>);
     constructor(ref: DocumentReference<any>);
     constructor(snapshotOrRef: QueryDocumentSnapshot<any> | DocumentReference<any>) {
@@ -190,6 +192,8 @@ export class Ticket extends FirebaseDocInterface{
         this.net.amount = Math.round(this.net.amount * 1000) / 1000;
 
         this.attachments = data.attachments ?? [];
+
+        this.infested = data.infested;
     }
 
     public static converter = {
@@ -263,6 +267,8 @@ export class Ticket extends FirebaseDocInterface{
                 type: data.type ?? null,
 
                 attachments: data.attachments ?? null,
+
+                infested: data.infested ?? null
             }
         },
         fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>, options: SnapshotOptions): Ticket {
@@ -396,21 +402,14 @@ export class Ticket extends FirebaseDocInterface{
     public setDiscounts(discountTables: DiscountTables): void | Error {
         for (const table of discountTables?.tables ?? []) {
             const discountName = table.fieldName;
-
-            let ticketDiscountValue = this[discountName];
-            if (ticketDiscountValue == null) {
-                console.error("Could not find a value for this discount on the ticket. Please make sure the Field Name on the discount table is correct.");
-                ticketDiscountValue = 0;
-            }
-
-            const rowData = table.getTableData(ticketDiscountValue);
+            const rowData = table.getTableData(this[discountName] ?? 0);
             
             table.headers.forEach(header => {
                 if (header.type === 'price-discount') {
-                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData[header.name], table.unit), this.net);
+                    this.priceDiscounts.setUnitRateDiscount(discountName, new Price(rowData?.[header.name] ?? 0, table.unit), this.net);
                 }
                 else if (header.type === 'weight-discount') {
-                    this.weightDiscounts.setDiscount(discountName, rowData[header.name], table.unit ?? this.gross.defaultUnits, this.net);
+                    this.weightDiscounts.setDiscount(discountName, rowData?.[header.name] ?? 0, table.unit ?? this.gross.defaultUnits, this.net);
                 }
             });
         }
@@ -481,13 +480,6 @@ export const WEIGHT_DISCOUNT_FIELDS = [
 ];
 
 /**
- * Weight Discounts:
- *  - weight that is subtracted for reasons such as moisture, drying, or damage to the product
- *  - calculated as a percentage of the weight
- *  - Formula: (Percentage)/100 * (Mass).amount
- */
-
-/**
  * Price Discounts:
  *  - Fixed: just a flat $ amount
  * 
@@ -497,7 +489,6 @@ export const WEIGHT_DISCOUNT_FIELDS = [
  *  - Tax: by percentage of the final amount I'm guessing
  *      --> Formula: (Percentage)/100 * ($ Total)
  */
-
 export class PriceDiscounts {
     public infested: number = 0;
     public musty: number = 0;
@@ -553,6 +544,10 @@ export class PriceDiscounts {
 /**
  * Based on common discounts used by the company. 
  * These discounts are calculated as a percentage of the weight of the product brought in as recorded on the ticket.
+ * 
+ *  - weight that is subtracted for reasons such as moisture, drying, or damage to the product
+ *  - calculated as a percentage of the weight
+ *  - Formula: (Percentage)/100 * (Mass).amount
  */
 export class WeightDiscounts {
     brokenGrain: Mass;

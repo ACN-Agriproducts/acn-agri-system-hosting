@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UNIT_LIST, units } from '@shared/classes/mass';
 
 @Component({
-  selector: 'app-table-header-unit-select',
-  templateUrl: './table-header-unit-select.component.html',
-  styleUrls: ['./table-header-unit-select.component.scss'],
+  selector: 'app-unit-select',
+  templateUrl: './unit-select.component.html',
+  styleUrls: ['./unit-select.component.scss'],
 })
-export class TableHeaderUnitSelectComponent implements OnInit {
+export class UnitSelectComponent implements OnInit {
   @Input() displayUnits: Map<string, units>;
   @Input() fieldname: string;
   @Input() isPrice?: boolean;

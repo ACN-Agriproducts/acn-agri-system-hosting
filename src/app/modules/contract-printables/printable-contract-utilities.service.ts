@@ -1,7 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import { Firestore } from '@angular/fire/firestore';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
-import { Contract } from '@shared/classes/contract';
+import { Contract, MONTH_CODES, PRODUCT_CODES } from '@shared/classes/contract';
 import { ContractSettings, FormField, SelectOption } from '@shared/classes/contract-settings';
 import { Mass, units } from '@shared/classes/mass';
 

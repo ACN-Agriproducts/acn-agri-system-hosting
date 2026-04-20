@@ -224,7 +224,10 @@ export class Contract extends FirebaseDocInterface {
         this.clientTicketInfo = data.clientTicketInfo;
         this.currentDelivered = new Mass(data.currentDelivered ?? 0, FirebaseDocInterface.session.getDefaultUnit());
         this.date = data.date?.toDate();
-        this.delivery_dates = {begin: data.delivery_dates?.begin?.toDate(), end: data.delivery_dates?.end?.toDate()};
+        this.delivery_dates = {
+            begin: data.delivery_dates?.begin?.toDate() ?? null,
+            end: data.delivery_dates?.end?.toDate() ?? null
+        };
         this.grade = data.grade;
         this.id = data.id;
         this.loads = data.loads;
@@ -703,8 +706,9 @@ export class PaymentTerms {
     constructor(data: any) {
         this.before = data.before;
         this.measurement = data.measurement;
-        this.origin = typeof data.origin == "string" ? data.origin:
-            data.origin ? "own-scale" : "client-scale";
+        this.origin = typeof data.origin == "string" ? data.origin :
+            (data.origin ?? true) ? "own-scale" 
+                : "client-scale";
         this.paymentTerms = data.paymentTerms;
     }
 
@@ -777,3 +781,30 @@ export interface Exectuive {
     name: string,
     ref: DocumentReference
 }
+
+export const MONTH_CODES = {
+    JAN: 'F',
+    FEB: 'G',
+    MAR: 'H',
+    APR: 'J',
+    MAY: 'K',
+    JUN: 'M',
+    JUL: 'N',
+    AUG: 'Q',
+    SEP: 'U',
+    OCT: 'V',
+    NOV: 'X',
+    DEC: 'Z'
+};
+
+export const PRODUCT_CODES = {
+    "yellow corn": 'C',
+    "soybean": 'S',
+    "hard red winter wheat": 'KE',
+    "rough rice": 'R',
+    "sorghum": 'SOR'
+};
+
+const PRODUCT_CODES_DAILY_LAST_PRICE = {
+    "hard red winter wheat": 'KW'
+};

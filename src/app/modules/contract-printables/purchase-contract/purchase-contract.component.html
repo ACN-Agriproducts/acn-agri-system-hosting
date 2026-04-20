@@ -34,11 +34,12 @@
       </div>
       <div class='column-size-3' *ngIf="contractForm.date">
         <b><span [printableField]="'id'">{{ contractForm.id || 0 }}</span>-{{ contractForm.date.getFullYear() % 100 }}</b><br>
-        <!-- {{ contractForm.price | getPricePerUnit:"bu":product }} -->
-        <span [printableField]="'base'">{{ contractForm.base | number:"0.5-5" }}</span><br>
-        <span [printableField]="'market_price'">{{ (contractForm.market_price | number:"0.5-5") ?? (contractForm.futurePriceInfo.expirationMonth | date:"MMM YYYY" | uppercase) }}</span><br>
-        <span [printableField]="'price.amount'">{{ contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:"0.5-5" }}</span>
-        <span *ngIf="contractForm.price.amount">&nbsp;/&nbsp;BU</span>
+        <span [printableField]="'base'">{{ contractForm.base | number:"0.5" }}</span><br>
+        <span [printableField]="'market_price'">{{ (contractForm.market_price | number:"0.5") ?? (contractForm.futurePriceInfo.expirationMonth | date:"MMM YYYY" | uppercase) }}</span><br>
+        <span [printableField]="'price.amount'" *ngIf="contractForm.price?.amount > 0 else altPriceFormat">{{ contractForm.price | pricePerUnit:"bu":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits | number:"0.5" | maskZeros }}&nbsp;/&nbsp;BU</span>
+        <ng-template #altPriceFormat>
+          <span [printableField]="'price.amount'">{{ contractForm.futurePriceInfo.expirationMonth | flatPrice:contractForm.base:contractForm.product?.id }}</span>
+        </ng-template>
         <br>
         <span [printableField]="'date'">{{ contractForm.date | date:'MM/dd/YYYY' }}</span><br>
         <br>
@@ -61,9 +62,9 @@
         <span [printableField]="'product'">{{ contractForm.product?.id }}</span><br>
         <div class='grid-3'>
           <div class='column-size-2'>
-            <span class='right-justify' [printableField]="'quantity.amount'">{{ !contractForm.isOpen || contractForm.status == 'closed'? (contractForm.quantity | massInUnit:'bu':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5') : '-' }}</span>
-            <span class='right-justify' [printableField]="'quantity.amount'">{{ !contractForm.isOpen || contractForm.status == 'closed'? (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5') : '-' }}</span>
-            <span class='right-justify' [printableField]="'quantity.amount'">{{ !contractForm.isOpen || contractForm.status == 'closed'? (contractForm.quantity | massInUnit:'mTon':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5') : '-' }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'bu':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5' | maskValue:(contractForm.isOpen && contractForm.status !== 'closed') | maskZeros }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5' | maskValue:(contractForm.isOpen && contractForm.status !== 'closed') | maskZeros }}</span>
+            <span class='right-justify' [printableField]="'quantity.amount'">{{ contractForm.quantity | massInUnit:'mTon':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5' | maskValue:(contractForm.isOpen && contractForm.status !== 'closed') | maskZeros }}</span>
           </div>
           <div class='column-size-1'>
             <span>BUSHELS</span><br>
@@ -118,8 +119,8 @@
           </ng-container>
         </div>
         <div class='column-size-2 text-align-right' [printableField]="'price.amount'">
-          ${{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' }}<br>
-          ${{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5-5' }}
+          $&nbsp;{{ contractForm.price | pricePerUnit:"CWT":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5' | maskZeros }}<br>
+          $&nbsp;{{ contractForm.price | pricePerUnit:"mTon":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product | number:'0.5' | maskZeros }}
         </div>
         <div class='column-size-2 text-align-right'>
           &nbsp;/&nbsp;CWT<br>
@@ -144,8 +145,7 @@
       <div class='column-size-2'>
         <div id='total'>
           <span><b>$</b></span>
-          <span><b>{{ !contractForm.isOpen || contractForm.status == 'closed'? ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * 
-            (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) | number:'1.2-2') : '-' }}</b></span>
+          <span><b>{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) | number:'1.2' | maskValue:(contractForm.isOpen && contractForm.status !== 'closed') | maskZeros }}</b></span>
         </div>
       </div>
     </div>
@@ -173,8 +173,7 @@
     
     <p>The Buyer is purchasing the following Goods from the Seller: <span [printableField]="'product'">{{ contractForm.product?.id }}</span>	</p>
     
-    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ !contractForm.isOpen || contractForm.status == 'closed'? ((contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits) * 
-      (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits) | number:'1.2-2') : '-' }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
+    <p><b>PRICE:</b> Buyer agrees to pay the purchase price (the "Purchase Price") of <span class="fill-line">{{ (contractForm.quantity | massInUnit:'lbs':contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) * (contractForm.price | pricePerUnit:"lbs":contractForm.quantity:contractForm.price.amount:contractForm.price.unit:contractForm.quantity.amount:contractForm.quantity.defaultUnits:contractForm.product) | number:'1.2' | maskValue:(contractForm.isOpen && contractForm.status !== 'closed') | maskZeros }}</span>$ to the Seller as consideration for the sale of the Goods mentioned above. The Purchase Price is exclusive of any pertinent taxes.</p>
     
     <p><b>PAYMENT:</b> The Purchase Price shall be paid only in the following payment methods: <br>
     •	<br>

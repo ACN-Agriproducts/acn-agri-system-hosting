@@ -135,7 +135,6 @@ export class Company extends FirebaseDocInterface {
         const logoRef = ref(storage, `companies/${this.ref.id}/logo.jpg`);
         const urlPromise = getDownloadURL(logoRef);
         urlPromise.then(url => this.logoURL = url);
-        console.log(storage);
 
         return urlPromise;
     }

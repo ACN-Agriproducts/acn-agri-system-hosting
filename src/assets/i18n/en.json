@@ -79,7 +79,9 @@
                 "Delivered": "Delivered",
                 "Total": "Total",
                 "Trend": "Trend"
-            }
+            },
+            "Active & Pending": "Active & Pending",
+            "Closed & Paid": "Closed & Paid"
         },
         "new": {
             "contract info": "Contract Info",
@@ -170,6 +172,7 @@
             "notes": "notes",
             "Notes": "Notes",
             "options": "options",
+            "Origin": "Origin",
             "payment method": "payment method",
             "Payment Method": "Payment Method",
             "payments": "payments",
@@ -252,7 +255,11 @@
             "Quantity must be positive": "Quantity must be positive",
             "Market Price is required": "Market Price is required",
             "Quantity": "Quantity",
-            "Price": "Price"
+            "Price": "Price",
+            "Future Price": "Future Price",
+            "Base Price": "Base Price",
+            "Base Price is required": "Base Price is required",
+            "Future Price is required": "Future Price is required"
         }
     },
     "directory": {
@@ -374,7 +381,8 @@
             "damagedGrain": "Damaged Grain",
             "price": "Price",
             "Discount Info" : "Discount Info",
-            "Corpus Christi Inspection": "Corpus Christi Inspection"
+            "Corpus Christi Inspection": "Corpus Christi Inspection",
+            "Infested": "Infested"
         },
         "table": {
             "Type": "Type",
@@ -417,7 +425,10 @@
             "CCGE CERTIFICATE" : "CCGE CERTIFICATE",
             "Storage": "Storage",
             "Attachments": "Attachments",
-            "Ticket Photos": "Ticket Photos"
+            "Ticket Photos": "Ticket Photos",
+            "Lot #": "Lot #",
+            "Original Ticket": "Original Ticket",
+            "Driver": "Driver"
         },
         "report": {
             "Ticket Report": "Ticket Report",

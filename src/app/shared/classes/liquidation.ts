@@ -79,6 +79,7 @@ export class Liquidation extends FirebaseDocInterface {
             beforeDiscounts: ticket.beforeDiscounts,
             netToPay: ticket.netToPay
         }));
+
         this.archived = data.archived;
         this.amountPaid = data.amountPaid;
         this.total = data.total;
@@ -143,8 +144,10 @@ export class Liquidation extends FirebaseDocInterface {
         return liquidationDoc.data();
     }
 
-    public static getTicketInfo(ticket: Ticket): TicketInfo {
+    public static getTicketInfo(ticket: Ticket, contract?: Contract): TicketInfo {
         if (ticket == null) return;
+
+        const useOriginWeight = contract?.type === "purchase" && contract?.paymentTerms.origin === "client-scale" && ticket.original_weight.get() > 0;
 
         return {
             damagedGrain: ticket.damagedGrain ?? 0,
@@ -152,16 +155,16 @@ export class Liquidation extends FirebaseDocInterface {
             dateOut: ticket.dateOut,
             displayId: ticket.displayId,
             dryWeightPercent: ticket.dryWeightPercent ?? 0,
-            gross: ticket.gross,
+            gross: useOriginWeight ? null : ticket.gross,
             id: ticket.id,
             moisture: ticket.moisture ?? 0,
-            net: ticket.net,
+            net: useOriginWeight ? ticket.original_weight : ticket.net,
             price: ticket.price ? new Price(ticket.price, ticket.net.defaultUnits) : null,
             priceDiscounts: ticket.priceDiscounts,
             ref: ticket.ref.withConverter(Ticket.converter),
             status: ticket.status,
             subId: ticket.subId ?? "",
-            tare: ticket.tare,
+            tare: useOriginWeight ? null : ticket.tare,
             weight: ticket.weight,
             weightDiscounts: ticket.weightDiscounts,
             original_weight: ticket.original_weight,
@@ -174,6 +177,15 @@ export class Liquidation extends FirebaseDocInterface {
 
     public setTotalValue(contract: Contract): void {
         this.total = +(new LiquidationTotals(this.tickets, contract)).netToPay.toFixed(3);
+    }
+
+    public defineBushels(contract: Contract) {
+        for (const ticket of this.tickets) {
+            for (const ticketProp of Object.values(ticket)) {
+                if (ticketProp instanceof Mass || ticketProp instanceof WeightDiscounts) 
+                    ticketProp.defineBushels(contract.productInfo);
+            }
+        }
     }
 }
 
@@ -197,12 +209,12 @@ export class LiquidationTotals {
 
             this.gross = this.gross.add(ticket.gross);
             this.tare = this.tare.add(ticket.tare);
-            this.net = this.net.add(contract.paymentTerms.origin === "client-scale" && contract.type === "purchase" ? (ticket.original_weight ?? ticket.net) : ticket.net);
             this.original_weight = this.original_weight.add(ticket.original_weight);
+            this.net = this.net.add(ticket.net);
 
             for (const key of Object.keys(ticket.weightDiscounts)) {
                 this.weightDiscounts[key] ??= new Mass(0, ticket.net.getUnit(), contract.productInfo);
-                this.weightDiscounts[key].amount += this.roundAmount(ticket.weightDiscounts[key].amount, 3);
+                this.weightDiscounts[key].amount += this.roundAmount(ticket.weightDiscounts[key].getMassInUnit(ticket.net.getUnit()), 3);
             }
             const tempAdjustedWeight = ticket.net.subtract(ticket.weightDiscounts.totalMass());
             this.adjustedWeight = this.adjustedWeight.add(tempAdjustedWeight);
@@ -211,8 +223,7 @@ export class LiquidationTotals {
             this.beforeFinalDiscounts += this.roundAmount(tempBeforeFinalDiscounts, 3);
 
             for (const key of Object.keys(ticket.priceDiscounts)) {
-                if (key === 'unitRateDiscounts') continue;
-                this.priceDiscounts[key] += this.roundAmount(ticket.priceDiscounts[key], 3);
+                if (key !== 'unitRateDiscounts') this.priceDiscounts[key] += this.roundAmount(ticket.priceDiscounts[key], 3);
             }
             for (const key of Object.keys(ticket.priceDiscounts.unitRateDiscounts)) {
                 this.priceDiscounts.unitRateDiscounts[key] ??= 0;
@@ -220,8 +231,7 @@ export class LiquidationTotals {
             }
 
             if (isSalesLiquidation) {
-                const massToUse = ticket.original_weight.get() > 0 ? ticket.original_weight : ticket.net;
-                this.netToPay += this.roundAmount((massToUse.get() || ticket.net.get()) * (price.getPricePerUnit(massToUse.getUnit(), contract.quantity)), 3);
+                this.netToPay += this.roundAmount((ticket.net.get()) * (price.getPricePerUnit(ticket.net.getUnit(), contract.quantity)), 3);
             }
             else {
                 this.netToPay += this.roundAmount(tempBeforeFinalDiscounts - ticket.priceDiscounts.total(), 3);

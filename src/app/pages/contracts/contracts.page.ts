@@ -9,9 +9,10 @@ import { Contract } from '@shared/classes/contract';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { QueryConstraint, startAfter } from 'firebase/firestore';
 import { ContractSettings } from '@shared/classes/contract-settings';
-import { units } from '@shared/classes/mass';
+import { Mass, units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
+import { MassDisplayPipe } from '@core/pipes/mass/mass-display.pipe';
 import { ReportService } from '@shared/services/report/report.service';
 
 @Component({
@@ -57,6 +58,7 @@ export class ContractsPage implements AfterViewInit {
     private session: SessionInfo,
     private navController: NavController,
     private transloco: TranslocoService,
+    private massDisplayPipe: MassDisplayPipe,
     private reportService: ReportService
   ) { }
 
@@ -315,20 +317,10 @@ export class ContractsPage implements AfterViewInit {
     await popover.present();
   }
 
-  public getDeliveredTooltip(contract: Contract): string {
-    const weight = contract.currentDelivered;
-
-    return `${weight.getMassInUnit('lbs').toFixed(3)} lbs
-    ${weight.getBushelWeight(contract.productInfo).toFixed(3)} bu
-    ${weight.getMassInUnit('mTon').toFixed(3)} mTon`
-  }
-
-  public getQuantityTooltip(contract: Contract): string {
-    const weight = contract.quantity;
-
-    return `${weight.getMassInUnit('lbs').toFixed(3)} lbs
-    ${weight.getBushelWeight(contract.productInfo).toFixed(3)} bu
-    ${weight.getMassInUnit('mTon').toFixed(3)} mTon`
+  public getMassDisplayTooltip(mass: Mass): string {
+    return `${this.massDisplayPipe.transform(mass, 3, 'lbs')}
+    ${this.massDisplayPipe.transform(mass, 3, 'bu')}
+    ${this.massDisplayPipe.transform(mass, 3, 'mTon')}`;
   }
 
   public exportSelect(checked: any, contract: Contract) {
