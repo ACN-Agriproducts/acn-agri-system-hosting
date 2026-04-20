@@ -43,9 +43,7 @@
       ]
     },
     "useDefineForClassFields": false,
-    "strict": false,
-    // "strictPropertyInitialization": false,
-    // "strictNullChecks": false,
+    "strict": false
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
