@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SessionInfo } from '@core/services/session-info/session-info.service';
 import { Contact } from '@shared/classes/contact';
 import { CompanyContact } from '@shared/classes/company';
@@ -10,7 +10,8 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   templateUrl: './select-client.component.html',
   styleUrls: ['./select-client.component.scss'],
 })
-export class SelectClientComponent implements OnInit {
+export class 
+SelectClientComponent implements OnInit {
   public clientSelected: Contact;
   public clientsList: CompanyContact[];
   public searchString: string;

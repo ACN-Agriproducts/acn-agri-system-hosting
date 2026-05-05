@@ -119,7 +119,7 @@ ion-segment-button{
 
 .header-filter {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   margin: 10px;
   column-gap: 10px;
   justify-content: space-between;
@@ -317,10 +317,11 @@ ion-item {
 
     mat-form-field {
       width: auto;
-
+      /*   TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
+      /*   TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
       ::ng-deep .mat-form-field-wrapper{
         margin-bottom: -1.25em;
-        
+        /*   TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
         .mat-form-field-outline {
           background-color: white;
         }

@@ -33,6 +33,7 @@ import { TemplateRefModule } from './template-ref';
 import { UnitSelectComponent } from './components/unit-select/unit-select.component';
 import { NewNoteComponent } from './components/new-note/new-note/new-note.component';
 import { PrintablePipesModule } from './pipes/printable-pipes/printable-pipes.pipe';
+import { ReportOptionsComponent } from './components/report-options/report-options.component';
 
 @NgModule({
   imports: [
@@ -93,7 +94,8 @@ import { PrintablePipesModule } from './pipes/printable-pipes/printable-pipes.pi
     PrintableDialogComponent,
     DocumentUploadDialogComponent,
     UnitSelectComponent,
-    NewNoteComponent
+    NewNoteComponent,
+    ReportOptionsComponent
   ]
 })
 export class SharedModule {}

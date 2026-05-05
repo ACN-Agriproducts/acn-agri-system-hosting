@@ -1,6 +1,6 @@
 import { AddPictureComponent } from './../add-picture/add-picture.component';
 import { ShowDetailsComponent } from './show-details/show-details.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ModalTicketComponent } from './../modal-ticket/modal-ticket.component';
 import { OptionsTicketComponent } from './../options-ticket/options-ticket.component';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';

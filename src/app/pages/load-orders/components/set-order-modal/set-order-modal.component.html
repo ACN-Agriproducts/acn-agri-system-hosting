@@ -33,10 +33,10 @@
       <input matInput type="text" [(ngModel)]="order.driver">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <span matPrefix>$</span>
-      <span matSuffix>CWT</span>
       <mat-label>{{t('freight')}}</mat-label>
+      <span matTextPrefix>$&nbsp;</span>
       <input matInput type="number" [(ngModel)]="order.freight.amount">
+      <span matTextSuffix>CWT</span>
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>{{t('truck plates')}}</mat-label>

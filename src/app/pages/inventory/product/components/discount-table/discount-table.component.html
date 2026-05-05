@@ -33,8 +33,8 @@
           <div class="cell options" *ngIf="editing"></div>
         </li>
       </mat-card>
-      <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editing">
-        <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag>
+      <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListDisabled]="!editing" class="drag-boundary">
+        <mat-card class="body-card" *ngFor="let row of table.data; let rowIndex = index" cdkDrag cdkDragBoundary=".drag-boundary">
           <li class="row" [class.hover]="!editing">
             <div class="cell options" *ngIf="editing">
               <button mat-icon-button color="warn" (click)="table.data.splice(rowIndex, 1)">
@@ -42,7 +42,7 @@
               </button>
             </div>
             <div class="cell" *ngFor="let header of table.headers">
-              <mat-form-field *ngIf="editing else readonly">
+              <mat-form-field *ngIf="editing else readonly" class="appearance--legacy no-underline no-subscript">
                 <input matInput [(ngModel)]="row[header.name]" type="number" step="0.01" min="0">
               </mat-form-field>
               <ng-template #readonly>{{ row[header.name] | number:"1.2" }}</ng-template>
@@ -64,9 +64,9 @@
       </div>
     </ol>
   </mat-card-content>
-  <div class="action-bar" [class.invisible]="!editing" *transloco="let ta; read: 'actions'">
-    <button mat-flat-button color="primary" (click)="cancel()">{{ ta('Cancel') }}</button>
-    <button mat-flat-button color="primary" (click)="reset()">{{ ta('Reset') }}</button>
-    <button mat-flat-button color="primary" (click)="save()">{{ ta('Save') }}</button>
-  </div>
+  <mat-card-actions align="end" [class.invisible]="!editing" *transloco="let ta; read: 'actions'">
+    <button mat-button (click)="cancel()">{{ ta('Cancel') }}</button>
+    <button mat-stroked-button color="accent" (click)="reset()">{{ ta('Reset') }}</button>
+    <button mat-stroked-button color="primary" (click)="save()">{{ ta('Save') }}</button>
+  </mat-card-actions>
 </mat-card>

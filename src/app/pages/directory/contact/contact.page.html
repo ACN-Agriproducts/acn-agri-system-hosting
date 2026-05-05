@@ -1,211 +1,209 @@
 <ng-container *transloco="let t, read: 'directory'">
 	<app-header-toolbar [titulo]="t('Contact')"></app-header-toolbar>
 	
-	<ion-content class="ion-padding" [fullscreen]="true">
-		<ng-template [ngIf]="ready" [ngIfElse]="loading">
-			<ion-grid>
-				<ion-row>
-					<ion-col size="7" id="contact">
-						<ion-card>
-							<ion-card-content>
-								<div>
-									<!-- TBD: ability to upload avatar img -->
-									<ion-avatar slot="start">
-										<img src="../../../assets/avatar.svg">
-									</ion-avatar>
-									<ion-buttons>
-										<ion-button color="primary" (click)="edit()">
-											<ion-icon name="create-outline"></ion-icon>
-										</ion-button>
-										<ion-button color="danger" (click)="archive()">
-											<ion-icon name="archive-outline"></ion-icon>
-										</ion-button>
-									</ion-buttons>
-								</div>
-								<h1><b>{{ contact.name | uppercase }}</b></h1>
-								<h3>
-									{{ contact | contactTagsDisplay | titlecase }}
-									<span *ngIf="(contact.caat ?? '') != ''"> - {{ contact.caat }}</span>
-								</h3>
-								<ion-list lines="none">
-									<ion-item>
-										<ion-icon name="location-outline" slot="start" size="large"></ion-icon>
-										<ion-label>
-											<ng-template [ngIf]="(contact.streetAddress ?? '') != '' || (contact.city ?? '') != ''
-												|| (contact.state ?? '') != '' || (contact.zipCode ?? '') != ''"
-												[ngIfElse]="noEntry"
-											>
-												<span *ngIf="(contact.streetAddress ?? '') != ''">{{ contact.streetAddress | titlecase }}
-												<br>
-												</span>
-												<span *ngIf="(contact.city ?? '') != ''">{{ contact.city | titlecase }}</span>
-												<span *ngIf="(contact.state ?? '') != ''">, {{ contact.state | titlecase | stateAbbreviation }}</span>
-												<span *ngIf="(contact.zipCode ?? '') != ''">, {{ contact.zipCode }}</span>
-											</ng-template>
-										</ion-label>
-									</ion-item>
-								</ion-list>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-					<ion-col id="primary-metacontact">
-						<ion-card>
-							<ion-card-header><h2>{{t('Primary Contact')}}:</h2></ion-card-header>
-						</ion-card>
-						<ion-card>
-							<ion-card-content>
-								<ion-avatar>
+	<ion-content class="ion-padding selectable" [fullscreen]="true">
+		<ion-grid *ngIf="ready else loading">
+			<ion-row>
+				<ion-col size="7" id="contact">
+					<ion-card>
+						<ion-card-content>
+							<div>
+								<!-- TBD: ability to upload avatar img -->
+								<ion-avatar slot="start">
 									<img src="../../../assets/avatar.svg">
 								</ion-avatar>
-								<h2><span *ngIf="(primaryContact?.name ?? '') !== '' else noEntry">{{ primaryContact?.name | titlecase }}</span></h2>
-								<ion-list lines="none">
-									<ion-item>
-										<ion-icon name="call-outline" slot="start"></ion-icon>
-										<ion-label>
-											<span *ngIf="(primaryContact?.phone ?? '') !== '' else noEntry">{{ primaryContact?.phone }}</span>
-										</ion-label>
-									</ion-item>
-									<ion-item>
-										<ion-icon name="mail-outline" slot="start"></ion-icon>
-										<ion-label>
-											<span *ngIf="(primaryContact?.email ?? '') !== '' else noEntry">{{ primaryContact?.email | lowercase }}</span>
-										</ion-label>
-									</ion-item>
-								</ion-list>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-				</ion-row>
-	
-				<ion-row>
-					<ion-col id="metacontacts">
-						<ion-card *ngFor="let metacontact of contact.metacontacts.filter(standardMetacontact)">
-							<ion-card-content>
-								<ion-avatar>
-									<img src="../../../assets/avatar.svg">
-								</ion-avatar>
+								<ion-buttons>
+									<ion-button color="primary" (click)="edit()">
+										<ion-icon name="create-outline"></ion-icon>
+									</ion-button>
+									<ion-button color="danger" (click)="archive()">
+										<ion-icon name="archive-outline"></ion-icon>
+									</ion-button>
+								</ion-buttons>
+							</div>
+							<h1><b>{{ contact.name | uppercase }}</b></h1>
+							<h3>
+								{{ contact | contactTagsDisplay | titlecase }}
+								<span *ngIf="(contact.caat ?? '') != ''"> - {{ contact.caat }}</span>
+							</h3>
+							<ion-list lines="none">
+								<ion-item>
+									<ion-icon name="location-outline" slot="start" size="large"></ion-icon>
+									<ion-label>
+										<ng-template [ngIf]="(contact.streetAddress ?? '') != '' || (contact.city ?? '') != ''
+											|| (contact.state ?? '') != '' || (contact.zipCode ?? '') != ''"
+											[ngIfElse]="noEntry"
+										>
+											<span *ngIf="(contact.streetAddress ?? '') != ''">{{ contact.streetAddress | titlecase }}
+											<br>
+											</span>
+											<span *ngIf="(contact.city ?? '') != ''">{{ contact.city | titlecase }}</span>
+											<span *ngIf="(contact.state ?? '') != ''">, {{ contact.state | titlecase | stateAbbreviation }}</span>
+											<span *ngIf="(contact.zipCode ?? '') != ''">, {{ contact.zipCode }}</span>
+										</ng-template>
+									</ion-label>
+								</ion-item>
+							</ion-list>
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+				<ion-col id="primary-metacontact">
+					<ion-card>
+						<ion-card-header><h2>{{t('Primary Contact')}}:</h2></ion-card-header>
+					</ion-card>
+					<ion-card>
+						<ion-card-content>
+							<ion-avatar>
+								<img src="../../../assets/avatar.svg">
+							</ion-avatar>
+							<h2><span *ngIf="(primaryContact?.name ?? '') !== '' else noEntry">{{ primaryContact?.name | titlecase }}</span></h2>
+							<ion-list lines="none">
+								<ion-item>
+									<ion-icon name="call-outline" slot="start"></ion-icon>
+									<ion-label>
+										<span *ngIf="(primaryContact?.phone ?? '') !== '' else noEntry">{{ primaryContact?.phone }}</span>
+									</ion-label>
+								</ion-item>
+								<ion-item>
+									<ion-icon name="mail-outline" slot="start"></ion-icon>
+									<ion-label>
+										<span *ngIf="(primaryContact?.email ?? '') !== '' else noEntry">{{ primaryContact?.email | lowercase }}</span>
+									</ion-label>
+								</ion-item>
+							</ion-list>
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ion-row>
+
+			<ion-row>
+				<ion-col id="metacontacts">
+					<ion-card *ngFor="let metacontact of contact.metacontacts.filter(standardMetacontact)">
+						<ion-card-content>
+							<ion-avatar>
+								<img src="../../../assets/avatar.svg">
+							</ion-avatar>
+							<div>
+								<h2>
+									<span *ngIf="(metacontact.name ?? '') !== '' else noEntry">{{ metacontact.name | titlecase}}</span>
+								</h2>
 								<div>
-									<h2>
-										<span *ngIf="(metacontact.name ?? '') !== '' else noEntry">{{ metacontact.name | titlecase}}</span>
-									</h2>
-									<div>
-										<span *ngIf="(metacontact.phone ?? '') !== '' else noEntry">{{ metacontact.phone }}</span>
-									</div>
-									<div>
-										<span *ngIf="(metacontact.email ?? '') !== '' else noEntry">{{ metacontact.email | lowercase }}</span>
-									</div>
+									<span *ngIf="(metacontact.phone ?? '') !== '' else noEntry">{{ metacontact.phone }}</span>
 								</div>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-				</ion-row>
+								<div>
+									<span *ngIf="(metacontact.email ?? '') !== '' else noEntry">{{ metacontact.email | lowercase }}</span>
+								</div>
+							</div>
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ion-row>
 
-				<app-section-title 
-					[title]="t('Notes')" 
-					[suffixButtons]="notesButtons"></app-section-title>
-				<!-- <h4>
-					<span>{{)}}</span>
-				</h4> -->
-				<!-- <button mat-icon-button><mat-icon>add</mat-icon></button> -->
+			<app-section-title 
+				[title]="t('Notes')" 
+				[suffixButtons]="notesButtons"></app-section-title>
+			<!-- <h4>
+				<span>{{)}}</span>
+			</h4> -->
+			<!-- <button mat-icon-button><mat-icon>add</mat-icon></button> -->
+			<ion-row>
+				<ion-col *ngFor="let note of notes | async" size-md="4" size-sm="6" size-xs="12">
+					<ion-card>
+						<ion-card-header>
+							<ion-card-subtitle>{{note.date | date}}</ion-card-subtitle>
+						</ion-card-header>
+						<ion-card-content>
+							{{note.text}}
+						</ion-card-content>
+					</ion-card>
+				</ion-col>
+			</ion-row>
+
+			<!-- <h4><span>{{t('Analytics')}}</span></h4>
+			<ion-row>
+				<ion-col>
+					<ion-card>
+						{{t('analytics information')}}
+						<div>--</div>
+						<div>--</div>
+						<div>--</div>
+						<div>--</div>
+					</ion-card>
+				</ion-col>
+			</ion-row> -->
+
+			<ng-template [ngIf]="contracts || tickets">
+				<h4><span>{{t('Documents')}}</span></h4>
+
 				<ion-row>
-					<ion-col *ngFor="let note of notes | async" size-md="4" size-sm="6" size-xs="12">
-						<ion-card>
-							<ion-card-header>
-								<ion-card-subtitle>{{note.date | date}}</ion-card-subtitle>
-							</ion-card-header>
-							<ion-card-content>
-								{{note.text}}
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
+					<ion-segment [value]="docsType" (ionChange)="changeDocuments($event)">
+						<ion-segment-button value="contracts" *ngIf="contracts">
+							<ion-label>{{t('Contracts')}}</ion-label>
+						</ion-segment-button>
+						<ion-segment-button value="tickets" *ngIf="tickets">
+							<ion-label>{{t('Tickets')}}</ion-label>
+						</ion-segment-button>
+					</ion-segment>
 				</ion-row>
 
-				<!-- <h4><span>{{t('Analytics')}}</span></h4>
 				<ion-row>
 					<ion-col>
 						<ion-card>
-							{{t('analytics information')}}
-							<div>--</div>
-							<div>--</div>
-							<div>--</div>
-							<div>--</div>
+							<ng-template [ngIf]="docsType === 'contracts'">
+								<div class="table-row">
+									<span>{{t('ID')}}</span>
+									<span>{{t('Type')}}</span>
+									<span>{{t('Date')}}</span>
+									<span>{{t('Status')}}</span>
+									<span>{{t('Product')}}</span>
+									<span>{{t('Quantity') + " (" + displayUnit + ")"}}</span>
+									<span>{{t('Price')}}</span>
+									<span>{{t('Total')}}</span>
+								</div>
+								<div class="table-row" [class.odd]="odd"
+									*ngFor="let doc of getCurrentList()?.list; let odd = odd"
+									(dblclick)="openContract(doc.ref.id)"
+								>
+									<span>{{ doc["id"] }}</span>
+									<span>{{ doc["type"] | titlecase }}</span>
+									<span>{{ doc["date"] | date }}</span>
+									<span><span class="status" [ngClass]="doc['status'].toLocaleLowerCase()">{{ doc["status"] }}</span></span>
+									<span>{{ doc["product"].id }}</span>
+									<span>{{ doc["quantity"] | massInUnit:displayUnit | number:'0.3' }}</span>
+									<span>{{ doc["pricePerBushel"] | currency: '$' }}</span>
+									<span>{{ ((doc["quantity"] | massInUnit:displayUnit) * doc["pricePerBushel"]) | currency }}</span>
+								</div>
+							</ng-template>
+							<ng-template [ngIf]="docsType === 'tickets'">
+								<div class="table-row">
+									<span>{{t('ID')}}</span>
+									<span>{{t('Date')}}</span>
+									<span>{{t('Contract')}}</span>
+									<span>{{t('Product')}}</span>
+									<span>{{t('Gross')}} ( lbs. )</span>
+									<span>{{t('Tare')}} ( lbs. )</span>
+									<span>{{t('Net')}} ( lbs. )</span>
+									<span>--</span>
+								</div>
+								<div class="table-row" [class.odd]="odd"
+									*ngFor="let doc of tickets?.list; let odd = odd"
+									(click)="openTicket(doc.snapshot)"
+								>
+									<span>{{ doc["id"] }}</span>
+									<span>{{ doc["dateOut"] | date }}</span>
+									<span>{{ doc["contractID"] }}</span>
+									<span>{{ doc["productName"] }}</span>
+									<span>{{ doc["gross"] | massInUnit }}</span>
+									<span>{{ doc["tare"] | massInUnit }}</span>
+									<span>{{ doc["net"] | massInUnit }}</span>
+									<span>--</span>
+								</div>
+							</ng-template>
 						</ion-card>
 					</ion-col>
-				</ion-row> -->
-	
-				<ng-template [ngIf]="contracts || tickets">
-					<h4><span>{{t('Documents')}}</span></h4>
-	
-					<ion-row>
-						<ion-segment [value]="docsType" (ionChange)="changeDocuments($event)">
-							<ion-segment-button value="contracts" *ngIf="contracts">
-								<ion-label>{{t('Contracts')}}</ion-label>
-							</ion-segment-button>
-							<ion-segment-button value="tickets" *ngIf="tickets">
-								<ion-label>{{t('Tickets')}}</ion-label>
-							</ion-segment-button>
-						</ion-segment>
-					</ion-row>
-	
-					<ion-row>
-						<ion-col>
-							<ion-card>
-								<ng-template [ngIf]="docsType === 'contracts'">
-									<div class="table-row">
-										<span>{{t('ID')}}</span>
-										<span>{{t('Type')}}</span>
-										<span>{{t('Date')}}</span>
-										<span>{{t('Status')}}</span>
-										<span>{{t('Product')}}</span>
-										<span>{{t('Quantity') + " (" + displayUnit + ")"}}</span>
-										<span>{{t('Price')}}</span>
-										<span>{{t('Total')}}</span>
-									</div>
-									<div class="table-row" [class.odd]="odd"
-										*ngFor="let doc of getCurrentList()?.list; let odd = odd"
-										(dblclick)="openContract(doc.ref.id)"
-									>
-										<span>{{ doc["id"] }}</span>
-										<span>{{ doc["type"] | titlecase }}</span>
-										<span>{{ doc["date"] | date }}</span>
-										<span><span class="status" [ngClass]="doc['status'].toLocaleLowerCase()">{{ doc["status"] }}</span></span>
-										<span>{{ doc["product"].id }}</span>
-										<span>{{ doc["quantity"] | massInUnit:displayUnit | number:'0.3' }}</span>
-										<span>{{ doc["pricePerBushel"] | currency: '$' }}</span>
-										<span>{{ ((doc["quantity"] | massInUnit:displayUnit) * doc["pricePerBushel"]) | currency }}</span>
-									</div>
-								</ng-template>
-								<ng-template [ngIf]="docsType === 'tickets'">
-									<div class="table-row">
-										<span>{{t('ID')}}</span>
-										<span>{{t('Date')}}</span>
-										<span>{{t('Contract')}}</span>
-										<span>{{t('Product')}}</span>
-										<span>{{t('Gross')}} ( lbs. )</span>
-										<span>{{t('Tare')}} ( lbs. )</span>
-										<span>{{t('Net')}} ( lbs. )</span>
-										<span>--</span>
-									</div>
-									<div class="table-row" [class.odd]="odd"
-										*ngFor="let doc of tickets?.list; let odd = odd"
-										(click)="openTicket(doc.snapshot)"
-									>
-										<span>{{ doc["id"] }}</span>
-										<span>{{ doc["dateOut"] | date }}</span>
-										<span>{{ doc["contractID"] }}</span>
-										<span>{{ doc["productName"] }}</span>
-										<span>{{ doc["gross"] | massInUnit }}</span>
-										<span>{{ doc["tare"] | massInUnit }}</span>
-										<span>{{ doc["net"] | massInUnit }}</span>
-										<span>--</span>
-									</div>
-								</ng-template>
-							</ion-card>
-						</ion-col>
-					</ion-row>
-				</ng-template>
-			</ion-grid>
-		</ng-template>
+				</ion-row>
+			</ng-template>
+		</ion-grid>
 		<ion-infinite-scroll threshold="200px" (ionInfinite)="infiniteDocuments($event)">
 			<ion-infinite-scroll-content
 				loadingSpinner="bubbles"

@@ -1,6 +1,6 @@
 import { PopoverController } from '@ionic/angular';
 import { ShowContactModalComponent } from './../show-contact-modal/show-contact-modal.component';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
