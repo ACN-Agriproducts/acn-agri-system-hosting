@@ -1,21 +1,21 @@
 <ng-container *transloco="let t, read: 'tickets.table'">
     <div class="options-bar">
         <div>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="background-white">
                 <mat-label>{{ t('Type') }}</mat-label>
                 <mat-select [(ngModel)]="inTicket" (selectionChange)="getTickets()">
                     <mat-option [value]="true">{{ t('In Tickets') }}</mat-option>
                     <mat-option [value]="false">{{ t('Out Tickets') }}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="background-white">
                 <mat-label>{{ t('Sort') }}</mat-label>
                 <mat-select [(ngModel)]="sort" (selectionChange)="getTickets()">
                     <mat-option value="date">{{ t('Date') }}</mat-option>
                     <mat-option value="id">{{ t('ID') }}</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field appearance="outline" *ngIf="sort == 'date'">
+            <mat-form-field appearance="outline" class="background-white" *ngIf="sort == 'date'">
                 <mat-label>{{ t('Month and Year') }}</mat-label>
                 <input matInput [matDatepicker]="dp" [(ngModel)]="date">
                 <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>

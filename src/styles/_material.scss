@@ -136,3 +136,7 @@ mat-form-field.no-subscript {
     height: 0;
   }
 }
+
+mat-form-field[appearance="outline"].background-white .mat-mdc-text-field-wrapper {
+  background-color: var(--ion-card-background, #fff);
+}

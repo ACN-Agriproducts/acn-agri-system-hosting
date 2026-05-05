@@ -1,4 +1,8 @@
 .dark-mode {
+  * {
+    color-scheme: dark;
+  }
+
   ion-menu {
     //   border-inline-end: 1px solid
     //     var(

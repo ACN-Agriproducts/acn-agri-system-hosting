@@ -26,6 +26,10 @@
 @import "~@ionic/angular/css/flex-utils.css";
 @import "styles/material";
 
+* {
+  color-scheme: light;
+}
+
 // ion-menu {
 //   border-inline-end: 1px solid rgb(238, 238, 238);
 // }

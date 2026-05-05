@@ -37,9 +37,3 @@ ion-searchbar {
     }
   }
 }
-
-:host ::ng-deep {
-  .mat-mdc-text-field-wrapper {
-    background-color: white;
-  }
-}
