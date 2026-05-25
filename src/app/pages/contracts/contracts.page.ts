@@ -345,7 +345,7 @@ export class ContractsPage implements AfterViewInit {
 
 
 
-  public async getYtdMonthlyToBeDeliveredExcel(): Promise<void> {
+  public async getYtdToBeDeliveredExcel(): Promise<void> {
     const currentDate = new Date();
     const startDate = new Date();
     const endDate = new Date();
@@ -360,7 +360,7 @@ export class ContractsPage implements AfterViewInit {
     const toBeDeliveredData = await this.getMonthlyToBeDeliveredData(startDate, endDate);
     const workbook = await this.outputMonthlyToBeDeliveredDataToExcel(toBeDeliveredData, startDate, endDate);
 
-    const filename = `acn_ytd-report_${currentDate.toLocaleDateString('en-US')}`;
+    const filename = `acn_ytd-report_tobedelivered_${currentDate.toLocaleDateString('en-US')}`;
     this.downloadExcel(workbook, filename);
   }
 
