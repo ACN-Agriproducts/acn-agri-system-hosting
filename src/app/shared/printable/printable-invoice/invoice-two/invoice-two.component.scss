@@ -2,7 +2,9 @@
     display: inline-block;
     height: 100%;
     width: 100%;
-    box-sizing: border-box;
+    * {
+        box-sizing: border-box;
+    }
 
     & > div {
         height: 100%;
@@ -33,11 +35,11 @@
 
     .company-info {
         font-weight: bold;
-        
+        line-height: initial;
 
         img {
             width: 70%;
-            margin: 1rem auto;
+            margin: 0.8rem auto;
             display: block;
         }
     }
@@ -49,13 +51,17 @@
     }
 
     .invoice-info {
-        padding: 1rem;
-        box-sizing: border-box;
+        padding: 1rem 0 0 1rem;
+        
+        .address-container {
+            display: flex;
+            line-height: initial;
 
-        .address-box {
-            display: inline-block;
-            flex: auto 1 0;
+            .address-info {
+                text-transform: uppercase;
+            }
         }
+
     }
 }
 
