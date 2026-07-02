@@ -131,7 +131,7 @@ export class ConfirmInvoicePage implements OnInit {
       status: "pending",
       seller: {
         city: "Progreso",
-        country: "US",
+        country: "USA",
         name: "ACN Agriproducts, LLC.",
         phone: "",
         state: "TEXAS",
