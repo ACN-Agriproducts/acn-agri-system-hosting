@@ -249,3 +249,12 @@ ion-item > b {
 i, #metacontacts h2 {
 	color: #737373;
 }
+
+:host * {
+	::ng-deep {
+		-webkit-user-select: text;
+		-moz-user-select: text;
+		-ms-user-select: text;
+		user-select: text;
+	}
+}
