@@ -77,7 +77,7 @@ import { TranslocoNestedPipe } from './pipes/translocoNested/transloco-nested.pi
     RoundPipe,
     TranslatePipe,
     IncludesPipe,
-    TranslocoNestedPipe,
+    TranslocoNestedPipe
   ]
 })
 export class CoreModule { }

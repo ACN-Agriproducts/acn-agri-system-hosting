@@ -13,6 +13,7 @@ import { Mass, units } from '@shared/classes/mass';
 import { TranslocoService } from '@ngneat/transloco';
 import * as Excel from 'exceljs';
 import { MassDisplayPipe } from '@core/pipes/mass/mass-display.pipe';
+import { ReportService } from '@shared/services/report/report.service';
 
 @Component({
   selector: 'app-contracts',
@@ -57,7 +58,8 @@ export class ContractsPage implements AfterViewInit {
     private session: SessionInfo,
     private navController: NavController,
     private transloco: TranslocoService,
-    private massDisplayPipe: MassDisplayPipe
+    private massDisplayPipe: MassDisplayPipe,
+    private reportService: ReportService
   ) { }
 
   ngAfterViewInit() {
@@ -336,5 +338,9 @@ export class ContractsPage implements AfterViewInit {
 
   public tableTranslate(key: string): string {
     return this.transloco.translate("contracts.table." + key);
+  }
+
+  public openReportOptions() {
+    this.reportService.run();
   }
 }

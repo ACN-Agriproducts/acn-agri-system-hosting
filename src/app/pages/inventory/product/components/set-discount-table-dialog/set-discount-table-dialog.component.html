@@ -18,16 +18,15 @@
                     <mat-error>{{ t('Required') }}</mat-error>
                 </mat-form-field>
             </div>
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="horizontal-scroll-input-chips thin-scrollbar">
                 <mat-label>{{ standardConfig ? t("Additional Headers") : t("Headers") }}</mat-label>
-                <mat-chip-list #chipList
-                    class="mat-chip-list-stacked"
+                <mat-chip-grid #chipList
                     cdkDropList
-                    cdkDropListOrientation="vertical"
+                    cdkDropListOrientation="horizontal"
                     (cdkDropListDropped)="drop($event)"
                     multiple
                 >
-                    <mat-chip
+                    <mat-chip-row
                         cdkDrag
                         *ngFor="let header of table.headers"
                         (removed)="remove(header)"
@@ -50,8 +49,8 @@
                                 {{ t("Mark as Price Discount") }}
                             </button>
                         </mat-menu>
-                    </mat-chip>
-                </mat-chip-list>
+                    </mat-chip-row>
+                </mat-chip-grid>
                 <input [placeholder]="t('New header') + '...'"
                     [matChipInputFor]="chipList"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -107,9 +106,9 @@
         </form>
     </mat-dialog-content>
     
-    <mat-dialog-actions *transloco="let a; read: 'actions'">
-        <button mat-flat-button color="primary" mat-dialog-close>{{ a('Cancel') }}</button>
-        <button mat-flat-button color="primary" [mat-dialog-close]="table" [disabled]="tableForm.invalid" (click)="generateDiscountData()">{{ editing ? a("Update") : a("Generate")}}</button>
+    <mat-dialog-actions *transloco="let a; read: 'actions'" class="justify-end">
+        <button mat-button mat-dialog-close>{{ a('Cancel') }}</button>
+        <button mat-stroked-button color="primary" [mat-dialog-close]="table" [disabled]="tableForm.invalid" (click)="generateDiscountData()">{{ editing ? a("Update") : a("Generate")}}</button>
     </mat-dialog-actions>
 </ng-container>
     

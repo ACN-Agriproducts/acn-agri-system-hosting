@@ -14,9 +14,13 @@
 //  If you specify typography styles for the components you use elsewhere, you should delete this line.
 //  If you don't need the default component typographies but still want the hierarchy styles,
 //  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
+//    `@include mat.legacy-typography-hierarchy(mat.define-typography-config());`
+/* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
 @include mat.all-legacy-component-typographies();
+@include mat.all-component-typographies();
+/* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
 @include mat.legacy-core();
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -79,20 +83,32 @@ $app-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$app-theme: mat.define-light-theme(
-  (
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  ),
+));
+
+.dark-mode {
+  $app-dark: mat.define-dark-theme((
     color: (
       primary: $app-primary,
       accent: $app-accent,
       warn: $app-warn,
     ),
-  )
-);
+  ));
+  @include mat.all-component-themes($app-dark);
+  @include mat.all-legacy-component-themes($app-dark);
+}
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
+/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated*/
 @include mat.all-legacy-component-themes($app-theme);
+@include mat.all-component-themes($app-theme);
 
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
@@ -214,6 +230,8 @@ $app-theme: mat.define-light-theme(
   --ion-color-primary-light-contrast-rgb: 0, 0, 0;
   --ion-color-primary-light-shade: #c5cfc4;
   --ion-color-primary-light-tint: #e3ede2;
+
+  --ion-card-color: #fff;
 }
 
 // @media (prefers-color-scheme: dark) {
