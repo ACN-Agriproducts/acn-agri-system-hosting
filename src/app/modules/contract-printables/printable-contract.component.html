@@ -32,6 +32,10 @@
 	<purchase-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></purchase-contract>
 </ng-template>
 
+<ng-template templateRef="export">
+	<sales-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></sales-contract>
+</ng-template>
+
 <ng-template #none>
 	<p>N/A</p>
 </ng-template>
