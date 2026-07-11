@@ -1,7 +1,4 @@
-<!-- <ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container> -->
-
-<ng-container *ngTemplateOutlet="(versionToo | templateRef) ?? none"></ng-container>
-
+<ng-container *ngTemplateOutlet="(template$ | async) ?? none"></ng-container>
 
 <ng-template typeTemplate="compra_aDeposito">
 	<contract-purchase-to-deposit [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-purchase-to-deposit>
@@ -27,20 +24,18 @@
 	<contract-sales-unfixed-price [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></contract-sales-unfixed-price>
 </ng-template>
 
-<ng-template typeTemplate="sales" templateRef="sales">
+<ng-template typeTemplate="sales">
 	<sales-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></sales-contract>
 </ng-template>
 
-<ng-template typeTemplate="purchase" templateRef="purchase">
+<ng-template typeTemplate="purchase">
 	<purchase-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></purchase-contract>
 </ng-template>
 
-<ng-template typeTemplate="export" templateRef="export">
+<ng-template typeTemplate="export">
 	<sales-contract [contractForm]="contract" [focusedField]="focusedField" [settings]="settings" [company]="company | async"></sales-contract>
 </ng-template>
 
 <ng-template #none>
-	<p>N/A</p>
+	<p>N / A</p>
 </ng-template>
-
-

@@ -20,7 +20,6 @@ export class PrintableContractComponent implements OnInit {
   }
   @Input() contract: Contract;
   @Input() focusedField: string;
-  @Input() versionToo: string;
   
   // @Output() contractTypesListEmitter = new EventEmitter<Map<string, string>>();
 
@@ -45,8 +44,6 @@ export class PrintableContractComponent implements OnInit {
     });
 
     this.company = Company.getCompany(this.db, this.session.getCompany());
-
-    console.log(this.versionToo)
   }
 
   ngAfterViewInit() {

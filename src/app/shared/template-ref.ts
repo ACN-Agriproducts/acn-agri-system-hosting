@@ -18,7 +18,6 @@ export class TemplateRefPipe implements PipeTransform {
   constructor(private registry: TemplateRegistry) {}
 
   transform(name: string): TemplateRef<any>|undefined {
-    console.log(this.registry.templates, name)
     return this.registry.templates[name];
   }
 }
